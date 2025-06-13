@@ -6,6 +6,7 @@ Tests core functionality of EmotionVector and emotion handlers.
 import os
 import json
 import pytest
+from pytest import approx
 from datetime import datetime
 from unittest.mock import patch, mock_open, MagicMock
 from duri_core.common.emotion_vector import EmotionVector
@@ -16,29 +17,29 @@ class TestEmotionVector:
     def test_init_empty(self):
         """빈 벡터 초기화 테스트"""
         vector = EmotionVector()
-        assert all(val == 0.0 for val in vector.values.values())
+        assert all(val == approx(0.0) for val in vector.values.values())
         assert len(vector.values) == len(EmotionVector.DIMENSIONS)
 
     def test_init_with_values(self):
         """값이 있는 벡터 초기화 테스트"""
         values = {"joy": 0.8, "trust": 0.6}
         vector = EmotionVector(values)
-        assert vector.values["joy"] == 0.8
-        assert vector.values["trust"] == 0.6
-        assert vector.values["anger"] == 0.0  # 지정되지 않은 차원
+        assert vector.values["joy"] == approx(0.8)
+        assert vector.values["trust"] == approx(0.6)
+        assert vector.values["anger"] == approx(0.0)  # 지정되지 않은 차원
 
     def test_value_bounds(self):
         """감정 값 범위 제한 테스트"""
         values = {"joy": 1.5, "anger": -0.5}  # 범위 벗어난 값
         vector = EmotionVector(values)
-        assert vector.values["joy"] == 1.0    # 최대값으로 제한
-        assert vector.values["anger"] == 0.0  # 최소값으로 제한
+        assert vector.values["joy"] == approx(1.0)    # 최대값으로 제한
+        assert vector.values["anger"] == approx(0.0)  # 최소값으로 제한
 
     def test_from_keyword(self):
         """키워드 기반 벡터 생성 테스트"""
         vector = EmotionVector.from_keyword("칭찬")
-        assert vector.values["joy"] == 0.8
-        assert vector.values["trust"] == 0.6
+        assert vector.values["joy"] == approx(0.8)
+        assert vector.values["trust"] == approx(0.6)
 
     def test_compute_importance(self):
         """중요도 계산 테스트"""
@@ -49,7 +50,7 @@ class TestEmotionVector:
         
         # 모든 값이 0인 경우
         zero_vector = EmotionVector()
-        assert zero_vector.compute_importance() == 0.0
+        assert zero_vector.compute_importance() == approx(0.0)
 
     def test_get_dominant_emotions(self):
         """주요 감정 추출 테스트"""
@@ -101,8 +102,8 @@ class TestEmotionDeltaHandler:
         new_vector = EmotionVector({"joy": 0.8, "trust": 0.2})
         
         delta = handler.compute_delta(old_vector, new_vector)
-        assert delta["joy"] == 0.3
-        assert delta["trust"] == -0.1
+        assert delta["joy"] == approx(0.3)
+        assert delta["trust"] == approx(-0.1)
         assert all(dim in delta for dim in EmotionVector.DIMENSIONS)
 
     def test_update_from_delta(self):
@@ -112,8 +113,8 @@ class TestEmotionDeltaHandler:
         delta = {"joy": 0.3, "trust": -0.1}
         
         updated = handler.update_from_delta(current, delta)
-        assert updated.values["joy"] == 0.8
-        assert updated.values["trust"] == 0.2
+        assert updated.values["joy"] == approx(0.8)
+        assert updated.values["trust"] == approx(0.2)
         assert all(0 <= val <= 1 for val in updated.values.values())
 
 # EmotionTransmitter 테스트
@@ -147,13 +148,13 @@ class TestEmotionTransmitter:
         """중요도 임계값 로드 테스트"""
         # 설정 파일이 없는 경우
         threshold = transmitter.load_importance_threshold()
-        assert threshold == 0.3  # 기본값
+        assert threshold == approx(0.3)  # 기본값
 
         # 설정 파일이 있는 경우
         mock_config = {"importance_threshold": 0.5}
         with patch('builtins.open', mock_open(read_data=json.dumps(mock_config))):
             threshold = transmitter.load_importance_threshold()
-            assert threshold == 0.5
+            assert threshold == approx(0.5)
 
 if __name__ == "__main__":
     pytest.main([__file__]) 
