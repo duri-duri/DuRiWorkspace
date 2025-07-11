@@ -1,0 +1,12 @@
+[submodule "duri_all_scripts"]
+	path = duri_all_scripts
+	url = git@github.com:duri-duri/duri_all_scripts.git
+[submodule "duri_control"]
+	path = duri_control
+	url = git@github.com:duri-duri/duri_control.git
+[submodule "duri_core_build"]
+	path = duri_core_build
+	url = git@github.com:duri-duri/duri_core_build.git
+[submodule "duri_snapshots"]
+	path = duri_snapshots
+	url = git@github.com:duri-duri/duri_snapshots.git
