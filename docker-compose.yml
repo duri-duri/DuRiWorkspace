@@ -11,6 +11,7 @@ services:
       - ./duri_core:/app
       - ./duri_common:/app/duri_common:ro
       - ./.env:/app/.env
+      - ./logs:/app/logs
     working_dir: /app
     environment:
       - PORT=8080
@@ -27,6 +28,7 @@ services:
       - ./duri_brain:/app
       - ./duri_common:/app/duri_common:ro
       - ./.env:/app/.env
+      - ./logs:/app/logs
     working_dir: /app
     environment:
       - PORT=8081
@@ -41,12 +43,9 @@ services:
       - "8082:8082"
     volumes:
       - ./duri_evolution:/app
-      - ./duri_common:/app/duri_common:ro
-      - ./.env:/app/.env
     working_dir: /app
     environment:
       - PORT=8082
-      - PYTHONPATH=/app
     restart: unless-stopped
 
   duri-postgres:
