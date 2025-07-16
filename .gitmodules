@@ -10,3 +10,9 @@
 [submodule "duri_snapshots"]
 	path = duri_snapshots
 	url = git@github.com:duri-duri/duri_snapshots.git
+[submodule "duri_brain"]
+	path = duri_brain
+	url = git@github.com:duri-duri/duri_brain.git
+[submodule "duri_evolution"]
+	path = duri_evolution
+	url = git@github.com:duri-duri/duri_evolution.git
