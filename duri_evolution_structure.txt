@@ -1,0 +1,57 @@
+./duri_evolution:
+total 80
+-rw-r--r-- 1 duri duri  349 Jul 16 18:38 DEV_NOTES.md
+-rw-r--r-- 1 duri duri  441 Jul 16 18:38 Dockerfile
+-rw-r--r-- 1 duri duri   18 Jul 16 18:38 README.md
+drwxr-xr-x 2 root root 4096 Jul 16 18:38 __pycache__
+drwxr-xr-x 4 duri duri 4096 Jul 16 18:38 app
+lrwxrwxrwx 1 duri duri    9 Jul 16 18:38 config -> ../config
+-rw-r--r-- 1 duri duri    0 Jul 16 18:38 conftest.py
+-rwxr-xr-x 1 duri duri  915 Jul 16 18:38 delete_old_snapshots.sh
+-rw-r--r-- 1 duri duri 1894 Jul 16 18:38 emit_emotion_to_core.py
+drwxr-xr-x 2 root root 4096 Jul 16 18:38 evolution_data
+-rw-r--r-- 1 duri duri    0 Jul 16 18:38 evolution_log.json
+-rw-r--r-- 1 duri duri  879 Jul 16 18:38 generate_emotion_vector.py
+-rwxr-xr-x 1 duri duri 1685 Jul 16 18:38 log_emotion_change.py
+drwxr-xr-x 2 duri duri 4096 Jul 16 18:38 logs
+-rw-r--r-- 1 duri duri 2978 Jul 16 18:38 main.py
+-rwxr-xr-x 1 duri duri  587 Jul 16 18:38 pre_work_backup.sh
+-rw-r--r-- 1 duri duri   52 Jul 16 18:38 pytest.ini
+-rw-r--r-- 1 duri duri 1661 Jul 16 18:38 receive_emotion_vector.py
+-rw-r--r-- 1 duri duri   45 Jul 16 18:38 requirements.txt
+-rw-r--r-- 1 duri duri  409 Jul 16 18:38 run.py
+drwxr-xr-x 2 duri duri 4096 Jul 16 18:38 tests
+-rwxr-xr-x 1 duri duri 1011 Jul 16 18:38 update_cur_from_delta.py
+-rwxr-xr-x 1 duri duri  256 Jul 16 18:38 wait-for-postgres.sh
+
+./duri_evolution/__pycache__:
+total 4
+-rw-r--r-- 1 root root 2330 Jul 16 18:38 main.cpython-310.pyc
+
+./duri_evolution/app:
+total 16
+-rw-r--r-- 1 duri duri  451 Jul 16 18:38 __init__.py
+drwxr-xr-x 2 root root 4096 Jul 16 18:38 __pycache__
+drwxr-xr-x 2 duri duri 4096 Jul 16 18:38 app
+-rw-r--r-- 1 duri duri 1441 Jul 16 18:38 receive_experience.py
+
+./duri_evolution/app/__pycache__:
+total 8
+-rw-r--r-- 1 root root  766 Jul 16 18:38 __init__.cpython-310.pyc
+-rw-r--r-- 1 root root 1679 Jul 16 18:38 receive_experience.cpython-310.pyc
+
+./duri_evolution/app/app:
+total 4
+-rw-r--r-- 1 duri duri 315 Jul 16 18:38 __init__.py
+
+./duri_evolution/evolution_data:
+total 0
+
+./duri_evolution/logs:
+total 12
+-rw-r--r-- 1 duri duri 11372 Jul 16 18:38 duri_core.log
+
+./duri_evolution/tests:
+total 4
+-rw-r--r-- 1 duri duri  0 Jul 16 18:38 __init__.py
+-rw-r--r-- 1 duri duri 46 Jul 16 18:38 test_evolution_dummy.py

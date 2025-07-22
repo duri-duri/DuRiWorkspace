@@ -1,0 +1,190 @@
+./duri_core:
+total 3616
+-rw-r--r-- 1 duri duri    3144 Jul 16 18:36 CORE_IDENTITY.md
+-rw-r--r-- 1 duri duri     321 Jul 16 18:36 DEV_NOTES.md
+-rw-r--r-- 1 duri duri   12184 Jul 16 18:36 DOCKER_DEPLOYMENT.md
+-rw-r--r-- 1 duri duri     441 Jul 16 18:36 Dockerfile
+-rw-r--r-- 1 duri duri    6511 Jul 16 18:36 README.md
+-rw-r--r-- 1 duri duri       0 Jul 16 18:36 __init__.py
+drwxr-xr-x 2 duri duri    4096 Jul 16 18:36 all-node-scripts
+drwxr-xr-x 3 duri duri    4096 Jul 16 18:56 app
+-rwxr-xr-x 1 duri duri     205 Jul 16 18:36 autosave_scripts.sh
+-rwxr-xr-x 1 duri duri     200 Jul 16 18:36 autosave_snapshots.sh
+-rw-r--r-- 1 duri duri   89967 Jul 16 18:36 bias_emotion_action_heatmap.png
+-rw-r--r-- 1 duri duri   33256 Jul 16 18:36 bias_history.json
+-rw-r--r-- 1 duri duri  133346 Jul 16 18:36 bias_hourly_heatmap.png
+-rw-r--r-- 1 duri duri   47267 Jul 16 18:36 bias_severity_distribution.png
+-rw-r--r-- 1 duri duri  712495 Jul 16 18:36 bias_timeline.png
+-rw-r--r-- 1 duri duri  138357 Jul 16 18:36 bias_type_distribution.png
+drwxr-xr-x 3 duri duri    4096 Jul 16 18:36 brain
+drwxr-xr-x 2 root root    4096 Jul 16 18:56 brain_state
+drwxr-xr-x 2 duri duri    4096 Jul 16 18:36 common
+-rwxr-xr-x 1 duri duri    1028 Jul 16 18:36 compute_importance_from_delta.py
+lrwxrwxrwx 1 duri duri       9 Jul 16 18:36 config -> ../config
+-rw-r--r-- 1 duri duri 2372057 Jul 16 18:36 context.tar.gz
+drwxr-xr-x 2 duri duri    4096 Jul 16 18:36 core
+drwxr-xr-x 3 duri duri    4096 Jul 16 18:36 database
+drwxr-xr-x 2 root root    4096 Jul 16 18:56 duri_common
+-rw-r--r-- 1 duri duri    1880 Jul 16 18:36 emit_emotion_to_core.py
+-rw-r--r-- 1 duri duri     440 Jul 16 18:36 env_docker
+drwxr-xr-x 3 duri duri    4096 Jul 16 18:36 evolution
+-rw-r--r-- 1 duri duri       0 Jul 16 18:36 evolution_log.json
+drwxr-xr-x 2 duri duri    4096 Jul 16 18:36 examples
+-rw-r--r-- 1 duri duri      49 Jul 16 18:36 last_check.txt
+-rwxr-xr-x 1 duri duri    2209 Jul 16 18:36 log_emotion_change.py
+drwxr-xr-x 2 root root    4096 Jul 16 18:56 logs
+drwxr-xr-x 4 duri duri    4096 Jul 16 18:36 loop_data
+-rw-r--r-- 1 duri duri    2910 Jul 16 18:36 main.py
+-rw-r--r-- 1 duri duri      69 Jul 16 18:36 pytest.ini
+-rwxr-xr-x 1 duri duri    1869 Jul 16 18:36 refactor_emotion_directories.py
+-rw-r--r-- 1 duri duri      45 Jul 16 18:36 requirements.txt
+-rw-r--r-- 1 duri duri    1266 Jul 16 18:36 run.py
+drwxr-xr-x 2 duri duri    4096 Jul 16 18:36 scripts
+drwxr-xr-x 2 duri duri    4096 Jul 16 18:36 shared-scripts
+-rwxr-xr-x 1 duri duri    6049 Jul 16 18:36 sleep_node.sh
+drwxr-xr-x 2 duri duri    4096 Jul 16 18:36 tests
+-rwxr-xr-x 1 duri duri    1011 Jul 16 18:36 update_cur_from_delta.py
+drwxr-xr-x 2 duri duri    4096 Jul 16 18:36 visualize
+-rwxr-xr-x 1 duri duri     256 Jul 16 18:36 wait-for-postgres.sh
+
+./duri_core/all-node-scripts:
+total 0
+
+./duri_core/app:
+total 40
+-rw-r--r-- 1 duri duri  2001 Jul 16 18:36 __init__.py
+drwxr-xr-x 2 root root  4096 Jul 16 18:56 __pycache__
+-rw-r--r-- 1 duri duri 16659 Jul 16 18:36 api.py
+-rw-r--r-- 1 duri duri     0 Jul 16 18:36 evolution_log.json
+-rw-r--r-- 1 duri duri  3455 Jul 16 18:36 logic.py
+-rw-r--r-- 1 duri duri  2912 Jul 16 18:36 models.py
+-rw-r--r-- 1 duri duri  1969 Jul 16 18:36 schemas.py
+
+./duri_core/app/__pycache__:
+total 4
+-rw-r--r-- 1 root root 1693 Jul 16 18:56 __init__.cpython-310.pyc
+
+./duri_core/brain:
+total 108
+-rw-r--r-- 1 duri duri  7964 Jul 16 18:36 README.md
+-rw-r--r-- 1 duri duri   657 Jul 16 18:36 __init__.py
+-rw-r--r-- 1 duri duri 10998 Jul 16 18:36 action_processor.py
+-rw-r--r-- 1 duri duri 17301 Jul 16 18:36 brain_controller.py
+-rw-r--r-- 1 duri duri  8741 Jul 16 18:36 brain_server.py
+drwxr-xr-x 2 duri duri  4096 Jul 16 18:36 config
+-rw-r--r-- 1 duri duri 10284 Jul 16 18:36 emotion_recorder.py
+-rw-r--r-- 1 duri duri 15483 Jul 16 18:36 feedback_collector.py
+-rw-r--r-- 1 duri duri 14798 Jul 16 18:36 loop_manager.py
+-rw-r--r-- 1 duri duri  3233 Jul 16 18:36 reinforcement_engine.py
+
+./duri_core/brain/config:
+total 4
+-rw-r--r-- 1 duri duri 1452 Jul 16 18:36 app.json
+
+./duri_core/brain_state:
+total 0
+
+./duri_core/common:
+total 20
+-rw-r--r-- 1 duri duri  418 Jul 16 18:36 __init__.py
+-rw-r--r-- 1 duri duri 4410 Jul 16 18:36 emotion_handlers.py
+-rw-r--r-- 1 duri duri 4674 Jul 16 18:36 emotion_vector.py
+
+./duri_core/core:
+total 112
+-rw-r--r-- 1 duri duri    50 Jul 16 18:36 __init__.py
+-rw-r--r-- 1 duri duri 19850 Jul 16 18:36 bias_detector.py
+-rw-r--r-- 1 duri duri 12245 Jul 16 18:36 database.py
+-rw-r--r-- 1 duri duri 29477 Jul 16 18:36 decision.py
+-rw-r--r-- 1 duri duri     0 Jul 16 18:36 decision_logic.py
+-rw-r--r-- 1 duri duri  8510 Jul 16 18:36 decision_processor.py
+-rw-r--r-- 1 duri duri  1974 Jul 16 18:36 logging.py
+-rw-r--r-- 1 duri duri 16391 Jul 16 18:36 loop_orchestrator.py
+-rw-r--r-- 1 duri duri  7175 Jul 16 18:36 stats.py
+
+./duri_core/database:
+total 4
+drwxr-xr-x 2 duri duri 4096 Jul 16 18:36 init
+
+./duri_core/database/init:
+total 12
+-rw-r--r-- 1 duri duri 9494 Jul 16 18:36 01-init.sql
+
+./duri_core/duri_common:
+total 0
+
+./duri_core/evolution:
+total 164
+-rw-r--r-- 1 duri duri  8906 Jul 16 18:36 README.md
+-rw-r--r-- 1 duri duri   717 Jul 16 18:36 __init__.py
+-rw-r--r-- 1 duri duri 14210 Jul 16 18:36 action_executor.py
+drwxr-xr-x 2 duri duri  4096 Jul 16 18:36 config
+-rw-r--r-- 1 duri duri 30774 Jul 16 18:36 evolution_controller.py
+-rw-r--r-- 1 duri duri 15706 Jul 16 18:36 evolution_server.py
+-rw-r--r-- 1 duri duri 32016 Jul 16 18:36 experience_manager.py
+-rw-r--r-- 1 duri duri 12486 Jul 16 18:36 learning_processor.py
+-rw-r--r-- 1 duri duri 20183 Jul 16 18:36 result_recorder.py
+-rw-r--r-- 1 duri duri  9199 Jul 16 18:36 test_evolution.py
+
+./duri_core/evolution/config:
+total 4
+-rw-r--r-- 1 duri duri 1931 Jul 16 18:36 app.json
+
+./duri_core/examples:
+total 8
+-rw-r--r-- 1 duri duri 7122 Jul 16 18:36 brain_example.py
+
+./duri_core/logs:
+total 0
+
+./duri_core/loop_data:
+total 8
+drwxr-xr-x 2 duri duri 4096 Jul 16 18:36 core
+drwxr-xr-x 2 duri duri 4096 Jul 16 18:36 sessions
+
+./duri_core/loop_data/core:
+total 8
+-rw-r--r-- 1 duri duri 431 Jul 16 18:36 aba2ec38-dbdd-4518-bcd6-7eec418b1ec6.json
+-rw-r--r-- 1 duri duri 431 Jul 16 18:36 cd673ef4-864d-47af-8b38-a76c58e25b67.json
+
+./duri_core/loop_data/sessions:
+total 8
+-rw-r--r-- 1 duri duri 185 Jul 16 18:36 aba2ec38-dbdd-4518-bcd6-7eec418b1ec6.json
+-rw-r--r-- 1 duri duri 185 Jul 16 18:36 cd673ef4-864d-47af-8b38-a76c58e25b67.json
+
+./duri_core/scripts:
+total 76
+-rw-r--r-- 1 duri duri    53 Jul 16 18:36 __init__.py
+-rwxr-xr-x 1 duri duri  9991 Jul 16 18:36 log_manager.py
+-rw-r--r-- 1 duri duri 11590 Jul 16 18:36 test_api.py
+-rwxr-xr-x 1 duri duri 23141 Jul 16 18:36 visualize_bias_history.py
+-rwxr-xr-x 1 duri duri 11257 Jul 16 18:36 visualize_decision_log.py
+-rwxr-xr-x 1 duri duri  9169 Jul 16 18:36 visualize_patterns.py
+
+./duri_core/shared-scripts:
+total 32
+-rw-r--r-- 1 duri duri  802 Jul 16 18:36 auto_commit_push.sh
+-rwxr-xr-x 1 duri duri  205 Jul 16 18:36 autosave_scripts.sh
+-rwxr-xr-x 1 duri duri  200 Jul 16 18:36 autosave_snapshots.sh
+-rwxr-xr-x 1 duri duri  915 Jul 16 18:36 delete_old_snapshots.sh
+-rwxr-xr-x 1 duri duri  840 Jul 16 18:36 restore_brain.sh
+-rwxr-xr-x 1 duri duri  908 Jul 16 18:36 restore_evolution.sh
+-rwxr-xr-x 1 duri duri  419 Jul 16 18:36 restore_from_tag.sh
+-rwxr-xr-x 1 duri duri 1306 Jul 16 18:36 save_snapshot.sh
+
+./duri_core/tests:
+total 44
+-rw-r--r-- 1 duri duri  1022 Jul 16 18:36 README.md
+-rw-r--r-- 1 duri duri    51 Jul 16 18:36 __init__.py
+-rw-r--r-- 1 duri duri 14306 Jul 16 18:36 test_decision_logic.py
+-rw-r--r-- 1 duri duri  6286 Jul 16 18:36 test_emotion_vector.py
+-rw-r--r-- 1 duri duri  5794 Jul 16 18:36 test_evolution_loop.py
+-rw-r--r-- 1 duri duri  3488 Jul 16 18:36 test_reinforcement_engine.py
+
+./duri_core/visualize:
+total 48
+-rw-r--r-- 1 duri duri    59 Jul 16 18:36 __init__.py
+-rw-r--r-- 1 duri duri  1217 Jul 16 18:36 emotion_summary.py
+-rw-r--r-- 1 duri duri 18980 Jul 16 18:36 summary_analyzer.py
+-rw-r--r-- 1 duri duri  6718 Jul 16 18:36 summary_loader.py
+-rw-r--r-- 1 duri duri  9166 Jul 16 18:36 summary_reporter.py

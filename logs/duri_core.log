@@ -84,3 +84,52 @@
 2025-07-15 05:17:57,653 [INFO] duri_core.run: 🧠 Brain URL: http://localhost:8081/brain
 2025-07-15 05:17:57,653 [INFO] duri_core.run: 🔄 Evolution URL: http://localhost:8082/evolve
 2025-07-15 05:17:57,653 [INFO] duri_core.run: ==================================================
+2025-07-22 04:37:39,571 [INFO] duri_core.decision: ReinforcementEngine 초기화 성공
+2025-07-22 04:37:39,572 [INFO] duri_core.bias_detector: BiasDetector 초기화 완료: /tmp/evolution_data/bias_data
+2025-07-22 04:37:39,572 [INFO] duri_core.decision: BiasDetector 초기화 성공
+2025-07-22 04:37:39,572 [INFO] duri_core.decision: ResultRecorder 초기화 성공
+2025-07-22 04:37:39,600 [INFO] duri_core.database: 데이터베이스 연결 성공
+2025-07-22 04:37:39,603 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-22 04:37:39,603 [INFO] duri_core.decision_processor: DecisionProcessor 초기화 완료
+2025-07-22 04:37:39,603 [INFO] duri_core.decision_processor: CoreService 초기화 완료
+2025-07-22 04:37:39,606 [INFO] duri_core.database: 데이터베이스 연결 성공
+2025-07-22 04:37:39,606 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-22 04:37:39,606 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-22 04:37:39,606 [INFO] duri_core.decision_processor: DecisionProcessor 초기화 완료
+2025-07-22 04:37:39,606 [INFO] duri_core.decision_processor: CoreService 초기화 완료
+2025-07-22 04:37:39,607 [INFO] duri_core.app: Flask 앱 초기화 완료
+2025-07-22 04:37:40,604 [INFO] duri_core.decision: ReinforcementEngine 초기화 성공
+2025-07-22 04:37:40,605 [INFO] duri_core.bias_detector: BiasDetector 초기화 완료: /tmp/evolution_data/bias_data
+2025-07-22 04:37:40,605 [INFO] duri_core.decision: BiasDetector 초기화 성공
+2025-07-22 04:37:40,605 [INFO] duri_core.decision: ResultRecorder 초기화 성공
+2025-07-22 04:37:40,613 [INFO] duri_core.database: 데이터베이스 연결 성공
+2025-07-22 04:37:40,614 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-22 04:37:40,614 [INFO] duri_core.decision_processor: DecisionProcessor 초기화 완료
+2025-07-22 04:37:40,614 [INFO] duri_core.decision_processor: CoreService 초기화 완료
+2025-07-22 04:37:40,617 [INFO] duri_core.database: 데이터베이스 연결 성공
+2025-07-22 04:37:40,617 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-22 04:37:40,617 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-22 04:37:40,617 [INFO] duri_core.decision_processor: DecisionProcessor 초기화 완료
+2025-07-22 04:37:40,617 [INFO] duri_core.decision_processor: CoreService 초기화 완료
+2025-07-22 04:37:40,619 [INFO] duri_core.app: Flask 앱 초기화 완료
+2025-07-22 04:37:40,619 [INFO] duri_core.run: 🚀 DuRi Core 서버 시작 중...
+2025-07-22 04:37:40,619 [INFO] duri_core.run: 📍 포트: 8080
+2025-07-22 04:37:40,619 [INFO] duri_core.run: 📁 로그 디렉토리: ./logs
+2025-07-22 04:37:40,619 [INFO] duri_core.run: 📄 수신 로그: ./brain_state/receive_log.json
+2025-07-22 04:37:40,619 [INFO] duri_core.run: 🧠 Brain URL: http://duri_brain_container:8081/brain
+2025-07-22 04:37:40,619 [INFO] duri_core.run: 🔄 Evolution URL: http://duri_evolution_container:8082/evolve
+2025-07-22 04:37:40,619 [INFO] duri_core.run: ==================================================
+2025-07-22 04:37:41,680 [INFO] duri_core.decision: ReinforcementEngine 초기화 성공
+2025-07-22 04:37:41,680 [INFO] duri_core.bias_detector: BiasDetector 초기화 완료: /tmp/evolution_data/bias_data
+2025-07-22 04:37:41,680 [INFO] duri_core.decision: BiasDetector 초기화 성공
+2025-07-22 04:37:41,681 [INFO] duri_core.decision: ResultRecorder 초기화 성공
+2025-07-22 04:37:41,690 [INFO] duri_core.database: 데이터베이스 연결 성공
+2025-07-22 04:37:41,691 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-22 04:37:41,692 [INFO] duri_core.decision_processor: DecisionProcessor 초기화 완료
+2025-07-22 04:37:41,692 [INFO] duri_core.decision_processor: CoreService 초기화 완료
+2025-07-22 04:37:41,696 [INFO] duri_core.database: 데이터베이스 연결 성공
+2025-07-22 04:37:41,696 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-22 04:37:41,696 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-22 04:37:41,696 [INFO] duri_core.decision_processor: DecisionProcessor 초기화 완료
+2025-07-22 04:37:41,696 [INFO] duri_core.decision_processor: CoreService 초기화 완료
+2025-07-22 04:37:41,697 [INFO] duri_core.app: Flask 앱 초기화 완료
