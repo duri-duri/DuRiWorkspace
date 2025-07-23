@@ -1,0 +1,13 @@
+[
+  {
+    "timestamp": "2025-05-25T09:00:29.433244",
+    "emotion": "hope",
+    "intensity": 0.72,
+    "importance_score": 0.44,
+    "targets": [
+      "duri-control",
+      "duri-brain",
+      "duri-evolution"
+    ]
+  }
+]

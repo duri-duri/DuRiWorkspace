@@ -1,0 +1,38 @@
+[
+  {
+    "timestamp": "2025-05-25T10:53:49.025710",
+    "target": "duri-brain",
+    "ip": "192.168.0.9",
+    "emotion": {
+      "emotion": "test_emotion",
+      "intensity": 0.7,
+      "importance_score": 0.8,
+      "timestamp": "2025-05-25T21:50:00"
+    },
+    "status": "success"
+  },
+  {
+    "timestamp": "2025-05-25T10:53:56.079624",
+    "target": "duri-control",
+    "ip": "192.168.0.11",
+    "emotion": {
+      "emotion": "test_emotion",
+      "intensity": 0.7,
+      "importance_score": 0.8,
+      "timestamp": "2025-05-25T21:50:00"
+    },
+    "status": "success"
+  },
+  {
+    "timestamp": "2025-05-25T10:54:10.054647",
+    "target": "duri-evolution",
+    "ip": "192.168.0.20",
+    "emotion": {
+      "emotion": "test_emotion",
+      "intensity": 0.7,
+      "importance_score": 0.8,
+      "timestamp": "2025-05-25T21:50:00"
+    },
+    "status": "success"
+  }
+]

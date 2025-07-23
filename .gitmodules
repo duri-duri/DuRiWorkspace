@@ -4,9 +4,7 @@
 [submodule "duri_control"]
         path = duri_control
         url = git@github.com:duri-duri/duri_control.git
-[submodule "duri_snapshots"]
-        path = duri_snapshots
-        url = https://github.com/duri-duri/duri_snapshots.git
+
 [submodule "duri_brain"]
         path = duri_brain
         url = https://github.com/duri-duri/duri_brain.git
