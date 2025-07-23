@@ -1,0 +1,13 @@
+FROM duri-base:latest
+
+WORKDIR /app
+
+# Control 서비스 파일 복사
+COPY duri_control/ /app/duri_control/
+
+# Control 서비스 의존성 설치 (requirements.txt가 있다면)
+# COPY duri_control/requirements.txt ./requirements.txt
+# RUN pip install --no-cache-dir -r requirements.txt
+
+# Control 서비스 실행
+CMD ["python", "duri_control/main.py"] 

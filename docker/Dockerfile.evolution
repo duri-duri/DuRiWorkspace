@@ -1,0 +1,13 @@
+FROM duri-base:latest
+
+WORKDIR /app
+
+# Evolution 서비스 파일 복사
+COPY duri_evolution/ /app/duri_evolution/
+
+# Evolution 서비스 의존성 설치
+COPY duri_evolution/requirements.txt ./requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Evolution 서비스 실행
+CMD ["python", "duri_evolution/run.py"]

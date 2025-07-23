@@ -1,0 +1,13 @@
+FROM duri-base:latest
+
+WORKDIR /app
+
+# Brain 서비스 파일 복사
+COPY duri_brain/ /app/duri_brain/
+
+# Brain 서비스 의존성 설치
+COPY duri_brain/requirements.txt ./requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Brain 서비스 실행
+CMD ["python", "duri_brain/run.py"]
