@@ -1,0 +1,124 @@
+2025-07-11 01:48:51,563 [INFO] duri_core.decision: ReinforcementEngine 초기화 성공
+2025-07-11 01:48:51,564 [INFO] duri_core.bias_detector: BiasDetector 초기화 완료: /tmp/evolution_data/bias_data
+2025-07-11 01:48:51,564 [INFO] duri_core.decision: BiasDetector 초기화 성공
+2025-07-11 01:48:51,564 [INFO] duri_core.decision: ResultRecorder 초기화 성공
+2025-07-11 01:48:51,570 [WARNING] duri_core.database: 데이터베이스 연결 실패: connection to server at "duri-postgres" (172.18.0.3), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2025-07-11 01:48:51,573 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-11 01:48:51,573 [INFO] duri_core.decision_processor: DecisionProcessor 초기화 완료
+2025-07-11 01:48:51,573 [INFO] duri_core.decision_processor: CoreService 초기화 완료
+2025-07-11 01:48:51,573 [WARNING] duri_core.database: 데이터베이스 연결 실패: connection to server at "duri-postgres" (172.18.0.3), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2025-07-11 01:48:51,573 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-11 01:48:51,573 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-11 01:48:51,573 [INFO] duri_core.decision_processor: DecisionProcessor 초기화 완료
+2025-07-11 01:48:51,573 [INFO] duri_core.decision_processor: CoreService 초기화 완료
+2025-07-11 01:48:51,575 [INFO] duri_core.app: Flask 앱 초기화 완료
+2025-07-11 02:24:54,987 [INFO] duri_core.decision: ReinforcementEngine 초기화 성공
+2025-07-11 02:24:54,987 [INFO] duri_core.bias_detector: BiasDetector 초기화 완료: /tmp/evolution_data/bias_data
+2025-07-11 02:24:54,987 [INFO] duri_core.decision: BiasDetector 초기화 성공
+2025-07-11 02:24:54,987 [INFO] duri_core.decision: ResultRecorder 초기화 성공
+2025-07-11 02:24:54,993 [WARNING] duri_core.database: 데이터베이스 연결 실패: connection to server at "duri-postgres" (172.18.0.4), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2025-07-11 02:24:54,994 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-11 02:24:54,994 [INFO] duri_core.decision_processor: DecisionProcessor 초기화 완료
+2025-07-11 02:24:54,994 [INFO] duri_core.decision_processor: CoreService 초기화 완료
+2025-07-11 02:24:54,994 [WARNING] duri_core.database: 데이터베이스 연결 실패: connection to server at "duri-postgres" (172.18.0.4), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2025-07-11 02:24:54,994 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-11 02:24:54,995 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-11 02:24:54,995 [INFO] duri_core.decision_processor: DecisionProcessor 초기화 완료
+2025-07-11 02:24:54,995 [INFO] duri_core.decision_processor: CoreService 초기화 완료
+2025-07-11 02:24:54,997 [INFO] duri_core.app: Flask 앱 초기화 완료
+2025-07-11 02:33:45,799 [INFO] duri_core.decision: ReinforcementEngine 초기화 성공
+2025-07-11 02:33:45,800 [INFO] duri_core.bias_detector: BiasDetector 초기화 완료: /tmp/evolution_data/bias_data
+2025-07-11 02:33:45,800 [INFO] duri_core.decision: BiasDetector 초기화 성공
+2025-07-11 02:33:45,800 [INFO] duri_core.decision: ResultRecorder 초기화 성공
+2025-07-11 02:33:45,815 [INFO] duri_core.database: 데이터베이스 연결 성공
+2025-07-11 02:33:45,816 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-11 02:33:45,816 [INFO] duri_core.decision_processor: DecisionProcessor 초기화 완료
+2025-07-11 02:33:45,816 [INFO] duri_core.decision_processor: CoreService 초기화 완료
+2025-07-11 02:33:45,819 [INFO] duri_core.database: 데이터베이스 연결 성공
+2025-07-11 02:33:45,819 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-11 02:33:45,819 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-11 02:33:45,819 [INFO] duri_core.decision_processor: DecisionProcessor 초기화 완료
+2025-07-11 02:33:45,819 [INFO] duri_core.decision_processor: CoreService 초기화 완료
+2025-07-11 02:33:45,821 [INFO] duri_core.app: Flask 앱 초기화 완료
+2025-07-11 02:35:02,408 [INFO] duri_core.decision: ReinforcementEngine 초기화 성공
+2025-07-11 02:35:02,409 [INFO] duri_core.bias_detector: BiasDetector 초기화 완료: /tmp/evolution_data/bias_data
+2025-07-11 02:35:02,409 [INFO] duri_core.decision: BiasDetector 초기화 성공
+2025-07-11 02:35:02,409 [INFO] duri_core.decision: ResultRecorder 초기화 성공
+2025-07-11 02:35:03,483 [WARNING] duri_core.database: 데이터베이스 연결 실패: connection to server at "duri-postgres" (172.18.0.3), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2025-07-11 02:35:03,484 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-11 02:35:03,484 [INFO] duri_core.decision_processor: DecisionProcessor 초기화 완료
+2025-07-11 02:35:03,484 [INFO] duri_core.decision_processor: CoreService 초기화 완료
+2025-07-11 02:35:03,485 [WARNING] duri_core.database: 데이터베이스 연결 실패: connection to server at "duri-postgres" (172.18.0.3), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2025-07-11 02:35:03,485 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-11 02:35:03,485 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-11 02:35:03,485 [INFO] duri_core.decision_processor: DecisionProcessor 초기화 완료
+2025-07-11 02:35:03,485 [INFO] duri_core.decision_processor: CoreService 초기화 완료
+2025-07-11 02:35:03,486 [INFO] duri_core.app: Flask 앱 초기화 완료
+2025-07-11 02:52:43,549 [INFO] duri_core.decision: ReinforcementEngine 초기화 성공
+2025-07-11 02:52:43,549 [INFO] duri_core.bias_detector: BiasDetector 초기화 완료: /tmp/evolution_data/bias_data
+2025-07-11 02:52:43,549 [INFO] duri_core.decision: BiasDetector 초기화 성공
+2025-07-11 02:52:43,549 [INFO] duri_core.decision: ResultRecorder 초기화 성공
+2025-07-11 02:52:43,559 [INFO] duri_core.database: 데이터베이스 연결 성공
+2025-07-11 02:52:43,560 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-11 02:52:43,560 [INFO] duri_core.decision_processor: DecisionProcessor 초기화 완료
+2025-07-11 02:52:43,560 [INFO] duri_core.decision_processor: CoreService 초기화 완료
+2025-07-11 02:52:43,563 [INFO] duri_core.database: 데이터베이스 연결 성공
+2025-07-11 02:52:43,563 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-11 02:52:43,563 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-11 02:52:43,563 [INFO] duri_core.decision_processor: DecisionProcessor 초기화 완료
+2025-07-11 02:52:43,564 [INFO] duri_core.decision_processor: CoreService 초기화 완료
+2025-07-11 02:52:43,565 [INFO] duri_core.app: Flask 앱 초기화 완료
+2025-07-11 03:44:17,670 [INFO] duri_core.decision: ReinforcementEngine 초기화 성공
+2025-07-11 03:44:17,670 [INFO] duri_core.bias_detector: BiasDetector 초기화 완료: /tmp/evolution_data/bias_data
+2025-07-11 03:44:17,670 [INFO] duri_core.decision: BiasDetector 초기화 성공
+2025-07-11 03:44:17,670 [INFO] duri_core.decision: ResultRecorder 초기화 성공
+2025-07-11 03:44:17,684 [INFO] duri_core.database: 데이터베이스 연결 성공
+2025-07-11 03:44:17,686 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-11 03:44:17,686 [INFO] duri_core.decision_processor: DecisionProcessor 초기화 완료
+2025-07-11 03:44:17,686 [INFO] duri_core.decision_processor: CoreService 초기화 완료
+2025-07-11 03:44:17,688 [INFO] duri_core.database: 데이터베이스 연결 성공
+2025-07-11 03:44:17,688 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-11 03:44:17,689 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-11 03:44:17,689 [INFO] duri_core.decision_processor: DecisionProcessor 초기화 완료
+2025-07-11 03:44:17,689 [INFO] duri_core.decision_processor: CoreService 초기화 완료
+2025-07-11 03:44:17,690 [INFO] duri_core.app: Flask 앱 초기화 완료
+2025-07-11 04:16:54,869 [INFO] duri_core.decision: ReinforcementEngine 초기화 성공
+2025-07-11 04:16:54,869 [INFO] duri_core.bias_detector: BiasDetector 초기화 완료: /tmp/evolution_data/bias_data
+2025-07-11 04:16:54,870 [INFO] duri_core.decision: BiasDetector 초기화 성공
+2025-07-11 04:16:54,870 [INFO] duri_core.decision: ResultRecorder 초기화 성공
+2025-07-11 04:16:54,879 [INFO] duri_core.database: 데이터베이스 연결 성공
+2025-07-11 04:16:54,880 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-11 04:16:54,880 [INFO] duri_core.decision_processor: DecisionProcessor 초기화 완료
+2025-07-11 04:16:54,880 [INFO] duri_core.decision_processor: CoreService 초기화 완료
+2025-07-11 04:16:54,883 [INFO] duri_core.database: 데이터베이스 연결 성공
+2025-07-11 04:16:54,883 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-11 04:16:54,883 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-11 04:16:54,883 [INFO] duri_core.decision_processor: DecisionProcessor 초기화 완료
+2025-07-11 04:16:54,883 [INFO] duri_core.decision_processor: CoreService 초기화 완료
+2025-07-11 04:16:54,884 [INFO] duri_core.app: Flask 앱 초기화 완료
+2025-07-11 04:20:47,314 [INFO] duri_core.decision: ReinforcementEngine 초기화 성공
+2025-07-11 04:20:47,314 [INFO] duri_core.bias_detector: BiasDetector 초기화 완료: /tmp/evolution_data/bias_data
+2025-07-11 04:20:47,314 [INFO] duri_core.decision: BiasDetector 초기화 성공
+2025-07-11 04:20:47,314 [INFO] duri_core.decision: ResultRecorder 초기화 성공
+2025-07-11 04:20:47,323 [INFO] duri_core.database: 데이터베이스 연결 성공
+2025-07-11 04:20:47,325 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-11 04:20:47,325 [INFO] duri_core.decision_processor: DecisionProcessor 초기화 완료
+2025-07-11 04:20:47,325 [INFO] duri_core.decision_processor: CoreService 초기화 완료
+2025-07-11 04:20:47,327 [INFO] duri_core.database: 데이터베이스 연결 성공
+2025-07-11 04:20:47,327 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-11 04:20:47,327 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+2025-07-11 04:20:47,327 [INFO] duri_core.decision_processor: DecisionProcessor 초기화 완료
+2025-07-11 04:20:47,327 [INFO] duri_core.decision_processor: CoreService 초기화 완료
+2025-07-11 04:20:47,329 [INFO] duri_core.app: Flask 앱 초기화 완료
