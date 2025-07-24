@@ -1,0 +1,21 @@
+Attaching to duri_control_container
+[36mduri_control_container |[0m [INFO] No stdin available. Using default: 상태 저장
+[36mduri_control_container |[0m 입력된 명령: 상태 저장
+[36mduri_control_container |[0m [🧠] 상태 저장 완료 (LOG_DIR: ./logs/control)
+[36mduri_control_container |[0m [INFO] No stdin available. Using default: 상태 저장
+[36mduri_control_container |[0m 입력된 명령: 상태 저장
+[36mduri_control_container |[0m [🧠] 상태 저장 완료 (LOG_DIR: ./logs/control)
+[36mduri_control_container |[0m [INFO] No stdin available. Using default: 상태 저장
+[36mduri_control_container |[0m 입력된 명령: 상태 저장
+[36mduri_control_container |[0m [🧠] 상태 저장 완료 (LOG_DIR: ./logs/control)
+[36mduri_control_container |[0m [INFO] No stdin available. Using default: 상태 저장
+[36mduri_control_container |[0m 입력된 명령: 상태 저장
+[36mduri_control_container |[0m [🧠] 상태 저장 완료 (LOG_DIR: ./logs/control)
+[36mduri_control_container |[0m [INFO] No stdin available. Using default: 상태 저장
+[36mduri_control_container |[0m 입력된 명령: 상태 저장
+[36mduri_control_container |[0m [🧠] 상태 저장 완료 (LOG_DIR: ./logs/control)
+[36mduri_control_container |[0m [INFO] No stdin available. Using default: 상태 저장
+[36mduri_control_container |[0m 입력된 명령: 상태 저장
+[36mduri_control_container |[0m [🧠] 상태 저장 완료 (LOG_DIR: ./logs/control)
+[36mduri_control_container |[0m [INFO] No stdin available. Using default: 상태 저장
+[36mduri_control_container |[0m 입력된 명령: 상태 저장
