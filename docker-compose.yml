@@ -70,6 +70,7 @@ services:
       - ./config:/app/config
       - ./.env:/app/.env
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./duri_control/wait-for-postgres.sh:/app/wait-for-postgres.sh:ro
     environment:
       - PORT=8083
       - PYTHONPATH=/app:/app/duri_common
@@ -78,6 +79,7 @@ services:
     depends_on:
       - duri-postgres
       - duri-redis
+    command: ["bash", "/app/wait-for-postgres.sh"]
     restart: unless-stopped
 
   duri-postgres:
