@@ -1,0 +1,12 @@
+[
+  {
+    "timestamp": "2025-05-25T10:30:59.461973",
+    "prev": "none",
+    "new": {
+      "emotion": "fear",
+      "intensity": 0.77,
+      "timestamp": "2025-05-25T21:05:00"
+    },
+    "reason": "first_log"
+  }
+]

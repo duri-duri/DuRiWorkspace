@@ -1,0 +1,79 @@
+{
+  "history": [
+    {
+      "timestamp": "2025-08-03T19:50:00.757435",
+      "quantitative_evolution": {
+        "evolution_score": 0.0,
+        "confidence": 0.5,
+        "trend": "stable",
+        "error": "object of type 'float' has no len()"
+      },
+      "qualitative_evolution": {
+        "evolution_score": 0.8025000000000001,
+        "confidence": 1.0,
+        "autonomy_level": 0.7,
+        "learning_efficiency": 0.8,
+        "problem_solving_capability": 0.85,
+        "evolution_capability": 0.9,
+        "qualitative_characteristics": {
+          "autonomy": "보통 자율성",
+          "learning": "보통 학습 효율성",
+          "problem_solving": "탁월한 문제 해결 능력",
+          "evolution": "강력한 진화 능력"
+        }
+      },
+      "temporal_evolution": {
+        "evolution_score": 0.25,
+        "confidence": 0.5,
+        "evolution_speed": 0.0,
+        "evolution_pattern": "insufficient_data",
+        "evolution_stage": "unknown",
+        "temporal_trend": "stable"
+      },
+      "overall_evolution_score": 0.34337500000000004,
+      "evolution_confidence": 0.675,
+      "key_insights": [
+        "진화 속도가 느려지고 있습니다",
+        "전반적인 진화 개선이 필요합니다"
+      ]
+    },
+    {
+      "timestamp": "2025-08-03T19:58:37.829825",
+      "quantitative_evolution": {
+        "evolution_score": 0.0,
+        "confidence": 0.5,
+        "trend": "stable",
+        "error": "'float' object is not subscriptable"
+      },
+      "qualitative_evolution": {
+        "evolution_score": 0.8025000000000001,
+        "confidence": 1.0,
+        "autonomy_level": 0.7,
+        "learning_efficiency": 0.8,
+        "problem_solving_capability": 0.85,
+        "evolution_capability": 0.9,
+        "qualitative_characteristics": {
+          "autonomy": "보통 자율성",
+          "learning": "보통 학습 효율성",
+          "problem_solving": "탁월한 문제 해결 능력",
+          "evolution": "강력한 진화 능력"
+        }
+      },
+      "temporal_evolution": {
+        "evolution_score": 0.25,
+        "confidence": 0.5,
+        "evolution_speed": 0.0,
+        "evolution_pattern": "insufficient_data",
+        "evolution_stage": "unknown",
+        "temporal_trend": "stable"
+      },
+      "overall_evolution_score": 0.34337500000000004,
+      "evolution_confidence": 0.675,
+      "key_insights": [
+        "진화 속도가 느려지고 있습니다",
+        "전반적인 진화 개선이 필요합니다"
+      ]
+    }
+  ],
+  "last_updated": "2025-08-03T19:58:37.829904"
+}

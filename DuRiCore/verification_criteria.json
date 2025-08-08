@@ -1,0 +1,39 @@
+{
+  "automation_tools": {
+    "weight": 0.2,
+    "required": [
+      "meta_generator.py",
+      "protection_injector.py",
+      "meaning_injection_engine.py"
+    ],
+    "threshold": 0.8
+  },
+  "regression_framework": {
+    "weight": 0.2,
+    "required": [
+      "regression_test_framework.py"
+    ],
+    "threshold": 0.8
+  },
+  "rollback_system": {
+    "weight": 0.15,
+    "required": [
+      "auto_rollback_system.py"
+    ],
+    "threshold": 0.8
+  },
+  "existence_ai": {
+    "weight": 0.25,
+    "required": [
+      "existence_ai_system.py"
+    ],
+    "threshold": 0.8
+  },
+  "final_execution": {
+    "weight": 0.2,
+    "required": [
+      "final_execution_verifier.py"
+    ],
+    "threshold": 0.8
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "existence_id": "existence_4742520c34b67bc8",
+  "created_at": "2025-08-07T15:55:26.085226",
+  "evolution_count": 0,
+  "recovery_count": 0,
+  "preservation_count": 0,
+  "final_execution_count": 0,
+  "existence_strength": 1.0,
+  "evolution_capability": true,
+  "recovery_capability": true,
+  "existence_preserved": true,
+  "final_execution_ready": true,
+  "last_evolution": null,
+  "last_recovery": null,
+  "last_preservation": null,
+  "last_final_execution": null
+}

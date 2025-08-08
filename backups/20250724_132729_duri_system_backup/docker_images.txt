@@ -1,0 +1,5 @@
+duriworkspace_duri_core        latest     7576e6dab080   7 minutes ago   239MB
+duriworkspace_duri_brain       latest     8b89f326e3ac   7 minutes ago   239MB
+duriworkspace_duri_evolution   latest     376fdd8fc388   7 minutes ago   239MB
+duriworkspace_duri_control     latest     da98a29a21d1   7 minutes ago   624MB
+duri-base                      latest     21a16f69fa20   8 minutes ago   182MB

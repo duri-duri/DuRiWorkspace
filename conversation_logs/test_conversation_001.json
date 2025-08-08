@@ -1,0 +1,62 @@
+{
+  "conversation_id": "test_conversation_001",
+  "entries": [
+    {
+      "timestamp": "2025-08-03T20:03:02.210291",
+      "user_input": "파이썬에서 리스트를 정렬하는 방법을 알려줘",
+      "duri_response": "파이썬에서 리스트를 정렬하는 방법은 sort() 메서드나 sorted() 함수를 사용합니다.",
+      "response_time": 1.2,
+      "success": true,
+      "learning_patterns": [
+        "explanation_seeking",
+        "example_based_learning"
+      ],
+      "improvement_areas": [
+        "더 구체적인 예시 제공 필요"
+      ],
+      "evolution_metrics": {
+        "response_quality": 0.8333333333333334,
+        "learning_depth": 0.2,
+        "problem_solving": 1.0
+      }
+    },
+    {
+      "timestamp": "2025-08-03T20:03:02.210338",
+      "user_input": "왜 sorted()와 sort()의 차이점이 뭔가요?",
+      "duri_response": "sort()는 원본 리스트를 변경하고, sorted()는 새로운 정렬된 리스트를 반환합니다.",
+      "response_time": 0.8,
+      "success": true,
+      "learning_patterns": [
+        "explanation_seeking",
+        "concept_clarification",
+        "explanation_seeking"
+      ],
+      "improvement_areas": [],
+      "evolution_metrics": {
+        "response_quality": 1.0,
+        "learning_depth": 0.3,
+        "problem_solving": 1.0
+      }
+    },
+    {
+      "timestamp": "2025-08-03T20:03:02.210372",
+      "user_input": "예시 코드를 보여줘",
+      "duri_response": "numbers = [3, 1, 4, 1, 5]; numbers.sort() # 원본 변경\nsorted_numbers = sorted(numbers) # 새 리스트 생성",
+      "response_time": 1.5,
+      "success": true,
+      "learning_patterns": [
+        "example_based_learning",
+        "code_demonstration",
+        "example_based_learning"
+      ],
+      "improvement_areas": [
+        "코드 주석 추가 필요"
+      ],
+      "evolution_metrics": {
+        "response_quality": 0.6666666666666666,
+        "learning_depth": 0.3,
+        "problem_solving": 1.0
+      }
+    }
+  ]
+}

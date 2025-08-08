@@ -1,0 +1,79 @@
+version: "3.9"
+
+services:
+  duri_core:
+    build:
+      context: ./duri_core
+    container_name: duri_core_container
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./duri_core:/app/duri_core
+      - ./duri_common:/app/duri_common:ro
+      - ./.env:/app/.env
+      - ./logs:/app/logs
+    working_dir: /app/duri_core
+    environment:
+      - PORT=8080
+      - PYTHONPATH=/app/duri_core:/app/duri_common
+    restart: unless-stopped
+
+  duri_brain:
+    build:
+      context: ./duri_brain
+    container_name: duri_brain_container
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./duri_brain/duri_brain:/app/duri_brain
+      - ./duri_brain/wait-for-postgres.sh:/app/wait-for-postgres.sh    # 추가
+      - ./duri_core:/app/duri_core
+      - ./duri_common:/app/duri_common:ro
+      - ./.env:/app/.env
+      - ./logs:/app/logs
+    working_dir: /app/duri_brain
+    environment:
+      - PORT=8081
+      - PYTHONPATH=/app/duri_brain:/app/duri_core:/app/duri_common
+    command: ["bash", "/app/wait-for-postgres.sh"]
+    restart: unless-stopped
+
+  duri_evolution:
+    build:
+      context: ./duri_evolution
+    container_name: duri_evolution_container
+    ports:
+      - "8082:8082"
+    volumes:
+      - ./duri_evolution/app:/app/duri_evolution
+      - ./duri_evolution/wait-for-postgres.sh:/app/wait-for-postgres.sh    # 추가
+      - ./duri_core:/app/duri_core
+      - ./duri_common:/app/duri_common:ro
+      - ./.env:/app/.env
+      - ./logs:/app/logs
+    working_dir: /app/duri_evolution
+    environment:
+      - PORT=8082
+      - PYTHONPATH=/app/duri_evolution:/app/duri_core:/app/duri_common
+    command: ["bash", "/app/wait-for-postgres.sh"]
+    restart: unless-stopped
+
+  duri-postgres:
+    image: postgres:14
+    container_name: duri-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: duri
+      POSTGRES_PASSWORD: duri
+      POSTGRES_DB: duri
+    ports:
+      - "5432:5432"
+    volumes:
+      - duri_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  duri_postgres_data:
+
+networks:
+  default:
+    driver: bridge

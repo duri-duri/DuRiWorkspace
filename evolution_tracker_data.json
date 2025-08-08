@@ -1,0 +1,24 @@
+{
+  "history": [
+    {
+      "timestamp": "2025-08-03T19:50:00.756957",
+      "performance_score": 0.75,
+      "learning_efficiency": 0.8,
+      "autonomy_level": 0.7,
+      "problem_solving_capability": 0.85,
+      "evolution_stage": "초기 학습 단계",
+      "improvement_rate": 0.0
+    },
+    {
+      "timestamp": "2025-08-03T19:58:37.828964",
+      "performance_score": 0.75,
+      "learning_efficiency": 0.8,
+      "autonomy_level": 0.7,
+      "problem_solving_capability": 0.85,
+      "evolution_stage": "기본 기능 습득",
+      "improvement_rate": 0.0
+    }
+  ],
+  "current_stage": 2,
+  "last_updated": "2025-08-03T19:58:37.828997"
+}

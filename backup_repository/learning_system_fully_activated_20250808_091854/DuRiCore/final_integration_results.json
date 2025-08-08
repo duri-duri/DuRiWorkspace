@@ -1,0 +1,96 @@
+{
+  "integration_result": {
+    "integration_id": "integration_1754308329_944c12fe",
+    "timestamp": "2025-08-04 20:52:09.122024",
+    "success": false,
+    "integrated_systems": [],
+    "performance_metrics": {},
+    "compatibility_score": 0.0,
+    "total_systems": 3,
+    "successful_integrations": 0,
+    "failed_integrations": 3,
+    "integration_time": 0.00012111663818359375,
+    "error_messages": [
+      "\uc2dc\uc2a4\ud15c advanced_feature_engine\uc758 \uc758\uc874\uc131 core_system\uac00 \ub4f1\ub85d\ub418\uc9c0 \uc54a\uc74c",
+      "\uc2dc\uc2a4\ud15c intelligent_automation_system\uc758 \uc758\uc874\uc131 core_system\uac00 \ub4f1\ub85d\ub418\uc9c0 \uc54a\uc74c",
+      "\uc2dc\uc2a4\ud15c advanced_analytics_platform\uc758 \uc758\uc874\uc131 core_system\uac00 \ub4f1\ub85d\ub418\uc9c0 \uc54a\uc74c"
+    ],
+    "warnings": []
+  },
+  "optimization_result": {
+    "optimization_id": "optimization_1754308329_cca48fa6",
+    "timestamp": "2025-08-04 20:52:09.272738",
+    "success": true,
+    "optimization_type": "performance_optimization",
+    "performance_improvement": 0.0,
+    "resource_usage_reduction": 0.0,
+    "optimization_time": 0.15066289901733398,
+    "applied_optimizations": [
+      "caching",
+      "load_balancing",
+      "resource_pooling"
+    ],
+    "metrics_before": {
+      "advanced_feature_engine_performance": 0.85,
+      "advanced_feature_engine_compatibility": 0.9,
+      "intelligent_automation_system_performance": 0.88,
+      "intelligent_automation_system_compatibility": 0.92,
+      "advanced_analytics_platform_performance": 0.82,
+      "advanced_analytics_platform_compatibility": 0.88,
+      "overall_performance": 0.85,
+      "overall_compatibility": 0.9
+    },
+    "metrics_after": {
+      "advanced_feature_engine_performance": 0.85,
+      "advanced_feature_engine_compatibility": 0.9,
+      "intelligent_automation_system_performance": 0.88,
+      "intelligent_automation_system_compatibility": 0.92,
+      "advanced_analytics_platform_performance": 0.82,
+      "advanced_analytics_platform_compatibility": 0.88,
+      "overall_performance": 0.85,
+      "overall_compatibility": 0.9
+    },
+    "error_messages": []
+  },
+  "performance_report": {
+    "report_id": "performance_1754308329_334631fc",
+    "timestamp": "2025-08-04 20:52:19.283245",
+    "overall_performance": 0.85,
+    "system_performance": {
+      "advanced_feature_engine": 0.85,
+      "intelligent_automation_system": 0.88,
+      "advanced_analytics_platform": 0.82
+    },
+    "bottleneck_analysis": [],
+    "recommendations": [],
+    "monitoring_duration": 10,
+    "data_points": 5,
+    "alerts": []
+  },
+  "validation_report": {
+    "validation_id": "validation_1754308339_5cf2ef16",
+    "timestamp": "2025-08-04 20:52:19.285245",
+    "success": false,
+    "compatibility_score": 0.0,
+    "validation_results": {
+      "advanced_feature_engine": false,
+      "intelligent_automation_system": false,
+      "advanced_analytics_platform": false
+    },
+    "issues_found": [
+      "\uc758\uc874\uc131 core_system \ub204\ub77d",
+      "\uc758\uc874\uc131 core_system \ub204\ub77d",
+      "\uc758\uc874\uc131 core_system \ub204\ub77d"
+    ],
+    "recommendations": [
+      "\uc2dc\uc2a4\ud15c advanced_feature_engine \ud638\ud658\uc131 \uac1c\uc120 \ud544\uc694",
+      "\uc2dc\uc2a4\ud15c intelligent_automation_system \ud638\ud658\uc131 \uac1c\uc120 \ud544\uc694",
+      "\uc2dc\uc2a4\ud15c advanced_analytics_platform \ud638\ud658\uc131 \uac1c\uc120 \ud544\uc694",
+      "\uc804\uccb4 \uc2dc\uc2a4\ud15c \ud638\ud658\uc131 \uac80\ud1a0 \ud544\uc694"
+    ],
+    "validation_time": 4.935264587402344e-05,
+    "systems_validated": 3,
+    "systems_passed": 0,
+    "systems_failed": 3
+  }
+}

@@ -1,0 +1,121 @@
+[
+  {
+    "timestamp": "2025-05-27T09:51:02.294142",
+    "target": "duri-brain",
+    "ip": "192.168.0.9",
+    "emotion": {
+      "timestamp": "2025-05-27T09:50:55.849613",
+      "emotion": "disgust",
+      "intensity": 0.55,
+      "reason": "emotion_changed",
+      "importance_score": 1.0
+    },
+    "status": "failure",
+    "error": "scp exit code: 256"
+  },
+  {
+    "timestamp": "2025-05-27T09:51:02.489275",
+    "target": "duri-control",
+    "ip": "192.168.0.11",
+    "emotion": {
+      "timestamp": "2025-05-27T09:50:55.849613",
+      "emotion": "disgust",
+      "intensity": 0.55,
+      "reason": "emotion_changed",
+      "importance_score": 1.0
+    },
+    "status": "success"
+  },
+  {
+    "timestamp": "2025-05-27T09:51:02.924793",
+    "target": "duri-evolution",
+    "ip": "192.168.0.20",
+    "emotion": {
+      "timestamp": "2025-05-27T09:50:55.849613",
+      "emotion": "disgust",
+      "intensity": 0.55,
+      "reason": "emotion_changed",
+      "importance_score": 1.0
+    },
+    "status": "failure",
+    "error": "scp exit code: 256"
+  },
+  {
+    "timestamp": "2025-05-27T10:01:13.583327",
+    "target": "duri-brain",
+    "ip": "192.168.0.9",
+    "emotion": {
+      "timestamp": "2025-05-27T10:00:44.918835",
+      "emotion": "sadness",
+      "intensity": 0.45,
+      "reason": "emotion_changed",
+      "importance_score": 1.0
+    },
+    "status": "success"
+  },
+  {
+    "timestamp": "2025-05-27T10:01:13.792084",
+    "target": "duri-control",
+    "ip": "192.168.0.11",
+    "emotion": {
+      "timestamp": "2025-05-27T10:00:44.918835",
+      "emotion": "sadness",
+      "intensity": 0.45,
+      "reason": "emotion_changed",
+      "importance_score": 1.0
+    },
+    "status": "success"
+  },
+  {
+    "timestamp": "2025-05-27T10:01:14.204922",
+    "target": "duri-evolution",
+    "ip": "192.168.0.20",
+    "emotion": {
+      "timestamp": "2025-05-27T10:00:44.918835",
+      "emotion": "sadness",
+      "intensity": 0.45,
+      "reason": "emotion_changed",
+      "importance_score": 1.0
+    },
+    "status": "success"
+  },
+  {
+    "timestamp": "2025-05-27T10:02:01.511191",
+    "target": "duri-brain",
+    "ip": "192.168.0.9",
+    "emotion": {
+      "timestamp": "2025-05-27T10:01:10.301740",
+      "emotion": "joy",
+      "intensity": 0.99,
+      "reason": "emotion_changed",
+      "importance_score": 1.0
+    },
+    "status": "success"
+  },
+  {
+    "timestamp": "2025-05-27T10:02:01.692497",
+    "target": "duri-control",
+    "ip": "192.168.0.11",
+    "emotion": {
+      "timestamp": "2025-05-27T10:01:10.301740",
+      "emotion": "joy",
+      "intensity": 0.99,
+      "reason": "emotion_changed",
+      "importance_score": 1.0
+    },
+    "status": "success"
+  },
+  {
+    "timestamp": "2025-05-27T10:02:01.969132",
+    "target": "duri-evolution",
+    "ip": "192.168.0.20",
+    "emotion": {
+      "timestamp": "2025-05-27T10:01:10.301740",
+      "emotion": "joy",
+      "intensity": 0.99,
+      "reason": "emotion_changed",
+      "importance_score": 1.0
+    },
+    "status": "success"
+  }
+]

@@ -1,0 +1,18 @@
+{
+  "conversation_id": "test_conversation_001",
+  "start_time": "2025-08-03T20:03:02.210291",
+  "end_time": "2025-08-03T20:03:02.210372",
+  "total_exchanges": 3,
+  "average_response_time": 1.1666666666666667,
+  "learning_efficiency": 1.0,
+  "problem_solving_score": 1.0,
+  "autonomy_level": 1.0,
+  "evolution_patterns": [
+    "active_learning",
+    "high_success_rate"
+  ],
+  "key_insights": [
+    "학습 패턴 8개 감지됨",
+    "성공률: 100.0%"
+  ]
+}

@@ -1,0 +1,1398 @@
+2025-08-08 09:02:21,155 - DuRiCore.unified_learning_system - WARNING - 존재형 AI 시스템을 찾을 수 없습니다.
+2025-08-08 09:02:21,156 - DuRiCore.unified_learning_system - WARNING - 최종 실행 준비 완료 시스템을 찾을 수 없습니다.
+2025-08-08 09:02:21,156 - DuRiCore.unified_learning_system - INFO - 통합 학습 시스템 초기화 완료
+2025-08-08 09:02:21,156 - DuRiCore.unified_learning_system - WARNING - 존재형 AI 시스템을 찾을 수 없습니다.
+2025-08-08 09:02:21,156 - DuRiCore.unified_learning_system - WARNING - 최종 실행 준비 완료 시스템을 찾을 수 없습니다.
+2025-08-08 09:02:21,156 - DuRiCore.unified_learning_system - INFO - 통합 학습 시스템 초기화 완료
+2025-08-08 09:02:21,156 - DuRiCore.unified_learning_system - INFO - 학습 세션 시작: learning_session_1_20250808_090221 - continuous
+2025-08-08 09:02:21,156 - __main__ - INFO - ✅ 통합 학습 시스템 활성화 완료: learning_session_1_20250808_090221
+2025-08-08 09:02:21,166 - duri_modules.autonomous.autonomous_question_generator - INFO - 🧠 자율 질문 생성 시스템 초기화 완료
+2025-08-08 09:02:21,290 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-08-08 09:02:21,290 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-08-08 09:02:21,290 - duri_modules.autonomous.strategy_loop_runner - INFO - 🔄 DuRi 전략 루프 러너 초기화 완료
+2025-08-08 09:02:21,290 - duri_core.utils.performance_monitor - INFO - PerformanceMonitor 초기화 완료
+2025-08-08 09:02:21,290 - duri_core.utils.log_analyzer - INFO - LogAnalyzer 초기화 완료
+2025-08-08 09:02:21,290 - duri_core.utils.fallback_handler - INFO - FallbackHandler 초기화 완료
+2025-08-08 09:02:21,290 - duri_core.memory.memory_sync - INFO - 메모리 데이터베이스 초기화 완료
+2025-08-08 09:02:21,291 - duri_core.memory.memory_sync - INFO - MemorySync 시스템 초기화 완료
+2025-08-08 09:02:21,291 - duri_core.memory.meta_learning_data - INFO - MetaLearningDataManager 초기화 완료
+2025-08-08 09:02:21,291 - duri_brain.learning.auto_retrospector - INFO - AutoRetrospector 초기화 완료
+2025-08-08 09:02:21,291 - duri_brain.learning.strategy_imitator - INFO - StrategyImitator 초기화 완료
+2025-08-08 09:02:21,291 - duri_brain.learning.practice_engine - INFO - PracticeEngine 초기화 완료
+2025-08-08 09:02:21,291 - duri_brain.learning.challenge_trigger - INFO - ChallengeTrigger 초기화 완료
+2025-08-08 09:02:21,291 - duri_brain.learning.self_improvement_engine - INFO - SelfImprovementEngine 초기화 완료
+2025-08-08 09:02:21,291 - duri_core.philosophy.survival_criteria - INFO - SurvivalCriteriaManager 초기화 완료
+2025-08-08 09:02:21,291 - duri_brain.learning.strategy_survival_judge - INFO - StrategySurvivalJudge 초기화 완료
+2025-08-08 09:02:21,291 - duri_core.memory.strategy_graveyard - INFO - 묘지 데이터 파일이 없습니다. 새로 시작합니다.
+2025-08-08 09:02:21,291 - duri_core.memory.strategy_graveyard - INFO - StrategyGraveyard 초기화 완료
+2025-08-08 09:02:21,291 - duri_brain.learning.auto_retrospector - INFO - AutoRetrospector 초기화 완료
+2025-08-08 09:02:21,291 - duri_core.utils.memory_optimizer - INFO - MemoryOptimizer 초기화 완료
+2025-08-08 09:02:21,291 - duri_core.utils.performance_optimizer - INFO - PerformanceOptimizer 초기화 완료
+2025-08-08 09:02:21,291 - duri_core.assessment.self_assessment_manager - INFO - SelfAssessmentManager 초기화 완료
+2025-08-08 09:02:21,292 - duri_brain.goals.goal_oriented_thinking - INFO - GoalOrientedThinking 초기화 완료
+2025-08-08 09:02:21,292 - duri_brain.ethics.emotional_ethical_judgment - INFO - EmotionalEthicalJudgment 초기화 완료
+2025-08-08 09:02:21,292 - duri_brain.goals.autonomous_goal_setting - INFO - AutonomousGoalSetting 초기화 완료
+2025-08-08 09:02:21,292 - duri_brain.creativity.advanced_creativity_system - INFO - AdvancedCreativitySystem 초기화 완료
+2025-08-08 09:02:21,292 - duri_brain.learning.learning_loop_manager - INFO - LearningLoopManager 초기화 완료
+2025-08-08 09:02:21,292 - duri_modules.autonomous.unified_improvement_system - INFO - ✅ 기존 시스템들과 통합 완료
+2025-08-08 09:02:21,292 - duri_modules.autonomous.unified_improvement_system - INFO - 🚀 통합 개선 시스템 초기화 완료
+2025-08-08 09:02:21,292 - duri_modules.autonomous.autonomous_question_generator - INFO - 🧠 자율 질문 생성 시스템 초기화 완료
+2025-08-08 09:02:21,293 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-08-08 09:02:21,293 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-08-08 09:02:21,293 - duri_modules.autonomous.strategy_loop_runner - INFO - 🔄 DuRi 전략 루프 러너 초기화 완료
+2025-08-08 09:02:21,293 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-08-08 09:02:21,293 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-08-08 09:02:21,293 - duri_modules.autonomous.strategy_loop_runner - INFO - 🔄 DuRi 전략 루프 러너 초기화 완료
+2025-08-08 09:02:21,293 - duri_brain.learning.auto_retrospector - INFO - AutoRetrospector 초기화 완료
+2025-08-08 09:02:21,293 - duri_brain.learning.auto_retrospector - INFO - AutoRetrospector 초기화 완료
+2025-08-08 09:02:21,293 - duri_brain.learning.learning_loop_manager - INFO - LearningLoopManager 초기화 완료
+2025-08-08 09:02:21,293 - duri_modules.autonomous.unified_improvement_system - INFO - ✅ 기존 시스템들과 통합 완료
+2025-08-08 09:02:21,293 - duri_modules.autonomous.unified_improvement_system - INFO - 🚀 통합 개선 시스템 초기화 완료
+2025-08-08 09:02:21,293 - duri_brain.learning.auto_retrospector - INFO - AutoRetrospector 초기화 완료
+2025-08-08 09:02:21,293 - duri_brain.learning.auto_retrospector - INFO - AutoRetrospector 초기화 완료
+2025-08-08 09:02:21,293 - duri_brain.learning.learning_loop_manager - INFO - LearningLoopManager 초기화 완료
+2025-08-08 09:02:21,294 - duri_modules.autonomous.duri_autonomous_core - INFO - 🧠 DuRi 자율 학습 통합 핵심 시스템 초기화 완료
+2025-08-08 09:02:21,294 - duri_modules.autonomous.autonomous_question_generator - INFO - 🧠 자율 질문 생성 시스템 초기화 완료
+2025-08-08 09:02:21,294 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-08-08 09:02:21,294 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-08-08 09:02:21,294 - duri_modules.autonomous.strategy_loop_runner - INFO - 🔄 DuRi 전략 루프 러너 초기화 완료
+2025-08-08 09:02:21,294 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-08-08 09:02:21,294 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-08-08 09:02:21,294 - duri_modules.autonomous.strategy_loop_runner - INFO - 🔄 DuRi 전략 루프 러너 초기화 완료
+2025-08-08 09:02:21,294 - duri_brain.learning.auto_retrospector - INFO - AutoRetrospector 초기화 완료
+2025-08-08 09:02:21,294 - duri_brain.learning.auto_retrospector - INFO - AutoRetrospector 초기화 완료
+2025-08-08 09:02:21,294 - duri_brain.learning.learning_loop_manager - INFO - LearningLoopManager 초기화 완료
+2025-08-08 09:02:21,294 - duri_modules.autonomous.unified_improvement_system - INFO - ✅ 기존 시스템들과 통합 완료
+2025-08-08 09:02:21,294 - duri_modules.autonomous.unified_improvement_system - INFO - 🚀 통합 개선 시스템 초기화 완료
+2025-08-08 09:02:21,294 - duri_brain.learning.auto_retrospector - INFO - AutoRetrospector 초기화 완료
+2025-08-08 09:02:21,294 - duri_brain.learning.auto_retrospector - INFO - AutoRetrospector 초기화 완료
+2025-08-08 09:02:21,295 - duri_brain.learning.learning_loop_manager - INFO - LearningLoopManager 초기화 완료
+2025-08-08 09:02:21,295 - duri_modules.autonomous.duri_autonomous_core - INFO - 🧠 DuRi 자율 학습 통합 핵심 시스템 초기화 완료
+2025-08-08 09:02:21,295 - duri_modules.autonomous.continuous_learner - INFO - 🚀 DuRi 24/7 자동 학습 시스템 시작
+2025-08-08 09:02:21,295 - duri_modules.autonomous.realtime_learner - INFO - 🚀 DuRi 실시간 학습 시스템 시작
+2025-08-08 09:02:21,295 - duri_modules.autonomous.duri_autonomous_core - INFO - 🚀 DuRi 자율 학습 시스템 시작
+2025-08-08 09:02:21,296 - duri_modules.autonomous.continuous_learner - WARNING - 문제 감지: 학습 진전이 없음 (심각도: 0.50)
+2025-08-08 09:02:21,296 - __main__ - INFO - ✅ 자율 학습 시스템 활성화 완료
+2025-08-08 09:02:21,296 - duri_modules.autonomous.continuous_learner - INFO - 자동 결정 실행: 학습률 조정 - 학습 진전이 0.00%로 낮음
+2025-08-08 09:02:21,296 - duri_modules.autonomous.continuous_learner - INFO - ⚙️ 학습률 조정 액션 실행
+2025-08-08 09:02:21,296 - duri_brain.learning.auto_retrospector - INFO - AutoRetrospector 초기화 완료
+2025-08-08 09:02:21,296 - duri_brain.learning.learning_loop_manager - INFO - LearningLoopManager 초기화 완료
+2025-08-08 09:02:21,296 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 1 시작
+2025-08-08 09:02:21,297 - duri_brain.learning.learning_loop_manager - INFO - 메타 학습 사이클 시작
+2025-08-08 09:02:21,297 - duri_brain.learning.learning_loop_manager - ERROR - 메타 학습 사이클 실행 중 오류: 'AutoRetrospector' object has no attribute 'run_comprehensive_analysis'
+2025-08-08 09:02:21,297 - duri_brain.learning.learning_loop_manager - INFO - 자기 평가 사이클 시작
+2025-08-08 09:02:21,297 - duri_core.assessment.self_assessment_manager - INFO - 자기 평가 시작: assessment_c046da18
+2025-08-08 09:02:21,296 - duri_brain.learning.learning_loop_manager - INFO - 학습 루프 시작: learning_cycle_20250808_090221
+2025-08-08 09:02:21,298 - duri_core.assessment.self_assessment_manager - INFO - 자기 평가 완료: assessment_c046da18 - 전체 점수: 0.68
+2025-08-08 09:02:21,298 - __main__ - INFO - ✅ 학습 루프 매니저 활성화 완료: learning_cycle_20250808_090221
+2025-08-08 09:02:21,298 - duri_brain.learning.learning_loop_manager - INFO - 학습 개선을 위해 개선 임계값을 조정합니다
+2025-08-08 09:02:21,298 - duri_modules.autonomous.realtime_learner - INFO - 🚀 DuRi 실시간 학습 시스템 시작
+2025-08-08 09:02:21,298 - duri_brain.learning.learning_loop_manager - INFO - 자기 평가 사이클 완료 - 전체 점수: 0.68
+2025-08-08 09:02:21,298 - duri_brain.learning.learning_loop_manager - INFO - 목표 지향적 사고 사이클 시작
+2025-08-08 09:02:21,298 - __main__ - INFO - ✅ 실시간 학습 시스템 활성화 완료
+2025-08-08 09:02:21,299 - duri_brain.learning.learning_loop_manager - INFO - 새로운 목표 1개 생성됨
+2025-08-08 09:02:21,299 - duri_brain.learning.learning_loop_manager - INFO - 목표: 시스템 안정성 강화 (stability)
+2025-08-08 09:02:21,299 - duri_brain.learning.learning_loop_manager - INFO - 목표 실행 계획 생성: plan_0591de43
+2025-08-08 09:02:21,299 - duri_brain.learning.learning_loop_manager - INFO - 목표 지향적 사고 사이클 완료
+2025-08-08 09:02:21,299 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:21,299 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:21,299 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:21,299 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:21,299 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:21,299 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:21,299 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:21,299 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:21,300 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:21,300 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:21,300 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:21,300 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:21,300 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:21,300 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:21,300 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:21,300 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:21,300 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:21,300 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:21,300 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:21,300 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:21,300 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:21,300 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:21,300 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 등록 완료
+2025-08-08 09:02:21,300 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:21,300 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:21,300 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:21,300 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:21,400 - duri_brain.learning.learning_loop_manager - INFO - 사이클 1 성공: 개선점수 0.13
+2025-08-08 09:02:22,401 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 2 시작
+2025-08-08 09:02:22,401 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:22,401 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:22,401 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:22,401 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:22,401 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:22,401 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:22,401 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:22,401 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:22,402 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:22,402 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:22,402 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:22,402 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:22,402 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:22,402 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:22,402 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:22,402 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:22,402 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:22,402 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:22,402 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:22,402 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:22,402 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:22,402 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:22,402 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:22,402 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:22,402 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:22,403 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:22,403 - duri_brain.learning.learning_loop_manager - INFO - 사이클 2 성공: 개선점수 0.13
+2025-08-08 09:02:23,404 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 3 시작
+2025-08-08 09:02:23,404 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:23,404 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:23,404 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:23,404 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:23,404 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:23,404 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:23,404 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:23,404 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:23,404 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:23,404 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:23,404 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:23,404 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:23,405 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:23,405 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:23,405 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:23,405 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:23,405 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:23,405 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:23,405 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:23,405 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:23,405 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:23,405 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:23,405 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:23,405 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:23,405 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:23,405 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:23,505 - duri_brain.learning.learning_loop_manager - INFO - 사이클 3 성공: 개선점수 0.13
+2025-08-08 09:02:24,506 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 4 시작
+2025-08-08 09:02:24,506 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:24,506 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:24,506 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:24,506 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:24,506 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:24,506 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:24,506 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:24,506 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:24,506 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:24,506 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:24,506 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:24,506 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:24,506 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:24,506 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:24,506 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:24,506 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:24,507 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:24,507 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:24,507 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:24,507 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:24,507 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:24,507 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:24,507 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:24,507 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:24,507 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:24,507 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:24,507 - duri_brain.learning.learning_loop_manager - INFO - 사이클 4 성공: 개선점수 0.13
+2025-08-08 09:02:25,507 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 5 시작
+2025-08-08 09:02:25,507 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:25,507 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:25,507 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:25,508 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:25,508 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:25,508 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:25,508 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:25,508 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:25,508 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:25,508 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:25,508 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:25,508 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:25,508 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:25,508 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:25,508 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:25,508 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:25,508 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:25,508 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:25,508 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:25,508 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:25,508 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:25,508 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:25,508 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:25,509 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:25,509 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:25,509 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:25,608 - duri_brain.learning.learning_loop_manager - INFO - 사이클 5 성공: 개선점수 0.13
+2025-08-08 09:02:26,609 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 6 시작
+2025-08-08 09:02:26,609 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:26,609 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:26,609 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:26,609 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:26,609 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:26,609 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:26,609 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:26,609 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:26,609 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:26,609 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:26,609 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:26,609 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:26,610 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:26,610 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:26,610 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:26,610 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:26,610 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:26,610 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:26,610 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:26,610 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:26,610 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:26,610 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:26,610 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:26,610 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:26,610 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:26,610 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:26,710 - duri_brain.learning.learning_loop_manager - INFO - 사이클 6 성공: 개선점수 0.13
+2025-08-08 09:02:27,710 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 7 시작
+2025-08-08 09:02:27,710 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:27,710 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:27,710 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:27,710 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:27,710 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:27,710 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:27,710 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:27,711 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:27,711 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:27,711 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:27,711 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:27,711 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:27,711 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:27,711 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:27,711 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:27,711 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:27,711 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:27,711 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:27,711 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:27,711 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:27,711 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:27,711 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:27,711 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:27,711 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:27,711 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:27,711 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:27,712 - duri_brain.learning.learning_loop_manager - INFO - 사이클 7 성공: 개선점수 0.13
+2025-08-08 09:02:28,712 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 8 시작
+2025-08-08 09:02:28,712 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:28,712 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:28,712 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:28,712 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:28,712 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:28,712 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:28,712 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:28,712 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:28,713 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:28,713 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:28,713 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:28,713 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:28,713 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:28,713 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:28,713 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:28,713 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:28,713 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:28,713 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:28,713 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:28,713 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:28,713 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:28,713 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:28,713 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:28,713 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:28,714 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:28,714 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:28,813 - duri_brain.learning.learning_loop_manager - INFO - 사이클 8 성공: 개선점수 0.13
+2025-08-08 09:02:29,814 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 9 시작
+2025-08-08 09:02:29,814 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:29,814 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:29,814 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:29,814 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:29,814 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:29,815 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:29,815 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:29,815 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:29,815 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:29,815 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:29,815 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:29,815 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:29,815 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:29,815 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:29,815 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:29,815 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:29,815 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:29,815 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:29,815 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:29,815 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:29,815 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:29,815 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:29,815 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:29,815 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:29,816 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:29,816 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:29,915 - duri_brain.learning.learning_loop_manager - INFO - 사이클 9 성공: 개선점수 0.13
+2025-08-08 09:02:30,916 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 10 시작
+2025-08-08 09:02:30,916 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:30,916 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:30,916 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:30,916 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:30,916 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:30,916 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:30,916 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:30,916 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:30,917 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:30,917 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:30,917 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:30,917 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:30,917 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:30,917 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:30,917 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:30,917 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:30,917 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:30,917 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:30,917 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:30,917 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:30,917 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:30,917 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:30,917 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:30,917 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:30,917 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:30,917 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:31,017 - duri_brain.learning.learning_loop_manager - INFO - 사이클 10 성공: 개선점수 0.13
+2025-08-08 09:02:32,017 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 11 시작
+2025-08-08 09:02:32,018 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:32,018 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:32,018 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:32,018 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:32,018 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:32,018 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:32,018 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:32,018 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:32,018 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:32,018 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:32,018 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:32,018 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:32,018 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:32,018 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:32,019 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:32,019 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:32,019 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:32,019 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:32,019 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:32,019 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:32,019 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:32,019 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:32,019 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:32,019 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:32,019 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:32,019 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:32,118 - duri_brain.learning.learning_loop_manager - INFO - 사이클 11 성공: 개선점수 0.13
+2025-08-08 09:02:33,120 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 12 시작
+2025-08-08 09:02:33,120 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:33,120 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:33,120 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:33,120 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:33,120 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:33,120 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:33,120 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:33,120 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:33,120 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:33,120 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:33,120 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:33,120 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:33,121 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:33,121 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:33,121 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:33,121 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:33,121 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:33,121 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:33,121 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:33,121 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:33,121 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:33,121 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:33,121 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:33,121 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:33,121 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:33,121 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:33,121 - duri_brain.learning.learning_loop_manager - INFO - 사이클 12 성공: 개선점수 0.13
+2025-08-08 09:02:34,122 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 13 시작
+2025-08-08 09:02:34,122 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:34,122 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:34,122 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:34,122 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:34,122 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:34,123 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:34,123 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:34,123 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:34,123 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:34,123 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:34,123 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:34,123 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:34,123 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:34,123 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:34,123 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:34,123 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:34,123 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:34,123 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:34,123 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:34,123 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:34,123 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:34,124 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:34,124 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:34,124 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:34,124 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:34,124 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:34,223 - duri_brain.learning.learning_loop_manager - INFO - 사이클 13 성공: 개선점수 0.13
+2025-08-08 09:02:35,224 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 14 시작
+2025-08-08 09:02:35,224 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:35,224 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:35,224 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:35,224 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:35,224 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:35,225 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:35,225 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:35,225 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:35,225 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:35,225 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:35,225 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:35,225 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:35,225 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:35,225 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:35,225 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:35,225 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:35,225 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:35,225 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:35,225 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:35,226 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:35,226 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:35,226 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:35,226 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:35,226 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:35,226 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:35,226 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:35,325 - duri_brain.learning.learning_loop_manager - INFO - 사이클 14 성공: 개선점수 0.13
+2025-08-08 09:02:36,326 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 15 시작
+2025-08-08 09:02:36,326 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:36,326 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:36,326 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:36,327 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:36,327 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:36,327 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:36,327 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:36,327 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:36,327 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:36,327 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:36,327 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:36,327 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:36,327 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:36,327 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:36,327 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:36,327 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:36,327 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:36,327 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:36,327 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:36,327 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:36,328 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:36,328 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:36,328 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:36,328 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:36,328 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:36,328 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:36,427 - duri_brain.learning.learning_loop_manager - INFO - 사이클 15 성공: 개선점수 0.13
+2025-08-08 09:02:37,428 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 16 시작
+2025-08-08 09:02:37,428 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:37,428 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:37,428 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:37,428 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:37,428 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:37,428 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:37,428 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:37,428 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:37,429 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:37,429 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:37,429 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:37,429 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:37,429 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:37,429 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:37,429 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:37,429 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:37,429 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:37,429 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:37,429 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:37,429 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:37,429 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:37,430 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:37,430 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:37,430 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:37,430 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:37,430 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:37,529 - duri_brain.learning.learning_loop_manager - INFO - 사이클 16 성공: 개선점수 0.13
+2025-08-08 09:02:38,530 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 17 시작
+2025-08-08 09:02:38,530 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:38,530 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:38,530 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:38,530 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:38,530 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:38,531 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:38,531 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:38,531 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:38,531 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:38,531 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:38,531 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:38,531 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:38,531 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:38,531 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:38,531 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:38,531 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:38,531 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:38,531 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:38,531 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:38,531 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:38,531 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:38,531 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:38,532 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:38,532 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:38,532 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:38,532 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:38,631 - duri_brain.learning.learning_loop_manager - INFO - 사이클 17 성공: 개선점수 0.13
+2025-08-08 09:02:39,632 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 18 시작
+2025-08-08 09:02:39,632 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:39,632 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:39,632 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:39,632 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:39,632 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:39,632 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:39,632 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:39,632 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:39,632 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:39,632 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:39,632 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:39,632 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:39,633 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:39,633 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:39,633 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:39,633 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:39,633 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:39,633 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:39,633 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:39,633 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:39,633 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:39,633 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:39,633 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:39,633 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:39,633 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:39,633 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:39,733 - duri_brain.learning.learning_loop_manager - INFO - 사이클 18 성공: 개선점수 0.13
+2025-08-08 09:02:40,734 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 19 시작
+2025-08-08 09:02:40,734 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:40,734 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:40,734 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:40,734 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:40,734 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:40,734 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:40,734 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:40,734 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:40,734 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:40,734 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:40,734 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:40,734 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:40,735 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:40,735 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:40,735 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:40,735 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:40,735 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:40,735 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:40,735 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:40,735 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:40,735 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:40,735 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:40,735 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:40,735 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:40,735 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:40,735 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:40,735 - duri_brain.learning.learning_loop_manager - INFO - 사이클 19 성공: 개선점수 0.13
+2025-08-08 09:02:41,736 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 20 시작
+2025-08-08 09:02:41,736 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:41,736 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:41,736 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:41,736 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:41,736 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:41,736 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:41,736 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:41,736 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:41,737 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:41,737 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:41,737 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:41,737 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:41,737 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:41,737 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:41,737 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:41,737 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:41,737 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:41,737 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:41,737 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:41,737 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:41,737 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:41,737 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:41,737 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:41,737 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:41,737 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:41,737 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:41,738 - duri_brain.learning.learning_loop_manager - INFO - 사이클 20 성공: 개선점수 0.13
+2025-08-08 09:02:42,739 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 21 시작
+2025-08-08 09:02:42,739 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:42,739 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:42,739 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:42,739 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:42,739 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:42,739 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:42,739 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:42,739 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:42,739 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:42,739 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:42,739 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:42,739 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:42,739 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:42,740 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:42,740 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:42,740 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:42,740 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:42,740 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:42,740 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:42,740 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:42,740 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:42,740 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:42,740 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:42,740 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:42,740 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:42,740 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:42,840 - duri_brain.learning.learning_loop_manager - INFO - 사이클 21 성공: 개선점수 0.13
+2025-08-08 09:02:43,840 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 22 시작
+2025-08-08 09:02:43,840 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:43,840 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:43,840 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:43,840 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:43,840 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:43,840 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:43,840 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:43,841 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:43,841 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:43,841 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:43,841 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:43,841 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:43,841 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:43,841 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:43,841 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:43,841 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:43,841 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:43,841 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:43,841 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:43,841 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:43,841 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:43,841 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:43,842 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:43,842 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:43,842 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:43,842 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:43,941 - duri_brain.learning.learning_loop_manager - INFO - 사이클 22 성공: 개선점수 0.13
+2025-08-08 09:02:44,942 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 23 시작
+2025-08-08 09:02:44,942 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:44,942 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:44,942 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:44,942 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:44,942 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:44,942 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:44,942 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:44,942 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:44,942 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:44,942 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:44,942 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:44,942 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:44,943 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:44,943 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:44,943 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:44,943 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:44,943 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:44,943 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:44,943 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:44,943 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:44,943 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:44,943 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:44,943 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:44,943 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:44,943 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:44,943 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:45,043 - duri_brain.learning.learning_loop_manager - INFO - 사이클 23 성공: 개선점수 0.13
+2025-08-08 09:02:48,978 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 24 시작
+2025-08-08 09:02:48,978 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:48,979 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:48,979 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:48,979 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:48,979 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:48,979 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:48,979 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:48,979 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:48,979 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:48,979 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:48,979 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:48,979 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:48,979 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:48,979 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:48,979 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:48,979 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:48,979 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:48,980 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:48,980 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:48,980 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:48,980 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:48,980 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:48,980 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:48,980 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:48,980 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:48,980 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:49,080 - duri_brain.learning.learning_loop_manager - INFO - 사이클 24 성공: 개선점수 0.13
+2025-08-08 09:02:50,080 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 25 시작
+2025-08-08 09:02:50,081 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:50,081 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:50,081 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:50,081 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:50,081 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:50,081 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:50,081 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:50,081 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:50,081 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:50,081 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:50,081 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:50,081 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:50,082 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:50,082 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:50,082 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:50,082 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:50,082 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:50,082 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:50,082 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:50,082 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:50,082 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:50,082 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:50,082 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:50,082 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:50,082 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:50,082 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:50,182 - duri_brain.learning.learning_loop_manager - INFO - 사이클 25 성공: 개선점수 0.13
+2025-08-08 09:02:51,183 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 26 시작
+2025-08-08 09:02:51,183 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:51,183 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:51,183 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:51,183 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:51,183 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:51,183 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:51,183 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:51,183 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:51,183 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:51,183 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:51,183 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:51,183 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:51,184 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:51,184 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:51,184 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:51,184 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:51,184 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:51,184 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:51,184 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:51,184 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:51,184 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:51,184 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:51,184 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:51,184 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:51,184 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:51,184 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:51,284 - duri_brain.learning.learning_loop_manager - INFO - 사이클 26 성공: 개선점수 0.13
+2025-08-08 09:02:52,284 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 27 시작
+2025-08-08 09:02:52,285 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:52,285 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:52,285 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:52,285 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:52,285 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:52,285 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:52,285 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:52,285 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:52,285 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:52,285 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:52,285 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:52,285 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:52,285 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:52,285 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:52,286 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:52,286 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:52,286 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:52,286 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:52,286 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:52,286 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:52,286 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:52,286 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:52,286 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:52,286 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:52,286 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:52,286 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:52,386 - duri_brain.learning.learning_loop_manager - INFO - 사이클 27 성공: 개선점수 0.13
+2025-08-08 09:02:53,387 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 28 시작
+2025-08-08 09:02:53,387 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:53,387 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:53,387 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:53,387 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:53,387 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:53,387 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:53,387 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:53,387 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:53,387 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:53,387 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:53,387 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:53,387 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:53,388 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:53,388 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:53,388 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:53,388 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:53,388 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:53,388 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:53,388 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:53,388 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:53,388 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:53,388 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:53,388 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:53,388 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:53,388 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:53,388 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:53,488 - duri_brain.learning.learning_loop_manager - INFO - 사이클 28 성공: 개선점수 0.13
+2025-08-08 09:02:54,489 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 29 시작
+2025-08-08 09:02:54,489 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:54,489 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:54,489 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:54,489 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:54,489 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:54,489 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:54,489 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:54,489 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:54,489 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:54,489 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:54,489 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:54,489 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:54,490 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:54,490 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:54,490 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:54,490 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:54,490 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:54,490 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:54,490 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:54,490 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:54,490 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:54,490 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:54,490 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:54,490 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:54,490 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:54,490 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:54,490 - duri_brain.learning.learning_loop_manager - INFO - 사이클 29 성공: 개선점수 0.13
+2025-08-08 09:02:55,491 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 30 시작
+2025-08-08 09:02:55,491 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:55,491 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:55,491 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:55,491 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:55,491 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:55,491 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:55,492 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:55,492 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:55,492 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:55,492 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:55,492 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:55,492 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:55,492 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:55,492 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:55,492 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:55,492 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:55,492 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:55,492 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:55,492 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:55,492 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:55,492 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:55,492 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:55,492 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:55,492 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:55,492 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:55,493 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:55,592 - duri_brain.learning.learning_loop_manager - INFO - 사이클 30 성공: 개선점수 0.13
+2025-08-08 09:02:56,593 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 31 시작
+2025-08-08 09:02:56,593 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:56,593 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:56,593 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:56,593 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:56,594 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:56,594 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:56,594 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:56,594 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:56,594 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:56,594 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:56,594 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:56,594 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:56,594 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:56,594 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:56,594 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:56,594 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:56,594 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:56,594 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:56,595 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:56,595 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:56,595 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:56,595 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:56,595 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:56,595 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:56,595 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:56,595 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:56,694 - duri_brain.learning.learning_loop_manager - INFO - 사이클 31 성공: 개선점수 0.13
+2025-08-08 09:02:57,695 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 32 시작
+2025-08-08 09:02:57,696 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:57,696 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:57,696 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:57,696 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:57,696 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:57,696 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:57,696 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:57,696 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:57,696 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:57,696 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:57,696 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:57,696 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:57,696 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:57,696 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:57,696 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:57,696 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:57,696 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:57,697 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:57,697 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:57,697 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:57,697 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:57,697 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:57,697 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:57,697 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:57,697 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:57,697 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:57,796 - duri_brain.learning.learning_loop_manager - INFO - 사이클 32 성공: 개선점수 0.13
+2025-08-08 09:02:58,798 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 33 시작
+2025-08-08 09:02:58,798 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:58,798 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:58,798 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:58,798 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:58,798 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:58,798 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:58,798 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:58,798 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:58,798 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:58,798 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:58,798 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:58,798 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:58,799 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:58,799 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:58,799 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:58,799 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:58,799 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:58,799 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:58,799 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:58,799 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:58,799 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:58,799 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:58,799 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:58,799 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:58,799 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:58,799 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:02:58,899 - duri_brain.learning.learning_loop_manager - INFO - 사이클 33 성공: 개선점수 0.13
+2025-08-08 09:02:59,900 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 34 시작
+2025-08-08 09:02:59,900 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:02:59,900 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:02:59,900 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:02:59,900 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:02:59,900 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:02:59,900 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:02:59,900 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:59,900 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:02:59,900 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:02:59,900 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:02:59,900 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:02:59,900 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:02:59,900 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:02:59,901 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:02:59,901 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:02:59,901 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:02:59,901 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:02:59,901 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:02:59,901 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:02:59,901 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:02:59,901 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:02:59,901 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:02:59,901 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:02:59,901 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:02:59,901 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:02:59,901 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:03:00,001 - duri_brain.learning.learning_loop_manager - INFO - 사이클 34 성공: 개선점수 0.13
+2025-08-08 09:03:01,001 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 35 시작
+2025-08-08 09:03:01,002 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:03:01,002 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:03:01,002 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:03:01,002 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:03:01,002 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:03:01,002 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:03:01,002 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:03:01,002 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:03:01,002 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:03:01,002 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:03:01,002 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:03:01,002 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:03:01,002 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:03:01,002 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:03:01,003 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:03:01,003 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:03:01,003 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:03:01,003 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:03:01,003 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:03:01,003 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:03:01,003 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:03:01,003 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:03:01,003 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:03:01,003 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:03:01,003 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:03:01,003 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:03:01,103 - duri_brain.learning.learning_loop_manager - INFO - 사이클 35 성공: 개선점수 0.13
+2025-08-08 09:03:02,103 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 36 시작
+2025-08-08 09:03:02,104 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:03:02,104 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:03:02,104 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:03:02,104 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:03:02,104 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:03:02,104 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:03:02,104 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:03:02,104 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:03:02,104 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:03:02,104 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:03:02,104 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:03:02,104 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:03:02,105 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:03:02,105 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:03:02,105 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:03:02,105 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:03:02,105 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:03:02,105 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:03:02,105 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:03:02,105 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:03:02,105 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:03:02,105 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:03:02,105 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:03:02,105 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:03:02,105 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:03:02,105 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:03:02,205 - duri_brain.learning.learning_loop_manager - INFO - 사이클 36 성공: 개선점수 0.13
+2025-08-08 09:03:03,206 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 37 시작
+2025-08-08 09:03:03,206 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:03:03,206 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:03:03,206 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:03:03,206 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:03:03,206 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:03:03,206 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:03:03,206 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:03:03,206 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:03:03,206 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:03:03,206 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:03:03,206 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:03:03,206 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:03:03,207 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:03:03,207 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:03:03,207 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:03:03,207 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:03:03,207 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:03:03,207 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:03:03,207 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:03:03,207 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:03:03,207 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:03:03,207 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:03:03,207 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:03:03,207 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:03:03,207 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:03:03,207 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:03:03,307 - duri_brain.learning.learning_loop_manager - INFO - 사이클 37 성공: 개선점수 0.13
+2025-08-08 09:03:04,307 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 38 시작
+2025-08-08 09:03:04,307 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:03:04,307 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:03:04,307 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:03:04,308 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:03:04,308 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:03:04,308 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:03:04,308 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:03:04,308 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:03:04,308 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:03:04,308 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:03:04,308 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:03:04,308 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:03:04,308 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:03:04,308 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:03:04,308 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:03:04,308 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:03:04,308 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:03:04,308 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:03:04,309 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:03:04,309 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:03:04,309 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:03:04,309 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:03:04,309 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:03:04,309 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:03:04,309 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:03:04,309 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:03:04,408 - duri_brain.learning.learning_loop_manager - INFO - 사이클 38 성공: 개선점수 0.13
+2025-08-08 09:03:05,413 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 39 시작
+2025-08-08 09:03:05,413 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:03:05,413 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:03:05,413 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:03:05,413 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:03:05,413 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:03:05,413 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:03:05,413 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:03:05,413 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:03:05,413 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:03:05,413 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:03:05,414 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:03:05,414 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:03:05,414 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:03:05,414 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:03:05,414 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:03:05,414 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:03:05,414 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:03:05,414 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:03:05,415 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:03:05,415 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:03:05,415 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:03:05,415 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:03:05,415 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:03:05,415 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:03:05,415 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:03:05,415 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:03:05,515 - duri_brain.learning.learning_loop_manager - INFO - 사이클 39 성공: 개선점수 0.13
+2025-08-08 09:03:06,516 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 40 시작
+2025-08-08 09:03:06,516 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:03:06,516 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:03:06,516 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:03:06,516 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:03:06,516 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:03:06,516 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:03:06,516 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:03:06,516 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:03:06,516 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:03:06,517 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:03:06,517 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:03:06,517 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:03:06,517 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:03:06,517 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:03:06,517 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:03:06,517 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:03:06,517 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:03:06,517 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:03:06,517 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:03:06,517 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:03:06,517 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:03:06,517 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:03:06,517 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:03:06,517 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:03:06,517 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:03:06,517 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:03:06,617 - duri_brain.learning.learning_loop_manager - INFO - 사이클 40 성공: 개선점수 0.13
+2025-08-08 09:03:07,618 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 41 시작
+2025-08-08 09:03:07,618 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:03:07,618 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:03:07,618 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:03:07,618 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:03:07,618 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:03:07,618 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:03:07,618 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:03:07,618 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:03:07,618 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:03:07,619 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:03:07,619 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:03:07,619 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:03:07,619 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:03:07,619 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:03:07,619 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:03:07,619 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:03:07,619 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:03:07,619 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:03:07,619 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:03:07,619 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:03:07,619 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:03:07,619 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:03:07,619 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:03:07,619 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:03:07,619 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:03:07,620 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:03:07,719 - duri_brain.learning.learning_loop_manager - INFO - 사이클 41 성공: 개선점수 0.13
+2025-08-08 09:03:08,720 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 42 시작
+2025-08-08 09:03:08,720 - duri_brain.learning.learning_loop_manager - INFO - 감정/윤리 판단 사이클 시작
+2025-08-08 09:03:08,720 - duri_brain.learning.learning_loop_manager - ERROR - 감정/윤리 판단 사이클 실행 중 오류: 'EmotionalEthicalJudgment' object has no attribute 'JudgmentType'
+2025-08-08 09:03:08,720 - duri_brain.learning.learning_loop_manager - INFO - 자율 목표 설정 사이클 시작
+2025-08-08 09:03:08,720 - duri_brain.learning.learning_loop_manager - INFO - 새로운 자율 목표 2개 생성됨
+2025-08-08 09:03:08,720 - duri_brain.goals.autonomous_goal_setting - INFO - 목표 우선순위 결정 완료: 2개 목표, 신뢰도: 0.50
+2025-08-08 09:03:08,720 - duri_brain.learning.learning_loop_manager - INFO - 목표 우선순위 결정 완료: 최우선 목표: 시스템 안정성 강화 (점수: 0.47)
+선택 이유: assessment_based 기반, moderate 복잡도, incremental 혁신 수준
+차순위 목표: 윤리적 판단 능력 강화 (점수: 0.46)
+
+2025-08-08 09:03:08,720 - duri_brain.learning.learning_loop_manager - ERROR - 자율 목표 설정 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:03:08,720 - duri_brain.learning.learning_loop_manager - INFO - 창의성 고도화 사이클 시작
+2025-08-08 09:03:08,720 - duri_brain.creativity.advanced_creativity_system - INFO - 창의성 세션 완료: 23개 아이디어, 품질: 0.30
+2025-08-08 09:03:08,720 - duri_brain.learning.learning_loop_manager - INFO - 창의성 세션 완료: 23개 아이디어 생성
+2025-08-08 09:03:08,720 - duri_brain.learning.learning_loop_manager - INFO - 세션 품질: 0.30
+2025-08-08 09:03:08,720 - duri_brain.learning.learning_loop_manager - ERROR - 창의성 고도화 사이클 실행 중 오류: 'LearningLoopManager' object has no attribute 'memory_sync'
+2025-08-08 09:03:08,720 - duri_brain.learning.learning_loop_manager - INFO - 1단계: 모방 시작
+2025-08-08 09:03:08,721 - duri_brain.learning.strategy_imitator - INFO - 전략 모방 완료: adaptive_copy, 신뢰도: 0.85
+2025-08-08 09:03:08,721 - duri_brain.learning.learning_loop_manager - INFO - 2단계: 반복 시작
+2025-08-08 09:03:08,721 - duri_brain.learning.practice_engine - INFO - 피드백 로깅 완료: unknown
+2025-08-08 09:03:08,721 - duri_brain.learning.practice_engine - INFO - 전략 연습 완료: repetition, 성공률: 1.00, 개선점수: 0.26
+2025-08-08 09:03:08,721 - duri_brain.learning.learning_loop_manager - INFO - 3단계: 피드백 시작
+2025-08-08 09:03:08,721 - duri_brain.learning.learning_loop_manager - INFO - 4단계: 도전 시작
+2025-08-08 09:03:08,721 - duri_brain.learning.challenge_trigger - INFO - 도전 보류: 점수 0.67, 신뢰도: 0.71
+2025-08-08 09:03:08,721 - duri_brain.learning.learning_loop_manager - INFO - 5단계: 개선 시작
+2025-08-08 09:03:08,721 - duri_brain.learning.self_improvement_engine - INFO - 전략 개선 완료: mutation, 개선점수: 0.00, 신뢰도향상: 0.00
+2025-08-08 09:03:08,721 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 성과 업데이트: 0.84
+2025-08-08 09:03:08,721 - duri_core.philosophy.survival_criteria - INFO - 전략 생존 판단 완료: continue, 신뢰도: 1.00
+2025-08-08 09:03:08,721 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
+2025-08-08 09:03:08,721 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
+2025-08-08 09:03:08,821 - duri_brain.learning.learning_loop_manager - INFO - 사이클 42 성공: 개선점수 0.13

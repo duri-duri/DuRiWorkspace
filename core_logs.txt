@@ -1,0 +1,21 @@
+Attaching to duri_core_container
+[36mduri_core_container |[0m 2025-07-23 09:45:59,338 [INFO] duri_core.loop_orchestrator: LoopOrchestrator 초기화 완료: loop_data
+[36mduri_core_container |[0m 2025-07-23 09:45:59,338 [INFO] duri_core.decision_processor: DecisionProcessor 초기화 완료
+[36mduri_core_container |[0m 2025-07-23 09:45:59,338 [INFO] duri_core.decision_processor: CoreService 초기화 완료
+[36mduri_core_container |[0m 2025-07-23 09:45:59,339 [INFO] duri_core.app: Flask 앱 초기화 완료
+[36mduri_core_container |[0m 2025-07-23 09:45:59,339 [INFO] duri_core.run: 🚀 DuRi Core 서버 시작 중...
+[36mduri_core_container |[0m 2025-07-23 09:45:59,339 [INFO] duri_core.run: 📍 포트: 8080
+[36mduri_core_container |[0m 2025-07-23 09:45:59,339 [INFO] duri_core.run: 📁 로그 디렉토리: /tmp/logs
+[36mduri_core_container |[0m 2025-07-23 09:45:59,339 [INFO] duri_core.run: 📄 수신 로그: /tmp/receive.json
+[36mduri_core_container |[0m 2025-07-23 09:45:59,339 [INFO] duri_core.run: 🧠 Brain URL: http://localhost:8081/brain
+[36mduri_core_container |[0m 2025-07-23 09:45:59,339 [INFO] duri_core.run: 🔄 Evolution URL: http://localhost:8082/evolve
+[36mduri_core_container |[0m 2025-07-23 09:45:59,339 [INFO] duri_core.run: ==================================================
+[36mduri_core_container |[0m  * Serving Flask app 'app'
+[36mduri_core_container |[0m  * Debug mode: off
+[36mduri_core_container |[0m [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+[36mduri_core_container |[0m  * Running on all addresses (0.0.0.0)
+[36mduri_core_container |[0m  * Running on http://127.0.0.1:8080
+[36mduri_core_container |[0m  * Running on http://172.18.0.4:8080
+[36mduri_core_container |[0m [33mPress CTRL+C to quit[0m
+[36mduri_core_container |[0m 172.18.0.1 - - [23/Jul/2025 09:49:44] "GET /health HTTP/1.1" 200 -
+[36mduri_core_container |[0m 172.18.0.1 - - [23/Jul/2025 09:58:07] "GET /health HTTP/1.1" 200 -

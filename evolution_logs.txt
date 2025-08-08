@@ -1,0 +1,10 @@
+Attaching to duri_evolution_container
+[36mduri_evolution_container |[0m  * Serving Flask app 'duri_evolution.app'
+[36mduri_evolution_container |[0m  * Debug mode: off
+[36mduri_evolution_container |[0m [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+[36mduri_evolution_container |[0m  * Running on all addresses (0.0.0.0)
+[36mduri_evolution_container |[0m  * Running on http://127.0.0.1:8082
+[36mduri_evolution_container |[0m  * Running on http://172.18.0.5:8082
+[36mduri_evolution_container |[0m [33mPress CTRL+C to quit[0m
+[36mduri_evolution_container |[0m 172.18.0.1 - - [23/Jul/2025 09:49:44] "GET /health HTTP/1.1" 200 -
+[36mduri_evolution_container |[0m 172.18.0.1 - - [23/Jul/2025 09:58:07] "GET /health HTTP/1.1" 200 -

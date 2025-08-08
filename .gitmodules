@@ -1,12 +1,16 @@
 [submodule "duri_all_scripts"]
-	path = duri_all_scripts
-	url = git@github.com:duri-duri/duri_all_scripts.git
+        path = duri_all_scripts
+        url = git@github.com:duri-duri/duri_all_scripts.git
 [submodule "duri_control"]
-	path = duri_control
-	url = git@github.com:duri-duri/duri_control.git
-[submodule "duri_core_build"]
-	path = duri_core_build
-	url = git@github.com:duri-duri/duri_core_build.git
-[submodule "duri_snapshots"]
-	path = duri_snapshots
-	url = git@github.com:duri-duri/duri_snapshots.git
+        path = duri_control
+        url = git@github.com:duri-duri/duri_control.git
+
+[submodule "duri_brain"]
+        path = duri_brain
+        url = https://github.com/duri-duri/duri_brain.git
+[submodule "duri_evolution"]
+        path = duri_evolution
+        url = https://github.com/duri-duri/duri_evolution.git
+[submodule "duri_core"]
+        path = duri_core
+        url = https://github.com/duri-duri/duri_core.git

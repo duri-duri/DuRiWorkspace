@@ -1,0 +1,3592 @@
+{
+  "total_files": 147,
+  "python_files": 86,
+  "markdown_files": 30,
+  "other_files": 31,
+  "total_lines": 54270,
+  "total_size": 2541625,
+  "modules": {
+    "CURSOR_RESTART_GUIDE_DAY8.md": {
+      "name": "CURSOR_RESTART_GUIDE_DAY8.md",
+      "path": "CURSOR_RESTART_GUIDE_DAY8.md",
+      "size": 10709,
+      "lines": 338,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "real_environment_deployment.py": {
+      "name": "real_environment_deployment",
+      "path": "real_environment_deployment.py",
+      "size": 25560,
+      "lines": 619,
+      "functions": [
+        "__init__"
+      ],
+      "classes": [
+        "DeploymentStatus",
+        "EnvironmentType",
+        "MonitoringLevel",
+        "DeploymentConfig",
+        "EnvironmentMetrics",
+        "DeploymentReport",
+        "RealEnvironmentDeployment"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "statistics",
+        "time",
+        "random"
+      ],
+      "can_import": true
+    },
+    "DAY7_PROGRESS_SUMMARY.md": {
+      "name": "DAY7_PROGRESS_SUMMARY.md",
+      "path": "DAY7_PROGRESS_SUMMARY.md",
+      "size": 11203,
+      "lines": 303,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "CURRENT_STATUS_UPDATE.md": {
+      "name": "CURRENT_STATUS_UPDATE.md",
+      "path": "CURRENT_STATUS_UPDATE.md",
+      "size": 6995,
+      "lines": 190,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "BACKUP_COMPLETION_REPORT.md": {
+      "name": "BACKUP_COMPLETION_REPORT.md",
+      "path": "BACKUP_COMPLETION_REPORT.md",
+      "size": 5717,
+      "lines": 201,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "DAY9_COMPLETION_REPORT.md": {
+      "name": "DAY9_COMPLETION_REPORT.md",
+      "path": "DAY9_COMPLETION_REPORT.md",
+      "size": 11403,
+      "lines": 358,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "DAY10_COMPLETION_REPORT.md": {
+      "name": "DAY10_COMPLETION_REPORT.md",
+      "path": "DAY10_COMPLETION_REPORT.md",
+      "size": 11462,
+      "lines": 364,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "system_stability_enhancer.py": {
+      "name": "system_stability_enhancer",
+      "path": "system_stability_enhancer.py",
+      "size": 24424,
+      "lines": 603,
+      "functions": [
+        "__init__"
+      ],
+      "classes": [
+        "StabilityEnhancementType",
+        "HealthMetricType",
+        "MaintenanceType",
+        "EnhancementStatus",
+        "SystemHealthMetrics",
+        "StabilityImprovement",
+        "HealthReport",
+        "MaintenanceResult",
+        "ValidationReport",
+        "SystemStabilityEnhancer"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "statistics",
+        "time",
+        "random"
+      ],
+      "can_import": true
+    },
+    "system_tuning_optimizer.py": {
+      "name": "system_tuning_optimizer",
+      "path": "system_tuning_optimizer.py",
+      "size": 24420,
+      "lines": 607,
+      "functions": [
+        "__init__",
+        "_update_parameter_value"
+      ],
+      "classes": [
+        "TuningStatus",
+        "OptimizationType",
+        "TuningStrategy",
+        "TuningParameter",
+        "OptimizationResult",
+        "TuningReport",
+        "SystemTuningOptimizer"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "statistics",
+        "time",
+        "random"
+      ],
+      "can_import": true
+    },
+    "DAY5_COMPLETION_REPORT.md": {
+      "name": "DAY5_COMPLETION_REPORT.md",
+      "path": "DAY5_COMPLETION_REPORT.md",
+      "size": 9699,
+      "lines": 285,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "final_integration_system.py": {
+      "name": "final_integration_system",
+      "path": "final_integration_system.py",
+      "size": 38475,
+      "lines": 939,
+      "functions": [
+        "__init__",
+        "_calculate_performance_improvement",
+        "_calculate_resource_reduction",
+        "_calculate_overall_performance",
+        "_analyze_system_performance",
+        "_identify_bottlenecks",
+        "_generate_performance_alerts"
+      ],
+      "classes": [
+        "SystemComponent",
+        "IntegrationResult",
+        "OptimizationResult",
+        "PerformanceReport",
+        "ValidationReport",
+        "FinalIntegrationSystem"
+      ],
+      "imports": [
+        "asyncio",
+        "json",
+        "time",
+        "uuid",
+        "datetime",
+        "typing",
+        "dataclasses",
+        "logging",
+        "statistics",
+        "concurrent.futures",
+        "threading"
+      ],
+      "can_import": true
+    },
+    "DAY3_COMPLETION_REPORT.md": {
+      "name": "DAY3_COMPLETION_REPORT.md",
+      "path": "DAY3_COMPLETION_REPORT.md",
+      "size": 9490,
+      "lines": 315,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "performance_enhancement_system.py": {
+      "name": "performance_enhancement_system",
+      "path": "performance_enhancement_system.py",
+      "size": 40726,
+      "lines": 982,
+      "functions": [
+        "__init__"
+      ],
+      "classes": [
+        "EnhancementType",
+        "EnhancementStatus",
+        "AdjustmentType",
+        "PerformanceMetrics",
+        "PerformanceImprovement",
+        "PerformanceReport",
+        "AdjustmentResult",
+        "ValidationReport",
+        "PerformanceEnhancementSystem"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "statistics",
+        "time",
+        "random"
+      ],
+      "can_import": true
+    },
+    "loop_performance_optimizer.py": {
+      "name": "loop_performance_optimizer",
+      "path": "loop_performance_optimizer.py",
+      "size": 29409,
+      "lines": 671,
+      "functions": [
+        "__init__"
+      ],
+      "classes": [
+        "OptimizationType",
+        "OptimizationStatus",
+        "Bottleneck",
+        "OptimizationResult",
+        "OptimizationReport",
+        "LoopPerformanceOptimizer"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "statistics",
+        "time",
+        "random"
+      ],
+      "can_import": true
+    },
+    "README.md": {
+      "name": "README.md",
+      "path": "README.md",
+      "size": 2611,
+      "lines": 68,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "evolution_algorithm.py": {
+      "name": "evolution_algorithm",
+      "path": "evolution_algorithm.py",
+      "size": 60679,
+      "lines": 1451,
+      "functions": [
+        "__init__"
+      ],
+      "classes": [
+        "EvolutionType",
+        "EvolutionStatus",
+        "EvolutionTrigger",
+        "EvolutionDecision",
+        "EvolutionResult",
+        "EvolutionAlgorithm"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "statistics",
+        "time",
+        "random",
+        "numpy"
+      ],
+      "can_import": true
+    },
+    "final_integration_results.json": {
+      "name": "final_integration_results.json",
+      "path": "final_integration_results.json",
+      "size": 3699,
+      "lines": 0,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "user_feedback_collector.py": {
+      "name": "user_feedback_collector",
+      "path": "user_feedback_collector.py",
+      "size": 26718,
+      "lines": 640,
+      "functions": [
+        "__init__"
+      ],
+      "classes": [
+        "FeedbackType",
+        "FeedbackPriority",
+        "FeedbackStatus",
+        "UserFeedback",
+        "FeedbackAnalysis",
+        "ImprovementSuggestion",
+        "FeedbackReport",
+        "UserFeedbackCollector"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "statistics",
+        "time",
+        "random"
+      ],
+      "can_import": true
+    },
+    "real_environment_simulator.py": {
+      "name": "real_environment_simulator",
+      "path": "real_environment_simulator.py",
+      "size": 24366,
+      "lines": 620,
+      "functions": [
+        "__init__"
+      ],
+      "classes": [
+        "EnvironmentType",
+        "ScenarioType",
+        "SimulationStatus",
+        "EnvironmentScenario",
+        "SimulationResult",
+        "EnvironmentReport",
+        "RealEnvironmentSimulator"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "statistics",
+        "time",
+        "random"
+      ],
+      "can_import": true
+    },
+    "DAY6_PROGRESS_SUMMARY.md": {
+      "name": "DAY6_PROGRESS_SUMMARY.md",
+      "path": "DAY6_PROGRESS_SUMMARY.md",
+      "size": 7047,
+      "lines": 231,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "PHASE5_5_START_SUMMARY.md": {
+      "name": "PHASE5_5_START_SUMMARY.md",
+      "path": "PHASE5_5_START_SUMMARY.md",
+      "size": 6316,
+      "lines": 239,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "DAY2_COMPLETION_REPORT.md": {
+      "name": "DAY2_COMPLETION_REPORT.md",
+      "path": "DAY2_COMPLETION_REPORT.md",
+      "size": 12083,
+      "lines": 371,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "data_flow_design.md": {
+      "name": "data_flow_design.md",
+      "path": "data_flow_design.md",
+      "size": 10048,
+      "lines": 418,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "simple_phase4_test.py": {
+      "name": "simple_phase4_test",
+      "path": "simple_phase4_test.py",
+      "size": 11627,
+      "lines": 288,
+      "functions": [
+        "__init__",
+        "generate_summary"
+      ],
+      "classes": [
+        "SimplePhase4Test"
+      ],
+      "imports": [
+        "asyncio",
+        "time",
+        "logging",
+        "datetime"
+      ],
+      "can_import": true
+    },
+    "integrated_learning_loop.py": {
+      "name": "integrated_learning_loop",
+      "path": "integrated_learning_loop.py",
+      "size": 33457,
+      "lines": 814,
+      "functions": [
+        "__init__"
+      ],
+      "classes": [
+        "LoopPhase",
+        "LoopStatus",
+        "LoopCycle",
+        "LoopMetrics",
+        "LoopReport",
+        "IntegratedLearningLoop"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "statistics",
+        "time",
+        "random",
+        "enhanced_memory_system",
+        "judgment_system",
+        "action_system",
+        "evolution_system",
+        "behavior_trace"
+      ],
+      "can_import": true
+    },
+    "CURSOR_RESTART_GUIDE_DAY10.md": {
+      "name": "CURSOR_RESTART_GUIDE_DAY10.md",
+      "path": "CURSOR_RESTART_GUIDE_DAY10.md",
+      "size": 7411,
+      "lines": 245,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "DEVELOPMENT_PLAN.md": {
+      "name": "DEVELOPMENT_PLAN.md",
+      "path": "DEVELOPMENT_PLAN.md",
+      "size": 4086,
+      "lines": 131,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "advanced_feature_engine.py": {
+      "name": "advanced_feature_engine",
+      "path": "advanced_feature_engine.py",
+      "size": 27944,
+      "lines": 659,
+      "functions": [
+        "__init__"
+      ],
+      "classes": [
+        "FeatureType",
+        "ImplementationStatus",
+        "ValidationStatus",
+        "FeatureRequirement",
+        "FeatureImplementation",
+        "FeatureResult",
+        "ValidationReport",
+        "AdvancedFeatureEngine"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "statistics",
+        "time",
+        "random"
+      ],
+      "can_import": true
+    },
+    "DAY1_COMPLETION_REPORT.md": {
+      "name": "DAY1_COMPLETION_REPORT.md",
+      "path": "DAY1_COMPLETION_REPORT.md",
+      "size": 7882,
+      "lines": 261,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "performance_requirements.md": {
+      "name": "performance_requirements.md",
+      "path": "performance_requirements.md",
+      "size": 10239,
+      "lines": 386,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "system_validation_results.json": {
+      "name": "system_validation_results.json",
+      "path": "system_validation_results.json",
+      "size": 4002,
+      "lines": 0,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "test_phase4_performance.py": {
+      "name": "test_phase4_performance",
+      "path": "test_phase4_performance.py",
+      "size": 20037,
+      "lines": 521,
+      "functions": [
+        "__init__",
+        "get_memory_usage",
+        "generate_summary"
+      ],
+      "classes": [
+        "Phase4PerformanceTester"
+      ],
+      "imports": [
+        "asyncio",
+        "time",
+        "logging",
+        "json",
+        "psutil",
+        "os",
+        "typing",
+        "datetime",
+        "sys",
+        "os",
+        "DuRiCore.utils.llm_interface",
+        "DuRiCore.utils.memory_manager",
+        "DuRiCore.memory.vector_store",
+        "utils.llm_interface",
+        "utils.memory_manager",
+        "memory.vector_store",
+        "DuRiCore.utils.llm_interface",
+        "DuRiCore.utils.memory_manager",
+        "DuRiCore.memory.vector_store"
+      ],
+      "can_import": true
+    },
+    "PHASE5_COMPLETE_ROADMAP.md": {
+      "name": "PHASE5_COMPLETE_ROADMAP.md",
+      "path": "PHASE5_COMPLETE_ROADMAP.md",
+      "size": 9815,
+      "lines": 410,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "comprehensive_testing_results.json": {
+      "name": "comprehensive_testing_results.json",
+      "path": "comprehensive_testing_results.json",
+      "size": 10078,
+      "lines": 0,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "advanced_optimization_engine.py": {
+      "name": "advanced_optimization_engine",
+      "path": "advanced_optimization_engine.py",
+      "size": 35171,
+      "lines": 830,
+      "functions": [
+        "__init__"
+      ],
+      "classes": [
+        "OptimizationType",
+        "OptimizationStrategy",
+        "OptimizationStatus",
+        "PerformancePattern",
+        "OptimizationStrategyData",
+        "OptimizationResult",
+        "ValidationReport",
+        "AdvancedOptimizationEngine"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "statistics",
+        "time",
+        "random",
+        "numpy"
+      ],
+      "can_import": true
+    },
+    "DAY8_COMPLETION_REPORT.md": {
+      "name": "DAY8_COMPLETION_REPORT.md",
+      "path": "DAY8_COMPLETION_REPORT.md",
+      "size": 11970,
+      "lines": 369,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "DAY7_COMPLETION_REPORT.md": {
+      "name": "DAY7_COMPLETION_REPORT.md",
+      "path": "DAY7_COMPLETION_REPORT.md",
+      "size": 12191,
+      "lines": 310,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "PROGRESS_SUMMARY_FOR_CURSOR.md": {
+      "name": "PROGRESS_SUMMARY_FOR_CURSOR.md",
+      "path": "PROGRESS_SUMMARY_FOR_CURSOR.md",
+      "size": 6610,
+      "lines": 228,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "learning_pattern_analyzer.py": {
+      "name": "learning_pattern_analyzer",
+      "path": "learning_pattern_analyzer.py",
+      "size": 28291,
+      "lines": 689,
+      "functions": [
+        "__init__"
+      ],
+      "classes": [
+        "PatternType",
+        "LearningEffectiveness",
+        "LearningPattern",
+        "PerformanceCorrelation",
+        "LearningEffectivenessReport",
+        "LearningPatternAnalyzer"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "statistics",
+        "time"
+      ],
+      "can_import": true
+    },
+    "evolution_system.py": {
+      "name": "evolution_system",
+      "path": "evolution_system.py",
+      "size": 42308,
+      "lines": 997,
+      "functions": [
+        "__init__"
+      ],
+      "classes": [
+        "EvolutionPhase",
+        "EvolutionPriority",
+        "EvolutionCycle",
+        "EvolutionMetrics",
+        "EvolutionReport",
+        "EvolutionSystem"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "statistics",
+        "time",
+        "random",
+        "learning_pattern_analyzer",
+        "evolution_algorithm"
+      ],
+      "can_import": true
+    },
+    "situation_analyzer.py": {
+      "name": "situation_analyzer",
+      "path": "situation_analyzer.py",
+      "size": 25215,
+      "lines": 643,
+      "functions": [
+        "__init__",
+        "_calculate_data_complexity",
+        "_assess_data_quality",
+        "_analyze_content",
+        "_calculate_context_importance",
+        "_categorize_context_element",
+        "_calculate_context_confidence",
+        "_extract_context_indicators"
+      ],
+      "classes": [
+        "AnalysisMethod",
+        "ContextElement",
+        "SituationPattern",
+        "SituationAnalyzer"
+      ],
+      "imports": [
+        "json",
+        "re",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "asyncio"
+      ],
+      "can_import": true
+    },
+    "learning_loop_architecture.md": {
+      "name": "learning_loop_architecture.md",
+      "path": "learning_loop_architecture.md",
+      "size": 9542,
+      "lines": 330,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "behavior_generator.py": {
+      "name": "behavior_generator",
+      "path": "behavior_generator.py",
+      "size": 19122,
+      "lines": 461,
+      "functions": [
+        "__init__",
+        "_initialize_templates"
+      ],
+      "classes": [
+        "BehaviorType",
+        "BehaviorStrategy",
+        "BehaviorPlan",
+        "BehaviorTemplate",
+        "BehaviorGenerator"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "time"
+      ],
+      "can_import": true
+    },
+    "intelligent_automation_system.py": {
+      "name": "intelligent_automation_system",
+      "path": "intelligent_automation_system.py",
+      "size": 28379,
+      "lines": 658,
+      "functions": [
+        "__init__"
+      ],
+      "classes": [
+        "WorkflowType",
+        "DecisionType",
+        "AutomationStatus",
+        "WorkflowStep",
+        "WorkflowResult",
+        "DecisionResult",
+        "AutomationReport",
+        "ValidationReport",
+        "IntelligentAutomationSystem"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "statistics",
+        "time",
+        "random"
+      ],
+      "can_import": true
+    },
+    "PHASE4_COMPLETION_REPORT.md": {
+      "name": "PHASE4_COMPLETION_REPORT.md",
+      "path": "PHASE4_COMPLETION_REPORT.md",
+      "size": 5475,
+      "lines": 191,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "DAY6_COMPLETION_REPORT.md": {
+      "name": "DAY6_COMPLETION_REPORT.md",
+      "path": "DAY6_COMPLETION_REPORT.md",
+      "size": 11599,
+      "lines": 357,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "user_experience_optimizer.py": {
+      "name": "user_experience_optimizer",
+      "path": "user_experience_optimizer.py",
+      "size": 21894,
+      "lines": 544,
+      "functions": [
+        "__init__"
+      ],
+      "classes": [
+        "UIOptimizationType",
+        "BehaviorPatternType",
+        "UXImprovementType",
+        "OptimizationStatus",
+        "UserBehavior",
+        "BehaviorAnalysis",
+        "UIImprovement",
+        "UXImprovement",
+        "ValidationReport",
+        "UserExperienceOptimizer"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "statistics",
+        "time",
+        "random"
+      ],
+      "can_import": true
+    },
+    "comprehensive_testing_platform.py": {
+      "name": "comprehensive_testing_platform",
+      "path": "comprehensive_testing_platform.py",
+      "size": 41355,
+      "lines": 1025,
+      "functions": [
+        "__init__",
+        "_register_default_test_cases",
+        "_calculate_overall_stability",
+        "_analyze_system_stability",
+        "_identify_stability_issues",
+        "_analyze_stress_performance",
+        "_identify_breaking_points",
+        "_analyze_recovery_patterns",
+        "_calculate_overall_test_score",
+        "_analyze_performance_trends",
+        "_assess_test_risks",
+        "_generate_improvement_suggestions"
+      ],
+      "classes": [
+        "TestCase",
+        "TestResult",
+        "StabilityReport",
+        "StressReport",
+        "AnalysisReport",
+        "ComprehensiveTestingPlatform"
+      ],
+      "imports": [
+        "asyncio",
+        "json",
+        "time",
+        "uuid",
+        "datetime",
+        "typing",
+        "dataclasses",
+        "logging",
+        "statistics",
+        "random",
+        "concurrent.futures",
+        "threading"
+      ],
+      "can_import": true
+    },
+    "judgment_system.py": {
+      "name": "judgment_system",
+      "path": "judgment_system.py",
+      "size": 33529,
+      "lines": 840,
+      "functions": [
+        "__init__",
+        "_calculate_data_complexity",
+        "_assess_data_quality"
+      ],
+      "classes": [
+        "JudgmentType",
+        "DecisionConfidence",
+        "SituationAnalysis",
+        "DecisionResult",
+        "JudgmentQuality",
+        "JudgmentSystem"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math"
+      ],
+      "can_import": true
+    },
+    "performance_monitoring_system.py": {
+      "name": "performance_monitoring_system",
+      "path": "performance_monitoring_system.py",
+      "size": 25642,
+      "lines": 611,
+      "functions": [
+        "__init__"
+      ],
+      "classes": [
+        "MonitoringStatus",
+        "AlertLevel",
+        "PerformanceMetric",
+        "PerformanceData",
+        "PerformanceAlert",
+        "PerformanceReport",
+        "PerformanceMonitoringSystem"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "statistics",
+        "time",
+        "random"
+      ],
+      "can_import": true
+    },
+    "integrated_learning_system.py": {
+      "name": "integrated_learning_system",
+      "path": "integrated_learning_system.py",
+      "size": 20858,
+      "lines": 498,
+      "functions": [
+        "__init__"
+      ],
+      "classes": [
+        "LearningCycleStatus",
+        "LearningCycle",
+        "IntegratedLearningSystem"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "time"
+      ],
+      "can_import": true
+    },
+    "CURRENT_STATUS_SUMMARY.md": {
+      "name": "CURRENT_STATUS_SUMMARY.md",
+      "path": "CURRENT_STATUS_SUMMARY.md",
+      "size": 4933,
+      "lines": 175,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "DURI_DIAGNOSTIC_SUMMARY.md": {
+      "name": "DURI_DIAGNOSTIC_SUMMARY.md",
+      "path": "DURI_DIAGNOSTIC_SUMMARY.md",
+      "size": 4344,
+      "lines": 171,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "test_core_system.py": {
+      "name": "test_core_system",
+      "path": "test_core_system.py",
+      "size": 9510,
+      "lines": 236,
+      "functions": [],
+      "classes": [],
+      "imports": [
+        "asyncio",
+        "logging",
+        "typing",
+        "sys",
+        "os",
+        "DuRiCore.core.main_loop",
+        "DuRiCore.modules.emotion.emotion_embedding",
+        "DuRiCore.memory.vector_store",
+        "DuRiCore.modules.judgment.self_critique"
+      ],
+      "can_import": false,
+      "import_error": "cannot import name 'DuRiCore' from 'DuRiCore.core.main_loop' (/home/duri/DuRiWorkspace/DuRiCore/./DuRiCore/core/main_loop.py)"
+    },
+    "behavior_trace.py": {
+      "name": "behavior_trace",
+      "path": "behavior_trace.py",
+      "size": 24247,
+      "lines": 615,
+      "functions": [
+        "__init__",
+        "_generate_hash",
+        "_generate_version"
+      ],
+      "classes": [
+        "TraceStatus",
+        "TraceType",
+        "TraceMetadata",
+        "MemoryTrace",
+        "JudgmentTrace",
+        "ActionTrace",
+        "EvolutionTrace",
+        "FullCycleTrace",
+        "BehaviorTracer"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "hashlib",
+        "time",
+        "uuid"
+      ],
+      "can_import": true
+    },
+    "memory_association.py": {
+      "name": "memory_association",
+      "path": "memory_association.py",
+      "size": 32634,
+      "lines": 768,
+      "functions": [
+        "__init__",
+        "_get_link_key",
+        "_cosine_similarity",
+        "_extract_emotion",
+        "_calculate_emotion_similarity",
+        "_calculate_context_similarity",
+        "_extract_themes",
+        "_calculate_theme_similarity",
+        "_get_strength_category",
+        "_recalculate_strength",
+        "__init__"
+      ],
+      "classes": [
+        "AssociationType",
+        "AssociationStrength",
+        "AssociationLink",
+        "AssociationAnalysis",
+        "MemoryAssociationSystem",
+        "MockMemory"
+      ],
+      "imports": [
+        "json",
+        "math",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "collections",
+        "asyncio"
+      ],
+      "can_import": true
+    },
+    "memory_classification.py": {
+      "name": "memory_classification",
+      "path": "memory_classification.py",
+      "size": 29908,
+      "lines": 732,
+      "functions": [
+        "__init__",
+        "_classify_by_keywords",
+        "_classify_by_context",
+        "_classify_by_semantics",
+        "_hybrid_classification",
+        "_analyze_emotion",
+        "_analyze_sentence_structure",
+        "_analyze_semantic_features",
+        "__init__",
+        "_extract_classification_tags",
+        "_extract_content_tags",
+        "_extract_context_tags",
+        "_generate_auto_tags",
+        "_deduplicate_tags"
+      ],
+      "classes": [
+        "MemoryType",
+        "ClassificationMethod",
+        "ClassificationResult",
+        "TagInfo",
+        "MemoryClassifier",
+        "MemoryTagger"
+      ],
+      "imports": [
+        "re",
+        "json",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "asyncio"
+      ],
+      "can_import": true
+    },
+    "system_validation_engine.py": {
+      "name": "system_validation_engine",
+      "path": "system_validation_engine.py",
+      "size": 29031,
+      "lines": 722,
+      "functions": [
+        "__init__",
+        "_calculate_overall_quality",
+        "_analyze_quality_metrics",
+        "_identify_quality_issues",
+        "_calculate_standards_compliance",
+        "_identify_compliance_issues",
+        "_calculate_overall_stability",
+        "_analyze_stability_metrics",
+        "_identify_stability_issues",
+        "_assess_final_risks"
+      ],
+      "classes": [
+        "QualityReport",
+        "StandardsReport",
+        "StabilityReport",
+        "FinalReport",
+        "SystemValidationEngine"
+      ],
+      "imports": [
+        "asyncio",
+        "json",
+        "time",
+        "uuid",
+        "datetime",
+        "typing",
+        "dataclasses",
+        "logging",
+        "statistics",
+        "random"
+      ],
+      "can_import": true
+    },
+    "DAY4_COMPLETION_REPORT.md": {
+      "name": "DAY4_COMPLETION_REPORT.md",
+      "path": "DAY4_COMPLETION_REPORT.md",
+      "size": 9994,
+      "lines": 334,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "enhanced_memory_system.py": {
+      "name": "enhanced_memory_system",
+      "path": "enhanced_memory_system.py",
+      "size": 27897,
+      "lines": 695,
+      "functions": [
+        "__init__",
+        "_generate_memory_id",
+        "_calculate_priority_score",
+        "_calculate_retention_score",
+        "_update_priority_queue",
+        "_get_search_targets",
+        "_cosine_similarity"
+      ],
+      "classes": [
+        "MemoryType",
+        "AssociationType",
+        "MemoryEntry",
+        "AssociationLink",
+        "EnhancedMemorySystem"
+      ],
+      "imports": [
+        "json",
+        "hashlib",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "numpy",
+        "collections"
+      ],
+      "can_import": true
+    },
+    "duri_state_inspector.py": {
+      "name": "duri_state_inspector",
+      "path": "duri_state_inspector.py",
+      "size": 13062,
+      "lines": 365,
+      "functions": [
+        "main",
+        "__init__",
+        "scan_all_systems",
+        "_scan_all_files",
+        "_analyze_python_modules",
+        "_analyze_dependencies",
+        "_test_connectivity",
+        "_identify_problems",
+        "_find_circular_dependencies",
+        "_generate_report",
+        "print_summary",
+        "save_detailed_report",
+        "dfs"
+      ],
+      "classes": [
+        "ModuleInfo",
+        "SystemAnalysisReport",
+        "DuriStateInspector"
+      ],
+      "imports": [
+        "os",
+        "sys",
+        "importlib",
+        "inspect",
+        "ast",
+        "json",
+        "time",
+        "pathlib",
+        "typing",
+        "dataclasses",
+        "datetime"
+      ],
+      "can_import": true
+    },
+    "action_system.py": {
+      "name": "action_system",
+      "path": "action_system.py",
+      "size": 33957,
+      "lines": 893,
+      "functions": [
+        "__init__",
+        "__init__",
+        "__init__",
+        "__init__"
+      ],
+      "classes": [
+        "ActionType",
+        "ActionStatus",
+        "ActionPriority",
+        "ActionPlan",
+        "ActionExecution",
+        "ActionResult",
+        "BehaviorPattern",
+        "ActionSystem",
+        "ActionGenerator",
+        "ActionExecutor",
+        "ActionResultAnalyzer"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "time"
+      ],
+      "can_import": true
+    },
+    "advanced_analytics_platform.py": {
+      "name": "advanced_analytics_platform",
+      "path": "advanced_analytics_platform.py",
+      "size": 27677,
+      "lines": 658,
+      "functions": [
+        "__init__"
+      ],
+      "classes": [
+        "AnalyticsType",
+        "InsightType",
+        "ModelType",
+        "AnalyticsStatus",
+        "AnalyticsData",
+        "AnalyticsResult",
+        "InsightReport",
+        "ModelResult",
+        "ValidationReport",
+        "AdvancedAnalyticsPlatform"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "statistics",
+        "time",
+        "random"
+      ],
+      "can_import": true
+    },
+    "memory/vector_store.py": {
+      "name": "memory.vector_store",
+      "path": "memory/vector_store.py",
+      "size": 16289,
+      "lines": 401,
+      "functions": [
+        "__init__",
+        "store_memory",
+        "search_similar_memories",
+        "get_memory_by_id",
+        "get_memories_by_tags",
+        "update_memory_importance",
+        "delete_memory",
+        "get_memory_statistics",
+        "_generate_memory_id",
+        "_create_semantic_vector",
+        "_create_emotion_vector",
+        "_create_context_vector",
+        "_extract_tags",
+        "_determine_memory_type",
+        "_find_and_link_associations",
+        "_cosine_similarity",
+        "_get_most_accessed_memories",
+        "_get_most_important_memories",
+        "export_memories",
+        "import_memories"
+      ],
+      "classes": [
+        "MemoryEntry",
+        "VectorMemoryStore"
+      ],
+      "imports": [
+        "json",
+        "hashlib",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "logging",
+        "math"
+      ],
+      "can_import": true
+    },
+    "memory/__pycache__/vector_store.cpython-310.pyc": {
+      "name": "memory.__pycache__.vector_store.cpython-310.pyc",
+      "path": "memory/__pycache__/vector_store.cpython-310.pyc",
+      "size": 13295,
+      "lines": 0,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "DuRiCore/modules/emotion_engine.py": {
+      "name": "DuRiCore.modules.emotion_engine",
+      "path": "DuRiCore/modules/emotion_engine.py",
+      "size": 20506,
+      "lines": 507,
+      "functions": [
+        "__init__",
+        "analyze_emotion",
+        "_fallback_emotion_analysis",
+        "__init__",
+        "analyze_complex_emotion",
+        "_analyze_emotion_combination",
+        "_detect_emotion_conflicts",
+        "_calculate_emotion_stability",
+        "_determine_complex_emotion_type",
+        "_analyze_contextual_emotion",
+        "_interpret_work_emotion",
+        "_interpret_social_emotion",
+        "_interpret_personal_emotion",
+        "_evaluate_context_fit",
+        "_generate_context_recommendations",
+        "_calculate_emotion_reason_balance",
+        "_get_balance_recommendation",
+        "_generate_empathetic_response",
+        "_calculate_empathy_level",
+        "_create_empathetic_response",
+        "get_emotional_intelligence_stats"
+      ],
+      "classes": [
+        "EmotionalAnalysis",
+        "LLMInterface",
+        "EmotionEngine"
+      ],
+      "imports": [
+        "logging",
+        "typing",
+        "datetime",
+        "dataclasses",
+        "numpy"
+      ],
+      "can_import": true
+    },
+    "DuRiCore/modules/learning_engine.py": {
+      "name": "DuRiCore.modules.learning_engine",
+      "path": "DuRiCore/modules/learning_engine.py",
+      "size": 29309,
+      "lines": 745,
+      "functions": [
+        "__init__",
+        "analyze_learning_content",
+        "__init__",
+        "process_learning",
+        "_analyze_content_type",
+        "_integrate_learning_results",
+        "_update_learning_stats",
+        "get_learning_stats",
+        "process",
+        "_assess_complexity",
+        "_extract_key_concepts",
+        "process",
+        "_extract_timing_info",
+        "process",
+        "_assess_reflection_level",
+        "_assess_self_awareness",
+        "_extract_metacognitive_insights",
+        "process",
+        "_analyze_family_relationship",
+        "_analyze_emotional_context",
+        "_extract_family_dynamics",
+        "process",
+        "_assess_autonomy_level",
+        "_assess_self_direction",
+        "_extract_learning_strategies",
+        "process",
+        "_assess_social_interaction",
+        "_assess_communication_skills",
+        "_extract_social_dynamics"
+      ],
+      "classes": [
+        "LearningResult",
+        "LLMInterface",
+        "LearningEngine",
+        "TextLearningSystem",
+        "SubtitleLearningSystem",
+        "MetacognitiveLearningSystem",
+        "FamilyLearningSystem",
+        "AutonomousLearningController",
+        "SocialLearningSystem"
+      ],
+      "imports": [
+        "logging",
+        "typing",
+        "datetime",
+        "dataclasses",
+        "numpy"
+      ],
+      "can_import": true
+    },
+    "DuRiCore/modules/ethical_reasoning.py": {
+      "name": "DuRiCore.modules.ethical_reasoning",
+      "path": "DuRiCore/modules/ethical_reasoning.py",
+      "size": 28321,
+      "lines": 728,
+      "functions": [
+        "__init__",
+        "analyze_ethical_situation",
+        "__init__",
+        "analyze_ethical_dilemma",
+        "_integrate_ethical_analysis",
+        "_calculate_ethical_score",
+        "_integrate_reasoning_process",
+        "_integrate_ethical_principles",
+        "_analyze_stakeholders",
+        "_generate_recommended_action",
+        "_calculate_confidence",
+        "_update_ethical_stats",
+        "get_ethical_stats",
+        "analyze_creative_context",
+        "_assess_creativity",
+        "_generate_creative_insights",
+        "analyze_ethical_situation",
+        "_assess_ethical_complexity",
+        "_generate_ethical_reasoning",
+        "_identify_applied_principles",
+        "analyze_ethical_dilemma",
+        "_assess_reasoning_quality",
+        "_generate_advanced_insights",
+        "_identify_ethical_frameworks",
+        "process_conversation",
+        "_assess_social_interaction",
+        "_analyze_social_dynamics"
+      ],
+      "classes": [
+        "EthicalAnalysis",
+        "LLMInterface",
+        "EthicalReasoningEngine",
+        "CreativeThinkingService",
+        "EnhancedEthicalSystem",
+        "AdvancedEthicalReasoningSystem",
+        "SocialIntelligenceService"
+      ],
+      "imports": [
+        "logging",
+        "typing",
+        "datetime",
+        "dataclasses",
+        "numpy"
+      ],
+      "can_import": true
+    },
+    "DuRiCore/modules/self_evolution.py": {
+      "name": "DuRiCore.modules.self_evolution",
+      "path": "DuRiCore/modules/self_evolution.py",
+      "size": 19471,
+      "lines": 483,
+      "functions": [
+        "__init__",
+        "analyze_and_evolve",
+        "_analyze_self_performance",
+        "_analyze_memory_performance",
+        "_analyze_emotional_performance",
+        "_analyze_evolution_performance",
+        "_analyze_overall_performance",
+        "_determine_performance_level",
+        "_analyze_performance_trend",
+        "_identify_improvement_areas",
+        "_get_suggested_actions",
+        "_suggest_evolution_directions",
+        "_execute_improvements",
+        "_execute_improvement",
+        "_improve_memory_system",
+        "_improve_emotional_system",
+        "_improve_evolution_system",
+        "_improve_general_system",
+        "_calculate_evolution_score",
+        "get_self_evolution_stats",
+        "__init__",
+        "analyze_evolution_need"
+      ],
+      "classes": [
+        "EvolutionResult",
+        "SelfEvolutionEngine",
+        "LLMInterface"
+      ],
+      "imports": [
+        "logging",
+        "typing",
+        "datetime",
+        "dataclasses",
+        "numpy"
+      ],
+      "can_import": true
+    },
+    "DuRiCore/modules/judgment/self_critique.py": {
+      "name": "DuRiCore.modules.judgment.self_critique",
+      "path": "DuRiCore/modules/judgment/self_critique.py",
+      "size": 21236,
+      "lines": 515,
+      "functions": [
+        "__init__",
+        "critique_judgment",
+        "_determine_critique_level",
+        "_evaluate_judgment_quality",
+        "_detect_bias",
+        "_identify_improvement_areas",
+        "_generate_self_feedback",
+        "_calculate_critique_confidence",
+        "_analyze_reasoning_process",
+        "_generate_alternative_perspectives",
+        "_extract_learning_points",
+        "_assess_complexity",
+        "_evaluate_consistency",
+        "_store_critique_history",
+        "_create_default_critique",
+        "get_critique_statistics",
+        "_get_most_common_improvements"
+      ],
+      "classes": [
+        "CritiqueLevel",
+        "BiasType",
+        "SelfCritique",
+        "SelfCritiqueSystem"
+      ],
+      "imports": [
+        "logging",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum"
+      ],
+      "can_import": true
+    },
+    "DuRiCore/modules/judgment/__pycache__/self_critique.cpython-310.pyc": {
+      "name": "DuRiCore.modules.judgment.__pycache__.self_critique.cpython-310.pyc",
+      "path": "DuRiCore/modules/judgment/__pycache__/self_critique.cpython-310.pyc",
+      "size": 14308,
+      "lines": 0,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "DuRiCore/modules/emotion/emotion_embedding.py": {
+      "name": "DuRiCore.modules.emotion.emotion_embedding",
+      "path": "DuRiCore/modules/emotion/emotion_embedding.py",
+      "size": 13215,
+      "lines": 344,
+      "functions": [
+        "__init__",
+        "analyze_emotion",
+        "_detect_emotion_keywords",
+        "_calculate_emotion_intensity",
+        "_determine_primary_emotion",
+        "_get_secondary_emotions",
+        "_calculate_confidence",
+        "_analyze_emotional_context",
+        "_calculate_sentiment_score",
+        "_extract_emotional_keywords",
+        "_extract_emotional_patterns",
+        "_has_negation",
+        "_create_default_embedding",
+        "get_emotion_summary"
+      ],
+      "classes": [
+        "EmotionCategory",
+        "EmotionEmbedding",
+        "NLPEmotionEmbedding"
+      ],
+      "imports": [
+        "re",
+        "typing",
+        "dataclasses",
+        "enum",
+        "logging"
+      ],
+      "can_import": true
+    },
+    "DuRiCore/modules/emotion/__pycache__/emotion_embedding.cpython-310.pyc": {
+      "name": "DuRiCore.modules.emotion.__pycache__.emotion_embedding.cpython-310.pyc",
+      "path": "DuRiCore/modules/emotion/__pycache__/emotion_embedding.cpython-310.pyc",
+      "size": 9803,
+      "lines": 0,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "DuRiCore/modules/__pycache__/emotion_engine.cpython-310.pyc": {
+      "name": "DuRiCore.modules.__pycache__.emotion_engine.cpython-310.pyc",
+      "path": "DuRiCore/modules/__pycache__/emotion_engine.cpython-310.pyc",
+      "size": 14623,
+      "lines": 0,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "DuRiCore/modules/__pycache__/self_evolution.cpython-310.pyc": {
+      "name": "DuRiCore.modules.__pycache__.self_evolution.cpython-310.pyc",
+      "path": "DuRiCore/modules/__pycache__/self_evolution.cpython-310.pyc",
+      "size": 12250,
+      "lines": 0,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "DuRiCore/modules/__pycache__/learning_engine.cpython-310.pyc": {
+      "name": "DuRiCore.modules.__pycache__.learning_engine.cpython-310.pyc",
+      "path": "DuRiCore/modules/__pycache__/learning_engine.cpython-310.pyc",
+      "size": 20401,
+      "lines": 0,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "DuRiCore/modules/__pycache__/ethical_reasoning.cpython-310.pyc": {
+      "name": "DuRiCore.modules.__pycache__.ethical_reasoning.cpython-310.pyc",
+      "path": "DuRiCore/modules/__pycache__/ethical_reasoning.cpython-310.pyc",
+      "size": 19155,
+      "lines": 0,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "DuRiCore/core/main_loop.py": {
+      "name": "DuRiCore.core.main_loop",
+      "path": "DuRiCore/core/main_loop.py",
+      "size": 18518,
+      "lines": 476,
+      "functions": [
+        "__post_init__",
+        "__init__",
+        "_calculate_importance_score",
+        "get_system_status",
+        "get_memory_summary"
+      ],
+      "classes": [
+        "InputData",
+        "JudgmentResult",
+        "ExecutionResult",
+        "ReflectionResult",
+        "MemoryEntry",
+        "MainLoop"
+      ],
+      "imports": [
+        "logging",
+        "asyncio",
+        "typing",
+        "datetime",
+        "dataclasses",
+        "modules.emotion_engine",
+        "modules.self_evolution"
+      ],
+      "can_import": true
+    },
+    "DuRiCore/core/__pycache__/main_loop.cpython-310.pyc": {
+      "name": "DuRiCore.core.__pycache__.main_loop.cpython-310.pyc",
+      "path": "DuRiCore/core/__pycache__/main_loop.cpython-310.pyc",
+      "size": 12314,
+      "lines": 0,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "DuRiCore/utils/__init__.py": {
+      "name": "DuRiCore.utils.__init__",
+      "path": "DuRiCore/utils/__init__.py",
+      "size": 658,
+      "lines": 29,
+      "functions": [],
+      "classes": [],
+      "imports": [
+        "llm_interface",
+        "memory_manager"
+      ],
+      "can_import": true
+    },
+    "DuRiCore/utils/llm_interface.py": {
+      "name": "DuRiCore.utils.llm_interface",
+      "path": "DuRiCore/utils/llm_interface.py",
+      "size": 17411,
+      "lines": 442,
+      "functions": [
+        "__init__",
+        "_initialize_providers",
+        "_create_system_prompt",
+        "_generate_cache_key",
+        "_evaluate_response_quality",
+        "_calculate_confidence_score",
+        "_update_stats",
+        "get_performance_stats",
+        "clear_cache"
+      ],
+      "classes": [
+        "LLMProvider",
+        "QueryType",
+        "LLMRequest",
+        "LLMResponse",
+        "AsyncLLMInterface"
+      ],
+      "imports": [
+        "asyncio",
+        "aiohttp",
+        "json",
+        "time",
+        "logging",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "os",
+        "concurrent.futures",
+        "hashlib"
+      ],
+      "can_import": true
+    },
+    "DuRiCore/utils/vector_db.py": {
+      "name": "DuRiCore.utils.vector_db",
+      "path": "DuRiCore/utils/vector_db.py",
+      "size": 10027,
+      "lines": 290,
+      "functions": [
+        "__init__",
+        "_initialize_index",
+        "add_vectors",
+        "search",
+        "batch_search",
+        "get_vector_by_id",
+        "get_statistics",
+        "save",
+        "load",
+        "clear",
+        "delete_vector"
+      ],
+      "classes": [
+        "VectorDatabase"
+      ],
+      "imports": [
+        "numpy",
+        "faiss",
+        "pickle",
+        "os",
+        "logging",
+        "typing",
+        "datetime",
+        "json"
+      ],
+      "can_import": false,
+      "import_error": "No module named 'faiss'"
+    },
+    "DuRiCore/utils/memory_manager.py": {
+      "name": "DuRiCore.utils.memory_manager",
+      "path": "DuRiCore/utils/memory_manager.py",
+      "size": 17275,
+      "lines": 480,
+      "functions": [
+        "__init__",
+        "_generate_memory_id",
+        "_generate_query_cache_key",
+        "_update_indexes",
+        "_rebuild_indexes",
+        "_update_stats",
+        "clear_cache"
+      ],
+      "classes": [
+        "MemoryEntry",
+        "MemoryQuery",
+        "MemoryManager"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "logging",
+        "time",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "hashlib",
+        "os",
+        "pathlib",
+        "pickle",
+        "gzip"
+      ],
+      "can_import": true
+    },
+    "DuRiCore/utils/__pycache__/memory_manager.cpython-310.pyc": {
+      "name": "DuRiCore.utils.__pycache__.memory_manager.cpython-310.pyc",
+      "path": "DuRiCore/utils/__pycache__/memory_manager.cpython-310.pyc",
+      "size": 13094,
+      "lines": 0,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "DuRiCore/utils/__pycache__/__init__.cpython-310.pyc": {
+      "name": "DuRiCore.utils.__pycache__.__init__.cpython-310.pyc",
+      "path": "DuRiCore/utils/__pycache__/__init__.cpython-310.pyc",
+      "size": 700,
+      "lines": 0,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "DuRiCore/utils/__pycache__/llm_interface.cpython-310.pyc": {
+      "name": "DuRiCore.utils.__pycache__.llm_interface.cpython-310.pyc",
+      "path": "DuRiCore/utils/__pycache__/llm_interface.cpython-310.pyc",
+      "size": 12878,
+      "lines": 0,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "DuRiCore/interface/__init__.py": {
+      "name": "DuRiCore.interface.__init__",
+      "path": "DuRiCore/interface/__init__.py",
+      "size": 223,
+      "lines": 14,
+      "functions": [],
+      "classes": [],
+      "imports": [
+        "api",
+        "services"
+      ],
+      "can_import": false,
+      "import_error": "cannot import name 'InputData' from 'DuRiCore.DuRiCore.modules.emotion_engine' (/home/duri/DuRiWorkspace/DuRiCore/./../DuRiCore/DuRiCore/modules/emotion_engine.py)"
+    },
+    "DuRiCore/interface/main.py": {
+      "name": "DuRiCore.interface.main",
+      "path": "DuRiCore/interface/main.py",
+      "size": 3441,
+      "lines": 118,
+      "functions": [],
+      "classes": [],
+      "imports": [
+        "fastapi",
+        "fastapi.middleware.cors",
+        "fastapi.responses",
+        "uvicorn",
+        "sys",
+        "os",
+        "datetime",
+        "DuRiCore.DuRiCore.interface.api"
+      ],
+      "can_import": false,
+      "import_error": "cannot import name 'InputData' from 'DuRiCore.DuRiCore.modules.emotion_engine' (/home/duri/DuRiWorkspace/DuRiCore/./../DuRiCore/DuRiCore/modules/emotion_engine.py)"
+    },
+    "DuRiCore/interface/api/emotion.py": {
+      "name": "DuRiCore.interface.api.emotion",
+      "path": "DuRiCore/interface/api/emotion.py",
+      "size": 4907,
+      "lines": 158,
+      "functions": [],
+      "classes": [
+        "EmotionRequest",
+        "EmotionResponse"
+      ],
+      "imports": [
+        "fastapi",
+        "pydantic",
+        "typing",
+        "sys",
+        "os",
+        "DuRiCore.DuRiCore.modules.emotion_engine"
+      ],
+      "can_import": false,
+      "import_error": "cannot import name 'InputData' from 'DuRiCore.DuRiCore.modules.emotion_engine' (/home/duri/DuRiWorkspace/DuRiCore/./../DuRiCore/DuRiCore/modules/emotion_engine.py)"
+    },
+    "DuRiCore/interface/api/__init__.py": {
+      "name": "DuRiCore.interface.api.__init__",
+      "path": "DuRiCore/interface/api/__init__.py",
+      "size": 958,
+      "lines": 33,
+      "functions": [],
+      "classes": [],
+      "imports": [
+        "fastapi",
+        "emotion",
+        "learning",
+        "ethical",
+        "evolution",
+        "health"
+      ],
+      "can_import": false,
+      "import_error": "cannot import name 'InputData' from 'DuRiCore.DuRiCore.modules.emotion_engine' (/home/duri/DuRiWorkspace/DuRiCore/./../DuRiCore/DuRiCore/modules/emotion_engine.py)"
+    },
+    "DuRiCore/interface/api/evolution.py": {
+      "name": "DuRiCore.interface.api.evolution",
+      "path": "DuRiCore/interface/api/evolution.py",
+      "size": 5306,
+      "lines": 166,
+      "functions": [],
+      "classes": [
+        "EvolutionRequest",
+        "EvolutionResponse"
+      ],
+      "imports": [
+        "fastapi",
+        "pydantic",
+        "typing",
+        "sys",
+        "os",
+        "DuRiCore.DuRiCore.modules.self_evolution"
+      ],
+      "can_import": false,
+      "import_error": "cannot import name 'InputData' from 'DuRiCore.DuRiCore.modules.emotion_engine' (/home/duri/DuRiWorkspace/DuRiCore/./../DuRiCore/DuRiCore/modules/emotion_engine.py)"
+    },
+    "DuRiCore/interface/api/health.py": {
+      "name": "DuRiCore.interface.api.health",
+      "path": "DuRiCore/interface/api/health.py",
+      "size": 7172,
+      "lines": 197,
+      "functions": [],
+      "classes": [],
+      "imports": [
+        "fastapi",
+        "typing",
+        "sys",
+        "os",
+        "DuRiCore.DuRiCore.modules.emotion_engine",
+        "DuRiCore.DuRiCore.modules.learning_engine",
+        "DuRiCore.DuRiCore.modules.ethical_reasoning",
+        "DuRiCore.DuRiCore.modules.self_evolution"
+      ],
+      "can_import": false,
+      "import_error": "cannot import name 'InputData' from 'DuRiCore.DuRiCore.modules.emotion_engine' (/home/duri/DuRiWorkspace/DuRiCore/./../DuRiCore/DuRiCore/modules/emotion_engine.py)"
+    },
+    "DuRiCore/interface/api/ethical.py": {
+      "name": "DuRiCore.interface.api.ethical",
+      "path": "DuRiCore/interface/api/ethical.py",
+      "size": 6544,
+      "lines": 201,
+      "functions": [],
+      "classes": [
+        "EthicalRequest",
+        "EthicalResponse"
+      ],
+      "imports": [
+        "fastapi",
+        "pydantic",
+        "typing",
+        "sys",
+        "os",
+        "DuRiCore.DuRiCore.modules.ethical_reasoning"
+      ],
+      "can_import": false,
+      "import_error": "cannot import name 'InputData' from 'DuRiCore.DuRiCore.modules.emotion_engine' (/home/duri/DuRiWorkspace/DuRiCore/./../DuRiCore/DuRiCore/modules/emotion_engine.py)"
+    },
+    "DuRiCore/interface/api/learning.py": {
+      "name": "DuRiCore.interface.api.learning",
+      "path": "DuRiCore/interface/api/learning.py",
+      "size": 5592,
+      "lines": 178,
+      "functions": [],
+      "classes": [
+        "LearningRequest",
+        "LearningResponse"
+      ],
+      "imports": [
+        "fastapi",
+        "pydantic",
+        "typing",
+        "sys",
+        "os",
+        "DuRiCore.DuRiCore.modules.learning_engine"
+      ],
+      "can_import": false,
+      "import_error": "cannot import name 'InputData' from 'DuRiCore.DuRiCore.modules.emotion_engine' (/home/duri/DuRiWorkspace/DuRiCore/./../DuRiCore/DuRiCore/modules/emotion_engine.py)"
+    },
+    "backup_repository/day9_backup/DAY9_COMPLETION_REPORT.md": {
+      "name": "backup_repository.day9_backup.DAY9_COMPLETION_REPORT.md",
+      "path": "backup_repository/day9_backup/DAY9_COMPLETION_REPORT.md",
+      "size": 11403,
+      "lines": 358,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "backup_repository/day9_backup/advanced_feature_engine.py": {
+      "name": "backup_repository.day9_backup.advanced_feature_engine",
+      "path": "backup_repository/day9_backup/advanced_feature_engine.py",
+      "size": 27944,
+      "lines": 659,
+      "functions": [
+        "__init__"
+      ],
+      "classes": [
+        "FeatureType",
+        "ImplementationStatus",
+        "ValidationStatus",
+        "FeatureRequirement",
+        "FeatureImplementation",
+        "FeatureResult",
+        "ValidationReport",
+        "AdvancedFeatureEngine"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "statistics",
+        "time",
+        "random"
+      ],
+      "can_import": true
+    },
+    "backup_repository/day9_backup/intelligent_automation_system.py": {
+      "name": "backup_repository.day9_backup.intelligent_automation_system",
+      "path": "backup_repository/day9_backup/intelligent_automation_system.py",
+      "size": 28379,
+      "lines": 658,
+      "functions": [
+        "__init__"
+      ],
+      "classes": [
+        "WorkflowType",
+        "DecisionType",
+        "AutomationStatus",
+        "WorkflowStep",
+        "WorkflowResult",
+        "DecisionResult",
+        "AutomationReport",
+        "ValidationReport",
+        "IntelligentAutomationSystem"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "statistics",
+        "time",
+        "random"
+      ],
+      "can_import": true
+    },
+    "backup_repository/day9_backup/advanced_analytics_platform.py": {
+      "name": "backup_repository.day9_backup.advanced_analytics_platform",
+      "path": "backup_repository/day9_backup/advanced_analytics_platform.py",
+      "size": 27677,
+      "lines": 658,
+      "functions": [
+        "__init__"
+      ],
+      "classes": [
+        "AnalyticsType",
+        "InsightType",
+        "ModelType",
+        "AnalyticsStatus",
+        "AnalyticsData",
+        "AnalyticsResult",
+        "InsightReport",
+        "ModelResult",
+        "ValidationReport",
+        "AdvancedAnalyticsPlatform"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "statistics",
+        "time",
+        "random"
+      ],
+      "can_import": true
+    },
+    "backup_repository/phase4_complete_backup_20250804_163501/modules/emotion_engine.py": {
+      "name": "backup_repository.phase4_complete_backup_20250804_163501.modules.emotion_engine",
+      "path": "backup_repository/phase4_complete_backup_20250804_163501/modules/emotion_engine.py",
+      "size": 20506,
+      "lines": 507,
+      "functions": [
+        "__init__",
+        "analyze_emotion",
+        "_fallback_emotion_analysis",
+        "__init__",
+        "analyze_complex_emotion",
+        "_analyze_emotion_combination",
+        "_detect_emotion_conflicts",
+        "_calculate_emotion_stability",
+        "_determine_complex_emotion_type",
+        "_analyze_contextual_emotion",
+        "_interpret_work_emotion",
+        "_interpret_social_emotion",
+        "_interpret_personal_emotion",
+        "_evaluate_context_fit",
+        "_generate_context_recommendations",
+        "_calculate_emotion_reason_balance",
+        "_get_balance_recommendation",
+        "_generate_empathetic_response",
+        "_calculate_empathy_level",
+        "_create_empathetic_response",
+        "get_emotional_intelligence_stats"
+      ],
+      "classes": [
+        "EmotionalAnalysis",
+        "LLMInterface",
+        "EmotionEngine"
+      ],
+      "imports": [
+        "logging",
+        "typing",
+        "datetime",
+        "dataclasses",
+        "numpy"
+      ],
+      "can_import": true
+    },
+    "backup_repository/phase4_complete_backup_20250804_163501/modules/learning_engine.py": {
+      "name": "backup_repository.phase4_complete_backup_20250804_163501.modules.learning_engine",
+      "path": "backup_repository/phase4_complete_backup_20250804_163501/modules/learning_engine.py",
+      "size": 29309,
+      "lines": 745,
+      "functions": [
+        "__init__",
+        "analyze_learning_content",
+        "__init__",
+        "process_learning",
+        "_analyze_content_type",
+        "_integrate_learning_results",
+        "_update_learning_stats",
+        "get_learning_stats",
+        "process",
+        "_assess_complexity",
+        "_extract_key_concepts",
+        "process",
+        "_extract_timing_info",
+        "process",
+        "_assess_reflection_level",
+        "_assess_self_awareness",
+        "_extract_metacognitive_insights",
+        "process",
+        "_analyze_family_relationship",
+        "_analyze_emotional_context",
+        "_extract_family_dynamics",
+        "process",
+        "_assess_autonomy_level",
+        "_assess_self_direction",
+        "_extract_learning_strategies",
+        "process",
+        "_assess_social_interaction",
+        "_assess_communication_skills",
+        "_extract_social_dynamics"
+      ],
+      "classes": [
+        "LearningResult",
+        "LLMInterface",
+        "LearningEngine",
+        "TextLearningSystem",
+        "SubtitleLearningSystem",
+        "MetacognitiveLearningSystem",
+        "FamilyLearningSystem",
+        "AutonomousLearningController",
+        "SocialLearningSystem"
+      ],
+      "imports": [
+        "logging",
+        "typing",
+        "datetime",
+        "dataclasses",
+        "numpy"
+      ],
+      "can_import": true
+    },
+    "backup_repository/phase4_complete_backup_20250804_163501/modules/ethical_reasoning.py": {
+      "name": "backup_repository.phase4_complete_backup_20250804_163501.modules.ethical_reasoning",
+      "path": "backup_repository/phase4_complete_backup_20250804_163501/modules/ethical_reasoning.py",
+      "size": 28321,
+      "lines": 728,
+      "functions": [
+        "__init__",
+        "analyze_ethical_situation",
+        "__init__",
+        "analyze_ethical_dilemma",
+        "_integrate_ethical_analysis",
+        "_calculate_ethical_score",
+        "_integrate_reasoning_process",
+        "_integrate_ethical_principles",
+        "_analyze_stakeholders",
+        "_generate_recommended_action",
+        "_calculate_confidence",
+        "_update_ethical_stats",
+        "get_ethical_stats",
+        "analyze_creative_context",
+        "_assess_creativity",
+        "_generate_creative_insights",
+        "analyze_ethical_situation",
+        "_assess_ethical_complexity",
+        "_generate_ethical_reasoning",
+        "_identify_applied_principles",
+        "analyze_ethical_dilemma",
+        "_assess_reasoning_quality",
+        "_generate_advanced_insights",
+        "_identify_ethical_frameworks",
+        "process_conversation",
+        "_assess_social_interaction",
+        "_analyze_social_dynamics"
+      ],
+      "classes": [
+        "EthicalAnalysis",
+        "LLMInterface",
+        "EthicalReasoningEngine",
+        "CreativeThinkingService",
+        "EnhancedEthicalSystem",
+        "AdvancedEthicalReasoningSystem",
+        "SocialIntelligenceService"
+      ],
+      "imports": [
+        "logging",
+        "typing",
+        "datetime",
+        "dataclasses",
+        "numpy"
+      ],
+      "can_import": true
+    },
+    "backup_repository/phase4_complete_backup_20250804_163501/modules/self_evolution.py": {
+      "name": "backup_repository.phase4_complete_backup_20250804_163501.modules.self_evolution",
+      "path": "backup_repository/phase4_complete_backup_20250804_163501/modules/self_evolution.py",
+      "size": 19471,
+      "lines": 483,
+      "functions": [
+        "__init__",
+        "analyze_and_evolve",
+        "_analyze_self_performance",
+        "_analyze_memory_performance",
+        "_analyze_emotional_performance",
+        "_analyze_evolution_performance",
+        "_analyze_overall_performance",
+        "_determine_performance_level",
+        "_analyze_performance_trend",
+        "_identify_improvement_areas",
+        "_get_suggested_actions",
+        "_suggest_evolution_directions",
+        "_execute_improvements",
+        "_execute_improvement",
+        "_improve_memory_system",
+        "_improve_emotional_system",
+        "_improve_evolution_system",
+        "_improve_general_system",
+        "_calculate_evolution_score",
+        "get_self_evolution_stats",
+        "__init__",
+        "analyze_evolution_need"
+      ],
+      "classes": [
+        "EvolutionResult",
+        "SelfEvolutionEngine",
+        "LLMInterface"
+      ],
+      "imports": [
+        "logging",
+        "typing",
+        "datetime",
+        "dataclasses",
+        "numpy"
+      ],
+      "can_import": true
+    },
+    "backup_repository/phase4_complete_backup_20250804_163501/modules/judgment/self_critique.py": {
+      "name": "backup_repository.phase4_complete_backup_20250804_163501.modules.judgment.self_critique",
+      "path": "backup_repository/phase4_complete_backup_20250804_163501/modules/judgment/self_critique.py",
+      "size": 21236,
+      "lines": 515,
+      "functions": [
+        "__init__",
+        "critique_judgment",
+        "_determine_critique_level",
+        "_evaluate_judgment_quality",
+        "_detect_bias",
+        "_identify_improvement_areas",
+        "_generate_self_feedback",
+        "_calculate_critique_confidence",
+        "_analyze_reasoning_process",
+        "_generate_alternative_perspectives",
+        "_extract_learning_points",
+        "_assess_complexity",
+        "_evaluate_consistency",
+        "_store_critique_history",
+        "_create_default_critique",
+        "get_critique_statistics",
+        "_get_most_common_improvements"
+      ],
+      "classes": [
+        "CritiqueLevel",
+        "BiasType",
+        "SelfCritique",
+        "SelfCritiqueSystem"
+      ],
+      "imports": [
+        "logging",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum"
+      ],
+      "can_import": true
+    },
+    "backup_repository/phase4_complete_backup_20250804_163501/modules/judgment/__pycache__/self_critique.cpython-310.pyc": {
+      "name": "backup_repository.phase4_complete_backup_20250804_163501.modules.judgment.__pycache__.self_critique.cpython-310.pyc",
+      "path": "backup_repository/phase4_complete_backup_20250804_163501/modules/judgment/__pycache__/self_critique.cpython-310.pyc",
+      "size": 14308,
+      "lines": 0,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "backup_repository/phase4_complete_backup_20250804_163501/modules/emotion/emotion_embedding.py": {
+      "name": "backup_repository.phase4_complete_backup_20250804_163501.modules.emotion.emotion_embedding",
+      "path": "backup_repository/phase4_complete_backup_20250804_163501/modules/emotion/emotion_embedding.py",
+      "size": 13215,
+      "lines": 344,
+      "functions": [
+        "__init__",
+        "analyze_emotion",
+        "_detect_emotion_keywords",
+        "_calculate_emotion_intensity",
+        "_determine_primary_emotion",
+        "_get_secondary_emotions",
+        "_calculate_confidence",
+        "_analyze_emotional_context",
+        "_calculate_sentiment_score",
+        "_extract_emotional_keywords",
+        "_extract_emotional_patterns",
+        "_has_negation",
+        "_create_default_embedding",
+        "get_emotion_summary"
+      ],
+      "classes": [
+        "EmotionCategory",
+        "EmotionEmbedding",
+        "NLPEmotionEmbedding"
+      ],
+      "imports": [
+        "re",
+        "typing",
+        "dataclasses",
+        "enum",
+        "logging"
+      ],
+      "can_import": true
+    },
+    "backup_repository/phase4_complete_backup_20250804_163501/modules/emotion/__pycache__/emotion_embedding.cpython-310.pyc": {
+      "name": "backup_repository.phase4_complete_backup_20250804_163501.modules.emotion.__pycache__.emotion_embedding.cpython-310.pyc",
+      "path": "backup_repository/phase4_complete_backup_20250804_163501/modules/emotion/__pycache__/emotion_embedding.cpython-310.pyc",
+      "size": 9803,
+      "lines": 0,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "backup_repository/phase4_complete_backup_20250804_163501/modules/__pycache__/emotion_engine.cpython-310.pyc": {
+      "name": "backup_repository.phase4_complete_backup_20250804_163501.modules.__pycache__.emotion_engine.cpython-310.pyc",
+      "path": "backup_repository/phase4_complete_backup_20250804_163501/modules/__pycache__/emotion_engine.cpython-310.pyc",
+      "size": 14623,
+      "lines": 0,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "backup_repository/phase4_complete_backup_20250804_163501/modules/__pycache__/self_evolution.cpython-310.pyc": {
+      "name": "backup_repository.phase4_complete_backup_20250804_163501.modules.__pycache__.self_evolution.cpython-310.pyc",
+      "path": "backup_repository/phase4_complete_backup_20250804_163501/modules/__pycache__/self_evolution.cpython-310.pyc",
+      "size": 12250,
+      "lines": 0,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "backup_repository/phase4_complete_backup_20250804_163501/modules/__pycache__/learning_engine.cpython-310.pyc": {
+      "name": "backup_repository.phase4_complete_backup_20250804_163501.modules.__pycache__.learning_engine.cpython-310.pyc",
+      "path": "backup_repository/phase4_complete_backup_20250804_163501/modules/__pycache__/learning_engine.cpython-310.pyc",
+      "size": 20401,
+      "lines": 0,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "backup_repository/phase4_complete_backup_20250804_163501/modules/__pycache__/ethical_reasoning.cpython-310.pyc": {
+      "name": "backup_repository.phase4_complete_backup_20250804_163501.modules.__pycache__.ethical_reasoning.cpython-310.pyc",
+      "path": "backup_repository/phase4_complete_backup_20250804_163501/modules/__pycache__/ethical_reasoning.cpython-310.pyc",
+      "size": 19155,
+      "lines": 0,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "backup_repository/phase4_complete_backup_20250804_163501/core/main_loop.py": {
+      "name": "backup_repository.phase4_complete_backup_20250804_163501.core.main_loop",
+      "path": "backup_repository/phase4_complete_backup_20250804_163501/core/main_loop.py",
+      "size": 18518,
+      "lines": 476,
+      "functions": [
+        "__post_init__",
+        "__init__",
+        "_calculate_importance_score",
+        "get_system_status",
+        "get_memory_summary"
+      ],
+      "classes": [
+        "InputData",
+        "JudgmentResult",
+        "ExecutionResult",
+        "ReflectionResult",
+        "MemoryEntry",
+        "MainLoop"
+      ],
+      "imports": [
+        "logging",
+        "asyncio",
+        "typing",
+        "datetime",
+        "dataclasses",
+        "modules.emotion_engine",
+        "modules.self_evolution"
+      ],
+      "can_import": true
+    },
+    "backup_repository/phase4_complete_backup_20250804_163501/core/__pycache__/main_loop.cpython-310.pyc": {
+      "name": "backup_repository.phase4_complete_backup_20250804_163501.core.__pycache__.main_loop.cpython-310.pyc",
+      "path": "backup_repository/phase4_complete_backup_20250804_163501/core/__pycache__/main_loop.cpython-310.pyc",
+      "size": 12314,
+      "lines": 0,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "backup_repository/phase4_complete_backup_20250804_163501/utils/__init__.py": {
+      "name": "backup_repository.phase4_complete_backup_20250804_163501.utils.__init__",
+      "path": "backup_repository/phase4_complete_backup_20250804_163501/utils/__init__.py",
+      "size": 658,
+      "lines": 29,
+      "functions": [],
+      "classes": [],
+      "imports": [
+        "llm_interface",
+        "memory_manager"
+      ],
+      "can_import": true
+    },
+    "backup_repository/phase4_complete_backup_20250804_163501/utils/llm_interface.py": {
+      "name": "backup_repository.phase4_complete_backup_20250804_163501.utils.llm_interface",
+      "path": "backup_repository/phase4_complete_backup_20250804_163501/utils/llm_interface.py",
+      "size": 17411,
+      "lines": 442,
+      "functions": [
+        "__init__",
+        "_initialize_providers",
+        "_create_system_prompt",
+        "_generate_cache_key",
+        "_evaluate_response_quality",
+        "_calculate_confidence_score",
+        "_update_stats",
+        "get_performance_stats",
+        "clear_cache"
+      ],
+      "classes": [
+        "LLMProvider",
+        "QueryType",
+        "LLMRequest",
+        "LLMResponse",
+        "AsyncLLMInterface"
+      ],
+      "imports": [
+        "asyncio",
+        "aiohttp",
+        "json",
+        "time",
+        "logging",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "os",
+        "concurrent.futures",
+        "hashlib"
+      ],
+      "can_import": true
+    },
+    "backup_repository/phase4_complete_backup_20250804_163501/utils/vector_db.py": {
+      "name": "backup_repository.phase4_complete_backup_20250804_163501.utils.vector_db",
+      "path": "backup_repository/phase4_complete_backup_20250804_163501/utils/vector_db.py",
+      "size": 10027,
+      "lines": 290,
+      "functions": [
+        "__init__",
+        "_initialize_index",
+        "add_vectors",
+        "search",
+        "batch_search",
+        "get_vector_by_id",
+        "get_statistics",
+        "save",
+        "load",
+        "clear",
+        "delete_vector"
+      ],
+      "classes": [
+        "VectorDatabase"
+      ],
+      "imports": [
+        "numpy",
+        "faiss",
+        "pickle",
+        "os",
+        "logging",
+        "typing",
+        "datetime",
+        "json"
+      ],
+      "can_import": false,
+      "import_error": "No module named 'faiss'"
+    },
+    "backup_repository/phase4_complete_backup_20250804_163501/utils/memory_manager.py": {
+      "name": "backup_repository.phase4_complete_backup_20250804_163501.utils.memory_manager",
+      "path": "backup_repository/phase4_complete_backup_20250804_163501/utils/memory_manager.py",
+      "size": 17275,
+      "lines": 480,
+      "functions": [
+        "__init__",
+        "_generate_memory_id",
+        "_generate_query_cache_key",
+        "_update_indexes",
+        "_rebuild_indexes",
+        "_update_stats",
+        "clear_cache"
+      ],
+      "classes": [
+        "MemoryEntry",
+        "MemoryQuery",
+        "MemoryManager"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "logging",
+        "time",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "hashlib",
+        "os",
+        "pathlib",
+        "pickle",
+        "gzip"
+      ],
+      "can_import": true
+    },
+    "backup_repository/phase4_complete_backup_20250804_163501/utils/__pycache__/memory_manager.cpython-310.pyc": {
+      "name": "backup_repository.phase4_complete_backup_20250804_163501.utils.__pycache__.memory_manager.cpython-310.pyc",
+      "path": "backup_repository/phase4_complete_backup_20250804_163501/utils/__pycache__/memory_manager.cpython-310.pyc",
+      "size": 13094,
+      "lines": 0,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "backup_repository/phase4_complete_backup_20250804_163501/utils/__pycache__/__init__.cpython-310.pyc": {
+      "name": "backup_repository.phase4_complete_backup_20250804_163501.utils.__pycache__.__init__.cpython-310.pyc",
+      "path": "backup_repository/phase4_complete_backup_20250804_163501/utils/__pycache__/__init__.cpython-310.pyc",
+      "size": 700,
+      "lines": 0,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "backup_repository/phase4_complete_backup_20250804_163501/utils/__pycache__/llm_interface.cpython-310.pyc": {
+      "name": "backup_repository.phase4_complete_backup_20250804_163501.utils.__pycache__.llm_interface.cpython-310.pyc",
+      "path": "backup_repository/phase4_complete_backup_20250804_163501/utils/__pycache__/llm_interface.cpython-310.pyc",
+      "size": 12878,
+      "lines": 0,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "backup_repository/phase4_complete_backup_20250804_163501/interface/__init__.py": {
+      "name": "backup_repository.phase4_complete_backup_20250804_163501.interface.__init__",
+      "path": "backup_repository/phase4_complete_backup_20250804_163501/interface/__init__.py",
+      "size": 223,
+      "lines": 14,
+      "functions": [],
+      "classes": [],
+      "imports": [
+        "api",
+        "services"
+      ],
+      "can_import": false,
+      "import_error": "cannot import name 'InputData' from 'DuRiCore.DuRiCore.modules.emotion_engine' (/home/duri/DuRiWorkspace/DuRiCore/./../DuRiCore/DuRiCore/modules/emotion_engine.py)"
+    },
+    "backup_repository/phase4_complete_backup_20250804_163501/interface/main.py": {
+      "name": "backup_repository.phase4_complete_backup_20250804_163501.interface.main",
+      "path": "backup_repository/phase4_complete_backup_20250804_163501/interface/main.py",
+      "size": 3441,
+      "lines": 118,
+      "functions": [],
+      "classes": [],
+      "imports": [
+        "fastapi",
+        "fastapi.middleware.cors",
+        "fastapi.responses",
+        "uvicorn",
+        "sys",
+        "os",
+        "datetime",
+        "DuRiCore.DuRiCore.interface.api"
+      ],
+      "can_import": false,
+      "import_error": "cannot import name 'InputData' from 'DuRiCore.DuRiCore.modules.emotion_engine' (/home/duri/DuRiWorkspace/DuRiCore/./../DuRiCore/DuRiCore/modules/emotion_engine.py)"
+    },
+    "backup_repository/phase4_complete_backup_20250804_163501/interface/api/emotion.py": {
+      "name": "backup_repository.phase4_complete_backup_20250804_163501.interface.api.emotion",
+      "path": "backup_repository/phase4_complete_backup_20250804_163501/interface/api/emotion.py",
+      "size": 4907,
+      "lines": 158,
+      "functions": [],
+      "classes": [
+        "EmotionRequest",
+        "EmotionResponse"
+      ],
+      "imports": [
+        "fastapi",
+        "pydantic",
+        "typing",
+        "sys",
+        "os",
+        "DuRiCore.DuRiCore.modules.emotion_engine"
+      ],
+      "can_import": false,
+      "import_error": "cannot import name 'InputData' from 'DuRiCore.DuRiCore.modules.emotion_engine' (/home/duri/DuRiWorkspace/DuRiCore/./../DuRiCore/DuRiCore/modules/emotion_engine.py)"
+    },
+    "backup_repository/phase4_complete_backup_20250804_163501/interface/api/__init__.py": {
+      "name": "backup_repository.phase4_complete_backup_20250804_163501.interface.api.__init__",
+      "path": "backup_repository/phase4_complete_backup_20250804_163501/interface/api/__init__.py",
+      "size": 958,
+      "lines": 33,
+      "functions": [],
+      "classes": [],
+      "imports": [
+        "fastapi",
+        "emotion",
+        "learning",
+        "ethical",
+        "evolution",
+        "health"
+      ],
+      "can_import": false,
+      "import_error": "cannot import name 'InputData' from 'DuRiCore.DuRiCore.modules.emotion_engine' (/home/duri/DuRiWorkspace/DuRiCore/./../DuRiCore/DuRiCore/modules/emotion_engine.py)"
+    },
+    "backup_repository/phase4_complete_backup_20250804_163501/interface/api/evolution.py": {
+      "name": "backup_repository.phase4_complete_backup_20250804_163501.interface.api.evolution",
+      "path": "backup_repository/phase4_complete_backup_20250804_163501/interface/api/evolution.py",
+      "size": 5306,
+      "lines": 166,
+      "functions": [],
+      "classes": [
+        "EvolutionRequest",
+        "EvolutionResponse"
+      ],
+      "imports": [
+        "fastapi",
+        "pydantic",
+        "typing",
+        "sys",
+        "os",
+        "DuRiCore.DuRiCore.modules.self_evolution"
+      ],
+      "can_import": false,
+      "import_error": "cannot import name 'InputData' from 'DuRiCore.DuRiCore.modules.emotion_engine' (/home/duri/DuRiWorkspace/DuRiCore/./../DuRiCore/DuRiCore/modules/emotion_engine.py)"
+    },
+    "backup_repository/phase4_complete_backup_20250804_163501/interface/api/health.py": {
+      "name": "backup_repository.phase4_complete_backup_20250804_163501.interface.api.health",
+      "path": "backup_repository/phase4_complete_backup_20250804_163501/interface/api/health.py",
+      "size": 7172,
+      "lines": 197,
+      "functions": [],
+      "classes": [],
+      "imports": [
+        "fastapi",
+        "typing",
+        "sys",
+        "os",
+        "DuRiCore.DuRiCore.modules.emotion_engine",
+        "DuRiCore.DuRiCore.modules.learning_engine",
+        "DuRiCore.DuRiCore.modules.ethical_reasoning",
+        "DuRiCore.DuRiCore.modules.self_evolution"
+      ],
+      "can_import": false,
+      "import_error": "cannot import name 'InputData' from 'DuRiCore.DuRiCore.modules.emotion_engine' (/home/duri/DuRiWorkspace/DuRiCore/./../DuRiCore/DuRiCore/modules/emotion_engine.py)"
+    },
+    "backup_repository/phase4_complete_backup_20250804_163501/interface/api/ethical.py": {
+      "name": "backup_repository.phase4_complete_backup_20250804_163501.interface.api.ethical",
+      "path": "backup_repository/phase4_complete_backup_20250804_163501/interface/api/ethical.py",
+      "size": 6544,
+      "lines": 201,
+      "functions": [],
+      "classes": [
+        "EthicalRequest",
+        "EthicalResponse"
+      ],
+      "imports": [
+        "fastapi",
+        "pydantic",
+        "typing",
+        "sys",
+        "os",
+        "DuRiCore.DuRiCore.modules.ethical_reasoning"
+      ],
+      "can_import": false,
+      "import_error": "cannot import name 'InputData' from 'DuRiCore.DuRiCore.modules.emotion_engine' (/home/duri/DuRiWorkspace/DuRiCore/./../DuRiCore/DuRiCore/modules/emotion_engine.py)"
+    },
+    "backup_repository/phase4_complete_backup_20250804_163501/interface/api/learning.py": {
+      "name": "backup_repository.phase4_complete_backup_20250804_163501.interface.api.learning",
+      "path": "backup_repository/phase4_complete_backup_20250804_163501/interface/api/learning.py",
+      "size": 5592,
+      "lines": 178,
+      "functions": [],
+      "classes": [
+        "LearningRequest",
+        "LearningResponse"
+      ],
+      "imports": [
+        "fastapi",
+        "pydantic",
+        "typing",
+        "sys",
+        "os",
+        "DuRiCore.DuRiCore.modules.learning_engine"
+      ],
+      "can_import": false,
+      "import_error": "cannot import name 'InputData' from 'DuRiCore.DuRiCore.modules.emotion_engine' (/home/duri/DuRiWorkspace/DuRiCore/./../DuRiCore/DuRiCore/modules/emotion_engine.py)"
+    },
+    "backup_repository/day10_backup/DAY10_COMPLETION_REPORT.md": {
+      "name": "backup_repository.day10_backup.DAY10_COMPLETION_REPORT.md",
+      "path": "backup_repository/day10_backup/DAY10_COMPLETION_REPORT.md",
+      "size": 11462,
+      "lines": 364,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "backup_repository/day10_backup/final_integration_system.py": {
+      "name": "backup_repository.day10_backup.final_integration_system",
+      "path": "backup_repository/day10_backup/final_integration_system.py",
+      "size": 38475,
+      "lines": 939,
+      "functions": [
+        "__init__",
+        "_calculate_performance_improvement",
+        "_calculate_resource_reduction",
+        "_calculate_overall_performance",
+        "_analyze_system_performance",
+        "_identify_bottlenecks",
+        "_generate_performance_alerts"
+      ],
+      "classes": [
+        "SystemComponent",
+        "IntegrationResult",
+        "OptimizationResult",
+        "PerformanceReport",
+        "ValidationReport",
+        "FinalIntegrationSystem"
+      ],
+      "imports": [
+        "asyncio",
+        "json",
+        "time",
+        "uuid",
+        "datetime",
+        "typing",
+        "dataclasses",
+        "logging",
+        "statistics",
+        "concurrent.futures",
+        "threading"
+      ],
+      "can_import": true
+    },
+    "backup_repository/day10_backup/comprehensive_testing_platform.py": {
+      "name": "backup_repository.day10_backup.comprehensive_testing_platform",
+      "path": "backup_repository/day10_backup/comprehensive_testing_platform.py",
+      "size": 41355,
+      "lines": 1025,
+      "functions": [
+        "__init__",
+        "_register_default_test_cases",
+        "_calculate_overall_stability",
+        "_analyze_system_stability",
+        "_identify_stability_issues",
+        "_analyze_stress_performance",
+        "_identify_breaking_points",
+        "_analyze_recovery_patterns",
+        "_calculate_overall_test_score",
+        "_analyze_performance_trends",
+        "_assess_test_risks",
+        "_generate_improvement_suggestions"
+      ],
+      "classes": [
+        "TestCase",
+        "TestResult",
+        "StabilityReport",
+        "StressReport",
+        "AnalysisReport",
+        "ComprehensiveTestingPlatform"
+      ],
+      "imports": [
+        "asyncio",
+        "json",
+        "time",
+        "uuid",
+        "datetime",
+        "typing",
+        "dataclasses",
+        "logging",
+        "statistics",
+        "random",
+        "concurrent.futures",
+        "threading"
+      ],
+      "can_import": true
+    },
+    "backup_repository/day10_backup/system_validation_engine.py": {
+      "name": "backup_repository.day10_backup.system_validation_engine",
+      "path": "backup_repository/day10_backup/system_validation_engine.py",
+      "size": 29031,
+      "lines": 722,
+      "functions": [
+        "__init__",
+        "_calculate_overall_quality",
+        "_analyze_quality_metrics",
+        "_identify_quality_issues",
+        "_calculate_standards_compliance",
+        "_identify_compliance_issues",
+        "_calculate_overall_stability",
+        "_analyze_stability_metrics",
+        "_identify_stability_issues",
+        "_assess_final_risks"
+      ],
+      "classes": [
+        "QualityReport",
+        "StandardsReport",
+        "StabilityReport",
+        "FinalReport",
+        "SystemValidationEngine"
+      ],
+      "imports": [
+        "asyncio",
+        "json",
+        "time",
+        "uuid",
+        "datetime",
+        "typing",
+        "dataclasses",
+        "logging",
+        "statistics",
+        "random"
+      ],
+      "can_import": true
+    },
+    "backup_repository/day8_backup/real_environment_deployment.py": {
+      "name": "backup_repository.day8_backup.real_environment_deployment",
+      "path": "backup_repository/day8_backup/real_environment_deployment.py",
+      "size": 25560,
+      "lines": 619,
+      "functions": [
+        "__init__"
+      ],
+      "classes": [
+        "DeploymentStatus",
+        "EnvironmentType",
+        "MonitoringLevel",
+        "DeploymentConfig",
+        "EnvironmentMetrics",
+        "DeploymentReport",
+        "RealEnvironmentDeployment"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "statistics",
+        "time",
+        "random"
+      ],
+      "can_import": true
+    },
+    "backup_repository/day8_backup/system_stability_enhancer.py": {
+      "name": "backup_repository.day8_backup.system_stability_enhancer",
+      "path": "backup_repository/day8_backup/system_stability_enhancer.py",
+      "size": 24424,
+      "lines": 603,
+      "functions": [
+        "__init__"
+      ],
+      "classes": [
+        "StabilityEnhancementType",
+        "HealthMetricType",
+        "MaintenanceType",
+        "EnhancementStatus",
+        "SystemHealthMetrics",
+        "StabilityImprovement",
+        "HealthReport",
+        "MaintenanceResult",
+        "ValidationReport",
+        "SystemStabilityEnhancer"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "statistics",
+        "time",
+        "random"
+      ],
+      "can_import": true
+    },
+    "backup_repository/day8_backup/system_tuning_optimizer.py": {
+      "name": "backup_repository.day8_backup.system_tuning_optimizer",
+      "path": "backup_repository/day8_backup/system_tuning_optimizer.py",
+      "size": 24420,
+      "lines": 607,
+      "functions": [
+        "__init__",
+        "_update_parameter_value"
+      ],
+      "classes": [
+        "TuningStatus",
+        "OptimizationType",
+        "TuningStrategy",
+        "TuningParameter",
+        "OptimizationResult",
+        "TuningReport",
+        "SystemTuningOptimizer"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "statistics",
+        "time",
+        "random"
+      ],
+      "can_import": true
+    },
+    "backup_repository/day8_backup/performance_enhancement_system.py": {
+      "name": "backup_repository.day8_backup.performance_enhancement_system",
+      "path": "backup_repository/day8_backup/performance_enhancement_system.py",
+      "size": 40726,
+      "lines": 982,
+      "functions": [
+        "__init__"
+      ],
+      "classes": [
+        "EnhancementType",
+        "EnhancementStatus",
+        "AdjustmentType",
+        "PerformanceMetrics",
+        "PerformanceImprovement",
+        "PerformanceReport",
+        "AdjustmentResult",
+        "ValidationReport",
+        "PerformanceEnhancementSystem"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "statistics",
+        "time",
+        "random"
+      ],
+      "can_import": true
+    },
+    "backup_repository/day8_backup/user_feedback_collector.py": {
+      "name": "backup_repository.day8_backup.user_feedback_collector",
+      "path": "backup_repository/day8_backup/user_feedback_collector.py",
+      "size": 26718,
+      "lines": 640,
+      "functions": [
+        "__init__"
+      ],
+      "classes": [
+        "FeedbackType",
+        "FeedbackPriority",
+        "FeedbackStatus",
+        "UserFeedback",
+        "FeedbackAnalysis",
+        "ImprovementSuggestion",
+        "FeedbackReport",
+        "UserFeedbackCollector"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "statistics",
+        "time",
+        "random"
+      ],
+      "can_import": true
+    },
+    "backup_repository/day8_backup/advanced_optimization_engine.py": {
+      "name": "backup_repository.day8_backup.advanced_optimization_engine",
+      "path": "backup_repository/day8_backup/advanced_optimization_engine.py",
+      "size": 35171,
+      "lines": 830,
+      "functions": [
+        "__init__"
+      ],
+      "classes": [
+        "OptimizationType",
+        "OptimizationStrategy",
+        "OptimizationStatus",
+        "PerformancePattern",
+        "OptimizationStrategyData",
+        "OptimizationResult",
+        "ValidationReport",
+        "AdvancedOptimizationEngine"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "statistics",
+        "time",
+        "random",
+        "numpy"
+      ],
+      "can_import": true
+    },
+    "backup_repository/day8_backup/DAY8_COMPLETION_REPORT.md": {
+      "name": "backup_repository.day8_backup.DAY8_COMPLETION_REPORT.md",
+      "path": "backup_repository/day8_backup/DAY8_COMPLETION_REPORT.md",
+      "size": 11970,
+      "lines": 369,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "backup_repository/day8_backup/user_experience_optimizer.py": {
+      "name": "backup_repository.day8_backup.user_experience_optimizer",
+      "path": "backup_repository/day8_backup/user_experience_optimizer.py",
+      "size": 21894,
+      "lines": 544,
+      "functions": [
+        "__init__"
+      ],
+      "classes": [
+        "UIOptimizationType",
+        "BehaviorPatternType",
+        "UXImprovementType",
+        "OptimizationStatus",
+        "UserBehavior",
+        "BehaviorAnalysis",
+        "UIImprovement",
+        "UXImprovement",
+        "ValidationReport",
+        "UserExperienceOptimizer"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "statistics",
+        "time",
+        "random"
+      ],
+      "can_import": true
+    },
+    "backup_repository/day8_backup/performance_monitoring_system.py": {
+      "name": "backup_repository.day8_backup.performance_monitoring_system",
+      "path": "backup_repository/day8_backup/performance_monitoring_system.py",
+      "size": 25642,
+      "lines": 611,
+      "functions": [
+        "__init__"
+      ],
+      "classes": [
+        "MonitoringStatus",
+        "AlertLevel",
+        "PerformanceMetric",
+        "PerformanceData",
+        "PerformanceAlert",
+        "PerformanceReport",
+        "PerformanceMonitoringSystem"
+      ],
+      "imports": [
+        "json",
+        "asyncio",
+        "typing",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "logging",
+        "math",
+        "statistics",
+        "time",
+        "random"
+      ],
+      "can_import": true
+    },
+    "__pycache__/behavior_trace.cpython-310.pyc": {
+      "name": "__pycache__.behavior_trace.cpython-310.pyc",
+      "path": "__pycache__/behavior_trace.cpython-310.pyc",
+      "size": 16799,
+      "lines": 0,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "__pycache__/evolution_algorithm.cpython-310.pyc": {
+      "name": "__pycache__.evolution_algorithm.cpython-310.pyc",
+      "path": "__pycache__/evolution_algorithm.cpython-310.pyc",
+      "size": 30646,
+      "lines": 0,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "__pycache__/evolution_system.cpython-310.pyc": {
+      "name": "__pycache__.evolution_system.cpython-310.pyc",
+      "path": "__pycache__/evolution_system.cpython-310.pyc",
+      "size": 23943,
+      "lines": 0,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "__pycache__/learning_pattern_analyzer.cpython-310.pyc": {
+      "name": "__pycache__.learning_pattern_analyzer.cpython-310.pyc",
+      "path": "__pycache__/learning_pattern_analyzer.cpython-310.pyc",
+      "size": 18570,
+      "lines": 0,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "__pycache__/action_system.cpython-310.pyc": {
+      "name": "__pycache__.action_system.cpython-310.pyc",
+      "path": "__pycache__/action_system.cpython-310.pyc",
+      "size": 22921,
+      "lines": 0,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "__pycache__/judgment_system.cpython-310.pyc": {
+      "name": "__pycache__.judgment_system.cpython-310.pyc",
+      "path": "__pycache__/judgment_system.cpython-310.pyc",
+      "size": 22016,
+      "lines": 0,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    },
+    "__pycache__/enhanced_memory_system.cpython-310.pyc": {
+      "name": "__pycache__.enhanced_memory_system.cpython-310.pyc",
+      "path": "__pycache__/enhanced_memory_system.cpython-310.pyc",
+      "size": 19481,
+      "lines": 0,
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "can_import": false
+    }
+  },
+  "dependency_graph": {
+    "real_environment_deployment.py": [],
+    "system_stability_enhancer.py": [],
+    "system_tuning_optimizer.py": [],
+    "final_integration_system.py": [],
+    "performance_enhancement_system.py": [],
+    "loop_performance_optimizer.py": [],
+    "evolution_algorithm.py": [],
+    "user_feedback_collector.py": [],
+    "real_environment_simulator.py": [],
+    "simple_phase4_test.py": [],
+    "integrated_learning_loop.py": [],
+    "advanced_feature_engine.py": [],
+    "test_phase4_performance.py": [],
+    "advanced_optimization_engine.py": [],
+    "learning_pattern_analyzer.py": [],
+    "evolution_system.py": [],
+    "situation_analyzer.py": [],
+    "behavior_generator.py": [],
+    "intelligent_automation_system.py": [],
+    "user_experience_optimizer.py": [],
+    "comprehensive_testing_platform.py": [],
+    "judgment_system.py": [],
+    "performance_monitoring_system.py": [],
+    "integrated_learning_system.py": [],
+    "test_core_system.py": [],
+    "behavior_trace.py": [],
+    "memory_association.py": [],
+    "memory_classification.py": [],
+    "system_validation_engine.py": [],
+    "enhanced_memory_system.py": [],
+    "duri_state_inspector.py": [],
+    "action_system.py": [],
+    "advanced_analytics_platform.py": [],
+    "memory/vector_store.py": [],
+    "DuRiCore/modules/emotion_engine.py": [],
+    "DuRiCore/modules/learning_engine.py": [],
+    "DuRiCore/modules/ethical_reasoning.py": [],
+    "DuRiCore/modules/self_evolution.py": [],
+    "DuRiCore/modules/judgment/self_critique.py": [],
+    "DuRiCore/modules/emotion/emotion_embedding.py": [],
+    "DuRiCore/core/main_loop.py": [],
+    "DuRiCore/utils/__init__.py": [],
+    "DuRiCore/utils/llm_interface.py": [],
+    "DuRiCore/utils/vector_db.py": [],
+    "DuRiCore/utils/memory_manager.py": [],
+    "DuRiCore/interface/__init__.py": [],
+    "DuRiCore/interface/main.py": [],
+    "DuRiCore/interface/api/emotion.py": [],
+    "DuRiCore/interface/api/__init__.py": [],
+    "DuRiCore/interface/api/evolution.py": [],
+    "DuRiCore/interface/api/health.py": [],
+    "DuRiCore/interface/api/ethical.py": [],
+    "DuRiCore/interface/api/learning.py": [],
+    "backup_repository/day9_backup/advanced_feature_engine.py": [],
+    "backup_repository/day9_backup/intelligent_automation_system.py": [],
+    "backup_repository/day9_backup/advanced_analytics_platform.py": [],
+    "backup_repository/phase4_complete_backup_20250804_163501/modules/emotion_engine.py": [],
+    "backup_repository/phase4_complete_backup_20250804_163501/modules/learning_engine.py": [],
+    "backup_repository/phase4_complete_backup_20250804_163501/modules/ethical_reasoning.py": [],
+    "backup_repository/phase4_complete_backup_20250804_163501/modules/self_evolution.py": [],
+    "backup_repository/phase4_complete_backup_20250804_163501/modules/judgment/self_critique.py": [],
+    "backup_repository/phase4_complete_backup_20250804_163501/modules/emotion/emotion_embedding.py": [],
+    "backup_repository/phase4_complete_backup_20250804_163501/core/main_loop.py": [],
+    "backup_repository/phase4_complete_backup_20250804_163501/utils/__init__.py": [],
+    "backup_repository/phase4_complete_backup_20250804_163501/utils/llm_interface.py": [],
+    "backup_repository/phase4_complete_backup_20250804_163501/utils/vector_db.py": [],
+    "backup_repository/phase4_complete_backup_20250804_163501/utils/memory_manager.py": [],
+    "backup_repository/phase4_complete_backup_20250804_163501/interface/__init__.py": [],
+    "backup_repository/phase4_complete_backup_20250804_163501/interface/main.py": [],
+    "backup_repository/phase4_complete_backup_20250804_163501/interface/api/emotion.py": [],
+    "backup_repository/phase4_complete_backup_20250804_163501/interface/api/__init__.py": [],
+    "backup_repository/phase4_complete_backup_20250804_163501/interface/api/evolution.py": [],
+    "backup_repository/phase4_complete_backup_20250804_163501/interface/api/health.py": [],
+    "backup_repository/phase4_complete_backup_20250804_163501/interface/api/ethical.py": [],
+    "backup_repository/phase4_complete_backup_20250804_163501/interface/api/learning.py": [],
+    "backup_repository/day10_backup/final_integration_system.py": [],
+    "backup_repository/day10_backup/comprehensive_testing_platform.py": [],
+    "backup_repository/day10_backup/system_validation_engine.py": [],
+    "backup_repository/day8_backup/real_environment_deployment.py": [],
+    "backup_repository/day8_backup/system_stability_enhancer.py": [],
+    "backup_repository/day8_backup/system_tuning_optimizer.py": [],
+    "backup_repository/day8_backup/performance_enhancement_system.py": [],
+    "backup_repository/day8_backup/user_feedback_collector.py": [],
+    "backup_repository/day8_backup/advanced_optimization_engine.py": [],
+    "backup_repository/day8_backup/user_experience_optimizer.py": [],
+    "backup_repository/day8_backup/performance_monitoring_system.py": []
+  },
+  "connectivity_status": {
+    "real_environment_deployment.py": true,
+    "system_stability_enhancer.py": true,
+    "system_tuning_optimizer.py": true,
+    "final_integration_system.py": true,
+    "performance_enhancement_system.py": true,
+    "loop_performance_optimizer.py": true,
+    "evolution_algorithm.py": true,
+    "user_feedback_collector.py": true,
+    "real_environment_simulator.py": true,
+    "simple_phase4_test.py": true,
+    "integrated_learning_loop.py": true,
+    "advanced_feature_engine.py": true,
+    "test_phase4_performance.py": true,
+    "advanced_optimization_engine.py": true,
+    "learning_pattern_analyzer.py": true,
+    "evolution_system.py": true,
+    "situation_analyzer.py": true,
+    "behavior_generator.py": true,
+    "intelligent_automation_system.py": true,
+    "user_experience_optimizer.py": true,
+    "comprehensive_testing_platform.py": true,
+    "judgment_system.py": true,
+    "performance_monitoring_system.py": true,
+    "integrated_learning_system.py": true,
+    "test_core_system.py": false,
+    "behavior_trace.py": true,
+    "memory_association.py": true,
+    "memory_classification.py": true,
+    "system_validation_engine.py": true,
+    "enhanced_memory_system.py": true,
+    "duri_state_inspector.py": true,
+    "action_system.py": true,
+    "advanced_analytics_platform.py": true,
+    "memory/vector_store.py": true,
+    "DuRiCore/modules/emotion_engine.py": true,
+    "DuRiCore/modules/learning_engine.py": true,
+    "DuRiCore/modules/ethical_reasoning.py": true,
+    "DuRiCore/modules/self_evolution.py": true,
+    "DuRiCore/modules/judgment/self_critique.py": true,
+    "DuRiCore/modules/emotion/emotion_embedding.py": true,
+    "DuRiCore/core/main_loop.py": true,
+    "DuRiCore/utils/__init__.py": true,
+    "DuRiCore/utils/llm_interface.py": true,
+    "DuRiCore/utils/vector_db.py": false,
+    "DuRiCore/utils/memory_manager.py": true,
+    "DuRiCore/interface/__init__.py": false,
+    "DuRiCore/interface/main.py": false,
+    "DuRiCore/interface/api/emotion.py": false,
+    "DuRiCore/interface/api/__init__.py": false,
+    "DuRiCore/interface/api/evolution.py": false,
+    "DuRiCore/interface/api/health.py": false,
+    "DuRiCore/interface/api/ethical.py": false,
+    "DuRiCore/interface/api/learning.py": false,
+    "backup_repository/day9_backup/advanced_feature_engine.py": true,
+    "backup_repository/day9_backup/intelligent_automation_system.py": true,
+    "backup_repository/day9_backup/advanced_analytics_platform.py": true,
+    "backup_repository/phase4_complete_backup_20250804_163501/modules/emotion_engine.py": true,
+    "backup_repository/phase4_complete_backup_20250804_163501/modules/learning_engine.py": true,
+    "backup_repository/phase4_complete_backup_20250804_163501/modules/ethical_reasoning.py": true,
+    "backup_repository/phase4_complete_backup_20250804_163501/modules/self_evolution.py": true,
+    "backup_repository/phase4_complete_backup_20250804_163501/modules/judgment/self_critique.py": true,
+    "backup_repository/phase4_complete_backup_20250804_163501/modules/emotion/emotion_embedding.py": true,
+    "backup_repository/phase4_complete_backup_20250804_163501/core/main_loop.py": true,
+    "backup_repository/phase4_complete_backup_20250804_163501/utils/__init__.py": true,
+    "backup_repository/phase4_complete_backup_20250804_163501/utils/llm_interface.py": true,
+    "backup_repository/phase4_complete_backup_20250804_163501/utils/vector_db.py": false,
+    "backup_repository/phase4_complete_backup_20250804_163501/utils/memory_manager.py": true,
+    "backup_repository/phase4_complete_backup_20250804_163501/interface/__init__.py": false,
+    "backup_repository/phase4_complete_backup_20250804_163501/interface/main.py": false,
+    "backup_repository/phase4_complete_backup_20250804_163501/interface/api/emotion.py": false,
+    "backup_repository/phase4_complete_backup_20250804_163501/interface/api/__init__.py": false,
+    "backup_repository/phase4_complete_backup_20250804_163501/interface/api/evolution.py": false,
+    "backup_repository/phase4_complete_backup_20250804_163501/interface/api/health.py": false,
+    "backup_repository/phase4_complete_backup_20250804_163501/interface/api/ethical.py": false,
+    "backup_repository/phase4_complete_backup_20250804_163501/interface/api/learning.py": false,
+    "backup_repository/day10_backup/final_integration_system.py": true,
+    "backup_repository/day10_backup/comprehensive_testing_platform.py": true,
+    "backup_repository/day10_backup/system_validation_engine.py": true,
+    "backup_repository/day8_backup/real_environment_deployment.py": true,
+    "backup_repository/day8_backup/system_stability_enhancer.py": true,
+    "backup_repository/day8_backup/system_tuning_optimizer.py": true,
+    "backup_repository/day8_backup/performance_enhancement_system.py": true,
+    "backup_repository/day8_backup/user_feedback_collector.py": true,
+    "backup_repository/day8_backup/advanced_optimization_engine.py": true,
+    "backup_repository/day8_backup/user_experience_optimizer.py": true,
+    "backup_repository/day8_backup/performance_monitoring_system.py": true
+  },
+  "problems": [
+    "Import 실패 모듈: 19개",
+    "  - test_core_system.py",
+    "  - DuRiCore/utils/vector_db.py",
+    "  - DuRiCore/interface/__init__.py",
+    "  - DuRiCore/interface/main.py",
+    "  - DuRiCore/interface/api/emotion.py",
+    "실행 루프 관련 모듈 부족: ['orchestrator']"
+  ],
+  "timestamp": "2025-08-05T10:23:59.407251"
+}
