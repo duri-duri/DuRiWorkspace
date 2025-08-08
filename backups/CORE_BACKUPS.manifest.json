@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "description": "Core DuRiCore backup files that must be preserved during repository cleanup",
+  "must_exist": [
+    {
+      "path": "DuRiCore_Backup_20250807_002146.tar.gz",
+      "sha256": "39e55df91f1f3f8dcd77e87c6352fa1ab7698a50cd1f74720b2140e06f35c686",
+      "description": "Core backup from 2025-08-07 00:21:46"
+    },
+    {
+      "path": "DuRiCore_ChatGPT_Analysis_Backup_20250807_100544.tar.gz",
+      "sha256": "cfd782f7d8b8c02a0239f8c10de6bf9425aae1aed692f4574e5ffbf57dc50ccb",
+      "description": "ChatGPT analysis backup from 2025-08-07 10:05:44"
+    },
+    {
+      "path": "DuRiCore_backup_20250807_20250807_131858_current_state_after_strategic_learning_completion.tar.gz",
+      "sha256": "89257ec8dac169c00e7d85f50c5e8a4b825657259e4fa1db099667e613dc4cea",
+      "description": "Strategic learning completion backup from 2025-08-07 13:18:58"
+    }
+  ],
+  "must_absent_globs": [
+    "backup/*.tar.gz",
+    "DuRiWorkspace_*.tar.gz",
+    "DuRi_Backup_*.tar.gz",
+    "DuRi_Phase*.tar.gz",
+    "duri_archive/*.tar.gz",
+    "*.tar",
+    "*.tgz",
+    "*.zst"
+  ],
+  "created_at": "2025-08-08T10:40:00Z",
+  "total_size_mb": 8.2
+}
