@@ -1,73 +1,68 @@
-# 백업 제외 파일 목록
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-*.log
-*.tmp
-*.swp
-*.swo
-*~
-.DS_Store
-Thumbs.db
+# DuRi Control System 백업 제외 파일 목록
+
+# 기존 백업 파일들
+*.tar.gz
+*.zip
+*.backup
 
 # Git 관련
 .git/
 .gitignore
+.gitmodules
+
+# 로그 파일들
+*.log
+logs/
+*.txt
+
+# 캐시 및 임시 파일들
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.cache/
+
+# 환경 설정
+.env
+venv/
+env/
+.venv/
+
+# 데이터베이스
+*.db
+*.sqlite
+*.sqlite3
 
 # Docker 관련
 .dockerignore
 
-# 환경 변수 (보안상 제외)
-.env
-.env.local
-.env.prod
+# IDE 설정
+.vscode/
+.idea/
+*.code-workspace
 
-# 로그 파일들
-logs/
-*.log
-
-# 백업 폴더들 (중복 방지)
+# 스냅샷 및 백업 디렉토리
 duri_snapshots/
-backups/
 backup/
+backups/
+
+# 테스트 관련
+tests/
+test_*.py
 
 # 임시 파일들
 *.tmp
 *.temp
-*.bak
-
-# IDE 설정
-.vscode/
-.idea/
-*.sublime-*
-
-# OS 생성 파일
 .DS_Store
 Thumbs.db
-desktop.ini
 
-# Python 가상환경
-venv/
-env/
-.venv/
-.env/
+# 로그 파일들
+control_logs.txt
+evolution_logs.txt
+core_logs.txt
+brain_logs.txt
+*_health.txt
+*_logs.txt
 
-# Node.js (있다면)
-node_modules/
-npm-debug.log*
-
-# 빌드 결과물
-dist/
-build/
-*.egg-info/
-
-# 테스트 결과
-.coverage
-.pytest_cache/
-htmlcov/
-
-# Docker 볼륨 데이터
-postgres_data/
-redis_data/ 
+# 스크립트 파일들
+*.sh 

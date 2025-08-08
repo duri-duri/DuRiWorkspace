@@ -1,0 +1,97 @@
+{
+  "module": "unified_learning_system",
+  "responsibility": "DuRi 통합 학습 시스템 (Unified Learning System)\nPhase 4: 모듈 통합 및 구조 리디자인 - 최종 실행 준비 완료 적용\n\n기존 12개 학습/진화 모듈을 2개로 통합:\n- self_directed_learning_system.py\n- realtime_learning_system.py\n- integrated_learning_system.py\n- strategic_learning_engine.py\n- self_evolution_manager.py\n- evolution_algorithm.py\n- advanced_evolution_system.py\n- integrated_advanced_learning_system.py\n- knowledge_evolution.py\n- learning_optimization.py\n- cognitive_meta_learning_system.py\n- adaptive_learning_system.py\n\n@preserve_identity: 학습 과정의 자기진화와 판단 이유 기록\n@evolution_protection: 기존 학습 패턴과 진화 경로 보존\n@execution_guarantee: 자동화와 검증 시스템 완성\n@existence_ai: 진화 가능 + 회복 가능한 존재형 AI\n@final_execution: 인간처럼 실패하고도 다시 일어날 수 있는 존재",
+  "must_define": [
+    "_process_revolutionary_evolution",
+    "process_learning",
+    "_process_adaptive_learning",
+    "_process_incremental_evolution",
+    "get_learning_summary",
+    "_process_integrative_evolution",
+    "_process_adaptive_evolution",
+    "process_evolution",
+    "_process_realtime_learning",
+    "get_evolution_summary",
+    "start_evolution_session",
+    "start_learning_session",
+    "_process_meta_learning",
+    "_process_self_directed_learning",
+    "_process_continuous_learning",
+    "_process_general_learning"
+  ],
+  "must_not": [
+    "finalize decisions (판단은 judgment_engine에서)",
+    "access memory directly (memory_system을 통해)",
+    "bypass judgment_trace (모든 판단은 기록되어야 함)"
+  ],
+  "integration": [
+    "imports asyncio",
+    "imports time",
+    "imports typing",
+    "imports dataclasses",
+    "imports enum",
+    "imports numpy",
+    "imports collections",
+    "imports ExistenceAISystem",
+    "imports FinalExecutionVerifier",
+    "calls logging.basicConfig()"
+  ],
+  "judgment_trace": "모든 판단 과정 기록",
+  "preserve_identity": "판단 이유 기록 시스템 강제 통합",
+  "evolution_protection": "진화 중 손상 방지 최우선",
+  "execution_guarantee": "자동화와 검증 시스템 완성",
+  "existence_ai": "진화 가능 + 회복 가능한 존재형 AI",
+  "final_execution": "인간처럼 실패하고도 다시 일어날 수 있는 존재",
+  "self_assessment": [
+    "creativity",
+    "judgment_diversity",
+    "memory_activity",
+    "emotional_response"
+  ],
+  "test_requirements": [
+    "consistency",
+    "reasoning_trace",
+    "identity_verification",
+    "regression_testing"
+  ],
+  "rollback_conditions": [
+    "creativity < 0.7",
+    "judgment_diversity < 0.7",
+    "memory_activity < 0.7",
+    "emotional_response < 0.7"
+  ],
+  "automation_tools": [
+    "meta_generator.py",
+    "protection_injector.py",
+    "meaning_injection_engine.py"
+  ],
+  "verification_systems": [
+    "regression_test_framework.py",
+    "auto_rollback_system.py"
+  ],
+  "existence_systems": [
+    "evolution_capability.py",
+    "recovery_capability.py",
+    "existence_preservation.py"
+  ],
+  "final_execution_systems": [
+    "final_execution_verifier.py",
+    "existence_ai_launcher.py"
+  ],
+  "generated_at": "2025-08-07T16:28:07.925552",
+  "version": "6.0",
+  "final_execution_ready": true,
+  "protection_status": {
+    "preserve_identity": true,
+    "evolution_protection": true,
+    "execution_guarantee": true,
+    "existence_ai": true,
+    "final_execution": true
+  },
+  "existence_ai_status": {
+    "evolution_capable": true,
+    "recovery_capable": true,
+    "existence_preserved": true,
+    "final_execution_ready": true
+  }
+}

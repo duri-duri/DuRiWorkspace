@@ -1,2 +1,16 @@
 !logs/.gitkeep
 .env
+# 백업 및 아카이브는 기본 차단
+DuRiCore_backup_*.tar.gz
+DuRiCore_Day*.tar.gz
+DuRiCore_Phase*.tar.gz
+*.tar
+*.tar.gz
+*.tgz
+*.zst
+backup/
+
+# --- 아래 3개만 예외 허용(화이트리스트) ---
+!DuRiCore_Backup_20250807_002146.tar.gz
+!DuRiCore_ChatGPT_Analysis_Backup_20250807_100544.tar.gz
+!DuRiCore_backup_20250807_20250807_131858_current_state_after_strategic_learning_completion.tar.gz

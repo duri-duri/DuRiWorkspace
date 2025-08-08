@@ -74,6 +74,7 @@ services:
     environment:
       - PORT=8083
       - PYTHONPATH=/app:/app/duri_common
+      - DATABASE_URL=postgresql://duri:duri@duri-postgres:5432/duri
     env_file:
       - .env
     depends_on:

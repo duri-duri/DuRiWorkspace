@@ -1,0 +1,17 @@
+{
+  "conversation_id": "conversation_20250803_200302",
+  "start_time": "2025-08-03T20:03:02.217056",
+  "end_time": "2025-08-03T20:03:02.221761",
+  "total_exchanges": 2,
+  "average_response_time": 0.004026651382446289,
+  "learning_efficiency": 0.0,
+  "problem_solving_score": 0.0,
+  "autonomy_level": 0.0,
+  "evolution_patterns": [
+    "response_time_increasing",
+    "low_success_rate"
+  ],
+  "key_insights": [
+    "성공률: 0.0%"
+  ]
+}
