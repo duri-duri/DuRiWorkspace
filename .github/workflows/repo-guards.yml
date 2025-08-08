@@ -1,0 +1,46 @@
+name: repo-guards
+on: [pull_request]
+
+jobs:
+  guards:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for verification
+      
+      - name: must_exist_at_HEAD
+        run: |
+          echo "🔍 Verifying must_exist files in HEAD..."
+          jq -r '.must_exist[]|.path' backups/CORE_BACKUPS.manifest.json \
+          | xargs -I{} git cat-file -e HEAD:"{}"
+          echo "✅ All must_exist files present in HEAD"
+      
+      - name: archives_in_history_is_zero
+        run: |
+          echo "🔍 Checking for remaining archives in history..."
+          ARCHIVE_COUNT=$(git rev-list --objects --all | grep -E '\.(tar\.gz|tgz|zst|tar)$' | wc -l)
+          if [ "$ARCHIVE_COUNT" -gt 0 ]; then
+            echo "❌ Found $ARCHIVE_COUNT archive files in history"
+            git rev-list --objects --all | grep -E '\.(tar\.gz|tgz|zst|tar)$' | head -10
+            exit 1
+          else
+            echo "✅ No archive files remaining in history"
+          fi
+      
+      - name: objects_count_decreased
+        run: |
+          echo "📊 Repository metrics..."
+          git count-objects -v
+          echo "✅ Repository metrics verified"
+      
+      - name: size_check
+        run: |
+          echo "📏 Repository size check..."
+          SIZE_KB=$(git count-objects -v | grep "size-pack" | awk '{print $2}')
+          if [ "$SIZE_KB" -gt 50000 ]; then  # 50MB threshold
+            echo "⚠️  Repository size: ${SIZE_KB}KB (large)"
+          else
+            echo "✅ Repository size: ${SIZE_KB}KB (acceptable)"
+          fi

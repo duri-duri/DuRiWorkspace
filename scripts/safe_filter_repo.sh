@@ -122,7 +122,21 @@ echo ""
 echo "📊 Post-cleanup metrics:"
 cat /tmp/metrics_after.txt
 
-# 8) 안전 푸시(운영 브랜치 직접 덮지 말고 cleaned/main로)
+# 8) 최종 검증 (푸시 전)
+echo ""
+echo "🔍 Final verification before push..."
+echo "-----------------------------------"
+
+# 아카이브 파일 잔존 확인
+if git rev-list --objects --all | grep -E '\.(tar\.gz|tgz|zst|tar)$' >/dev/null; then
+    echo "❌ Archives remain in history"
+    git rev-list --objects --all | grep -E '\.(tar\.gz|tgz|zst|tar)$' | head -5
+    exit 55
+else
+    echo "✅ No archives in history"
+fi
+
+# 9) 안전 푸시(운영 브랜치 직접 덮지 말고 cleaned/main로)
 echo ""
 echo "🚀 Pushing to cleaned/main (safe with-lease)..."
 CURRENT_HEAD="$(git rev-parse --abbrev-ref HEAD || echo HEAD)"
