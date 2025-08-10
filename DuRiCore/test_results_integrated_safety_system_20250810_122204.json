@@ -1,0 +1,11 @@
+{
+  "total_tests": 2,
+  "passed_tests": 2,
+  "failed_tests": 0,
+  "errors": [
+    "안전성 위반으로 인해 작업 항목을 추가할 수 없습니다"
+  ],
+  "start_time": "2025-08-10T12:22:04.910923",
+  "end_time": "2025-08-10T12:22:04.912479",
+  "duration_seconds": 0.001556
+}

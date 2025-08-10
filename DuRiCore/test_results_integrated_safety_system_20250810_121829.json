@@ -1,0 +1,11 @@
+{
+  "total_tests": 2,
+  "passed_tests": 2,
+  "failed_tests": 0,
+  "errors": [
+    "'can_add_work'"
+  ],
+  "start_time": "2025-08-10T12:18:29.484015",
+  "end_time": "2025-08-10T12:18:29.485035",
+  "duration_seconds": 0.00102
+}

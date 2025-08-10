@@ -1,0 +1,57 @@
+{
+  "emergency_stop_policy_routing": {
+    "description": "DuRi E-stop 정책 라우팅 테이블 (원인→정책)",
+    "version": "1.0.0",
+    "policy_selection": "single_policy_only",
+    "priority_order": ["immediate", "hysteresis", "gradual"],
+    "routing_table": {
+      "equivalence_violation": {
+        "policy": "hysteresis",
+        "description": "동등성 위반 시 히스테리시스 적용",
+        "parameters": {
+          "window_size": 3,
+          "time_window_seconds": 180.0,
+          "severity_threshold": 0.9
+        },
+        "behavior": "3분 창에서 3회 연속 위반 시 E-stop",
+        "e_stop_trigger": false
+      },
+      "performance_threshold": {
+        "policy": "immediate",
+        "description": "성능 임계 위반 시 즉시 E-stop",
+        "parameters": {
+          "severity_threshold": 0.8
+        },
+        "behavior": "즉시 비상 정지",
+        "e_stop_trigger": true
+      },
+      "observability_missing": {
+        "policy": "gradual",
+        "description": "관찰성 결측 시 점진적 격리",
+        "parameters": {
+          "isolation_level": "safe_mode",
+          "fallback_mode": true,
+          "severity_threshold": 0.7
+        },
+        "behavior": "SAFE_MODE 진입 + fallback 모드",
+        "e_stop_trigger": false
+      }
+    },
+    "hysteresis_config": {
+      "default_window_size": 3,
+      "default_time_window": 180.0,
+      "max_violations_before_estop": 3,
+      "reset_after_estop": true
+    },
+    "gradual_isolation_config": {
+      "safe_mode_duration": 300.0,
+      "fallback_grace_period": 60.0,
+      "auto_recovery": true
+    },
+    "validation_rules": {
+      "single_policy_enforcement": "동일 이벤트에서 정책 1종만 발화",
+      "no_duplicate_triggers": "중복 트리거 금지",
+      "policy_consistency": "설정된 정책과 실제 실행 정책 일치"
+    }
+  }
+}

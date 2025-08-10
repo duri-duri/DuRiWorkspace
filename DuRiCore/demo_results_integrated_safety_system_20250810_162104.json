@@ -1,0 +1,370 @@
+{
+  "scenarios": [
+    {
+      "name": "기본 작업 관리",
+      "description": "작업 항목 추가, 시작, 완료의 기본 워크플로우",
+      "success": true,
+      "details": {
+        "work_item_id": "demo_001",
+        "start_success": true,
+        "complete_success": true
+      },
+      "start_time": "2025-08-10T16:21:02.038972",
+      "end_time": "2025-08-10T16:21:02.040400",
+      "duration_seconds": 0.001428
+    },
+    {
+      "name": "용량 거버넌스 테스트",
+      "description": "WIP 한계, LOC 변경량, 파일 변경량 제한 테스트",
+      "success": true,
+      "details": {
+        "initial_capacity": {
+          "current_status": {
+            "workload_level": "very_low",
+            "current_wip": 0,
+            "wip_limit": 2,
+            "capacity_utilization": 0.0
+          },
+          "daily_metrics": {
+            "loc_change": 50,
+            "loc_limit": 600,
+            "file_change": 1,
+            "file_limit": 25
+          },
+          "weekly_metrics": {
+            "loc_change": 50,
+            "loc_limit": 1500,
+            "file_change": 1,
+            "file_limit": 100
+          },
+          "capacity_limits": {
+            "daily_loc": true,
+            "weekly_loc": true,
+            "daily_file": true,
+            "weekly_file": true,
+            "wip": true,
+            "can_add_work": true
+          },
+          "work_items_summary": {
+            "total": 1,
+            "pending": 0,
+            "in_progress": 0,
+            "completed": 1,
+            "blocked": 0
+          },
+          "performance_metrics": {
+            "total_completed": 1,
+            "average_completion_time": 7.3e-06,
+            "uptime_days": 0
+          },
+          "current_wip": 0,
+          "max_wip": 2,
+          "workload_level": "very_low"
+        },
+        "added_work_items": 3,
+        "capacity_limits": {
+          "daily_loc": true,
+          "weekly_loc": true,
+          "daily_file": true,
+          "weekly_file": true,
+          "wip": true,
+          "can_add_work": true
+        }
+      },
+      "start_time": "2025-08-10T16:21:02.040432",
+      "end_time": "2025-08-10T16:21:02.041001",
+      "duration_seconds": 0.000569
+    },
+    {
+      "name": "안전성 모니터링",
+      "description": "실시간 안전성 상태 모니터링 및 체크포인트",
+      "success": true,
+      "details": {
+        "checkpoints_count": 5,
+        "health_status": "warning",
+        "integration_score": 0.15,
+        "safety_score": 6.857142857142857,
+        "equivalence_score": 0.15
+      },
+      "start_time": "2025-08-10T16:21:02.041027",
+      "end_time": "2025-08-10T16:21:04.545724",
+      "duration_seconds": 2.504697
+    },
+    {
+      "name": "비상 대응 (T6)",
+      "description": "히스테리시스 기반 비상 정지 및 복구 시나리오",
+      "success": true,
+      "details": {
+        "estop_conditions": {
+          "timestamp": "2025-08-10T16:21:04.545817",
+          "current_policy": "hysteresis",
+          "hysteresis_status": {
+            "equivalence_violation": {
+              "violation_count": 0,
+              "time_window": 180.0,
+              "window_size": 3,
+              "should_trigger": false
+            },
+            "performance_threshold": {
+              "violation_count": 0,
+              "time_window": 180.0,
+              "window_size": 3,
+              "should_trigger": false
+            }
+          },
+          "recent_violations": 2,
+          "should_trigger": false
+        },
+        "health_status": "warning",
+        "emergency_stops_count": 0,
+        "hysteresis_status": {
+          "equivalence_violation": {
+            "violation_count": 0,
+            "time_window": 180.0,
+            "window_size": 3,
+            "should_trigger": false
+          },
+          "performance_threshold": {
+            "violation_count": 0,
+            "time_window": 180.0,
+            "window_size": 3,
+            "should_trigger": false
+          }
+        }
+      },
+      "start_time": "2025-08-10T16:21:04.545759",
+      "end_time": "2025-08-10T16:21:04.545956",
+      "duration_seconds": 0.000197
+    },
+    {
+      "name": "히스테리시스 테스트 (T6)",
+      "description": "연속 위반에 따른 히스테리시스 E-stop 트리거 테스트",
+      "success": true,
+      "details": {
+        "violations_count": 3,
+        "hysteresis_triggered": false,
+        "estop_conditions": {
+          "timestamp": "2025-08-10T16:21:04.846910",
+          "current_policy": "hysteresis",
+          "hysteresis_status": {
+            "equivalence_violation": {
+              "violation_count": 0,
+              "time_window": 180.0,
+              "window_size": 3,
+              "should_trigger": false
+            },
+            "performance_threshold": {
+              "violation_count": 0,
+              "time_window": 180.0,
+              "window_size": 3,
+              "should_trigger": false
+            }
+          },
+          "recent_violations": 2,
+          "should_trigger": false
+        },
+        "hysteresis_windows": {
+          "equivalence_violation": {
+            "violation_count": 0,
+            "time_window": 180.0,
+            "window_size": 3,
+            "should_trigger": false
+          },
+          "performance_threshold": {
+            "violation_count": 0,
+            "time_window": 180.0,
+            "window_size": 3,
+            "should_trigger": false
+          }
+        }
+      },
+      "start_time": "2025-08-10T16:21:04.545983",
+      "end_time": "2025-08-10T16:21:04.847033",
+      "duration_seconds": 0.30105
+    },
+    {
+      "name": "E-stop 정책 테스트 (T6)",
+      "description": "다양한 E-stop 정책 (즉시/점진적/히스테리시스) 테스트",
+      "success": true,
+      "details": {
+        "estop_history": [
+          {
+            "trigger": "equivalence_violation",
+            "timestamp": "2025-08-10T16:21:02.542631",
+            "severity": 0.85,
+            "policy": "hysteresis",
+            "details": {
+              "equivalence_score": 0.15,
+              "threshold": 0.995,
+              "violation_type": "minor"
+            }
+          },
+          {
+            "trigger": "performance_threshold",
+            "timestamp": "2025-08-10T16:21:02.542694",
+            "severity": 1.0,
+            "policy": "immediate",
+            "details": {
+              "safety_level": "critical",
+              "violation_type": "critical_safety"
+            }
+          }
+        ],
+        "policy_results": {
+          "equivalence_violation": {
+            "policy": "hysteresis",
+            "severity": 0.85
+          },
+          "performance_threshold": {
+            "policy": "immediate",
+            "severity": 1.0
+          }
+        },
+        "total_estops": 2
+      },
+      "start_time": "2025-08-10T16:21:04.847059",
+      "end_time": "2025-08-10T16:21:04.847123",
+      "duration_seconds": 6.4e-05
+    },
+    {
+      "name": "회귀 테스트 (T6)",
+      "description": "기존 기능의 회귀 방지 및 안정성 검증",
+      "success": false,
+      "details": {
+        "integration_check": false,
+        "state_manager": "ready",
+        "capacity_governance": true,
+        "equivalence_validation": false,
+        "regression_passed": false
+      },
+      "start_time": "2025-08-10T16:21:04.847134",
+      "end_time": "2025-08-10T16:21:04.847198",
+      "duration_seconds": 6.4e-05
+    },
+    {
+      "name": "통합 검증 (T6)",
+      "description": "전체 시스템의 통합 상태 및 성능 검증",
+      "success": false,
+      "details": {
+        "health_status": {
+          "timestamp": "2025-08-10T16:21:04.847228",
+          "overall_health": "warning",
+          "system_status": "emergency_stop",
+          "state_manager_status": "ready",
+          "ssot_metrics": {
+            "workload_level": "idle",
+            "current_wip": 0,
+            "safety_score": 0.15,
+            "health_status": "healthy"
+          },
+          "components": {
+            "safety_framework": {
+              "status": "healthy",
+              "score": 6.857142857142857
+            },
+            "capacity_governance": {
+              "status": "healthy",
+              "workload_level": "idle",
+              "current_wip": 0
+            },
+            "equivalence_validator": {
+              "status": "warning",
+              "score": null
+            }
+          },
+          "emergency_stop_warmup": {
+            "equivalence_violation": {
+              "active": false,
+              "remaining": 0.0
+            },
+            "performance_threshold": {
+              "active": false,
+              "remaining": 0.0
+            }
+          }
+        },
+        "estop_conditions": {
+          "timestamp": "2025-08-10T16:21:04.847291",
+          "current_policy": "hysteresis",
+          "hysteresis_status": {
+            "equivalence_violation": {
+              "violation_count": 0,
+              "time_window": 180.0,
+              "window_size": 3,
+              "should_trigger": false
+            },
+            "performance_threshold": {
+              "violation_count": 0,
+              "time_window": 180.0,
+              "window_size": 3,
+              "should_trigger": false
+            }
+          },
+          "recent_violations": 2,
+          "should_trigger": false
+        },
+        "performance_metrics": {
+          "uptime": 0.604876,
+          "integration_score": 0.15,
+          "checkpoints_passed": 2,
+          "emergency_stops": 0
+        },
+        "validation_criteria": {
+          "health_ok": false,
+          "no_estop": true,
+          "integration_score_ok": false,
+          "system_ready": false
+        },
+        "integration_passed": false
+      },
+      "start_time": "2025-08-10T16:21:04.847209",
+      "end_time": "2025-08-10T16:21:04.847355",
+      "duration_seconds": 0.000146
+    }
+  ],
+  "total_scenarios": 8,
+  "successful_scenarios": 6,
+  "failed_scenarios": 2,
+  "start_time": "2025-08-10T16:21:01.937513",
+  "end_time": "2025-08-10T16:21:04.847359",
+  "duration_seconds": 2.909846,
+  "t6_regression_tests": [
+    {
+      "test_name": "기본 기능 회귀",
+      "passed": false,
+      "components_tested": [
+        "integration",
+        "state_manager",
+        "capacity",
+        "equivalence"
+      ],
+      "timestamp": "2025-08-10T16:21:04.847186"
+    },
+    {
+      "test_name": "통합 검증",
+      "passed": false,
+      "criteria_met": 1,
+      "total_criteria": 4,
+      "timestamp": "2025-08-10T16:21:04.847330"
+    }
+  ],
+  "hysteresis_tests": [
+    {
+      "test_name": "연속 위반 히스테리시스",
+      "violations_count": 3,
+      "triggered": false,
+      "timestamp": "2025-08-10T16:21:04.846937"
+    }
+  ],
+  "estop_policy_tests": [
+    {
+      "test_name": "다양한 E-stop 정책",
+      "policies_tested": [
+        "equivalence_violation",
+        "performance_threshold"
+      ],
+      "total_estops": 2,
+      "timestamp": "2025-08-10T16:21:04.847112"
+    }
+  ]
+}
