@@ -48,3 +48,8 @@ day8:
   alerting:
     enabled: true
     webhook_url_env: "DURI_ALERT_WEBHOOK"
+  self_heal:
+    # Self-heal 메트릭 임계값 (1시간 윈도우)
+    ready_attempts_max: 3      # 1시간 내 READY 복구 시도 최대 횟수
+    ready_success_min: 0.8     # READY 복구 성공률 최소값 (80%)
+    alert_threshold: 3          # 1시간 내 3회 초과 시 경고
