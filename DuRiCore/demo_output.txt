@@ -1,0 +1,648 @@
+🚀 Phase 4B 데모 시작
+============================================================
+
+🔍 에러 모델 데모
+==================================================
+✅ 정상 케이스: 성공 (valid=False)
+❌ ValidationError (음수): ValidationError - negative not allowed
+⚠️  TransientError (타임아웃): TransientError - simulated timeout
+💥 SystemError (시스템 오류): SystemError - simulated system error
+
+🔄 리트라이 정책 데모
+==================================================
+리트라이 설정: 최대 2회, 백오프 [2, 8]ms, 지터 3ms
+
+🚀 시나리오 실행: 50개 요청, 동시성 5
+2025-08-10 21:21:19,992 ERROR core.runner_engine :: [system-fail-unexpected] req_id=4 attempt=1 elapsed_ms=10.5 err=TransientError() takes no keyword arguments
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 149, in validate
+    return await super().validate(request_id, data)
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 69, in validate
+    await asyncio.sleep(latency_ms / 1000.0)  # Convert to seconds
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 605, in sleep
+    return await future
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 456, in wait_for
+    return fut.result()
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 23, in _attempt_once
+    return await asyncio.wait_for(self.validator.validate(request_id, payload), timeout=per_attempt)
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 458, in wait_for
+    raise exceptions.TimeoutError() from exc
+asyncio.exceptions.TimeoutError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 40, in _validate_with_retry
+    res = await self._attempt_once(request_id, payload)
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 26, in _attempt_once
+    raise TransientError("timeout", code="timeout") from e
+TypeError: TransientError() takes no keyword arguments
+2025-08-10 21:21:19,992 ERROR core.runner_engine :: [system-fail-unexpected] req_id=0 attempt=1 elapsed_ms=10.9 err=TransientError() takes no keyword arguments
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 149, in validate
+    return await super().validate(request_id, data)
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 69, in validate
+    await asyncio.sleep(latency_ms / 1000.0)  # Convert to seconds
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 605, in sleep
+    return await future
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 456, in wait_for
+    return fut.result()
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 23, in _attempt_once
+    return await asyncio.wait_for(self.validator.validate(request_id, payload), timeout=per_attempt)
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 458, in wait_for
+    raise exceptions.TimeoutError() from exc
+asyncio.exceptions.TimeoutError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 40, in _validate_with_retry
+    res = await self._attempt_once(request_id, payload)
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 26, in _attempt_once
+    raise TransientError("timeout", code="timeout") from e
+TypeError: TransientError() takes no keyword arguments
+2025-08-10 21:21:20,001 ERROR core.runner_engine :: [system-fail-unexpected] req_id=6 attempt=1 elapsed_ms=10.1 err=TransientError() takes no keyword arguments
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 149, in validate
+    return await super().validate(request_id, data)
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 69, in validate
+    await asyncio.sleep(latency_ms / 1000.0)  # Convert to seconds
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 605, in sleep
+    return await future
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 456, in wait_for
+    return fut.result()
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 23, in _attempt_once
+    return await asyncio.wait_for(self.validator.validate(request_id, payload), timeout=per_attempt)
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 458, in wait_for
+    raise exceptions.TimeoutError() from exc
+asyncio.exceptions.TimeoutError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 40, in _validate_with_retry
+    res = await self._attempt_once(request_id, payload)
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 26, in _attempt_once
+    raise TransientError("timeout", code="timeout") from e
+TypeError: TransientError() takes no keyword arguments
+2025-08-10 21:21:20,005 ERROR core.runner_engine :: [system-fail-unexpected] req_id=10 attempt=1 elapsed_ms=10.9 err=TransientError() takes no keyword arguments
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 149, in validate
+    return await super().validate(request_id, data)
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 69, in validate
+    await asyncio.sleep(latency_ms / 1000.0)  # Convert to seconds
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 605, in sleep
+    return await future
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 456, in wait_for
+    return fut.result()
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 23, in _attempt_once
+    return await asyncio.wait_for(self.validator.validate(request_id, payload), timeout=per_attempt)
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 458, in wait_for
+    raise exceptions.TimeoutError() from exc
+asyncio.exceptions.TimeoutError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 40, in _validate_with_retry
+    res = await self._attempt_once(request_id, payload)
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 26, in _attempt_once
+    raise TransientError("timeout", code="timeout") from e
+TypeError: TransientError() takes no keyword arguments
+2025-08-10 21:21:20,008 ERROR core.runner_engine :: [system-fail-unexpected] req_id=12 attempt=1 elapsed_ms=11.0 err=TransientError() takes no keyword arguments
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 149, in validate
+    return await super().validate(request_id, data)
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 69, in validate
+    await asyncio.sleep(latency_ms / 1000.0)  # Convert to seconds
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 605, in sleep
+    return await future
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 456, in wait_for
+    return fut.result()
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 23, in _attempt_once
+    return await asyncio.wait_for(self.validator.validate(request_id, payload), timeout=per_attempt)
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 458, in wait_for
+    raise exceptions.TimeoutError() from exc
+asyncio.exceptions.TimeoutError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 40, in _validate_with_retry
+    res = await self._attempt_once(request_id, payload)
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 26, in _attempt_once
+    raise TransientError("timeout", code="timeout") from e
+TypeError: TransientError() takes no keyword arguments
+2025-08-10 21:21:20,010 ERROR core.runner_engine :: [system-fail-unexpected] req_id=13 attempt=1 elapsed_ms=10.2 err=TransientError() takes no keyword arguments
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 149, in validate
+    return await super().validate(request_id, data)
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 69, in validate
+    await asyncio.sleep(latency_ms / 1000.0)  # Convert to seconds
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 605, in sleep
+    return await future
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 456, in wait_for
+    return fut.result()
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 23, in _attempt_once
+    return await asyncio.wait_for(self.validator.validate(request_id, payload), timeout=per_attempt)
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 458, in wait_for
+    raise exceptions.TimeoutError() from exc
+asyncio.exceptions.TimeoutError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 40, in _validate_with_retry
+    res = await self._attempt_once(request_id, payload)
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 26, in _attempt_once
+    raise TransientError("timeout", code="timeout") from e
+TypeError: TransientError() takes no keyword arguments
+2025-08-10 21:21:20,021 ERROR core.runner_engine :: [system-fail-unexpected] req_id=18 attempt=1 elapsed_ms=10.7 err=TransientError() takes no keyword arguments
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 149, in validate
+    return await super().validate(request_id, data)
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 69, in validate
+    await asyncio.sleep(latency_ms / 1000.0)  # Convert to seconds
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 605, in sleep
+    return await future
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 456, in wait_for
+    return fut.result()
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 23, in _attempt_once
+    return await asyncio.wait_for(self.validator.validate(request_id, payload), timeout=per_attempt)
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 458, in wait_for
+    raise exceptions.TimeoutError() from exc
+asyncio.exceptions.TimeoutError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 40, in _validate_with_retry
+    res = await self._attempt_once(request_id, payload)
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 26, in _attempt_once
+    raise TransientError("timeout", code="timeout") from e
+TypeError: TransientError() takes no keyword arguments
+2025-08-10 21:21:20,021 ERROR core.runner_engine :: [system-fail-unexpected] req_id=19 attempt=1 elapsed_ms=10.7 err=TransientError() takes no keyword arguments
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 149, in validate
+    return await super().validate(request_id, data)
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 69, in validate
+    await asyncio.sleep(latency_ms / 1000.0)  # Convert to seconds
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 605, in sleep
+    return await future
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 456, in wait_for
+    return fut.result()
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 23, in _attempt_once
+    return await asyncio.wait_for(self.validator.validate(request_id, payload), timeout=per_attempt)
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 458, in wait_for
+    raise exceptions.TimeoutError() from exc
+asyncio.exceptions.TimeoutError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 40, in _validate_with_retry
+    res = await self._attempt_once(request_id, payload)
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 26, in _attempt_once
+    raise TransientError("timeout", code="timeout") from e
+TypeError: TransientError() takes no keyword arguments
+2025-08-10 21:21:20,024 ERROR core.runner_engine :: [system-fail-unexpected] req_id=20 attempt=1 elapsed_ms=10.9 err=TransientError() takes no keyword arguments
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 149, in validate
+    return await super().validate(request_id, data)
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 69, in validate
+    await asyncio.sleep(latency_ms / 1000.0)  # Convert to seconds
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 605, in sleep
+    return await future
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 456, in wait_for
+    return fut.result()
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 23, in _attempt_once
+    return await asyncio.wait_for(self.validator.validate(request_id, payload), timeout=per_attempt)
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 458, in wait_for
+    raise exceptions.TimeoutError() from exc
+asyncio.exceptions.TimeoutError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 40, in _validate_with_retry
+    res = await self._attempt_once(request_id, payload)
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 26, in _attempt_once
+    raise TransientError("timeout", code="timeout") from e
+TypeError: TransientError() takes no keyword arguments
+2025-08-10 21:21:20,031 ERROR core.runner_engine :: [system-fail-unexpected] req_id=23 attempt=1 elapsed_ms=10.6 err=TransientError() takes no keyword arguments
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 149, in validate
+    return await super().validate(request_id, data)
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 69, in validate
+    await asyncio.sleep(latency_ms / 1000.0)  # Convert to seconds
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 605, in sleep
+    return await future
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 456, in wait_for
+    return fut.result()
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 23, in _attempt_once
+    return await asyncio.wait_for(self.validator.validate(request_id, payload), timeout=per_attempt)
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 458, in wait_for
+    raise exceptions.TimeoutError() from exc
+asyncio.exceptions.TimeoutError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 40, in _validate_with_retry
+    res = await self._attempt_once(request_id, payload)
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 26, in _attempt_once
+    raise TransientError("timeout", code="timeout") from e
+TypeError: TransientError() takes no keyword arguments
+2025-08-10 21:21:20,032 ERROR core.runner_engine :: [system-fail-unexpected] req_id=24 attempt=1 elapsed_ms=10.7 err=TransientError() takes no keyword arguments
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 149, in validate
+    return await super().validate(request_id, data)
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 69, in validate
+    await asyncio.sleep(latency_ms / 1000.0)  # Convert to seconds
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 605, in sleep
+    return await future
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 456, in wait_for
+    return fut.result()
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 23, in _attempt_once
+    return await asyncio.wait_for(self.validator.validate(request_id, payload), timeout=per_attempt)
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 458, in wait_for
+    raise exceptions.TimeoutError() from exc
+asyncio.exceptions.TimeoutError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 40, in _validate_with_retry
+    res = await self._attempt_once(request_id, payload)
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 26, in _attempt_once
+    raise TransientError("timeout", code="timeout") from e
+TypeError: TransientError() takes no keyword arguments
+2025-08-10 21:21:20,042 ERROR core.runner_engine :: [system-fail-unexpected] req_id=28 attempt=1 elapsed_ms=10.6 err=TransientError() takes no keyword arguments
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 149, in validate
+    return await super().validate(request_id, data)
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 69, in validate
+    await asyncio.sleep(latency_ms / 1000.0)  # Convert to seconds
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 605, in sleep
+    return await future
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 456, in wait_for
+    return fut.result()
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 23, in _attempt_once
+    return await asyncio.wait_for(self.validator.validate(request_id, payload), timeout=per_attempt)
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 458, in wait_for
+    raise exceptions.TimeoutError() from exc
+asyncio.exceptions.TimeoutError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 40, in _validate_with_retry
+    res = await self._attempt_once(request_id, payload)
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 26, in _attempt_once
+    raise TransientError("timeout", code="timeout") from e
+TypeError: TransientError() takes no keyword arguments
+2025-08-10 21:21:20,043 ERROR core.runner_engine :: [system-fail-unexpected] req_id=31 attempt=1 elapsed_ms=10.6 err=TransientError() takes no keyword arguments
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 149, in validate
+    return await super().validate(request_id, data)
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 69, in validate
+    await asyncio.sleep(latency_ms / 1000.0)  # Convert to seconds
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 605, in sleep
+    return await future
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 456, in wait_for
+    return fut.result()
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 23, in _attempt_once
+    return await asyncio.wait_for(self.validator.validate(request_id, payload), timeout=per_attempt)
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 458, in wait_for
+    raise exceptions.TimeoutError() from exc
+asyncio.exceptions.TimeoutError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 40, in _validate_with_retry
+    res = await self._attempt_once(request_id, payload)
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 26, in _attempt_once
+    raise TransientError("timeout", code="timeout") from e
+TypeError: TransientError() takes no keyword arguments
+2025-08-10 21:21:20,058 ERROR core.runner_engine :: [system-fail-unexpected] req_id=37 attempt=1 elapsed_ms=10.6 err=TransientError() takes no keyword arguments
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 149, in validate
+    return await super().validate(request_id, data)
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 69, in validate
+    await asyncio.sleep(latency_ms / 1000.0)  # Convert to seconds
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 605, in sleep
+    return await future
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 456, in wait_for
+    return fut.result()
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 23, in _attempt_once
+    return await asyncio.wait_for(self.validator.validate(request_id, payload), timeout=per_attempt)
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 458, in wait_for
+    raise exceptions.TimeoutError() from exc
+asyncio.exceptions.TimeoutError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 40, in _validate_with_retry
+    res = await self._attempt_once(request_id, payload)
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 26, in _attempt_once
+    raise TransientError("timeout", code="timeout") from e
+TypeError: TransientError() takes no keyword arguments
+2025-08-10 21:21:20,061 ERROR core.runner_engine :: [system-fail-unexpected] req_id=39 attempt=1 elapsed_ms=10.8 err=TransientError() takes no keyword arguments
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 149, in validate
+    return await super().validate(request_id, data)
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 69, in validate
+    await asyncio.sleep(latency_ms / 1000.0)  # Convert to seconds
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 605, in sleep
+    return await future
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 456, in wait_for
+    return fut.result()
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 23, in _attempt_once
+    return await asyncio.wait_for(self.validator.validate(request_id, payload), timeout=per_attempt)
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 458, in wait_for
+    raise exceptions.TimeoutError() from exc
+asyncio.exceptions.TimeoutError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 40, in _validate_with_retry
+    res = await self._attempt_once(request_id, payload)
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 26, in _attempt_once
+    raise TransientError("timeout", code="timeout") from e
+TypeError: TransientError() takes no keyword arguments
+2025-08-10 21:21:20,061 ERROR core.runner_engine :: [system-fail-unexpected] req_id=41 attempt=1 elapsed_ms=10.9 err=TransientError() takes no keyword arguments
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 149, in validate
+    return await super().validate(request_id, data)
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 69, in validate
+    await asyncio.sleep(latency_ms / 1000.0)  # Convert to seconds
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 605, in sleep
+    return await future
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 456, in wait_for
+    return fut.result()
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 23, in _attempt_once
+    return await asyncio.wait_for(self.validator.validate(request_id, payload), timeout=per_attempt)
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 458, in wait_for
+    raise exceptions.TimeoutError() from exc
+asyncio.exceptions.TimeoutError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 40, in _validate_with_retry
+    res = await self._attempt_once(request_id, payload)
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 26, in _attempt_once
+    raise TransientError("timeout", code="timeout") from e
+TypeError: TransientError() takes no keyword arguments
+2025-08-10 21:21:20,068 ERROR core.runner_engine :: [system-fail-unexpected] req_id=43 attempt=1 elapsed_ms=11.0 err=TransientError() takes no keyword arguments
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 149, in validate
+    return await super().validate(request_id, data)
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 69, in validate
+    await asyncio.sleep(latency_ms / 1000.0)  # Convert to seconds
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 605, in sleep
+    return await future
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 456, in wait_for
+    return fut.result()
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 23, in _attempt_once
+    return await asyncio.wait_for(self.validator.validate(request_id, payload), timeout=per_attempt)
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 458, in wait_for
+    raise exceptions.TimeoutError() from exc
+asyncio.exceptions.TimeoutError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 40, in _validate_with_retry
+    res = await self._attempt_once(request_id, payload)
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 26, in _attempt_once
+    raise TransientError("timeout", code="timeout") from e
+TypeError: TransientError() takes no keyword arguments
+2025-08-10 21:21:20,077 ERROR core.runner_engine :: [system-fail-unexpected] req_id=48 attempt=1 elapsed_ms=10.6 err=TransientError() takes no keyword arguments
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 149, in validate
+    return await super().validate(request_id, data)
+  File "/home/duri/DuRiWorkspace/DuRiCore/adapters/mock/mock_validator.py", line 69, in validate
+    await asyncio.sleep(latency_ms / 1000.0)  # Convert to seconds
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 605, in sleep
+    return await future
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 456, in wait_for
+    return fut.result()
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 23, in _attempt_once
+    return await asyncio.wait_for(self.validator.validate(request_id, payload), timeout=per_attempt)
+  File "/usr/lib/python3.10/asyncio/tasks.py", line 458, in wait_for
+    raise exceptions.TimeoutError() from exc
+asyncio.exceptions.TimeoutError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 40, in _validate_with_retry
+    res = await self._attempt_once(request_id, payload)
+  File "/home/duri/DuRiWorkspace/DuRiCore/core/runner_engine.py", line 26, in _attempt_once
+    raise TransientError("timeout", code="timeout") from e
+TypeError: TransientError() takes no keyword arguments
+
+📊 결과 요약:
+   총 요청: 50
+   성공: 32
+   실패: 18
+   전체 성공률: 0.640
+   가용성 성공률(Validation 제외): 0.640
+   p95 지연: 10.95ms
+   처리량: 0.0 req/s
+   에러 분류:
+     validation: 0
+     transient: 0
+     system: 18
+
+✅ 임계값 검증:
+   전체 성공률 ❌ 0.640 < 0.9
+   가용성 성공률 ❌ 0.640 < 0.95
+   p95 지연 ✅ 10.95ms <= 20ms
+
+🎉 Phase 4B 데모 완료!
+============================================================

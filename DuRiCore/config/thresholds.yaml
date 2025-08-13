@@ -1,0 +1,50 @@
+profile: dev
+stress:
+  success_rate_min: 0.90
+  availability_min: 0.95
+  p95_ms:
+    light: 15
+    medium: 20
+    heavy: 30
+    extreme: 35
+  slo:
+    availability_excludes_validation: true
+retry:
+  transient_max_attempts: 2
+  backoff_ms: [2, 8]
+  jitter_ms: 3
+timeouts:
+  per_attempt_ms: 10
+alerting:
+  on_system_error: true
+
+# Day 7: 성능 튜닝 및 부하 테스트 지표
+day7:
+  latency_ms:
+    p95: 120
+    p99: 180
+  memory_mb:
+    p95: 200
+  ready_gate:
+    min_pass_rate: 0.95
+  safety_score:
+    clamp_min: 0.0
+    clamp_max: 1.0
+  hysteresis:
+    enter_critical: 0.12   # 동등성 avg가 이 값 미만이면 critical
+    exit_critical: 0.16    # 복귀 기준(바운스 방지)
+
+# Day 8: SLO 게이트 + 관측(Export) + 알림 훅
+day8:
+  slo_gate:
+    latency_ms_p95: 120
+    memory_mb_p95: 200
+    pass_rate_min: 0.95
+  export:
+    prometheus:
+      enabled: true
+      # 서버 안 띄우고 파일로만 내보내기(환경 독립)
+      path: "var/metrics/prometheus.txt"
+  alerting:
+    enabled: true
+    webhook_url_env: "DURI_ALERT_WEBHOOK"
