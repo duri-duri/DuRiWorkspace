@@ -8,8 +8,3 @@ backup/*/src/
 DuRi_Backup_Phase*.tar.gz
 
 # 중첩된 Git 저장소 제외
-duri_brain/
-duri_control/
-duri_core/
-duri_evolution/
-duri_all_scripts/
