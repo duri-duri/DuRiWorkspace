@@ -1,0 +1,3 @@
+latency_ms_p95 100.0
+memory_mb_p95 150.0
+pass_rate 0.97
