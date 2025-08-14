@@ -1,0 +1,20 @@
+{
+  "type": "canary",
+  "rows": 200,
+  "random_state": 4242,
+  "data_sha256": "b0e2c67714554fc6ac877b396e77ff0c93dfe2a68a7e1f789ba096caa35307b2",
+  "canary_sha256": "4cfcd7a01603e08ff42f6766225f30637e7b01a1fa53665be4816cbeed2865b9",
+  "columns": [
+    "row_id",
+    "event_time",
+    "num_a",
+    "num_b",
+    "num_c",
+    "num_d",
+    "num_e",
+    "num_f",
+    "cat_a",
+    "cat_b",
+    "target"
+  ]
+}

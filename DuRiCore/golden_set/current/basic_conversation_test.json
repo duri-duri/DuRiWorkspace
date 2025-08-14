@@ -1,0 +1,32 @@
+{
+  "test_case_id": "golden_basic_conversation",
+  "name": "기본 대화 기능 골든 테스트",
+  "description": "기본적인 대화 기능의 동등성을 검증하는 골든 테스트",
+  "input_data": {
+    "message": "안녕하세요",
+    "speaker": "사용자",
+    "context": {
+      "session_id": "test_session_001",
+      "timestamp": "2025-08-10T12:30:00Z"
+    }
+  },
+  "expected_output": {
+    "status": "success",
+    "response": "안녕하세요",
+    "response_type": "greeting",
+    "confidence_score": 0.95,
+    "processing_time_ms": 150
+  },
+  "validation_criteria": {
+    "equivalence_threshold": 0.995,
+    "ks_pvalue_min": 0.1,
+    "metamorphic_match_min": 0.999,
+    "sample_min": 10000
+  },
+  "metadata": {
+    "created_at": "2025-08-10T12:30:00Z",
+    "version": "1.0.0",
+    "author": "DuRi System",
+    "tags": ["conversation", "basic", "golden"]
+  }
+}

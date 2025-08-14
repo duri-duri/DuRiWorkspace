@@ -1,0 +1,39 @@
+{
+  "tag": "promoted_20250812_183725",
+  "metrics": {
+    "validation": {
+      "r2": 0.8041,
+      "mse": 0.082557
+    },
+    "test": {
+      "r2": 0.7452,
+      "mse": 0.11218
+    },
+    "gap_analysis": {
+      "r2_gap": 0.059,
+      "mse_ratio": 1.359,
+      "nrmse_ratio": 1.141
+    }
+  },
+  "files": [
+    {
+      "file": "final_model.pkl",
+      "sha256": "6cdc7b0047315749c3df0b2979c0e304cd4c194ff390618e399121dc7f386ba0"
+    },
+    {
+      "file": "final_metrics_valid_test.json",
+      "sha256": "5a15bd2c4023fc6adb5607eb008f3befe4da7af35aab30980fda26f144aee9e8"
+    },
+    {
+      "file": "snapshot_1754990790.json",
+      "sha256": "28a786994a67525c8e2ba785f67ea512af316cf3a7b07954c4c6c02f391e2b5b"
+    },
+    {
+      "file": "summary_1754990790.json",
+      "sha256": "1ab4583d68c3c2a8c8611f4eda6e15765f099b0369ca1b16f981bd396c4e631c"
+    }
+  ],
+  "source_dir": "/home/duri/DuRiWorkspace/temp_extract_8월7일/DuRiCore/modules/ml_integration/artifacts_phase1",
+  "baseline_test_r2": 0.7452,
+  "gate_reason": "ok"
+}

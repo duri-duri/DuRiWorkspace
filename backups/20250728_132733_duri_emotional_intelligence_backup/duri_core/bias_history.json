@@ -1,0 +1,1332 @@
+[
+  {
+    "timestamp": "2025-06-21T07:47:57.000709",
+    "emotion": "sad",
+    "action": "wait",
+    "detections": [
+      {
+        "type": "action_bias",
+        "severity": "medium",
+        "confidence": 0.7698077081726896,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-21T08:47:57.000709",
+    "emotion": "curious",
+    "action": "console",
+    "detections": [
+      {
+        "type": "action_bias",
+        "severity": "low",
+        "confidence": 0.507329149449467,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-21T10:47:57.000709",
+    "emotion": "happy",
+    "action": "console",
+    "detections": [
+      {
+        "type": "action_bias",
+        "severity": "critical",
+        "confidence": 0.5362129972058584,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-21T15:47:57.000709",
+    "emotion": "curious",
+    "action": "reflect",
+    "detections": [
+      {
+        "type": "action_bias",
+        "severity": "medium",
+        "confidence": 0.6941227199492821,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "pattern_bias",
+        "severity": "medium",
+        "confidence": 0.3292863432011431,
+        "description": "Sample bias detection 2",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "intensity_bias",
+        "severity": "high",
+        "confidence": 0.31529458329885446,
+        "description": "Sample bias detection 3",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-21T21:47:57.000709",
+    "emotion": "angry",
+    "action": "reflect",
+    "detections": [
+      {
+        "type": "intensity_bias",
+        "severity": "high",
+        "confidence": 0.911004168451939,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "emotion_bias",
+        "severity": "low",
+        "confidence": 0.4222817080772059,
+        "description": "Sample bias detection 2",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-22T00:47:57.000709",
+    "emotion": "curious",
+    "action": "console",
+    "detections": [
+      {
+        "type": "intensity_bias",
+        "severity": "critical",
+        "confidence": 0.6129500406380293,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "emotion_bias",
+        "severity": "medium",
+        "confidence": 0.746934474377834,
+        "description": "Sample bias detection 2",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "temporal_bias",
+        "severity": "medium",
+        "confidence": 0.5793427980933239,
+        "description": "Sample bias detection 3",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-22T13:47:57.000709",
+    "emotion": "angry",
+    "action": "observe",
+    "detections": [
+      {
+        "type": "temporal_bias",
+        "severity": "high",
+        "confidence": 0.46333135468477005,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-22T15:47:57.000709",
+    "emotion": "curious",
+    "action": "console",
+    "detections": [
+      {
+        "type": "action_bias",
+        "severity": "medium",
+        "confidence": 0.5169671240656482,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "emotion_bias",
+        "severity": "medium",
+        "confidence": 0.5711544264386529,
+        "description": "Sample bias detection 2",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "emotion_bias",
+        "severity": "low",
+        "confidence": 0.6810645791638974,
+        "description": "Sample bias detection 3",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-22T15:47:57.000709",
+    "emotion": "sad",
+    "action": "console",
+    "detections": [
+      {
+        "type": "frequency_bias",
+        "severity": "low",
+        "confidence": 0.3609937972569153,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "pattern_bias",
+        "severity": "low",
+        "confidence": 0.35506330412411524,
+        "description": "Sample bias detection 2",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-22T16:47:57.000709",
+    "emotion": "sad",
+    "action": "reflect",
+    "detections": [
+      {
+        "type": "pattern_bias",
+        "severity": "medium",
+        "confidence": 0.47723102324073974,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "pattern_bias",
+        "severity": "low",
+        "confidence": 0.3502762427583788,
+        "description": "Sample bias detection 2",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "temporal_bias",
+        "severity": "medium",
+        "confidence": 0.5366668890434081,
+        "description": "Sample bias detection 3",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-22T19:47:57.000709",
+    "emotion": "angry",
+    "action": "reflect",
+    "detections": [
+      {
+        "type": "action_bias",
+        "severity": "low",
+        "confidence": 0.49581877813885333,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-22T19:47:57.000709",
+    "emotion": "sad",
+    "action": "console",
+    "detections": [
+      {
+        "type": "action_bias",
+        "severity": "low",
+        "confidence": 0.45001180639509014,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "pattern_bias",
+        "severity": "medium",
+        "confidence": 0.5828745290651165,
+        "description": "Sample bias detection 2",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "temporal_bias",
+        "severity": "high",
+        "confidence": 0.3413816909152226,
+        "description": "Sample bias detection 3",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-22T22:47:57.000709",
+    "emotion": "angry",
+    "action": "reflect",
+    "detections": [
+      {
+        "type": "temporal_bias",
+        "severity": "high",
+        "confidence": 0.6843882030358936,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "action_bias",
+        "severity": "low",
+        "confidence": 0.7479595469144908,
+        "description": "Sample bias detection 2",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "pattern_bias",
+        "severity": "low",
+        "confidence": 0.44691380402532044,
+        "description": "Sample bias detection 3",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-23T01:47:57.000709",
+    "emotion": "sad",
+    "action": "observe",
+    "detections": [
+      {
+        "type": "emotion_bias",
+        "severity": "low",
+        "confidence": 0.517887385886683,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-23T06:47:57.000709",
+    "emotion": "frustrated",
+    "action": "console",
+    "detections": [
+      {
+        "type": "pattern_bias",
+        "severity": "low",
+        "confidence": 0.5786567249120345,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "intensity_bias",
+        "severity": "medium",
+        "confidence": 0.7835534555144137,
+        "description": "Sample bias detection 2",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "intensity_bias",
+        "severity": "medium",
+        "confidence": 0.668145666186577,
+        "description": "Sample bias detection 3",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-23T06:47:57.000709",
+    "emotion": "sad",
+    "action": "wait",
+    "detections": [
+      {
+        "type": "frequency_bias",
+        "severity": "medium",
+        "confidence": 0.8527233725143566,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-23T09:47:57.000709",
+    "emotion": "happy",
+    "action": "observe",
+    "detections": [
+      {
+        "type": "temporal_bias",
+        "severity": "low",
+        "confidence": 0.43873385077546756,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "pattern_bias",
+        "severity": "medium",
+        "confidence": 0.6888648859835331,
+        "description": "Sample bias detection 2",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-23T14:47:57.000709",
+    "emotion": "curious",
+    "action": "console",
+    "detections": [
+      {
+        "type": "intensity_bias",
+        "severity": "low",
+        "confidence": 0.5043863609380915,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "intensity_bias",
+        "severity": "low",
+        "confidence": 0.48556622683755335,
+        "description": "Sample bias detection 2",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "frequency_bias",
+        "severity": "high",
+        "confidence": 0.5597658119728728,
+        "description": "Sample bias detection 3",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-23T18:47:57.000709",
+    "emotion": "happy",
+    "action": "observe",
+    "detections": [
+      {
+        "type": "pattern_bias",
+        "severity": "low",
+        "confidence": 0.37287828895852876,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "emotion_bias",
+        "severity": "low",
+        "confidence": 0.4194652147585375,
+        "description": "Sample bias detection 2",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "pattern_bias",
+        "severity": "low",
+        "confidence": 0.9177293139545217,
+        "description": "Sample bias detection 3",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-23T20:47:57.000709",
+    "emotion": "curious",
+    "action": "reflect",
+    "detections": [
+      {
+        "type": "frequency_bias",
+        "severity": "medium",
+        "confidence": 0.5343360889793768,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "temporal_bias",
+        "severity": "low",
+        "confidence": 0.37487423479821214,
+        "description": "Sample bias detection 2",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "intensity_bias",
+        "severity": "low",
+        "confidence": 0.7852829133922605,
+        "description": "Sample bias detection 3",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-23T23:47:57.000709",
+    "emotion": "angry",
+    "action": "console",
+    "detections": [
+      {
+        "type": "pattern_bias",
+        "severity": "low",
+        "confidence": 0.8904198485055561,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "intensity_bias",
+        "severity": "medium",
+        "confidence": 0.5273181556394586,
+        "description": "Sample bias detection 2",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "pattern_bias",
+        "severity": "medium",
+        "confidence": 0.4294927947491176,
+        "description": "Sample bias detection 3",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-24T01:47:57.000709",
+    "emotion": "curious",
+    "action": "wait",
+    "detections": [
+      {
+        "type": "intensity_bias",
+        "severity": "medium",
+        "confidence": 0.861129818566541,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "action_bias",
+        "severity": "critical",
+        "confidence": 0.7549022257067481,
+        "description": "Sample bias detection 2",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "intensity_bias",
+        "severity": "low",
+        "confidence": 0.8099124464871661,
+        "description": "Sample bias detection 3",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-24T03:47:57.000709",
+    "emotion": "angry",
+    "action": "wait",
+    "detections": [
+      {
+        "type": "frequency_bias",
+        "severity": "high",
+        "confidence": 0.3404298019856075,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-24T07:47:57.000709",
+    "emotion": "curious",
+    "action": "observe",
+    "detections": [
+      {
+        "type": "emotion_bias",
+        "severity": "low",
+        "confidence": 0.8094517862959334,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-24T08:47:57.000709",
+    "emotion": "curious",
+    "action": "wait",
+    "detections": [
+      {
+        "type": "emotion_bias",
+        "severity": "medium",
+        "confidence": 0.6299706854890283,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-24T09:47:57.000709",
+    "emotion": "happy",
+    "action": "wait",
+    "detections": [
+      {
+        "type": "pattern_bias",
+        "severity": "low",
+        "confidence": 0.4235485716134542,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "action_bias",
+        "severity": "medium",
+        "confidence": 0.8260848244761463,
+        "description": "Sample bias detection 2",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "pattern_bias",
+        "severity": "low",
+        "confidence": 0.675084134381311,
+        "description": "Sample bias detection 3",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-24T13:47:57.000709",
+    "emotion": "angry",
+    "action": "console",
+    "detections": [
+      {
+        "type": "action_bias",
+        "severity": "high",
+        "confidence": 0.6421544278737797,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "pattern_bias",
+        "severity": "critical",
+        "confidence": 0.79543740552109,
+        "description": "Sample bias detection 2",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "temporal_bias",
+        "severity": "low",
+        "confidence": 0.7541718085369651,
+        "description": "Sample bias detection 3",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-24T14:47:57.000709",
+    "emotion": "sad",
+    "action": "observe",
+    "detections": [
+      {
+        "type": "emotion_bias",
+        "severity": "low",
+        "confidence": 0.7933199951035826,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "frequency_bias",
+        "severity": "high",
+        "confidence": 0.6005768458378311,
+        "description": "Sample bias detection 2",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "pattern_bias",
+        "severity": "medium",
+        "confidence": 0.5316859207166551,
+        "description": "Sample bias detection 3",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-24T17:47:57.000709",
+    "emotion": "curious",
+    "action": "reflect",
+    "detections": [
+      {
+        "type": "pattern_bias",
+        "severity": "high",
+        "confidence": 0.3244967168200554,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "emotion_bias",
+        "severity": "low",
+        "confidence": 0.5315046647104814,
+        "description": "Sample bias detection 2",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-24T21:47:57.000709",
+    "emotion": "frustrated",
+    "action": "wait",
+    "detections": [
+      {
+        "type": "intensity_bias",
+        "severity": "low",
+        "confidence": 0.4255423040194122,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "intensity_bias",
+        "severity": "medium",
+        "confidence": 0.3981631248282355,
+        "description": "Sample bias detection 2",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-24T22:47:57.000709",
+    "emotion": "sad",
+    "action": "observe",
+    "detections": [
+      {
+        "type": "pattern_bias",
+        "severity": "high",
+        "confidence": 0.7801886455943954,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-24T23:47:57.000709",
+    "emotion": "curious",
+    "action": "reflect",
+    "detections": [
+      {
+        "type": "temporal_bias",
+        "severity": "high",
+        "confidence": 0.941913753519023,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-25T03:47:57.000709",
+    "emotion": "angry",
+    "action": "wait",
+    "detections": [
+      {
+        "type": "action_bias",
+        "severity": "medium",
+        "confidence": 0.8032677927183915,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "temporal_bias",
+        "severity": "low",
+        "confidence": 0.5021086958010967,
+        "description": "Sample bias detection 2",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "pattern_bias",
+        "severity": "medium",
+        "confidence": 0.8302493499889363,
+        "description": "Sample bias detection 3",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-25T04:47:57.000709",
+    "emotion": "frustrated",
+    "action": "reflect",
+    "detections": [
+      {
+        "type": "temporal_bias",
+        "severity": "medium",
+        "confidence": 0.806669838127994,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "action_bias",
+        "severity": "medium",
+        "confidence": 0.3693419261427009,
+        "description": "Sample bias detection 2",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "pattern_bias",
+        "severity": "medium",
+        "confidence": 0.6147889507869347,
+        "description": "Sample bias detection 3",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-25T07:47:57.000709",
+    "emotion": "happy",
+    "action": "console",
+    "detections": [
+      {
+        "type": "action_bias",
+        "severity": "high",
+        "confidence": 0.6706382638482664,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "action_bias",
+        "severity": "low",
+        "confidence": 0.4662034401378756,
+        "description": "Sample bias detection 2",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-25T12:47:57.000709",
+    "emotion": "angry",
+    "action": "observe",
+    "detections": [
+      {
+        "type": "action_bias",
+        "severity": "high",
+        "confidence": 0.8278823439098395,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-25T15:47:57.000709",
+    "emotion": "sad",
+    "action": "observe",
+    "detections": [
+      {
+        "type": "intensity_bias",
+        "severity": "medium",
+        "confidence": 0.7384792240940282,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-25T16:47:57.000709",
+    "emotion": "happy",
+    "action": "console",
+    "detections": [
+      {
+        "type": "intensity_bias",
+        "severity": "low",
+        "confidence": 0.6921475657900917,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-26T09:47:57.000709",
+    "emotion": "curious",
+    "action": "console",
+    "detections": [
+      {
+        "type": "action_bias",
+        "severity": "low",
+        "confidence": 0.5375194760401347,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "temporal_bias",
+        "severity": "medium",
+        "confidence": 0.7383006946459203,
+        "description": "Sample bias detection 2",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-26T12:47:57.000709",
+    "emotion": "angry",
+    "action": "reflect",
+    "detections": [
+      {
+        "type": "pattern_bias",
+        "severity": "low",
+        "confidence": 0.6230435836805015,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-26T16:47:57.000709",
+    "emotion": "happy",
+    "action": "observe",
+    "detections": [
+      {
+        "type": "intensity_bias",
+        "severity": "medium",
+        "confidence": 0.3365823413784609,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "temporal_bias",
+        "severity": "low",
+        "confidence": 0.7867677493739054,
+        "description": "Sample bias detection 2",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-27T03:47:57.000709",
+    "emotion": "curious",
+    "action": "reflect",
+    "detections": [
+      {
+        "type": "emotion_bias",
+        "severity": "low",
+        "confidence": 0.8563639618012826,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "emotion_bias",
+        "severity": "low",
+        "confidence": 0.4799823521980706,
+        "description": "Sample bias detection 2",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-27T04:47:57.000709",
+    "emotion": "sad",
+    "action": "console",
+    "detections": [
+      {
+        "type": "temporal_bias",
+        "severity": "low",
+        "confidence": 0.4363319492037483,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "frequency_bias",
+        "severity": "high",
+        "confidence": 0.6728296959422342,
+        "description": "Sample bias detection 2",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-27T05:47:57.000709",
+    "emotion": "sad",
+    "action": "reflect",
+    "detections": [
+      {
+        "type": "pattern_bias",
+        "severity": "high",
+        "confidence": 0.6943404717421595,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "action_bias",
+        "severity": "low",
+        "confidence": 0.5097188313077268,
+        "description": "Sample bias detection 2",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-27T06:47:57.000709",
+    "emotion": "curious",
+    "action": "console",
+    "detections": [
+      {
+        "type": "pattern_bias",
+        "severity": "low",
+        "confidence": 0.8920902014232182,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-27T12:47:57.000709",
+    "emotion": "frustrated",
+    "action": "reflect",
+    "detections": [
+      {
+        "type": "pattern_bias",
+        "severity": "low",
+        "confidence": 0.46309721248730895,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "emotion_bias",
+        "severity": "high",
+        "confidence": 0.9182537267781394,
+        "description": "Sample bias detection 2",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-27T12:47:57.000709",
+    "emotion": "happy",
+    "action": "wait",
+    "detections": [
+      {
+        "type": "frequency_bias",
+        "severity": "high",
+        "confidence": 0.947875842336803,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-27T20:47:57.000709",
+    "emotion": "frustrated",
+    "action": "reflect",
+    "detections": [
+      {
+        "type": "pattern_bias",
+        "severity": "critical",
+        "confidence": 0.3655026411217671,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "temporal_bias",
+        "severity": "low",
+        "confidence": 0.8748162100840262,
+        "description": "Sample bias detection 2",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-27T23:47:57.000709",
+    "emotion": "frustrated",
+    "action": "observe",
+    "detections": [
+      {
+        "type": "intensity_bias",
+        "severity": "low",
+        "confidence": 0.6071620959728371,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-06-28T02:47:57.000709",
+    "emotion": "happy",
+    "action": "console",
+    "detections": [
+      {
+        "type": "temporal_bias",
+        "severity": "critical",
+        "confidence": 0.7967454941739807,
+        "description": "Sample bias detection 1",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      },
+      {
+        "type": "action_bias",
+        "severity": "medium",
+        "confidence": 0.538940754101099,
+        "description": "Sample bias detection 2",
+        "recommendations": [
+          "Increase exploration",
+          "Adjust parameters"
+        ]
+      }
+    ]
+  }
+]

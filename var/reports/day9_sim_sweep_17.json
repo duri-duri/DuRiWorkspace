@@ -1,0 +1,101 @@
+[
+  {
+    "p95_ms": 1076.49,
+    "timeout_rate": 0.0,
+    "missing_rate": 0.0,
+    "delivered": 210,
+    "total": 210,
+    "timeouts": 0,
+    "missings": 0,
+    "intensity": 0.2,
+    "concurrency": 1
+  },
+  {
+    "p95_ms": 1086.81,
+    "timeout_rate": 0.0,
+    "missing_rate": 0.0,
+    "delivered": 210,
+    "total": 210,
+    "timeouts": 0,
+    "missings": 0,
+    "intensity": 0.2,
+    "concurrency": 5
+  },
+  {
+    "p95_ms": 1060.06,
+    "timeout_rate": 0.0,
+    "missing_rate": 0.0,
+    "delivered": 210,
+    "total": 210,
+    "timeouts": 0,
+    "missings": 0,
+    "intensity": 0.2,
+    "concurrency": 10
+  },
+  {
+    "p95_ms": 1073.32,
+    "timeout_rate": 0.0,
+    "missing_rate": 0.0,
+    "delivered": 300,
+    "total": 300,
+    "timeouts": 0,
+    "missings": 0,
+    "intensity": 0.5,
+    "concurrency": 1
+  },
+  {
+    "p95_ms": 1051.93,
+    "timeout_rate": 0.0033,
+    "missing_rate": 0.0,
+    "delivered": 299,
+    "total": 300,
+    "timeouts": 1,
+    "missings": 0,
+    "intensity": 0.5,
+    "concurrency": 5
+  },
+  {
+    "p95_ms": 1058.5,
+    "timeout_rate": 0.0,
+    "missing_rate": 0.0,
+    "delivered": 300,
+    "total": 300,
+    "timeouts": 0,
+    "missings": 0,
+    "intensity": 0.5,
+    "concurrency": 10
+  },
+  {
+    "p95_ms": 1090.9,
+    "timeout_rate": 0.0,
+    "missing_rate": 0.0,
+    "delivered": 390,
+    "total": 390,
+    "timeouts": 0,
+    "missings": 0,
+    "intensity": 0.8,
+    "concurrency": 1
+  },
+  {
+    "p95_ms": 1081.22,
+    "timeout_rate": 0.0,
+    "missing_rate": 0.0,
+    "delivered": 390,
+    "total": 390,
+    "timeouts": 0,
+    "missings": 0,
+    "intensity": 0.8,
+    "concurrency": 5
+  },
+  {
+    "p95_ms": 1083.2,
+    "timeout_rate": 0.0,
+    "missing_rate": 0.0,
+    "delivered": 390,
+    "total": 390,
+    "timeouts": 0,
+    "missings": 0,
+    "intensity": 0.8,
+    "concurrency": 10
+  }
+]

@@ -1,0 +1,37 @@
+name: repo-guards
+on: [pull_request]
+
+jobs:
+  guards:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: must_exist_at_HEAD
+        shell: bash
+        run: |
+          set -euo pipefail
+          MANIFEST="backups/CORE_BACKUPS.manifest.json"
+          if [ ! -f "$MANIFEST" ]; then
+            echo "No manifest file found -> skipping."; exit 0
+          fi
+          COUNT=$(jq '.must_exist | length' "$MANIFEST" 2>/dev/null || echo 0)
+          echo "must_exist count: $COUNT"
+          if [ "$COUNT" -eq 0 ]; then
+            echo "Empty must_exist -> skip check."; exit 0
+          fi
+          jq -r '.must_exist[] | .path' "$MANIFEST" \
+          | while read -r p; do
+              echo "verify $p"
+              git cat-file -e HEAD:"$p"
+            done
+
+      - name: archives_in_history_is_zero
+        run: |
+          git rev-list --objects --all | grep -E '\.(tar\.gz|tgz|zst|tar)$' \
+          && exit 1 || true
+
+      - name: objects_count_decreased
+        run: |
+          git count-objects -v >/dev/null
+          echo OK

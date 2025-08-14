@@ -1,0 +1,69 @@
+name: DuRi CI - Day 8 + Day 9 Gate
+
+on:
+  pull_request:
+    branches: [ main, develop, feature/* ]
+  push:
+    branches: [ main, develop ]
+
+jobs:
+  day8-day9-gate:
+    runs-on: ubuntu-latest
+    name: Day 8 + Day 9 Gate Check
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest pytest-asyncio pyyaml
+        
+    - name: Day 8 Regression Test
+      run: |
+        export PYTHONPATH=.
+        pytest -q DuRiCore/test_integrated_safety_system.py \
+          --disable-warnings --maxfail=1 \
+          -k "not test_rapid_integration_checks" \
+          --junitxml=var/reports/junit_day8_regression.xml
+          
+    - name: Day 8 SLO Gate Test
+      run: |
+        export PYTHONPATH=.
+        pytest -q tests/test_day8_slo_gate.py \
+          --disable-warnings --maxfail=1 \
+          --junitxml=var/reports/junit_day8_slo.xml
+          
+    - name: Day 8 Full Gate Check
+      run: |
+        export PYTHONPATH=.
+        chmod +x tools/day8_gate_check.sh
+        ./tools/day8_gate_check.sh
+        
+    - name: Day 9 Gate Check (Enhanced)
+      run: |
+        export PYTHONPATH=.
+        chmod +x tools/day9_gate_check.sh
+        export DURI_SEEDS="17,42,123"  # seed-matrix(평균+부트스트랩)
+        ./tools/day9_gate_check.sh
+        
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: day8-day9-test-results
+        path: |
+          var/reports/
+          var/metrics/
+          var/logs/
+          var/reports/day9_latency_result_*.json
+          var/reports/day9_latency_samples_*.json
+          var/reports/day9_seed_matrix.txt
+          var/reports/day9_bootstrap.txt
+          var/reports/day9_wilson.txt

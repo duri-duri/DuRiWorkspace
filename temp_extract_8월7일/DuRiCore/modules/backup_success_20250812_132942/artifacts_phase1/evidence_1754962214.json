@@ -1,0 +1,184 @@
+{
+  "timestamp": 1754962214,
+  "datetime": "2025-08-12T10:30:14",
+  "snapshot_id": 1754962214,
+  "backup_trigger": "post-train",
+  "tag": "phase1",
+  "system_state": {
+    "working_directory": "/home/duri/DuRiWorkspace/temp_extract_8월7일/DuRiCore/modules/ml_integration",
+    "artifacts_directory": "./artifacts_phase1",
+    "python_process": 14533
+  },
+  "cross_reference": {
+    "snapshot_file": "snapshot_1754962214.json",
+    "backup_meta": {
+      "when": "post-train",
+      "tag": "phase1",
+      "timestamp": 1754962214,
+      "datetime": "2025-08-12T10:30:14",
+      "backup_type": "snapshot_evidence",
+      "artifacts_dir": "./artifacts_phase1",
+      "random_state": 42,
+      "test_size": 0.2,
+      "feature_list": [
+        "f0",
+        "f1",
+        "f2"
+      ],
+      "models": {
+        "rf": {
+          "n_estimators": 300,
+          "random_state": 42
+        },
+        "xgb": {
+          "enabled": true,
+          "n_estimators": 500,
+          "max_depth": 6
+        }
+      },
+      "folds": 5,
+      "calibration": {
+        "rf": "residual_gbm",
+        "xgb": "residual_gbm"
+      },
+      "split_ratios": {
+        "train": 0.64,
+        "valid": 0.16,
+        "test": 0.2
+      },
+      "file_hashes": {
+        "phase1_problem_solver.py": {
+          "hash": "f9893fe49197129836d777aa0f99302fd5e58558bea1e666d0868d1e8d7e5d44",
+          "size": 50407,
+          "modified": 1754962193.9828968
+        }
+      },
+      "artifacts_info": {
+        "exists": true,
+        "file_count": 24,
+        "files": [
+          {
+            "name": "snapshot_1754960972.json",
+            "size": 65,
+            "modified": 1754960972.7422287
+          },
+          {
+            "name": "evidence_1754961905.json",
+            "size": 3561,
+            "modified": 1754961905.163423
+          },
+          {
+            "name": "snapshot_1754961905.json",
+            "size": 2667,
+            "modified": 1754961905.163423
+          },
+          {
+            "name": "evidence_1754961217.json",
+            "size": 2851,
+            "modified": 1754961217.1399534
+          },
+          {
+            "name": "error_slicing_1754962211.json",
+            "size": 22825,
+            "modified": 1754962211.5514064
+          },
+          {
+            "name": "error_slicing_1754960932.json",
+            "size": 87,
+            "modified": 1754960932.3501263
+          },
+          {
+            "name": "cards_1754961164.json",
+            "size": 347,
+            "modified": 1754961164.6202962
+          },
+          {
+            "name": "error_slicing_1754961214.json",
+            "size": 22908,
+            "modified": 1754961214.9259536
+          },
+          {
+            "name": "snapshot_1754961164.json",
+            "size": 1447,
+            "modified": 1754961164.6202962
+          },
+          {
+            "name": "cards_1754961217.json",
+            "size": 347,
+            "modified": 1754961217.1399534
+          },
+          {
+            "name": "cards_1754960972.json",
+            "size": 156,
+            "modified": 1754960972.7422287
+          },
+          {
+            "name": "error_slicing_1754960972.json",
+            "size": 87,
+            "modified": 1754960972.7422287
+          },
+          {
+            "name": "summary_1754961905.json",
+            "size": 202,
+            "modified": 1754961905.163423
+          },
+          {
+            "name": "cards_1754960932.json",
+            "size": 156,
+            "modified": 1754960932.3592696
+          },
+          {
+            "name": "summary_1754961217.json",
+            "size": 202,
+            "modified": 1754961217.1399534
+          },
+          {
+            "name": "summary_1754961164.json",
+            "size": 202,
+            "modified": 1754961164.6202962
+          },
+          {
+            "name": "snapshot_1754961217.json",
+            "size": 2057,
+            "modified": 1754961217.1399534
+          },
+          {
+            "name": "error_slicing_1754961902.json",
+            "size": 22899,
+            "modified": 1754961902.7874231
+          },
+          {
+            "name": "final_metrics_valid_test.json",
+            "size": 261,
+            "modified": 1754962214.2161
+          },
+          {
+            "name": "best_metrics.json",
+            "size": 61,
+            "modified": 1754962214.2161
+          },
+          {
+            "name": "evidence_1754961164.json",
+            "size": 2141,
+            "modified": 1754961164.6202962
+          },
+          {
+            "name": "snapshot_1754960932.json",
+            "size": 65,
+            "modified": 1754960932.3592696
+          },
+          {
+            "name": "error_slicing_1754961162.json",
+            "size": 22893,
+            "modified": 1754961162.2262962
+          },
+          {
+            "name": "cards_1754961905.json",
+            "size": 347,
+            "modified": 1754961905.163423
+          }
+        ]
+      }
+    }
+  }
+}

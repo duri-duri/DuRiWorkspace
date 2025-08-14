@@ -1,0 +1,20 @@
+alert:
+  warn:
+    nrmse_ratio: 1.20
+    mse_ratio: 1.50
+    r2_gap: 0.06
+  crit:
+    nrmse_ratio: 1.35
+    mse_ratio: 1.80
+    r2_gap: 0.08
+hard_fail:
+  nrmse_ratio: 1.40
+  mse_ratio: 2.00
+drift:
+  psi:
+    warn: 0.10
+    crit: 0.25
+  ks:
+    warn: 0.10
+    crit: 0.20
+

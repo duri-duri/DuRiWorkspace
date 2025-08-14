@@ -1,0 +1,11 @@
+{
+  "total_tests": 1,
+  "passed_tests": 1,
+  "failed_tests": 0,
+  "errors": [
+    "0 != 1"
+  ],
+  "start_time": "2025-08-13T13:27:44.340951",
+  "end_time": "2025-08-13T13:27:44.342231",
+  "duration_seconds": 0.00128
+}

@@ -1,0 +1,14 @@
+- intent_classify_basic
+- code_fix_small_bug
+- code_fix_medium_refactor
+- dataset_clean_minimal
+- drift_detect_smoke
+- canary_eval_smoke
+- promote_gate_policy
+- rollback_dryrun_ok
+- explain_trace_generation
+- monitor_alert_emit
+- hitl_queue_roundtrip
+- auto_patch_smoke
+
+

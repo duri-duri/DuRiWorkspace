@@ -1,0 +1,16 @@
+{
+  "timestamp": 1754963367,
+  "datetime": "2025-08-12T10:49:27",
+  "performance_metrics": {
+    "r2": 0.9703009926374137,
+    "mse": 0.012232233354437317
+  },
+  "file_paths": {
+    "metrics": "./artifacts_phase1/best_metrics.json"
+  },
+  "system_info": {
+    "python_version": "3.10.12",
+    "platform": "linux",
+    "timestamp": 1754963367
+  }
+}

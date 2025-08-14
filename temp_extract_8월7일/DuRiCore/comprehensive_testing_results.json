@@ -1,0 +1,266 @@
+{
+  "comprehensive_result": {
+    "test_id": "comprehensive_1754309104_a8a6e112",
+    "timestamp": "2025-08-04 21:05:05.194612",
+    "test_case": "comprehensive_performance_test",
+    "test_type": "comprehensive",
+    "success": true,
+    "execution_time": 0.4017636775970459,
+    "performance_metrics": {
+      "avg_response_time": 0.1054472114935954,
+      "avg_throughput": 1129.2522015964005,
+      "avg_cpu_usage": 0.5204509475096137,
+      "avg_memory_usage": 0.5172331502792737,
+      "success_rate": 1.0
+    },
+    "error_messages": [],
+    "warnings": [],
+    "actual_result": {
+      "total_tests": 4,
+      "successful_tests": 4,
+      "failed_tests": 0,
+      "success_rate": 1.0,
+      "test_results": [
+        {
+          "test_id": "performance_1754309104_bde73e79",
+          "timestamp": "2025-08-04 21:05:04.893125",
+          "test_case": "performance_test",
+          "test_type": "performance",
+          "success": true,
+          "execution_time": 0.10025620460510254,
+          "performance_metrics": {
+            "response_time": 0.16351719325231373,
+            "throughput": 1065.002113403663,
+            "cpu_usage": 0.554492740238079,
+            "memory_usage": 0.4157638254436877
+          },
+          "error_messages": [],
+          "warnings": [],
+          "actual_result": {
+            "response_time": 0.16351719325231373,
+            "throughput": 1065.002113403663,
+            "cpu_usage": 0.554492740238079,
+            "memory_usage": 0.4157638254436877
+          }
+        },
+        {
+          "test_id": "stability_1754309104_54540c66",
+          "timestamp": "2025-08-04 21:05:04.993556",
+          "test_case": "stability_test",
+          "test_type": "stability",
+          "success": true,
+          "execution_time": 0.10023689270019531,
+          "performance_metrics": {
+            "response_time": 0.09293635365461456,
+            "throughput": 1164.6777313588534,
+            "cpu_usage": 0.5538503296933479,
+            "memory_usage": 0.6268229711144107
+          },
+          "error_messages": [],
+          "warnings": [],
+          "actual_result": {
+            "response_time": 0.09293635365461456,
+            "throughput": 1164.6777313588534,
+            "cpu_usage": 0.5538503296933479,
+            "memory_usage": 0.6268229711144107
+          }
+        },
+        {
+          "test_id": "stress_1754309104_9bafac43",
+          "timestamp": "2025-08-04 21:05:05.093946",
+          "test_case": "stress_test",
+          "test_type": "stress",
+          "success": true,
+          "execution_time": 0.10025167465209961,
+          "performance_metrics": {
+            "response_time": 0.08327624849951781,
+            "throughput": 1141.145556543615,
+            "cpu_usage": 0.48803002492224956,
+            "memory_usage": 0.45056837210714024
+          },
+          "error_messages": [],
+          "warnings": [],
+          "actual_result": {
+            "response_time": 0.08327624849951781,
+            "throughput": 1141.145556543615,
+            "cpu_usage": 0.48803002492224956,
+            "memory_usage": 0.45056837210714024
+          }
+        },
+        {
+          "test_id": "compatibility_1754309105_79dc167e",
+          "timestamp": "2025-08-04 21:05:05.194311",
+          "test_case": "compatibility_test",
+          "test_type": "compatibility",
+          "success": true,
+          "execution_time": 0.10023283958435059,
+          "performance_metrics": {
+            "response_time": 0.0820590505679355,
+            "throughput": 1146.183405079471,
+            "cpu_usage": 0.48543069518477855,
+            "memory_usage": 0.5757774324518564
+          },
+          "error_messages": [],
+          "warnings": [],
+          "actual_result": {
+            "response_time": 0.0820590505679355,
+            "throughput": 1146.183405079471,
+            "cpu_usage": 0.48543069518477855,
+            "memory_usage": 0.5757774324518564
+          }
+        }
+      ]
+    }
+  },
+  "stability_report": {
+    "report_id": "stability_1754309105_29e94029",
+    "timestamp": "2025-08-04 21:05:35.252402",
+    "overall_stability": 0.9118537742915059,
+    "system_stability": {
+      "advanced_feature_engine": 0.9257076695489312,
+      "intelligent_automation_system": 0.9068733344503204,
+      "advanced_analytics_platform": 0.9029803188752661
+    },
+    "stability_issues": [
+      "\uc2dc\uc2a4\ud15c intelligent_automation_system: \ub0ae\uc740 \uc548\uc815\uc131 (88.15%)",
+      "\uc2dc\uc2a4\ud15c advanced_analytics_platform: \ub0ae\uc740 \uc548\uc815\uc131 (86.36%)",
+      "\uc2dc\uc2a4\ud15c advanced_feature_engine: \ub0ae\uc740 \uc548\uc815\uc131 (87.70%)",
+      "\uc2dc\uc2a4\ud15c intelligent_automation_system: \ub0ae\uc740 \uc548\uc815\uc131 (86.56%)",
+      "\uc2dc\uc2a4\ud15c advanced_analytics_platform: \ub0ae\uc740 \uc548\uc815\uc131 (85.59%)",
+      "\uc2dc\uc2a4\ud15c advanced_feature_engine: \ub0ae\uc740 \uc548\uc815\uc131 (90.00%)",
+      "\uc2dc\uc2a4\ud15c advanced_feature_engine: \ub0ae\uc740 \uc548\uc815\uc131 (89.81%)",
+      "\uc2dc\uc2a4\ud15c intelligent_automation_system: \ub0ae\uc740 \uc548\uc815\uc131 (88.72%)",
+      "\uc2dc\uc2a4\ud15c advanced_analytics_platform: \ub0ae\uc740 \uc548\uc815\uc131 (85.73%)",
+      "\uc2dc\uc2a4\ud15c intelligent_automation_system: \ub0ae\uc740 \uc548\uc815\uc131 (89.89%)"
+    ],
+    "recommendations": [
+      "intelligent_automation_system \uc548\uc815\uc131 \uac1c\uc120 \ud544\uc694",
+      "advanced_analytics_platform \uc548\uc815\uc131 \uac1c\uc120 \ud544\uc694",
+      "advanced_feature_engine \uc548\uc815\uc131 \uac1c\uc120 \ud544\uc694",
+      "intelligent_automation_system \uc548\uc815\uc131 \uac1c\uc120 \ud544\uc694",
+      "advanced_analytics_platform \uc548\uc815\uc131 \uac1c\uc120 \ud544\uc694",
+      "advanced_feature_engine \uc548\uc815\uc131 \uac1c\uc120 \ud544\uc694",
+      "advanced_feature_engine \uc548\uc815\uc131 \uac1c\uc120 \ud544\uc694",
+      "intelligent_automation_system \uc548\uc815\uc131 \uac1c\uc120 \ud544\uc694",
+      "advanced_analytics_platform \uc548\uc815\uc131 \uac1c\uc120 \ud544\uc694",
+      "intelligent_automation_system \uc548\uc815\uc131 \uac1c\uc120 \ud544\uc694",
+      "\uc804\uccb4 \uc2dc\uc2a4\ud15c \uc548\uc815\uc131 \uac1c\uc120 \uad8c\uc7a5"
+    ],
+    "test_duration": 30,
+    "test_cases_executed": 18,
+    "successful_tests": 8,
+    "failed_tests": 10
+  },
+  "stress_report": {
+    "report_id": "stress_1754309135_05edc20a",
+    "timestamp": "2025-08-04 21:06:05.278350",
+    "stress_level": 1.5,
+    "system_performance_under_stress": {
+      "advanced_feature_engine": 0.5717669078729617,
+      "intelligent_automation_system": 0.7274626868577867
+    },
+    "breaking_points": [
+      "\uc2dc\uc2a4\ud15c intelligent_automation_system: \ud30c\uad34 \uc9c0\uc810 397",
+      "\uc2dc\uc2a4\ud15c intelligent_automation_system: \ud30c\uad34 \uc9c0\uc810 354",
+      "\uc2dc\uc2a4\ud15c intelligent_automation_system: \ud30c\uad34 \uc9c0\uc810 372"
+    ],
+    "recovery_analysis": {
+      "total_breakdowns": 3,
+      "avg_recovery_time": 66.0634436652068,
+      "recovery_success_rate": 1.0
+    },
+    "stress_duration": 30,
+    "max_concurrent_load": 500,
+    "system_responses": [
+      {
+        "system": "advanced_feature_engine",
+        "timestamp": "2025-08-04 21:05:35.252595",
+        "current_load": 270.8104534625548,
+        "performance_under_stress": 0.4459837558277454,
+        "breaking_point": 385.56880992289433,
+        "is_breaking": false,
+        "recovery_time": 0
+      },
+      {
+        "system": "intelligent_automation_system",
+        "timestamp": "2025-08-04 21:05:35.252597",
+        "current_load": 426.5041671255048,
+        "performance_under_stress": 0.692538225287503,
+        "breaking_point": 396.9131862861016,
+        "is_breaking": true,
+        "recovery_time": 102.6936033947437
+      },
+      {
+        "system": "advanced_feature_engine",
+        "timestamp": "2025-08-04 21:05:45.256776",
+        "current_load": 386.329465837145,
+        "performance_under_stress": 0.5297119291915828,
+        "breaking_point": 388.62670179332775,
+        "is_breaking": false,
+        "recovery_time": 0
+      },
+      {
+        "system": "intelligent_automation_system",
+        "timestamp": "2025-08-04 21:05:45.256786",
+        "current_load": 366.4131045516338,
+        "performance_under_stress": 0.6686589745621137,
+        "breaking_point": 353.56464445886576,
+        "is_breaking": true,
+        "recovery_time": 37.961381045507736
+      },
+      {
+        "system": "advanced_feature_engine",
+        "timestamp": "2025-08-04 21:05:55.268222",
+        "current_load": 288.5299764308194,
+        "performance_under_stress": 0.7396050385995567,
+        "breaking_point": 382.6178418675998,
+        "is_breaking": false,
+        "recovery_time": 0
+      },
+      {
+        "system": "intelligent_automation_system",
+        "timestamp": "2025-08-04 21:05:55.268235",
+        "current_load": 664.7290151191054,
+        "performance_under_stress": 0.8211908607237435,
+        "breaking_point": 371.96689551678327,
+        "is_breaking": true,
+        "recovery_time": 57.53534655536899
+      }
+    ]
+  },
+  "analysis_report": {
+    "report_id": "analysis_1754309165_6def4d79",
+    "timestamp": "2025-08-04 21:06:05.278625",
+    "analysis_type": "comprehensive",
+    "overall_score": 0.9367316731038428,
+    "detailed_analysis": {
+      "test_type_distribution": {
+        "comprehensive": 1
+      },
+      "performance_analysis": {
+        "avg_response_time": 0,
+        "avg_throughput": 0,
+        "min_response_time": 0,
+        "max_response_time": 0
+      },
+      "error_analysis": {},
+      "trend_analysis": {}
+    },
+    "performance_trends": [
+      {
+        "timestamp": "2025-08-04 21:05:05.194612",
+        "response_time": 0,
+        "throughput": 0,
+        "test_index": 0
+      }
+    ],
+    "recommendations": [],
+    "risk_assessment": {
+      "performance_risk": 0.0,
+      "stability_risk": 0.0,
+      "compatibility_risk": 0.0,
+      "overall_risk": 0.0
+    },
+    "improvement_suggestions": []
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "timestamp": 1754961164,
+  "datetime": "2025-08-12T10:12:44",
+  "snapshot_id": 1754961164,
+  "backup_trigger": "post-train",
+  "tag": "phase1",
+  "system_state": {
+    "working_directory": "/home/duri/DuRiWorkspace/temp_extract_8월7일/DuRiCore/modules/ml_integration",
+    "artifacts_directory": "./artifacts_phase1",
+    "python_process": 11774
+  },
+  "cross_reference": {
+    "snapshot_file": "snapshot_1754961164.json",
+    "backup_meta": {
+      "when": "post-train",
+      "tag": "phase1",
+      "timestamp": 1754961164,
+      "datetime": "2025-08-12T10:12:44",
+      "backup_type": "snapshot_evidence",
+      "artifacts_dir": "./artifacts_phase1",
+      "file_hashes": {
+        "phase1_problem_solver.py": {
+          "hash": "c3d7bfacd5a200b916527d76e65e7aabbf6833cb7fcf6319115da193161ac10d",
+          "size": 38687,
+          "modified": 1754961146.2152965
+        }
+      },
+      "artifacts_info": {
+        "exists": true,
+        "file_count": 8,
+        "files": [
+          {
+            "name": "snapshot_1754960972.json",
+            "size": 65,
+            "modified": 1754960972.7422287
+          },
+          {
+            "name": "error_slicing_1754960932.json",
+            "size": 87,
+            "modified": 1754960932.3501263
+          },
+          {
+            "name": "cards_1754960972.json",
+            "size": 156,
+            "modified": 1754960972.7422287
+          },
+          {
+            "name": "error_slicing_1754960972.json",
+            "size": 87,
+            "modified": 1754960972.7422287
+          },
+          {
+            "name": "cards_1754960932.json",
+            "size": 156,
+            "modified": 1754960932.3592696
+          },
+          {
+            "name": "best_metrics.json",
+            "size": 61,
+            "modified": 1754961164.6202962
+          },
+          {
+            "name": "snapshot_1754960932.json",
+            "size": 65,
+            "modified": 1754960932.3592696
+          },
+          {
+            "name": "error_slicing_1754961162.json",
+            "size": 22893,
+            "modified": 1754961162.2262962
+          }
+        ]
+      }
+    }
+  }
+}

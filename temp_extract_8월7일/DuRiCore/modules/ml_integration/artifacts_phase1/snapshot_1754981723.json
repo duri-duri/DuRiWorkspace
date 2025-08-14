@@ -1,0 +1,1001 @@
+{
+  "when": "post-train",
+  "tag": "phase1",
+  "timestamp": 1754981723,
+  "datetime": "2025-08-12T15:55:23",
+  "backup_type": "snapshot_evidence",
+  "artifacts_dir": "./artifacts_phase1",
+  "random_state": 42,
+  "test_size": 0.2,
+  "feature_list": [
+    "num_a",
+    "num_b"
+  ],
+  "models": {
+    "rf": {
+      "n_estimators": 300,
+      "random_state": 42
+    },
+    "xgb": {
+      "enabled": true,
+      "n_estimators": 500,
+      "max_depth": 6
+    }
+  },
+  "folds": 5,
+  "calibration": {
+    "rf": "none",
+    "xgb": "none"
+  },
+  "split_ratios": {
+    "train": 0.64,
+    "valid": 0.16,
+    "test": 0.2
+  },
+  "env": {
+    "python": "3.10.12",
+    "numpy": "2.2.6",
+    "sklearn": "n/a",
+    "xgboost": "n/a",
+    "cpu_count": 24,
+    "mem_gb": 16.68
+  },
+  "file_hashes": {
+    "phase1_problem_solver.py": {
+      "hash": "b565e9adf22327b9e54e7a177e0c4987ee31d08159092568d2f26d3b44f5b136",
+      "size": 74115,
+      "modified": 1754981453.207061
+    }
+  },
+  "artifacts_info": {
+    "exists": true,
+    "file_count": 189,
+    "files": [
+      {
+        "name": "error_slicing_1754962579.json",
+        "size": 22850,
+        "modified": 1754962579.9226377
+      },
+      {
+        "name": "summary_1754962587.json",
+        "size": 202,
+        "modified": 1754962587.1136377
+      },
+      {
+        "name": "snapshot_1754962538.json",
+        "size": 4441,
+        "modified": 1754962538.873367
+      },
+      {
+        "name": "evidence_1754970583.json",
+        "size": 21534,
+        "modified": 1754970583.1097326
+      },
+      {
+        "name": "evidence_1754964027.json",
+        "size": 12468,
+        "modified": 1754964027.225812
+      },
+      {
+        "name": "cards_1754981528.json",
+        "size": 393,
+        "modified": 1754981528.2018847
+      },
+      {
+        "name": "cards_1754979741.json",
+        "size": 344,
+        "modified": 1754979741.5077007
+      },
+      {
+        "name": "summary_1754962214.json",
+        "size": 202,
+        "modified": 1754962214.2161
+      },
+      {
+        "name": "summary_1754979333.json",
+        "size": 199,
+        "modified": 1754979333.2660887
+      },
+      {
+        "name": "snapshot_1754960972.json",
+        "size": 65,
+        "modified": 1754960972.7422287
+      },
+      {
+        "name": "evidence_1754970230.json",
+        "size": 18714,
+        "modified": 1754970230.1671672
+      },
+      {
+        "name": "error_slicing_1754979741.json",
+        "size": 1918,
+        "modified": 1754979741.498534
+      },
+      {
+        "name": "snapshot_1754979980.json",
+        "size": 21597,
+        "modified": 1754979980.4794078
+      },
+      {
+        "name": "evidence_1754976724.json",
+        "size": 22973,
+        "modified": 1754976724.3602738
+      },
+      {
+        "name": "split_idx_valid.npy",
+        "size": 1408,
+        "modified": 1754972847.4196491
+      },
+      {
+        "name": "summary_1754979741.json",
+        "size": 199,
+        "modified": 1754979741.5077007
+      },
+      {
+        "name": "evidence_1754961905.json",
+        "size": 3561,
+        "modified": 1754961905.163423
+      },
+      {
+        "name": "snapshot_1754961905.json",
+        "size": 2667,
+        "modified": 1754961905.163423
+      },
+      {
+        "name": "error_slicing_1754964782.json",
+        "size": 2147,
+        "modified": 1754964782.687636
+      },
+      {
+        "name": "summary_1754963411.json",
+        "size": 201,
+        "modified": 1754963411.2669713
+      },
+      {
+        "name": "schema_expectations_baseline.json",
+        "size": 1422,
+        "modified": 1754976745.6876142
+      },
+      {
+        "name": "summary_1754976724.json",
+        "size": 199,
+        "modified": 1754976724.3602738
+      },
+      {
+        "name": "evidence_1754961217.json",
+        "size": 2851,
+        "modified": 1754961217.1399534
+      },
+      {
+        "name": "evidence_1754962214.json",
+        "size": 4965,
+        "modified": 1754962214.2161
+      },
+      {
+        "name": "snapshot_1754970547.json",
+        "size": 17455,
+        "modified": 1754970547.531003
+      },
+      {
+        "name": "summary_1754964782.json",
+        "size": 201,
+        "modified": 1754964782.6968024
+      },
+      {
+        "name": "summary_1754981481.json",
+        "size": 212,
+        "modified": 1754981481.1990018
+      },
+      {
+        "name": "cards_1754964027.json",
+        "size": 346,
+        "modified": 1754964027.225812
+      },
+      {
+        "name": "evidence_1754963337.json",
+        "size": 8642,
+        "modified": 1754963337.894122
+      },
+      {
+        "name": "evidence_1754979333.json",
+        "size": 23834,
+        "modified": 1754979333.2660887
+      },
+      {
+        "name": "error_slicing_1754976724.json",
+        "size": 1918,
+        "modified": 1754976724.3511071
+      },
+      {
+        "name": "snapshot_1754979333.json",
+        "size": 20040,
+        "modified": 1754979333.2660887
+      },
+      {
+        "name": "cards_1754969458.json",
+        "size": 346,
+        "modified": 1754969458.4113028
+      },
+      {
+        "name": "snapshot_1754969458.json",
+        "size": 14425,
+        "modified": 1754969458.4113028
+      },
+      {
+        "name": "error_slicing_1754972855.json",
+        "size": 1918,
+        "modified": 1754972855.6957202
+      },
+      {
+        "name": "cards_1754970476.json",
+        "size": 346,
+        "modified": 1754970476.8855271
+      },
+      {
+        "name": "snapshot_1754962579.json",
+        "size": 5049,
+        "modified": 1754962579.9856377
+      },
+      {
+        "name": "evidence_1754964782.json",
+        "size": 15294,
+        "modified": 1754964782.6968024
+      },
+      {
+        "name": "error_slicing_1754963375.json",
+        "size": 22978,
+        "modified": 1754963375.1139388
+      },
+      {
+        "name": "evidence_1754962587.json",
+        "size": 7798,
+        "modified": 1754962587.1136377
+      },
+      {
+        "name": "snapshot_1754964058.json",
+        "size": 10901,
+        "modified": 1754964058.6396801
+      },
+      {
+        "name": "evidence_1754970194.json",
+        "size": 18003,
+        "modified": 1754970194.2108743
+      },
+      {
+        "name": "summary_1754962538.json",
+        "size": 202,
+        "modified": 1754962538.873367
+      },
+      {
+        "name": "summary_1754970521.json",
+        "size": 201,
+        "modified": 1754970521.873799
+      },
+      {
+        "name": "summary_1754964059.json",
+        "size": 201,
+        "modified": 1754964059.96268
+      },
+      {
+        "name": "summary_1754981528.json",
+        "size": 212,
+        "modified": 1754981528.2018847
+      },
+      {
+        "name": "evidence_1754979741.json",
+        "size": 24808,
+        "modified": 1754979741.5077007
+      },
+      {
+        "name": "error_slicing_1754962538.json",
+        "size": 22817,
+        "modified": 1754962538.8283672
+      },
+      {
+        "name": "cards_1754972855.json",
+        "size": 344,
+        "modified": 1754972855.6957202
+      },
+      {
+        "name": "cards_1754966791.json",
+        "size": 346,
+        "modified": 1754966791.285384
+      },
+      {
+        "name": "summary_1754964027.json",
+        "size": 201,
+        "modified": 1754964027.225812
+      },
+      {
+        "name": "snapshot_1754981221.json",
+        "size": 22208,
+        "modified": 1754981221.9258606
+      },
+      {
+        "name": "summary_1754970230.json",
+        "size": 200,
+        "modified": 1754970230.1671672
+      },
+      {
+        "name": "error_slicing_1754962211.json",
+        "size": 22825,
+        "modified": 1754962211.5514064
+      },
+      {
+        "name": "cards_1754963367.json",
+        "size": 347,
+        "modified": 1754963367.391939
+      },
+      {
+        "name": "summary_1754963337.json",
+        "size": 202,
+        "modified": 1754963337.894122
+      },
+      {
+        "name": "summary_1754970194.json",
+        "size": 201,
+        "modified": 1754970194.2108743
+      },
+      {
+        "name": "evidence_1754981221.json",
+        "size": 26362,
+        "modified": 1754981221.9258606
+      },
+      {
+        "name": "cards_1754963337.json",
+        "size": 347,
+        "modified": 1754963337.894122
+      },
+      {
+        "name": "cards_1754962587.json",
+        "size": 347,
+        "modified": 1754962587.1136377
+      },
+      {
+        "name": "error_slicing_1754979333.json",
+        "size": 1918,
+        "modified": 1754979333.2660887
+      },
+      {
+        "name": "summary_1754962583.json",
+        "size": 202,
+        "modified": 1754962583.5586376
+      },
+      {
+        "name": "summary_1754979980.json",
+        "size": 199,
+        "modified": 1754979980.4794078
+      },
+      {
+        "name": "seed_sweep_summary.json",
+        "size": 466,
+        "modified": 1754962587.1316376
+      },
+      {
+        "name": "evidence_1754981481.json",
+        "size": 27077,
+        "modified": 1754981481.1990018
+      },
+      {
+        "name": "snapshot_1754963371.json",
+        "size": 8210,
+        "modified": 1754963371.6759388
+      },
+      {
+        "name": "summary_1754966791.json",
+        "size": 201,
+        "modified": 1754966791.285384
+      },
+      {
+        "name": "error_slicing_1754963371.json",
+        "size": 22885,
+        "modified": 1754963371.6579387
+      },
+      {
+        "name": "error_slicing_1754970547.json",
+        "size": 1503,
+        "modified": 1754970547.531003
+      },
+      {
+        "name": "error_slicing_1754970583.json",
+        "size": 1503,
+        "modified": 1754970583.1097326
+      },
+      {
+        "name": "snapshot_1754970194.json",
+        "size": 15029,
+        "modified": 1754970194.2108743
+      },
+      {
+        "name": "cards_1754962579.json",
+        "size": 347,
+        "modified": 1754962579.9856377
+      },
+      {
+        "name": "error_slicing_1754960932.json",
+        "size": 87,
+        "modified": 1754960932.3501263
+      },
+      {
+        "name": "summary_1754964058.json",
+        "size": 201,
+        "modified": 1754964058.6396801
+      },
+      {
+        "name": "evidence_1754970476.json",
+        "size": 19425,
+        "modified": 1754970476.8855271
+      },
+      {
+        "name": "snapshot_1754981481.json",
+        "size": 22823,
+        "modified": 1754981481.1990018
+      },
+      {
+        "name": "snapshot_1754964027.json",
+        "size": 10282,
+        "modified": 1754964027.225812
+      },
+      {
+        "name": "cards_1754963371.json",
+        "size": 347,
+        "modified": 1754963371.6759388
+      },
+      {
+        "name": "cards_1754981221.json",
+        "size": 344,
+        "modified": 1754981221.9258606
+      },
+      {
+        "name": "error_slicing_1754964058.json",
+        "size": 23232,
+        "modified": 1754964058.5856802
+      },
+      {
+        "name": "cards_1754964058.json",
+        "size": 346,
+        "modified": 1754964058.6396801
+      },
+      {
+        "name": "error_slicing_1754979980.json",
+        "size": 1918,
+        "modified": 1754979980.4794078
+      },
+      {
+        "name": "summary_1754981221.json",
+        "size": 199,
+        "modified": 1754981221.9258606
+      },
+      {
+        "name": "cards_1754962583.json",
+        "size": 347,
+        "modified": 1754962583.5586376
+      },
+      {
+        "name": "snapshot_1754976724.json",
+        "size": 19299,
+        "modified": 1754979326.381923
+      },
+      {
+        "name": "error_slicing_1754970194.json",
+        "size": 1941,
+        "modified": 1754970194.2108743
+      },
+      {
+        "name": "evidence_1754963371.json",
+        "size": 10056,
+        "modified": 1754963371.6759388
+      },
+      {
+        "name": "snapshot_1754963411.json",
+        "size": 9532,
+        "modified": 1754963411.2669713
+      },
+      {
+        "name": "cards_1754976724.json",
+        "size": 344,
+        "modified": 1754976724.3602738
+      },
+      {
+        "name": "evidence_1754970547.json",
+        "size": 20825,
+        "modified": 1754970547.531003
+      },
+      {
+        "name": "cards_1754970583.json",
+        "size": 345,
+        "modified": 1754970583.1097326
+      },
+      {
+        "name": "cards_1754961164.json",
+        "size": 347,
+        "modified": 1754961164.6202962
+      },
+      {
+        "name": "error_slicing_1754961214.json",
+        "size": 22908,
+        "modified": 1754961214.9259536
+      },
+      {
+        "name": "error_slicing_1754966791.json",
+        "size": 2357,
+        "modified": 1754966791.2762172
+      },
+      {
+        "name": "snapshot_1754961164.json",
+        "size": 1447,
+        "modified": 1754961164.6202962
+      },
+      {
+        "name": "error_slicing_1754963367.json",
+        "size": 22827,
+        "modified": 1754963367.3739388
+      },
+      {
+        "name": "evidence_1754964058.json",
+        "size": 13187,
+        "modified": 1754964058.6396801
+      },
+      {
+        "name": "summary_1754962579.json",
+        "size": 202,
+        "modified": 1754962579.9856377
+      },
+      {
+        "name": "split_idx_test.npy",
+        "size": 1728,
+        "modified": 1754972847.4196491
+      },
+      {
+        "name": "snapshot_1754979741.json",
+        "size": 20874,
+        "modified": 1754979741.5077007
+      },
+      {
+        "name": "evidence_1754964059.json",
+        "size": 13886,
+        "modified": 1754964059.96268
+      },
+      {
+        "name": "cards_1754970521.json",
+        "size": 346,
+        "modified": 1754970521.873799
+      },
+      {
+        "name": "cards_1754962538.json",
+        "size": 347,
+        "modified": 1754962538.873367
+      },
+      {
+        "name": "evidence_1754966791.json",
+        "size": 16008,
+        "modified": 1754966791.285384
+      },
+      {
+        "name": "snapshot_1754962583.json",
+        "size": 5659,
+        "modified": 1754962583.5586376
+      },
+      {
+        "name": "snapshot_1754970476.json",
+        "size": 16251,
+        "modified": 1754970476.8855271
+      },
+      {
+        "name": "evidence_1754972855.json",
+        "size": 22262,
+        "modified": 1754972855.6957202
+      },
+      {
+        "name": "error_slicing_1754963965.json",
+        "size": 22581,
+        "modified": 1754963965.7168765
+      },
+      {
+        "name": "evidence_1754962583.json",
+        "size": 7085,
+        "modified": 1754962583.5586376
+      },
+      {
+        "name": "canary_set.csv",
+        "size": 30838,
+        "modified": 1754981720.9603977
+      },
+      {
+        "name": "cards_1754961217.json",
+        "size": 347,
+        "modified": 1754961217.1399534
+      },
+      {
+        "name": "cards_1754960972.json",
+        "size": 156,
+        "modified": 1754960972.7422287
+      },
+      {
+        "name": "cards_1754970194.json",
+        "size": 346,
+        "modified": 1754970194.2108743
+      },
+      {
+        "name": "evidence_1754969458.json",
+        "size": 17303,
+        "modified": 1754969458.4113028
+      },
+      {
+        "name": "error_slicing_1754960972.json",
+        "size": 87,
+        "modified": 1754960972.7422287
+      },
+      {
+        "name": "snapshot_1754970230.json",
+        "size": 15640,
+        "modified": 1754970230.1671672
+      },
+      {
+        "name": "summary_1754964061.json",
+        "size": 202,
+        "modified": 1754964061.28568
+      },
+      {
+        "name": "evidence_1754963375.json",
+        "size": 10770,
+        "modified": 1754963375.1319387
+      },
+      {
+        "name": "error_slicing_1754962587.json",
+        "size": 22602,
+        "modified": 1754962587.0506375
+      },
+      {
+        "name": "summary_1754961905.json",
+        "size": 202,
+        "modified": 1754961905.163423
+      },
+      {
+        "name": "cards_1754960932.json",
+        "size": 156,
+        "modified": 1754960932.3592696
+      },
+      {
+        "name": "summary_1754961217.json",
+        "size": 202,
+        "modified": 1754961217.1399534
+      },
+      {
+        "name": "error_slicing_1754964059.json",
+        "size": 22564,
+        "modified": 1754964059.9086802
+      },
+      {
+        "name": "snapshot_1754970583.json",
+        "size": 18064,
+        "modified": 1754970583.1097326
+      },
+      {
+        "name": "error_slicing_1754964061.json",
+        "size": 23212,
+        "modified": 1754964061.2406802
+      },
+      {
+        "name": "snapshot_1754972855.json",
+        "size": 18723,
+        "modified": 1754976702.3602762
+      },
+      {
+        "name": "error_slicing_1754981481.json",
+        "size": 1918,
+        "modified": 1754981481.1165018
+      },
+      {
+        "name": "summary_1754970476.json",
+        "size": 201,
+        "modified": 1754970476.8855271
+      },
+      {
+        "name": "error_slicing_1754970230.json",
+        "size": 1912,
+        "modified": 1754970230.1580005
+      },
+      {
+        "name": "lightweight_sweep_summary.json",
+        "size": 509,
+        "modified": 1754963375.1589386
+      },
+      {
+        "name": "summary_1754969458.json",
+        "size": 201,
+        "modified": 1754969458.4113028
+      },
+      {
+        "name": "summary_1754963371.json",
+        "size": 202,
+        "modified": 1754963371.6759388
+      },
+      {
+        "name": "canary_meta.json",
+        "size": 402,
+        "modified": 1754981720.9603977
+      },
+      {
+        "name": "summary_1754961164.json",
+        "size": 202,
+        "modified": 1754961164.6202962
+      },
+      {
+        "name": "cards_1754964061.json",
+        "size": 347,
+        "modified": 1754964061.28568
+      },
+      {
+        "name": "error_slicing_1754970521.json",
+        "size": 1941,
+        "modified": 1754970521.873799
+      },
+      {
+        "name": "cards_1754964782.json",
+        "size": 346,
+        "modified": 1754964782.6968024
+      },
+      {
+        "name": "error_slicing_1754963337.json",
+        "size": 22881,
+        "modified": 1754963337.867122
+      },
+      {
+        "name": "error_slicing_1754981528.json",
+        "size": 1918,
+        "modified": 1754981528.110218
+      },
+      {
+        "name": "snapshot_1754964782.json",
+        "size": 12708,
+        "modified": 1754964782.6968024
+      },
+      {
+        "name": "summary_1754963375.json",
+        "size": 202,
+        "modified": 1754963375.1319387
+      },
+      {
+        "name": "evidence_1754979980.json",
+        "size": 25651,
+        "modified": 1754979980.4794078
+      },
+      {
+        "name": "snapshot_1754963337.json",
+        "size": 6996,
+        "modified": 1754963337.894122
+      },
+      {
+        "name": "cards_1754979980.json",
+        "size": 344,
+        "modified": 1754979980.4794078
+      },
+      {
+        "name": "snapshot_1754962587.json",
+        "size": 6272,
+        "modified": 1754962587.1046376
+      },
+      {
+        "name": "error_slicing_1754981221.json",
+        "size": 1918,
+        "modified": 1754981221.9258606
+      },
+      {
+        "name": "final_model.pkl",
+        "size": 638820,
+        "modified": 1754981723.444564
+      },
+      {
+        "name": "snapshot_1754961217.json",
+        "size": 2057,
+        "modified": 1754961217.1399534
+      },
+      {
+        "name": "error_slicing_1754969458.json",
+        "size": 2357,
+        "modified": 1754969458.4113028
+      },
+      {
+        "name": "error_slicing_1754970476.json",
+        "size": 1941,
+        "modified": 1754970476.8855271
+      },
+      {
+        "name": "evidence_1754970521.json",
+        "size": 20133,
+        "modified": 1754970521.873799
+      },
+      {
+        "name": "snapshot_1754966791.json",
+        "size": 13322,
+        "modified": 1754966791.2762172
+      },
+      {
+        "name": "evidence_1754964061.json",
+        "size": 14599,
+        "modified": 1754964061.28568
+      },
+      {
+        "name": "cards_1754963411.json",
+        "size": 346,
+        "modified": 1754963411.2669713
+      },
+      {
+        "name": "error_slicing_1754961902.json",
+        "size": 22899,
+        "modified": 1754961902.7874231
+      },
+      {
+        "name": "final_metrics_valid_test.json",
+        "size": 491,
+        "modified": 1754981723.3620641
+      },
+      {
+        "name": "cards_1754979333.json",
+        "size": 344,
+        "modified": 1754979333.2660887
+      },
+      {
+        "name": "snapshot_1754962214.json",
+        "size": 3839,
+        "modified": 1754962214.2161
+      },
+      {
+        "name": "summary_1754963367.json",
+        "size": 202,
+        "modified": 1754963367.391939
+      },
+      {
+        "name": "best_metrics.json",
+        "size": 58,
+        "modified": 1754981723.3620641
+      },
+      {
+        "name": "cards_1754970547.json",
+        "size": 345,
+        "modified": 1754970547.531003
+      },
+      {
+        "name": "evidence_1754961164.json",
+        "size": 2141,
+        "modified": 1754961164.6202962
+      },
+      {
+        "name": "error_slicing_1754981723.json",
+        "size": 1918,
+        "modified": 1754981723.3620641
+      },
+      {
+        "name": "error_slicing_1754963411.json",
+        "size": 20001,
+        "modified": 1754963411.2123427
+      },
+      {
+        "name": "error_slicing_1754962583.json",
+        "size": 22821,
+        "modified": 1754962583.4956377
+      },
+      {
+        "name": "error_slicing_1754964027.json",
+        "size": 22600,
+        "modified": 1754964027.162812
+      },
+      {
+        "name": "snapshot_1754964059.json",
+        "size": 11500,
+        "modified": 1754964059.96268
+      },
+      {
+        "name": "summary_1754972855.json",
+        "size": 199,
+        "modified": 1754972855.6957202
+      },
+      {
+        "name": "evidence_1754963367.json",
+        "size": 9348,
+        "modified": 1754963367.391939
+      },
+      {
+        "name": "snapshot_1754960932.json",
+        "size": 65,
+        "modified": 1754960932.3592696
+      },
+      {
+        "name": "cards_1754963375.json",
+        "size": 347,
+        "modified": 1754963375.1319387
+      },
+      {
+        "name": "cards_1754964059.json",
+        "size": 346,
+        "modified": 1754964059.96268
+      },
+      {
+        "name": "snapshot_1754981528.json",
+        "size": 23428,
+        "modified": 1754981528.192718
+      },
+      {
+        "name": "snapshot_1754970521.json",
+        "size": 16859,
+        "modified": 1754970521.873799
+      },
+      {
+        "name": "snapshot_1754964061.json",
+        "size": 12113,
+        "modified": 1754964061.28568
+      },
+      {
+        "name": "cards_1754981481.json",
+        "size": 393,
+        "modified": 1754981481.1990018
+      },
+      {
+        "name": "evidence_1754962538.json",
+        "size": 5667,
+        "modified": 1754962538.873367
+      },
+      {
+        "name": "error_slicing_1754961162.json",
+        "size": 22893,
+        "modified": 1754961162.2262962
+      },
+      {
+        "name": "cards_1754962214.json",
+        "size": 347,
+        "modified": 1754962214.2161
+      },
+      {
+        "name": "summary_1754970583.json",
+        "size": 200,
+        "modified": 1754970583.1097326
+      },
+      {
+        "name": "evidence_1754962579.json",
+        "size": 6375,
+        "modified": 1754962579.9856377
+      },
+      {
+        "name": "evidence_1754963411.json",
+        "size": 11594,
+        "modified": 1754963411.2669713
+      },
+      {
+        "name": "cards_1754961905.json",
+        "size": 347,
+        "modified": 1754961905.163423
+      },
+      {
+        "name": "evidence_1754981528.json",
+        "size": 27782,
+        "modified": 1754981528.2018847
+      },
+      {
+        "name": "split_idx_train.npy",
+        "size": 5248,
+        "modified": 1754972847.4196491
+      },
+      {
+        "name": "snapshot_1754963367.json",
+        "size": 7602,
+        "modified": 1754963367.391939
+      },
+      {
+        "name": "cards_1754970230.json",
+        "size": 345,
+        "modified": 1754970230.1671672
+      },
+      {
+        "name": "snapshot_1754963375.json",
+        "size": 8824,
+        "modified": 1754963375.1319387
+      },
+      {
+        "name": "summary_1754970547.json",
+        "size": 200,
+        "modified": 1754970547.531003
+      }
+    ]
+  }
+}

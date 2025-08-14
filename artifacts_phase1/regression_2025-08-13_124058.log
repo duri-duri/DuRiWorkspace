@@ -1,0 +1,20 @@
+=== DuRi Regression Runner ===
+time=2025-08-13T12:40:58+09:00
+repo=/home/duri/DuRiWorkspace
+bench_list=/home/duri/DuRiWorkspace/configs/regression_bench_list.yaml
+
+==================================== ERRORS ====================================
+________________ ERROR collecting tests/test_emotion_vector.py _________________
+ImportError while importing test module '/home/duri/DuRiWorkspace/tests/test_emotion_vector.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.10/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/test_emotion_vector.py:12: in <module>
+    from duri_core.common.emotion_vector import EmotionVector
+E   ModuleNotFoundError: No module named 'duri_core'
+=========================== short test summary info ============================
+ERROR tests/test_emotion_vector.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.06s
+=== DONE ===

@@ -1,0 +1,86 @@
+{
+  "when": "post-train",
+  "tag": "phase1",
+  "timestamp": 1754961217,
+  "datetime": "2025-08-12T10:13:37",
+  "backup_type": "snapshot_evidence",
+  "artifacts_dir": "./artifacts_phase1",
+  "file_hashes": {
+    "phase1_problem_solver.py": {
+      "hash": "92fbde459447addd8624e98069d1c7c1c7e86f4899e2e3b39e4179feea9d1122",
+      "size": 39518,
+      "modified": 1754961200.173637
+    }
+  },
+  "artifacts_info": {
+    "exists": true,
+    "file_count": 13,
+    "files": [
+      {
+        "name": "snapshot_1754960972.json",
+        "size": 65,
+        "modified": 1754960972.7422287
+      },
+      {
+        "name": "error_slicing_1754960932.json",
+        "size": 87,
+        "modified": 1754960932.3501263
+      },
+      {
+        "name": "cards_1754961164.json",
+        "size": 347,
+        "modified": 1754961164.6202962
+      },
+      {
+        "name": "error_slicing_1754961214.json",
+        "size": 22908,
+        "modified": 1754961214.9259536
+      },
+      {
+        "name": "snapshot_1754961164.json",
+        "size": 1447,
+        "modified": 1754961164.6202962
+      },
+      {
+        "name": "cards_1754960972.json",
+        "size": 156,
+        "modified": 1754960972.7422287
+      },
+      {
+        "name": "error_slicing_1754960972.json",
+        "size": 87,
+        "modified": 1754960972.7422287
+      },
+      {
+        "name": "cards_1754960932.json",
+        "size": 156,
+        "modified": 1754960932.3592696
+      },
+      {
+        "name": "summary_1754961164.json",
+        "size": 202,
+        "modified": 1754961164.6202962
+      },
+      {
+        "name": "best_metrics.json",
+        "size": 61,
+        "modified": 1754961217.1399534
+      },
+      {
+        "name": "evidence_1754961164.json",
+        "size": 2141,
+        "modified": 1754961164.6202962
+      },
+      {
+        "name": "snapshot_1754960932.json",
+        "size": 65,
+        "modified": 1754960932.3592696
+      },
+      {
+        "name": "error_slicing_1754961162.json",
+        "size": 22893,
+        "modified": 1754961162.2262962
+      }
+    ]
+  }
+}

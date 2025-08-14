@@ -1,0 +1,64 @@
+{
+  "phase": "Phase 13",
+  "description": "Reasoning + Learning 통합 실행 흐름 구성",
+  "total_tests": 6,
+  "passed_tests": 5,
+  "failed_tests": 1,
+  "success_rate": 83.33333333333334,
+  "test_results": {
+    "test_system_initialization": {
+      "test_name": "시스템 초기화",
+      "success": true,
+      "message": "모든 시스템이 성공적으로 초기화되었습니다"
+    },
+    "test_reasoning_learning_integration": {
+      "test_name": "Reasoning + Learning 통합",
+      "success": true,
+      "message": "통합 실행 흐름이 성공적으로 완료되었습니다",
+      "details": {
+        "reasoning_quality": 0.6,
+        "learning_effectiveness": 0.8,
+        "integration_score": 0.68,
+        "execution_time": 0.0020017623901367188,
+        "feedback_loop_count": 3,
+        "optimization_applied": true
+      }
+    },
+    "test_feedback_loop": {
+      "test_name": "피드백 루프",
+      "success": true,
+      "message": "피드백 루프가 성공적으로 작동했습니다",
+      "details": {
+        "feedback_loop_count": 3,
+        "integration_score": 0.68
+      }
+    },
+    "test_optimization": {
+      "test_name": "최적화",
+      "success": true,
+      "message": "최적화가 성공적으로 적용되었습니다",
+      "details": {
+        "optimization_applied": true,
+        "integration_score": 0.68
+      }
+    },
+    "test_performance_metrics": {
+      "test_name": "성능 메트릭",
+      "success": true,
+      "message": "성능 메트릭이 성공적으로 수집되었습니다",
+      "details": {
+        "total_sessions": 3,
+        "successful_integrations": 3,
+        "average_execution_time": 0.0016252199808756511,
+        "average_integration_score": 0.68
+      }
+    },
+    "test_error_handling": {
+      "test_name": "에러 처리",
+      "success": false,
+      "message": "에러 처리가 예상대로 작동하지 않았습니다"
+    }
+  },
+  "execution_time": 0.007284402847290039,
+  "timestamp": "2025-08-07T00:20:08.557590"
+}

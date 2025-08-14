@@ -1,0 +1,81 @@
+profile: dev
+stress:
+  success_rate_min: 0.90
+  availability_min: 0.95
+  p95_ms:
+    light: 15
+    medium: 20
+    heavy: 30
+    extreme: 35
+  slo:
+    availability_excludes_validation: true
+retry:
+  transient_max_attempts: 2
+  backoff_ms: [2, 8]
+  jitter_ms: 3
+timeouts:
+  per_attempt_ms: 10
+alerting:
+  on_system_error: true
+
+# Day 7: 성능 튜닝 및 부하 테스트 지표
+day7:
+  latency_ms:
+    p95: 120
+    p99: 180
+  memory_mb:
+    p95: 200
+  ready_gate:
+    min_pass_rate: 0.95
+  safety_score:
+    clamp_min: 0.0
+    clamp_max: 1.0
+  hysteresis:
+    enter_critical: 0.12   # 동등성 avg가 이 값 미만이면 critical
+    exit_critical: 0.16    # 복귀 기준(바운스 방지)
+
+# Day 8: SLO 게이트 + 관측(Export) + 알림 훅
+day8:
+  slo_gate:
+    latency_ms_p95: 120
+    memory_mb_p95: 200
+    pass_rate_min: 0.95
+  export:
+    prometheus:
+      enabled: true
+      # 서버 안 띄우고 파일로만 내보내기(환경 독립)
+      path: "var/metrics/prometheus.txt"
+  alerting:
+    enabled: true
+    webhook_url_env: "DURI_ALERT_WEBHOOK"
+  self_heal:
+    # Self-heal 메트릭 임계값 (1시간 윈도우)
+    ready_attempts_max: 3      # 1시간 내 READY 복구 시도 최대 횟수
+    ready_success_min: 0.8     # READY 복구 성공률 최소값 (80%)
+    alert_threshold: 3          # 1시간 내 3회 초과 시 경고
+
+# Day 9: 모니터링·알림 고도화 + 장애 시뮬레이션
+day9:
+  alert_latency:
+    p95_ms_max: 5000           # 알림 지연 P95 최대값 (5초)
+    timeout_rate_max: 0.01     # 알림 타임아웃 비율 최대값 (1%)
+  simulation:
+    iterations: 20              # 장애 시뮬레이션 반복 횟수
+    timeout_seconds: 10         # 알림 대기 타임아웃 (초)
+  quarantine:
+    enabled: true               # 알림 지연 임계 초과 시 자동 격리
+    max_violations: 3           # 최대 위반 횟수 (격리 트리거)
+  # --- Simulation parameters (외부화) ---
+  sim:
+    seed: 42                    # 결정성 보장을 위한 기본 시드
+    base_min_ms: 450            # 기본 지연 하한
+    base_max_ms: 950            # 기본 지연 상한
+    tail_prob: 0.0005           # 0.05% (기존 0.08%에서 -37% 추가 감소)
+    tail_scale_ms: 40           # 지수 꼬리 scale (기존 60에서 -33% 추가 감소)
+    timeout_over_ms: 60         # 타임아웃 초과 지연 상한 (기존 80에서 -25% 감소)
+    missing_given_timeout: 0.005  # timeout 조건부 0.5% (기존 1%에서 -50% 감소)
+    base_missing_prob: 0.0002   # 베이스 누락 확률 (기존 0.0004에서 -50% 추가 감소)
+    max_tail_ms: 1200           # 꼬리 상단 캡 (2000ms 초과 완전 차단)
+    base_mu_ms: 700             # 베이스 분포 중앙값 (p95 유지용)
+    base_sigma: 0.24            # 베이스 분포 분산 (기존 0.28에서 -14% 추가 감소)
+    safety_margin_ms: 150       # 타임아웃 직전 안전여유

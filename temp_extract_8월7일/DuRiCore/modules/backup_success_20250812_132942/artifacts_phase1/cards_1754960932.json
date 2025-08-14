@@ -1,0 +1,9 @@
+{
+  "metrics": {
+    "r2": 0.9421842025804252,
+    "mse": 0.024559294139681106
+  },
+  "paths": {
+    "metrics": "./artifacts_phase1/best_metrics.json"
+  }
+}

@@ -1,18 +1,15 @@
-#!/usr/bin/env python3
+from DuRiCore.trace import emit_trace
 """
 DuRi Common Utilities
 
 공통으로 사용되는 유틸리티 함수들을 모아둔 모듈입니다.
 """
-
 import os
 import json
 from datetime import datetime
 from typing import Dict, Any, Optional, List
 from .logger import get_logger
-
-logger = get_logger("duri_common.utils")
-
+logger = get_logger('duri_common.utils')
 
 def ensure_directory(path: str) -> bool:
     """
@@ -28,11 +25,10 @@ def ensure_directory(path: str) -> bool:
         os.makedirs(path, exist_ok=True)
         return True
     except Exception as e:
-        logger.error(f"디렉토리 생성 실패: {path} - {e}")
+        logger.error(f'디렉토리 생성 실패: {path} - {e}')
         return False
 
-
-def save_json(data: Dict[str, Any], filepath: str, ensure_ascii: bool = False) -> bool:
+def save_json(data: Dict[str, Any], filepath: str, ensure_ascii: bool=False) -> bool:
     """
     JSON 데이터를 파일에 저장
     
@@ -45,17 +41,13 @@ def save_json(data: Dict[str, Any], filepath: str, ensure_ascii: bool = False) -
         bool: 성공 여부
     """
     try:
-        # 디렉토리 생성
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
-        
         with open(filepath, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=2, ensure_ascii=ensure_ascii)
-        
         return True
     except Exception as e:
-        logger.error(f"JSON 저장 실패: {filepath} - {e}")
+        logger.error(f'JSON 저장 실패: {filepath} - {e}')
         return False
-
 
 def load_json(filepath: str) -> Optional[Dict[str, Any]]:
     """
@@ -70,13 +62,11 @@ def load_json(filepath: str) -> Optional[Dict[str, Any]]:
     try:
         if not os.path.exists(filepath):
             return None
-        
         with open(filepath, 'r', encoding='utf-8') as f:
             return json.load(f)
     except Exception as e:
-        logger.error(f"JSON 로드 실패: {filepath} - {e}")
+        logger.error(f'JSON 로드 실패: {filepath} - {e}')
         return None
-
 
 def get_timestamp() -> str:
     """
@@ -86,7 +76,6 @@ def get_timestamp() -> str:
         str: ISO 형식 타임스탬프
     """
     return datetime.now().isoformat()
-
 
 def format_duration(seconds: float) -> str:
     """
@@ -99,14 +88,13 @@ def format_duration(seconds: float) -> str:
         str: 포맷된 시간 문자열
     """
     if seconds < 60:
-        return f"{seconds:.2f}초"
+        return f'{seconds:.2f}초'
     elif seconds < 3600:
         minutes = seconds / 60
-        return f"{minutes:.1f}분"
+        return f'{minutes:.1f}분'
     else:
         hours = seconds / 3600
-        return f"{hours:.1f}시간"
-
+        return f'{hours:.1f}시간'
 
 def validate_emotion(emotion: str, valid_emotions: List[str]) -> bool:
     """
@@ -120,7 +108,6 @@ def validate_emotion(emotion: str, valid_emotions: List[str]) -> bool:
         bool: 유효성 여부
     """
     return emotion.lower() in [e.lower() for e in valid_emotions]
-
 
 def calculate_success_rate(successful: int, total: int) -> float:
     """
@@ -137,7 +124,6 @@ def calculate_success_rate(successful: int, total: int) -> float:
         return 0.0
     return successful / total
 
-
 def merge_dicts(dict1: Dict[str, Any], dict2: Dict[str, Any]) -> Dict[str, Any]:
     """
     두 딕셔너리를 병합 (dict2가 우선)
@@ -151,4 +137,4 @@ def merge_dicts(dict1: Dict[str, Any], dict2: Dict[str, Any]) -> Dict[str, Any]:
     """
     result = dict1.copy()
     result.update(dict2)
-    return result 
+    return result

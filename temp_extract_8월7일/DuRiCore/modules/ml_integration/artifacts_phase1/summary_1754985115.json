@@ -1,0 +1,12 @@
+{
+  "timestamp": 1754985115,
+  "performance_summary": {
+    "r2_score": 0.8077583468747029,
+    "mse": 0.07458346892806414,
+    "status": "completed"
+  },
+  "artifacts_generated": [
+    "metrics",
+    "model"
+  ]
+}

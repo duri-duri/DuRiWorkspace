@@ -1,0 +1,394 @@
+*** Begin Patch
+*** Add File: configs/thresholds.yaml
+alert:
+  warn:
+    nrmse_ratio: 1.20
+    mse_ratio: 1.50
+    r2_gap: 0.06
+  crit:
+    nrmse_ratio: 1.35
+    mse_ratio: 1.80
+    r2_gap: 0.08
+hard_fail:
+  nrmse_ratio: 1.40
+  mse_ratio: 2.00
+drift:
+  psi:
+    warn: 0.10
+    crit: 0.25
+  ks:
+    warn: 0.10
+    crit: 0.20
+
+*** End Patch
+
+*** Begin Patch
+*** Add File: scripts/rollback.sh
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+REG_DIR="registry"
+CUR="$REG_DIR/current.json"
+TARGET="${1:-}"
+
+usage() {
+  echo "Usage: $0 <registry json or sha-tag>.json"
+  echo "       $0 --dry-run   (prints current and last 5 candidates)"
+}
+
+if [[ "${TARGET:-}" == "--dry-run" || -z "${TARGET:-}" ]]; then
+  echo "[DRY-RUN] Current registry:"
+  ls -l "$CUR" || true
+  echo "[DRY-RUN] Recent registry snapshots:"
+  ls -lt "$REG_DIR"/*.json 2>/dev/null | head -5 || true
+  exit 0
+fi
+
+SRC="$TARGET"
+if [[ ! -f "$SRC" ]]; then
+  SRC="$REG_DIR/$TARGET"
+fi
+if [[ ! -f "$SRC" ]]; then
+  echo " rollback source not found: $TARGET"
+  usage; exit 1
+fi
+
+cp -v "$CUR" "$CUR.bak.$(date +%Y%m%d%H%M%S)"
+cp -v "$SRC" "$CUR"
+echo "[OK] Rolled back to: $SRC"
+
+*** End Patch
+
+*** Begin Patch
+*** Add File: tools/monitor_prod_plus.py
+#!/usr/bin/env python3
+# Lightweight add-on monitor: reads thresholds.yaml, prints alert-level,
+# and optionally posts to Slack via SLACK_WEBHOOK_URL.
+import argparse, json, os, sys, datetime
+from typing import Dict, Any
+try:
+    import yaml, requests, pytz
+except Exception as e:
+    print("[WARN] missing deps; install: pip install PyYAML requests pytz", file=sys.stderr)
+    raise
+
+def load_yaml(p:str)->Dict[str,Any]:
+    with open(p,"r",encoding="utf-8") as f:
+        return yaml.safe_load(f)
+
+def classify(metrics:Dict[str,float], th:Dict[str,Any])->str:
+    # hard-fail first
+    hf = th.get("hard_fail",{})
+    if (metrics.get("nrmse_ratio",0)>hf.get("nrmse_ratio",1e9)) or \
+       (metrics.get("mse_ratio",0)>hf.get("mse_ratio",1e9)):
+        return "hard-fail"
+    alert = th.get("alert",{})
+    crit = alert.get("crit",{})
+    warn = alert.get("warn",{})
+    if (metrics.get("nrmse_ratio",0)>crit.get("nrmse_ratio",1e9)) or \
+       (metrics.get("mse_ratio",0)>crit.get("mse_ratio",1e9)) or \
+       (metrics.get("r2_gap",0)>crit.get("r2_gap",1e9)):
+        return "crit"
+    if (metrics.get("nrmse_ratio",0)>warn.get("nrmse_ratio",1e9)) or \
+       (metrics.get("mse_ratio",0)>warn.get("mse_ratio",1e9)) or \
+       (metrics.get("r2_gap",0)>warn.get("r2_gap",1e9)):
+        return "warn"
+    return "ok"
+
+def slack_post(text:str):
+    url=os.environ.get("SLACK_WEBHOOK_URL","").strip()
+    if not url: return
+    try:
+        requests.post(url, json={"text": text}, timeout=5)
+    except Exception as e:
+        print(f"[WARN] slack post failed: {e}", file=sys.stderr)
+
+def main():
+    ap=argparse.ArgumentParser()
+    ap.add_argument("--model", required=True, help="registry/current.json")
+    ap.add_argument("--out", required=True, help="output json path")
+    ap.add_argument("--thresholds", default="configs/thresholds.yaml")
+    ap.add_argument("--tz", default="UTC")
+    ap.add_argument("--alert-level", default="", choices=["","ok","warn","crit","hard-fail"])
+    args=ap.parse_args()
+
+    tz=pytz.timezone(args.tz)
+    now=datetime.datetime.now(tz).isoformat()
+
+    with open(args.model,"r",encoding="utf-8") as f:
+        model=json.load(f)
+
+    # minimal metric extraction (fallback-safe)
+    meta=model.get("meta",{})
+    gap=meta.get("gap",{})
+    metrics={
+        "nrmse_ratio": float(gap.get("nrmse_ratio", 0)),
+        "mse_ratio": float(gap.get("mse_ratio", 0)),
+        "r2_gap": float(gap.get("r2_gap", 0)),
+    }
+    th=load_yaml(args.thresholds)
+    level=classify(metrics, th)
+    if args.alert_level and args.alert_level!=level:
+        # explicit filter: if user asked for specific level, only emit when matching
+        print(f"[SKIP] computed={level} but --alert-level={args.alert_level}")
+        return
+
+    out={
+        "ts": now,
+        "model": os.path.abspath(args.model),
+        "metrics": metrics,
+        "level": level,
+        "thresholds": th.get("alert",{})
+    }
+    os.makedirs(os.path.dirname(args.out), exist_ok=True)
+    with open(args.out,"w",encoding="utf-8") as f:
+        json.dump(out,f,ensure_ascii=False,indent=2)
+
+    msg=f"📈 monitor @ {now}\nlevel={level} metrics={metrics}"
+    print(msg)
+    if level in ("warn","crit","hard-fail"):
+        slack_post(f":rotating_light: {msg}")
+    elif level=="ok":
+        slack_post(f":white_check_mark: {msg}")
+
+if __name__=="__main__":
+    main()
+
+*** End Patch
+
+*** Begin Patch
+*** Add File: tools/regression_guard.py
+#!/usr/bin/env python3
+# Writes detailed rejection reasons as a JSON artifact.
+import argparse, json, os, time
+
+def main():
+    ap=argparse.ArgumentParser()
+    ap.add_argument("--reason", required=True)
+    ap.add_argument("--details", default="{}",
+                    help='JSON string, e.g. {"mse_ratio":1.9}')
+    ap.add_argument("--outdir", default="artifacts_phase1/rejections")
+    args=ap.parse_args()
+
+    os.makedirs(args.outdir, exist_ok=True)
+    ts=int(time.time())
+    outp=os.path.join(args.outdir, f"rejection_{ts}.json")
+    try:
+        details=json.loads(args.details)
+    except Exception:
+        details={"raw": args.details}
+    payload={
+        "ts": ts,
+        "reason": args.reason,
+        "details": details
+    }
+    with open(outp,"w",encoding="utf-8") as f:
+        json.dump(payload,f,ensure_ascii=False,indent=2)
+    print(f"[OK] wrote {outp}")
+
+if __name__=="__main__":
+    main()
+
+*** End Patch
+
+*** Begin Patch
+*** Add File: tools/cleanup_artifacts.py
+#!/usr/bin/env python3
+import argparse, os, time, re
+
+KEEP_PATTERNS=[
+    r"registry/current\.json$",
+    r"registry/model_.*\.json$",
+    r"artifacts_phase1/monitor/.*\.json$",
+    r"artifacts_phase1/canary/.*\.json$",
+    r"artifacts_phase1/summary_.*\.json$",
+    r"artifacts_phase1/snapshot_.*\.json$",
+]
+
+def keep(path):
+    for p in KEEP_PATTERNS:
+        if re.search(p, path): return True
+    return False
+
+def main():
+    ap=argparse.ArgumentParser()
+    ap.add_argument("--root", default=".")
+    ap.add_argument("--days", type=int, default=14)
+    args=ap.parse_args()
+
+    cutoff=time.time()-args.days*86400
+    removed=0
+    for root,_,files in os.walk(args.root):
+        for fn in files:
+            p=os.path.join(root,fn)
+            try:
+                st=os.stat(p)
+            except FileNotFoundError:
+                continue
+            if keep(p): continue
+            if st.st_mtime<cutoff:
+                try:
+                    os.remove(p); removed+=1
+                except Exception:
+                    pass
+    print(f"[CLEANUP] removed {removed} files older than {args.days} days (keep list honored)")
+
+if __name__=="__main__":
+    main()
+
+*** End Patch
+
+*** Begin Patch
+*** Add File: scripts/annotate_registry.py
+#!/usr/bin/env python3
+# Append reproducibility metadata to registry/current.json
+import os, json, subprocess, datetime
+
+REG="registry/current.json"
+OUT="registry/current.json"
+
+def run(cmd):
+    return subprocess.check_output(cmd, shell=True, text=True).strip()
+
+def main():
+    with open(REG,"r",encoding="utf-8") as f:
+        obj=json.load(f)
+    meta=obj.setdefault("meta",{})
+    repro=meta.setdefault("repro",{})
+
+    repro["timestamp"]=datetime.datetime.utcnow().isoformat()+"Z"
+    try:
+        repro["git_rev"]=run("git rev-parse HEAD")
+    except Exception:
+        pass
+    # Optional image tag from env
+    img=os.environ.get("MODEL_IMAGE_TAG","").strip()
+    if img: repro["image_tag"]=img
+
+    # pip freeze snapshot path (optional)
+    dep_files=[p for p in os.listdir("registry") if p.startswith("deps_") and p.endswith(".txt")]
+    dep_files.sort(reverse=True)
+    dep_files.sort(reverse=True)
+    if dep_files:
+        repro["deps_file"]=f"registry/{dep_files[0]}"
+
+    with open(OUT,"w",encoding="utf-8") as f:
+        json.dump(obj,f,ensure_ascii=False,indent=2)
+    print("[OK] annotated registry with reproducibility metadata")
+
+if __name__=="__main__":
+    main()
+
+*** End Patch
+
+*** Begin Patch
+*** Add File: configs/features_order.example.txt
+# Replace this file with the exact final input feature order used in production.
+# One feature name per line, in order.
+f1
+f2
+f3
+
+*** End Patch
+
+*** Begin Patch
+*** Add File: scripts/inject_signature.py
+#!/usr/bin/env python3
+# Injects feature/schema signature into registry/current.json
+import argparse, hashlib, json, os
+
+def sha256_lines(lines):
+    h=hashlib.sha256()
+    for s in lines:
+        h.update((s+"\n").encode("utf-8"))
+    return h.hexdigest()
+
+def main():
+    ap=argparse.ArgumentParser()
+    ap.add_argument("--features-file", default="configs/features_order.txt",
+                    help="Path with one feature per line (final input order).")
+    ap.add_argument("--schema-version", default="v1")
+    ap.add_argument("--topk", type=int, default=None)
+    ap.add_argument("--calibration", default=None)
+    ap.add_argument("--registry", default="registry/current.json")
+    args=ap.parse_args()
+
+    # fallback to example if not provided
+    ff=args.features_file
+    if not os.path.exists(ff):
+        ff="configs/features_order.example.txt"
+        print(f"[WARN] {args.features_file} not found; using {ff}")
+    with open(ff,"r",encoding="utf-8") as f:
+        feats=[ln.strip() for ln in f if ln.strip()]
+
+    with open(args.registry,"r",encoding="utf-8") as f:
+        reg=json.load(f)
+
+    meta=reg.setdefault("meta",{})
+    sign=meta.setdefault("signature",{})
+    sign["schema_version"]=args.schema_version
+    sign["feature_order"]=feats
+    sign["feature_order_sha256"]=sha256_lines(feats)
+    if args.topk is not None:
+        sign["topk"]=args.topk
+    if args.calibration is not None:
+        sign["calibration"]=args.calibration
+
+    with open(args.registry,"w",encoding="utf-8") as f:
+        json.dump(reg,f,ensure_ascii=False,indent=2)
+    print("[OK] injected signature into", args.registry)
+
+if __name__=="__main__":
+    main()
+
+*** End Patch
+
+*** Begin Patch
+*** Add File: tools/canary_compare.py
+#!/usr/bin/env python3
+# Compares current vs previous registry snapshots and emits a canary JSON.
+import argparse, json, os, time
+
+def metric(reg, key_path, default=None):
+    cur=reg
+    for k in key_path:
+        if not isinstance(cur, dict) or k not in cur: return default
+        cur=cur[k]
+    return cur
+
+def main():
+    ap=argparse.ArgumentParser()
+    ap.add_argument("--current", required=True)
+    ap.add_argument("--previous", required=True)
+    ap.add_argument("--out", required=True)
+    args=ap.parse_args()
+
+    with open(args.current,"r",encoding="utf-8") as f: cur=json.load(f)
+    with open(args.previous,"r",encoding="utf-8") as f: prev=json.load(f)
+    cur_r2=metric(cur, ["meta","eval","test","r2"], None)
+    prev_r2=metric(prev, ["meta","eval","test","r2"], None)
+    cur_gap=metric(cur, ["meta","gap"], {})
+    prev_gap=metric(prev, ["meta","gap"], {})
+
+    out={
+        "ts": int(time.time()),
+        "current": os.path.abspath(args.current),
+        "previous": os.path.abspath(args.previous),
+        "delta": {
+            "r2": None if (cur_r2 is None or prev_r2 is None) else (cur_r2 - prev_r2),
+            "mse_ratio": (cur_gap.get("mse_ratio"), prev_gap.get("mse_ratio")),
+            "nrmse_ratio": (cur_gap.get("nrmse_ratio"), prev_gap.get("nrmse_ratio")),
+            "r2_gap": (cur_gap.get("r2_gap"), prev_gap.get("r2_gap")),
+        }
+    }
+    os.makedirs(os.path.dirname(args.out), exist_ok=True)
+    with open(args.out,"w",encoding="utf-8") as f:
+        json.dump(out,f,ensure_ascii=False,indent=2)
+    print(f"[OK] canary compare written: {args.out}")
+
+if __name__=="__main__":
+    main()
+
+*** End Patch
+

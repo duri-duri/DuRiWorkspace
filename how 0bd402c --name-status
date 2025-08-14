@@ -1,0 +1,47 @@
+[33mcommit 0bd402cb7d9588a66981d4d8f42f1f2f6c6d3a79[m[33m ([m[1;36mHEAD -> [m[1;32mfeature/phase4b[m[33m, [m[1;33mtag: v1.1.0-safety-stabilized[m[33m, [m[1;32mfeat/safety-hf-20250810[m[33m, [m[1;32mfeat/phase3-hardening[m[33m, [m[1;32mfeat/integration-validator-stabilize[m[33m)[m
+Author: 김신 <ks@duri.ai>
+Date:   Sun Aug 10 16:48:48 2025 +0900
+
+    ✅ feat: 8/8 시나리오 성공률 달성 - T7-T10 핫픽스 완료
+    
+    - T7: 동등성 메트릭 SSOT 라우팅 구현
+    - T8: current_wip 접근 방식 딕셔너리 기준 통일
+    - T9: READY 게이트 통과 로직 구현
+    - T10: 웜업 윈도우 + merge_if_absent + 동등성 점수 복구
+    - 상태 매니저 대소문자 문제 해결
+    - E-stop 복구 로직 강화
+    
+    성공률: 4/8 → 8/8 (100%) 달성
+
+ .../DuRiCore_Day14_PreRefactoring_Backup_20250806_214833.tar.gz      |  Bin [31m0[m -> [32m43554[m bytes
+ DuRiCore/__pycache__/capacity_governance.cpython-310.pyc             |  Bin [31m0[m -> [32m13680[m bytes
+ DuRiCore/__pycache__/demo_integrated_safety_system.cpython-310.pyc   |  Bin [31m0[m -> [32m25981[m bytes
+ DuRiCore/__pycache__/equivalence_validator.cpython-310.pyc           |  Bin [31m0[m -> [32m23395[m bytes
+ DuRiCore/__pycache__/integrated_safety_system.cpython-310.pyc        |  Bin [31m0[m -> [32m36841[m bytes
+ DuRiCore/__pycache__/safety_framework.cpython-310.pyc                |  Bin [31m0[m -> [32m12434[m bytes
+ DuRiCore/__pycache__/state_manager.cpython-310.pyc                   |  Bin [31m0[m -> [32m13617[m bytes
+ DuRiCore/backups/abductive_reasoning_backup.tar.gz                   |  Bin [31m0[m -> [32m3551958[m bytes
+ DuRiCore/backups/conflict_resolver_backup.tar.gz                     |  Bin [31m0[m -> [32m3510804[m bytes
+ DuRiCore/backups/deductive_reasoning_backup.tar.gz                   |  Bin [31m0[m -> [32m3549670[m bytes
+ DuRiCore/backups/inductive_reasoning_backup.tar.gz                   |  Bin [31m0[m -> [32m3551790[m bytes
+ DuRiCore/backups/logical_processor_backup.tar.gz                     |  Bin [31m0[m -> [32m3545820[m bytes
+ DuRiCore/backups/performance_monitor_backup.tar.gz                   |  Bin [31m0[m -> [32m3565708[m bytes
+ DuRiCore/backups/reasoning_engine_backup.tar.gz                      |  Bin [31m0[m -> [32m3546318[m bytes
+ DuRiCore/backups/reasoning_integration_backup.tar.gz                 |  Bin [31m0[m -> [32m3510157[m bytes
+ DuRiCore/backups/reasoning_optimizer_backup.tar.gz                   |  Bin [31m0[m -> [32m3560410[m bytes
+ DuRiCore/backups/unified_conversation_service_backup.tar.gz          |  Bin [31m0[m -> [32m3582440[m bytes
+ DuRiCore/backups/unified_judgment_system_backup.tar.gz               |  Bin [31m0[m -> [32m3597694[m bytes
+ DuRiCore/backups/unified_learning_system_backup.tar.gz               |  Bin [31m0[m -> [32m3589479[m bytes
+ DuRiCore/backups/unified_performance_optimizer_backup.tar.gz         |  Bin [31m0[m -> [32m3610357[m bytes
+ DuRiCore/capacity_governance.py                                      |  446 [32m+++++++++++[m
+ DuRiCore/demo_integrated_safety_system.py                            |  918 [32m++++++++++++++++++++++[m
+ DuRiCore/demo_results_integrated_safety_system_20250810_122559.json  |   56 [32m++[m
+ DuRiCore/demo_results_integrated_safety_system_20250810_124551.json  |  257 [32m++++++[m
+ DuRiCore/demo_results_integrated_safety_system_20250810_124617.json  |  257 [32m++++++[m
+ DuRiCore/demo_results_integrated_safety_system_20250810_124658.json  |  257 [32m++++++[m
+ DuRiCore/demo_results_integrated_safety_system_20250810_133252.json  |  285 [32m+++++++[m
+ DuRiCore/demo_results_integrated_safety_system_20250810_134548.json  |  306 [32m++++++++[m
+ DuRiCore/demo_results_integrated_safety_system_20250810_140212.json  |  285 [32m+++++++[m
+ DuRiCore/demo_results_integrated_safety_system_20250810_152546.json  |  303 [32m+++++++[m
+ DuRiCore/demo_results_integrated_safety_system_20250810_161028.json  |  313 [32m++++++++[m
+ DuRiCore/demo_

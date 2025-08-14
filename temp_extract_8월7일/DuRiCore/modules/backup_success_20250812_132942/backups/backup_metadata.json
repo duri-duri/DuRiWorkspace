@@ -1,0 +1,55 @@
+{
+  "backup_history": [
+    {
+      "backup_id": "backup_1754904601997_d171ee08",
+      "timestamp": 1754904601.9980595,
+      "description": "ML 통합 모듈 시스템 전체 상태 백업",
+      "size_bytes": 458,
+      "checksum": "a325bf52a61247acd485d780d6a3b821",
+      "backup_type": "system",
+      "metadata": {},
+      "file_path": "backups/backup_1754904601997_d171ee08_20250811_183001.pkl.gz"
+    },
+    {
+      "backup_id": "backup_1754904657936_b5003f4f",
+      "timestamp": 1754904657.9368877,
+      "description": "사용자 설정 및 선호도 백업",
+      "size_bytes": 201,
+      "checksum": "cfe46901261e05a51eb0544968b7c291",
+      "backup_type": "user_config",
+      "metadata": {},
+      "file_path": "backups/backup_1754904657936_b5003f4f_20250811_183057.pkl.gz"
+    },
+    {
+      "backup_id": "backup_1754904657937_b9e76749",
+      "timestamp": 1754904657.937133,
+      "description": "시스템 성능 지표 백업",
+      "size_bytes": 228,
+      "checksum": "f387a3ce7bfe74e0b522c4280b1b698f",
+      "backup_type": "performance",
+      "metadata": {},
+      "file_path": "backups/backup_1754904657937_b9e76749_20250811_183057.pkl.gz"
+    },
+    {
+      "backup_id": "backup_1754904657937_b9e76749",
+      "timestamp": 1754904657.9376872,
+      "description": "머신러닝 학습 데이터 및 모델 백업",
+      "size_bytes": 374,
+      "checksum": "3bce98677d481ba7374786e2c23c7fe7",
+      "backup_type": "learning",
+      "metadata": {},
+      "file_path": "backups/backup_1754904657937_b9e76749_20250811_183057.pkl.gz"
+    },
+    {
+      "backup_id": "backup_1754905200065_889090c5",
+      "timestamp": 1754905200.0660377,
+      "description": "품질 검증 백업",
+      "size_bytes": 60,
+      "checksum": "7d2d217b469a2595d52786c555b6bb9b",
+      "backup_type": "quality_test",
+      "metadata": {},
+      "file_path": "backups/backup_1754905200065_889090c5_20250811_184000.pkl.gz"
+    }
+  ],
+  "last_updated": 1754905200.0660493
+}

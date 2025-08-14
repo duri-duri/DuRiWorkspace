@@ -1,0 +1,23 @@
+FROM duri-base:latest
+
+WORKDIR /app
+
+# Control 서비스 파일 복사
+COPY duri_control/ /app/duri_control/
+
+# wait-for-postgres 스크립트 복사 및 권한 설정
+COPY duri_control/wait-for-postgres.sh /app/wait-for-postgres.sh
+RUN chmod +x /app/wait-for-postgres.sh
+
+# Control 서비스 의존성 설치
+COPY duri_control/requirements.txt ./requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# PostgreSQL 클라이언트 및 Docker CLI 설치
+RUN apt-get update && apt-get install -y \
+    postgresql-client \
+    docker.io \
+    && rm -rf /var/lib/apt/lists/*
+
+# Control 서비스 실행 (wait-for-postgres 스크립트 사용)
+CMD ["bash", "/app/wait-for-postgres.sh"] 

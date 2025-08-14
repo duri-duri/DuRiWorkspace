@@ -1,0 +1,234 @@
+{
+  "timestamp": 1754962579,
+  "datetime": "2025-08-12T10:36:19",
+  "snapshot_id": 1754962579,
+  "backup_trigger": "post-train",
+  "tag": "phase1",
+  "system_state": {
+    "working_directory": "/home/duri/DuRiWorkspace/temp_extract_8월7일/DuRiCore/modules/ml_integration",
+    "artifacts_directory": "./artifacts_phase1",
+    "python_process": 15792
+  },
+  "cross_reference": {
+    "snapshot_file": "snapshot_1754962579.json",
+    "backup_meta": {
+      "when": "post-train",
+      "tag": "phase1",
+      "timestamp": 1754962579,
+      "datetime": "2025-08-12T10:36:19",
+      "backup_type": "snapshot_evidence",
+      "artifacts_dir": "./artifacts_phase1",
+      "random_state": 41,
+      "test_size": 0.2,
+      "feature_list": [
+        "f0",
+        "f1",
+        "f2"
+      ],
+      "models": {
+        "rf": {
+          "n_estimators": 300,
+          "random_state": 41
+        },
+        "xgb": {
+          "enabled": true,
+          "n_estimators": 500,
+          "max_depth": 6
+        }
+      },
+      "folds": 5,
+      "calibration": {
+        "rf": "residual_gbm",
+        "xgb": "residual_gbm"
+      },
+      "split_ratios": {
+        "train": 0.64,
+        "valid": 0.16,
+        "test": 0.2
+      },
+      "file_hashes": {
+        "phase1_problem_solver.py": {
+          "hash": "3b2cb7ad1ac133c61eeb5d54d693cf66235a1d46abd2ff5cf89ecf455a07a1d1",
+          "size": 50787,
+          "modified": 1754962522.7709148
+        }
+      },
+      "artifacts_info": {
+        "exists": true,
+        "file_count": 34,
+        "files": [
+          {
+            "name": "error_slicing_1754962579.json",
+            "size": 22850,
+            "modified": 1754962579.9226377
+          },
+          {
+            "name": "snapshot_1754962538.json",
+            "size": 4441,
+            "modified": 1754962538.873367
+          },
+          {
+            "name": "summary_1754962214.json",
+            "size": 202,
+            "modified": 1754962214.2161
+          },
+          {
+            "name": "snapshot_1754960972.json",
+            "size": 65,
+            "modified": 1754960972.7422287
+          },
+          {
+            "name": "evidence_1754961905.json",
+            "size": 3561,
+            "modified": 1754961905.163423
+          },
+          {
+            "name": "snapshot_1754961905.json",
+            "size": 2667,
+            "modified": 1754961905.163423
+          },
+          {
+            "name": "evidence_1754961217.json",
+            "size": 2851,
+            "modified": 1754961217.1399534
+          },
+          {
+            "name": "evidence_1754962214.json",
+            "size": 4965,
+            "modified": 1754962214.2161
+          },
+          {
+            "name": "summary_1754962538.json",
+            "size": 202,
+            "modified": 1754962538.873367
+          },
+          {
+            "name": "error_slicing_1754962538.json",
+            "size": 22817,
+            "modified": 1754962538.8283672
+          },
+          {
+            "name": "error_slicing_1754962211.json",
+            "size": 22825,
+            "modified": 1754962211.5514064
+          },
+          {
+            "name": "error_slicing_1754960932.json",
+            "size": 87,
+            "modified": 1754960932.3501263
+          },
+          {
+            "name": "cards_1754961164.json",
+            "size": 347,
+            "modified": 1754961164.6202962
+          },
+          {
+            "name": "error_slicing_1754961214.json",
+            "size": 22908,
+            "modified": 1754961214.9259536
+          },
+          {
+            "name": "snapshot_1754961164.json",
+            "size": 1447,
+            "modified": 1754961164.6202962
+          },
+          {
+            "name": "cards_1754962538.json",
+            "size": 347,
+            "modified": 1754962538.873367
+          },
+          {
+            "name": "cards_1754961217.json",
+            "size": 347,
+            "modified": 1754961217.1399534
+          },
+          {
+            "name": "cards_1754960972.json",
+            "size": 156,
+            "modified": 1754960972.7422287
+          },
+          {
+            "name": "error_slicing_1754960972.json",
+            "size": 87,
+            "modified": 1754960972.7422287
+          },
+          {
+            "name": "summary_1754961905.json",
+            "size": 202,
+            "modified": 1754961905.163423
+          },
+          {
+            "name": "cards_1754960932.json",
+            "size": 156,
+            "modified": 1754960932.3592696
+          },
+          {
+            "name": "summary_1754961217.json",
+            "size": 202,
+            "modified": 1754961217.1399534
+          },
+          {
+            "name": "summary_1754961164.json",
+            "size": 202,
+            "modified": 1754961164.6202962
+          },
+          {
+            "name": "snapshot_1754961217.json",
+            "size": 2057,
+            "modified": 1754961217.1399534
+          },
+          {
+            "name": "error_slicing_1754961902.json",
+            "size": 22899,
+            "modified": 1754961902.7874231
+          },
+          {
+            "name": "final_metrics_valid_test.json",
+            "size": 262,
+            "modified": 1754962579.9856377
+          },
+          {
+            "name": "snapshot_1754962214.json",
+            "size": 3839,
+            "modified": 1754962214.2161
+          },
+          {
+            "name": "best_metrics.json",
+            "size": 61,
+            "modified": 1754962579.9856377
+          },
+          {
+            "name": "evidence_1754961164.json",
+            "size": 2141,
+            "modified": 1754961164.6202962
+          },
+          {
+            "name": "snapshot_1754960932.json",
+            "size": 65,
+            "modified": 1754960932.3592696
+          },
+          {
+            "name": "evidence_1754962538.json",
+            "size": 5667,
+            "modified": 1754962538.873367
+          },
+          {
+            "name": "error_slicing_1754961162.json",
+            "size": 22893,
+            "modified": 1754961162.2262962
+          },
+          {
+            "name": "cards_1754962214.json",
+            "size": 347,
+            "modified": 1754962214.2161
+          },
+          {
+            "name": "cards_1754961905.json",
+            "size": 347,
+            "modified": 1754961905.163423
+          }
+        ]
+      }
+    }
+  }
+}

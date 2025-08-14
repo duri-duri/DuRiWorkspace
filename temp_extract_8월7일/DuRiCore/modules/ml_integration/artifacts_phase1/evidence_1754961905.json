@@ -1,0 +1,126 @@
+{
+  "timestamp": 1754961905,
+  "datetime": "2025-08-12T10:25:05",
+  "snapshot_id": 1754961905,
+  "backup_trigger": "post-train",
+  "tag": "phase1",
+  "system_state": {
+    "working_directory": "/home/duri/DuRiWorkspace/temp_extract_8월7일/DuRiCore/modules/ml_integration",
+    "artifacts_directory": "./artifacts_phase1",
+    "python_process": 13638
+  },
+  "cross_reference": {
+    "snapshot_file": "snapshot_1754961905.json",
+    "backup_meta": {
+      "when": "post-train",
+      "tag": "phase1",
+      "timestamp": 1754961905,
+      "datetime": "2025-08-12T10:25:05",
+      "backup_type": "snapshot_evidence",
+      "artifacts_dir": "./artifacts_phase1",
+      "file_hashes": {
+        "phase1_problem_solver.py": {
+          "hash": "5dd5ecfa640af60f10801d315407bfc9bf8d618f44f389f1658b20de8e3f1d3a",
+          "size": 45220,
+          "modified": 1754961890.8804233
+        }
+      },
+      "artifacts_info": {
+        "exists": true,
+        "file_count": 18,
+        "files": [
+          {
+            "name": "snapshot_1754960972.json",
+            "size": 65,
+            "modified": 1754960972.7422287
+          },
+          {
+            "name": "evidence_1754961217.json",
+            "size": 2851,
+            "modified": 1754961217.1399534
+          },
+          {
+            "name": "error_slicing_1754960932.json",
+            "size": 87,
+            "modified": 1754960932.3501263
+          },
+          {
+            "name": "cards_1754961164.json",
+            "size": 347,
+            "modified": 1754961164.6202962
+          },
+          {
+            "name": "error_slicing_1754961214.json",
+            "size": 22908,
+            "modified": 1754961214.9259536
+          },
+          {
+            "name": "snapshot_1754961164.json",
+            "size": 1447,
+            "modified": 1754961164.6202962
+          },
+          {
+            "name": "cards_1754961217.json",
+            "size": 347,
+            "modified": 1754961217.1399534
+          },
+          {
+            "name": "cards_1754960972.json",
+            "size": 156,
+            "modified": 1754960972.7422287
+          },
+          {
+            "name": "error_slicing_1754960972.json",
+            "size": 87,
+            "modified": 1754960972.7422287
+          },
+          {
+            "name": "cards_1754960932.json",
+            "size": 156,
+            "modified": 1754960932.3592696
+          },
+          {
+            "name": "summary_1754961217.json",
+            "size": 202,
+            "modified": 1754961217.1399534
+          },
+          {
+            "name": "summary_1754961164.json",
+            "size": 202,
+            "modified": 1754961164.6202962
+          },
+          {
+            "name": "snapshot_1754961217.json",
+            "size": 2057,
+            "modified": 1754961217.1399534
+          },
+          {
+            "name": "error_slicing_1754961902.json",
+            "size": 22899,
+            "modified": 1754961902.7874231
+          },
+          {
+            "name": "best_metrics.json",
+            "size": 61,
+            "modified": 1754961905.163423
+          },
+          {
+            "name": "evidence_1754961164.json",
+            "size": 2141,
+            "modified": 1754961164.6202962
+          },
+          {
+            "name": "snapshot_1754960932.json",
+            "size": 65,
+            "modified": 1754960932.3592696
+          },
+          {
+            "name": "error_slicing_1754961162.json",
+            "size": 22893,
+            "modified": 1754961162.2262962
+          }
+        ]
+      }
+    }
+  }
+}

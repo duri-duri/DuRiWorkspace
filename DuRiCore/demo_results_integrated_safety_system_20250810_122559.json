@@ -1,0 +1,56 @@
+{
+  "scenarios": [
+    {
+      "name": "기본 작업 관리",
+      "description": "작업 항목 추가, 시작, 완료의 기본 워크플로우",
+      "success": false,
+      "details": {
+        "error": "안전성 위반으로 인해 작업 항목을 추가할 수 없습니다"
+      },
+      "start_time": "2025-08-10T12:25:56.575875",
+      "end_time": "2025-08-10T12:25:56.576016",
+      "duration_seconds": 0.000141
+    },
+    {
+      "name": "용량 거버넌스 테스트",
+      "description": "WIP 한계, LOC 변경량, 파일 변경량 제한 테스트",
+      "success": false,
+      "details": {
+        "error": "'current_wip'"
+      },
+      "start_time": "2025-08-10T12:25:56.576046",
+      "end_time": "2025-08-10T12:25:56.576076",
+      "duration_seconds": 3e-05
+    },
+    {
+      "name": "안전성 모니터링",
+      "description": "실시간 안전성 상태 모니터링 및 체크포인트",
+      "success": true,
+      "details": {
+        "error": "'safety_score'"
+      },
+      "start_time": "2025-08-10T12:25:56.576100",
+      "end_time": "2025-08-10T12:25:59.079766",
+      "duration_seconds": 2.503666
+    },
+    {
+      "name": "비상 대응",
+      "description": "비상 정지 및 복구 시나리오",
+      "success": true,
+      "details": {
+        "emergency_status": "emergency_stop",
+        "health_status": "error",
+        "emergency_stops_count": 1
+      },
+      "start_time": "2025-08-10T12:25:59.079790",
+      "end_time": "2025-08-10T12:25:59.079896",
+      "duration_seconds": 0.000106
+    }
+  ],
+  "total_scenarios": 4,
+  "successful_scenarios": 2,
+  "failed_scenarios": 2,
+  "start_time": "2025-08-10T12:25:56.574743",
+  "end_time": "2025-08-10T12:25:59.079899",
+  "duration_seconds": 2.505156
+}

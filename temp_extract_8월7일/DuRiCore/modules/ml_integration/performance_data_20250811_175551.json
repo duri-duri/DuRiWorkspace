@@ -1,0 +1,62 @@
+{
+  "export_time": "2025-08-11T17:55:51.049563",
+  "performance_history": [
+    {
+      "timestamp": "2025-08-11T17:55:43.044429",
+      "cpu_usage": 0.0,
+      "memory_usage": 13.5,
+      "execution_time": 1.4407016426925052,
+      "success_rate": 0.9888044368506854,
+      "error_count": 1,
+      "throughput": 118.54033897209487,
+      "latency": 56.09746063492904,
+      "score": 0.95434389737195,
+      "level": "excellent"
+    },
+    {
+      "timestamp": "2025-08-11T17:55:46.046306",
+      "cpu_usage": 0.0,
+      "memory_usage": 13.5,
+      "execution_time": 0.42488128819772575,
+      "success_rate": 0.8883991142959053,
+      "error_count": 0,
+      "throughput": 90.7361017837631,
+      "latency": 182.72121456382564,
+      "score": 0.9366654977770076,
+      "level": "excellent"
+    },
+    {
+      "timestamp": "2025-08-11T17:55:49.047578",
+      "cpu_usage": 0.1,
+      "memory_usage": 13.5,
+      "execution_time": 1.3498076265973054,
+      "success_rate": 0.9773370038812075,
+      "error_count": 1,
+      "throughput": 94.84383713312658,
+      "latency": 123.77179064487837,
+      "score": 0.945668221249297,
+      "level": "excellent"
+    }
+  ],
+  "alerts": [],
+  "optimization_suggestions": [
+    {
+      "timestamp": "2025-08-11T17:55:46.046333",
+      "priority": "medium",
+      "category": "reliability_improvement",
+      "title": "성공률 개선",
+      "description": "현재 성공률이 0.89로 개선이 필요합니다",
+      "expected_improvement": "성공률 5-10% 향상",
+      "implementation_steps": [
+        "오류 로그 분석 및 패턴 파악",
+        "예외 처리 로직 개선",
+        "재시도 메커니즘 구현"
+      ],
+      "estimated_effort": "4-8시간"
+    }
+  ],
+  "stats": {
+    "total_metrics_collected": 3,
+    "total_alerts_generated": 0,
+    "total_suggestions_generated": 1,
+    "monitoring_start_time": 

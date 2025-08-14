@@ -1,0 +1,30 @@
+{
+  "input": {
+    "raw": "",
+    "context": {},
+    "meta": {}
+  },
+  "intent": "",
+  "options": [],
+  "decision": {
+    "selected": "",
+    "score": 0.0,
+    "criteria": []
+  },
+  "rationale": [
+    {"reason": "", "evidence": [], "weight": 0.0}
+  ],
+  "uncertainty": {
+    "type": "",
+    "value": 0.0,
+    "notes": ""
+  },
+  "next_action": "",
+  "audit": {
+    "timestamp": "",
+    "version": "trace-v2",
+    "rev": ""
+  }
+}
+
+

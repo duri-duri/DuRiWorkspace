@@ -1,0 +1,12 @@
+{
+  "count": 20,
+  "ok": 0,
+  "timeouts": 20,
+  "timeout_rate": 1.0,
+  "p50_ms": null,
+  "p95_ms": null,
+  "max_ms": null,
+  "min_ms": null,
+  "mean_ms": null,
+  "simulation_time": "metrics"
+}

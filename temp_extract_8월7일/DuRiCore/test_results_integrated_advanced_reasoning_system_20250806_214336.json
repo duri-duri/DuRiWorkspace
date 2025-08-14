@@ -1,0 +1,148 @@
+[
+  {
+    "test_id": "day14_comprehensive_test_1754484216",
+    "test_time": "2025-08-06T21:43:36.588138",
+    "total_execution_time": 0.002424001693725586,
+    "test_results": {
+      "basic_functionality": {
+        "status": "success",
+        "system_status": {
+          "system_name": "IntegratedAdvancedReasoningSystem",
+          "status": "initializing",
+          "performance_metrics": {
+            "total_sessions": 9,
+            "average_consistency_score": 0.4018518518518518,
+            "average_integration_success_score": 0.16666666666666666,
+            "average_efficiency_score": 0.5279868333333333,
+            "average_reasoning_adaptation_score": 0.5433333333333333,
+            "average_overall_stability": 0.0
+          },
+          "total_integrations": 0,
+          "last_integration_time": null,
+          "day14_goals": {
+            "consistency_score_target": "60%",
+            "integration_success_target": "60%",
+            "efficiency_target": "80%",
+            "reasoning_adaptation_target": "70%",
+            "overall_stability_target": "90%"
+          }
+        },
+        "reasoning_session_id": "advanced_reasoning_session_1754484216",
+        "reasoning_level": "basic",
+        "system_status_value": "maintenance",
+        "performance_metrics": {}
+      },
+      "adaptive_reasoning": {
+        "status": "success",
+        "adaptive_results": [
+          {
+            "context": "problem_solving",
+            "reasoning_type": "unknown",
+            "confidence_score": 0.0,
+            "adaptation_score": 0.0
+          },
+          {
+            "context": "decision_making",
+            "reasoning_type": "unknown",
+            "confidence_score": 0.0,
+            "adaptation_score": 0.0
+          },
+          {
+            "context": "learning",
+            "reasoning_type": "unknown",
+            "confidence_score": 0.0,
+            "adaptation_score": 0.0
+          },
+          {
+            "context": "creation",
+            "reasoning_type": "unknown",
+            "confidence_score": 0.0,
+            "adaptation_score": 0.0
+          }
+        ],
+        "average_confidence": 0.0,
+        "average_adaptation": 0.0
+      },
+      "consistency_enhancement": {
+        "status": "success",
+        "original_consistency": 0.0,
+        "enhanced_consistency": 0.0,
+        "improvement_score": 0.0,
+        "enhancement_methods": []
+      },
+      "integration_success": {
+        "status": "success",
+        "improvement_score": 0.0,
+        "total_conflicts": 0,
+        "resolved_conflicts": 0,
+        "total_priorities": 0
+      },
+      "efficiency_optimization": {
+        "status": "success",
+        "original_efficiency": 0.0,
+        "optimized_efficiency": 0.0,
+        "improvement_score": 0.0,
+        "strategy": "unknown"
+      },
+      "integrated_system": {
+        "status": "failed",
+        "error": "INTEGRATED"
+      },
+      "performance": {
+        "status": "success",
+        "execution_time": 0.0001647472381591797,
+        "performance_metrics": {},
+        "system_status": "maintenance"
+      },
+      "day14_goals": {
+        "status": "success",
+        "performance_report": {
+          "consistency_score": 0.0,
+          "integration_success_score": 0.0,
+          "efficiency_score": 0.0,
+          "reasoning_adaptation_score": 0.0,
+          "overall_system_stability": 0.0
+        },
+        "goals_evaluation": {
+          "goals": {
+            "consistency_score": {
+              "current": 0.0,
+              "target": 0.6,
+              "achievement_rate": 0.0,
+              "status": "in_progress"
+            },
+            "integration_success_score": {
+              "current": 0.0,
+              "target": 0.6,
+              "achievement_rate": 0.0,
+              "status": "in_progress"
+            },
+            "efficiency_score": {
+              "current": 0.0,
+              "target": 0.8,
+              "achievement_rate": 0.0,
+              "status": "in_progress"
+            },
+            "reasoning_adaptation_score": {
+              "current": 0.0,
+              "target": 0.7,
+              "achievement_rate": 0.0,
+              "status": "in_progress"
+            },
+            "overall_system_stability": {
+              "current": 0.0,
+              "target": 0.9,
+              "achievement_rate": 0.0,
+              "status": "in_progress"
+            }
+          },
+          "total_achievement_rate": 0.0,
+          "overall_status": "in_progress",
+          "evaluation_time": "2025-08-06T21:43:36.588115"
+        }
+      }
+    },
+    "overall_status": "completed",
+    "success_rate": 0.875
+  }
+]

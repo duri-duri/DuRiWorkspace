@@ -1,0 +1,98 @@
+{
+  "equivalence_metrics": {
+    "description": "DuRi 동등성 검증 결과 SSOT 스키마",
+    "version": "1.0.0",
+    "fields": {
+      "overall_equivalence_score": {
+        "type": "float",
+        "range": [0.0, 1.0],
+        "description": "전체 동등성 점수 (0.995 이상이 정상)",
+        "required": true
+      },
+      "ks_pvalue": {
+        "type": "float",
+        "range": [0.0, 1.0],
+        "description": "Kolmogorov-Smirnov 검정 p-value (0.1 이상이 정상)",
+        "required": true
+      },
+      "metamorphic_match": {
+        "type": "float",
+        "range": [0.0, 1.0],
+        "description": "메타모픽 테스트 매치율 (0.999 이상이 정상)",
+        "required": true
+      },
+      "n_samples": {
+        "type": "integer",
+        "min": 1,
+        "description": "검증에 사용된 샘플 수",
+        "required": true
+      },
+      "last_eval_ts": {
+        "type": "string",
+        "format": "iso8601",
+        "description": "마지막 평가 타임스탬프",
+        "required": true
+      }
+    },
+    "validation_rules": {
+      "healthy_threshold": {
+        "overall_equivalence_score": 0.995,
+        "ks_pvalue": 0.1,
+        "metamorphic_match": 0.999
+      },
+      "warning_threshold": {
+        "overall_equivalence_score": 0.99,
+        "ks_pvalue": 0.05,
+        "metamorphic_match": 0.995
+      }
+    }
+  },
+  "system_metrics": {
+    "description": "DuRi 시스템 메트릭 SSOT 스키마",
+    "version": "1.0.0",
+    "fields": {
+      "workload_level": {
+        "type": "enum",
+        "values": ["idle", "normal", "high", "saturated", "unknown"],
+        "description": "작업량 수준 (unknown 시 E-stop 비대상)",
+        "default": "idle",
+        "required": true
+      },
+      "current_wip": {
+        "type": "integer",
+        "min": 0,
+        "description": "현재 진행 중인 작업 수",
+        "default": 0,
+        "required": true
+      },
+      "safety_score": {
+        "type": "float",
+        "range": [0.0, 1.0],
+        "description": "안전성 점수 (0.8 이상이 정상)",
+        "default": 1.0,
+        "required": true
+      },
+      "health_status": {
+        "type": "string",
+        "values": ["healthy", "warning", "critical", "unknown"],
+        "description": "시스템 건강 상태",
+        "default": "healthy",
+        "required": true
+      },
+      "last_update": {
+        "type": "string",
+        "format": "iso8601",
+        "description": "마지막 업데이트 타임스탬프",
+        "required": true
+      }
+    },
+    "validation_rules": {
+      "healthy_threshold": {
+        "safety_score": 0.8
+      },
+      "warning_threshold": {
+        "safety_score": 0.6
+      }
+    }
+  }
+}

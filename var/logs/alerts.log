@@ -1,0 +1,26 @@
+2025-08-13 15:42:38 SLO PASS Day8-Phase2
+2025-08-13 17:12:38 Day8 PASS (regression+SLO+export)
+2025-08-13 17:51:49 Day8 PASS (regression+SLO+export)
+2025-08-13 18:10:34 Day8 PASS (regression+SLO+export)
+{"trigger_time": 1755129570, "alert_time": 1755129570, "marker": "DAY9-1-1755129570-1422", "source": "day9_simulation", "timestamp": "2025-08-14T08:59:30.907032"}
+{"trigger_time": 1755129571, "alert_time": 1755129571, "marker": "DAY9-2-1755129571-24740", "source": "day9_simulation", "timestamp": "2025-08-14T08:59:31.367440"}
+{"trigger_time": 1755129571, "alert_time": 1755129571, "marker": "DAY9-3-1755129571-29350", "source": "day9_simulation", "timestamp": "2025-08-14T08:59:31.549740"}
+{"trigger_time": 1755129571, "alert_time": 1755129572, "marker": "DAY9-4-1755129571-21760", "source": "day9_simulation", "timestamp": "2025-08-14T08:59:32.146159"}
+{"trigger_time": 1755129572, "alert_time": 1755129572, "marker": "DAY9-5-1755129572-5085", "source": "day9_simulation", "timestamp": "2025-08-14T08:59:32.486518"}
+{"trigger_time": 1755129572, "alert_time": 1755129572, "marker": "DAY9-6-1755129572-30585", "source": "day9_simulation", "timestamp": "2025-08-14T08:59:32.967920"}
+{"trigger_time": 1755129573, "alert_time": 1755129573, "marker": "DAY9-7-1755129573-30761", "source": "day9_simulation", "timestamp": "2025-08-14T08:59:33.385440"}
+{"trigger_time": 1755129573, "alert_time": 1755129573, "marker": "DAY9-8-1755129573-27619", "source": "day9_simulation", "timestamp": "2025-08-14T08:59:33.978654"}
+{"trigger_time": 1755129574, "alert_time": 1755129574, "marker": "DAY9-9-1755129574-21393", "source": "day9_simulation", "timestamp": "2025-08-14T08:59:34.493692"}
+{"trigger_time": 1755129574, "alert_time": 1755129574, "marker": "DAY9-10-1755129574-10902", "source": "day9_simulation", "timestamp": "2025-08-14T08:59:34.991443"}
+{"trigger_time": 1755129575, "alert_time": 1755129578, "marker": "DAY9-11-1755129575-15548", "source": "day9_simulation", "timestamp": "2025-08-14T08:59:38.104654"}
+{"trigger_time": 1755129578, "alert_time": 1755129578, "marker": "DAY9-12-1755129578-27727", "source": "day9_simulation", "timestamp": "2025-08-14T08:59:38.313200"}
+{"trigger_time": 1755129578, "alert_time": 1755129578, "marker": "DAY9-13-1755129578-715", "source": "day9_simulation", "timestamp": "2025-08-14T08:59:38.842823"}
+{"trigger_time": 1755129578, "alert_time": 1755129579, "marker": "DAY9-14-1755129578-11714", "source": "day9_simulation", "timestamp": "2025-08-14T08:59:39.186389"}
+{"trigger_time": 1755129579, "alert_time": 1755129579, "marker": "DAY9-15-1755129579-6110", "source": "day9_simulation", "timestamp": "2025-08-14T08:59:39.627351"}
+{"trigger_time": 1755129579, "alert_time": 1755129580, "marker": "DAY9-16-1755129579-4126", "source": "day9_simulation", "timestamp": "2025-08-14T08:59:40.163963"}
+{"trigger_time": 1755129580, "alert_time": 1755129580, "marker": "DAY9-17-1755129580-2932", "source": "day9_simulation", "timestamp": "2025-08-14T08:59:40.525875"}
+{"trigger_time": 1755129580, "alert_time": 1755129580, "marker": "DAY9-18-1755129580-14753", "source": "day9_simulation", "timestamp": "2025-08-14T08:59:40.763379"}
+{"trigger_time": 1755129580, "alert_time": 1755129581, "marker": "DAY9-19-1755129580-923", "source": "day9_simulation", "timestamp": "2025-08-14T08:59:41.014085"}
+{"trigger_time": 1755129581, "alert_time": 1755129581, "marker": "DAY9-20-1755129581-25349", "source": "day9_simulation", "timestamp": "2025-08-14T08:59:41.471582"}
+2025-08-14 09:29:51 Day9 PASS (alert_latency+simulation+export)
+2025-08-14 09:37:35 Day9 PASS (alert_latency+simulation+export)

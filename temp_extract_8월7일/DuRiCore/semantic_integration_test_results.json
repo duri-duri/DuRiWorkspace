@@ -1,0 +1,52 @@
+{
+  "total_tests": 7,
+  "successful_tests": 3,
+  "failed_tests": 4,
+  "success_rate": 42.857142857142854,
+  "total_duration": 0.0014362335205078125,
+  "test_results": [
+    {
+      "test_name": "시맨틱 기본 기능 테스트",
+      "success": false,
+      "duration": 0.000179290771484375,
+      "timestamp": "2025-08-05T14:22:59.668640"
+    },
+    {
+      "test_name": "시맨틱 개념 관리 테스트",
+      "success": true,
+      "duration": 0.00028896331787109375,
+      "timestamp": "2025-08-05T14:22:59.668981"
+    },
+    {
+      "test_name": "시맨틱 추론 시스템 테스트",
+      "success": false,
+      "duration": 2.956390380859375e-05,
+      "timestamp": "2025-08-05T14:22:59.669084"
+    },
+    {
+      "test_name": "시맨틱 경로 찾기 테스트",
+      "success": true,
+      "duration": 6.67572021484375e-06,
+      "timestamp": "2025-08-05T14:22:59.669138"
+    },
+    {
+      "test_name": "시맨틱 지식 추론 테스트",
+      "success": true,
+      "duration": 0.00010633468627929688,
+      "timestamp": "2025-08-05T14:22:59.669283"
+    },
+    {
+      "test_name": "메모리 시스템 통합 테스트",
+      "success": false,
+      "duration": 0.0001354217529296875,
+      "timestamp": "2025-08-05T14:22:59.669465"
+    },
+    {
+      "test_name": "통합 시스템 매니저 테스트",
+      "success": false,
+      "duration": 0.00037407875061035156,
+      "timestamp": "2025-08-05T14:22:59.669861"
+    }
+  ],
+  "timestamp": "2025-08-05T14:22:59.669887"
+}

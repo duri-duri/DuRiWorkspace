@@ -1,0 +1,4 @@
+version: 20250813_104927
+sha256: d0220c65da7c19a839e9c963d884759dcba4f35cff2c7510be235d3ca9b9c202
+source: artifacts_phase1/frozen/current_freeze.json
+promoted_at: 2025-08-13T10:49:27+09:00

@@ -1,0 +1,13 @@
+seed: 42
+feature_topk: 3
+calibration: none
+use_xgb: false
+stacking_enabled: false
+gate:
+  max_mse_ratio: 1.4
+  max_r2_gap: 0.06
+  min_test_r2: 0.14
+  hard_filter:
+    max_mse_ratio: 2.0
+    max_nrmse_ratio: 1.4
+
