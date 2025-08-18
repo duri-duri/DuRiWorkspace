@@ -1,0 +1,37 @@
+name: DuRi Canary
+on:
+  workflow_dispatch:
+    inputs:
+      deploy_cmd:
+        description: 'Deploy shell command'
+        required: false
+      rollback_cmd:
+        description: 'Rollback shell command'
+        required: false
+
+jobs:
+  canary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Install tools
+        run: sudo apt-get update && sudo apt-get install -y jq curl
+      - name: Run pipeline
+        env:
+          PROM_URL: ${{ vars.PROM_URL || 'http://localhost:9090' }}
+          GRAFANA_URL: ${{ vars.GRAFANA_URL || 'http://localhost:3000' }}
+          GRAFANA_TOKEN: ${{ secrets.GRAFANA_TOKEN }}
+          DASH_UID: duri-phase-lat
+          P95_SLO_MS: ${{ vars.P95_SLO_MS || '350' }}
+          P99_SLO_MS: ${{ vars.P99_SLO_MS || '500' }}
+          WINDOW: ${{ vars.WINDOW || '10m' }}
+          STEP: ${{ vars.STEP || '15s' }}
+          WARMUP_SECS: ${{ vars.WARMUP_SECS || '60' }}
+          ANN_TAGS: canary,duri
+        run: |
+          bash tools/canary_pipeline.sh \
+            --deploy "${{ inputs.deploy_cmd || '' }}" \
+            --rollback "${{ inputs.rollback_cmd || '' }}"
