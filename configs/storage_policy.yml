@@ -1,0 +1,182 @@
+# configs/storage_policy.yml
+# 중앙 저장/백업/보호 정책의 단일 소스
+version: 1
+
+meta:
+  owner: "DuRi Ops"
+  last_review: "2025-08-20"
+  description: "Git 추적, 백업 포함/제외, 보존/삭제 금지 기준의 단일 정책"
+
+profiles:
+  # 필요시 다른 환경(dev/stage/prod)로 확장 가능
+  default:
+    git:
+      track:              # 반드시 Git에 포함
+        - "configs/**"
+        - "scripts/**"
+        - "ops/**"
+        - "tools/**"
+        - "unified_backup_full.sh"
+        - ".github/**"
+        - "var/reports/**/*.json"
+        - "var/reports/**/*.txt"
+        - "var/reports/**/*.xml"
+        - "learning_journal/**"
+        - "CURRENT_WORK_STATUS_*.md"
+        - "DuRi_*Plan*.md"
+        - "TOMORROW_START_GUIDE_*.md"
+      ignore:             # Git에서 제외(작업공간 산출물/캐시/대용량 바이너리)
+        - ".local/**"                 # 로컬 바이너리/툴 번들 (Grafana/Prometheus 등)
+        - "var/logs/**"               # 로그 파일 (표준화: var/logs/ 사용)
+        - "var/backups/**"
+        - "var/state/**"              # 런타임 상태 (백업에서 화이트리스트 포함)
+        - "**/__pycache__/**"
+        - "**/*.pyc"
+        - "node_modules/**"
+        - "dist/**"
+        - "build/**"
+        - "backups/**"               # 스냅샷 산출물(별도 백업 경로 운용)
+        - "duri_snapshots/**"
+        - "*.tmp"
+        - "*.temp"
+        - "*.bak"
+        - "*.tar.gz"
+        - "*.tar.zst"
+        - "backup/*/src/**"
+      size_limits:
+        max_blob_bytes: 90000000      # 90MB 이상 커밋 차단
+        allowlist: []                 # (필요시) 특정 대형 파일만 허용
+
+      submodules:
+        policy: "pointers-only"       # 서브모듈은 커밋 포인터만 관리(내용 스풀 금지)
+        paths:
+          - "duri_brain"
+          - "duri_control"
+          - "duri_core"
+          - "duri_evolution"
+          - "duri_all_scripts"
+
+    backup:
+      include:            # 백업에 반드시 포함(재현성/감사 목적)
+        - "configs/**"
+        - "scripts/**"
+        - "ops/**"
+        - "tools/**"
+        - ".github/**"
+        - "var/reports/**"
+        - "learning_journal/**"
+        - "CURRENT_WORK_STATUS_*.md"
+        - "DuRi_*Plan*.md"
+        - "TOMORROW_START_GUIDE_*.md"
+        # var/state 화이트리스트 백업 포함 (리스크 ≤2%)
+        - "var/state/backup_refs.json"
+        - "var/state/restore_slo.jsonl"
+      exclude:            # 백업에서 제외(재생성 가능/용량절감)
+        - ".git/**"
+        - ".local/**"
+        - "var/logs/**"              # 로그 파일 (표준화: var/logs/ 사용)
+        - "**/__pycache__/**"
+        - "**/*.pyc"
+        - "node_modules/**"
+        - "dist/**"
+        - "build/**"
+        - "*.tmp"
+        - "*.temp"
+        - "*.bak"
+        - "*.tar.gz"
+        - "*.tar.zst"
+        - "duri_snapshots/**"
+        - "backups/**"
+      retention:
+        # 정책 키는 도구에서 해석, 실제 cron은 스크립트에서 생성
+        daily:
+          keep: 7
+        weekly:
+          keep: 4
+          run_on: "Sun"
+        monthly:
+          keep: 6
+          run_on_day: 1
+        # 병합된 overrides: var/reports와 var/state 화이트리스트
+        overrides:
+          - path: "var/reports/**"
+            min_keep_days: 180
+          - path: "var/state/backup_refs.json"
+            min_keep_days: 30
+          - path: "var/state/restore_slo.jsonl"
+            min_keep_days: 30
+
+    safety:               # 삭제/정책 위반 방지 보호규칙
+      protect:
+        - "configs/**"
+        - "scripts/**"
+        - "ops/**"
+        - "tools/**"
+        - "var/reports/**"
+        - "learning_journal/**"
+        - "CURRENT_WORK_STATUS_*.md"
+        - "DuRi_*Plan*.md"
+        - "TOMORROW_START_GUIDE_*.md"
+      never_delete:       # 자동 정리에서 영구 제외
+        - "ops_baseline/**"
+        - "backup_repository/**"
+      dangerous_patterns: # PR/배포 차단 패턴
+        - "**/*.pem"
+        - "**/*.key"
+        - ".env"
+        - "secrets/**"
+
+    ci:
+      checks:
+        - name: "gitignore-sync"
+          description: "storage_policy.yml → .gitignore 동기화 검증"
+          tool: "tools/policy_check_gitignore.py"
+        - name: "backup-exclude-sync"
+          description: "storage_policy.yml → backup_exclude.txt 동기화 검증"
+          tool: "tools/policy_check_backup.py"
+        - name: "blob-size-guard"
+          description: "90MB 초과 바이너리 커밋 차단"
+          tool: "tools/blob_size_guard.py"
+        - name: "protected-path-guard"
+          description: "보호 경로 변경/삭제 감시"
+          tool: "tools/protected_path_guard.py"
+
+    generators:           # 정책 → 실제 파일 생성 매핑
+      gitignore:
+        output: ".gitignore"
+        template: "tools/templates/gitignore.j2"
+        source: "profiles.default.git"
+      backup_exclude:
+        output: "backup_exclude.txt"
+        template: "tools/templates/backup_exclude.j2"
+        source: "profiles.default.backup.exclude"
+      retention_cron:
+        output: "configs/retention.yml"
+        template: "tools/templates/retention.yml.j2"
+        source: "profiles.default.backup.retention"
+
+    observability:
+      emit_policy_fingerprint: true   # 정책 해시를 메트릭/로그로 방출
+      metric_name: "duri.storage_policy.hash"
+      report_files:
+        - "var/reports/policy_fingerprint.json"
+
+# 참고: 툴들이 사용하는 스키마 버전. 필요시 마이그레이션 로직에서 활용.
+schema:
+  git:
+    keys: ["track", "ignore", "size_limits", "submodules"]
+  backup:
+    keys: ["include", "exclude", "retention"]
+  safety:
+    keys: ["protect", "never_delete", "dangerous_patterns"]
+  ci:
+    keys: ["checks"]
+  generators:
+    keys: ["gitignore", "backup_exclude", "retention_cron"]
+
+# 운영 노트 (중요 경고사항)
+operations:
+  warnings:
+    - "repo_guard_setup.sh: 정책 확정 전 실행 금지 (var/ 광역 무시 주입 위험)"
+    - "var/logs/ 표준화: 생성 경로와 무시 규칙 통일 (var/logs/ 사용)"
+    - "var/state: 화이트리스트 백업 포함으로 리스크 ≤2% 달성"
