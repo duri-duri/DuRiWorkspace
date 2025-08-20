@@ -1,0 +1,20 @@
+groups:
+  - name: duri-latency
+    interval: 15s
+    rules:
+      # 개발/저부하 환경에서 NaN을 줄이기 위해 짧은 윈도우의 increase 기반으로 전환
+      - record: duri:latency_seconds:inc1m
+        expr: sum by (le, phase) (increase(latency_seconds_bucket[1m]))
+
+      - record: duri:latency_p95
+        expr: histogram_quantile(0.95, duri:latency_seconds:inc1m)
+
+      - record: duri:latency_p99
+        expr: histogram_quantile(0.99, duri:latency_seconds:inc1m)
+
+      - record: duri:latency_count
+        expr: sum by (phase) (increase(latency_seconds_count[1m]))
+
+      # 필요시 평균도 함께
+      - record: duri:latency_avg
+        expr: (sum by (phase) (increase(latency_seconds_sum[1m]))) / ignoring(le) (sum by (phase) (increase(latency_seconds_count[1m])))

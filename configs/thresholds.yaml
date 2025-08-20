@@ -36,3 +36,23 @@ day9:
     base_mu_ms: 700.0  # 로그정규분포 평균 (ms) - 검증됨
     base_sigma: 0.24  # 로그정규분포 표준편차 - 검증됨
     safety_margin_ms: 150.0  # 안전 마진 (ms) - 검증됨
+
+# 일반/타이트 모드 전환을 위한 gate_sets 추가
+gate_sets:
+  normal:
+    p95_ms_max: 1200
+    timeout_rate_wilson_ub: 0.02
+    missing_rate_wilson_ub: 0.005
+  tight:
+    p95_ms_max: 1100
+    timeout_rate_wilson_ub: 0.01
+    missing_rate_wilson_ub: 0.0025
+
+# 이미 운영 중인 값이 있으면 유지하세요. 아래 값은 Day9 기준 예시입니다.
+seeds: [17, 42, 123]
+timeout_ms:
+  measure: 2000
+  sweep: 1500
+sweep:
+  intensities: [0.2, 0.5, 0.8]
+  concurrencies: [1, 5, 10]

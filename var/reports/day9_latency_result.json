@@ -1,9 +1,9 @@
 {
-  "p95_ms": 1072.69,
-  "timeout_rate": 0.0,
+  "p95_ms": 1071.07,
+  "timeout_rate": 0.0017,
   "missing_rate": 0.0,
-  "delivered": 600,
+  "delivered": 599,
   "total": 600,
-  "timeouts": 0,
+  "timeouts": 1,
   "missings": 0
 }

@@ -1,0 +1,568 @@
+{
+  "schema_version": "1.1",
+  "run_id": "",
+  "timestamp": "2025-08-15T19:03:38.194964+09:00",
+  "git": {
+    "commit": "2600d0c5bff2292f7aebefd5da693f277ef2ea79",
+    "branch": "stabilized-2025-08-14",
+    "repo_remote": "git@github.com:duri-duri/DuRiWorkspace.git"
+  },
+  "host": {
+    "hostname": "duri-head",
+    "os": "Linux"
+  },
+  "phase": {
+    "name": "unknown",
+    "step": 0
+  },
+  "params": {},
+  "metrics": {},
+  "artifacts": [
+    {
+      "logical_name": "FULLDuRi_Phase2.1_Complete_Backup_20250805_181717.tar.gz",
+      "type": "cache",
+      "created_at": "2025-08-15T08:37:24.837526+09:00",
+      "size_bytes": 2963312,
+      "sha256": "4ae434e9fa19020b221b9a63ce276450efa4dbe3c5035959970e6bda0e439c07",
+      "local_path": "/home/duri/DuRiWorkspace/DuRi_Phase2.1_Complete_Backup_20250805_181717.tar.gz",
+      "backup_refs": [
+        "FULL__2025-08-15__0834__host-duri-head.tar.tar.zst/FULL__2025-08-15__0834__host-duri-head.tar.tar.zst:DuRi_Phase2.1_Complete_Backup_20250805_181717.tar.gz",
+        "FULL__2025-08-15__0917__host-duri-head.tar.zst/FULL__2025-08-15__0917__host-duri-head.tar.zst:DuRi_Phase2.1_Complete_Backup_20250805_181717.tar.gz",
+        "FULL__2025-08-15__0940__host-duri-head.tar.zst/FULL__2025-08-15__0940__host-duri-head.tar.zst:DuRi_Phase2.1_Complete_Backup_20250805_181717.tar.gz",
+        "FULL__2025-08-15__1722__host-duri-head.tar.zst/FULL__2025-08-15__1722__host-duri-head.tar.zst:DuRi_Phase2.1_Complete_Backup_20250805_181717.tar.gz",
+        "FULL__2025-08-15__1739__host-duri-head.tar.zst/FULL__2025-08-15__1739__host-duri-head.tar.zst:DuRi_Phase2.1_Complete_Backup_20250805_181717.tar.gz",
+        "FULL__2025-08-15__1900__host-duri-head.tar.zst/FULL__2025-08-15__1900__host-duri-head.tar.zst:DuRi_Phase2.1_Complete_Backup_20250805_181717.tar.gz"
+      ],
+      "tags": [],
+      "notes": "",
+      "source_host": "duri-head",
+      "storage_class": "hot"
+    },
+    {
+      "logical_name": "FULLDuRi_Phase2.1_Complete_Backup_20250805_181704.tar.gz",
+      "type": "cache",
+      "created_at": "2025-08-15T08:37:24.839505+09:00",
+      "size_bytes": 2963312,
+      "sha256": "4ae434e9fa19020b221b9a63ce276450efa4dbe3c5035959970e6bda0e439c07",
+      "local_path": "/home/duri/DuRiWorkspace/DuRi_Phase2.1_Complete_Backup_20250805_181704.tar.gz",
+      "backup_refs": [
+        "FULL__2025-08-15__0834__host-duri-head.tar.tar.zst/FULL__2025-08-15__0834__host-duri-head.tar.tar.zst:DuRi_Phase2.1_Complete_Backup_20250805_181704.tar.gz",
+        "FULL__2025-08-15__0917__host-duri-head.tar.zst/FULL__2025-08-15__0917__host-duri-head.tar.zst:DuRi_Phase2.1_Complete_Backup_20250805_181704.tar.gz",
+        "FULL__2025-08-15__0940__host-duri-head.tar.zst/FULL__2025-08-15__0940__host-duri-head.tar.zst:DuRi_Phase2.1_Complete_Backup_20250805_181704.tar.gz",
+        "FULL__2025-08-15__1722__host-duri-head.tar.zst/FULL__2025-08-15__1722__host-duri-head.tar.zst:DuRi_Phase2.1_Complete_Backup_20250805_181704.tar.gz",
+        "FULL__2025-08-15__1739__host-duri-head.tar.zst/FULL__2025-08-15__1739__host-duri-head.tar.zst:DuRi_Phase2.1_Complete_Backup_20250805_181704.tar.gz",
+        "FULL__2025-08-15__1900__host-duri-head.tar.zst/FULL__2025-08-15__1900__host-duri-head.tar.zst:DuRi_Phase2.1_Complete_Backup_20250805_181704.tar.gz"
+      ],
+      "tags": [],
+      "notes": "",
+      "source_host": "duri-head",
+      "storage_class": "hot"
+    },
+    {
+      "logical_name": "FULLDuRi_전략_판단_4단계_통합_시스템_백업_20250807_134651.tar.gz",
+      "type": "cache",
+      "created_at": "2025-08-15T08:37:24.841782+09:00",
+      "size_bytes": 3478294,
+      "sha256": "3456e449b0f41f47d3c5a7ab17bd4976ab8b6657f581cf1ec3f55ac8f30673f5",
+      "local_path": "/home/duri/DuRiWorkspace/DuRi_전략_판단_4단계_통합_시스템_백업_20250807_134651.tar.gz",
+      "backup_refs": [
+        "FULL__2025-08-15__0834__host-duri-head.tar.tar.zst/FULL__2025-08-15__0834__host-duri-head.tar.tar.zst:DuRi_전략_판단_4단계_통합_시스템_백업_20250807_134651.tar.gz",
+        "FULL__2025-08-15__0917__host-duri-head.tar.zst/FULL__2025-08-15__0917__host-duri-head.tar.zst:DuRi_전략_판단_4단계_통합_시스템_백업_20250807_134651.tar.gz",
+        "FULL__2025-08-15__0940__host-duri-head.tar.zst/FULL__2025-08-15__0940__host-duri-head.tar.zst:DuRi_전략_판단_4단계_통합_시스템_백업_20250807_134651.tar.gz",
+        "FULL__2025-08-15__1722__host-duri-head.tar.zst/FULL__2025-08-15__1722__host-duri-head.tar.zst:DuRi_전략_판단_4단계_통합_시스템_백업_20250807_134651.tar.gz",
+        "FULL__2025-08-15__1739__host-duri-head.tar.zst/FULL__2025-08-15__1739__host-duri-head.tar.zst:DuRi_전략_판단_4단계_통합_시스템_백업_20250807_134651.tar.gz",
+        "FULL__2025-08-15__1900__host-duri-head.tar.zst/FULL__2025-08-15__1900__host-duri-head.tar.zst:DuRi_전략_판단_4단계_통합_시스템_백업_20250807_134651.tar.gz"
+      ],
+      "tags": [],
+      "notes": "",
+      "source_host": "duri-head",
+      "storage_class": "hot"
+    },
+    {
+      "logical_name": "FULLDuRi_Phase1-3_Week3_Day10_Complete_Backup_20250806_141432.tar.gz",
+      "type": "cache",
+      "created_at": "2025-08-15T08:37:24.843569+09:00",
+      "size_bytes": 2355417,
+      "sha256": "668ef97e3e843df2ca3b36c9b08caa605359b40ec4a59b2d034609cb9ffdcfd4",
+      "local_path": "/home/duri/DuRiWorkspace/DuRi_Phase1-3_Week3_Day10_Complete_Backup_20250806_141432.tar.gz",
+      "backup_refs": [
+        "FULL__2025-08-15__0834__host-duri-head.tar.tar.zst/FULL__2025-08-15__0834__host-duri-head.tar.tar.zst:DuRi_Phase1-3_Week3_Day10_Complete_Backup_20250806_141432.tar.gz",
+        "FULL__2025-08-15__0917__host-duri-head.tar.zst/FULL__2025-08-15__0917__host-duri-head.tar.zst:DuRi_Phase1-3_Week3_Day10_Complete_Backup_20250806_141432.tar.gz",
+        "FULL__2025-08-15__0940__host-duri-head.tar.zst/FULL__2025-08-15__0940__host-duri-head.tar.zst:DuRi_Phase1-3_Week3_Day10_Complete_Backup_20250806_141432.tar.gz",
+        "FULL__2025-08-15__1722__host-duri-head.tar.zst/FULL__2025-08-15__1722__host-duri-head.tar.zst:DuRi_Phase1-3_Week3_Day10_Complete_Backup_20250806_141432.tar.gz",
+        "FULL__2025-08-15__1739__host-duri-head.tar.zst/FULL__2025-08-15__1739__host-duri-head.tar.zst:DuRi_Phase1-3_Week3_Day10_Complete_Backup_20250806_141432.tar.gz",
+        "FULL__2025-08-15__1900__host-duri-head.tar.zst/FULL__2025-08-15__1900__host-duri-head.tar.zst:DuRi_Phase1-3_Week3_Day10_Complete_Backup_20250806_141432.tar.gz"
+      ],
+      "tags": [],
+      "notes": "",
+      "source_host": "duri-head",
+      "storage_class": "hot"
+    },
+    {
+      "logical_name": "FULLDuRiWorkspace_20250727_1634_complete_backup.tar.gz",
+      "type": "cache",
+      "created_at": "2025-08-15T08:37:25.215694+09:00",
+      "size_bytes": 660922005,
+      "sha256": "740154824eb60af8e22ce7a17cfcce4afd2058ac77a9d7364b0639baa34cd78b",
+      "local_path": "/home/duri/DuRiWorkspace/DuRiWorkspace_20250727_1634_complete_backup.tar.gz",
+      "backup_refs": [
+        "FULL__2025-08-15__0834__host-duri-head.tar.tar.zst/FULL__2025-08-15__0834__host-duri-head.tar.tar.zst:DuRiWorkspace_20250727_1634_complete_backup.tar.gz",
+        "FULL__2025-08-15__0917__host-duri-head.tar.zst/FULL__2025-08-15__0917__host-duri-head.tar.zst:DuRiWorkspace_20250727_1634_complete_backup.tar.gz",
+        "FULL__2025-08-15__0940__host-duri-head.tar.zst/FULL__2025-08-15__0940__host-duri-head.tar.zst:DuRiWorkspace_20250727_1634_complete_backup.tar.gz",
+        "FULL__2025-08-15__1722__host-duri-head.tar.zst/FULL__2025-08-15__1722__host-duri-head.tar.zst:DuRiWorkspace_20250727_1634_complete_backup.tar.gz",
+        "FULL__2025-08-15__1739__host-duri-head.tar.zst/FULL__2025-08-15__1739__host-duri-head.tar.zst:DuRiWorkspace_20250727_1634_complete_backup.tar.gz",
+        "FULL__2025-08-15__1900__host-duri-head.tar.zst/FULL__2025-08-15__1900__host-duri-head.tar.zst:DuRiWorkspace_20250727_1634_complete_backup.tar.gz"
+      ],
+      "tags": [],
+      "notes": "",
+      "source_host": "duri-head",
+      "storage_class": "hot"
+    },
+    {
+      "logical_name": "FULLDuRi_BackupBackupBackup_20250810_224813.tar.gz",
+      "type": "cache",
+      "created_at": "2025-08-15T08:37:25.244342+09:00",
+      "size_bytes": 48539385,
+      "sha256": "1b56a430f95a38f31628592d656ae24236dc647ca82935fa03f892c9285db95d",
+      "local_path": "/home/duri/DuRiWorkspace/DuRi_BackupBackupBackup_20250810_224813.tar.gz",
+      "backup_refs": [
+        "FULL__2025-08-15__0834__host-duri-head.tar.tar.zst/FULL__2025-08-15__0834__host-duri-head.tar.tar.zst:DuRi_BackupBackupBackup_20250810_224813.tar.gz",
+        "FULL__2025-08-15__0917__host-duri-head.tar.zst/FULL__2025-08-15__0917__host-duri-head.tar.zst:DuRi_BackupBackupBackup_20250810_224813.tar.gz",
+        "FULL__2025-08-15__0940__host-duri-head.tar.zst/FULL__2025-08-15__0940__host-duri-head.tar.zst:DuRi_BackupBackupBackup_20250810_224813.tar.gz",
+        "FULL__2025-08-15__1722__host-duri-head.tar.zst/FULL__2025-08-15__1722__host-duri-head.tar.zst:DuRi_BackupBackupBackup_20250810_224813.tar.gz",
+        "FULL__2025-08-15__1739__host-duri-head.tar.zst/FULL__2025-08-15__1739__host-duri-head.tar.zst:DuRi_BackupBackupBackup_20250810_224813.tar.gz",
+        "FULL__2025-08-15__1900__host-duri-head.tar.zst/FULL__2025-08-15__1900__host-duri-head.tar.zst:DuRi_BackupBackupBackup_20250810_224813.tar.gz"
+      ],
+      "tags": [],
+      "notes": "",
+      "source_host": "duri-head",
+      "storage_class": "hot"
+    },
+    {
+      "logical_name": "FULLDuRi_Phase2_Complete_Backup_20250805_183912.tar.gz",
+      "type": "cache",
+      "created_at": "2025-08-15T08:37:25.246499+09:00",
+      "size_bytes": 2987243,
+      "sha256": "57a23efe19e6f865cc88950badcd74cac9acce0b40fdfeb98400957b271d316a",
+      "local_path": "/home/duri/DuRiWorkspace/DuRi_Phase2_Complete_Backup_20250805_183912.tar.gz",
+      "backup_refs": [
+        "FULL__2025-08-15__0834__host-duri-head.tar.tar.zst/FULL__2025-08-15__0834__host-duri-head.tar.tar.zst:DuRi_Phase2_Complete_Backup_20250805_183912.tar.gz",
+        "FULL__2025-08-15__0917__host-duri-head.tar.zst/FULL__2025-08-15__0917__host-duri-head.tar.zst:DuRi_Phase2_Complete_Backup_20250805_183912.tar.gz",
+        "FULL__2025-08-15__0940__host-duri-head.tar.zst/FULL__2025-08-15__0940__host-duri-head.tar.zst:DuRi_Phase2_Complete_Backup_20250805_183912.tar.gz",
+        "FULL__2025-08-15__1722__host-duri-head.tar.zst/FULL__2025-08-15__1722__host-duri-head.tar.zst:DuRi_Phase2_Complete_Backup_20250805_183912.tar.gz",
+        "FULL__2025-08-15__1739__host-duri-head.tar.zst/FULL__2025-08-15__1739__host-duri-head.tar.zst:DuRi_Phase2_Complete_Backup_20250805_183912.tar.gz",
+        "FULL__2025-08-15__1900__host-duri-head.tar.zst/FULL__2025-08-15__1900__host-duri-head.tar.zst:DuRi_Phase2_Complete_Backup_20250805_183912.tar.gz"
+      ],
+      "tags": [],
+      "notes": "",
+      "source_host": "duri-head",
+      "storage_class": "hot"
+    },
+    {
+      "logical_name": "FULLDuRi_Backup_20250810_224720.tar.gz",
+      "type": "cache",
+      "created_at": "2025-08-15T08:37:25.274337+09:00",
+      "size_bytes": 48539385,
+      "sha256": "1b56a430f95a38f31628592d656ae24236dc647ca82935fa03f892c9285db95d",
+      "local_path": "/home/duri/DuRiWorkspace/DuRi_Backup_20250810_224720.tar.gz",
+      "backup_refs": [
+        "FULL__2025-08-15__0834__host-duri-head.tar.tar.zst/FULL__2025-08-15__0834__host-duri-head.tar.tar.zst:DuRi_Backup_20250810_224720.tar.gz",
+        "FULL__2025-08-15__0917__host-duri-head.tar.zst/FULL__2025-08-15__0917__host-duri-head.tar.zst:DuRi_Backup_20250810_224720.tar.gz",
+        "FULL__2025-08-15__0940__host-duri-head.tar.zst/FULL__2025-08-15__0940__host-duri-head.tar.zst:DuRi_Backup_20250810_224720.tar.gz",
+        "FULL__2025-08-15__1722__host-duri-head.tar.zst/FULL__2025-08-15__1722__host-duri-head.tar.zst:DuRi_Backup_20250810_224720.tar.gz",
+        "FULL__2025-08-15__1739__host-duri-head.tar.zst/FULL__2025-08-15__1739__host-duri-head.tar.zst:DuRi_Backup_20250810_224720.tar.gz",
+        "FULL__2025-08-15__1900__host-duri-head.tar.zst/FULL__2025-08-15__1900__host-duri-head.tar.zst:DuRi_Backup_20250810_224720.tar.gz"
+      ],
+      "tags": [],
+      "notes": "",
+      "source_host": "duri-head",
+      "storage_class": "hot"
+    },
+    {
+      "logical_name": "FULLDuRi_Phase3_Complete_Backup_20250805_190404.tar.gz",
+      "type": "cache",
+      "created_at": "2025-08-15T08:37:25.276502+09:00",
+      "size_bytes": 3040700,
+      "sha256": "50ee4c83fcc9809de3fc70a8775d4d4c6a875c03f4df227539b2e69a5631b040",
+      "local_path": "/home/duri/DuRiWorkspace/DuRi_Phase3_Complete_Backup_20250805_190404.tar.gz",
+      "backup_refs": [
+        "FULL__2025-08-15__0834__host-duri-head.tar.tar.zst/FULL__2025-08-15__0834__host-duri-head.tar.tar.zst:DuRi_Phase3_Complete_Backup_20250805_190404.tar.gz",
+        "FULL__2025-08-15__0917__host-duri-head.tar.zst/FULL__2025-08-15__0917__host-duri-head.tar.zst:DuRi_Phase3_Complete_Backup_20250805_190404.tar.gz",
+        "FULL__2025-08-15__0940__host-duri-head.tar.zst/FULL__2025-08-15__0940__host-duri-head.tar.zst:DuRi_Phase3_Complete_Backup_20250805_190404.tar.gz",
+        "FULL__2025-08-15__1722__host-duri-head.tar.zst/FULL__2025-08-15__1722__host-duri-head.tar.zst:DuRi_Phase3_Complete_Backup_20250805_190404.tar.gz",
+        "FULL__2025-08-15__1739__host-duri-head.tar.zst/FULL__2025-08-15__1739__host-duri-head.tar.zst:DuRi_Phase3_Complete_Backup_20250805_190404.tar.gz",
+        "FULL__2025-08-15__1900__host-duri-head.tar.zst/FULL__2025-08-15__1900__host-duri-head.tar.zst:DuRi_Phase3_Complete_Backup_20250805_190404.tar.gz"
+      ],
+      "tags": [],
+      "notes": "",
+      "source_host": "duri-head",
+      "storage_class": "hot"
+    },
+    {
+      "logical_name": "FULLDuRi_Backup_Phase6_20250807_172145.tar.gz",
+      "type": "cache",
+      "created_at": "2025-08-15T08:37:25.691816+09:00",
+      "size_bytes": 710954734,
+      "sha256": "ecb384b48312cb591682fb4e43f27ef184fe8e73aeea6dae7a0ef516ced84b93",
+      "local_path": "/home/duri/DuRiWorkspace/DuRi_Backup_Phase6_20250807_172145.tar.gz",
+      "backup_refs": [
+        "FULL__2025-08-15__0834__host-duri-head.tar.tar.zst/FULL__2025-08-15__0834__host-duri-head.tar.tar.zst:DuRi_Backup_Phase6_20250807_172145.tar.gz",
+        "FULL__2025-08-15__0917__host-duri-head.tar.zst/FULL__2025-08-15__0917__host-duri-head.tar.zst:DuRi_Backup_Phase6_20250807_172145.tar.gz",
+        "FULL__2025-08-15__0940__host-duri-head.tar.zst/FULL__2025-08-15__0940__host-duri-head.tar.zst:DuRi_Backup_Phase6_20250807_172145.tar.gz",
+        "FULL__2025-08-15__1722__host-duri-head.tar.zst/FULL__2025-08-15__1722__host-duri-head.tar.zst:DuRi_Backup_Phase6_20250807_172145.tar.gz",
+        "FULL__2025-08-15__1739__host-duri-head.tar.zst/FULL__2025-08-15__1739__host-duri-head.tar.zst:DuRi_Backup_Phase6_20250807_172145.tar.gz",
+        "FULL__2025-08-15__1900__host-duri-head.tar.zst/FULL__2025-08-15__1900__host-duri-head.tar.zst:DuRi_Backup_Phase6_20250807_172145.tar.gz"
+      ],
+      "tags": [],
+      "notes": "",
+      "source_host": "duri-head",
+      "storage_class": "hot"
+    },
+    {
+      "logical_name": "FULLDuRi_3단계_통합_학습_시스템_백업_20250807_133917.tar.gz",
+      "type": "cache",
+      "created_at": "2025-08-15T08:37:25.694499+09:00",
+      "size_bytes": 3475120,
+      "sha256": "f8573e59f1cf34163e0735d65c4fd244da594ebbee19831d721b763bd8e55856",
+      "local_path": "/home/duri/DuRiWorkspace/DuRi_3단계_통합_학습_시스템_백업_20250807_133917.tar.gz",
+      "backup_refs": [
+        "FULL__2025-08-15__0834__host-duri-head.tar.tar.zst/FULL__2025-08-15__0834__host-duri-head.tar.tar.zst:DuRi_3단계_통합_학습_시스템_백업_20250807_133917.tar.gz",
+        "FULL__2025-08-15__0917__host-duri-head.tar.zst/FULL__2025-08-15__0917__host-duri-head.tar.zst:DuRi_3단계_통합_학습_시스템_백업_20250807_133917.tar.gz",
+        "FULL__2025-08-15__0940__host-duri-head.tar.zst/FULL__2025-08-15__0940__host-duri-head.tar.zst:DuRi_3단계_통합_학습_시스템_백업_20250807_133917.tar.gz",
+        "FULL__2025-08-15__1722__host-duri-head.tar.zst/FULL__2025-08-15__1722__host-duri-head.tar.zst:DuRi_3단계_통합_학습_시스템_백업_20250807_133917.tar.gz",
+        "FULL__2025-08-15__1739__host-duri-head.tar.zst/FULL__2025-08-15__1739__host-duri-head.tar.zst:DuRi_3단계_통합_학습_시스템_백업_20250807_133917.tar.gz",
+        "FULL__2025-08-15__1900__host-duri-head.tar.zst/FULL__2025-08-15__1900__host-duri-head.tar.zst:DuRi_3단계_통합_학습_시스템_백업_20250807_133917.tar.gz"
+      ],
+      "tags": [],
+      "notes": "",
+      "source_host": "duri-head",
+      "storage_class": "hot"
+    },
+    {
+      "logical_name": "FULLDuRi_Phase1-3_Week3_Day10_Complete_Backup_20250806_141448.tar.gz",
+      "type": "cache",
+      "created_at": "2025-08-15T08:37:25.696215+09:00",
+      "size_bytes": 2355417,
+      "sha256": "668ef97e3e843df2ca3b36c9b08caa605359b40ec4a59b2d034609cb9ffdcfd4",
+      "local_path": "/home/duri/DuRiWorkspace/DuRi_Phase1-3_Week3_Day10_Complete_Backup_20250806_141448.tar.gz",
+      "backup_refs": [
+        "FULL__2025-08-15__0834__host-duri-head.tar.tar.zst/FULL__2025-08-15__0834__host-duri-head.tar.tar.zst:DuRi_Phase1-3_Week3_Day10_Complete_Backup_20250806_141448.tar.gz",
+        "FULL__2025-08-15__0917__host-duri-head.tar.zst/FULL__2025-08-15__0917__host-duri-head.tar.zst:DuRi_Phase1-3_Week3_Day10_Complete_Backup_20250806_141448.tar.gz",
+        "FULL__2025-08-15__0940__host-duri-head.tar.zst/FULL__2025-08-15__0940__host-duri-head.tar.zst:DuRi_Phase1-3_Week3_Day10_Complete_Backup_20250806_141448.tar.gz",
+        "FULL__2025-08-15__1722__host-duri-head.tar.zst/FULL__2025-08-15__1722__host-duri-head.tar.zst:DuRi_Phase1-3_Week3_Day10_Complete_Backup_20250806_141448.tar.gz",
+        "FULL__2025-08-15__1739__host-duri-head.tar.zst/FULL__2025-08-15__1739__host-duri-head.tar.zst:DuRi_Phase1-3_Week3_Day10_Complete_Backup_20250806_141448.tar.gz",
+        "FULL__2025-08-15__1900__host-duri-head.tar.zst/FULL__2025-08-15__1900__host-duri-head.tar.zst:DuRi_Phase1-3_Week3_Day10_Complete_Backup_20250806_141448.tar.gz"
+      ],
+      "tags": [],
+      "notes": "",
+      "source_host": "duri-head",
+      "storage_class": "hot"
+    },
+    {
+      "logical_name": "FULLDuRi_Phase6_Completion_Backup_20250729_132725.tar.gz",
+      "type": "cache",
+      "created_at": "2025-08-15T08:37:26.058963+09:00",
+      "size_bytes": 664564949,
+      "sha256": "d5f145a507b797b3416a90ff13b27d131475d8f1c3c811563f4385a81fc45704",
+      "local_path": "/home/duri/DuRiWorkspace/DuRi_Phase6_Completion_Backup_20250729_132725.tar.gz",
+      "backup_refs": [
+        "FULL__2025-08-15__0834__host-duri-head.tar.tar.zst/FULL__2025-08-15__0834__host-duri-head.tar.tar.zst:DuRi_Phase6_Completion_Backup_20250729_132725.tar.gz",
+        "FULL__2025-08-15__0917__host-duri-head.tar.zst/FULL__2025-08-15__0917__host-duri-head.tar.zst:DuRi_Phase6_Completion_Backup_20250729_132725.tar.gz",
+        "FULL__2025-08-15__0940__host-duri-head.tar.zst/FULL__2025-08-15__0940__host-duri-head.tar.zst:DuRi_Phase6_Completion_Backup_20250729_132725.tar.gz",
+        "FULL__2025-08-15__1722__host-duri-head.tar.zst/FULL__2025-08-15__1722__host-duri-head.tar.zst:DuRi_Phase6_Completion_Backup_20250729_132725.tar.gz",
+        "FULL__2025-08-15__1739__host-duri-head.tar.zst/FULL__2025-08-15__1739__host-duri-head.tar.zst:DuRi_Phase6_Completion_Backup_20250729_132725.tar.gz",
+        "FULL__2025-08-15__1900__host-duri-head.tar.zst/FULL__2025-08-15__1900__host-duri-head.tar.zst:DuRi_Phase6_Completion_Backup_20250729_132725.tar.gz"
+      ],
+      "tags": [],
+      "notes": "",
+      "source_host": "duri-head",
+      "storage_class": "hot"
+    },
+    {
+      "logical_name": "FULLDuRi_Phase2_Complete_Backup_20250805_183920.tar.gz",
+      "type": "cache",
+      "created_at": "2025-08-15T08:37:26.060466+09:00",
+      "size_bytes": 1993119,
+      "sha256": "6ac86f80473b3ee45e00660605a27fc5598b40bbdaf2cc5678bdbc9d074a687c",
+      "local_path": "/home/duri/DuRiWorkspace/DuRi_Phase2_Complete_Backup_20250805_183920.tar.gz",
+      "backup_refs": [
+        "FULL__2025-08-15__0834__host-duri-head.tar.tar.zst/FULL__2025-08-15__0834__host-duri-head.tar.tar.zst:DuRi_Phase2_Complete_Backup_20250805_183920.tar.gz",
+        "FULL__2025-08-15__0917__host-duri-head.tar.zst/FULL__2025-08-15__0917__host-duri-head.tar.zst:DuRi_Phase2_Complete_Backup_20250805_183920.tar.gz",
+        "FULL__2025-08-15__0940__host-duri-head.tar.zst/FULL__2025-08-15__0940__host-duri-head.tar.zst:DuRi_Phase2_Complete_Backup_20250805_183920.tar.gz",
+        "FULL__2025-08-15__1722__host-duri-head.tar.zst/FULL__2025-08-15__1722__host-duri-head.tar.zst:DuRi_Phase2_Complete_Backup_20250805_183920.tar.gz",
+        "FULL__2025-08-15__1739__host-duri-head.tar.zst/FULL__2025-08-15__1739__host-duri-head.tar.zst:DuRi_Phase2_Complete_Backup_20250805_183920.tar.gz",
+        "FULL__2025-08-15__1900__host-duri-head.tar.zst/FULL__2025-08-15__1900__host-duri-head.tar.zst:DuRi_Phase2_Complete_Backup_20250805_183920.tar.gz"
+      ],
+      "tags": [],
+      "notes": "",
+      "source_host": "duri-head",
+      "storage_class": "hot"
+    },
+    {
+      "logical_name": "FULLDuRi_Backup_Phase5_20250807_165308.tar.gz",
+      "type": "cache",
+      "created_at": "2025-08-15T08:37:26.459326+09:00",
+      "size_bytes": 710945712,
+      "sha256": "e8bf24f9fb06868d79de39447a205f51496d564bde8957282fb0c0143569a4f4",
+      "local_path": "/home/duri/DuRiWorkspace/DuRi_Backup_Phase5_20250807_165308.tar.gz",
+      "backup_refs": [
+        "FULL__2025-08-15__0834__host-duri-head.tar.tar.zst/FULL__2025-08-15__0834__host-duri-head.tar.tar.zst:DuRi_Backup_Phase5_20250807_165308.tar.gz",
+        "FULL__2025-08-15__0917__host-duri-head.tar.zst/FULL__2025-08-15__0917__host-duri-head.tar.zst:DuRi_Backup_Phase5_20250807_165308.tar.gz",
+        "FULL__2025-08-15__0940__host-duri-head.tar.zst/FULL__2025-08-15__0940__host-duri-head.tar.zst:DuRi_Backup_Phase5_20250807_165308.tar.gz",
+        "FULL__2025-08-15__1722__host-duri-head.tar.zst/FULL__2025-08-15__1722__host-duri-head.tar.zst:DuRi_Backup_Phase5_20250807_165308.tar.gz",
+        "FULL__2025-08-15__1739__host-duri-head.tar.zst/FULL__2025-08-15__1739__host-duri-head.tar.zst:DuRi_Backup_Phase5_20250807_165308.tar.gz",
+        "FULL__2025-08-15__1900__host-duri-head.tar.zst/FULL__2025-08-15__1900__host-duri-head.tar.zst:DuRi_Backup_Phase5_20250807_165308.tar.gz"
+      ],
+      "tags": [],
+      "notes": "",
+      "source_host": "duri-head",
+      "storage_class": "hot"
+    },
+    {
+      "logical_name": "FULLDuRi_Phase4_Complete_Backup_20250806_091217.tar.gz",
+      "type": "cache",
+      "created_at": "2025-08-15T08:37:26.461009+09:00",
+      "size_bytes": 2020781,
+      "sha256": "6d092464214d25093ef967f60d924e86aed09a177c79331c65619dbad2bd6de0",
+      "local_path": "/home/duri/DuRiWorkspace/DuRi_Phase4_Complete_Backup_20250806_091217.tar.gz",
+      "backup_refs": [
+        "FULL__2025-08-15__0834__host-duri-head.tar.tar.zst/FULL__2025-08-15__0834__host-duri-head.tar.tar.zst:DuRi_Phase4_Complete_Backup_20250806_091217.tar.gz",
+        "FULL__2025-08-15__0917__host-duri-head.tar.zst/FULL__2025-08-15__0917__host-duri-head.tar.zst:DuRi_Phase4_Complete_Backup_20250806_091217.tar.gz",
+        "FULL__2025-08-15__0940__host-duri-head.tar.zst/FULL__2025-08-15__0940__host-duri-head.tar.zst:DuRi_Phase4_Complete_Backup_20250806_091217.tar.gz",
+        "FULL__2025-08-15__1722__host-duri-head.tar.zst/FULL__2025-08-15__1722__host-duri-head.tar.zst:DuRi_Phase4_Complete_Backup_20250806_091217.tar.gz",
+        "FULL__2025-08-15__1739__host-duri-head.tar.zst/FULL__2025-08-15__1739__host-duri-head.tar.zst:DuRi_Phase4_Complete_Backup_20250806_091217.tar.gz",
+        "FULL__2025-08-15__1900__host-duri-head.tar.zst/FULL__2025-08-15__1900__host-duri-head.tar.zst:DuRi_Phase4_Complete_Backup_20250806_091217.tar.gz"
+      ],
+      "tags": [],
+      "notes": "",
+      "source_host": "duri-head",
+      "storage_class": "hot"
+    },
+    {
+      "logical_name": "FULLDuRi_BackupBackup_20250810_224756.tar.gz",
+      "type": "cache",
+      "created_at": "2025-08-15T08:37:26.487392+09:00",
+      "size_bytes": 48539385,
+      "sha256": "1b56a430f95a38f31628592d656ae24236dc647ca82935fa03f892c9285db95d",
+      "local_path": "/home/duri/DuRiWorkspace/DuRi_BackupBackup_20250810_224756.tar.gz",
+      "backup_refs": [
+        "FULL__2025-08-15__0834__host-duri-head.tar.tar.zst/FULL__2025-08-15__0834__host-duri-head.tar.tar.zst:DuRi_BackupBackup_20250810_224756.tar.gz",
+        "FULL__2025-08-15__0917__host-duri-head.tar.zst/FULL__2025-08-15__0917__host-duri-head.tar.zst:DuRi_BackupBackup_20250810_224756.tar.gz",
+        "FULL__2025-08-15__0940__host-duri-head.tar.zst/FULL__2025-08-15__0940__host-duri-head.tar.zst:DuRi_BackupBackup_20250810_224756.tar.gz",
+        "FULL__2025-08-15__1722__host-duri-head.tar.zst/FULL__2025-08-15__1722__host-duri-head.tar.zst:DuRi_BackupBackup_20250810_224756.tar.gz",
+        "FULL__2025-08-15__1739__host-duri-head.tar.zst/FULL__2025-08-15__1739__host-duri-head.tar.zst:DuRi_BackupBackup_20250810_224756.tar.gz",
+        "FULL__2025-08-15__1900__host-duri-head.tar.zst/FULL__2025-08-15__1900__host-duri-head.tar.zst:DuRi_BackupBackup_20250810_224756.tar.gz"
+      ],
+      "tags": [],
+      "notes": "",
+      "source_host": "duri-head",
+      "storage_class": "hot"
+    },
+    {
+      "logical_name": "FULLDuRi_PhaseZ_Complete_Backup_20250806_145306.tar.gz",
+      "type": "cache",
+      "created_at": "2025-08-15T08:37:26.489127+09:00",
+      "size_bytes": 2392295,
+      "sha256": "11fd7041d8c4267424723a842aa5dbe205adb6bdd44dbc3e49ed0cfd81ff1f79",
+      "local_path": "/home/duri/DuRiWorkspace/DuRi_PhaseZ_Complete_Backup_20250806_145306.tar.gz",
+      "backup_refs": [
+        "FULL__2025-08-15__0834__host-duri-head.tar.tar.zst/FULL__2025-08-15__0834__host-duri-head.tar.tar.zst:DuRi_PhaseZ_Complete_Backup_20250806_145306.tar.gz",
+        "FULL__2025-08-15__0917__host-duri-head.tar.zst/FULL__2025-08-15__0917__host-duri-head.tar.zst:DuRi_PhaseZ_Complete_Backup_20250806_145306.tar.gz",
+        "FULL__2025-08-15__0940__host-duri-head.tar.zst/FULL__2025-08-15__0940__host-duri-head.tar.zst:DuRi_PhaseZ_Complete_Backup_20250806_145306.tar.gz",
+        "FULL__2025-08-15__1722__host-duri-head.tar.zst/FULL__2025-08-15__1722__host-duri-head.tar.zst:DuRi_PhaseZ_Complete_Backup_20250806_145306.tar.gz",
+        "FULL__2025-08-15__1739__host-duri-head.tar.zst/FULL__2025-08-15__1739__host-duri-head.tar.zst:DuRi_PhaseZ_Complete_Backup_20250806_145306.tar.gz",
+        "FULL__2025-08-15__1900__host-duri-head.tar.zst/FULL__2025-08-15__1900__host-duri-head.tar.zst:DuRi_PhaseZ_Complete_Backup_20250806_145306.tar.gz"
+      ],
+      "tags": [],
+      "notes": "",
+      "source_host": "duri-head",
+      "storage_class": "hot"
+    },
+    {
+      "logical_name": "FULLDuRi_Backup_20250810_224713.tar.gz",
+      "type": "cache",
+      "created_at": "2025-08-15T08:37:26.516755+09:00",
+      "size_bytes": 48539385,
+      "sha256": "1b56a430f95a38f31628592d656ae24236dc647ca82935fa03f892c9285db95d",
+      "local_path": "/home/duri/DuRiWorkspace/DuRi_Backup_20250810_224713.tar.gz",
+      "backup_refs": [
+        "FULL__2025-08-15__0834__host-duri-head.tar.tar.zst/FULL__2025-08-15__0834__host-duri-head.tar.tar.zst:DuRi_Backup_20250810_224713.tar.gz",
+        "FULL__2025-08-15__0917__host-duri-head.tar.zst/FULL__2025-08-15__0917__host-duri-head.tar.zst:DuRi_Backup_20250810_224713.tar.gz",
+        "FULL__2025-08-15__0940__host-duri-head.tar.zst/FULL__2025-08-15__0940__host-duri-head.tar.zst:DuRi_Backup_20250810_224713.tar.gz",
+        "FULL__2025-08-15__1722__host-duri-head.tar.zst/FULL__2025-08-15__1722__host-duri-head.tar.zst:DuRi_Backup_20250810_224713.tar.gz",
+        "FULL__2025-08-15__1739__host-duri-head.tar.zst/FULL__2025-08-15__1739__host-duri-head.tar.zst:DuRi_Backup_20250810_224713.tar.gz",
+        "FULL__2025-08-15__1900__host-duri-head.tar.zst/FULL__2025-08-15__1900__host-duri-head.tar.zst:DuRi_Backup_20250810_224713.tar.gz"
+      ],
+      "tags": [],
+      "notes": "",
+      "source_host": "duri-head",
+      "storage_class": "hot"
+    },
+    {
+      "logical_name": "FULLDuRi_Pre_Implementation_Backup_20250729_110059.tar.gz",
+      "type": "cache",
+      "created_at": "2025-08-15T08:37:26.520838+09:00",
+      "size_bytes": 6844111,
+      "sha256": "4741a558ff4657350ba448057985e97d72d7253dd78729c10e1b21d3c3ccc40d",
+      "local_path": "/home/duri/DuRiWorkspace/DuRi_Pre_Implementation_Backup_20250729_110059.tar.gz",
+      "backup_refs": [
+        "FULL__2025-08-15__0834__host-duri-head.tar.tar.zst/FULL__2025-08-15__0834__host-duri-head.tar.tar.zst:DuRi_Pre_Implementation_Backup_20250729_110059.tar.gz",
+        "FULL__2025-08-15__0917__host-duri-head.tar.zst/FULL__2025-08-15__0917__host-duri-head.tar.zst:DuRi_Pre_Implementation_Backup_20250729_110059.tar.gz",
+        "FULL__2025-08-15__0940__host-duri-head.tar.zst/FULL__2025-08-15__0940__host-duri-head.tar.zst:DuRi_Pre_Implementation_Backup_20250729_110059.tar.gz",
+        "FULL__2025-08-15__1722__host-duri-head.tar.zst/FULL__2025-08-15__1722__host-duri-head.tar.zst:DuRi_Pre_Implementation_Backup_20250729_110059.tar.gz",
+        "FULL__2025-08-15__1739__host-duri-head.tar.zst/FULL__2025-08-15__1739__host-duri-head.tar.zst:DuRi_Pre_Implementation_Backup_20250729_110059.tar.gz",
+        "FULL__2025-08-15__1900__host-duri-head.tar.zst/FULL__2025-08-15__1900__host-duri-head.tar.zst:DuRi_Pre_Implementation_Backup_20250729_110059.tar.gz"
+      ],
+      "tags": [],
+      "notes": "",
+      "source_host": "duri-head",
+      "storage_class": "hot"
+    },
+    {
+      "logical_name": "FULLDuRi_Day6_Completion_20250813_143801.tar.gz",
+      "type": "cache",
+      "created_at": "2025-08-15T08:37:26.524816+09:00",
+      "size_bytes": 6026705,
+      "sha256": "6392d911da5b5833aa3fc77dcc2577a8fd38d9afda85ead0784ab379b0c106f4",
+      "local_path": "/home/duri/DuRiWorkspace/DuRi_Day6_Completion_20250813_143801.tar.gz",
+      "backup_refs": [
+        "FULL__2025-08-15__0834__host-duri-head.tar.tar.zst/FULL__2025-08-15__0834__host-duri-head.tar.tar.zst:DuRi_Day6_Completion_20250813_143801.tar.gz",
+        "FULL__2025-08-15__0917__host-duri-head.tar.zst/FULL__2025-08-15__0917__host-duri-head.tar.zst:DuRi_Day6_Completion_20250813_143801.tar.gz",
+        "FULL__2025-08-15__0940__host-duri-head.tar.zst/FULL__2025-08-15__0940__host-duri-head.tar.zst:DuRi_Day6_Completion_20250813_143801.tar.gz",
+        "FULL__2025-08-15__1722__host-duri-head.tar.zst/FULL__2025-08-15__1722__host-duri-head.tar.zst:DuRi_Day6_Completion_20250813_143801.tar.gz",
+        "FULL__2025-08-15__1739__host-duri-head.tar.zst/FULL__2025-08-15__1739__host-duri-head.tar.zst:DuRi_Day6_Completion_20250813_143801.tar.gz",
+        "FULL__2025-08-15__1900__host-duri-head.tar.zst/FULL__2025-08-15__1900__host-duri-head.tar.zst:DuRi_Day6_Completion_20250813_143801.tar.gz"
+      ],
+      "tags": [],
+      "notes": "",
+      "source_host": "duri-head",
+      "storage_class": "hot"
+    },
+    {
+      "logical_name": "FULLDuRi_Backup_Phase4_20250807_163323.tar.gz",
+      "type": "cache",
+      "created_at": "2025-08-15T08:37:26.916255+09:00",
+      "size_bytes": 710925407,
+      "sha256": "bf6472407c9ca960c61f14449e0271c769ba9719a108d8abdd3f9c7d224bd224",
+      "local_path": "/home/duri/DuRiWorkspace/DuRi_Backup_Phase4_20250807_163323.tar.gz",
+      "backup_refs": [
+        "FULL__2025-08-15__0834__host-duri-head.tar.tar.zst/FULL__2025-08-15__0834__host-duri-head.tar.tar.zst:DuRi_Backup_Phase4_20250807_163323.tar.gz",
+        "FULL__2025-08-15__0917__host-duri-head.tar.zst/FULL__2025-08-15__0917__host-duri-head.tar.zst:DuRi_Backup_Phase4_20250807_163323.tar.gz",
+        "FULL__2025-08-15__0940__host-duri-head.tar.zst/FULL__2025-08-15__0940__host-duri-head.tar.zst:DuRi_Backup_Phase4_20250807_163323.tar.gz",
+        "FULL__2025-08-15__1722__host-duri-head.tar.zst/FULL__2025-08-15__1722__host-duri-head.tar.zst:DuRi_Backup_Phase4_20250807_163323.tar.gz",
+        "FULL__2025-08-15__1739__host-duri-head.tar.zst/FULL__2025-08-15__1739__host-duri-head.tar.zst:DuRi_Backup_Phase4_20250807_163323.tar.gz",
+        "FULL__2025-08-15__1900__host-duri-head.tar.zst/FULL__2025-08-15__1900__host-duri-head.tar.zst:DuRi_Backup_Phase4_20250807_163323.tar.gz"
+      ],
+      "tags": [],
+      "notes": "",
+      "source_host": "duri-head",
+      "storage_class": "hot"
+    },
+    {
+      "logical_name": "FULLDuRiWorkspace_20250725_1822_backup.tar.gz",
+      "type": "cache",
+      "created_at": "2025-08-15T08:37:26.918263+09:00",
+      "size_bytes": 3178675,
+      "sha256": "b0b0bcdbb72394f4408b34090f4a3a702d8f68be4fb322c3162ca55d36eb3f1c",
+      "local_path": "/home/duri/DuRiWorkspace/DuRiWorkspace_20250725_1822_backup.tar.gz",
+      "backup_refs": [
+        "FULL__2025-08-15__0834__host-duri-head.tar.tar.zst/FULL__2025-08-15__0834__host-duri-head.tar.tar.zst:DuRiWorkspace_20250725_1822_backup.tar.gz",
+        "FULL__2025-08-15__0917__host-duri-head.tar.zst/FULL__2025-08-15__0917__host-duri-head.tar.zst:DuRiWorkspace_20250725_1822_backup.tar.gz",
+        "FULL__2025-08-15__0940__host-duri-head.tar.zst/FULL__2025-08-15__0940__host-duri-head.tar.zst:DuRiWorkspace_20250725_1822_backup.tar.gz",
+        "FULL__2025-08-15__1722__host-duri-head.tar.zst/FULL__2025-08-15__1722__host-duri-head.tar.zst:DuRiWorkspace_20250725_1822_backup.tar.gz",
+        "FULL__2025-08-15__1739__host-duri-head.tar.zst/FULL__2025-08-15__1739__host-duri-head.tar.zst:DuRiWorkspace_20250725_1822_backup.tar.gz",
+        "FULL__2025-08-15__1900__host-duri-head.tar.zst/FULL__2025-08-15__1900__host-duri-head.tar.zst:DuRiWorkspace_20250725_1822_backup.tar.gz"
+      ],
+      "tags": [],
+      "notes": "",
+      "source_host": "duri-head",
+      "storage_class": "hot"
+    },
+    {
+      "logical_name": "FULLDuRi_PhaseZ_Complete_Backup_20250806_145316.tar.gz",
+      "type": "cache",
+      "created_at": "2025-08-15T08:37:26.919926+09:00",
+      "size_bytes": 2392295,
+      "sha256": "11fd7041d8c4267424723a842aa5dbe205adb6bdd44dbc3e49ed0cfd81ff1f79",
+      "local_path": "/home/duri/DuRiWorkspace/DuRi_PhaseZ_Complete_Backup_20250806_145316.tar.gz",
+      "backup_refs": [
+        "FULL__2025-08-15__0834__host-duri-head.tar.tar.zst/FULL__2025-08-15__0834__host-duri-head.tar.tar.zst:DuRi_PhaseZ_Complete_Backup_20250806_145316.tar.gz",
+        "FULL__2025-08-15__0917__host-duri-head.tar.zst/FULL__2025-08-15__0917__host-duri-head.tar.zst:DuRi_PhaseZ_Complete_Backup_20250806_145316.tar.gz",
+        "FULL__2025-08-15__0940__host-duri-head.tar.zst/FULL__2025-08-15__0940__host-duri-head.tar.zst:DuRi_PhaseZ_Complete_Backup_20250806_145316.tar.gz",
+        "FULL__2025-08-15__1722__host-duri-head.tar.zst/FULL__2025-08-15__1722__host-duri-head.tar.zst:DuRi_PhaseZ_Complete_Backup_20250806_145316.tar.gz",
+        "FULL__2025-08-15__1739__host-duri-head.tar.zst/FULL__2025-08-15__1739__host-duri-head.tar.zst:DuRi_PhaseZ_Complete_Backup_20250806_145316.tar.gz",
+        "FULL__2025-08-15__1900__host-duri-head.tar.zst/FULL__2025-08-15__1900__host-duri-head.tar.zst:DuRi_PhaseZ_Complete_Backup_20250806_145316.tar.gz"
+      ],
+      "tags": [],
+      "notes": "",
+      "source_host": "duri-head",
+      "storage_class": "hot"
+    },
+    {
+      "logical_name": "FULLDuRi_Stable_Backup_20250728_194912.tar.gz",
+      "type": "cache",
+      "created_at": "2025-08-15T08:37:26.924196+09:00",
+      "size_bytes": 7366628,
+      "sha256": "8cfaeb0e6ac2c48ddd0d6e699a3362ec69c6fe0606c9f988d8ac2ef68bfbf8e2",
+      "local_path": "/home/duri/DuRiWorkspace/DuRi_Stable_Backup_20250728_194912.tar.gz",
+      "backup_refs": [
+        "FULL__2025-08-15__0834__host-duri-head.tar.tar.zst/FULL__2025-08-15__0834__host-duri-head.tar.tar.zst:DuRi_Stable_Backup_20250728_194912.tar.gz",
+        "FULL__2025-08-15__0917__host-duri-head.tar.zst/FULL__2025-08-15__0917__host-duri-head.tar.zst:DuRi_Stable_Backup_20250728_194912.tar.gz",
+        "FULL__2025-08-15__0940__host-duri-head.tar.zst/FULL__2025-08-15__0940__host-duri-head.tar.zst:DuRi_Stable_Backup_20250728_194912.tar.gz",
+        "FULL__2025-08-15__1722__host-duri-head.tar.zst/FULL__2025-08-15__1722__host-duri-head.tar.zst:DuRi_Stable_Backup_20250728_194912.tar.gz",
+        "FULL__2025-08-15__1739__host-duri-head.tar.zst/FULL__2025-08-15__1739__host-duri-head.tar.zst:DuRi_Stable_Backup_20250728_194912.tar.gz",
+        "FULL__2025-08-15__1900__host-duri-head.tar.zst/FULL__2025-08-15__1900__host-duri-head.tar.zst:DuRi_Stable_Backup_20250728_194912.tar.gz"
+      ],
+      "tags": [],
+      "notes": "",
+      "source_host": "duri-head",
+      "storage_class": "hot"
+    },
+    {
+      "logical_name": "FULLDuRi_Phase4_Complete_Backup_20250806_091224.tar.gz",
+      "type": "cache",
+      "created_at": "2025-08-15T08:37:26.925677+09:00",
+      "size_bytes": 2020781,
+      "sha256": "6d092464214d25093ef967f60d924e86aed09a177c79331c65619dbad2bd6de0",
+      "local_path": "/home/duri/DuRiWorkspace/DuRi_Phase4_Complete_Backup_20250806_091224.tar.gz",
+      "backup_refs": [
+        "FULL__2025-08-15__0834__host-duri-head.tar.tar.zst/FULL__2025-08-15__0834__host-duri-head.tar.tar.zst:DuRi_Phase4_Complete_Backup_20250806_091224.tar.gz",
+        "FULL__2025-08-15__0917__host-duri-head.tar.zst/FULL__2025-08-15__0917__host-duri-head.tar.zst:DuRi_Phase4_Complete_Backup_20250806_091224.tar.gz",
+        "FULL__2025-08-15__0940__host-duri-head.tar.zst/FULL__2025-08-15__0940__host-duri-head.tar.zst:DuRi_Phase4_Complete_Backup_20250806_091224.tar.gz",
+        "FULL__2025-08-15__1722__host-duri-head.tar.zst/FULL__2025-08-15__1722__host-duri-head.tar.zst:DuRi_Phase4_Complete_Backup_20250806_091224.tar.gz",
+        "FULL__2025-08-15__1739__host-duri-head.tar.zst/FULL__2025-08-15__1739__host-duri-head.tar.zst:DuRi_Phase4_Complete_Backup_20250806_091224.tar.gz",
+        "FULL__2025-08-15__1900__host-duri-head.tar.zst/FULL__2025-08-15__1900__host-duri-head.tar.zst:DuRi_Phase4_Complete_Backup_20250806_091224.tar.gz"
+      ],
+      "tags": [],
+      "notes": "",
+      "source_host": "duri-head",
+      "storage_class": "hot"
+    },
+    {
+      "logical_name": "FULLphase2_deep_learning_model.pth",
+      "type": "model",
+      "created_at": "2025-08-15T08:37:26.925933+09:00",
+      "size_bytes": 26901,
+      "sha256": "3a7e055a5ab3f9f648e4b18ee311af294a2391c9f87b6ca25e71db487ecac4fa",
+      "local_path": "/home/duri/DuRiWorkspace/models/phase2_deep_learning_model.pth",
+      "backup_refs": [
+        "FULL__2025-08-15__0834__host-duri-head.tar.tar.zst/FULL__2025-08-15__0834__host-duri-head.tar.tar.zst:models/phase2_deep_learning_model.pth",
+        "FULL__2025-08-15__0917__host-duri-head.tar.zst/FULL__2025-08-15__0917__host-duri-head.tar.zst:models/phase2_deep_learning_model.pth",
+        "FULL__2025-08-15__0940__host-duri-head.tar.zst/FULL__2025-08-15__0940__host-duri-head.tar.zst:models/phase2_deep_learning_model.pth",
+        "FULL__2025-08-15__1722__host-duri-head.tar.zst/FULL__2025-08-15__1722__host-duri-head.tar.zst:models/phase2_deep_learning_model.pth",
+        "FULL__2025-08-15__1739__host-duri-head.tar.zst/FULL__2025-08-15__1739__host-duri-head.tar.zst:models/phase2_deep_learning_model.pth",
+        "FULL__2025-08-15__1900__host-duri-head.tar.zst/FULL__2025-08-15__1900__host-duri-head.tar.zst:models/phase2_deep_learning_model.pth"
+      ],
+      "tags": [],
+      "notes": "",
+      "source_host": "duri-head",
+      "storage_class": "hot"
+    }
+  ],
+  "backup": {
+    "primary_root": "/mnt/c/Users/admin/Desktop/두리백업/2025/08/15",
+    "date_bucket": "FULL__2025-08-15__1900__host-duri-head.tar.zst",
+    "bundle_name": "FULL__2025-08-15__1900__host-duri-head.tar.zst"
+  },
+  "notes": ""
+}

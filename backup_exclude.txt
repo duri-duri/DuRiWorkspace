@@ -20,9 +20,9 @@ Thumbs.db
 .dockerignore
 
 # 환경 변수 (보안상 제외)
-.env
-.env.local
-.env.prod
+# .env
+# .env.local
+# .env.prod
 
 # 로그 파일들
 logs/
@@ -31,7 +31,7 @@ logs/
 # 백업 폴더들 (중복 방지)
 duri_snapshots/
 backups/
-backup/
+# backup/  # disabled to include docs/scripts
 
 # 임시 파일들
 *.tmp
@@ -52,7 +52,7 @@ desktop.ini
 venv/
 env/
 .venv/
-.env/
+# .env/
 
 # Node.js (있다면)
 node_modules/

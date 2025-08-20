@@ -8,3 +8,19 @@ backup/*/src/
 DuRi_Backup_Phase*.tar.gz
 
 # 중첩된 Git 저장소 제외
+
+# Python 캐시
+__pycache__/
+*.pyc
+
+# 런타임 산출물
+var/log/
+var/backups/
+var/state/
+
+# 잘못 add된 홈 디렉토리 무시
+~/
+
+# 중첩된 Git 저장소 제외
+**/.git/
+.local/

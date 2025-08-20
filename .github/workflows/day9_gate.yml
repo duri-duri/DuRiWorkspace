@@ -1,0 +1,55 @@
+name: Day9 Gate
+
+on:
+  workflow_dispatch:
+    inputs:
+      gate_set:
+        description: "Gate set (normal|tight)"
+        required: false
+        default: "normal"
+      seeds:
+        description: "Comma-separated seeds"
+        required: false
+        default: "17,42,123"
+  pull_request:
+    paths:
+      - "tools/**"
+      - "configs/**"
+      - ".github/workflows/day9_gate.yml"
+
+env:
+  PYTHONPATH: .
+  DURI_DEBUG_SIM: "0"
+  DURI_SEEDS: ${{ github.event.inputs.seeds || '17,42,123' }}
+  GATE_SET: ${{ github.event.inputs.gate_set || 'normal' }}
+
+jobs:
+  run-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install deps (yq optional)
+        run: |
+          python -m pip install --upgrade pip pyyaml
+          sudo apt-get update -y
+          sudo apt-get install -y jq
+          if ! command -v yq >/dev/null 2>&1; then
+            sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.44.3/yq_linux_amd64
+            sudo chmod +x /usr/local/bin/yq
+          fi
+      - name: Run Day9 Gate (existing script)
+        run: |
+          chmod +x tools/day9_gate_check.sh
+          bash tools/day9_gate_check.sh
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: day9-reports
+          path: var/reports/**
+
+
+

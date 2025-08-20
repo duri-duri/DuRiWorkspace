@@ -35,3 +35,6 @@ jobs:
           bash tools/canary_pipeline.sh \
             --deploy "${{ inputs.deploy_cmd || '' }}" \
             --rollback "${{ inputs.rollback_cmd || '' }}"
+
+
+

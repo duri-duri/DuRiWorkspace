@@ -1,0 +1,56 @@
+groups:
+  - name: duri-alerts
+    rules:
+      # 기존 간단 임계값 알림 유지
+      - alert: DuRiP95High
+        expr: duri:latency_p95 > 1.05
+        for: 10m
+        labels:
+          severity: page
+          service: duri-core
+        annotations:
+          summary: "p95 high on {{ $labels.phase }}"
+          description: "p95 > 1050ms for 10m (5m-rate 기반)"
+
+      # -------------------------------
+      # ① 빠른 번레이트(5m) 알림
+      # -------------------------------
+      - alert: DuRiP95FastBurn
+        expr: histogram_quantile(
+                0.95,
+                sum by (le, phase) (rate(latency_seconds_bucket[5m]))
+              ) > 0.35
+        for: 5m
+        labels:
+          severity: page
+          service: duri-core
+          burn: fast
+        annotations:
+          summary: "FAST burn: p95 high on {{ $labels.phase }}"
+          description: "p95(5m) > 350ms 지속(5m). 즉각 대응 권장."
+
+      # -------------------------------
+      # ② 느린 번레이트(1h) 알림
+      # -------------------------------
+      - alert: DuRiP95SlowBurn
+        expr: histogram_quantile(
+                0.95,
+                sum by (le, phase) (rate(latency_seconds_bucket[1h]))
+              ) > 0.35
+        for: 30m
+        labels:
+          severity: warn
+          service: duri-core
+          burn: slow
+        annotations:
+          summary: "SLOW burn: p95 elevated on {{ $labels.phase }}"
+          description: "p95(1h) > 350ms 완만 상승(30m+). 중장기 영향 점검."
+
+      # 선택: p99에도 동일 패턴을 쓰고 싶다면 아래 주석 해제
+      # - alert: DuRiP99FastBurn
+      #   expr: histogram_quantile(0.99, sum by (le,phase)(rate(latency_seconds_bucket[5m]))) > 0.50
+      #   for: 5m
+      #   labels: { severity: page, service: duri-core, burn: fast }
+      #   annotations:
+      #     summary: "FAST burn: p99 high on {{ $labels.phase }}"
+      #     description: "p99(5m) > 500ms 지속(5m)."
