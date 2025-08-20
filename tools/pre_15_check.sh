@@ -41,11 +41,8 @@ ls -la ops/observability/rules | tee "$OUT/rules_tree.txt" || true
 
 log "=== Cron 스케줄 검증(Phase1) ==="
 crontab -l | tee "$OUT/cron.txt"
-# Sunday 15:00 full — stepwise check
-if grep -E '^[[:space:]]*0[[:space:]]+15[[:space:]]+' "$OUT/cron.txt" \
- | grep -E '[[:space:]]+(0|7|sun|SUN|Sun)[[:space:]]+' \
- | grep -F '/home/duri/DuRiWorkspace/scripts/duri_backup_phase1.sh' \
- | grep -Eq '(^|[[:space:]])full([[:space:]]|$)'; then
+# Sunday 15:00 full — robust regex check
+if grep -Eq '^[[:space:]]*0[[:space:]]+15[[:space:]]+\*[[:space:]]+\*[[:space:]]+(0|7|sun|SUN|Sun)[[:space:]]+[^#]*\/home\/duri\/DuRiWorkspace\/scripts\/duri_backup_phase1\.sh([[:space:]]|$).*([[:space:]]|^)full([[:space:]]|$)' "$OUT/cron.txt"; then
   echo OK_full15h >> "$OUT/flags"
 else
   echo MISS_full15h >> "$OUT/flags"
