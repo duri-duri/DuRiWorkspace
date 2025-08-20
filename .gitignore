@@ -14,7 +14,7 @@ __pycache__/
 *.pyc
 
 # 런타임 산출물
-var/log/
+var/logs/
 var/backups/
 var/state/
 
