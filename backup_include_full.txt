@@ -1,0 +1,31 @@
+# 확장자 기반 필수 포함
+*.md
+*.rst
+*.sh
+*.bash
+*.zsh
+*.sql
+*.ini
+*.cfg
+*.conf
+*.yml
+*.yaml
+*.toml
+*.json
+
+# 디렉터리 기반 필수 포함
+docs/
+scripts/
+tools/
+configs/
+schemas/
+database/
+duri_control/app/database/migrations/
+
+# ── Root-level docs & configs (force-include) ──
+*.md
+*.rst
+.env*
+.gitignore
+.gitmodules
+.github/

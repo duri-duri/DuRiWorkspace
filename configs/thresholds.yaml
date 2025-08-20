@@ -1,0 +1,58 @@
+# DuRi Core 성능 임계값 설정
+# 이 파일은 Day 9 시뮬레이션 및 알림 성능 기준을 정의합니다
+
+day9:
+  # 게이트 통과 기준 (Day 9 성공 기준)
+  gate_criteria:
+    p95_ms_max: 2000  # P95 지연시간 최대값 (ms) - 목표: <1200ms
+    timeout_rate_max: 0.02  # 타임아웃 비율 최대값 (2%) - 목표: <0.5%
+    missing_rate_max: 0.005  # 누락 비율 최대값 (0.5%) - 목표: <0.1%
+    wilson_confidence: 0.95  # Wilson 신뢰구간 (95%)
+  
+  # 시뮬레이션 설정
+  simulation:
+    iterations: 20  # 시뮬레이션 반복 횟수
+    timeout_seconds: 10  # 시뮬레이션 타임아웃 (초)
+  
+  # 플레이키 테스트 격리
+  quarantine:
+    enabled: true  # 플레이키 테스트 격리 활성화
+    max_violations: 3  # 최대 위반 횟수
+  
+  # 시뮬레이션 프로필 (baseline_v1 = 안정화된 표준)
+  sim:
+    profile: "baseline_v1"  # 사용할 시뮬레이션 프로필 (고정)
+    seed: 42  # 기본 랜덤 시드
+    
+    # Baseline v1 프로필 파라미터 (안정적 성능 - 검증됨)
+    base_min_ms: 450.0  # 기본 지연시간 최소값
+    base_max_ms: 950.0  # 기본 지연시간 최대값
+    tail_prob: 0.0005  # 꼬리 진입 확률 (0.05%) - 검증됨
+    tail_scale_ms: 40.0  # 꼬리 규모 (ms) - 검증됨
+    timeout_over_ms: 60.0  # 타임아웃 초과 지연 (ms) - 검증됨
+    missing_given_timeout: 0.005  # 타임아웃 시 누락 확률 (0.5%) - 검증됨
+    base_missing_prob: 0.0002  # 기본 누락 확률 (0.02%) - 검증됨
+    max_tail_ms: 1200.0  # 꼬리 최대값 (ms) - 검증됨
+    base_mu_ms: 700.0  # 로그정규분포 평균 (ms) - 검증됨
+    base_sigma: 0.24  # 로그정규분포 표준편차 - 검증됨
+    safety_margin_ms: 150.0  # 안전 마진 (ms) - 검증됨
+
+# 일반/타이트 모드 전환을 위한 gate_sets 추가
+gate_sets:
+  normal:
+    p95_ms_max: 1200
+    timeout_rate_wilson_ub: 0.02
+    missing_rate_wilson_ub: 0.005
+  tight:
+    p95_ms_max: 1100
+    timeout_rate_wilson_ub: 0.01
+    missing_rate_wilson_ub: 0.0025
+
+# 이미 운영 중인 값이 있으면 유지하세요. 아래 값은 Day9 기준 예시입니다.
+seeds: [17, 42, 123]
+timeout_ms:
+  measure: 2000
+  sweep: 1500
+sweep:
+  intensities: [0.2, 0.5, 0.8]
+  concurrencies: [1, 5, 10]

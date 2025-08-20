@@ -1,0 +1,88 @@
+{
+  "schema_version": "1.1",
+  "run_id": "initial_backup_system_setup",
+  "timestamp": "2025-08-17T17:31:31.594448+09:00",
+  "git": {
+    "commit": "2600d0c5bff2292f7aebefd5da693f277ef2ea79",
+    "branch": "stabilized-2025-08-14",
+    "repo_remote": "git@github.com:duri-duri/DuRiWorkspace.git"
+  },
+  "host": {
+    "hostname": "duri-head",
+    "os": "Linux",
+    "python": "3.10.12",
+    "env_name": "duri-venv"
+  },
+  "phase": {
+    "name": "backup_system_initialization",
+    "step": 2
+  },
+  "params": {
+    "backup_level": "CORE",
+    "compression": "zstd",
+    "deterministic": true
+  },
+  "metrics": {
+    "backup_count": 1,
+    "total_size_bytes": 0,
+    "last_backup_time": "2025-08-14T13:10:00+09:00"
+  },
+  "artifacts": [
+    {
+      "logical_name": "backup_system_schema",
+      "type": "report",
+      "created_at": "2025-08-14T13:10:00+09:00",
+      "size_bytes": 0,
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "local_path": "schemas/state.schema.json",
+      "backup_refs": [],
+      "tags": [
+        "system",
+        "schema"
+      ],
+      "notes": "백업 시스템 초기 설정",
+      "source_host": "duri-head",
+      "storage_class": "hot"
+    },
+    {
+      "logical_name": "core_phase2_deep_learning_model.pth",
+      "type": "model",
+      "created_at": "2025-08-14T21:15:49.859693+09:00",
+      "size_bytes": 26901,
+      "sha256": "3a7e055a5ab3f9f648e4b18ee311af294a2391c9f87b6ca25e71db487ecac4fa",
+      "local_path": "/home/duri/DuRiWorkspace/models/phase2_deep_learning_model.pth",
+      "backup_refs": [
+        "2025/08/14/CORE__2025-08-14__2114__host-duri-head-.tar.zst:models/phase2_deep_learning_model.pth",
+        "2025/08/14/CORE__2025-08-14__2117__host-duri-head-.tar.zst:models/phase2_deep_learning_model.pth",
+        "2025/08/14/CORE__2025-08-14__2159__host-duri-head-.tar.zst:models/phase2_deep_learning_model.pth",
+        "2025/08/14/CORE__2025-08-14__2200__host-duri-head-.tar.zst:models/phase2_deep_learning_model.pth"
+      ],
+      "tags": [],
+      "notes": "",
+      "source_host": "duri-head",
+      "storage_class": "hot"
+    },
+    {
+      "logical_name": "full_phase2_deep_learning_model.pth",
+      "type": "model",
+      "created_at": "2025-08-17T16:43:02.144564+09:00",
+      "size_bytes": 26901,
+      "sha256": "3a7e055a5ab3f9f648e4b18ee311af294a2391c9f87b6ca25e71db487ecac4fa",
+      "local_path": "/home/duri/DuRiWorkspace/models/phase2_deep_learning_model.pth",
+      "backup_refs": [
+        "2025/08/17/FULL__2025-08-17__1641__host-duri-head-.tar.zst:models/phase2_deep_learning_model.pth",
+        "2025/08/17/FULL__2025-08-17__1729__host-duri-head-.tar.zst:models/phase2_deep_learning_model.pth"
+      ],
+      "tags": [],
+      "notes": "",
+      "source_host": "duri-head",
+      "storage_class": "hot"
+    }
+  ],
+  "backup": {
+    "primary_root": "/mnt/c/Users/admin/Desktop/두리백업",
+    "date_bucket": "2025/08/17",
+    "bundle_name": "FULL__2025-08-17__1729__host-duri-head-.tar.zst"
+  },
+  "notes": "DuRi 백업 시스템 초기 설정 완료. 첫 번째 CORE 백업이 성공적으로 생성되었습니다. CORE/EXTENDED/FULL 백업 스크립트와 state.json 자동 동기화 시스템이 정상 작동 중입니다."
+}

@@ -1,0 +1,40 @@
+groups:
+- name: duri-day9-gate
+  rules:
+  # --- normal ---
+  - alert: DuRiP95High
+    expr: duri_alert_latency_p95_ms{job="duri-core"} > 1200
+    for: 2m
+    labels: { severity: warning, team: duri, scope: day9, mode: normal }
+    annotations:
+      summary: "DuRi alert latency p95 high"
+      description: "p95={{ $value }}ms (>1200ms) profile={{ $labels.profile }}"
+
+  - alert: DuRiTimeoutRateHigh
+    expr: duri_alert_timeout_rate{job="duri-core"} > 0.02
+    for: 2m
+    labels: { severity: warning, team: duri, scope: day9, mode: normal }
+
+  - alert: DuRiMissingRateHigh
+    expr: duri_alert_missing_rate{job="duri-core"} > 0.005
+    for: 2m
+    labels: { severity: warning, team: duri, scope: day9, mode: normal }
+
+  # --- tight ---
+  - alert: DuRiP95HighTight
+    expr: duri_alert_latency_p95_ms{job="duri-core"} > 1100
+    for: 2m
+    labels: { severity: critical, team: duri, scope: day10_stabilization, mode: tight }
+
+  - alert: DuRiTimeoutRateHighTight
+    expr: duri_alert_timeout_rate{job="duri-core"} > 0.01
+    for: 2m
+    labels: { severity: critical, team: duri, scope: day10_stabilization, mode: tight }
+
+  - alert: DuRiMissingRateHighTight
+    expr: duri_alert_missing_rate{job="duri-core"} > 0.0025
+    for: 2m
+    labels: { severity: critical, team: duri, scope: day10_stabilization, mode: tight }
+
+
+
