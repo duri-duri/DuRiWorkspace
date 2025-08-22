@@ -24,3 +24,4 @@ var/state/
 # 중첩된 Git 저장소 제외
 **/.git/
 .local/
+var/test_restore/
