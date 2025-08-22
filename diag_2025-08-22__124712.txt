@@ -1,0 +1,56 @@
+== LOCKS ==
+NO_LOCKS_DIR
+== PROCS ==
+NO_RELATED_PROCS
+== MOUNTS ==
+G: on /mnt/usb type 9p (rw,relatime,dirsync,aname=drvfs;path=G:;uid=1000;gid=1000;metadata;umask=022;fmask=0111;symlinkroot=/mnt/,mmap,access=client,msize=65536,trans=fd,rfd=3,wfd=3)
+C:\ on /mnt/c type 9p (rw,noatime,dirsync,aname=drvfs;path=C:\;uid=1000;gid=1000;metadata;umask=22;fmask=11;symlinkroot=/mnt/,mmap,access=client,msize=65536,trans=fd,rfd=5,wfd=5)
+== DISK ==
+none            7.8G  4.0K  7.8G   1% /mnt/wsl
+none            7.8G   92K  7.8G   1% /mnt/wslg
+none            7.8G   76K  7.8G   1% /mnt/wslg/versions.txt
+none            7.8G   76K  7.8G   1% /mnt/wslg/doc
+G:              120G  111G  9.4G  93% /mnt/usb
+C:\             897G  474G  423G  53% /mnt/c
+D:\             954G   40G  915G   5% /mnt/d
+H:\             3.7T  223M  3.7T   1% /mnt/h
+I:\             3.7T   33M  3.7T   1% /mnt/i
+== DMESG ==
+[    5.287671] misc dxg: dxgk: dxgkio_query_adapter_info: Ioctl failed: -2
+[    5.288333] misc dxg: dxgk: dxgkio_query_adapter_info: Ioctl failed: -2
+[    5.289016] misc dxg: dxgk: dxgkio_query_adapter_info: Ioctl failed: -2
+[    5.289691] misc dxg: dxgk: dxgkio_query_adapter_info: Ioctl failed: -2
+[    5.290180] misc dxg: dxgk: dxgkio_query_adapter_info: Ioctl failed: -2
+[    5.290837] misc dxg: dxgk: dxgkio_query_adapter_info: Ioctl failed: -2
+[    5.291438] misc dxg: dxgk: dxgkio_query_adapter_info: Ioctl failed: -2
+[    5.291862] misc dxg: dxgk: dxgkio_query_adapter_info: Ioctl failed: -2
+[    5.292275] misc dxg: dxgk: dxgkio_query_adapter_info: Ioctl failed: -2
+[    5.292725] misc dxg: dxgk: dxgkio_query_adapter_info: Ioctl failed: -2
+[    5.293140] misc dxg: dxgk: dxgkio_query_adapter_info: Ioctl failed: -2
+[    5.293562] misc dxg: dxgk: dxgkio_query_adapter_info: Ioctl failed: -2
+[    5.470461] misc dxg: dxgk: dxgkio_query_adapter_info: Ioctl failed: -2
+[    7.730058] WSL (287) ERROR: CheckConnection: getaddrinfo() failed: -5
+[   36.295100] WSL (297) ERROR: No buffer space available @telemetry.cpp:152 (StartTelemetryAgent)
+[   49.152967] hv_balloon: Max. dynamic memory size: 16294 MB
+[  600.420740] mini_init (281): drop_caches: 1
+[ 2340.394846] mini_init (281): drop_caches: 1
+[ 2520.401904] mini_init (281): drop_caches: 1
+[ 2640.398637] mini_init (281): drop_caches: 1
+== PERMS SLO ==
+f: var/state/restore_slo.jsonl
+drwxr-xr-x duri duri var
+drwxr-xr-x duri duri state
+-rw-r--r-- duri duri restore_slo.jsonl
+== PERMS LOG ==
+f: var/logs/backup
+drwxr-xr-x duri duri var
+drwxr-xr-x duri duri logs
+drwxr-xr-x duri duri backup
+== CRON/CONC ==
+ 6977       0 grep -E --color=auto cron|systemd.*timer|smoke_restore|duri_backup
+== LAST LOG ==
+NO_SMOKE_LOG
+== ULIMIT ==
+open files                          (-n) 1024
+cpu time                   (seconds, -t) unlimited
+max user processes                  (-u) 63586

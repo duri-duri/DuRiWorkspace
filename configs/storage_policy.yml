@@ -180,3 +180,7 @@ operations:
     - "repo_guard_setup.sh: 정책 확정 전 실행 금지 (var/ 광역 무시 주입 위험)"
     - "var/logs/ 표준화: 생성 경로와 무시 규칙 통일 (var/logs/ 사용)"
     - "var/state: 화이트리스트 백업 포함으로 리스크 ≤2% 달성"
+
+
+
+

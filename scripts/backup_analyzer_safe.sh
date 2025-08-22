@@ -138,3 +138,7 @@ ls -la "$OUTPUT_DIR/"
 log "요약 파일: $SUMMARY_FILE"
 
 
+
+
+
+

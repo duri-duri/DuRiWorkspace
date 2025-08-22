@@ -1,4 +1,54 @@
-# DuRi Control System
+# 🚀 DuRi 백업 리팩토링 - 운영자용 스타트 가이드
+
+> **⚠️ 중요**: 이 가이드는 백업 리팩토링 실행을 위한 것입니다. 실행 전 반드시 전체 내용을 읽어주세요.
+
+## ✅ **첫 실행 체크리스트 (DRY-RUN→실행) - 5줄 핵심**
+
+1. `SAFE_BACKUP` 태그 + 전체 스냅샷 생성 완료 여부 확인
+2. `config.env` 환경변수(경로·브랜치·토큰) 정확히 설정  
+3. DRY-RUN 모드(`export DRY_RUN=1`)로 `summary_report.sh` 실행 → summary.json/summary.md 생성 확인
+4. 로그에 오류(FAIL/FATAL) 없고 README 미수정 확인
+5. DRY-RUN 해제 후 재실행 → README Phase 표 ✅ 자동 반영 확인
+
+## 🎯 **백업 리팩토링 목표**
+
+- **실패율**: 0.1%/일 → ≤0.01%/일 (10배 개선)
+- **RTO**: 50% 단축 + Silent corruption 탐지
+- **운영 판단**: 10분/일 → ≤5분/일
+- **안정성**: 업계 상위 5% → 엔터프라이즈급(금융기관 수준)
+
+## 📊 **10주 Super-Safe 로드맵**
+
+| Phase | 설명 | W0 | W1 | W2 | W3 | W4 | W5 | W6 | W7 | W8 | W9 | W10 |
+|-------|------|----|----|----|----|----|----|----|----|----|----|-----|
+| P0 | 안전장치 가동 (스냅샷, SAFE_BACKUP, Fail-Fast+Degrade) | [ ] |    |    |    |    |    |    |    |    |    |     |
+| P1 | SOoT 확정·정책 정렬 + 검증 2중 루프(기초) |    | [ ] |    |    |    |    |    |    |    |    |     |
+| P2 | 스케줄 표준화 + 검증 2중 루프(강화) |    |    | [ ] |    |    |    |    |    |    |    |     |
+| P3 | 관찰성 일원화 + Runbook Drill 시작 |    |    |    | [ ] |    |    |    |    |    |    |     |
+| P4 | 레거시 Freeze→Shadow |    |    |    |    | [ ] |    |    |    |    |    |     |
+| P5 | Turn-off & 위험축소 |    |    |    |    |    | [ ] |    |    |    |    |     |
+| P6 | USB 품질 루프 강화 |    |    |    |    |    |    | [ ] |    |    |    |     |
+| P7 | 게이트-정기 교차 검증 |    |    |    |    |    |    |    | [ ] |    |    |     |
+| P8 | 리스크 드릴/롤백 훈련 |    |    |    |    |    |    |    |    | [ ] |    |     |
+| P9 | 문서·Runbook 최종 확정 |    |    |    |    |    |    |    |    |    | [ ] |     |
+| P10| 안정화·KPI 리뷰 |    |    |    |    |    |    |    |    |    |    | [ ] |
+
+## 🛡️ **안전장치**
+
+- **Fail-Fast**: 치명적 문제 시 즉시 중단
+- **Graceful Degrade**: INCR 실패 → FULL 승격, RETENTION 하루 지연
+- **롤백 경로**: `SAFE_BACKUP` + `rollback_backup_system.sh`
+- **락 파일**: 중복 실행 차단 → 경합 확률 <0.1%
+
+## 📁 **주요 파일 위치**
+
+- **Windows 백업 자동화**: `ops/windows_backup/`
+- **19:05 자동 요약**: `ops/summary/`
+- **백업 정책**: `configs/storage_policy.yml`, `configs/retention.yml`
+
+---
+
+# DuRiControl System
 
 DuRi 시스템의 중앙 제어 허브 API 서버입니다. 모든 DuRi 서비스들의 상태 모니터링, 제어, 백업, 알림 등을 관리합니다.
 

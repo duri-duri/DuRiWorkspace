@@ -1,0 +1,183 @@
+# configs/standard_schedule.yml
+# DuRi 백업 시스템 표준 스케줄 및 의존성 정의
+version: 1
+
+meta:
+  owner: "DuRi Ops"
+  last_review: "2025-08-22"
+  description: "백업 스케줄 표준화 및 의존성 규칙 정의"
+
+schedules:
+  # === 게이트 백업 (P0: 즉시 실행) ===
+  gate:
+    priority: 0
+    description: "게이트 트리거 기반 즉시 백업"
+    triggers:
+      - "GitHub PR/merge"
+      - "수동 실행"
+      - "긴급 상황"
+    types:
+      - name: "CORE"
+        description: "핵심 파일만 백업 (빠른 복구)"
+        max_duration: "15분"
+      - name: "EXTENDED"
+        description: "핵심 + 확장 파일 백업"
+        max_duration: "30분"
+      - name: "FULL"
+        description: "전체 시스템 백업"
+        max_duration: "120분"
+    skip_rules:
+      - "동일 날짜 FULL 성공 시 cron 주간 FULL 스킵"
+      - "게이트 FULL 성공 시 다음 게이트 FULL까지 대기"
+
+  # === 정기 백업 (P1: 스케줄 기반) ===
+  cron:
+    priority: 1
+    description: "정기 스케줄 기반 백업"
+    daily:
+      - time: "18:30"
+        type: "INCR"
+        description: "일일 증분 백업"
+        max_duration: "20분"
+        dependencies: []
+        skip_conditions:
+          - "변경된 파일 없음"
+          - "게이트 FULL 성공 (동일 날짜)"
+      
+      - time: "18:45"
+        type: "RETENTION"
+        description: "보존 정책 실행"
+        max_duration: "10분"
+        dependencies: ["INCR"]
+        skip_conditions:
+          - "INCR 실패 시 1일 연기"
+          - "정리 대상 파일 없음"
+      
+      - time: "19:00"
+        type: "HEALTH"
+        description: "백업 시스템 상태 점검"
+        max_duration: "5분"
+        dependencies: ["INCR", "RETENTION"]
+        skip_conditions: []
+      
+      - time: "19:05"
+        type: "SUMMARY"
+        description: "일일 백업 요약 리포트"
+        max_duration: "2분"
+        dependencies: ["INCR", "RETENTION", "HEALTH"]
+        skip_conditions: []
+    
+    weekly:
+      - time: "15:00 (일요일)"
+        type: "FULL"
+        description: "주간 전체 백업"
+        max_duration: "120분"
+        dependencies: []
+        skip_conditions:
+          - "게이트 FULL 성공 (동일 주)"
+          - "디스크 공간 부족"
+      
+      - time: "19:10 (일요일)"
+        type: "SMOKE_RESTORE"
+        description: "주간 FULL 후 스모크 복원 테스트"
+        max_duration: "30분"
+        dependencies: ["FULL"]
+        skip_conditions:
+          - "FULL 실패"
+          - "복원 환경 불가용"
+
+dependencies:
+  # === 의존성 규칙 ===
+  rules:
+    - name: "INCR → RETENTION → HEALTH"
+      description: "일일 백업 순서 강제"
+      order: ["INCR", "RETENTION", "HEALTH"]
+      failure_handling: "RETENTION 실패 시 1일 연기, HEALTH는 항상 실행"
+    
+    - name: "FULL → SMOKE_RESTORE"
+      description: "주간 FULL 후 복원 테스트 필수"
+      order: ["FULL", "SMOKE_RESTORE"]
+      failure_handling: "FULL 실패 시 SMOKE_RESTORE 스킵"
+    
+    - name: "GATE vs CRON"
+      description: "게이트 우선, cron 후순"
+      priority: ["GATE", "CRON"]
+      conflict_resolution: "게이트 FULL 성공 시 cron FULL 스킵"
+
+  # === 실패 처리 규칙 ===
+  failure_handling:
+    - condition: "INCR 실패"
+      action: "다음날 FULL 자동 스케줄 (Graceful Degrade)"
+      retry: "최대 1회 (다음날)"
+    
+    - condition: "RETENTION 실패"
+      action: "1일 연기 + 경고 표시"
+      retry: "최대 3일 연기"
+    
+    - condition: "HEALTH 실패"
+      action: "즉시 알림 + 수동 개입 필요"
+      retry: "수동 재시도"
+    
+    - condition: "FULL 실패"
+      action: "다음 주 재시도 + INCR 강화"
+      retry: "주간 재시도"
+
+skip_conditions:
+  # === 스킵 조건 정의 ===
+  - name: "게이트 FULL 성공"
+    description: "동일 날짜에 게이트 FULL 성공 시 cron FULL 스킵"
+    logic: "backup_refs.json에서 날짜별 FULL 상태 확인"
+    priority: "HIGH"
+  
+  - name: "변경 없음"
+    description: "이전 백업과 동일한 파일 상태 시 INCR 스킵"
+    logic: "파일 해시 비교 + 타임스탬프 검증"
+    priority: "MEDIUM"
+  
+  - name: "정리 대상 없음"
+    description: "보존 정책에 해당하는 파일 없음 시 RETENTION 스킵"
+    logic: "파일 수명 주기 검사"
+    priority: "MEDIUM"
+
+monitoring:
+  # === 모니터링 지표 ===
+  metrics:
+    - name: "백업 성공률"
+      target: "≥99.9%"
+      measurement: "일일/주간/월간"
+    
+    - name: "의존성 준수율"
+      target: "100%"
+      measurement: "순서 위반 횟수"
+    
+    - name: "스킵 비율"
+      target: "정상 스킵 100%"
+      measurement: "게이트 FULL 성공 시 cron FULL 스킵률"
+    
+    - name: "RTO (복구 시간)"
+      target: "기준 대비 50% 단축"
+      measurement: "스모크 복원 테스트 결과"
+
+  # === 알림 규칙 ===
+  alerts:
+    - condition: "의존성 위반"
+      level: "CRITICAL"
+      action: "즉시 알림 + 백업 중단"
+    
+    - condition: "연속 실패"
+      level: "WARNING"
+      action: "경고 + 자동 재시도"
+    
+    - condition: "스킵 비율 이상"
+      level: "INFO"
+      action: "로깅 + 리포트에 표시"
+
+# === 운영 노트 ===
+operations:
+  notes:
+    - "게이트 백업은 언제든지 실행 가능 (우선순위 최고)"
+    - "cron 백업은 의존성 순서 엄수 필수"
+    - "스킵은 정상 동작이므로 알림 대상 아님"
+    - "실패 시 Graceful Degrade 정책 적용"
+
+

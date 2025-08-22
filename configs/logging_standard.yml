@@ -1,0 +1,294 @@
+# configs/logging_standard.yml
+# DuRi 백업 시스템 표준 로깅 정책
+# Phase 3: 관찰성 일원화
+
+version: 1
+
+meta:
+  owner: "DuRi Ops"
+  last_review: "2025-08-22"
+  description: "백업 시스템 로깅 표준화 및 일원화 정책"
+
+# === 로그 디렉토리 구조 ===
+directories:
+  root: "var/logs"
+  
+  # === 백업 관련 로그 ===
+  backup:
+    path: "var/logs/backup"
+    description: "정기 백업 작업 로그"
+    subdirectories:
+      - name: "daily"
+        description: "일일 백업 로그 (INCR, RETENTION, HEALTH)"
+        retention: "30일"
+        max_size: "100MB"
+      - name: "weekly"
+        description: "주간 백업 로그 (FULL, SMOKE_RESTORE)"
+        retention: "90일"
+        max_size: "500MB"
+      - name: "monthly"
+        description: "월간 백업 로그 (아카이브, 정리)"
+        retention: "365일"
+        max_size: "1GB"
+  
+  # === 게이트 백업 로그 ===
+  gate:
+    path: "var/logs/gate"
+    description: "게이트 트리거 백업 로그"
+    subdirectories:
+      - name: "core"
+        description: "CORE 백업 로그"
+        retention: "30일"
+        max_size: "50MB"
+      - name: "extended"
+        description: "EXTENDED 백업 로그"
+        retention: "30일"
+        max_size: "100MB"
+      - name: "full"
+        description: "FULL 백업 로그"
+        retention: "90일"
+        max_size: "200MB"
+  
+  # === 시스템 로그 ===
+  system:
+    path: "var/logs/system"
+    description: "시스템 상태 및 모니터링 로그"
+    subdirectories:
+      - name: "health"
+        description: "시스템 상태 점검 로그"
+        retention: "30일"
+        max_size: "50MB"
+      - name: "monitoring"
+        description: "성능 모니터링 로그"
+        retention: "30일"
+        max_size: "100MB"
+      - name: "alerts"
+        description: "알림 및 경고 로그"
+        retention: "90일"
+        max_size: "50MB"
+  
+  # === 아카이브 ===
+  archive:
+    path: "var/logs/archive"
+    description: "오래된 로그 아카이브"
+    retention: "무제한"
+    compression: "gzip"
+    rotation: "월간"
+
+# === 로그 파일 명명 규칙 ===
+naming:
+  format: "{type}_{date}_{time}.log"
+  examples:
+    - "incr_2025-08-22_18-30.log"
+    - "gate_full_2025-08-22_14-15.log"
+    - "health_2025-08-22_19-00.log"
+    - "summary_2025-08-22_19-05.log"
+  
+  # === 로그 타입별 접두사 ===
+  prefixes:
+    backup:
+      incr: "incr"
+      retention: "retention"
+      health: "health"
+      full: "full"
+      smoke_restore: "smoke"
+    gate:
+      core: "gate_core"
+      extended: "gate_ext"
+      full: "gate_full"
+    system:
+      health: "health"
+      monitoring: "monitor"
+      alerts: "alert"
+      summary: "summary"
+
+# === 로그 형식 표준 ===
+format:
+  timestamp: "ISO 8601 (YYYY-MM-DD HH:MM:SS+ZZ)"
+  level: "INFO, WARN, ERROR, FATAL"
+  fields:
+    - "timestamp"
+    - "level"
+    - "component"
+    - "operation"
+    - "message"
+    - "duration_ms"
+    - "status"
+    - "details"
+  
+  # === 로그 레벨 정의 ===
+  levels:
+    INFO: "일반 정보, 성공한 작업"
+    WARN: "경고, 주의가 필요한 상황"
+    ERROR: "오류, 작업 실패"
+    FATAL: "치명적 오류, 시스템 중단 필요"
+  
+  # === 컴포넌트 정의 ===
+  components:
+    - "backup"
+    - "gate"
+    - "system"
+    - "monitoring"
+    - "retention"
+    - "restore"
+
+# === 로그 로테이션 정책 ===
+rotation:
+  # === 크기 기반 로테이션 ===
+  size_based:
+    max_size: "100MB"
+    compress: true
+    keep_compressed: true
+  
+  # === 시간 기반 로테이션 ===
+  time_based:
+    daily: true
+    weekly: true
+    monthly: true
+  
+  # === 보존 정책 ===
+  retention:
+    daily_logs: "30일"
+    weekly_logs: "90일"
+    monthly_logs: "365일"
+    compressed_archives: "무제한"
+
+# === 로그 내용 표준 ===
+content:
+  # === 백업 작업 로그 ===
+  backup_operations:
+    required_fields:
+      - "작업 시작/종료 시간"
+      - "작업 유형 (INCR/RETENTION/HEALTH/FULL)"
+      - "대상 디렉토리/파일"
+      - "처리된 파일 수"
+      - "성공/실패 상태"
+      - "소요 시간"
+      - "오류 메시지 (실패 시)"
+    
+    optional_fields:
+      - "백업 크기"
+      - "압축률"
+      - "체크섬 정보"
+      - "의존성 상태"
+  
+  # === 게이트 백업 로그 ===
+  gate_operations:
+    required_fields:
+      - "트리거 원인 (PR/merge/수동/긴급)"
+      - "백업 유형 (CORE/EXTENDED/FULL)"
+      - "우선순위"
+      - "실행 결과"
+      - "충돌 해결 방법"
+    
+    optional_fields:
+      - "GitHub 이벤트 정보"
+      - "수동 실행자 정보"
+      - "긴급 상황 상세"
+  
+  # === 시스템 상태 로그 ===
+  system_status:
+    required_fields:
+      - "시스템 상태 (OK/WARN/ERROR)"
+      - "점검 항목"
+      - "점검 결과"
+      - "권장 조치"
+    
+    optional_fields:
+      - "시스템 리소스 사용량"
+      - "성능 지표"
+      - "트렌드 정보"
+
+# === 로그 집계 및 요약 ===
+aggregation:
+  # === 일일 요약 (19:05) ===
+  daily_summary:
+    time: "19:05"
+    source: "모든 일일 백업 로그"
+    output: "var/logs/summary/daily_{date}.md"
+    content:
+      - "작업 요약 (총 작업 수, 성공/실패)"
+      - "의존성 준수 상태"
+      - "성능 지표 (평균/최대 소요 시간)"
+      - "오류 및 경고 요약"
+      - "다음날 권장 사항"
+  
+  # === 주간 요약 ===
+  weekly_summary:
+    time: "일요일 19:15"
+    source: "주간 백업 + 일일 요약"
+    output: "var/logs/summary/weekly_{week}.md"
+    content:
+      - "주간 백업 성공률"
+      - "RTO 벤치마크 결과"
+      - "성능 트렌드"
+      - "정책 준수 상태"
+      - "다음 주 계획"
+  
+  # === 월간 요약 ===
+  monthly_summary:
+    time: "월 1일 10:00"
+    source: "월간 백업 + 주간 요약"
+    output: "var/logs/summary/monthly_{year}_{month}.md"
+    content:
+      - "월간 백업 통계"
+      - "장기 성능 트렌드"
+      - "정책 효과성 분석"
+      - "개선 권장사항"
+      - "다음 달 계획"
+
+# === 모니터링 및 알림 ===
+monitoring:
+  # === 로그 품질 모니터링 ===
+  quality_checks:
+    - "로그 파일 크기 이상"
+    - "로그 형식 오류"
+    - "필수 필드 누락"
+    - "로그 레벨 불일치"
+  
+  # === 성능 모니터링 ===
+  performance_metrics:
+    - "로그 쓰기 속도"
+    - "로그 압축 효율성"
+    - "로그 검색 속도"
+    - "디스크 사용량"
+  
+  # === 알림 규칙 ===
+  alerts:
+    - condition: "로그 파일 크기 > 100MB"
+      level: "WARN"
+      action: "로그 로테이션 실행"
+    
+    - condition: "로그 형식 오류 > 10건/일"
+      level: "ERROR"
+      action: "로그 생성 스크립트 점검"
+    
+    - condition: "로그 디스크 사용량 > 80%"
+      level: "WARN"
+      action: "오래된 로그 정리"
+
+# === 마이그레이션 계획 ===
+migration:
+  # === Phase 3: 관찰성 일원화 ===
+  phase3:
+    - "표준 로그 디렉토리 구조 생성"
+    - "기존 로그 파일 매핑"
+    - "새 로깅 정책 적용"
+    - "로그 집계 시스템 구축"
+  
+  # === Phase 4: 레거시 정리 ===
+  phase4:
+    - "레거시 로그 디렉토리 정리"
+    - "로그 경로 통합"
+    - "기존 스크립트 로그 경로 업데이트"
+
+# === 운영 노트 ===
+operations:
+  notes:
+    - "모든 백업 관련 로그는 var/logs/ 하위에 저장"
+    - "로그 파일명은 명확하고 일관된 형식 사용"
+    - "로그 로테이션은 자동화하여 디스크 공간 관리"
+    - "일일/주간/월간 요약은 사람이 읽기 쉬운 형태로 생성"
+    - "로그 품질 모니터링으로 시스템 안정성 확보"
+
+
