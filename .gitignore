@@ -14,3 +14,21 @@ backup/
 !DuRiCore_Backup_20250807_002146.tar.gz
 !DuRiCore_ChatGPT_Analysis_Backup_20250807_100544.tar.gz
 !DuRiCore_backup_20250807_20250807_131858_current_state_after_strategic_learning_completion.tar.gz
+# 대용량 백업 파일 제외
+*.tar.zst
+backup/*/src/
+DuRi_Backup_Phase*.tar.gz
+# 중첩된 Git 저장소 제외
+# Python 캐시
+__pycache__/
+*.pyc
+# 런타임 산출물
+var/logs/
+var/backups/
+var/state/
+# 잘못 add된 홈 디렉토리 무시
+~/
+# 중첩된 Git 저장소 제외
+**/.git/
+.local/
+var/test_restore/
