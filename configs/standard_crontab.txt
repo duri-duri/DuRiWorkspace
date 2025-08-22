@@ -1,0 +1,77 @@
+# configs/standard_crontab.txt
+# DuRi 백업 시스템 표준 cron 테이블
+# Phase 2: 스케줄·의존성 표준화
+
+# === 환경 설정 ===
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+TZ=Asia/Seoul
+MAILTO=""
+
+# === Phase 2: 표준 백업 스케줄 ===
+# 일일 백업 (의존성 순서: INCR → RETENTION → HEALTH → SUMMARY)
+
+# 18:30 - 일일 증분 백업
+30 18 * * * /bin/bash -lc "$HOME/DuRiWorkspace/scripts/duri_backup_phase1.sh incr >> $HOME/DuRiWorkspace/var/logs/cron.incr.log 2>&1"
+
+# 18:45 - 보존 정책 실행 (INCR 성공 후)
+45 18 * * * /bin/bash -lc "$HOME/DuRiWorkspace/scripts/duri_backup_phase1.sh retention >> $HOME/DuRiWorkspace/var/logs/cron.retention.log 2>&1"
+
+# 19:00 - 백업 시스템 상태 점검 (INCR + RETENTION 완료 후)
+0 19 * * * /bin/bash -lc "$HOME/DuRiWorkspace/scripts/duri_backup_phase1.sh health >> $HOME/DuRiWorkspace/var/logs/cron.health.log 2>&1"
+
+# 19:05 - 일일 요약 리포트 (모든 일일 작업 완료 후)
+5 19 * * * /bin/bash -lc "$HOME/DuRiWorkspace/ops/summary/summary_report.sh >> $HOME/DuRiWorkspace/var/logs/cron.summary.log 2>&1"
+
+# === 주간 백업 ===
+# 15:00 (일요일) - 주간 전체 백업
+0 15 * * 0 /bin/bash -lc "$HOME/DuRiWorkspace/scripts/duri_backup_phase1.sh full >> $HOME/DuRiWorkspace/var/logs/cron.full.log 2>&1"
+
+# 19:10 (일요일) - 주간 FULL 후 스모크 복원 테스트
+10 19 * * 0 /bin/bash -lc "$HOME/DuRiWorkspace/scripts/smoke_restore_test.sh >> $HOME/DuRiWorkspace/var/logs/cron.smoke.log 2>&1"
+
+# === 모니터링 및 정리 ===
+# 20:00 - 일일 로그 정리 (로그 로테이션)
+0 20 * * * /bin/bash -lc "$HOME/DuRiWorkspace/scripts/log_rotation.sh >> $HOME/DuRiWorkspace/var/logs/cron.logrotate.log 2>&1"
+
+# 21:00 - 백업 상태 집계 및 알림
+0 21 * * * /bin/bash -lc "$HOME/DuRiWorkspace/scripts/backup_status_aggregator.sh >> $HOME/DuRiWorkspace/var/logs/cron.status.log 2>&1"
+
+# === 주말 정리 작업 ===
+# 10:00 (토요일) - 주간 백업 정리 및 최적화
+0 10 * * 6 /bin/bash -lc "$HOME/DuRiWorkspace/scripts/weekly_cleanup.sh >> $HOME/DuRiWorkspace/var/logs/cron.cleanup.log 2>&1"
+
+# === 월말 정리 작업 ===
+# 1일 02:00 - 월간 백업 아카이브 및 정리
+0 2 1 * * /bin/bash -lc "$HOME/DuRiWorkspace/scripts/monthly_archive.sh >> $HOME/DuRiWorkspace/var/logs/cron.archive.log 2>&1"
+
+# === 의존성 검증 ===
+# 각 작업 완료 후 의존성 확인
+# INCR → RETENTION → HEALTH → SUMMARY 순서 강제
+
+# === 스킵 조건 처리 ===
+# 게이트 FULL 성공 시 cron FULL 스킵
+# 변경된 파일 없음 시 INCR 스킵
+# 정리 대상 없음 시 RETENTION 스킵
+
+# === 실패 처리 ===
+# INCR 실패 시 다음날 FULL 자동 스케줄
+# RETENTION 실패 시 1일 연기
+# HEALTH 실패 시 즉시 알림
+
+# === 로그 경로 표준화 ===
+# 모든 로그는 var/logs/ 디렉토리에 저장
+# 로그 파일명: cron.{작업타입}.log
+# 로그 로테이션: 일일 + 주간 + 월간
+
+# === 성능 모니터링 ===
+# 각 작업의 실행 시간 측정
+# 의존성 준수율 모니터링
+# 스킵 비율 및 원인 분석
+
+# === 운영 노트 ===
+# 이 cron 테이블은 Phase 2 표준화의 결과물
+# 기존 레거시 cron 항목들은 Phase 4에서 정리 예정
+# 게이트 백업과의 충돌 방지 규칙 적용
+
+
