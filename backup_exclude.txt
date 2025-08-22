@@ -70,4 +70,14 @@ htmlcov/
 
 # Docker 볼륨 데이터
 postgres_data/
-redis_data/ 
+redis_data/
+var/test_restore/
+var/test_restore/**
+**/node_modules/**
+**/__pycache__/**
+var/test_restore
+var/test_restore/
+var/test_restore/**
+./var/test_restore
+./var/test_restore/
+./var/test_restore/**
