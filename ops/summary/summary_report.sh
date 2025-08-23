@@ -258,3 +258,4 @@ git commit -m "auto: daily summary update ($(date +%F))" || true
 git push origin "$GIT_BRANCH" || true
 
 log "INFO README updated & committed"
+

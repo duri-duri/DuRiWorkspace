@@ -92,3 +92,4 @@ Write-Host "`n🎯 동기화 테스트 완료!" -ForegroundColor Green
 Write-Host "이제 백업 자동화 스크립트를 생성할 수 있습니다." -ForegroundColor Yellow
 
 
+
