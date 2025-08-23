@@ -124,3 +124,4 @@ if [[ "$DO_RECORD" -eq 1 ]]; then
 fi
 
 log "스모크 복원 테스트 성공"
+

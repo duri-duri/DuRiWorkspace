@@ -64,3 +64,4 @@ Write-Host "`n🎯 백업 드라이브 설정 완료!" -ForegroundColor Green
 Write-Host "이제 robocopy 명령어를 실행하여 동기화 테스트를 진행하세요." -ForegroundColor Yellow
 
 
+
