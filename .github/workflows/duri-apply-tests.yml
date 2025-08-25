@@ -1,0 +1,43 @@
+name: duri-apply-tests
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare FS mounts
+        run: |
+          sudo mkdir -p /mnt/usb /mnt/hdd/ARCHIVE/{FULL,INCR,META,CHECKPOINTS}
+          sudo chmod -R 777 /mnt/usb /mnt/hdd
+
+      - name: Install deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq rsync coreutils
+
+      - name: Basic
+        env:
+          NO_COLOR: "1"
+          LC_ALL: "C"
+          LANG: "C"
+        run: |
+          make clean && make test && make verify-logs
+
+      - name: Extended
+        env:
+          NO_COLOR: "1"
+          LC_ALL: "C"
+          LANG: "C"
+          APPLY_EXT: "1"
+        run: |
+          make clean && make test-extended && make verify-logs
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-artifacts
+          path: |
+            .test-artifacts/*

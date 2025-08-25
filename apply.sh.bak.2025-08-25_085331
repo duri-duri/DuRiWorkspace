@@ -1,52 +1,18 @@
-#!/usr/bin/env bash
 set -Eeuo pipefail
-
-# ---- SELF-TEST (runs before any normal flow) ----
-if [[ "${1:-}" == "--self-test" ]]; then
-  set -euo pipefail
-  USB=${USB:-/mnt/usb}; HDD=${HDD:-/mnt/hdd}; PLAN=${PLAN:?need PLAN.jsonl}
-
-  echo "[SELF-TEST] 1/3 ALL GREEN 기대"
-  ./apply.sh --verify-only --quiet
-
-  echo "[SELF-TEST] 2/3 한 바이트 손상 → 실패 기대"
-  PB="$(jq -r 'if type=="array" then .[] else . end
-    | select(.src|test("/FULL__"))
-    | (.src|capture("(?<base>FULL__.*)").base)' "$PLAN")"
-  T="$(mktemp)"
-  cp -- "$HDD/ARCHIVE/FULL/$PB" "$T"
-  dd if=/dev/zero of="$T" bs=1 count=1 seek=0 conv=notrunc status=none
-  sudo mv -- "$T" "$HDD/ARCHIVE/FULL/$PB"
-
-  set +e
-  ./apply.sh --verify-only --quiet
-  rc=$?
-  set -e
-  echo "[RESULT] exit=$rc (expect 1)"
-
-  echo "[SELF-TEST] 3/3 원복"
-  sudo cp -- "$USB/CORE_PROTECTED/$PB" "$HDD/ARCHIVE/FULL/$PB"
-  exit "$rc"
-fi
-# ---- END SELF-TEST ----
 
 # =========================
 # 옵션 파싱
 # =========================
 VERIFY_ONLY=0
-JSON_SUMMARY=${JSON_SUMMARY:-0}
-JSON_SUMMARY_ONLY=${JSON_SUMMARY_ONLY:-0}
 KEEP_TMP=0
 FULL_MANIFEST=0
 QUIET=0
 for arg in "$@"; do
   case "$arg" in
-    --verify-only)    VERIFY_ONLY=1 ;;
-    --keep-tmp)       KEEP_TMP=1 ;;
-    --full-manifest)  FULL_MANIFEST=1 ;;
-    --quiet)          QUIET=1 ;;
-    --json-summary)   JSON_SUMMARY=1 ;;
-    --json-summary-only) JSON_SUMMARY_ONLY=1 ;;
+    --verify-only) VERIFY_ONLY=1 ;;
+    --keep-tmp) KEEP_TMP=1 ;;
+    --full-manifest) FULL_MANIFEST=1 ;;
+    --quiet) QUIET=1 ;;
   esac
 done
 
@@ -66,8 +32,7 @@ META_DIR="${META_DIR:-$CORE_OUT/META}"
 # =========================
 # PLAN 사전 가드레일
 # =========================
-if jq -r 'if type=="array" then .[] else . end | .dst // empty' "$PLAN" \
-   | grep -E -v '^/mnt/hdd/ARCHIVE/(FULL|INCR)/' | grep . >/dev/null 2>&1; then
+if jq -r 'if type=="array" then .[] else . end | .dst // empty' "$PLAN" | grep -E -v '^/mnt/hdd/ARCHIVE/(FULL|INCR)/' | grep . >/dev/null 2>&1; then
   echo "[ERR] invalid dst in plan (must start with /mnt/hdd/ARCHIVE/(FULL|INCR)/)"
   exit 2
 fi
@@ -85,13 +50,17 @@ check_one_exact() {
     line="$(grep -F -- "  $base" "$meta" | head -1)"
     [[ -z "$line" ]] && { [[ $QUIET -eq 0 ]] && echo "[META-NOLINE] $base in $(basename "$meta")"; return 2; }
     hmeta="$(printf '%s\n' "$line" | tr -d '\r' | awk '{print $1}')"
+    [[ $QUIET -eq 1 ]] && echo "[CDBG] hmeta(from meta)=$hmeta" >&2
   else
     meta="$(grep -RIl --include='SHA256SUMS.*' -e "  $base\$" "$META_DIR" | head -1 || true)"
     [[ -z "$meta" ]] && { [[ $QUIET -eq 0 ]] && echo "[NO META] $base"; return 2; }
     hmeta="$(grep -F -- "  $base" "$meta" | head -1 | tr -d '\r' | awk '{print $1}')"
+    [[ $QUIET -eq 1 ]] && echo "[CDBG] hmeta(from meta)=$hmeta" >&2
   fi
 
+    [[ $QUIET -eq 1 ]] && echo "[CDBG] using meta=$meta for base=$base" >&2
   hfile="$(sha256sum -- "$f" | awk '{print $1}')"
+    [[ $QUIET -eq 1 ]] && echo "[CDBG] hfile(computed)=$hfile" >&2
   if [[ "$hfile" == "$hmeta" ]]; then
     [[ $QUIET -eq 0 ]] && echo "[OK] $base"
     return 0
@@ -194,58 +163,61 @@ fi
 # =========================
 # 검증 & 요약
 # =========================
-[[ $QUIET -eq 0 ]] && { echo; echo "===================="; echo "[VERIFY & SUMMARY]"; echo "===================="; }
+[[ $QUIET -eq 0 ]] && echo && echo "====================" && echo "[VERIFY & SUMMARY]" && echo "===================="
 
 tmpdir="$(mktemp -d)"
-# 검증(집계) 구간: 실패/미정의 변수로 중단되지 않도록
-set +e
-set +u
+  # 검증(집계) 구간: 실패/미정의 변수로 중단되지 않도록
+  set +e
+  set +u
 
-# --- 목록 초기화 ---
-: > "$tmpdir/full.list"
-: > "$tmpdir/incr.list"
+  # --- 목록 초기화 (여기서만 생성/초기화하고, 이후엔 건드리지 않음) ---
+  : > "$tmpdir/full.list"
+  : > "$tmpdir/incr.list"
 
-# PLAN에서 FULL/INCR 대상 추출 (JSONL/배열 모두 대응, CRLF 방지)
-jq -r 'if type=="array" then .[] else . end
-       | select(.src|test("/FULL__"))
-       | (.src|capture("(?<name>FULL__.*)").name)' "$PLAN" | tr -d '\r' >> "$tmpdir/full.list" || true
-jq -r 'if type=="array" then .[] else . end
-       | select(.src|test("/INCR__"))
-       | (.src|capture("(?<name>INCR__.*)").name)' "$PLAN" | tr -d '\r' >> "$tmpdir/incr.list" || true
+  # PLAN에서 FULL/INCR 대상 추출 (JSONL/배열 모두 대응, CRLF 방지)
+  jq -r 'if type=="array" then .[] else . end
+         | select(.src|test("/FULL__"))
+         | (.src|capture("(?<name>FULL__.*)").name)' "$PLAN" | tr -d '\r' >> "$tmpdir/full.list" || true
 
-# Fallback: PLAN이 비어 있으면 디렉토리 스캔
-if [[ ! -s "$tmpdir/full.list" ]] && [[ -d "$FULL_DIR" ]]; then
-  (cd "$FULL_DIR" && ls -1 FULL__*.tar.zst 2>/dev/null) >> "$tmpdir/full.list" || true
-fi
-if [[ ! -s "$tmpdir/incr.list" ]] && [[ -d "$INCR_DIR" ]]; then
-  (cd "$INCR_DIR" && ls -1 INCR__*.tar.zst 2>/dev/null) >> "$tmpdir/incr.list" || true
-fi
+  jq -r 'if type=="array" then .[] else . end
+         | select(.src|test("/INCR__"))
+         | (.src|capture("(?<name>INCR__.*)").name)' "$PLAN" | tr -d '\r' >> "$tmpdir/incr.list" || true
 
+  # Fallback: PLAN이 비어 있거나 필터 실패 시, 디렉토리 스캔으로 채우기
+  if [[ ! -s "$tmpdir/full.list" ]] && [[ -d "$FULL_DIR" ]]; then
+    (cd "$FULL_DIR" && ls -1 FULL__*.tar.zst 2>/dev/null) >> "$tmpdir/full.list" || true
+  fi
+  if [[ ! -s "$tmpdir/incr.list" ]] && [[ -d "$INCR_DIR" ]]; then
+    (cd "$INCR_DIR" && ls -1 INCR__*.tar.zst 2>/dev/null) >> "$tmpdir/incr.list" || true
+  fi
+  # 검증(집계) 구간: 실패/미정의 변수로 중단되지 않도록
+  set +e
+  set +u
+  # 검증(집계) 구간에서는 실패로 멈추지 않음
+  set +e
+  # verification loops: collect errors, don't abort on first failure
+  set +e
 [[ $KEEP_TMP -eq 0 ]] && trap 'rm -rf "$tmpdir"' EXIT
+
 
 FULL_DIR="$HDD_AR/FULL"
 INCR_DIR="$HDD_AR/INCR"
-
 ok_full=0; bad_full_cnt=0; ok_incr=0; bad_incr_cnt=0
-
-# FULL 루프
+ok_full=0; bad_full_cnt=0
 while IFS= read -r base; do
   [[ -z "$base" ]] && continue
   base="${base%%$'\r'}"
   f="$FULL_DIR/$base"
+    [[ $QUIET -eq 1 ]] && { echo "[QDBG] base='$base' f='$f'" >&2; }
   if [[ ! -f "$f" ]]; then
     [[ $QUIET -eq 0 ]] && echo "[MISS-FULL] $base"
     (( bad_full_cnt++ ))
     continue
   fi
-  if check_one_exact "$f" >/dev/null; then
-    (( ok_full++ ))
-  else
-    (( bad_full_cnt++ ))
-  fi
+  if check_one_exact "$f" >/dev/null; then (( ok_full++ )); else (( bad_full_cnt++ )); fi
 done < "$tmpdir/full.list"
 
-# INCR 루프
+ok_incr=0; bad_incr_cnt=0
 while IFS= read -r base; do
   [[ -z "$base" ]] && continue
   base="${base%%$'\r'}"
@@ -255,49 +227,43 @@ while IFS= read -r base; do
     (( bad_incr_cnt++ ))
     continue
   fi
-  if check_one_exact "$f" >/dev/null; then
-    (( ok_incr++ ))
-  else
-    (( bad_incr_cnt++ ))
-  fi
+  if check_one_exact "$f" >/dev/null; then (( ok_incr++ )); else (( bad_incr_cnt++ )); fi
 done < "$tmpdir/incr.list"
+  # ---- BEGIN: unified summary & deterministic exit ----
+  set -e
+  set -u
 
-# ---- BEGIN: unified summary & deterministic exit ----
-set -e
-set -u
+  total_full=$(grep -c . "$tmpdir/full.list" 2>/dev/null || echo 0)
+  total_incr=$(grep -c . "$tmpdir/incr.list" 2>/dev/null || echo 0)
 
-total_full=$(awk 'NF{c++} END{print c+0}' "$tmpdir/full.list" 2>/dev/null)
-total_incr=$(awk 'NF{c++} END{print c+0}' "$tmpdir/incr.list" 2>/dev/null)
-rc=$(( bad_full_cnt + bad_incr_cnt ))
+  rc=$(( bad_full_cnt + bad_incr_cnt ))
 
-# 전수 출력은 FULL_MANIFEST & !QUIET에서만
-if [[ $FULL_MANIFEST -eq 1 && $QUIET -eq 0 ]]; then
-  echo "— FULL 전수 결과"; while IFS= read -r f; do [[ -n "$f" ]] && check_one_exact "$FULL_DIR/$f" || true; done < "$tmpdir/full.list"
-  echo "— INCR 전수 결과"; while IFS= read -r f; do [[ -n "$f" ]] && check_one_exact "$INCR_DIR/$f" || true; done < "$tmpdir/incr.list"
-fi
+  { echo "[RCDBG] rc=$rc  ok_full=$ok_full bad_full_cnt=$bad_full_cnt  ok_incr=$ok_incr bad_incr_cnt=$bad_incr_cnt  total_full=$total_full total_incr=$total_incr" >&2; } || true
 
-if [[ $QUIET -eq 0 && ${JSON_SUMMARY_ONLY:-0} -eq 0 ]]; then
-  echo
-  echo "===================="
-  echo "SUMMARY"
-  echo "===================="
-  printf "개수: FULL 기대=%d 실제=%d | INCR 기대=%d 실제=%d\n" \
-    "$total_full" "$(ls -1 "$FULL_DIR" 2>/dev/null | wc -l)" \
-    "$total_incr" "$(ls -1 "$INCR_DIR" 2>/dev/null | wc -l)"
-  printf "무결성: FULL OK=%d BAD=%d | INCR OK=%d BAD=%d\n" \
-    "$ok_full" "$bad_full_cnt" "$ok_incr" "$bad_incr_cnt"
-  if (( rc==0 )); then
-    echo "[ALL GREEN] 무결성 이상 없음 ✅"
-  else
-    echo "[ATTENTION] 무결성 불일치 존재 ❗"
+  if [[ $FULL_MANIFEST -eq 1 && $QUIET -eq 0 ]]; then
+    echo "— FULL 전수 결과"; while IFS= read -r f; do [[ -n "$f" ]] && check_one_exact "$FULL_DIR/$f" || true; done < "$tmpdir/full.list"
+    echo "— INCR 전수 결과"; while IFS= read -r f; do [[ -n "$f" ]] && check_one_exact "$INCR_DIR/$f" || true; done < "$tmpdir/incr.list"
   fi
-fi
 
-# JSON 요약 출력
-if [[ ${JSON_SUMMARY:-0} -eq 1 || ${JSON_SUMMARY_ONLY:-0} -eq 1 ]]; then
-  printf '{"full_expected":%d,"incr_expected":%d,"full_ok":%d,"full_bad":%d,"incr_ok":%d,"incr_bad":%d,"rc":%d}\n' \
-    "$total_full" "$total_incr" "$ok_full" "$bad_full_cnt" "$ok_incr" "$bad_incr_cnt" "$rc"
-fi
+  # ---- TRACE SUMMARY BEGIN ----
+  PS4='+TRACE+ '; BASH_XTRACEFD=2; set -x
+  if [[ $QUIET -eq 0 ]]; then
+    echo
+    echo "===================="
+    echo "SUMMARY"
+    echo "===================="
+    printf "개수: FULL 기대=%d 실제=%d | INCR 기대=%d 실제=%d\n" \
+      "$total_full" "$(ls -1 "$FULL_DIR" 2>/dev/null | wc -l)" \
+      "$total_incr" "$(ls -1 "$INCR_DIR" 2>/dev/null | wc -l)"
+    printf "무결성: FULL OK=%d BAD=%d | INCR OK=%d BAD=%d\n" \
+      "$ok_full" "$bad_full_cnt" "$ok_incr" "$bad_incr_cnt"
+    if (( rc==0 )); then
+      echo "[ALL GREEN] 무결성 이상 없음 ✅"
+    else
+      echo "[ATTENTION] 무결성 불일치 존재 ❗"
+    fi
+  fi
+  set +x; # ---- TRACE SUMMARY END ----
 
-exit $rc
-# ---- END: unified summary & deterministic exit ----
+  exit $rc
+  # ---- END: unified summary & deterministic exit ----

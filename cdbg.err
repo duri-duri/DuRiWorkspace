@@ -1,0 +1,6 @@
+[QDBG] base='FULL__2025-08-22__2044__host-duri-head.tar.zst' f='/mnt/hdd/ARCHIVE/FULL/FULL__2025-08-22__2044__host-duri-head.tar.zst'
+[CDBG] hmeta(from meta)=1041c3aa87d6ef51a06a7e1c314cf72a33596f3903f2fb368d31d3727f0dcbf2
+[CDBG] using meta=/mnt/usb/CORE_PROTECTED/META/SHA256SUMS.FULL__2025-08-22__2044__host-duri-head.txt for base=FULL__2025-08-22__2044__host-duri-head.tar.zst
+[CDBG] hfile(computed)=1041c3aa87d6ef51a06a7e1c314cf72a33596f3903f2fb368d31d3727f0dcbf2
+[RCDBG] rc=1  ok_full=0 bad_full_cnt=1  ok_incr=0 bad_incr_cnt=0  total_full=1 total_incr=0
+0

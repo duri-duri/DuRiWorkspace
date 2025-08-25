@@ -1,0 +1,16 @@
+[RCDBG] rc=0  ok_full=1 bad_full_cnt=0  ok_incr=0 bad_incr_cnt=0  total_full=1 total_incr=0
+0
+++TRACE+ [[ 0 -eq 0 ]]
+++TRACE+ echo
+++TRACE+ echo ====================
+++TRACE+ echo SUMMARY
+++TRACE+ echo ====================
++++TRACE+ ls -1 /mnt/hdd/ARCHIVE/FULL
++++TRACE+ wc -l
++++TRACE+ ls -1 /mnt/hdd/ARCHIVE/INCR
++++TRACE+ wc -l
+++TRACE+ printf '개수: FULL 기대=%d 실제=%d | INCR 기대=%d 실제=%d\n' 1 21 '0
+0' 9
+./apply.sh: line 255: printf: 0
+0: invalid number
+++TRACE+ rm -rf /tmp/tmp.JUGfi6Zdao

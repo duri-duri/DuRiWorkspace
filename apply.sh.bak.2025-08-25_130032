@@ -34,19 +34,15 @@ fi
 # 옵션 파싱
 # =========================
 VERIFY_ONLY=0
-JSON_SUMMARY=${JSON_SUMMARY:-0}
-JSON_SUMMARY_ONLY=${JSON_SUMMARY_ONLY:-0}
 KEEP_TMP=0
 FULL_MANIFEST=0
 QUIET=0
 for arg in "$@"; do
   case "$arg" in
-    --verify-only)    VERIFY_ONLY=1 ;;
-    --keep-tmp)       KEEP_TMP=1 ;;
-    --full-manifest)  FULL_MANIFEST=1 ;;
-    --quiet)          QUIET=1 ;;
-    --json-summary)   JSON_SUMMARY=1 ;;
-    --json-summary-only) JSON_SUMMARY_ONLY=1 ;;
+    --verify-only) VERIFY_ONLY=1 ;;
+    --keep-tmp) KEEP_TMP=1 ;;
+    --full-manifest) FULL_MANIFEST=1 ;;
+    --quiet) QUIET=1 ;;
   esac
 done
 
@@ -276,7 +272,7 @@ if [[ $FULL_MANIFEST -eq 1 && $QUIET -eq 0 ]]; then
   echo "— INCR 전수 결과"; while IFS= read -r f; do [[ -n "$f" ]] && check_one_exact "$INCR_DIR/$f" || true; done < "$tmpdir/incr.list"
 fi
 
-if [[ $QUIET -eq 0 && ${JSON_SUMMARY_ONLY:-0} -eq 0 ]]; then
+if [[ $QUIET -eq 0 ]]; then
   echo
   echo "===================="
   echo "SUMMARY"
@@ -293,8 +289,8 @@ if [[ $QUIET -eq 0 && ${JSON_SUMMARY_ONLY:-0} -eq 0 ]]; then
   fi
 fi
 
-# JSON 요약 출력
-if [[ ${JSON_SUMMARY:-0} -eq 1 || ${JSON_SUMMARY_ONLY:-0} -eq 1 ]]; then
+# JSON 요약 출력 (환경변수 JSON_SUMMARY=1 또는 --json-summary 옵션 시)
+if [[ ${JSON_SUMMARY:-0} -eq 1 || " $* " == *" --json-summary "* ]]; then
   printf '{"full_expected":%d,"incr_expected":%d,"full_ok":%d,"full_bad":%d,"incr_ok":%d,"incr_bad":%d,"rc":%d}\n' \
     "$total_full" "$total_incr" "$ok_full" "$bad_full_cnt" "$ok_incr" "$bad_incr_cnt" "$rc"
 fi
