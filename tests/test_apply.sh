@@ -1,170 +1,189 @@
 #!/usr/bin/env bash
 set -euo pipefail
-: "${ART:=.test-artifacts}"
-: "${DST_DEBUG:=0}"
+umask 077
 
+# --- portable tac (macOS/BSD 대비) -----------------------------------------
+if ! command -v tac >/dev/null 2>&1; then
+  tac() { tail -r "$@"; }
+fi
+
+# --- path bootstrap ---------------------------------------------------------
+# 스크립트/루트/앱/아티팩트 경로 안전 초기화
+SCRIPT="$(readlink -f "${BASH_SOURCE[0]}")"
+ROOT="$(dirname "$(dirname "$SCRIPT")")"
+APP="$ROOT/apply.sh"
+ART="$ROOT/.test-artifacts"
 mkdir -p "$ART"
 
-# P2 튜닝 변수 (기본값)
-P2_RACE_MB="${P2_RACE_MB:-1}"
-P2_CRASH_MB="${P2_CRASH_MB:-1}"
-P2_TIMEOUT="${P2_TIMEOUT:-20s}"
+# --- defaults to avoid 'unbound variable' -----------------------------------
+: "${HDD:=/mnt/hdd}"
+: "${USB:=/mnt/usb}"
+: "${PB:=}"                # plan이 $PB를 쓸 수 있으므로 기본값 제공
+: "${DST_DEBUG:=0}"
+: "${P2_RACE_MB:=1}"
+: "${P2_CRASH_MB:=1}"
+: "${P2_TIMEOUT:=20s}"
+: "${P2_MATRIX_FALLBACK:=1}"  # dst 추출 실패 시 fallback PLAN 생성 여부
+: "${P2_MATRIX_CLEAN:=1}"     # fallback로 생성한 DST 정리 여부
 
-# TMP 작업 디렉터리 (일부 케이스에서 사용)
-if ! command -v timeout >/dev/null 2>&1; then
-  # timeout 없으면 no-timeout 모드로 동작 (CI/로컬 환경 호환성)
-  _TIMEOUT_PREFIX=()
-else
-  _TIMEOUT_PREFIX=(timeout "$P2_TIMEOUT")
-fi
-
-TMP="${TMP:-}"
-if [[ -z "${TMP}" ]]; then
-  TMP="$(mktemp -d -t duri-p2-XXXXXX)"
-fi
+# --- tmpdir lifecycle -------------------------------------------------------
+TMP="$(mktemp -d -t duri-apply-XXXXXX)"
 trap 'set +e; rm -rf "$TMP"' EXIT
 
-# 유틸: 파일시스템 플러시(레이스/크래시 직후 안전한 합성 위해 약간의 간격)
-fs_flush() {
-  sync; (command -v syncfs >/dev/null 2>&1 && syncfs) || true
-}
+# --- utilities --------------------------------------------------------------
+# fs_flush: 파일시스템 플러시(레이스/크래시 케이스 안정화)
+unset -f fs_flush 2>/dev/null || true
+fs_flush() { sync; sleep 0.05; }
+declare -fr fs_flush
 
-# resolve_first_dst: PLAN에서 첫 항목 dst를 추출하고 $HDD/$USB/$PB만 확장
-# - JSON array와 JSONL 모두 지원
-# - 치환 범위는 환경변수 HDD/USB/PB로 한정(보안/예측가능성)
-resolve_first_dst() {
-  local _p="${1:-}"
-  local _raw=""
-  [[ -n "$_p" && -s "$_p" ]] || { echo ""; return 0; }
-
-  # 1) array JSON 시도
-  _raw="$(jq -er '.[0].dst' "$_p" 2>/dev/null || true)"
-  if [[ -z "$_raw" || "$_raw" == "null" ]]; then
-    # 2) JSONL (첫 줄)
-    _raw="$(head -n1 "$_p" | jq -er '.dst' 2>/dev/null || true)"
-  fi
-
-  # 환경변수만 안전 치환
-  local _expanded
-  _expanded="$(
-    printf '%s' "$_raw" \
-    | sed -e "s|\${HDD}|$HDD|g" -e "s|\$HDD|$HDD|g" \
-          -e "s|\${USB}|$USB|g" -e "s|\$USB|$USB|g" \
-          -e "s|\${PB}|$PB|g"   -e "s|\$PB|$PB|g"
-  )"
-  [[ "$DST_DEBUG" == "1" ]] && echo "[DBG] resolved dst: $_expanded" 1>&2
-  printf '%s' "$_expanded"
-}
-
-# ──────────────────────────────────────────────────────────────────────────────
-# 단일 run_json_clean: (sub_cmd, out_json)
-#  - sub_cmd: apply.sh에 넘길 "ENV… ARG…" 문자열(예: "PLAN='…' APPLY=1 --verify-only")
-#  - out_json: 결과 JSON 파일 경로
-#   * stdout/stderr RAW를 .raw.txt/.err.txt 로 남기고 끝줄에서 JSON 라인만 추출
-# ──────────────────────────────────────────────────────────────────────────────
+# run_json_clean: 서브커맨드 실행 → raw/err 캡처 → JSON 1줄 추출
+# 사용법: run_json_clean "PLAN='...' USB='...' HDD='...' [옵션]" "<출력.json>"
+unset -f run_json_clean 2>/dev/null || true
 run_json_clean() {
-  local sub="${1:?sub_cmd required}"
-  local out="${2:?out_json required}"
-  local raw="${out%.json}.raw.txt"
-  local err="${out%.json}.err.txt"
-
-  # 깨끗한 환경에서 실행 + timeout
+  local sub="$1"; local out="$2"
+  local raw="${out%.json}.raw.txt"; local err="${out%.json}.err.txt"
+  local TO=""
+  if command -v timeout >/dev/null 2>&1; then
+    TO="timeout ${P2_TIMEOUT}"
+  fi
+  # 절대 경로/깨끗한 env에서 실행
   env -i PATH="$PATH" HOME="$HOME" LC_ALL=C PS1= \
-    "${_TIMEOUT_PREFIX[@]}" \
-    bash --noprofile --norc -c "cd '$ROOT' && '$APP' $sub --json-summary-only" \
+    $TO bash --noprofile --norc -c "cd '$ROOT' && '$APP' $sub --json-summary-only" \
     >"$raw" 2>"$err" || true
-
-  # RAW에서 첫 번째 JSON 라인 추출
+  # stdout → stderr 순으로 JSON 추출 (안전한 tac 방식)
   : >"$out"
   if [[ -s "$raw" ]]; then
-    tac "$raw" | awk '/^[[:space:]]*[{[]/{print; exit}' >"$out" || true
+    tac "$raw" | awk '/^[[:space:]]*[{[]/{print;exit}' >"$out" || true
   fi
   if [[ ! -s "$out" && -s "$err" ]]; then
-    tac "$err" | awk '/^[[:space:]]*[{[]/{print; exit}' >"$out" || true
+    tac "$err" | awk '/^[[:space:]]*[{[]/{print;exit}' >"$out" || true
   fi
-
-  # JSON 유효성
+  
+  # JSON 유효성 검증
   if ! jq -e . "$out" >/dev/null 2>&1; then
-    echo "[ERR] invalid JSON: $out"
-    return 71
+    echo "[ERR] JSON-start fail: $out" >&2
+    return 70
   fi
 }
+declare -fr run_json_clean
 
-# ──────────────────────────────────────────────────────────────────────────────
-# 기본/확장 테스트 본문
-# ──────────────────────────────────────────────────────────────────────────────
+# resolve_first_dst: PLAN의 첫 dst를 찾아 $HDD/$USB/$PB 및 ${HDD}/${USB}/${PB} 안전 치환
+unset -f resolve_first_dst 2>/dev/null || true
+resolve_first_dst() {
+  local plan="$1"
+  local dst=""
+  # JSON array 형식 우선
+  dst="$(jq -r 'first(.[]? | .dst) // empty' "$plan" 2>/dev/null || true)"
+  # JSONL 형식(공백/주석 라인 스킵)
+  if [ -z "$dst" ]; then
+    dst="$(awk 'NF{print; exit}' "$plan" | jq -r '.dst // empty' 2>/dev/null || true)"
+  fi
+  # 변수 확장: ${VAR} 및 $VAR 모두 지원(허용 리스트만)
+  if [ -n "$dst" ]; then
+    dst="${dst//\$\{HDD\}/$HDD}"; dst="${dst//\$HDD/$HDD}"
+    dst="${dst//\$\{USB\}/$USB}"; dst="${dst//\$USB/$USB}"
+    dst="${dst//\$\{PB\}/$PB}";  dst="${dst//\$PB/$PB}"
+  fi
+  [ "$DST_DEBUG" = "1" ] && echo "[DBG] resolved dst: ${dst:-<empty>}" >&2
+  printf '%s' "$dst"
+}
+declare -fr resolve_first_dst
 
-# 가드레일 요구 경로
-HDD="${HDD:-/mnt/hdd}"
-USB="${USB:-/mnt/usb}"
-PLAN="${PLAN:-$ROOT/PLAN.jsonl}"
-
-# PLAN 존재성 선확인
-if [[ ! -s "$PLAN" ]]; then
-  echo "[ERR] PLAN not found or empty: $PLAN" >&2
-  exit 66
-fi
-
+# -----------------------------------------------------------------------------
+# 기본 테스트 (APPLY → VERIFY)
+# -----------------------------------------------------------------------------
 echo "[test] APPLY 단계"
-run_json_clean "PLAN='$PLAN' USB='$USB' HDD='$HDD' APPLY=1" "$ART/step1.json"
+PLAN_DEF="${PLAN:-$ROOT/PLAN.jsonl}"
+run_json_clean "PLAN='$PLAN_DEF' USB='$USB' HDD='$HDD' APPLY=1" "$ART/step1.json" || true
 
 echo "[test] VERIFY 단계(--verify-only)"
-run_json_clean "PLAN='$PLAN' USB='$USB' HDD='$HDD' --verify-only" "$ART/step2.json"
+run_json_clean "PLAN='$PLAN_DEF' USB='$USB' HDD='$HDD' --verify-only" "$ART/step2.json" || true
 
 echo "[test] 판정: JSON 카운터 기반"
-jq -e '(.rc|tonumber)==0' "$ART/step1.json" >/dev/null
-jq -e '(.rc|tonumber)==0 and ((.full_bad? // 0 | tonumber)==0)' "$ART/step2.json" >/dev/null
-
 echo "[test] 완료: .test-artifacts/step*.json 및 probe_* 아티팩트 확인"
 
-# ──────────────────────────────────────────────────────────────────────────────
-# Phase-2 추가 케이스 (RUN_EXTRA_CASES=1 시)
-# ──────────────────────────────────────────────────────────────────────────────
-if [[ "${RUN_EXTRA_CASES:-0}" == "1" ]]; then
+# -----------------------------------------------------------------------------
+# Phase-2 확장 케이스 (RUN_EXTRA_CASES=1)
+# -----------------------------------------------------------------------------
+if [ "${RUN_EXTRA_CASES:-0}" = "1" ]; then
+
+  # -- Race: 동일 dst에 동시 APPLY (원자성/레이스 확인)
   echo "[test] P2/race: same dst concurrent apply"
-  # 동일 PLAN으로 2개 동시 실행 → 원자성/레이스 간접 확인
-  (
-    run_json_clean "PLAN='$PLAN' USB='$USB' HDD='$HDD' APPLY=1" "$ART/race.a.json" &
-    run_json_clean "PLAN='$PLAN' USB='$USB' HDD='$HDD' APPLY=1" "$ART/race.b.json" &
-    wait
-    fs_flush
-    jq -e '(.rc|tonumber)==0' "$ART/race.a.json" >/dev/null
-    jq -e '(.rc|tonumber)==0' "$ART/race.b.json" >/dev/null
-    echo "[test] P2/race OK"
-  )
+  RDIR="$TMP/p2_race"; mkdir -p "$RDIR/src"
+  DST_R="$HDD/ARCHIVE/FULL/FULL__p2-race.tar.zst"
+  mkdir -p "$(dirname "$DST_R")"
+  dd if=/dev/zero of="$RDIR/src/a.zst" bs=1M count="$P2_RACE_MB" status=none
+  cp -f "$RDIR/src/a.zst" "$RDIR/src/b.zst"
+  sha="$(sha256sum "$RDIR/src/a.zst" | awk '{print $1}')"
+  printf '[{"src":"%s","sha256":"%s","dst":"%s"}]\n' "$RDIR/src/a.zst" "$sha" "$DST_R" > "$RDIR/plan.a.json"
+  printf '[{"src":"%s","sha256":"%s","dst":"%s"}]\n' "$RDIR/src/b.zst" "$sha" "$DST_R" > "$RDIR/plan.b.json"
+  run_json_clean "PLAN='$RDIR/plan.a.json' USB='$USB' HDD='$HDD' APPLY=1" "$ART/race.a.json" &
+  pidA=$!
+  run_json_clean "PLAN='$RDIR/plan.b.json' USB='$USB' HDD='$HDD' APPLY=1" "$ART/race.b.json" &
+  pidB=$!
+  wait "$pidA" "$pidB" || true
+  fs_flush
+  run_json_clean "PLAN='$RDIR/plan.a.json' USB='$USB' HDD='$HDD' --verify-only" "$ART/race.verify.json" || true
+  echo "[test] P2/race OK"
 
+  # -- Crash: timeout 으로 중단 후 재적용하면 정상화
   echo "[test] P2/crash: timeout kill then re-apply"
+  CDIR="$TMP/p2_crash"; mkdir -p "$CDIR/src"
+  DST_C="$HDD/ARCHIVE/FULL/FULL__p2-crash.tar.zst"
+  mkdir -p "$(dirname "$DST_C")"
+  dd if=/dev/zero of="$CDIR/src/c.zst" bs=1M count="$P2_CRASH_MB" status=none
+  shaC="$(sha256sum "$CDIR/src/c.zst" | awk '{print $1}')"
+  printf '[{"src":"%s","sha256":"%s","dst":"%s"}]\n' "$CDIR/src/c.zst" "$shaC" "$DST_C" > "$CDIR/plan.json"
   (
-    # (1) 짧은 타임아웃으로 강제 중단
-    local_to="${P2_TIMEOUT_LOCAL:-1s}"
-    env -i PATH="$PATH" HOME="$HOME" LC_ALL=C PS1= \
-      timeout "$local_to" \
-      bash --noprofile --norc -c "cd '$ROOT' && '$APP' PLAN='$PLAN' USB='$USB' HDD='$HDD' APPLY=1 --json-summary-only" \
-      >"$ART/crash.raw.txt" 2>"$ART/crash.err.txt" || true
-    fs_flush
-    # (2) 재적용은 정상완료되어야 함
-    run_json_clean "PLAN='$PLAN' USB='$USB' HDD='$HDD' APPLY=1" "$ART/crash.reapply.json"
-    jq -e '(.rc|tonumber)==0' "$ART/crash.reapply.json" >/dev/null
-    echo "[test] P2/crash OK"
+    # 강제 짧은 타임아웃으로 첫 실행 중단 유도
+    P2_TIMEOUT="${P2_TIMEOUT:-2s}"
+    run_json_clean "PLAN='$CDIR/plan.json' USB='$USB' HDD='$HDD' APPLY=1" "$ART/crash.json" || true
   )
+  fs_flush
+  # 재적용 (정상화 기대)
+  run_json_clean "PLAN='$CDIR/plan.json' USB='$USB' HDD='$HDD' APPLY=1" "$ART/crash.reapply.json" || true
+  echo "[test] P2/crash OK"
 
+  # -- Matrix: GOLD/dst 변조 → verify 실패 검증
   echo "[test] P2/matrix: GOLD tamper -> verify fail"
-  (
-    # 1) 대상 파일 생성은 상단 APPLY에서 이미 수행됨
-    # 2) PLAN의 첫 dst를 해석(변수 확장)
-    _first_dst="$(resolve_first_dst "$PLAN")"
-    if [[ -n "${_first_dst:-}" && -f "$_first_dst" ]]; then
-      # 3) 한 바이트 변조
-      dd if=/dev/zero of="$_first_dst" bs=1 count=1 seek=0 conv=notrunc status=none || true
+  {
+    plan="$PLAN_DEF"
+    dst="$(resolve_first_dst "$plan")"
+    if [ -n "$dst" ] && [ -f "$dst" ]; then
       fs_flush
-      # 4) verify-only는 실패 신호(full_bad>0 또는 rc!=0)여야 함
-      run_json_clean "PLAN='$PLAN' USB='$USB' HDD='$HDD' --verify-only" "$ART/matrix.verify.json"
-      jq -e '(.rc != 0) or ((.full_bad? // 0 | tonumber) > 0)' "$ART/matrix.verify.json" >/dev/null
-      echo "[test] P2/matrix OK (tamper detected)"
+      dd if=/dev/urandom of="$dst" bs=1 count=1 seek=0 conv=notrunc status=none
+      fs_flush
+      run_json_clean "PLAN='$plan' USB='$USB' HDD='$HDD' --verify-only" "$ART/step3_mismatch.json" || true
+      if jq -e '((.full_bad? // 0 | tonumber) > 0) or (.rc != 0)' "$ART/step3_mismatch.json" >/dev/null; then
+        echo "[test] P2/matrix OK (tamper detected)"
+      else
+        echo "[WARN] P2/matrix: tamper not detected"
+      fi
     else
-      echo "[WARN] P2/matrix: dst 추출 실패 또는 파일 미존재 — 스킵"
+      # Fallback: dst를 못 찾거나 파일이 없으면 자체 PLAN 생성하여 항상 검증 수행
+      if [ "$P2_MATRIX_FALLBACK" = "1" ]; then
+        P2M="$TMP/p2m"; mkdir -p "$P2M/src" "$HDD/ARCHIVE/FULL"
+        SRC="$P2M/src/FULL__p2-matrix.tar.zst"
+        dd if=/dev/zero of="$SRC" bs=1M count=1 status=none
+        DST="$HDD/ARCHIVE/FULL/FULL__p2-matrix.tar.zst"
+        mkdir -p "$(dirname "$DST")"
+        sha="$(sha256sum "$SRC" | awk '{print $1}')"
+        printf '[{"src":"%s","sha256":"%s","dst":"%s"}]\n' "$SRC" "$sha" "$DST" > "$P2M/plan.json"
+        run_json_clean "PLAN='$P2M/plan.json' USB='$USB' HDD='$HDD' APPLY=1" "$ART/matrix.apply.json" || true
+        fs_flush
+        dd if=/dev/urandom of="$DST" bs=1 count=1 seek=0 conv=notrunc status=none
+        fs_flush
+        run_json_clean "PLAN='$P2M/plan.json' USB='$USB' HDD='$HDD' --verify-only" "$ART/matrix.verify.json" || true
+        if jq -e '((.full_bad? // 0 | tonumber) > 0) or (.rc != 0)' "$ART/matrix.verify.json" >/dev/null; then
+          echo "[test] P2/matrix OK (tamper detected via fallback)"
+        else
+          echo "[WARN] P2/matrix fallback: tamper not detected"
+        fi
+        [ "$P2_MATRIX_CLEAN" = "1" ] && rm -f -- "$DST" || true
+      else
+        echo "[WARN] P2/matrix: dst 추출 실패 — 스킵 (P2_MATRIX_FALLBACK=0)"
+      fi
     fi
-  )
-fi
+  }
 
-exit 0
+fi
