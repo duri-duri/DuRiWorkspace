@@ -1,2 +1,0 @@
-mkdir: cannot create directory '/mnt/hdd/ARCHIVE/CHECKPOINTS': Read-only file system
-mkdir: cannot create directory '/mnt/hdd/ARCHIVE/META': Read-only file system
