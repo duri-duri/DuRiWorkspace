@@ -80,3 +80,29 @@ verify-logs:
 	  jq -e '((.full_bad? // 0 | tonumber) > 0)' \
 	     .test-artifacts/step3_mismatch.json >/dev/null) || true
 	@echo "OK"
+
+# === Help ===
+.PHONY: help
+HELP_WIDTH ?= 16
+help: ## Show help for common targets and tunables
+	@echo "DuRi apply test runner — targets"
+	@printf "  \033[36m%-$(HELP_WIDTH)s\033[0m %s\n" \
+	 "clean"        "Remove test artifacts and re-create .test-artifacts" \
+	 "check-env"    "Check required tools (jq) exist" \
+	 "smoke"        "Run clean → test → verify-logs" \
+	 "test"         "Run base apply & verify-only sequence" \
+	 "verify-logs"  "Validate JSON counters (full_ok/full_bad/rc)" \
+	 "test-extended""Run extended base (APPLY_EXT=1)" \
+	 "test-ro-hdd"  "Filesystem read-only simulation (auto-skip if no sudo)" \
+	 "test-extra"   "Phase-2: race/crash/matrix (tunable via P2_* envs)" \
+	 "test-enospc"  "ENOSPC via tmpfs (requires sudo; auto-skip if none)" \
+	 "test-all"     "Run base + RO + Phase-2" \
+	 "test-all-ci"  "CI combo (auto-skip sudo-requiring cases)"
+	@echo
+	@echo "Tunables:"
+	@printf "  %-$(HELP_WIDTH)s %s\n" \
+	 "P2_RACE_MB"   "Race file size in MB (default 1)" \
+	 "P2_CRASH_MB"  "Crash file size in MB (default 1)" \
+	 "P2_TIMEOUT"   "Timeout for Phase-2, e.g. 500ms/2s (default 20s)" \
+	 "ENOSPC_SIZE"  "tmpfs size for test-enospc, e.g. 8m" \
+	 "FILL_MB"      "Pre-fill MB for ENOSPC (default 7)"
