@@ -32,3 +32,6 @@ var/state/
 **/.git/
 .local/
 var/test_restore/
+
+.test-artifacts/
+--json-summary --quiet*
