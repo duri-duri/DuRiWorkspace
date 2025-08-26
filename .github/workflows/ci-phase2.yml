@@ -23,7 +23,8 @@ jobs:
       P2_CRASH_MB: "2"
       P2_TIMEOUT: "2s"
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Install jq
         run: |
@@ -33,24 +34,19 @@ jobs:
       - name: Help (for log readability)
         run: make help || true
 
-      - name: Phase-2 suite
+      - name: Run test-all-ci
         run: make test-all-ci
 
       - name: Summarize key results
         if: always()
         run: |
-          echo "## DuRi Phase-2 Summary" >> "$GITHUB_STEP_SUMMARY"
-          if [ -d .test-artifacts ]; then
-            for f in .test-artifacts/step1.json .test-artifacts/step2.json \
-                     .test-artifacts/matrix.verify.json .test-artifacts/race.verify.json; do
-              [ -s "$f" ] || continue
-              printf "\n### %s\n\n" "$(basename "$f")" >> "$GITHUB_STEP_SUMMARY"
-              jq -r '{rc,full_ok,full_bad} | to_entries | map("- \(.key): \(.value // 0)") | .[]' "$f" \
-                >> "$GITHUB_STEP_SUMMARY" || true
-            done
-          else
-            echo "- No .test-artifacts found" >> "$GITHUB_STEP_SUMMARY"
-          fi
+          echo "## Phase-2 summary" >> "$GITHUB_STEP_SUMMARY"
+          for f in .test-artifacts/step1.json .test-artifacts/step2.json .test-artifacts/matrix.verify.json; do
+            if [ -s "$f" ]; then
+              echo -n "- \`$f\`: " >> "$GITHUB_STEP_SUMMARY"
+              jq -c '{rc,full_ok:(.full_ok? // 0),full_bad:(.full_bad? // 0)}' "$f" >> "$GITHUB_STEP_SUMMARY" || true
+            fi
+          done
 
       - name: Upload test artifacts
         if: always()
