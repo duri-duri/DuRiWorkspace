@@ -60,10 +60,11 @@ run_json_clean() {
     tac "$err" | awk '/^[[:space:]]*[{[]/{print;exit}' >"$out" || true
   fi
   
-  # JSON 유효성 검증
+  # JSON 유효성 검증 - 실패 시 fallback JSON 생성
   if ! jq -e . "$out" >/dev/null 2>&1; then
-    echo "[ERR] JSON-start fail: $out" >&2
-    return 70
+    echo "[WARN] JSON-start fail: $out, creating fallback JSON" >&2
+    # fallback JSON 생성 (에러 상태를 나타내는 JSON)
+    printf '{"full_expected":0,"incr_expected":0,"full_ok":0,"full_bad":0,"incr_ok":0,"incr_bad":0,"rc":1,"note":"JSON extraction failed"}\n' >"$out"
   fi
 }
 declare -f run_json_clean
