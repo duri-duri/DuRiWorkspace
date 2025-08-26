@@ -37,37 +37,7 @@ unset -f fs_flush 2>/dev/null || true
 fs_flush() { sync; sleep 0.05; }
 declare -fr fs_flush
 
-# run_json_clean: 서브커맨드 실행 → raw/err 캡처 → JSON 1줄 추출
-# 사용법: run_json_clean "PLAN='...' USB='...' HDD='...' [옵션]" "<출력.json>"
-unset -f run_json_clean 2>/dev/null || true
-run_json_clean() {
-  local sub="$1"; local out="$2"
-  local raw="${out%.json}.raw.txt"; local err="${out%.json}.err.txt"
-  local TO=""
-  if command -v timeout >/dev/null 2>&1; then
-    TO="timeout ${P2_TIMEOUT}"
-  fi
-  # 절대 경로/깨끗한 env에서 실행
-  env -i PATH="$PATH" HOME="$HOME" LC_ALL=C PS1= \
-    $TO bash --noprofile --norc -c "cd '$ROOT' && '$APP' $sub --json-summary-only" \
-    >"$raw" 2>"$err" || true
-  # stdout → stderr 순으로 JSON 추출 (안전한 tac 방식)
-  : >"$out"
-  if [[ -s "$raw" ]]; then
-    tac "$raw" | awk '/^[[:space:]]*[{[]/{print;exit}' >"$out" || true
-  fi
-  if [[ ! -s "$out" && -s "$err" ]]; then
-    tac "$err" | awk '/^[[:space:]]*[{[]/{print;exit}' >"$out" || true
-  fi
-  
-  # JSON 유효성 검증 - 실패 시 fallback JSON 생성
-  if ! jq -e . "$out" >/dev/null 2>&1; then
-    echo "[WARN] JSON-start fail: $out, creating fallback JSON" >&2
-    # fallback JSON 생성 (에러 상태를 나타내는 JSON)
-    printf '{"full_expected":0,"incr_expected":0,"full_ok":0,"full_bad":0,"incr_ok":0,"incr_bad":0,"rc":1,"note":"JSON extraction failed"}\n' >"$out"
-  fi
-}
-declare -f run_json_clean
+# run_json_clean 함수는 아래에 정의됨 (중복 제거)
 
 # json_first_line: 파일에서 처음 등장하는 JSON 오브젝트/배열 시작 줄만 추출
 json_first_line() {
@@ -96,17 +66,19 @@ json_sanitize_file() {
   return 0
 }
 
-# resolve_first_dst: PLAN의 첫 dst를 찾아 $HDD/$USB/$PB 및 ${HDD}/${USB}/${PB} 안전 치환
+# resolve_first_dst: PLAN의 첫 경로를 찾아 $HDD/$USB/$PB 및 ${HDD}/${USB}/${PB} 안전 치환
 unset -f resolve_first_dst 2>/dev/null || true
 resolve_first_dst() {
   local plan="$1"
   local dst=""
-  # JSON array 형식 우선
-  dst="$(jq -r 'first(.[]? | .dst) // empty' "$plan" 2>/dev/null || true)"
-  # JSONL 형식(공백/주석 라인 스킵)
-  if [ -z "$dst" ]; then
-    dst="$(awk 'NF{print; exit}' "$plan" | jq -r '.dst // empty' 2>/dev/null || true)"
-  fi
+  # 다형 파서: 숫자/불린/null 무시, 문자열/객체만 처리
+  dst="$(jq -r '
+    if type=="array" then .[] else . end
+    | if type=="object" then (.src // .dst // .path // .)
+      elif type=="string" then .
+      else empty end
+    | select(type=="string")
+  ' "$plan" 2>/dev/null | head -n 1 || true)"
   # 변수 확장: ${VAR} 및 $VAR 모두 지원(허용 리스트만)
   if [ -n "$dst" ]; then
     dst="${dst//\$\{HDD\}/$HDD}"; dst="${dst//\$HDD/$HDD}"
@@ -133,13 +105,9 @@ run_json_clean() {
   # JSON-only 모드에서는 stdout에 JSON만 있으므로 직접 복사
   cp "$raw" "$out" || true
 
-  # JSON 유효성 검증 - 실패 시 fallback JSON 생성
-  if ! jq -e . "$out" >/dev/null 2>&1; then
-    echo "[WARN] JSON validation failed: $out, creating fallback JSON" >&2
-    printf '{"rc":1,"error":"json validation failed","raw_tail":%s,"err_tail":%s}\n' \
-      "$(tail -n 50 "$raw" | jq -aRs .)" \
-      "$(tail -n 50 "$err" | jq -aRs .)" >"$out"
-  fi
+  # 이제 stdout은 반드시 단일 JSON이어야 한다.
+  # 파싱 실패 시 바로 실패(대체 JSON으로 덮어쓰지 않음)
+  jq -e . "$out" >/dev/null 2>&1 || { echo "[ERR] invalid JSON: $out" >&2; return 70; }
 }
 
 # ---- APPLY (step1) -------------------------------------------------
