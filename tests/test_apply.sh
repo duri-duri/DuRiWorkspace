@@ -89,18 +89,49 @@ resolve_first_dst() {
 }
 declare -fr resolve_first_dst
 
-# -----------------------------------------------------------------------------
-# 기본 테스트 (APPLY → VERIFY)
-# -----------------------------------------------------------------------------
-echo "[test] APPLY 단계"
-PLAN_DEF="${PLAN:-$ROOT/PLAN.jsonl}"
-run_json_clean "PLAN='$PLAN_DEF' USB='$USB' HDD='$HDD' APPLY=1" "$ART/step1.json" || true
+# ========= BEGIN: APPLY/VERIFY runner (drop-in replacement) =========
 
-echo "[test] VERIFY 단계(--verify-only)"
-run_json_clean "PLAN='$PLAN_DEF' USB='$USB' HDD='$HDD' --verify-only" "$ART/step2.json" || true
+# JSON 한 건만 추출 (stdout 우선, 실패 시 stderr)
+_extract_first_json() {
+  awk '/^[[:space:]]*[{[]/ {print; exit}'
+}
+
+run_json_clean() {
+  local out="$1" raw="$2" err="$3"; shift 3
+  # 커맨드 실행 (환경변수=값은 반드시 명령어 앞!)
+  env -i PATH="$PATH" HOME="$HOME" LC_ALL=C PS1= "$@" >"$raw" 2>"$err" || true
+
+  # stdout → stderr 순서로 JSON 추출 (tac -- 로 파일명 안전)
+  : >"$out"
+  tac -- "$raw" | _extract_first_json >"$out" || true
+  if ! grep -q '^[[:space:]]*[{[]' "$out" 2>/dev/null; then
+    tac -- "$err" | _extract_first_json >"$out" || true
+  fi
+
+  # 그래도 비어있으면 스텁 JSON 남겨 디버깅 정보 보존
+  if ! test -s "$out"; then
+    printf '{"rc":1,"error":"json not found","raw_tail":%s,"err_tail":%s}\n' \
+      "$(tail -n 50 "$raw" | jq -aRs .)" \
+      "$(tail -n 50 "$err" | jq -aRs .)" >"$out"
+  fi
+}
+
+# ---- APPLY (step1) -------------------------------------------------
+raw="$ART/step1.raw.txt"; err="$ART/step1.err.txt"; out="$ART/step1.json"
+run_json_clean "$out" "$raw" "$err" \
+  PLAN="$PLAN_DEF" HDD="${HDD:-/mnt/hdd}" USB="${USB:-/mnt/usb}" APPLY=1 \
+  "$APP" --json-summary-only
+
+# ---- VERIFY-ONLY (step2) ------------------------------------------
+raw="$ART/step2.raw.txt"; err="$ART/step2.err.txt"; out="$ART/step2.json"
+run_json_clean "$out" "$raw" "$err" \
+  PLAN="$PLAN_DEF" HDD="${HDD:-/mnt/hdd}" USB="${USB:-/mnt/usb}" \
+  "$APP" --json-summary-only --verify-only
 
 echo "[test] 판정: JSON 카운터 기반"
 echo "[test] 완료: .test-artifacts/step*.json 및 probe_* 아티팩트 확인"
+
+# =========  END: APPLY/VERIFY runner (drop-in replacement)  =========
 
 # -----------------------------------------------------------------------------
 # Phase-2 확장 케이스 (RUN_EXTRA_CASES=1)
