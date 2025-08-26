@@ -33,6 +33,19 @@ if [ "$JSON_ONLY" -eq 1 ]; then
 fi
 
 # =========================
+# PLAN 유틸리티
+# =========================
+# PLAN 항목 → "경로 문자열"로 정규화 (객체/문자열 모두 지원)
+plan_paths() {
+  jq -r '
+    if type=="array" then .[] else . end
+    | if type=="object" then (.src // .dst // .path // .)
+      elif type=="string" then .
+      else empty end
+  ' "$PLAN"
+}
+
+# =========================
 # 환경변수
 # =========================
 APPLY="${APPLY:-0}"                 # 0=DRY, 1=실행
@@ -48,7 +61,12 @@ META_DIR="${META_DIR:-$CORE_OUT/META}"
 # =========================
 # PLAN 사전 가드레일
 # =========================
-if jq -r '.[].dst // empty' "$PLAN" | grep -E -v '^/mnt/hdd/ARCHIVE/(FULL|INCR)/' | grep . >/dev/null 2>&1; then
+if jq -r '
+  if type=="array" then .[] else . end
+  | if type=="object" then (.src // .dst // .path // .)
+    elif type=="string" then .
+    else empty end
+' "$PLAN" | grep -E -v '^/mnt/hdd/ARCHIVE/(FULL|INCR)/' | grep . >/dev/null 2>&1; then
   echo "[ERR] invalid dst in plan (must start with /mnt/hdd/ARCHIVE/(FULL|INCR)/)"
   exit 2
 fi
@@ -127,7 +145,7 @@ if [[ $VERIFY_ONLY -eq 0 ]]; then
 
   # 1) 이관
   say "[1/3] 백업 파일 이관:"
-  jq -r '.src' "$PLAN" | while IFS= read -r f; do
+  plan_paths | while IFS= read -r f; do
     [[ -z "$f" ]] && continue
     base="$(basename "$f")"
     [[ $QUIET -eq 0 ]] && log "[COPY] $base"
@@ -141,7 +159,11 @@ if [[ $VERIFY_ONLY -eq 0 ]]; then
 
   # 2) SHA256SUMS
   say "[2/3] SHA256SUMS 메타데이터 생성:"
-  jq -r 'select(.sha256 != null) | "\(.src)|\(.sha256)"' "$PLAN" \
+  jq -r '
+    if type=="array" then .[] else . end
+    | if type=="object" and (.sha256 != null) then "\(.src // .dst // .path // .)|\(.sha256)"
+      else empty end
+  ' "$PLAN" \
   | while IFS='|' read -r f hash; do
       [[ -z "$f" ]] && continue
       base="$(basename "$f")"
@@ -156,7 +178,11 @@ if [[ $VERIFY_ONLY -eq 0 ]]; then
   GOLD="$(ls -1t "$HDD_AR/FULL"/FULL__*.tar.zst 2>/dev/null | head -1 || true)"
   if [[ -n "$GOLD" ]]; then
     base="$(basename "$GOLD")"
-    src_from_plan="$(jq -r --arg b "$base" 'select(.src|endswith($b)) | .src' "$PLAN" | head -1 || true)"
+    src_from_plan="$(jq -r --arg b "$base" '
+      if type=="array" then .[] else . end
+      | if type=="object" and ((.src // .dst // .path // .) | endswith($b)) then (.src // .dst // .path // .)
+        else empty end
+    ' "$PLAN" | head -1 || true)"
     meta="$META_DIR/${base%.tar.zst}.GOLD.txt"
     {
       echo "GOLD_FULL=$base"
@@ -183,8 +209,23 @@ fi
 tmpdir="$(mktemp -d)"
 [[ $KEEP_TMP -eq 0 ]] && trap 'rm -rf "$tmpdir"' EXIT
 
-jq -r 'select(.src|test("/FULL__")) | (.src|capture("(?<base>FULL__.*)").base)' "$PLAN" | sort -u > "$tmpdir/full.list" || true
-jq -r 'select(.src|test("/INCR__")) | (.src|capture("(?<base>INCR__.*)").base)' "$PLAN" | sort -u > "$tmpdir/incr.list" || true
+jq -r '
+  if type=="array" then .[] else . end
+  | if type=="object" then (.src // .dst // .path // .)
+    elif type=="string" then .
+    else empty end
+  | select(test("/FULL__"))
+  | capture("(?<base>FULL__.*)").base
+' "$PLAN" | sort -u > "$tmpdir/full.list" || true
+
+jq -r '
+  if type=="array" then .[] else . end
+  | if type=="object" then (.src // .dst // .path // .)
+    elif type=="string" then .
+    else empty end
+  | select(test("/INCR__"))
+  | capture("(?<base>INCR__.*)").base
+' "$PLAN" | sort -u > "$tmpdir/incr.list" || true
 
 FULL_DIR="$HDD_AR/FULL"
 INCR_DIR="$HDD_AR/INCR"
