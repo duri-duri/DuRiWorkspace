@@ -333,3 +333,4 @@ git pull origin main
 [![Phase-2 CI](https://github.com/duri-duri/DuRiWorkspace/actions/workflows/ci-phase2.yml/badge.svg?branch=main)](https://github.com/duri-duri/DuRiWorkspace/actions/workflows/ci-phase2.yml)
 
 # gate
+# workflow_dispatch test Tue Aug 26 10:02:49 KST 2025
