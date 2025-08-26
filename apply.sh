@@ -8,14 +8,29 @@ VERIFY_ONLY=0
 KEEP_TMP=0
 FULL_MANIFEST=0
 QUIET=0
+JSON_ONLY=0
 for arg in "$@"; do
   case "$arg" in
     --verify-only) VERIFY_ONLY=1 ;;
     --keep-tmp) KEEP_TMP=1 ;;
     --full-manifest) FULL_MANIFEST=1 ;;
     --quiet) QUIET=1 ;;
+    --json-summary-only)
+      JSON_ONLY=1
+      QUIET=1
+      ;;
   esac
 done
+
+# ---- logging helpers ----
+log() { printf '%s\n' "$*" 1>&2; }          # 항상 stderr
+say() { [ "${QUIET:-0}" -eq 0 ] && log "$@"; }  # QUIET이면 침묵
+
+# JSON_ONLY: 모든 stdout을 stderr로 우회, 마지막에 fd3(원래 stdout)로 JSON만 1줄
+if [ "$JSON_ONLY" -eq 1 ]; then
+  exec 3>&1
+  exec 1>&2
+fi
 
 # =========================
 # 환경변수
@@ -87,53 +102,57 @@ copy() {
   local src="$1" dst="$2"
   if [ "$APPLY" = "1" ]; then
     mkdir -p "$(dirname "$dst")"
-    rsync -a --info=NAME,PROGRESS2 -- "$src" "$dst"
+    if [ "$JSON_ONLY" -eq 1 ]; then
+      rsync -a --info=NAME,PROGRESS2 -- "$src" "$dst" 1>&2
+    else
+      rsync -a --info=NAME,PROGRESS2 -- "$src" "$dst"
+    fi
   else
     if [[ $VERIFY_ONLY -eq 1 ]]; then
-      [[ $QUIET -eq 0 ]] && echo "[VERIFY-SKIP] $src"
+      [[ $QUIET -eq 0 ]] && log "[VERIFY-SKIP] $src"
     else
-      [[ $QUIET -eq 0 ]] && echo "[DRY] $src -> $dst"
+      [[ $QUIET -eq 0 ]] && log "[DRY] $src -> $dst"
     fi
   fi
 }
 
-[[ $QUIET -eq 0 ]] && echo "== apply.sh :: APPLY=$APPLY VERIFY_ONLY=$VERIFY_ONLY KEEP_TMP=$KEEP_TMP FULL_MANIFEST=$FULL_MANIFEST QUIET=$QUIET =="
-[[ $QUIET -eq 0 ]] && echo "[PLAN] $PLAN"
+[[ $QUIET -eq 0 ]] && log "== apply.sh :: APPLY=$APPLY VERIFY_ONLY=$VERIFY_ONLY KEEP_TMP=$KEEP_TMP FULL_MANIFEST=$FULL_MANIFEST QUIET=$QUIET =="
+[[ $QUIET -eq 0 ]] && log "[PLAN] $PLAN"
 
 # =========================
 # 메인 실행부
 # =========================
 if [[ $VERIFY_ONLY -eq 0 ]]; then
-  [[ $QUIET -eq 0 ]] && echo "== [APPLY MODE] 파일 이관 및 메타 생성 수행 =="
+  [[ $QUIET -eq 0 ]] && log "== [APPLY MODE] 파일 이관 및 메타 생성 수행 =="
 
   # 1) 이관
-  [[ $QUIET -eq 0 ]] && echo "[1/3] 백업 파일 이관:"
+  say "[1/3] 백업 파일 이관:"
   jq -r '.src' "$PLAN" | while IFS= read -r f; do
     [[ -z "$f" ]] && continue
     base="$(basename "$f")"
-    [[ $QUIET -eq 0 ]] && echo "[COPY] $base" >&2
+    [[ $QUIET -eq 0 ]] && log "[COPY] $base"
     if [ -d "$HDD" ]; then
       subdir="$( [[ $base == FULL__* ]] && echo FULL || echo INCR )"
       copy "$f" "$HDD_AR/$subdir/$base"
     else
-      [[ $QUIET -eq 0 ]] && echo "[SKIP] HDD 없음: $base"
+      [[ $QUIET -eq 0 ]] && log "[SKIP] HDD 없음: $base"
     fi
   done
 
   # 2) SHA256SUMS
-  [[ $QUIET -eq 0 ]] && echo "[2/3] SHA256SUMS 메타데이터 생성:"
+  say "[2/3] SHA256SUMS 메타데이터 생성:"
   jq -r 'select(.sha256 != null) | "\(.src)|\(.sha256)"' "$PLAN" \
   | while IFS='|' read -r f hash; do
       [[ -z "$f" ]] && continue
       base="$(basename "$f")"
       meta_file="$META_DIR/SHA256SUMS.${base%.tar.zst}.txt"
       printf "%s  %s\n" "$hash" "$base" > "$meta_file"
-      [[ $QUIET -eq 0 ]] && echo "[META] 생성: $meta_file"
+      [[ $QUIET -eq 0 ]] && log "[META] 생성: $meta_file"
       [ -d "$HDD" ] && copy "$meta_file" "$HDD_AR/META/$(basename "$meta_file")"
     done
 
   # 3) GOLD
-  [[ $QUIET -eq 0 ]] && echo "[3/3] GOLD FULL 메타데이터 생성:"
+  say "[3/3] GOLD FULL 메타데이터 생성:"
   GOLD="$(ls -1t "$HDD_AR/FULL"/FULL__*.tar.zst 2>/dev/null | head -1 || true)"
   if [[ -n "$GOLD" ]]; then
     base="$(basename "$GOLD")"
@@ -145,7 +164,7 @@ if [[ $VERIFY_ONLY -eq 0 ]]; then
       echo "HDD_PATH=$HDD_AR/FULL/$base"
     } > "$meta"
     copy "$meta" "$FINAL_OUT/"
-    [[ $QUIET -eq 0 ]] && echo "[GOLD] 최신 GOLD 지정: $base"
+    [[ $QUIET -eq 0 ]] && log "[GOLD] 최신 GOLD 지정: $base"
   fi
 
   # 4) 봉인
@@ -159,7 +178,7 @@ fi
 # =========================
 # 검증 & 요약
 # =========================
-[[ $QUIET -eq 0 ]] && echo && echo "====================" && echo "[VERIFY & SUMMARY]" && echo "===================="
+[[ $QUIET -eq 0 ]] && log && log "====================" && log "[VERIFY & SUMMARY]" && log "===================="
 
 tmpdir="$(mktemp -d)"
 [[ $KEEP_TMP -eq 0 ]] && trap 'rm -rf "$tmpdir"' EXIT
@@ -189,14 +208,33 @@ if [[ $FULL_MANIFEST -eq 1 && $QUIET -eq 0 ]]; then
   echo "— INCR 전수 결과"; while IFS= read -r f; do check_one_exact "$INCR_DIR/$f" || true; done < "$tmpdir/incr.list"
 fi
 
-[[ $QUIET -eq 0 ]] && echo && echo "====================" && echo "SUMMARY" && echo "===================="
+[[ $QUIET -eq 0 ]] && log && log "====================" && log "SUMMARY" && log "===================="
 printf "개수: FULL 기대=%d 실제=%d | INCR 기대=%d 실제=%d\n" "$(<"$tmpdir/full.list" wc -l)" "$(ls -1 "$FULL_DIR" 2>/dev/null | wc -l)" "$(<"$tmpdir/incr.list" wc -l)" "$(ls -1 "$INCR_DIR" 2>/dev/null | wc -l)"
 printf "무결성: FULL OK=%d BAD=%d | INCR OK=%d BAD=%d\n" "$ok_full" "$bad_full_cnt" "$ok_incr" "$bad_incr_cnt"
 
 if (( bad_full_cnt==0 && bad_incr_cnt==0 )); then
-  echo "[ALL GREEN] 무결성 이상 없음 ✅"
-  exit 0
+  say "[ALL GREEN] 무결성 이상 없음 ✅"
+  rc=0
 else
-  echo "[ATTENTION] 무결성 불일치 존재 ❗"
-  exit 1
+  say "[ATTENTION] 무결성 불일치 존재 ❗"
+  rc=1
 fi
+
+# ==== JSON 출력 (JSON_ONLY 모드일 때만) ====
+if [ "$JSON_ONLY" -eq 1 ]; then
+  full_expected="$(<"$tmpdir/full.list" wc -l)"
+  incr_expected="$(<"$tmpdir/incr.list" wc -l)"
+  full_ok="$ok_full"
+  full_bad="$bad_full_cnt"
+  incr_ok="$ok_incr"
+  incr_bad="$bad_incr_cnt"
+
+  if [ "${VERIFY_ONLY:-0}" -eq 1 ]; then
+    printf '{"full_expected":%d,"incr_expected":%d,"full_ok":%d,"full_bad":%d,"incr_ok":%d,"incr_bad":%d,"rc":%d}\n' \
+      "$full_expected" "$incr_expected" "$full_ok" "$full_bad" "$incr_ok" "$incr_bad" "$rc" >&3
+  else
+    printf '{"phase":"apply","rc":%d}\n' "$rc" >&3
+  fi
+fi
+
+exit "$rc"

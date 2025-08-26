@@ -130,16 +130,13 @@ run_json_clean() {
   # 커맨드 실행 (환경변수=값은 반드시 명령어 앞!)
   env -i PATH="$PATH" HOME="$HOME" LC_ALL=C PS1= "$@" >"$raw" 2>"$err" || true
 
-  # stdout → stderr 순서로 JSON 추출 (tac -- 로 파일명 안전)
-  : >"$out"
-  tac -- "$raw" | _extract_first_json >"$out" || true
-  if ! grep -q '^[[:space:]]*[{[]' "$out" 2>/dev/null; then
-    tac -- "$err" | _extract_first_json >"$out" || true
-  fi
+  # JSON-only 모드에서는 stdout에 JSON만 있으므로 직접 복사
+  cp "$raw" "$out" || true
 
-  # 그래도 비어있으면 스텁 JSON 남겨 디버깅 정보 보존
-  if ! test -s "$out"; then
-    printf '{"rc":1,"error":"json not found","raw_tail":%s,"err_tail":%s}\n' \
+  # JSON 유효성 검증 - 실패 시 fallback JSON 생성
+  if ! jq -e . "$out" >/dev/null 2>&1; then
+    echo "[WARN] JSON validation failed: $out, creating fallback JSON" >&2
+    printf '{"rc":1,"error":"json validation failed","raw_tail":%s,"err_tail":%s}\n' \
       "$(tail -n 50 "$raw" | jq -aRs .)" \
       "$(tail -n 50 "$err" | jq -aRs .)" >"$out"
   fi
@@ -159,12 +156,11 @@ run_json_clean "$out" "$raw" "$err" \
 
 echo "[test] 판정: JSON 카운터 기반"
 
-# JSON 파일 정제 (verify-logs 직전)
+# JSON 파일 디버그 출력 (읽기 전용)
 for f in "$ART"/step*.json; do
   [[ -f "$f" ]] || continue
   echo "[DEBUG] head $f"
   head -n 3 "$f" || true
-  json_sanitize_file "$f" || true
 done
 
 echo "[test] 완료: .test-artifacts/step*.json 및 probe_* 아티팩트 확인"
