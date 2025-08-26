@@ -4,18 +4,47 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: .
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ github.workspace }}
     steps:
       - uses: actions/checkout@v4
-
+        with:
+          fetch-depth: 0
+      - name: Common debug header
+        run: |
+          set -euxo pipefail
+          pwd
+          git rev-parse --is-inside-work-tree
+          ls -la
+          ls -la tests || true
+          ls -la scripts || true
+      - name: Ensure exec bit
+        run: |
+          chmod +x tests/*.sh scripts/*.sh || true
+      - name: Normalize line endings
+        run: |
+          git config --global core.autocrlf input
+      - name: Base deps
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r tools/requirements_day9.txt || true
+      - name: Sanity env guard (fail-fast)
+        run: |
+          set -euo pipefail
+          export PYTHONPATH="${PYTHONPATH:-.}"
       - name: Prepare FS mounts
         run: |
           sudo mkdir -p /mnt/usb /mnt/hdd/ARCHIVE/{FULL,INCR,META,CHECKPOINTS}
           sudo chmod -R 777 /mnt/usb /mnt/hdd
-
       - name: Install deps
         run: |
-          sudo apt-get update
-          sudo apt-get install -y jq rsync coreutils
+          export DEBIAN_FRONTEND=noninteractive
+          sudo apt-get update -yq
+          sudo apt-get install -yq jq rsync coreutils
 
       - name: Basic
         env:
