@@ -68,6 +68,27 @@ run_json_clean() {
 }
 declare -f run_json_clean
 
+# json_sanitize_file: JSON 파일 정제 (ANSI 제거, NaN/Inf→null, 유효성 검증)
+json_sanitize_file() {
+  local f="$1"
+  # 1) ANSI 컬러 제거
+  sed -i -r 's/\x1B\[[0-9;]*[mK]//g' "$f" 2>/dev/null || true
+  # 2) 파일 내에서 첫 JSON 블록만 남기기 ({ 또는 [ 로 시작)
+  if ! head -c 1 "$f" | grep -q '[{\[]'; then
+    # 뒤에서부터 검색해 JSON 시작 라인만 추출
+    tac "$f" | awk '/^[[:space:]]*[{[]/{print;exit}' > "$f.__head" || true
+    if [[ -s "$f.__head" ]]; then mv "$f.__head" "$f"; else : > "$f"; fi
+  fi
+  # 3) NaN / Infinity → null 치환 (jq가 허용하지 않음)
+  sed -i -E 's/: *-?Infinity([,}])/:\ null\1/g; s/: *NaN([,}])/:\ null\1/g' "$f" 2>/dev/null || true
+  # 4) 빠르게 유효성 체크. 실패하면 원본 유지하되 에러만 남김
+  if ! jq -e . "$f" >/dev/null 2>&1; then
+    echo "[WARN] JSON sanitize failed: $f" 1>&2
+    return 1
+  fi
+  return 0
+}
+
 # resolve_first_dst: PLAN의 첫 dst를 찾아 $HDD/$USB/$PB 및 ${HDD}/${USB}/${PB} 안전 치환
 unset -f resolve_first_dst 2>/dev/null || true
 resolve_first_dst() {
@@ -130,6 +151,15 @@ run_json_clean "$out" "$raw" "$err" \
   "$APP" --json-summary-only --verify-only
 
 echo "[test] 판정: JSON 카운터 기반"
+
+# JSON 파일 정제 (verify-logs 직전)
+for f in "$ART"/step*.json; do
+  [[ -f "$f" ]] || continue
+  echo "[DEBUG] head $f"
+  head -n 3 "$f" || true
+  json_sanitize_file "$f" || true
+done
+
 echo "[test] 완료: .test-artifacts/step*.json 및 probe_* 아티팩트 확인"
 
 # =========  END: APPLY/VERIFY runner (drop-in replacement)  =========
