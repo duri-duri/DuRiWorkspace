@@ -1,0 +1,47 @@
+name: Phase-2 Suite
+
+on:
+  push:
+    branches: [ "main", "sig-test" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: phase2-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      P2_RACE_MB: "2"
+      P2_CRASH_MB: "2"
+      P2_TIMEOUT: "2s"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install jq
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+
+      - name: Help (for log readability)
+        run: make help || true
+
+      - name: Smoke
+        run: make smoke
+
+      - name: Phase-2 (race/crash/matrix)
+        run: make test-all-ci
+
+      # sudo 없는 환경은 자동 SKIP
+      - name: RO HDD (best-effort)
+        run: make test-ro-hdd || true
+
+      - name: ENOSPC (best-effort)
+        run: make test-enospc || true
