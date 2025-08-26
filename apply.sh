@@ -26,6 +26,30 @@ done
 log() { printf '%s\n' "$*" 1>&2; }          # 항상 stderr
 say() { [ "${QUIET:-0}" -eq 0 ] && log "$@"; }  # QUIET이면 침묵
 
+# ---- PLAN helpers ----
+# PLAN에서 경로만 추출 (문자열/객체 모두 허용)
+plan_paths() {
+  jq -r '
+    if type=="array" then .[] else . end
+    | if type=="object" then (.src // .dst // .path // .)
+      elif type=="string" then .
+      else empty end
+  ' "$PLAN"
+}
+
+# 파일명 보고 FULL/INCR 분류
+classify_subdir() {
+  local base="$1"
+  [[ $base == FULL__* ]] && echo FULL || echo INCR
+}
+
+# 목적지 경로 계산 (코드에서 산출)
+ar_dest_for() {
+  local src="$1"
+  local base; base="$(basename "$src")"
+  echo "$HDD_AR/$(classify_subdir "$base")/$base"
+}
+
 # JSON_ONLY: 모든 stdout을 stderr로 우회, 마지막에 fd3(원래 stdout)로 JSON만 1줄
 if [ "$JSON_ONLY" -eq 1 ]; then
   exec 3>&1
@@ -144,13 +168,13 @@ if [[ $VERIFY_ONLY -eq 0 ]]; then
 
   # 1) 이관
   say "[1/3] 백업 파일 이관:"
-  plan_paths | while IFS= read -r f; do
-    [[ -z "$f" ]] && continue
-    base="$(basename "$f")"
-    [[ $QUIET -eq 0 ]] && log "[COPY] $base"
+  plan_paths | while IFS= read -r src; do
+    [[ -z "$src" ]] && continue
+    base="$(basename "$src")"
+    say "[1/3] 백업 파일 이관: $base"
     if [ -d "$HDD" ]; then
-      subdir="$( [[ $base == FULL__* ]] && echo FULL || echo INCR )"
-      copy "$f" "$HDD_AR/$subdir/$base"
+      dst="$(ar_dest_for "$src")"
+      copy "$src" "$dst"
     else
       [[ $QUIET -eq 0 ]] && log "[SKIP] HDD 없음: $base"
     fi
@@ -208,6 +232,22 @@ fi
 tmpdir="$(mktemp -d)"
 [[ $KEEP_TMP -eq 0 ]] && trap 'rm -rf "$tmpdir"' EXIT
 
+# 기대 개수 계산 (plan_paths 기반)
+read full_expected incr_expected <<EOF
+$(jq -rs '
+  map(if type=="array" then .[] else . end)
+  | map(
+      if type=="object" then (.src // .dst // .path // .)
+      elif type=="string" then .
+      else empty end
+    )
+  | map( (.|split("/")|last) ) as $names
+  | [ $names[] | startswith("FULL__") ] | map(select(.)) | length,
+    [ $names[] | startswith("INCR__") ] | map(select(.)) | length
+' "$PLAN")
+EOF
+
+# 파일 리스트 생성 (검증용)
 jq -r '
   if type=="array" then .[] else . end
   | if type=="object" then (.src // .dst // .path // .)
@@ -262,8 +302,7 @@ fi
 
 # ==== JSON 출력 (JSON_ONLY 모드일 때만) ====
 if [ "$JSON_ONLY" -eq 1 ]; then
-  full_expected="$(<"$tmpdir/full.list" wc -l)"
-  incr_expected="$(<"$tmpdir/incr.list" wc -l)"
+  # full_expected, incr_expected는 이미 위에서 계산됨
   full_ok="$ok_full"
   full_bad="$bad_full_cnt"
   incr_ok="$ok_incr"
