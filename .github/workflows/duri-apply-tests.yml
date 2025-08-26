@@ -70,3 +70,4 @@ jobs:
           name: test-artifacts
           path: |
             .test-artifacts/*
+          include-hidden-files: true

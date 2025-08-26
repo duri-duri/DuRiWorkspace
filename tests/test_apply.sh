@@ -69,6 +69,12 @@ run_json_clean() {
 }
 declare -f run_json_clean
 
+# json_first_line: 파일에서 처음 등장하는 JSON 오브젝트/배열 시작 줄만 추출
+json_first_line() {
+  local f="$1"
+  tac "$f" | awk '/^[[:space:]]*[{[]/{print;exit}' | tac
+}
+
 # json_sanitize_file: JSON 파일 정제 (ANSI 제거, NaN/Inf→null, 유효성 검증)
 json_sanitize_file() {
   local f="$1"

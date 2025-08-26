@@ -72,9 +72,9 @@ clean:
 
 verify-logs:
 	@echo "[CHECK] step1.json"
-	@jq -e '(.rc|tonumber)==0' .test-artifacts/step1.json >/dev/null
+	@bash -c 'source tests/test_apply.sh && json_first_line .test-artifacts/step1.json | jq -e "(.rc|tonumber)==0"' >/dev/null
 	@echo "[CHECK] step2.json"
-	@jq -e '(.rc|tonumber)==0 and ((.full_bad? // 0 | tonumber)==0)' .test-artifacts/step2.json >/dev/null
+	@bash -c 'source tests/test_apply.sh && json_first_line .test-artifacts/step2.json | jq -e "(.rc|tonumber)==0 and ((.full_bad? // 0 | tonumber)==0)"' >/dev/null
 	@echo "[CHECK] mismatch (if exists)"
 	@([ -f .test-artifacts/step3_mismatch.json ] && \
 	  jq -e '((.full_bad? // 0 | tonumber) > 0)' \
@@ -86,18 +86,17 @@ verify-logs:
 HELP_WIDTH ?= 16
 help: ## Show help for common targets and tunables
 	@echo "DuRi apply test runner — targets"
-	@printf "  \033[36m%-$(HELP_WIDTH)s\033[0m %s\n" \
-	 "clean"        "Remove test artifacts and re-create .test-artifacts" \
-	 "check-env"    "Check required tools (jq) exist" \
-	 "smoke"        "Run clean → test → verify-logs" \
-	 "test"         "Run base apply & verify-only sequence" \
-	 "verify-logs"  "Validate JSON counters (full_ok/full_bad/rc)" \
-	 "test-extended""Run extended base (APPLY_EXT=1)" \
-	 "test-ro-hdd"  "Filesystem read-only simulation (auto-skip if no sudo)" \
-	 "test-extra"   "Phase-2: race/crash/matrix (tunable via P2_* envs)" \
-	 "test-enospc"  "ENOSPC via tmpfs (requires sudo; auto-skip if none)" \
-	 "test-all"     "Run base + RO + Phase-2" \
-	 "test-all-ci"  "CI combo (auto-skip sudo-requiring cases)"
+	@printf "  \033[36m%-$(HELP_WIDTH)s\033[0m %s\n" "clean" "Remove test artifacts and re-create .test-artifacts"
+	@printf "  \033[36m%-$(HELP_WIDTH)s\033[0m %s\n" "check-env" "Check required tools (jq) exist"
+	@printf "  \033[36m%-$(HELP_WIDTH)s\033[0m %s\n" "smoke" "Run clean → test → verify-logs"
+	@printf "  \033[36m%-$(HELP_WIDTH)s\033[0m %s\n" "test" "Run base apply & verify-only sequence"
+	@printf "  \033[36m%-$(HELP_WIDTH)s\033[0m %s\n" "verify-logs" "Validate JSON counters (full_ok/full_bad/rc)"
+	@printf "  \033[36m%-$(HELP_WIDTH)s\033[0m %s\n" "test-extended" "Run extended base (APPLY_EXT=1)"
+	@printf "  \033[36m%-$(HELP_WIDTH)s\033[0m %s\n" "test-ro-hdd" "Filesystem read-only simulation (auto-skip if no sudo)"
+	@printf "  \033[36m%-$(HELP_WIDTH)s\033[0m %s\n" "test-extra" "Phase-2: race/crash/matrix (tunable via P2_* envs)"
+	@printf "  \033[36m%-$(HELP_WIDTH)s\033[0m %s\n" "test-enospc" "ENOSPC via tmpfs (requires sudo; auto-skip if none)"
+	@printf "  \033[36m%-$(HELP_WIDTH)s\033[0m %s\n" "test-all" "Run base + RO + Phase-2"
+	@printf "  \033[36m%-$(HELP_WIDTH)s\033[0m %s\n" "test-all-ci" "CI combo (auto-skip sudo-requiring cases)"
 	@echo
 	@echo "Tunables:"
 	@printf "  %-$(HELP_WIDTH)s %s\n" \
