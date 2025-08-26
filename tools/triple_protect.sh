@@ -152,7 +152,7 @@ if [ "$APPLY" = "1" ]; then
       SHA256SUMS.CORE.*|*.tar|*.tar.zst) dest="$CORE_OUT/CORE/$base" ;;
       *) dest="$CORE_OUT/META/$base" ;;
     esac
-    echo "[COPY] $f -> $dest"
+    printf '[COPY] %s -> %s\n' "$f" "$dest" >&2
     rsync -a --mkpath "$f" "$dest"
   done
 
