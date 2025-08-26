@@ -66,7 +66,7 @@ run_json_clean() {
     return 70
   fi
 }
-declare -fr run_json_clean
+declare -f run_json_clean
 
 # resolve_first_dst: PLAN의 첫 dst를 찾아 $HDD/$USB/$PB 및 ${HDD}/${USB}/${PB} 안전 치환
 unset -f resolve_first_dst 2>/dev/null || true
