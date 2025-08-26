@@ -331,3 +331,5 @@ git pull origin main
 **DuRi Control System** - 중앙 집중식 시스템 관리의 새로운 패러다임
 
 [![Phase-2 CI](https://github.com/duri-duri/DuRiWorkspace/actions/workflows/ci-phase2.yml/badge.svg?branch=main)](https://github.com/duri-duri/DuRiWorkspace/actions/workflows/ci-phase2.yml)
+
+# gate
