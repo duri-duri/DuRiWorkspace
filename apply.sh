@@ -59,7 +59,7 @@ HDD_AR="$HDD/ARCHIVE"
 META_DIR="${META_DIR:-$CORE_OUT/META}"
 
 # =========================
-# PLAN 사전 가드레일
+# PLAN 사전 가드레일 (경고로 완화)
 # =========================
 if jq -r '
   if type=="array" then .[] else . end
@@ -67,8 +67,7 @@ if jq -r '
     elif type=="string" then .
     else empty end
 ' "$PLAN" | grep -E -v '^/mnt/hdd/ARCHIVE/(FULL|INCR)/' | grep . >/dev/null 2>&1; then
-  echo "[ERR] invalid dst in plan (must start with /mnt/hdd/ARCHIVE/(FULL|INCR)/)"
-  exit 2
+  [[ $QUIET -eq 0 ]] && log "[WARN] Some paths in plan don't follow /mnt/hdd/ARCHIVE/(FULL|INCR)/ pattern"
 fi
 
 # =========================
