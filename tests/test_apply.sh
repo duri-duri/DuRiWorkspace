@@ -39,6 +39,7 @@ declare -fr fs_flush
 # run_json_clean: 서브커맨드 실행 → raw/err 캡처 → JSON 1줄 추출
 # 사용법: run_json_clean "PLAN='...' USB='...' HDD='...' [옵션]" "<출력.json>"
 unset -f run_json_clean 2>/dev/null || true
+if ! declare -F run_json_clean >/dev/null 2>&1; then
 run_json_clean() {
   local sub="$1"; local out="$2"
   local raw="${out%.json}.raw.txt"; local err="${out%.json}.err.txt"
@@ -65,7 +66,7 @@ run_json_clean() {
     return 70
   fi
 }
-declare -fr run_json_clean
+declare -f run_json_clean
 
 # resolve_first_dst: PLAN의 첫 dst를 찾아 $HDD/$USB/$PB 및 ${HDD}/${USB}/${PB} 안전 치환
 unset -f resolve_first_dst 2>/dev/null || true
@@ -217,4 +218,5 @@ if [ "${RUN_EXTRA_CASES:-0}" = "1" ]; then
     fi
   }
 
+fi
 fi
