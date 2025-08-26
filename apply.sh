@@ -27,13 +27,14 @@ log() { printf '%s\n' "$*" 1>&2; }          # 항상 stderr
 say() { [ "${QUIET:-0}" -eq 0 ] && log "$@"; }  # QUIET이면 침묵
 
 # ---- PLAN helpers ----
-# PLAN에서 경로만 추출 (문자열/객체 모두 허용)
+# PLAN에서 경로만 추출 (문자열/객체 모두 허용, 숫자 제외)
 plan_paths() {
   jq -r '
     if type=="array" then .[] else . end
     | if type=="object" then (.src // .dst // .path // .)
       elif type=="string" then .
       else empty end
+    | select(type == "string")  # 문자열만 통과 (숫자/불린 제외)
   ' "$PLAN"
 }
 
@@ -232,7 +233,7 @@ fi
 tmpdir="$(mktemp -d)"
 [[ $KEEP_TMP -eq 0 ]] && trap 'rm -rf "$tmpdir"' EXIT
 
-# 기대 개수 계산 (plan_paths 기반)
+# 기대 개수 계산 (plan_paths 기반, 숫자 제외)
 read full_expected incr_expected <<EOF
 $(jq -rs '
   map(if type=="array" then .[] else . end)
@@ -241,18 +242,20 @@ $(jq -rs '
       elif type=="string" then .
       else empty end
     )
+  | map(select(type == "string"))  # 문자열만 통과 (숫자/불린 제외)
   | map( (.|split("/")|last) ) as $names
   | [ $names[] | startswith("FULL__") ] | map(select(.)) | length,
     [ $names[] | startswith("INCR__") ] | map(select(.)) | length
 ' "$PLAN")
 EOF
 
-# 파일 리스트 생성 (검증용)
+# 파일 리스트 생성 (검증용, 숫자 제외)
 jq -r '
   if type=="array" then .[] else . end
   | if type=="object" then (.src // .dst // .path // .)
     elif type=="string" then .
     else empty end
+  | select(type == "string")  # 문자열만 통과 (숫자/불린 제외)
   | select(test("/FULL__"))
   | capture("(?<base>FULL__.*)").base
 ' "$PLAN" | sort -u > "$tmpdir/full.list" || true
@@ -262,6 +265,7 @@ jq -r '
   | if type=="object" then (.src // .dst // .path // .)
     elif type=="string" then .
     else empty end
+  | select(type == "string")  # 문자열만 통과 (숫자/불린 제외)
   | select(test("/INCR__"))
   | capture("(?<base>INCR__.*)").base
 ' "$PLAN" | sort -u > "$tmpdir/incr.list" || true
