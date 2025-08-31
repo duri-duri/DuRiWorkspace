@@ -100,6 +100,8 @@ echo "[GATE] policy verification"
 policy_sha=$(sha256sum "$POLICY" | cut -d' ' -f1)
 [[ $EXPLAIN -eq 1 ]] && echo "[INFO] policy_sha=$policy_sha root=$REPO_ROOT"
 rc=0
+allow_cnt=0
+deny_cnt=0
 for raw in "${FILES[@]}"; do
   [[ -n "$raw" ]] || continue
   
@@ -124,6 +126,7 @@ for raw in "${FILES[@]}"; do
     echo "[DENY] blacklisted: $raw  (pattern: $bl_hit)"
     [[ $EXPLAIN -eq 1 ]] && echo "[EXPLAIN] $raw -> BL by '$bl_hit'"
     rc=$((rc+1))
+    deny_cnt=$((deny_cnt+1))
     continue
   fi
 
@@ -139,12 +142,15 @@ for raw in "${FILES[@]}"; do
   if [[ -n "$wl_hit" ]]; then
     echo "[ALLOW] $raw  (pattern: $wl_hit)"
     [[ $EXPLAIN -eq 1 ]] && echo "[EXPLAIN] $raw -> WL by '$wl_hit'"
+    allow_cnt=$((allow_cnt+1))
   else
     echo "[DENY] not whitelisted: $raw"
     rc=$((rc+1))
+    deny_cnt=$((deny_cnt+1))
   fi
 done
 
+echo "[SUMMARY] allow=$allow_cnt deny=$deny_cnt files=${#FILES[@]}"
 if (( rc )); then
   echo "[FAIL] policy verify ($rc)"
   exit 1
