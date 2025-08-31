@@ -1,166 +1,122 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
+TS() { date '+%F %T'; }
+log(){ echo "[$(TS)] $*"; }
+die(){ log "[FATAL] $*"; exit 1; }
 
-MODE="${1:-full}"              # 기본: full(USB 검증형)
-SRC_DIR="${2:-/home/duri/DuRiWorkspace}"
-TS="$(date +%F__%H%M)"
-HOST="host-$(hostname -s)"
-LOG_DIR="${LOG_DIR:-/var/log/duri2-backup}"
-mkdir -p "$LOG_DIR" 2>/dev/null || LOG_DIR="/tmp/duri2-backup"
-RUNLOG="$LOG_DIR/run_${TS}_${MODE}.log"
+# === DuRi 백업 시스템 메인 진입점 ===
+# 목적: 모든 백업 실행을 이 스크립트로 수렴하여 정책 통일
 
-# PRECHECK START
-precheck_usb_or_fallback() {
-  USB_MNT="/mnt/usb"
-  DESKTOP_ROOT="/mnt/c/Users/admin/Desktop/두리백업"
-  mkdir -p "$DESKTOP_ROOT" 2>/dev/null || true
+# 환경 변수 설정
+SRC="${SRC:-/home/duri/DuRiWorkspace}"
+MODE="${MODE:-full}"  # full 또는 incr
+SRC_DIR="${SRC_DIR:-$SRC}"
 
-  # 1) /mnt/usb가 fstab 자동 마운트로 살아있으면 OK
-  if mount | grep -q " on ${USB_MNT} "; then
-    log "[PRECHECK] USB mounted at ${USB_MNT}"
-    echo "$USB_MNT"
-    return 0
-  fi
+# 로그 디렉토리 준비
+RUNLOG="/var/log/duri2-backup/backup_$(date +%Y%m%d_%H%M%S).log"
+mkdir -p "$(dirname "$RUNLOG")" 2>/dev/null || true
 
-  # 2) fstab 등록되어 있으면 재마운트 시도
-  if grep -qE '^[A-Z]:[[:space:]]+/mnt/usb[[:space:]]+drvfs' /etc/fstab 2>/dev/null; then
-    if sudo mount /mnt/usb 2>/dev/null; then
-      log "[PRECHECK] USB mounted via fstab"
-      echo "$USB_MNT"
-      return 0
-    fi
-  fi
+log "=== DuRi 백업 시작 ===" | tee -a "$RUNLOG"
+log "SRC=${SRC_DIR}" | tee -a "$RUNLOG"
+log "MODE=${MODE}" | tee -a "$RUNLOG"
 
-  # 3) 마지막 폴백: 데스크톱 경로
-  log "[PRECHECK] USB unavailable -> fallback to Desktop: ${DESKTOP_ROOT}"
-  echo "$DESKTOP_ROOT"
-  return 0
-}
+# HDD→USB→Desktop 우선순위 선택자 로드
+source scripts/duri_backup.dest.sh
 
-# 대상 루트 자동 결정
-BACKUP_ROOT="$(precheck_usb_or_fallback)"
-echo "[PRECHECK] Backup root determined: ${BACKUP_ROOT}"
+TODAY="$(date +%Y/%m/%d)"
+HOST="$(hostname -s)"
+BASENAME="FULL__$(date +%F__%H%M)__host-${HOST}.tar.zst"
 
-# USB와 데스크톱 경로 설정
-if [[ "$BACKUP_ROOT" == "/mnt/usb" ]]; then
-  USB="/mnt/usb"
-  DESKTOP_ROOT="/mnt/c/Users/admin/Desktop/두리백업"
-  DEST_DESKTOP_DIR="${DESKTOP_ROOT}/$(date +%Y)/$(date +%m)/$(date +%d)"
-  mkdir -p "$DEST_DESKTOP_DIR" 2>/dev/null || true
+# HDD-우선 목적지 선택 (stdout 누출 방지)
+DEST_MAIN="$(choose_dest)"
+DEST_FILE_MAIN="${DEST_MAIN}/${BASENAME}"
+
+# 미러 후보들 준비
+USB="/mnt/usb"
+DESK_DIR="/mnt/c/Users/admin/Desktop/두리백업/${TODAY}"
+mkdir -p "$DESK_DIR" 2>/dev/null || true
+DEST_FILE_USB="${USB}/두리백업/${TODAY}/${BASENAME}"
+DEST_FILE_DESK="${DESK_DIR}/${BASENAME}"
+
+log "PRIMARY=${DEST_FILE_MAIN}" | tee -a "$RUNLOG"
+log "MIRRORS: USB=${DEST_FILE_USB} DESK=${DEST_FILE_DESK}" | tee -a "$RUNLOG"
+
+# 1) PRIMARY 백업 생성 (HDD 우선) - 실패시 즉시 중단
+log "📁 PRIMARY 백업 시작: ${DEST_FILE_MAIN}" | tee -a "$RUNLOG"
+TMP_MAIN="${DEST_FILE_MAIN}.part"
+mkdir -p "$(dirname "$DEST_FILE_MAIN")" 2>/dev/null || die "PRIMARY 디렉토리 생성 실패"
+
+if tar --numeric-owner --acls --xattrs -C "$SRC_DIR" -cpf - . | zstd -T0 -19 -q -o "$TMP_MAIN" 2>>"$RUNLOG"; then
+  sync "$TMP_MAIN" || true
+  mv -f "$TMP_MAIN" "$DEST_FILE_MAIN" || die "PRIMARY 파일 이동 실패"
+  # 목적지 스탬프(증적 남김) - 실패시 경고만
+  stamp_dest "$(dirname "$DEST_FILE_MAIN")" "$BASENAME" || log "[WARN] 스탬프 생성 실패"
+  log "✅ PRIMARY 백업 완료: $DEST_FILE_MAIN" | tee -a "$RUNLOG"
+  log "ARTIFACT=${DEST_FILE_MAIN}" | tee -a "$RUNLOG"
 else
-  USB=""
-  DESKTOP_ROOT="$BACKUP_ROOT"
-  DEST_DESKTOP_DIR="${DESKTOP_ROOT}/$(date +%Y)/$(date +%m)/$(date +%d)"
-  mkdir -p "$DEST_DESKTOP_DIR" 2>/dev/null || true
-fi
-# PRECHECK END
-
-# 공통 tar 옵션(메타 보존)
-TAR_FLAGS=(--numeric-owner --acls --xattrs --xattrs-include='*' --same-owner --hard-dereference)
-
-die(){ echo "[FATAL] $*" | tee -a "$RUNLOG"; exit 1; }
-log(){ echo "[$(date '+%F %T')] $*" | tee -a "$RUNLOG"; }
-
-# 모드별 규격
-case "$MODE" in
-  full)     exec "$(dirname "$0")/duri_backup_full_canonical.sh";;
-  extended) PREFIX="EXT";     EXCLUDES_FILE="scripts/backup_exclude_extended.txt";;
-  dev)      PREFIX="DEV";     EXCLUDES_FILE="scripts/backup_exclude_dev.txt";;
-  artifact) PREFIX="ART";     EXCLUDES_FILE="scripts/backup_exclude_artifact.txt";;
-  *) die "unknown mode: $MODE";;
-esac
-
-ARCH_NAME="${PREFIX}__${TS}__${HOST}.tar.zst"
-DEST_USB="${USB}/${ARCH_NAME}"
-DEST_DESK="${DEST_DESKTOP_DIR}/${ARCH_NAME}"
-
-# exclude 규칙 구성
-EX_ARGS=()
-if [[ -n "${EXCLUDES_FILE}" && -f "${EXCLUDES_FILE}" ]]; then
-  while IFS= read -r p; do 
-    [[ -z "$p" || "$p" =~ ^# ]] && continue; 
-    EX_ARGS+=(--exclude="$p"); 
-  done < "${EXCLUDES_FILE}"
+  rm -f "$TMP_MAIN"
+  die "PRIMARY 백업 실패: ${DEST_FILE_MAIN}"
 fi
 
-log "MODE=${MODE} SRC=${SRC_DIR}"
-log "DEST_USB=${DEST_USB}"
-log "DEST_DESK=${DEST_DESK}"
-
-# ---- 백업 생성 (tar → zstd) ----
-tmp_tar="$(mktemp -u /tmp/duri_backup_payload.XXXXXX.tar)"
-cleanup(){ rm -f "$tmp_tar"; }
-trap cleanup EXIT
-
-log "creating tar…"
-tar "${EX_ARGS[@]}" "${TAR_FLAGS[@]}" -cf "${tmp_tar}" -C "${SRC_DIR}" . 2>>"$RUNLOG" || die "tar failed"
-
-log "compressing to backup destinations…"
-
-# USB 백업 (USB가 있을 때만)
-if [[ -n "$USB" && -d "$USB" ]]; then
-  log "📁 USB 백업 시작: ${DEST_USB}"
-  if zstd -T0 -19 -f "${tmp_tar}" -o "${DEST_USB}" 2>>"$RUNLOG"; then
-    log "✅ USB 백업 완료: ${DEST_USB}"
+# 2) USB 미러 (PRIMARY가 USB가 아닐 때만)
+USB_OK=false
+if [[ -d "$USB" && "$(dirname "$DEST_FILE_MAIN")" != "$USB" ]]; then
+  log "📁 USB 미러 시작: ${DEST_FILE_USB}" | tee -a "$RUNLOG"
+  mkdir -p "$(dirname "$DEST_FILE_USB")" 2>/dev/null || true
+  
+  if command -v rsync >/dev/null 2>&1; then
+    rsync --inplace --partial "$DEST_FILE_MAIN" "$DEST_FILE_USB" && USB_OK=true || true
   else
-    log "⚠️  USB 백업 실패, 데스크톱으로 계속 진행"
+    cp -f "$DEST_FILE_MAIN" "$DEST_FILE_USB" && USB_OK=true || true
   fi
-else
-  log "ℹ️  USB 백업 스킵 (USB 마운트 없음)"
-fi
-
-# 데스크톱 백업 (항상 진행)
-log "📁 데스크톱 백업 시작: ${DEST_DESK}"
-if zstd -T0 -19 -f "${tmp_tar}" -o "${DEST_DESK}" 2>>"$RUNLOG"; then
-  log "✅ 데스크톱 백업 완료: ${DEST_DESK}"
-else
-  die "데스크톱 백업 실패: ${DEST_DESK}"
-fi
-
-# ---- full 모드 검증(USB 복원 스모크) ----
-if [[ "$MODE" == "full" ]]; then
-  if [[ -n "$USB" && -d "$USB" ]]; then
-    IMG="${USB}/duri2.img"
-    if [[ -e "$IMG" ]]; then
-      log "🔍 USB 롤백 검증 시작..."
-      
-      MNT="/mnt/duri2_usb"
-      mkdir -p "$MNT" 2>/dev/null || true
-      LOOP="$(losetup -f --show "$IMG" 2>/dev/null)" || { log "[WARN] losetup 실패, 검증 스킵"; exit 0; }
-      trap 'umount "$MNT" 2>/dev/null || true; losetup -d "$LOOP" 2>/dev/null || true' EXIT
-
-      log "mkfs.ext4 -F ${LOOP}"
-      mkfs.ext4 -F -L DURI2 "$LOOP" >>"$RUNLOG" 2>&1 || { log "[WARN] mkfs 실패, 검증 스킵"; exit 0; }
-      
-      log "mount ${LOOP} ${MNT}"
-      mount "$LOOP" "$MNT" 2>/dev/null || { log "[WARN] mount 실패, 검증 스킵"; exit 0; }
-
-      log "restore to ${MNT}"
-      zstd -dc < "${DEST_USB}" | tar -xvf - -C "${MNT}" "${TAR_FLAGS[@]}" >>"$RUNLOG" 2>&1 || { log "[WARN] restore 실패, 검증 스킵"; exit 0; }
-
-      # 간단한 구조 비교(샘플)
-      ORIG_COUNT=$(find "${SRC_DIR}" -type f 2>/dev/null | wc -l)
-      REST_COUNT=$(find "${MNT}" -type f 2>/dev/null | wc -l)
-      log "compare count: orig=${ORIG_COUNT} restored=${REST_COUNT}"
-      
-      if [[ "$ORIG_COUNT" -gt 0 && "$REST_COUNT" -gt 0 ]]; then
-        RESTORE_RATIO=$(echo "scale=1; $REST_COUNT * 100 / $ORIG_COUNT" | bc 2>/dev/null || echo "0")
-        log "✅ 복원률: ${RESTORE_RATIO}%"
-      fi
-
-      umount "$MNT" 2>/dev/null || true
-      losetup -d "$LOOP" 2>/dev/null || true
-      log "✅ USB 롤백 검증 완료"
+  
+  if $USB_OK; then
+    SUM_M="$(sha256sum "$DEST_FILE_MAIN" | awk '{print $1}')"
+    SUM_U="$(sha256sum "$DEST_FILE_USB" | awk '{print $1}')"
+    if [ "$SUM_M" = "$SUM_U" ]; then
+      ( cd "$(dirname "$DEST_FILE_USB")" && echo "$SUM_U  $(basename "$DEST_FILE_USB")" > "SHA256SUMS.$(basename "$DEST_FILE_USB").txt" )
+      log "✅ USB 미러 검증 완료: $DEST_FILE_USB" | tee -a "$RUNLOG"
+      log "USB_MIRROR=${DEST_FILE_USB}" | tee -a "$RUNLOG"
     else
-      log "[WARN] USB 이미지 없음: ${IMG} → 검증 스킵"
+      log "[WARN] USB 체크섬 불일치"; USB_OK=false
+      log "USB_MIRROR=SKIP" | tee -a "$RUNLOG"
     fi
   else
-    log "ℹ️  USB 롤백 검증 스킵 (USB 마운트 없음)"
+    log "[WARN] USB 미러 실패"
+    log "USB_MIRROR=SKIP" | tee -a "$RUNLOG"
   fi
+else
+  log "ℹ️ USB 미러 스킵 (PRIMARY가 USB이거나 USB 마운트 안됨)"
+  log "USB_MIRROR=SKIP" | tee -a "$RUNLOG"
 fi
 
-log "[DONE] backup ${MODE} -> ${ARCH_NAME}"
-log "📁 백업 위치:"
-log "   USB: ${DEST_USB}"
-log "   데스크톱: ${DEST_DESK}"
-log "📋 로그: ${RUNLOG}"
+# 3) Desktop 미러 (PRIMARY가 Desktop이 아닐 때만)
+if [[ "$(dirname "$DEST_FILE_MAIN")" != "$DESK_DIR" ]]; then
+  log "📁 Desktop 미러 시작: ${DEST_FILE_DESK}" | tee -a "$RUNLOG"
+  TMP_DESK="${DEST_FILE_DESK}.part"
+  
+  if tar --numeric-owner --acls --xattrs -C "$SRC_DIR" -cpf - . | zstd -T0 -19 -q -o "$TMP_DESK" 2>>"$RUNLOG"; then
+    sync "$TMP_DESK" || true
+    mv -f "$TMP_DESK" "$DEST_FILE_DESK"
+    ( cd "$DESK_DIR" && sha256sum "$(basename "$DEST_FILE_DESK")" > "SHA256SUMS.$(basename "$DEST_FILE_DESK").txt" )
+    log "✅ Desktop 미러 완료: $DEST_FILE_DESK" | tee -a "$RUNLOG"
+    log "DESK_MIRROR=${DEST_FILE_DESK}" | tee -a "$RUNLOG"
+  else
+    rm -f "$TMP_DESK"
+    log "[WARN] Desktop 미러 실패"
+    log "DESK_MIRROR=SKIP" | tee -a "$RUNLOG"
+  fi
+else
+  log "ℹ️ Desktop 미러 스킵 (PRIMARY가 Desktop)"
+  log "DESK_MIRROR=SKIP" | tee -a "$RUNLOG"
+fi
+
+# 4) 종료 규칙
+if $USB_OK; then
+  log "SUMMARY: PRIMARY=OK, USB=OK → success" | tee -a "$RUNLOG"
+else
+  log "SUMMARY: PRIMARY=OK, USB=MISS → success (보완 필요)" | tee -a "$RUNLOG"
+fi
+
+log "=== DuRi 백업 완료 ===" | tee -a "$RUNLOG"
+exit 0

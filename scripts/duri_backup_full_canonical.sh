@@ -2,6 +2,7 @@
 set -Eeuo pipefail
 TS() { date '+%F %T'; }
 log(){ echo "[$(TS)] $*"; }
+die(){ log "[FATAL] $*"; exit 1; }
 
 # HDD→USB→Desktop 우선순위 선택자 로드
 source scripts/duri_backup.dest.sh
@@ -11,7 +12,7 @@ TODAY="$(date +%Y/%m/%d)"
 HOST="$(hostname -s)"
 BASENAME="FULL__$(date +%F__%H%M)__host-${HOST}.tar.zst"
 
-# HDD-우선 목적지 선택
+# HDD-우선 목적지 선택 (stdout 누출 방지)
 DEST_MAIN="$(choose_dest)"
 DEST_FILE_MAIN="${DEST_MAIN}/${BASENAME}"
 
@@ -25,21 +26,21 @@ DEST_FILE_DESK="${DESK_DIR}/${BASENAME}"
 log "PRIMARY=${DEST_FILE_MAIN}"
 log "MIRRORS: USB=${DEST_FILE_USB} DESK=${DEST_FILE_DESK}"
 
-# 1) PRIMARY 백업 생성 (HDD 우선)
+# 1) PRIMARY 백업 생성 (HDD 우선) - 실패시 즉시 중단
 log "📁 PRIMARY 백업 시작: ${DEST_FILE_MAIN}"
 TMP_MAIN="${DEST_FILE_MAIN}.part"
-mkdir -p "$(dirname "$DEST_FILE_MAIN")" 2>/dev/null || true
+mkdir -p "$(dirname "$DEST_FILE_MAIN")" 2>/dev/null || die "PRIMARY 디렉토리 생성 실패"
 
 if tar --numeric-owner --acls --xattrs -C "$SRC" -cpf - . | zstd -T0 -19 -q -o "$TMP_MAIN"; then
   sync "$TMP_MAIN" || true
-  mv -f "$TMP_MAIN" "$DEST_FILE_MAIN"
-  # 목적지 스탬프(증적 남김)
-  stamp_dest "$(dirname "$DEST_FILE_MAIN")" "$BASENAME"
+  mv -f "$TMP_MAIN" "$DEST_FILE_MAIN" || die "PRIMARY 파일 이동 실패"
+  # 목적지 스탬프(증적 남김) - 실패시 경고만
+  stamp_dest "$(dirname "$DEST_FILE_MAIN")" "$BASENAME" || log "[WARN] 스탬프 생성 실패"
   log "✅ PRIMARY 백업 완료: $DEST_FILE_MAIN"
+  log "ARTIFACT=${DEST_FILE_MAIN}"
 else
   rm -f "$TMP_MAIN"
-  log "[FATAL] PRIMARY 백업 실패: $DEST_FILE_MAIN"
-  exit 1
+  die "PRIMARY 백업 실패: ${DEST_FILE_MAIN}"
 fi
 
 # 2) USB 미러 (PRIMARY가 USB가 아닐 때만)
@@ -60,14 +61,18 @@ if [[ -d "$USB" && "$(dirname "$DEST_FILE_MAIN")" != "$USB" ]]; then
     if [ "$SUM_M" = "$SUM_U" ]; then
       ( cd "$(dirname "$DEST_FILE_USB")" && echo "$SUM_U  $(basename "$DEST_FILE_USB")" > "SHA256SUMS.$(basename "$DEST_FILE_USB").txt" )
       log "✅ USB 미러 검증 완료: $DEST_FILE_USB"
+      log "USB_MIRROR=${DEST_FILE_USB}"
     else
       log "[WARN] USB 체크섬 불일치"; USB_OK=false
+      log "USB_MIRROR=SKIP"
     fi
   else
     log "[WARN] USB 미러 실패"
+    log "USB_MIRROR=SKIP"
   fi
 else
   log "ℹ️ USB 미러 스킵 (PRIMARY가 USB이거나 USB 마운트 안됨)"
+  log "USB_MIRROR=SKIP"
 fi
 
 # 3) Desktop 미러 (PRIMARY가 Desktop이 아닐 때만)
@@ -80,12 +85,15 @@ if [[ "$(dirname "$DEST_FILE_MAIN")" != "$DESK_DIR" ]]; then
     mv -f "$TMP_DESK" "$DEST_FILE_DESK"
     ( cd "$DESK_DIR" && sha256sum "$(basename "$DEST_FILE_DESK")" > "SHA256SUMS.$(basename "$DEST_FILE_DESK").txt" )
     log "✅ Desktop 미러 완료: $DEST_FILE_DESK"
+    log "DESK_MIRROR=${DEST_FILE_DESK}"
   else
     rm -f "$TMP_DESK"
     log "[WARN] Desktop 미러 실패"
+    log "DESK_MIRROR=SKIP"
   fi
 else
   log "ℹ️ Desktop 미러 스킵 (PRIMARY가 Desktop)"
+  log "DESK_MIRROR=SKIP"
 fi
 
 # 4) 종료 규칙
