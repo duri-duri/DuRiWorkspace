@@ -1,0 +1,18 @@
+{
+  "session_id": "cd673ef4-864d-47af-8b38-a76c58e25b67",
+  "emotion": "happy",
+  "decision": "celebrate",
+  "confidence": 0.7,
+  "reasoning": {
+    "emotion": "happy",
+    "intensity": 0.8,
+    "base_decision": "celebrate",
+    "context_factors": [],
+    "confidence_factors": {
+      "base_confidence": 0.7,
+      "intensity_factor": 1.0,
+      "context_adjustment": false
+    }
+  },
+  "timestamp": "2025-06-28T03:43:37.574635"
+}

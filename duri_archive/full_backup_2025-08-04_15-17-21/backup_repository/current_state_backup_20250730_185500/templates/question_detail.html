@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>질문 상세 - DuRi 가족 상호작용</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; margin: 0; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 15px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .question-detail { background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+        .response-card { background: #e3f2fd; padding: 15px; margin: 10px 0; border-radius: 8px; border-left: 4px solid #2196f3; }
+        .btn { background: #667eea; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; text-decoration: none; display: inline-block; }
+        .btn:hover { background: #5a6fd8; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="btn">← 홈으로 돌아가기</a>
+        
+        {% if question %}
+        <div class="question-detail">
+            <h2>{{ question.question_text }}</h2>
+            <p><strong>대상:</strong> {{ question.target_member }}</p>
+            <p><strong>유형:</strong> {{ question.question_type }}</p>
+            <p><strong>생성 시간:</strong> {{ question.timestamp.strftime('%Y-%m-%d %H:%M') }}</p>
+        </div>
+        
+        <h3>답변들</h3>
+        {% for response in responses %}
+        <div class="response-card">
+            <p><strong>{{ response.responder_id }}</strong>의 답변:</p>
+            <p>{{ response.response_text }}</p>
+            <p><small>감정: {{ response.emotional_tone }} | 만족도: {{ response.satisfaction_score }}/10 | 시간: {{ response.timestamp.strftime('%H:%M') }}</small></p>
+        </div>
+        {% endfor %}
+        
+        {% if not responses %}
+        <p>아직 답변이 없습니다.</p>
+        {% endif %}
+        {% else %}
+        <p>질문을 찾을 수 없습니다.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
+    

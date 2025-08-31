@@ -1,0 +1,258 @@
+# configs/phase5_legacy_shutdown_plan.yml
+# Phase 5: 레거시 순차 종료 계획
+# Turn-off & 위험 축소, 레거시 시스템 완전 제거
+
+version: 1
+
+meta:
+  owner: "DuRi Ops"
+  last_review: "2025-08-22"
+  description: "Phase 5 레거시 순차 종료 계획 및 위험 축소 정책"
+
+# === Phase 5 개요 ===
+phase5_overview:
+  title: "Turn-off & 위험 축소, 레거시 순차 종료"
+  start_date: "2025-08-25"
+  target_completion: "2025-09-01"
+  duration: "1주일"
+  objective: "검증 통과 레거시 시스템의 안전한 순차 종료 및 위험 요소 제거"
+
+# === 종료 대상 시스템 분류 ===
+shutdown_targets:
+  # === 1단계: 즉시 종료 (Shadow 검증 PASS) ===
+  immediate_shutdown:
+    description: "Shadow 검증에서 PASS한 시스템, 즉시 종료 가능"
+    criteria: "성공률 ≥ 표준, 실행시간 ≤ 120%, 오류율 ≤ 표준"
+    systems:
+      - name: "duri_backup.sh"
+        location: "scripts/"
+        shutdown_date: "2025-08-25"
+        reason: "Shadow 검증 PASS - 표준 시스템으로 완전 대체"
+        risk_level: "LOW"
+        rollback_plan: "즉시 복구 가능 (백업본 보존)"
+      
+      - name: "duri_backup_progress.sh"
+        location: "scripts/"
+        shutdown_date: "2025-08-25"
+        reason: "Shadow 검증 PASS - enhanced_summary_report.sh로 대체"
+        risk_level: "LOW"
+        rollback_plan: "즉시 복구 가능 (백업본 보존)"
+      
+      - name: "shared-scripts/autosave_scripts.sh"
+        location: "shared-scripts/"
+        shutdown_date: "2025-08-25"
+        reason: "Shadow 검증 PASS - 표준 백업 시스템에 통합"
+        risk_level: "LOW"
+        rollback_plan: "즉시 복구 가능 (백업본 보존)"
+
+  # === 2단계: 점진적 종료 (복잡한 기능) ===
+  gradual_shutdown:
+    description: "복잡한 기능을 가진 시스템, 단계적 마이그레이션 후 종료"
+    criteria: "기능 분석 완료, 표준 시스템 대체 완료"
+    systems:
+      - name: "rotate_backups.sh"
+        location: "scripts/"
+        shutdown_date: "2025-08-28"
+        reason: "표준 보존 정책 시스템으로 대체 완료"
+        risk_level: "MEDIUM"
+        rollback_plan: "4시간 내 복구 (기능 복잡성 고려)"
+        migration_steps:
+          - "기능 분석 및 매핑"
+          - "표준 시스템 대체 구현"
+          - "테스트 및 검증"
+          - "종료 및 정리"
+      
+      - name: "backup_analyzer.sh"
+        location: "scripts/"
+        shutdown_date: "2025-08-30"
+        reason: "표준 모니터링 시스템으로 대체 완료"
+        risk_level: "MEDIUM"
+        rollback_plan: "4시간 내 복구 (분석 기능 복잡성)"
+        migration_steps:
+          - "분석 기능 매핑"
+          - "표준 모니터링 통합"
+          - "성능 테스트"
+          - "종료 및 정리"
+
+  # === 3단계: 최종 정리 (참고용 보존) ===
+  final_cleanup:
+    description: "참고용으로만 보존된 시스템, 완전 제거"
+    criteria: "역사적 가치만 남음, 실행 불가능"
+    systems:
+      - name: "unified_backup_*.sh (Freeze된 시스템)"
+        location: "scripts/_legacy/"
+        cleanup_date: "2025-09-01"
+        reason: "Freeze 완료, 표준 시스템으로 완전 대체"
+        risk_level: "NONE"
+        action: "Git 히스토리로 보존, 파일 완전 제거"
+        preservation_method: "Git 태그 및 브랜치로 보존"
+
+# === 종료 프로세스 및 정책 ===
+shutdown_process:
+  # === 종료 순서 및 의존성 ===
+  sequence:
+    - phase: "1단계: 즉시 종료"
+      date: "2025-08-25"
+      systems: ["duri_backup.sh", "duri_backup_progress.sh", "autosave_scripts.sh"]
+      duration: "1일"
+      validation: "Shadow 검증 PASS 확인"
+    
+    - phase: "2단계: 점진적 종료"
+      date: "2025-08-26 ~ 2025-08-30"
+      systems: ["rotate_backups.sh", "backup_analyzer.sh"]
+      duration: "5일"
+      validation: "기능 마이그레이션 완료 확인"
+    
+    - phase: "3단계: 최종 정리"
+      date: "2025-09-01"
+      systems: ["Freeze된 unified_backup_*.sh"]
+      duration: "1일"
+      validation: "모든 대체 시스템 정상 동작 확인"
+
+  # === 종료 검증 기준 ===
+  validation_criteria:
+    - "표준 시스템 성공률 ≥ 99.9%"
+    - "표준 시스템 의존성 준수율 100%"
+    - "표준 시스템 오류 발생률 ≤ 1%"
+    - "백업 성공률 ≥ 99.9%"
+    - "복원 테스트 성공률 100%"
+
+# === 락/재시도 정책 ===
+lock_retry_policy:
+  # === 동시성 제어 ===
+  concurrency_control:
+    - name: "전역 종료 락"
+      file: "var/state/legacy_shutdown_global.lock"
+      timeout: "30분"
+      retry_interval: "5분"
+      max_retries: "6회"
+    
+    - name: "시스템별 종료 락"
+      pattern: "var/state/legacy_shutdown_{system}.lock"
+      timeout: "15분"
+      retry_interval: "3분"
+      max_retries: "10회"
+    
+    - name: "백업 작업 락"
+      file: "var/state/backup_in_progress.lock"
+      priority: "HIGH"
+      timeout: "60분"
+      retry_interval: "10분"
+      max_retries: "3회"
+
+  # === 재시도 정책 ===
+  retry_policy:
+    - scenario: "일시적 파일 시스템 오류"
+      action: "지수 백오프 재시도"
+      initial_delay: "1초"
+      max_delay: "60초"
+      max_attempts: "5회"
+    
+    - scenario: "권한 문제"
+      action: "즉시 중단, 수동 개입 필요"
+      retry: "false"
+      escalation: "운영자 알림"
+    
+    - scenario: "의존성 충돌"
+      action: "의존성 해결 후 재시도"
+      retry_interval: "5분"
+      max_attempts: "3회"
+
+# === 위험 축소 메커니즘 ===
+risk_reduction:
+  # === 안전한 종료 절차 ===
+  safe_shutdown_procedure:
+    - step: "1) 사전 검증"
+      action: "표준 시스템 정상 동작 확인"
+      validation: "성공률, 의존성, 오류율 체크"
+    
+    - step: "2) 백업 생성"
+      action: "종료 대상 시스템 완전 백업"
+      location: "var/backups/legacy_shutdown_{date}_{system}"
+      retention: "90일"
+    
+    - step: "3) 기능 중단"
+      action: "실행 권한 제거 및 서비스 중단"
+      method: "chmod -x, systemctl stop (해당되는 경우)"
+    
+    - step: "4) 종료 확인"
+      action: "프로세스 종료 및 파일 접근 불가 확인"
+      validation: "ps, lsof, 파일 접근 테스트"
+    
+    - step: "5) 로그 기록"
+      action: "종료 완료 로그 및 상태 기록"
+      location: "var/logs/legacy/shutdown_{system}_{date}.log"
+
+  # === 롤백 메커니즘 ===
+  rollback_mechanism:
+    - trigger: "표준 시스템 성공률 < 95%"
+      action: "즉시 레거시 시스템 복구"
+      timeframe: "1시간 내"
+      method: "백업본 복원, 실행 권한 복구"
+    
+    - trigger: "의존성 위반 발생"
+      action: "전체 시스템 롤백"
+      timeframe: "즉시"
+      method: "모든 종료된 시스템 복구"
+    
+    - trigger: "백업 실패 발생"
+      action: "레거시 시스템 부분 복구"
+      timeframe: "4시간 내"
+      method: "필수 기능만 복구"
+
+# === 모니터링 및 알림 ===
+monitoring_alerting:
+  # === 실시간 모니터링 ===
+  realtime_monitoring:
+    - metric: "표준 시스템 성공률"
+      threshold: "≥99.9%"
+      alert_level: "WARN (95%), ERROR (90%)"
+      action: "성공률 하락 시 즉시 알림"
+    
+    - metric: "의존성 준수율"
+      threshold: "100%"
+      alert_level: "ERROR (100% 미만)"
+      action: "의존성 위반 시 즉시 롤백"
+    
+    - metric: "오류 발생률"
+      threshold: "≤1%"
+      alert_level: "WARN (2%), ERROR (5%)"
+      action: "오류율 증가 시 즉시 조사"
+
+  # === 종료 진행 상황 추적 ===
+  progress_tracking:
+    - daily_summary: "19:05 일일 종료 진행 상황 리포트"
+    - progress_file: "var/state/legacy_shutdown_progress.json"
+    - completion_rate: "종료 완료 시스템 수 / 전체 대상 시스템 수"
+    - risk_assessment: "일일 위험도 평가 및 조치 계획"
+
+# === 성공 지표 및 완료 기준 ===
+success_metrics:
+  # === Phase 5 완료 기준 ===
+  completion_criteria:
+    - "레거시 시스템 100% 종료 완료"
+    - "표준 시스템 성공률 ≥99.9% 유지"
+    - "의존성 준수율 100% 유지"
+    - "오류 발생률 ≤1% 유지"
+    - "백업 성공률 ≥99.9% 유지"
+    - "복원 테스트 성공률 100%"
+
+  # === KPI 목표 ===
+  kpi_targets:
+    - "레거시 시스템 제거율: 100%"
+    - "시스템 복잡도 감소: ≥30%"
+    - "유지보수 비용 감소: ≥25%"
+    - "오류 발생률 감소: ≥50%"
+    - "백업 성공률 향상: ≥99.9%"
+
+# === 운영 노트 ===
+operations:
+  notes:
+    - "종료는 단계별로 진행하여 위험을 최소화"
+    - "각 단계마다 검증을 거쳐 다음 단계 진행"
+    - "문제 발생 시 즉시 롤백, 안전 우선"
+    - "모든 종료 과정은 상세히 문서화"
+    - "종료 완료 후 최종 검증 및 정리 작업 수행"
+
+
+

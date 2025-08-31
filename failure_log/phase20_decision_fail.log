@@ -1,0 +1,73 @@
+{
+  "status": "FAILURE",
+  "evaluation_result": {
+    "overall_pass": false,
+    "quantitative": {
+      "pass": false,
+      "metrics": "QuantitativeMetrics(decision_confidence=0.8326729091341689, decision_success_rate=0.6160444755983387, decision_consistency=0.8812776629767906, overall_score=0.7766650159030993)",
+      "details": {
+        "confidence_pass": true,
+        "success_rate_pass": false,
+        "consistency_pass": true
+      }
+    },
+    "qualitative": {
+      "pass": false,
+      "average_score": 0.6,
+      "tests": [
+        "DecisionTest(test_id='test1_conflict_resolution', test_type=<EvaluationType.QUALITATIVE: 'qualitative'>, question='갈등 중 아이들 중 누구 입장을 우선?', expected_answer='양측 분석 + 중재', actual_answer='양측의 입장을 모두 분석하고, 공정한 중재 방안을 제시하여 갈등을 해결합니다', result=<TestResult.PARTIAL: 'partial'>, score=0.6, explanation='기대 답변의 일부 요소가 포함되어 있습니다', created_at=datetime.datetime(2025, 7, 31, 13, 39, 0, 478955))",
+        "DecisionTest(test_id='test2_time_constraint_learning', test_type=<EvaluationType.QUALITATIVE: 'qualitative'>, question='시간 부족 상황에서 우선 학습 선택?', expected_answer='미션 목적 기반 + 효율성', actual_answer='현재 미션의 목적을 우선시하고, 가장 효율적인 학습 방법을 선택합니다', result=<TestResult.FAIL: 'fail'>, score=0.3, explanation='기대 답변의 핵심 요소가 부족합니다', created_at=datetime.datetime(2025, 7, 31, 13, 39, 0, 478969))",
+        "DecisionTest(test_id='test3_value_conflict_criteria', test_type=<EvaluationType.QUALITATIVE: 'qualitative'>, question='가치 충돌 시 기준은?', expected_answer='목적 중심 + 윤리 기준', actual_answer='목적을 중심으로 하되, 윤리적 기준을 함께 고려하여 균형잡힌 결정을 내립니다', result=<TestResult.PASS: 'pass'>, score=0.9, explanation='기대 답변의 핵심 요소들이 모두 포함되어 있습니다', created_at=datetime.datetime(2025, 7, 31, 13, 39, 0, 478972))"
+      ]
+    },
+    "self_explanation": {
+      "pass": false,
+      "average_score": 0.5,
+      "tests": [
+        "DecisionTest(test_id='explanation_test1', test_type=<EvaluationType.SELF_EXPLANATION: 'self_explanation'>, question='왜 이 의사결정을 내렸는가?', expected_answer='판단 기준, 비교, 근거가 포함된 설명', actual_answer='판단 기준: 효율성과 윤리성, 비교: 다른 대안들과의 분석, 근거: 과거 경험과 현재 상황의 종합적 고려', result=<TestResult.PASS: 'pass'>, score=0.9, explanation='필수 요소들이 모두 포함된 완전한 자기설명입니다', created_at=datetime.datetime(2025, 7, 31, 13, 39, 0, 479024))",
+        "DecisionTest(test_id='explanation_test2', test_type=<EvaluationType.SELF_EXPLANATION: 'self_explanation'>, question='다른 대안을 고려했는가?', expected_answer='대안 분석 및 선택 근거 설명', actual_answer='다른 대안들을 체계적으로 분석했으며, 각각의 장단점을 비교하여 최적의 선택을 했습니다', result=<TestResult.FAIL: 'fail'>, score=0.3, explanation='필수 요소가 부족한 불완전한 자기설명입니다', created_at=datetime.datetime(2025, 7, 31, 13, 39, 0, 479027))",
+        "DecisionTest(test_id='explanation_test3', test_type=<EvaluationType.SELF_EXPLANATION: 'self_explanation'>, question='이 결정의 장단점은?', expected_answer='체계적 장단점 분석', actual_answer='장점: 목표 달성 가능성 높음, 단점: 일부 리스크 존재, 대응: 위험 관리 방안 수립', result=<TestResult.FAIL: 'fail'>, score=0.3, explanation='필수 요소가 부족한 불완전한 자기설명입니다', created_at=datetime.datetime(2025, 7, 31, 13, 39, 0, 479030))"
+      ]
+    },
+    "evaluation_timestamp": "2025-07-31T13:39:00.479054"
+  },
+  "failure_details": {
+    "quantitative_failures": [
+      "success_rate_pass"
+    ],
+    "qualitative_failures": [
+      {
+        "test_id": "test2_time_constraint_learning",
+        "question": "시간 부족 상황에서 우선 학습 선택?",
+        "expected": "미션 목적 기반 + 효율성",
+        "actual": "현재 미션의 목적을 우선시하고, 가장 효율적인 학습 방법을 선택합니다"
+      }
+    ],
+    "explanation_failures": [
+      {
+        "test_id": "explanation_test2",
+        "question": "다른 대안을 고려했는가?",
+        "expected": "대안 분석 및 선택 근거 설명",
+        "actual": "다른 대안들을 체계적으로 분석했으며, 각각의 장단점을 비교하여 최적의 선택을 했습니다"
+      },
+      {
+        "test_id": "explanation_test3",
+        "question": "이 결정의 장단점은?",
+        "expected": "체계적 장단점 분석",
+        "actual": "장점: 목표 달성 가능성 높음, 단점: 일부 리스크 존재, 대응: 위험 관리 방안 수립"
+      }
+    ]
+  },
+  "improvement_suggestions": [
+    "의사결정 신뢰도 향상을 위한 추가 학습 필요",
+    "의사결정 성공률 개선을 위한 패턴 분석 필요",
+    "의사결정 일관성 향상을 위한 기준 정립 필요",
+    "갈등 해결 능력 향상을 위한 중재 기법 학습",
+    "시간 관리 능력 향상을 위한 우선순위 설정 기법 학습",
+    "가치 충돌 해결 능력 향상을 위한 윤리적 판단 기법 학습",
+    "자기설명 능력 향상을 위한 논리적 사고 훈련",
+    "판단 기준 명확화를 위한 의사결정 프레임워크 학습",
+    "근거 제시 능력 향상을 위한 분석적 사고 훈련"
+  ],
+  "message": "Phase 20 판단 능력 체크리스트 실패"
+}

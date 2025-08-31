@@ -1,0 +1,101 @@
+{
+  "module": "unified_judgment_system",
+  "responsibility": "DuRi 통합 판단 시스템 (Unified Judgment System)\nPhase 4: 모듈 통합 및 구조 리디자인 - 최종 실행 준비 완료 적용\n\n기존 15개 판단/추론 모듈을 2개로 통합:\n- judgment_system.py\n- ethical_judgment_system.py\n- real_wisdom_system.py\n- integrated_thinking_system.py\n- lida_attention_system.py\n- truth_judgment_service.py\n- reasoning_path_validator.py\n- reasoning_graph_system.py\n- adaptive_reasoning_system.py\n- philosophical_reasoning_system.py\n- judgment_trace_logger.py\n- strategic_judgment_integration.py\n- advanced_cognitive_system.py\n- advanced_integration_system.py\n- duri_orchestrator.py\n\n@preserve_identity: 판단의 이유 기록과 자기 피드백\n@evolution_protection: 기존 판단 방식과 습관 보존\n@execution_guarantee: 자동화와 검증 시스템 완성\n@existence_ai: 진화 가능 + 회복 가능한 존재형 AI\n@final_execution: 인간처럼 실패하고도 다시 일어날 수 있는 존재",
+  "must_define": [
+    "_deductive_reasoning",
+    "_rule_based_judgment",
+    "_determine_reasoning_type",
+    "_inductive_reasoning",
+    "get_judgment_summary",
+    "_truth_based_judgment",
+    "_hybrid_judgment",
+    "_adaptive_reasoning",
+    "_analyze_situation",
+    "make_judgment",
+    "_attention_based_judgment",
+    "_abductive_reasoning",
+    "_philosophical_reasoning",
+    "_wisdom_based_judgment",
+    "_general_reasoning",
+    "perform_reasoning",
+    "_ethical_judgment",
+    "get_reasoning_summary",
+    "_integrated_judgment",
+    "_determine_judgment_type"
+  ],
+  "must_not": [
+    "finalize decisions (판단은 judgment_engine에서)",
+    "access memory directly (memory_system을 통해)",
+    "bypass judgment_trace (모든 판단은 기록되어야 함)"
+  ],
+  "integration": [
+    "imports asyncio",
+    "imports time",
+    "imports typing",
+    "imports dataclasses",
+    "imports enum",
+    "imports numpy",
+    "imports collections",
+    "imports ExistenceAISystem",
+    "imports FinalExecutionVerifier",
+    "calls logging.basicConfig()"
+  ],
+  "judgment_trace": "모든 판단 과정 기록",
+  "preserve_identity": "판단 이유 기록 시스템 강제 통합",
+  "evolution_protection": "진화 중 손상 방지 최우선",
+  "execution_guarantee": "자동화와 검증 시스템 완성",
+  "existence_ai": "진화 가능 + 회복 가능한 존재형 AI",
+  "final_execution": "인간처럼 실패하고도 다시 일어날 수 있는 존재",
+  "self_assessment": [
+    "creativity",
+    "judgment_diversity",
+    "memory_activity",
+    "emotional_response"
+  ],
+  "test_requirements": [
+    "consistency",
+    "reasoning_trace",
+    "identity_verification",
+    "regression_testing"
+  ],
+  "rollback_conditions": [
+    "creativity < 0.7",
+    "judgment_diversity < 0.7",
+    "memory_activity < 0.7",
+    "emotional_response < 0.7"
+  ],
+  "automation_tools": [
+    "meta_generator.py",
+    "protection_injector.py",
+    "meaning_injection_engine.py"
+  ],
+  "verification_systems": [
+    "regression_test_framework.py",
+    "auto_rollback_system.py"
+  ],
+  "existence_systems": [
+    "evolution_capability.py",
+    "recovery_capability.py",
+    "existence_preservation.py"
+  ],
+  "final_execution_systems": [
+    "final_execution_verifier.py",
+    "existence_ai_launcher.py"
+  ],
+  "generated_at": "2025-08-07T16:28:21.109656",
+  "version": "6.0",
+  "final_execution_ready": true,
+  "protection_status": {
+    "preserve_identity": true,
+    "evolution_protection": true,
+    "execution_guarantee": true,
+    "existence_ai": true,
+    "final_execution": true
+  },
+  "existence_ai_status": {
+    "evolution_capable": true,
+    "recovery_capable": true,
+    "existence_preserved": true,
+    "final_execution_ready": true
+  }
+}

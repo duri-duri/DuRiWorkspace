@@ -1,0 +1,40 @@
+profiles:
+  duri:
+    # 기본값은 LEVEL/KEEP/POLICY 중 원하는 걸 override해서 사용 가능
+    # 아래 값은 모니터링/스케줄러 기본 권장치
+    level: ""          # 빈 값이면 CLI 인자를 우선
+    keep: ""           # CORE/EXTENDED에서 N 최신 보존
+    policy: ""         # FULL에서 정책 문자열
+
+  # 참고 프로필(원클릭용)
+  duri-core14:
+    level: CORE
+    keep: 14
+
+  duri-extended8:
+    level: EXTENDED
+    keep: 8
+
+  duri-full-weekly-monthly:
+    level: FULL
+    policy: "8w+monthly"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

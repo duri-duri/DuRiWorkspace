@@ -1,0 +1,252 @@
+# configs/legacy_system_mapping.yml
+# DuRi 백업 시스템 레거시 시스템 매핑 및 분류
+# Phase 4: 레거시 Freeze → Shadow 병행 검증
+
+version: 1
+
+meta:
+  owner: "DuRi Ops"
+  last_review: "2025-08-22"
+  description: "레거시 시스템 매핑 및 Phase 4 전환 계획"
+
+# === 레거시 시스템 분류 ===
+legacy_systems:
+  # === 1단계: 즉시 Freeze (기능 중단, 로그만 수집) ===
+  immediate_freeze:
+    description: "기능은 중단하되 로그 경로만 표준으로 매핑"
+    reason: "중복 기능, 표준 시스템으로 대체 완료"
+    systems:
+      - name: "unified_backup_core.sh"
+        location: "scripts/_legacy/"
+        original_function: "핵심 파일 백업"
+        replacement: "duri_backup_phase1.sh core"
+        freeze_date: "2025-08-22"
+        log_mapping: "var/logs/legacy/core.log"
+        status: "FREEZE"
+      
+      - name: "unified_backup_extended.sh"
+        location: "scripts/_legacy/"
+        original_function: "확장 파일 백업"
+        replacement: "duri_backup_phase1.sh extended"
+        freeze_date: "2025-08-22"
+        log_mapping: "var/logs/legacy/extended.log"
+        status: "FREEZE"
+      
+      - name: "unified_backup_full.sh"
+        location: "scripts/_legacy/"
+        original_function: "전체 시스템 백업"
+        replacement: "duri_backup_phase1.sh full"
+        freeze_date: "2025-08-22"
+        log_mapping: "var/logs/legacy/full.log"
+        status: "FREEZE"
+
+  # === 2단계: Shadow 병행 (2-3일 병행 검증) ===
+  shadow_parallel:
+    description: "표준 시스템과 병행 실행하여 성능/성공률 비교"
+    reason: "기능은 유지하되 표준 시스템과 병행 검증"
+    systems:
+      - name: "duri_backup.sh"
+        location: "scripts/"
+        original_function: "기본 백업 시스템"
+        replacement: "duri_backup_phase1.sh"
+        shadow_start: "2025-08-22"
+        shadow_duration: "3일"
+        log_mapping: "var/logs/legacy/shadow_duri_backup.log"
+        status: "SHADOW"
+      
+      - name: "duri_backup_progress.sh"
+        location: "scripts/"
+        original_function: "진행 상황 추적"
+        replacement: "ops/summary/enhanced_summary_report.sh"
+        shadow_start: "2025-08-22"
+        shadow_duration: "3일"
+        log_mapping: "var/logs/legacy/shadow_progress.log"
+        status: "SHADOW"
+      
+      - name: "shared-scripts/autosave_scripts.sh"
+        location: "shared-scripts/"
+        original_function: "스크립트 자동 저장"
+        replacement: "표준 백업 시스템에 통합"
+        shadow_start: "2025-08-22"
+        shadow_duration: "3일"
+        log_mapping: "var/logs/legacy/shadow_autosave.log"
+        status: "SHADOW"
+
+  # === 3단계: 점진적 전환 (1주일 내) ===
+  gradual_transition:
+    description: "기능을 점진적으로 표준 시스템으로 이전"
+    reason: "복잡한 기능, 단계적 마이그레이션 필요"
+    systems:
+      - name: "rotate_backups.sh"
+        location: "scripts/"
+        original_function: "백업 로테이션"
+        replacement: "표준 보존 정책 시스템"
+        transition_start: "2025-08-25"
+        transition_duration: "7일"
+        log_mapping: "var/logs/legacy/transition_rotate.log"
+        status: "TRANSITION"
+      
+      - name: "backup_analyzer.sh"
+        location: "scripts/"
+        original_function: "백업 분석"
+        replacement: "표준 모니터링 시스템"
+        transition_start: "2025-08-25"
+        transition_duration: "7일"
+        log_mapping: "var/logs/legacy/transition_analyzer.log"
+        status: "TRANSITION"
+
+  # === 4단계: 장기 보존 (참고용) ===
+  long_term_preserve:
+    description: "참고용으로 보존, 실행은 중단"
+    reason: "역사적 가치, 문서화 목적"
+    systems:
+      - name: "unified_backup_*_backup_*.sh"
+        location: "scripts/"
+        original_function: "백업 스크립트 백업본"
+        replacement: "Git 히스토리로 대체"
+        preserve_reason: "역사적 참고 자료"
+        log_mapping: "var/logs/legacy/archive.log"
+        status: "ARCHIVE"
+
+# === 로그 경로 매핑 ===
+log_mapping:
+  # === 레거시 로그 디렉토리 구조 ===
+  legacy_logs_dir: "var/logs/legacy"
+  subdirectories:
+    - name: "freeze"
+      description: "즉시 Freeze된 시스템 로그"
+      retention: "30일"
+    
+    - name: "shadow"
+      description: "Shadow 병행 검증 로그"
+      retention: "90일"
+    
+    - name: "transition"
+      description: "점진적 전환 로그"
+      retention: "90일"
+    
+    - name: "archive"
+      description: "장기 보존 로그"
+      retention: "365일"
+
+  # === 로그 파일 명명 규칙 ===
+  naming_convention: "legacy_{category}_{system}_{date}.log"
+  examples:
+    - "legacy_freeze_unified_core_2025-08-22.log"
+    - "legacy_shadow_duri_backup_2025-08-22.log"
+    - "legacy_transition_rotate_2025-08-25.log"
+
+# === Shadow 병행 검증 계획 ===
+shadow_validation:
+  # === 검증 기간 ===
+  duration: "3일 (2025-08-22 ~ 2025-08-25)"
+  
+  # === 검증 지표 ===
+  metrics:
+    - name: "백업 성공률"
+      legacy_source: "레거시 시스템 로그"
+      standard_source: "var/logs/backup/"
+      comparison: "성공률 차이 분석"
+    
+    - name: "실행 시간"
+      legacy_source: "레거시 시스템 로그"
+      standard_source: "var/logs/backup/"
+      comparison: "성능 차이 분석"
+    
+    - name: "리소스 사용량"
+      legacy_source: "시스템 모니터링"
+      standard_source: "var/logs/system/monitoring/"
+      comparison: "효율성 차이 분석"
+    
+    - name: "오류 발생률"
+      legacy_source: "레거시 시스템 로그"
+      standard_source: "var/logs/system/alerts/"
+      comparison: "안정성 차이 분석"
+  
+  # === 검증 결과 판정 기준 ===
+  success_criteria:
+    - "표준 시스템 성공률 ≥ 레거시 시스템 성공률"
+    - "표준 시스템 실행 시간 ≤ 레거시 시스템 실행 시간 × 1.2"
+    - "표준 시스템 오류 발생률 ≤ 레거시 시스템 오류 발생률"
+    - "의존성 준수율 100% (표준 시스템)"
+
+# === 전환 일정 ===
+transition_schedule:
+  # === Week 1 (2025-08-22 ~ 2025-08-28) ===
+  week1:
+    - date: "2025-08-22"
+      action: "즉시 Freeze: unified_backup_*.sh"
+      status: "FREEZE"
+    
+    - date: "2025-08-22 ~ 2025-08-25"
+      action: "Shadow 병행: duri_backup.sh, progress.sh"
+      status: "SHADOW"
+    
+    - date: "2025-08-25"
+      action: "점진적 전환 시작: rotate_backups.sh"
+      status: "TRANSITION"
+  
+  # === Week 2 (2025-08-29 ~ 2025-09-04) ===
+  week2:
+    - date: "2025-08-29"
+      action: "Shadow 완료, 결과 분석"
+      status: "ANALYSIS"
+    
+    - date: "2025-08-30"
+      action: "전환 완료: rotate_backups.sh"
+      status: "COMPLETE"
+    
+    - date: "2025-09-01"
+      action: "Phase 4 완료 검토"
+      status: "REVIEW"
+
+# === 위험 관리 ===
+risk_management:
+  # === 롤백 계획 ===
+  rollback_plan:
+    - condition: "표준 시스템 성공률 < 95%"
+      action: "레거시 시스템 즉시 복구"
+      timeframe: "1시간 내"
+    
+    - condition: "표준 시스템 오류 발생률 > 5%"
+      action: "레거시 시스템 부분 복구"
+      timeframe: "4시간 내"
+    
+    - condition: "의존성 위반 발생"
+      action: "전체 시스템 롤백"
+      timeframe: "즉시"
+  
+  # === 모니터링 강화 ===
+  enhanced_monitoring:
+    - "실시간 성공률 모니터링"
+    - "성능 지표 자동 수집"
+    - "오류 발생 시 즉시 알림"
+    - "일일 전환 상태 리포트"
+
+# === 성공 지표 ===
+success_metrics:
+  # === Phase 4 완료 기준 ===
+  completion_criteria:
+    - "레거시 시스템 100% Freeze/Shadow/Transition 완료"
+    - "표준 시스템 성능 지표 ≥ 레거시 시스템"
+    - "의존성 준수율 100%"
+    - "오류 발생률 ≤ 1%"
+  
+  # === KPI 목표 ===
+  kpi_targets:
+    - "백업 성공률: ≥99.9%"
+    - "실행 시간: 레거시 대비 ≤120%"
+    - "리소스 사용량: 레거시 대비 ≤110%"
+    - "오류 발생률: ≤1%"
+
+# === 운영 노트 ===
+operations:
+  notes:
+    - "레거시 시스템은 기능은 중단하되 로그는 계속 수집"
+    - "Shadow 병행 중에는 두 시스템의 결과를 지속적으로 비교"
+    - "문제 발생 시 즉시 롤백, 안전 우선"
+    - "전환 완료 후 레거시 시스템은 참고용으로만 보존"
+    - "모든 전환 과정은 상세히 문서화하여 향후 참고"
+
+
+

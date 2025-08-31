@@ -1,0 +1,47 @@
+{
+  "DuRiSystem": {
+    "nodes": {
+      "core": {
+        "name": "duri_core_node",
+        "port": 8090,
+        "description": "외부 요청을 받아 Brain 및 Evolution 노드로 분배하는 API Gateway",
+        "routes": ["/conversation/process", "/health", "/dashboard"],
+        "responsibilities": ["요청 라우팅", "결과 통합", "노드 상태 모니터링"]
+      },
+      "brain": {
+        "name": "duri_brain_node", 
+        "port": 8091,
+        "description": "DuRi의 판단, 철학, 기억 시스템을 담당",
+        "modules": ["meaning_analysis", "context_analysis", "emotion_analysis", "memory_retrieval", "ethical_judgment", "creative_insights"],
+        "routes": ["/analyze", "/health"],
+        "dependencies": ["core"]
+      },
+      "evolution": {
+        "name": "duri_evolution_node",
+        "port": 8092, 
+        "description": "DuRi의 자가 학습, 평가, 개선을 담당하는 시스템",
+        "modules": ["chatgpt_evaluation", "duri_self_reflection", "discussion", "autonomous_learning", "realtime_learning", "automatic_improvement"],
+        "routes": ["/learn", "/health"],
+        "dependencies": ["core", "brain"]
+      }
+    },
+    "communication": {
+      "core_to_brain": "POST /analyze",
+      "core_to_evolution": "POST /learn", 
+      "brain_to_core": "analysis_result",
+      "evolution_to_core": "learning_result"
+    },
+    "rules": {
+      "no_direct_crossing": "Brain과 Evolution은 Core 없이 직접 통신 금지",
+      "keep_flow": "Core → Brain → Evolution → Core 흐름 유지",
+      "error_handling": "각 노드별 독립적 오류 처리",
+      "state_management": "Core가 전체 상태 관리"
+    },
+    "current_status": {
+      "all_nodes_healthy": true,
+      "test_score": 0.126,
+      "processing_time": "0.002초",
+      "improvement_suggestions": 10
+    }
+  }
+} 

@@ -1,0 +1,13 @@
+LOG_DIR=/data/logs
+EMOTION_DATA_DIR=/data/emotion_data
+SCRIPT_DIR=/data/scripts
+RECEIVE_JSON_LOG=/data/emotion_data/receive_log.json
+UPDATE_SCRIPT_PATH=/data/scripts/update_cur_from_delta.py
+PORT=8080
+
+# .env (duri_core)
+BRAIN_URL=http://duri_brain_container:8081/brain
+EVOLUTION_URL=http://duri_evolution_container:8082/evolve
+
+ACTION_STATS_PATH=/data/evolution_data/action_stats.json
+EVOLUTION_LOG=/data/evolution_data/evolution_log.json

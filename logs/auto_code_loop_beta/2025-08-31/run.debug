@@ -1,0 +1,19 @@
++ [12:16:05] line: set -euo pipefail
++ [12:16:05] line: ROOT=/home/duri/DuRiWorkspace
++ [12:16:05] line: POLICY=/home/duri/DuRiWorkspace/policies/auto_code_loop/gate_policy.yaml
+++ [12:16:05] line: date +%F
++ [12:16:05] line: LOGDIR=/home/duri/DuRiWorkspace/logs/auto_code_loop_beta/2025-08-31
++ [12:16:05] line: REGRESSION=/home/duri/DuRiWorkspace/run_regression_tests.sh
++ [12:16:05] line: SECURITY_CHECK=/home/duri/DuRiWorkspace/tools/policy_verify.sh
++ [12:16:05] line: RESTORE_SMOKE=/home/duri/DuRiWorkspace/scripts/smoke_restore_test.sh
++ [12:16:05] line: CANARY_PIPELINE=/home/duri/DuRiWorkspace/tools/canary_pipeline.sh
++ [12:16:05] line: BRANCH=gate-test
+++ [12:16:05] line: date +%F_%H%M
++ [12:16:05] line: TAG=day15-beta-2025-08-31_1216
++ [12:16:05] line: BUDGET_TOKENS=120000
++ [12:16:05] line: BUDGET_MINUTES=20
++ [12:16:05] line: PR_LIMIT_PER_DAY=3
++ [12:16:05] line: DRY_RUN=0
++ [12:16:05] line: mkdir -p /home/duri/DuRiWorkspace/logs/auto_code_loop_beta/2025-08-31
++ [12:16:05] line: exec
+++ [12:16:05] line: tee -a /home/duri/DuRiWorkspace/logs/auto_code_loop_beta/2025-08-31/run.log

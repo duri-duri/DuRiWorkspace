@@ -1,0 +1,223 @@
+{
+  "test_suite_id": "test_suite_1754460810",
+  "test_suite_name": "Phase Ω 통합 테스트 스위트",
+  "execution_time": 30.0314621925354,
+  "total_tests": 17,
+  "passed_tests": 17,
+  "failed_tests": 0,
+  "skipped_tests": 0,
+  "success_rate": 1.0,
+  "timestamp": "2025-08-06T15:14:00.770849",
+  "test_results": [
+    {
+      "test_id": "survival_engine_assessment",
+      "test_name": "생존 상태 평가 테스트",
+      "test_type": "unit",
+      "status": "passed",
+      "execution_time": 0.0002770423889160156,
+      "success": true,
+      "error_message": null,
+      "metrics": {
+        "survival_probability": 0.44999999999999996
+      }
+    },
+    {
+      "test_id": "survival_engine_threats",
+      "test_name": "위협 식별 테스트",
+      "test_type": "unit",
+      "status": "passed",
+      "execution_time": 4.506111145019531e-05,
+      "success": true,
+      "error_message": null,
+      "metrics": {
+        "threat_count": 0
+      }
+    },
+    {
+      "test_id": "goal_generator_analysis",
+      "test_name": "현재 상태 분석 테스트",
+      "test_type": "unit",
+      "status": "passed",
+      "execution_time": 8.535385131835938e-05,
+      "success": true,
+      "error_message": null,
+      "metrics": {
+        "confidence_score": 0.5916666666666667
+      }
+    },
+    {
+      "test_id": "goal_generator_goals",
+      "test_name": "자가 목표 생성 테스트",
+      "test_type": "unit",
+      "status": "passed",
+      "execution_time": 0.00012826919555664062,
+      "success": true,
+      "error_message": null,
+      "metrics": {
+        "goal_count": 8
+      }
+    },
+    {
+      "test_id": "evolution_progress",
+      "test_name": "진화 진행도 평가 테스트",
+      "test_type": "unit",
+      "status": "passed",
+      "execution_time": 3.504753112792969e-05,
+      "success": true,
+      "error_message": null,
+      "metrics": {
+        "evolution_score": 0.0
+      }
+    },
+    {
+      "test_id": "evolution_adaptation",
+      "test_name": "환경 적응 테스트",
+      "test_type": "unit",
+      "status": "passed",
+      "execution_time": 2.3603439331054688e-05,
+      "success": true,
+      "error_message": null,
+      "metrics": {
+        "adaptation_score": 0.85
+      }
+    },
+    {
+      "test_id": "survival_assessment_risks",
+      "test_name": "환경적 위험 평가 테스트",
+      "test_type": "unit",
+      "status": "passed",
+      "execution_time": 1.4066696166992188e-05,
+      "success": true,
+      "error_message": null,
+      "metrics": {
+        "risk_count": 0
+      }
+    },
+    {
+      "test_id": "survival_assessment_score",
+      "test_name": "생존 점수 계산 테스트",
+      "test_type": "unit",
+      "status": "passed",
+      "execution_time": 5.3882598876953125e-05,
+      "success": true,
+      "error_message": null,
+      "metrics": {
+        "survival_score": 0.6224999999999999
+      }
+    },
+    {
+      "test_id": "phase_omega_integration",
+      "test_name": "Phase Ω 통합 프로세스 테스트",
+      "test_type": "integration",
+      "status": "passed",
+      "execution_time": 0.0018267631530761719,
+      "success": true,
+      "error_message": null,
+      "metrics": {
+        "integration_time": 0.0018036365509033203,
+        "self_goals_count": 8,
+        "risk_assessments_count": 0,
+        "recommendations_count": 6
+      }
+    },
+    {
+      "test_id": "system_interactions",
+      "test_name": "시스템 간 상호작용 테스트",
+      "test_type": "integration",
+      "status": "passed",
+      "execution_time": 0.0003724098205566406,
+      "success": true,
+      "error_message": null,
+      "metrics": {
+        "goals_generated": 8
+      }
+    },
+    {
+      "test_id": "response_time_survival",
+      "test_name": "생존 엔진 응답 시간 테스트",
+      "test_type": "performance",
+      "status": "passed",
+      "execution_time": 0.00015163421630859375,
+      "success": true,
+      "error_message": null,
+      "metrics": {
+        "response_time": 0.00015163421630859375
+      }
+    },
+    {
+      "test_id": "response_time_goals",
+      "test_name": "목표 생성기 응답 시간 테스트",
+      "test_type": "performance",
+      "status": "passed",
+      "execution_time": 6.67572021484375e-05,
+      "success": true,
+      "error_message": null,
+      "metrics": {
+        "response_time": 6.67572021484375e-05
+      }
+    },
+    {
+      "test_id": "throughput_test",
+      "test_name": "처리량 테스트",
+      "test_type": "performance",
+      "status": "passed",
+      "execution_time": 0.0015690326690673828,
+      "success": true,
+      "error_message": null,
+      "metrics": {
+        "success_rate": 1.0,
+        "throughput": 6373.353593678772
+      }
+    },
+    {
+      "test_id": "memory_usage",
+      "test_name": "메모리 사용량 테스트",
+      "test_type": "performance",
+      "status": "passed",
+      "execution_time": 0.0,
+      "success": true,
+      "error_message": null,
+      "metrics": {
+        "memory_increase_mb": 0.0
+      }
+    },
+    {
+      "test_id": "long_running",
+      "test_name": "장시간 실행 테스트",
+      "test_type": "stability",
+      "status": "passed",
+      "execution_time": 30.00304102897644,
+      "success": true,
+      "error_message": null,
+      "metrics": {
+        "iterations": 263,
+        "avg_time_per_iteration": 0.11408000391245794
+      }
+    },
+    {
+      "test_id": "error_recovery",
+      "test_name": "오류 복구 테스트",
+      "test_type": "stability",
+      "status": "passed",
+      "execution_time": 0.0002942085266113281,
+      "success": true,
+      "error_message": null,
+      "metrics": {
+        "recovery_success": true
+      }
+    },
+    {
+      "test_id": "stress_test",
+      "test_name": "부하 테스트",
+      "test_type": "stability",
+      "status": "passed",
+      "execution_time": 0.007544279098510742,
+      "success": true,
+      "error_message": null,
+      "metrics": {
+        "success_rate": 1.0,
+        "total_requests": 50
+      }
+    }
+  ]
+}

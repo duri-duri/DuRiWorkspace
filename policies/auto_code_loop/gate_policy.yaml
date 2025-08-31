@@ -1,0 +1,36 @@
+version: 1
+plan_max_files: 5
+
+whitelist:
+  - "duri_modules/**/*.py"
+  - "tools/**/*.sh"
+  - "scripts/safe_*.sh"
+  - "docs/**/*.md"
+  - "eval/**/*.yaml"
+  - "risk/**/*.md"
+
+blacklist:
+  - "var/secrets/**"
+  - "**/*.env"
+  - "ops/**"
+  - "**/requirements*.txt"
+  - "configs/standard_schedule.yml"  # 운영 스케줄은 변경 금지
+  - ".github/**"                     # CI 정의는 별도 날짜에만
+
+budgets:
+  tokens_per_pr: 120000
+  minutes_per_pr: 20
+  prs_per_day: 3
+
+gates:
+  unit_pass: true
+  regression_pass: true
+  security_pass: true
+  rollback_plan: true
+
+canary:
+  percent: 10
+  rollback_if:
+    latency_p95_increase_pct: 10
+    error_rate_pct: 1
+    regression_failures: 0

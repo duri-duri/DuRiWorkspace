@@ -1,0 +1,52 @@
+[2025-08-14 21:45:36] LEVEL=CORE keep latest 14 of 3 (base=/mnt/c/Users/admin/Desktop/두리백업)
+[2025-08-14 21:45:36] KEEP  /mnt/c/Users/admin/Desktop/두리백업/2025/08/14/CORE__2025-08-14__2117__host-duri-head-.tar.zst
+[2025-08-14 21:45:36] KEEP  /mnt/c/Users/admin/Desktop/두리백업/2025/08/14/CORE__2025-08-14__2114__host-duri-head-.tar.zst
+[2025-08-14 21:45:36] KEEP  /mnt/c/Users/admin/Desktop/두리백업/2025/08/14/CORE__2025-08-14__1310__host-duri-head-.tar.zst
+[2025-08-14 21:45:36] rotation done (dry_run=1)
+[2025-08-14 21:45:54] LEVEL=EXTENDED keep latest 8 of 1 (base=/mnt/c/Users/admin/Desktop/두리백업)
+[2025-08-14 21:45:54] KEEP  /mnt/c/Users/admin/Desktop/두리백업/2025/08/14/EXTENDED__2025-08-14__1312__host-duri-head-.tar.zst
+[2025-08-14 21:45:54] rotation done (dry_run=1)
+[2025-08-14 21:46:23] LEVEL=FULL policy=8w+monthly (TOTAL=1, KEEP=1)
+[2025-08-14 21:46:23] KEEP  /mnt/c/Users/admin/Desktop/두리백업/2025/08/14/FULL__2025-08-14__2025-08-14__2009__host-duri-head-.tar.tar.zst
+[2025-08-14 21:46:23] rotation done (dry_run=1)
+[2025-08-14 21:47:10] LEVEL=CORE keep latest 14 of 3 (base=/mnt/c/Users/admin/Desktop/두리백업)
+[2025-08-14 21:47:10] KEEP  /mnt/c/Users/admin/Desktop/두리백업/2025/08/14/CORE__2025-08-14__2117__host-duri-head-.tar.zst
+[2025-08-14 21:47:10] KEEP  /mnt/c/Users/admin/Desktop/두리백업/2025/08/14/CORE__2025-08-14__2114__host-duri-head-.tar.zst
+[2025-08-14 21:47:10] KEEP  /mnt/c/Users/admin/Desktop/두리백업/2025/08/14/CORE__2025-08-14__1310__host-duri-head-.tar.zst
+[2025-08-14 21:47:10] rotation done (dry_run=0)
+[2025-08-14 21:47:45] LEVEL=EXTENDED keep latest 8 of 1 (base=/mnt/c/Users/admin/Desktop/두리백업)
+[2025-08-14 21:47:45] KEEP  /mnt/c/Users/admin/Desktop/두리백업/2025/08/14/EXTENDED__2025-08-14__1312__host-duri-head-.tar.zst
+[2025-08-14 21:47:45] rotation done (dry_run=0)
+[2025-08-14 21:48:15] LEVEL=FULL policy=8w+monthly (TOTAL=1, KEEP=1)
+[2025-08-14 21:48:15] KEEP  /mnt/c/Users/admin/Desktop/두리백업/2025/08/14/FULL__2025-08-14__2025-08-14__2009__host-duri-head-.tar.tar.zst
+[2025-08-14 21:48:15] rotation done (dry_run=0)
+[2025-08-14 21:57:34] LEVEL=CORE keep latest 14 of 3 (base=/mnt/c/Users/admin/Desktop/두리백업)
+[2025-08-14 21:57:34] KEEP  /mnt/c/Users/admin/Desktop/두리백업/2025/08/14/CORE__2025-08-14__2117__host-duri-head-.tar.zst
+[2025-08-14 21:57:34] KEEP  /mnt/c/Users/admin/Desktop/두리백업/2025/08/14/CORE__2025-08-14__2114__host-duri-head-.tar.zst
+[2025-08-14 21:57:34] KEEP  /mnt/c/Users/admin/Desktop/두리백업/2025/08/14/CORE__2025-08-14__1310__host-duri-head-.tar.zst
+[2025-08-14 21:57:34] rotation done (dry_run=1)
+[2025-08-14 21:58:05] LEVEL=EXTENDED keep latest 8 of 1 (base=/mnt/c/Users/admin/Desktop/두리백업)
+[2025-08-14 21:58:05] KEEP  /mnt/c/Users/admin/Desktop/두리백업/2025/08/14/EXTENDED__2025-08-14__1312__host-duri-head-.tar.zst
+[2025-08-14 21:58:05] rotation done (dry_run=1)
+[2025-08-14 21:58:17] LEVEL=EXTENDED keep latest 8 of 1 (base=/mnt/c/Users/admin/Desktop/두리백업)
+[2025-08-14 21:58:17] KEEP  /mnt/c/Users/admin/Desktop/두리백업/2025/08/14/EXTENDED__2025-08-14__1312__host-duri-head-.tar.zst
+[2025-08-14 21:58:17] rotation done (dry_run=1)
+[2025-08-14 21:58:39] LEVEL=FULL policy=8w+monthly (TOTAL=1, KEEP=1)
+[2025-08-14 21:58:39] KEEP  /mnt/c/Users/admin/Desktop/두리백업/2025/08/14/FULL__2025-08-14__2025-08-14__2009__host-duri-head-.tar.tar.zst
+[2025-08-14 21:58:39] rotation done (dry_run=1)
+LEVEL이 필요합니다 (CORE|EXTENDED|FULL).
+Usage: /home/duri/DuRiWorkspace/scripts/rotate_backups.sh [--profile duri] [--config configs/retention.yml] [--base-root PATH]
+          [--level CORE|EXTENDED|FULL] [--keep N] [--policy "8w+monthly"] [--dry-run]
+Examples:
+  /home/duri/DuRiWorkspace/scripts/rotate_backups.sh --level CORE --keep 14 --dry-run
+  /home/duri/DuRiWorkspace/scripts/rotate_backups.sh --level EXTENDED --keep 8
+  /home/duri/DuRiWorkspace/scripts/rotate_backups.sh --level FULL --policy "8w+monthly" --dry-run
+  /home/duri/DuRiWorkspace/scripts/rotate_backups.sh --profile duri --config configs/retention.yml
+LEVEL이 필요합니다 (CORE|EXTENDED|FULL).
+Usage: /home/duri/DuRiWorkspace/scripts/rotate_backups.sh [--profile duri] [--config configs/retention.yml] [--base-root PATH]
+          [--level CORE|EXTENDED|FULL] [--keep N] [--policy "8w+monthly"] [--dry-run]
+Examples:
+  /home/duri/DuRiWorkspace/scripts/rotate_backups.sh --level CORE --keep 14 --dry-run
+  /home/duri/DuRiWorkspace/scripts/rotate_backups.sh --level EXTENDED --keep 8
+  /home/duri/DuRiWorkspace/scripts/rotate_backups.sh --level FULL --policy "8w+monthly" --dry-run
+  /home/duri/DuRiWorkspace/scripts/rotate_backups.sh --profile duri --config configs/retention.yml

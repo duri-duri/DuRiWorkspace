@@ -1,0 +1,80 @@
+{
+  "module": "conflict_resolver",
+  "responsibility": "ConflictResolver - 충돌 해결 모듈\n최종 실행 준비 완료 시스템의 핵심 도구\n\n@preserve_identity: 충돌 해결 및 조율\n@evolution_protection: 진화 중 손상 방지 최우선\n@execution_guarantee: 자동화와 검증 시스템 완성\n@existence_ai: 진화 가능 + 회복 가능한 존재형 AI\n@final_execution: 인간처럼 실패하고도 다시 일어날 수 있는 존재",
+  "must_define": [],
+  "must_not": [
+    "finalize decisions (판단은 judgment_engine에서)",
+    "access memory directly (memory_system을 통해)",
+    "bypass judgment_trace (모든 판단은 기록되어야 함)"
+  ],
+  "integration": [
+    "imports typing",
+    "calls logging.getLogger()",
+    "calls path.exists()",
+    "calls datetime.now()",
+    "calls datetime.now()",
+    "calls datetime.now()",
+    "calls datetime.now()",
+    "calls datetime.now()",
+    "calls evolution_capability.can_evolve()",
+    "calls evolution_capability.evolve()"
+  ],
+  "judgment_trace": "모든 판단 과정 기록",
+  "preserve_identity": "판단 이유 기록 시스템 강제 통합",
+  "evolution_protection": "진화 중 손상 방지 최우선",
+  "execution_guarantee": "자동화와 검증 시스템 완성",
+  "existence_ai": "진화 가능 + 회복 가능한 존재형 AI",
+  "final_execution": "인간처럼 실패하고도 다시 일어날 수 있는 존재",
+  "self_assessment": [
+    "creativity",
+    "judgment_diversity",
+    "memory_activity",
+    "emotional_response"
+  ],
+  "test_requirements": [
+    "consistency",
+    "reasoning_trace",
+    "identity_verification",
+    "regression_testing"
+  ],
+  "rollback_conditions": [
+    "creativity < 0.7",
+    "judgment_diversity < 0.7",
+    "memory_activity < 0.7",
+    "emotional_response < 0.7"
+  ],
+  "automation_tools": [
+    "meta_generator.py",
+    "protection_injector.py",
+    "meaning_injection_engine.py"
+  ],
+  "verification_systems": [
+    "regression_test_framework.py",
+    "auto_rollback_system.py"
+  ],
+  "existence_systems": [
+    "evolution_capability.py",
+    "recovery_capability.py",
+    "existence_preservation.py"
+  ],
+  "final_execution_systems": [
+    "final_execution_verifier.py",
+    "existence_ai_launcher.py"
+  ],
+  "generated_at": "2025-08-07T15:58:44.649567",
+  "version": "6.0",
+  "final_execution_ready": true,
+  "protection_status": {
+    "preserve_identity": true,
+    "evolution_protection": true,
+    "execution_guarantee": true,
+    "existence_ai": true,
+    "final_execution": true
+  },
+  "existence_ai_status": {
+    "evolution_capable": true,
+    "recovery_capable": true,
+    "existence_preserved": true,
+    "final_execution_ready": true
+  }
+}

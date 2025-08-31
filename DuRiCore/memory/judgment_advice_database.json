@@ -1,0 +1,56 @@
+{
+  "judgment_strategies": [
+    {
+      "id": "strategy_001",
+      "context_pattern": "사용자 상태가 혼란",
+      "improvement": "요약 후 방향 제시",
+      "success_rate": 0.85,
+      "usage_count": 12,
+      "last_used": "2025-08-07T12:00:00",
+      "description": "사용자가 혼란스러운 상태일 때 정보를 요약하고 명확한 방향을 제시하는 전략"
+    },
+    {
+      "id": "strategy_002", 
+      "context_pattern": "복잡한 의사결정 상황",
+      "improvement": "단계별 분석 및 옵션 제시",
+      "success_rate": 0.78,
+      "usage_count": 8,
+      "last_used": "2025-08-07T11:30:00",
+      "description": "복잡한 의사결정 상황에서 단계별로 분석하고 구체적인 옵션을 제시하는 전략"
+    },
+    {
+      "id": "strategy_003",
+      "context_pattern": "감정적 상황",
+      "improvement": "공감 후 논리적 접근",
+      "success_rate": 0.92,
+      "usage_count": 15,
+      "last_used": "2025-08-07T10:45:00", 
+      "description": "감정적 상황에서 먼저 공감을 표현한 후 논리적으로 접근하는 전략"
+    },
+    {
+      "id": "strategy_004",
+      "context_pattern": "위험도가 높은 상황",
+      "improvement": "신중한 분석 및 대안 검토",
+      "success_rate": 0.88,
+      "usage_count": 6,
+      "last_used": "2025-08-07T09:15:00",
+      "description": "위험도가 높은 상황에서 신중하게 분석하고 여러 대안을 검토하는 전략"
+    },
+    {
+      "id": "strategy_005",
+      "context_pattern": "시간이 제한된 상황",
+      "improvement": "핵심 요소 우선순위화",
+      "success_rate": 0.75,
+      "usage_count": 10,
+      "last_used": "2025-08-07T08:30:00",
+      "description": "시간이 제한된 상황에서 핵심 요소를 우선순위화하여 빠른 판단을 내리는 전략"
+    }
+  ],
+  "metadata": {
+    "version": "1.0.0",
+    "created_at": "2025-08-07T12:00:00",
+    "last_updated": "2025-08-07T12:00:00",
+    "total_strategies": 5,
+    "average_success_rate": 0.84
+  }
+}
