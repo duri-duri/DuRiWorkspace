@@ -3,71 +3,98 @@ set -Eeuo pipefail
 TS() { date '+%F %T'; }
 log(){ echo "[$(TS)] $*"; }
 
+# HDD→USB→Desktop 우선순위 선택자 로드
+source scripts/duri_backup.dest.sh
+
 SRC="${SRC:-/home/duri/DuRiWorkspace}"
 TODAY="$(date +%Y/%m/%d)"
-DESK_DIR="/mnt/c/Users/admin/Desktop/두리백업/${TODAY}"
-USB_DIR="/mnt/usb"
 HOST="$(hostname -s)"
 BASENAME="FULL__$(date +%F__%H%M)__host-${HOST}.tar.zst"
 
-ART_DESK="${DESK_DIR}/${BASENAME}"
-ART_USB="${USB_DIR}/${BASENAME}"
-TMP_DESK="${ART_DESK}.part"
+# HDD-우선 목적지 선택
+DEST_MAIN="$(choose_dest)"
+DEST_FILE_MAIN="${DEST_MAIN}/${BASENAME}"
 
-mkdir -p "$DESK_DIR"
+# 미러 후보들 준비
+USB="/mnt/usb"
+DESK_DIR="/mnt/c/Users/admin/Desktop/두리백업/${TODAY}"
+mkdir -p "$DESK_DIR" 2>/dev/null || true
+DEST_FILE_USB="${USB}/두리백업/${TODAY}/${BASENAME}"
+DEST_FILE_DESK="${DESK_DIR}/${BASENAME}"
 
-# 1) 데스크톱에 '정식 아티팩트' 생성 (USB에서 검증된 파이프라인 그대로)
-log "creating canonical artifact on Desktop…"
-if tar --numeric-owner --acls --xattrs -C "$SRC" -cpf - . | zstd -T0 -19 -q -o "$TMP_DESK"; then
-  sync "$TMP_DESK" || true
-  mv -f "$TMP_DESK" "$ART_DESK"
+log "PRIMARY=${DEST_FILE_MAIN}"
+log "MIRRORS: USB=${DEST_FILE_USB} DESK=${DEST_FILE_DESK}"
+
+# 1) PRIMARY 백업 생성 (HDD 우선)
+log "📁 PRIMARY 백업 시작: ${DEST_FILE_MAIN}"
+TMP_MAIN="${DEST_FILE_MAIN}.part"
+mkdir -p "$(dirname "$DEST_FILE_MAIN")" 2>/dev/null || true
+
+if tar --numeric-owner --acls --xattrs -C "$SRC" -cpf - . | zstd -T0 -19 -q -o "$TMP_MAIN"; then
+  sync "$TMP_MAIN" || true
+  mv -f "$TMP_MAIN" "$DEST_FILE_MAIN"
+  # 목적지 스탬프(증적 남김)
+  stamp_dest "$(dirname "$DEST_FILE_MAIN")" "$BASENAME"
+  log "✅ PRIMARY 백업 완료: $DEST_FILE_MAIN"
 else
-  rm -f "$TMP_DESK"; log "[FATAL] Desktop artifact creation failed"; exit 1
+  rm -f "$TMP_MAIN"
+  log "[FATAL] PRIMARY 백업 실패: $DEST_FILE_MAIN"
+  exit 1
 fi
 
-# 2) 데스크톱 체크섬
-( cd "$DESK_DIR" && sha256sum "$(basename "$ART_DESK")" > "SHA256SUMS.$(basename "$ART_DESK").txt" )
-log "✅ Desktop artifact ready: $ART_DESK"
-
-# 3) USB 미러(가능하면) + 체크섬 검증
+# 2) USB 미러 (PRIMARY가 USB가 아닐 때만)
 USB_OK=false
-if [ -d "$USB_DIR" ] && [ -w "$USB_DIR" ]; then
-  log "mirroring to USB…"
-  # USB에 올바른 디렉토리 구조 생성
-  USB_BACKUP_DIR="${USB_DIR}/두리백업/${TODAY}"
-  mkdir -p "$USB_BACKUP_DIR" || true
-  
-  # USB 백업 경로 수정
-  ART_USB="${USB_BACKUP_DIR}/${BASENAME}"
+if [[ -d "$USB" && "$(dirname "$DEST_FILE_MAIN")" != "$USB" ]]; then
+  log "📁 USB 미러 시작: ${DEST_FILE_USB}"
+  mkdir -p "$(dirname "$DEST_FILE_USB")" 2>/dev/null || true
   
   if command -v rsync >/dev/null 2>&1; then
-    rsync --inplace --partial "$ART_DESK" "$ART_USB" && USB_OK=true || true
+    rsync --inplace --partial "$DEST_FILE_MAIN" "$DEST_FILE_USB" && USB_OK=true || true
   else
-    cp -f "$ART_DESK" "$ART_USB" && USB_OK=true || true
+    cp -f "$DEST_FILE_MAIN" "$DEST_FILE_USB" && USB_OK=true || true
   fi
+  
   if $USB_OK; then
-    SUM_D="$(sha256sum "$ART_DESK" | awk '{print $1}')"
-    SUM_U="$(sha256sum "$ART_USB"  | awk '{print $1}')"
-    if [ "$SUM_D" = "$SUM_U" ]; then
-      ( cd "$(dirname "$ART_USB")" && echo "$SUM_U  $(basename "$ART_USB")" > "SHA256SUMS.$(basename "$ART_USB").txt" )
-      log "✅ USB mirror verified: $ART_USB"
+    SUM_M="$(sha256sum "$DEST_FILE_MAIN" | awk '{print $1}')"
+    SUM_U="$(sha256sum "$DEST_FILE_USB" | awk '{print $1}')"
+    if [ "$SUM_M" = "$SUM_U" ]; then
+      ( cd "$(dirname "$DEST_FILE_USB")" && echo "$SUM_U  $(basename "$DEST_FILE_USB")" > "SHA256SUMS.$(basename "$DEST_FILE_USB").txt" )
+      log "✅ USB 미러 검증 완료: $DEST_FILE_USB"
     else
-      log "[WARN] USB checksum mismatch"; USB_OK=false
+      log "[WARN] USB 체크섬 불일치"; USB_OK=false
     fi
   else
-    log "[WARN] USB mirror failed"
+    log "[WARN] USB 미러 실패"
   fi
 else
-  log "[INFO] USB not mounted/writable — skipping mirror"
+  log "ℹ️ USB 미러 스킵 (PRIMARY가 USB이거나 USB 마운트 안됨)"
 fi
 
-# 4) 보완 마커 + 종료 규칙
-if $USB_OK; then
-  log "SUMMARY: Desktop=OK, USB=OK → success"; exit 0
+# 3) Desktop 미러 (PRIMARY가 Desktop이 아닐 때만)
+if [[ "$(dirname "$DEST_FILE_MAIN")" != "$DESK_DIR" ]]; then
+  log "📁 Desktop 미러 시작: ${DEST_FILE_DESK}"
+  TMP_DESK="${DEST_FILE_DESK}.part"
+  
+  if tar --numeric-owner --acls --xattrs -C "$SRC" -cpf - . | zstd -T0 -19 -q -o "$TMP_DESK"; then
+    sync "$TMP_DESK" || true
+    mv -f "$TMP_DESK" "$DEST_FILE_DESK"
+    ( cd "$DESK_DIR" && sha256sum "$(basename "$DEST_FILE_DESK")" > "SHA256SUMS.$(basename "$DEST_FILE_DESK").txt" )
+    log "✅ Desktop 미러 완료: $DEST_FILE_DESK"
+  else
+    rm -f "$TMP_DESK"
+    log "[WARN] Desktop 미러 실패"
+  fi
 else
-  echo "$(date -Iseconds) PENDING_USB $(basename "$ART_DESK")" >> "${DESK_DIR}/.pending_usb_mirror"
-  log "SUMMARY: Desktop=OK, USB=MISS → success (보완 필요)"; exit 0
+  log "ℹ️ Desktop 미러 스킵 (PRIMARY가 Desktop)"
 fi
+
+# 4) 종료 규칙
+if $USB_OK; then
+  log "SUMMARY: PRIMARY=OK, USB=OK → success"
+else
+  log "SUMMARY: PRIMARY=OK, USB=MISS → success (보완 필요)"
+fi
+exit 0
 
 
 
