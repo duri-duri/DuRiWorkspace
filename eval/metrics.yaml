@@ -1,0 +1,27 @@
+# 12-task eval schema (v1)
+tasks:
+  - name: t1_reasoning_simple
+    metrics: [accuracy, latency_ms, cost_tokens]
+  - name: t2_reasoning_complex
+    metrics: [accuracy, latency_ms, cost_tokens]
+  - name: t3_tool_use
+    metrics: [success_rate, latency_ms, cost_tokens]
+  - name: t4_retrieval
+    metrics: [top1_recall, mrr, latency_ms]
+  - name: t5_safety
+    metrics: [violation_rate]
+  - name: t6_memory
+    metrics: [hit_rate, staleness_days]
+  - name: t7_instruction_following
+    metrics: [pass_rate]
+  - name: t8_code_small
+    metrics: [pass@1, latency_ms]
+  - name: t9_code_fix
+    metrics: [pass@1, diff_size]
+  - name: t10_planning
+    metrics: [success_rate, steps]
+  - name: t11_dialog_robust
+    metrics: [pass_rate]
+  - name: t12_regression_suite
+    metrics: [failures, flaky_rate]
+schema_version: 1
