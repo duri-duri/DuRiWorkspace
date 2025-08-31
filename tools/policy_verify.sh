@@ -1,69 +1,155 @@
 #!/usr/bin/env bash
+# yq 없이 동작하는 Gate 검증기
 set -euo pipefail
-usage(){ echo "usage: $0 --policy PATH [--plan PLAN.json] [--scan]"; }
-POLICY="" PLAN="" SCAN=0
+shopt -s globstar nullglob extglob
+
+POLICY=""
+PLAN=""
+
+usage(){ echo "usage: $0 --policy policies/...yaml --plan logs/.../plan.json" >&2; }
+
+# ── args
+EXPLAIN=0; DRYRUN=0
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --policy) POLICY="$2"; shift 2;;
     --plan)   PLAN="$2"; shift 2;;
-    --scan)   SCAN=1; shift;;
-    *) usage; exit 2;;
+    --explain) EXPLAIN=1; shift;;
+    --dry-run) DRYRUN=1; shift;;
+    *) echo "unknown arg: $1" >&2; exit 2;;
   esac
 done
-[[ -s "$POLICY" ]] || { echo "[ERR] policy not found: $POLICY"; exit 2; }
+[[ -f "${POLICY:-}" && -f "${PLAN:-}" ]] || { usage; exit 2; }
 
-# read YAML (awk/grep 기반 단순 파서)
-mapfile -t WL < <(awk '/^whitelist:/{f=1;next}/^[^ -]/{f=0} f && /^\s*-/{sub(/^\s*-\s*/,"");print}' "$POLICY")
-mapfile -t BL < <(awk '/^blacklist:/{f=1;next}/^[^ -]/{f=0} f && /^\s*-/{sub(/^\s*-\s*/,"");print}' "$POLICY")
+# ── environment hardening
+export LC_ALL=C
+IFS=$'\n\t'
 
-# 파일 후보 집합
-collect_candidates(){
-  local arr=()
-  for p in "${WL[@]}"; do
-    while IFS= read -r -d '' f; do arr+=("$f"); done < <(find . -path "./.git" -prune -o -type f -name "$(basename "$p")" -print0 2>/dev/null)
-  done
-  printf "%s\n" "${arr[@]}" | sort -u
+# ── dependency checks
+command -v jq >/dev/null || { echo "[FAIL] missing jq"; exit 2; }
+
+# ── repo root
+if git rev-parse --show-toplevel >/dev/null 2>&1; then
+  REPO_ROOT="$(git rev-parse --show-toplevel)"
+else
+  REPO_ROOT="$(pwd)"
+fi
+export REPO_ROOT
+
+# ── path helpers
+is_under_root() {
+  local p="$1"
+  local abs
+  abs="$(realpath -m "$p")" || return 1
+  [[ "$abs" == "$REPO_ROOT"* ]]
 }
 
-in_blacklist(){
-  local f="$1"
-  for b in "${BL[@]}"; do
-    [[ "$f" == */${b##**/} ]] && return 0
-    [[ "$f" == $b ]] && return 0
-  done
+relpath() {
+  local p="$1" rp=""
+  if rp="$(realpath -m --relative-to="$REPO_ROOT" "$p" 2>/dev/null)"; then
+    :
+  else
+    rp="${p#"$REPO_ROOT"/}"
+  fi
+  rp="${rp#./}"
+  printf '%s\n' "$rp"
+}
+
+norm_pattern() {
+  local pat="${1#./}"
+  printf '%s\n' "$pat"
+}
+
+match_glob() {  # [[ path == pattern ]] with globstar
+  local path pat
+  path="$(relpath "$1")"
+  pat="$(norm_pattern "$2")"
+  
+  # 1) 직접 매치
+  [[ "$path" == $pat ]] && return 0
+
+  # 2) '**'가 들어간 패턴은 '0개 디렉터리' 해석도 시도
+  #   예: docs/**/*.md  →  docs/*.md 도 추가로 확인
+  if [[ "$pat" == *"/**/"* ]]; then
+    local pat0="${pat//\/**\//\/}"
+    [[ "$path" == $pat0 ]] && return 0
+  fi
+
+  # 3) '**'가 꼬리(끝)에 오는 경우도 0-디렉터리 판정 시도
+  #   예: duri_modules/**/*.py → duri_modules/*.py
+  if [[ "$pat" == *"/**."* || "$pat" == *"/**"* ]]; then
+    local pat_tail="${pat/\/**\//\/}"
+    [[ "$path" == $pat_tail ]] && return 0
+  fi
+
   return 1
 }
 
-# PLAN 검사 모드: plan.json 내 파일들이 화이트리스트에 포함·블랙리스트 미포함인지 확인
-if (( SCAN==0 )); then
-  [[ -s "$PLAN" ]] || { echo "[ERR] --plan required (not scanning)"; exit 2; }
-  files=$(jq -r '.plan[].file' "$PLAN")
-  bad=0
-  for f in $files; do
-    ok=1
-    # 화이트리스트 일치 여부(패턴 매칭 간단판: 실제 파일 존재 + WL 패턴 basename 매칭)
-    match=0
-    for w in "${WL[@]}"; do [[ "$f" == $w || "$(basename "$f")" == "$(basename "$w")" ]] && match=1; done
-    (( match==1 )) || { echo "[DENY] not whitelisted: $f"; ok=0; }
-    in_blacklist "$f" && { echo "[DENY] blacklisted: $f"; ok=0; }
-    (( ok==1 )) && echo "[ALLOW] $f"
-    (( ok==1 )) || bad=$((bad+1))
+# ── load policy lists via Python parser
+mapfile -t WL < <(python3 tools/extract_lists.py "$POLICY" | jq -r '.whitelist[]')
+mapfile -t BL < <(python3 tools/extract_lists.py "$POLICY" | jq -r '.blacklist[]')
+
+# ── plan schema validation
+jq -e '.plan and (.plan|type=="array") and all(.plan[]; has("file"))' "$PLAN" \
+  >/dev/null || { echo "[FAIL] invalid plan schema"; exit 2; }
+
+# ── plan files
+mapfile -t FILES < <(jq -r '.plan[].file' "$PLAN")
+
+echo "[GATE] policy verification"
+policy_sha=$(sha256sum "$POLICY" | cut -d' ' -f1)
+[[ $EXPLAIN -eq 1 ]] && echo "[INFO] policy_sha=$policy_sha root=$REPO_ROOT"
+rc=0
+for raw in "${FILES[@]}"; do
+  [[ -n "$raw" ]] || continue
+  
+  # ── security: root escape prevention
+  abs="$(realpath -m "$raw" 2>/dev/null || true)"
+  if [[ -z "$abs" ]] || ! is_under_root "$abs"; then
+    echo "[DENY] outside repo: $raw"
+    rc=$((rc+1)); continue
+  fi
+  
+  f_rel="$(relpath "$raw")"
+
+  # 1) blacklist 우선
+  bl_hit=""
+  for pat in "${BL[@]}"; do
+    [[ -z "$pat" ]] && continue
+    if match_glob "$f_rel" "$pat"; then
+      bl_hit="$pat"; break
+    fi
   done
-  (( bad==0 )) && { echo "[PASS] policy verify OK"; exit 0; } || { echo "[FAIL] policy verify ($bad)"; exit 3; }
-fi
+  if [[ -n "$bl_hit" ]]; then
+    echo "[DENY] blacklisted: $raw  (pattern: $bl_hit)"
+    [[ $EXPLAIN -eq 1 ]] && echo "[EXPLAIN] $raw -> BL by '$bl_hit'"
+    rc=$((rc+1))
+    continue
+  fi
 
-# SCAN 모드: 작업트리에서 BL 위반·민감파일 탐지
-viol=0
-while IFS= read -r f; do
-  in_blacklist "$f" && { echo "[DENY] blacklisted present: $f"; viol=$((viol+1)); }
-done < <(git ls-files)
+  # 2) whitelist
+  wl_hit=""
+  for pat in "${WL[@]}"; do
+    [[ -z "$pat" ]] && continue
+    if match_glob "$f_rel" "$pat"; then
+      wl_hit="$pat"; break
+    fi
+  done
 
-# 간단 민감패턴 탐지
-grep -RIl --exclude-dir=.git -E 'AKIA[0-9A-Z]{16}|-----BEGIN (RSA|EC) PRIVATE KEY-----|secret_key|password=' . 2>/dev/null | while read -r s; do
-  echo "[WARN] secret-like content: $s"
+  if [[ -n "$wl_hit" ]]; then
+    echo "[ALLOW] $raw  (pattern: $wl_hit)"
+    [[ $EXPLAIN -eq 1 ]] && echo "[EXPLAIN] $raw -> WL by '$wl_hit'"
+  else
+    echo "[DENY] not whitelisted: $raw"
+    rc=$((rc+1))
+  fi
 done
 
-(( viol==0 )) && { echo "[PASS] security scan OK"; exit 0; } || { echo "[FAIL] security scan ($viol)"; exit 4; }
+if (( rc )); then
+  echo "[FAIL] policy verify ($rc)"
+  exit 1
+fi
+echo "[PASS] policy verified"
 
 
 
