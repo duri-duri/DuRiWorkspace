@@ -1,0 +1,145 @@
+#!/usr/bin/env bash
+# yq 없이 동작하는 Gate 검증기
+set -euo pipefail
+shopt -s globstar nullglob extglob
+
+POLICY=""
+PLAN=""
+
+usage(){ echo "usage: $0 --policy policies/...yaml --plan logs/.../plan.json" >&2; }
+
+# ── args
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --policy) POLICY="$2"; shift 2;;
+    --plan)   PLAN="$2"; shift 2;;
+    *) echo "unknown arg: $1" >&2; exit 2;;
+  esac
+done
+[[ -f "${POLICY:-}" && -f "${PLAN:-}" ]] || { usage; exit 2; }
+
+# ── repo root
+if git rev-parse --show-toplevel >/dev/null 2>&1; then
+  REPO_ROOT="$(git rev-parse --show-toplevel)"
+else
+  REPO_ROOT="$(pwd)"
+fi
+export REPO_ROOT
+
+# ── path helpers
+relpath() {
+  local p="$1" rp=""
+  if rp="$(realpath -m --relative-to="$REPO_ROOT" "$p" 2>/dev/null)"; then
+    :
+  else
+    rp="${p#"$REPO_ROOT"/}"
+  fi
+  rp="${rp#./}"
+  printf '%s\n' "$rp"
+}
+
+norm_pattern() {
+  local pat="${1#./}"
+  printf '%s\n' "$pat"
+}
+
+match_glob() {  # [[ path == pattern ]] with globstar
+  local path pat
+  path="$(relpath "$1")"
+  pat="$(norm_pattern "$2")"
+  [[ "$path" == $pat ]]
+}
+
+# ── YAML list reader (whitelist/blacklist만 단순 지원)
+#  - 리스트 항목: "- value" 형식
+#  - 따옴표('", ') 제거, 선행 "./" 제거
+#  - 줄 끝 주석(#...) 제거(따옴표 안 주석은 미지원)
+read_yaml_list() {
+  local key="$1" file="$2"
+  awk -v key="$key" '
+    function ltrim(s){ sub(/^[ \t\r\n]+/,"",s); return s }
+    function rtrim(s){ sub(/[ \t\r\n]+$/,"",s); return s }
+    function trim(s){ s=ltrim(s); s=rtrim(s); return s }
+    function unquote(s){
+      if (s ~ /^".*"$/) { sub(/^"/,"",s); sub(/"$/,"",s); return s }
+      if (s ~ /^'\''.*'\''$/) { sub(/^'\''/,"",s); sub(/'\''$/,"",s); return s }
+      return s
+    }
+    BEGIN{inlist=0}
+    $0 ~ "^"key":" {inlist=1; next}
+    inlist && /^[A-Za-z0-9_.-]+:/ { exit }  # 다음 톱레벨 키 시작
+    inlist {
+      if ($0 ~ /^\s*-\s*/) {
+        s=$0
+        sub(/^\s*-\s*/,"",s)
+        # 주석 제거 (따옴표 내부 주석은 단순화하여 미지원)
+        sub(/[ \t]#.*$/,"",s)
+        s=trim(s)
+        s=unquote(s)
+        gsub(/^\.\/+/,"",s)
+        if (length(s)>0) print s
+      }
+    }
+  ' "$file"
+}
+
+# ── load policy lists
+mapfile -t WL < <(read_yaml_list "whitelist" "$POLICY")
+mapfile -t BL < <(read_yaml_list "blacklist" "$POLICY")
+
+# ── plan files
+mapfile -t FILES < <(jq -r '.plan[].file' "$PLAN")
+
+echo "[GATE] policy verification"
+rc=0
+for raw in "${FILES[@]}"; do
+  [[ -n "$raw" ]] || continue
+  f_rel="$(relpath "$raw")"
+
+  # 1) blacklist 우선
+  bl_hit=""
+  for pat in "${BL[@]}"; do
+    [[ -z "$pat" ]] && continue
+    if match_glob "$f_rel" "$pat"; then
+      bl_hit="$pat"; break
+    fi
+  done
+  if [[ -n "$bl_hit" ]]; then
+    echo "[DENY] blacklisted: $raw  (pattern: $bl_hit)"
+    rc=$((rc+1))
+    continue
+  fi
+
+  # 2) whitelist
+  wl_hit=""
+  for pat in "${WL[@]}"; do
+    [[ -z "$pat" ]] && continue
+    if match_glob "$f_rel" "$pat"; then
+      wl_hit="$pat"; break
+    fi
+  done
+
+  if [[ -n "$wl_hit" ]]; then
+    echo "[ALLOW] $raw  (pattern: $wl_hit)"
+  else
+    echo "[DENY] not whitelisted: $raw"
+    rc=$((rc+1))
+  fi
+done
+
+if (( rc )); then
+  echo "[FAIL] policy verify ($rc)"
+  exit 1
+fi
+echo "[PASS] policy verified"
+
+
+
+
+
+
+
+
+
+
+
