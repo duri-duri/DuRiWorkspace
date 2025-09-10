@@ -1,0 +1,76 @@
+# ===== DuRi 현실적 운영 스케줄 (2025-09-05 최종 업데이트) =====
+# 운영시간: 평일 09-19, 토요일 OFF, 일요일 09-16
+# 점심시간: 13:00-14:00 (업무 중단)
+# 업무 종료 1시간 전: 평일 18:00-19:00, 일요일 15:00-16:00
+# 기존 중요 스케줄 완전 보존 + 경로 수정 + HDD 정리 추가
+
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+MAILTO=""
+
+# ── 공통: 아침 자동 점검/보정 (매일 08:55) - 기존 보존 ──
+55 8 * * * cd /home/duri/DuRiWorkspace && flock -n var/locks/health.lock -c '/home/duri/DuRiWorkspace/scripts/morning_check_and_recover.sh' >> /home/duri/DuRiWorkspace/var/logs/cron.health.log 2>&1
+
+# ── 공통: 스모크 복구 테스트 (매일 09:00) - 기존 보존 ──
+0 9 * * * cd /home/duri/DuRiWorkspace && LATEST=$(ls -1t /mnt/h/ARCHIVE/FULL/FULL__*.tar.* /mnt/i/두리백업/*/*/*/FULL__*.tar.* 2>/dev/null | head -1) && [ -n "$LATEST" ] && flock -n var/locks/smoke.lock -c "/home/duri/DuRiWorkspace/scripts/smoke_restore_test.sh --archive \"$LATEST\" --fast --record" || /home/duri/DuRiWorkspace/scripts/ops_alert.sh "[SMOKE_RESTORE][FAIL] $(date +\%F\ \%T)"
+
+# ── 새로운 HDD 정리 및 축 관리 시스템 (평일 업무 중간/종료 직전) ──
+# 평일 상태 스냅샷 (09:02)
+2 9 * * 1-5 MODE=snapshot ROOT=/mnt/h/ARCHIVE TAGS="weekday" bash /home/duri/DuRiWorkspace/tools/cron_snapshots.sh >/dev/null 2>&1
+
+# 평일 A단계 COMMIT (11:30 - 업무 중간, 점심 전)
+30 11 * * 1-5 MODE=commit DAYS_KEEP=5 bash /home/duri/DuRiWorkspace/tools/cleanup_space.sh /mnt/h/ARCHIVE >/dev/null 2>&1
+
+# ── 평일(월-금): INCR(18:00) → FULL(18:20) → Health(18:50) ※ 업무 종료 1시간 전 (기존 시간 유지) ──
+0 18 * * 1-5 cd /home/duri/DuRiWorkspace && ! ( [ -f etc/holidays.txt ] && grep -qx "$(date +\%F)" etc/holidays.txt ) && flock -n var/locks/incr.lock -c '/home/duri/DuRiWorkspace/scripts/duri_backup_phase1.sh incr' >> /home/duri/DuRiWorkspace/var/logs/cron.incr.log 2>&1
+20 18 * * 1-5 cd /home/duri/DuRiWorkspace && ! ( [ -f etc/holidays.txt ] && grep -qx "$(date +\%F)" etc/holidays.txt ) && flock -n var/locks/full.lock -c '/home/duri/DuRiWorkspace/scripts/duri_backup_phase1.sh full' >> /home/duri/DuRiWorkspace/var/logs/cron.full.log 2>&1
+50 18 * * 1-5 cd /home/duri/DuRiWorkspace && ! ( [ -f etc/holidays.txt ] && grep -qx "$(date +\%F)" etc/holidays.txt ) && flock -n var/locks/health.lock -c '/home/duri/DuRiWorkspace/scripts/run_health_and_mark.sh' >> /home/duri/DuRiWorkspace/var/logs/cron.health.log 2>&1
+
+# ── 평일 업무 종료 직전 정리 작업 (18:00-19:00 사이) ──
+# 평일 PURGE (18:10 - 업무 종료 1시간 전)
+10 18 * * 1-5 MODE=purge DAYS_KEEP=5 bash /home/duri/DuRiWorkspace/tools/cleanup_space.sh /mnt/h/ARCHIVE >/dev/null 2>&1
+
+# 평일 분류/대시보드 집계 (18:30-18:35 - 업무 종료 1시간 전)
+30 18 * * 1-5 bash /home/duri/DuRiWorkspace/tools/classify_axes.sh /mnt/h/ARCHIVE >/dev/null 2>&1
+35 18 * * 1-5 bash /home/duri/DuRiWorkspace/tools/axis_dashboard.sh >/dev/null 2>&1
+
+# ── 일요일: 13시 검증 루틴 (기존 유지하되 경로 수정) ──
+5 13 * * 0 cd /home/duri/DuRiWorkspace && flock -n var/locks/hdd_verify.lock -c 'DESK_ROOT="/mnt/c/Users/admin/Desktop/두리백업" KEEP_CHECK=3 HEAD_N=50 LOG_FILE="var/logs/hdd_verify.log" /home/duri/DuRiWorkspace/scripts/hdd_verify_backups.sh' || /home/duri/DuRiWorkspace/scripts/ops_alert.sh "[HDD_VERIFY][FAIL] $(date +\%F\ \%T)"
+15 13 * * 0 cd /home/duri/DuRiWorkspace && LATEST=$(ls -1t /mnt/i/두리백업/*/*/*/FULL__*.tar.* 2>/dev/null | head -1) && [ -n "$LATEST" ] && flock -n var/locks/usb_verify.lock -c "LOG_FILE='var/logs/usb_verify.log' ARCHIVE='$LATEST' /home/duri/DuRiWorkspace/scripts/hdd_verify_backups.sh" || /home/duri/DuRiWorkspace/scripts/ops_alert.sh "[USB_VERIFY][FAIL] $(date +\%F\ \%T)"
+45 13 * * 0 cd /home/duri/DuRiWorkspace && bash scripts/rotate_hdd_verify_log.sh
+
+# ── 새로운 HDD 정리 및 축 관리 시스템 (일요일) ──
+# 일요일 상태 스냅샷 (09:10)
+10 9 * * 7 MODE=snapshot ROOT=/mnt/h/ARCHIVE TAGS="sunday" bash /home/duri/DuRiWorkspace/tools/cron_snapshots.sh >/dev/null 2>&1
+
+# 일요일 A단계 COMMIT (14:00 - 점심 후, 업무 재개)
+0 14 * * 7 MODE=commit DAYS_KEEP=5 bash /home/duri/DuRiWorkspace/tools/cleanup_space.sh /mnt/h/ARCHIVE >/dev/null 2>&1
+
+# ── 공휴일 + 일요일: INCR(15:00) → FULL(15:20) → Health(15:45) ※ 업무 종료 1시간 전 (기존 시간 유지) ──
+0 15 * * * cd /home/duri/DuRiWorkspace && flock -n var/locks/incr.lock -c '/home/duri/DuRiWorkspace/scripts/run_if_holiday_or_sunday.sh incr' >> /home/duri/DuRiWorkspace/var/logs/cron.holiday_incr.log 2>&1
+20 15 * * * cd /home/duri/DuRiWorkspace && flock -n var/locks/full.lock -c '/home/duri/DuRiWorkspace/scripts/run_if_holiday_or_sunday.sh full' >> /home/duri/DuRiWorkspace/var/logs/cron.holiday_full.log 2>&1
+45 15 * * * cd /home/duri/DuRiWorkspace && flock -n var/locks/health.lock -c '/home/duri/DuRiWorkspace/scripts/run_if_holiday_or_sunday.sh health' >> /home/duri/DuRiWorkspace/var/logs/cron.holiday_health.log 2>&1
+
+# ── 일요일 업무 종료 직전 정리 작업 (15:00-16:00 사이) ──
+# 일요일 PURGE (15:10 - 업무 종료 1시간 전)
+10 15 * * 7 MODE=purge DAYS_KEEP=5 bash /home/duri/DuRiWorkspace/tools/cleanup_space.sh /mnt/h/ARCHIVE >/dev/null 2>&1
+
+# 일요일 분류/대시보드 집계 (15:30-15:35 - 업무 종료 1시간 전)
+30 15 * * 7 bash /home/duri/DuRiWorkspace/tools/classify_axes.sh /mnt/h/ARCHIVE >/dev/null 2>&1
+35 15 * * 7 bash /home/duri/DuRiWorkspace/tools/axis_dashboard.sh >/dev/null 2>&1
+
+# === user-ops-hardening (do not edit below) - 기존 완전 보존 ===
+# 매일 03:30: 저부하 드릴 (전원 OFF면 자연 skip)
+30 3 * * * cd /home/duri/DuRiWorkspace && ./bin/dr-disk >> var/logs/dr-disk.log 2>&1
+# 첫째 월요일 11:30: 월 1회 복구 드릴
+30 11 1-7 * 1 cd /home/duri/DuRiWorkspace && flock -n var/locks/drill.cron.lock -c './scripts/dr_monthly_drill.sh' >> var/logs/drill.log 2>&1
+# 매주 수요일 17:10: SHA256 원장 검증
+10 17 * * 3 cd /home/duri/DuRiWorkspace && flock -n var/locks/ledger.cron.lock -c './scripts/verify_full_sha256.sh' >> var/logs/sha256_verify.log 2>&1        
+# 매일 03:35: 유저 로그 로테이션
+35 3 * * * cd /home/duri/DuRiWorkspace && ./scripts/rotate_dr_logs.sh >> var/logs/dr-disk.log 2>&1
+# === user-ops-hardening end ===
+55 15 * * 0 cd $HOME/DuRiWorkspace && flock -n var/locks/weekly-report.lock ./scripts/ops_weekly_report.sh >> var/logs/weekly-report.cron.log 2>&1
+
+
+
+

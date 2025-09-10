@@ -1,0 +1,1 @@
+../..//mnt/h/ARCHIVE/.UNWRAP/SECOND/scripts/restore_smoke.sh

@@ -49,6 +49,13 @@ mkdir -p "$(dirname "$DEST_FILE_MAIN")" 2>/dev/null || die "PRIMARY 디렉토리
 if tar --numeric-owner --acls --xattrs -C "$SRC_DIR" -cpf - . | zstd -T0 -19 -q -o "$TMP_MAIN" 2>>"$RUNLOG"; then
   sync "$TMP_MAIN" || true
   mv -f "$TMP_MAIN" "$DEST_FILE_MAIN" || die "PRIMARY 파일 이동 실패"
+  
+  # 스탬프는 "성공한 파일" 확인 후에만
+  [ -s "$DEST_FILE_MAIN" ] || die "empty output"
+  zstd -t "$DEST_FILE_MAIN" || die "integrity failed"
+  min=$((32*1024*1024))  # 32MiB 하한
+  [ "$(stat -c %s "$DEST_FILE_MAIN")" -ge "$min" ] || die "too small"
+  
   # 목적지 스탬프(증적 남김) - 실패시 경고만
   stamp_dest "$(dirname "$DEST_FILE_MAIN")" "$BASENAME" || log "[WARN] 스탬프 생성 실패"
   log "✅ PRIMARY 백업 완료: $DEST_FILE_MAIN" | tee -a "$RUNLOG"
@@ -99,6 +106,8 @@ if [[ "$(dirname "$DEST_FILE_MAIN")" != "$DESK_DIR" ]]; then
     sync "$TMP_DESK" || true
     mv -f "$TMP_DESK" "$DEST_FILE_DESK"
     ( cd "$DESK_DIR" && sha256sum "$(basename "$DEST_FILE_DESK")" > "SHA256SUMS.$(basename "$DEST_FILE_DESK").txt" )
+    # 원본(HDD)의 mtime 기준으로 미러 파일 mtime 맞추기
+    touch -r "$DEST_FILE_MAIN" "$DEST_FILE_DESK" 2>/dev/null || true
     log "✅ Desktop 미러 완료: $DEST_FILE_DESK" | tee -a "$RUNLOG"
     log "DESK_MIRROR=${DEST_FILE_DESK}" | tee -a "$RUNLOG"
   else

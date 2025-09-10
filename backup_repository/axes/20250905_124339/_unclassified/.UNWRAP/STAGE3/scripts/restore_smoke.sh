@@ -1,0 +1,1 @@
+../..//mnt/h/ARCHIVE/.UNWRAP/STAGE3/scripts/restore_smoke.sh

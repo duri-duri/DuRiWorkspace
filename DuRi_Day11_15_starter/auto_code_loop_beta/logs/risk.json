@@ -1,0 +1,21 @@
+{
+  "new_risks": 0,
+  "high_severity_count": 0,
+  "human_ack": true,
+  "guards": {
+    "single_timeout": true,
+    "pass_rate_ge_0.80": true,
+    "delta_p95_le_5pct": true,
+    "p99_le_slo105": true,
+    "canary_lt_25pct": true,
+    "freeze_flag": false
+  },
+  "policy_thresholds": {
+    "delta_p95_le": 0.05,
+    "p99_le_slo_multiplier": 1.05,
+    "canary_pct_lt": 25.0,
+    "pass_rate_ge": 0.8,
+    "require_no_freeze": true
+  },
+  "notes": "downgraded: single System timeout (p95Δ≤5%, p99≤SLO*1.05, canary<25%, no FREEZE)"
+}

@@ -1,0 +1,1 @@
+../..//mnt/h/ARCHIVE/.UNWRAP/STAGE1/duri_core/sleep_node.sh

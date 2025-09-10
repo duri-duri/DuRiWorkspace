@@ -1,56 +1,31 @@
 {
-  "src": "/mnt/usb/두리백업/2025/08/19/INCR__2025-08-19__1354__host-duri-head.tar.zst",
-  "sha256": "e0380aff52c99b0608d3f4385302d5c9513c46a2fd64c9cd1bda6047ad74170c"
+  "src": "/mnt/hdd/ARCHIVE/FULL/FULL__p2-crash.tar.zst",
+  "sha256": "83ee47245398adee79bd9c0a8bc57b821e92aba10f5f9ade8a5d1fae4d8c4302",
+  "status": "active",
+  "date": "2025-08-25",
+  "type": "FULL",
+  "size": "32MB"
 }
 {
-  "src": "/mnt/usb/두리백업/2025/08/20/INCR__2025-08-20__1309__host-duri-head.tar.zst",
-  "sha256": "fa09c3572f71b75ecc5df3304d37628cc5568681a2b71bb57c9c6855c2a311aa"
+  "src": "/mnt/hdd/ARCHIVE/FULL/FULL__p2-one.tar.zst", 
+  "sha256": "2daeb1f36095b44b318410b3f4e8b5d989dcc7bb023d1426c492dab0a3053e74",
+  "status": "active",
+  "date": "2025-08-25",
+  "type": "FULL",
+  "size": "8MB"
 }
 {
-  "src": "/mnt/usb/두리백업/2025/08/20/INCR__2025-08-20__1311__host-duri-head.tar.zst",
-  "sha256": "6d6df5294d88c867ccae82100078a79486ec34277111b61ee1979e935c1a59aa"
+  "src": "/mnt/hdd/ARCHIVE/INCR/INCR__unit-incr.tar.zst",
+  "sha256": "de676bae28a480011d3d012db14bef539324e62a841a9627863c689bea168af3", 
+  "status": "active",
+  "date": "2025-08-25",
+  "type": "INCR",
+  "size": "24KB"
 }
 {
-  "src": "/mnt/usb/두리백업/2025/08/20/INCR__2025-08-20__1312__host-duri-head.tar.zst",
-  "sha256": "6d6df5294d88c867ccae82100078a79486ec34277111b61ee1979e935c1a59aa"
-}
-{
-  "src": "/mnt/usb/두리백업/2025/08/20/INCR__2025-08-20__1329__host-duri-head.tar.zst",
-  "sha256": "f79f532f856c0b3cbc96961372361993518c43513534c84ac17b0be798936fa9"
-}
-{
-  "src": "/mnt/c/Users/admin/Desktop/두리백업/2025/08/18/INCR__2025-08-18__1057__host-duri-head.tar.zst",
-  "sha256": "f1fd74b746b7b76f0097b3c06c2c7e1cc1c6ea9d05ea8a215060ea738b42969c"
-}
-{
-  "src": "/mnt/c/Users/admin/Desktop/두리백업/2025/08/18/INCR__2025-08-18__1301__host-duri-head.tar.zst",
-  "sha256": "7879db1b6663410ca7aeb1ee8f0d470a326a8398442769baf9fa87909f4f15c7"
-}
-{
-  "src": "/mnt/c/Users/admin/Desktop/두리백업/2025/08/18/INCR__2025-08-18__1310__host-duri-head.tar.zst",
-  "sha256": "205a4bfefe692638a86abd94fdac1bb73f7a4f8bc77e7a7a09e53b9c56134642"
-}
-{
-  "src": "/mnt/c/Users/admin/Desktop/두리백업/2025/08/18/INCR__2025-08-18__1830__host-duri-head.tar.zst",
-  "sha256": "285614ac3d1b07912dcea19ec3c2811b06861c3a175f356aedef56b9da2b04ba"
-}
-{
-  "src": "/mnt/c/Users/admin/Desktop/두리백업/2025/08/19/INCR__2025-08-19__1354__host-duri-head.tar.zst",
-  "sha256": "e0380aff52c99b0608d3f4385302d5c9513c46a2fd64c9cd1bda6047ad74170c"
-}
-{
-  "src": "/mnt/c/Users/admin/Desktop/두리백업/2025/08/20/INCR__2025-08-20__1309__host-duri-head.tar.zst",
-  "sha256": "fa09c3572f71b75ecc5df3304d37628cc5568681a2b71bb57c9c6855c2a311aa"
-}
-{
-  "src": "/mnt/c/Users/admin/Desktop/두리백업/2025/08/20/INCR__2025-08-20__1311__host-duri-head.tar.zst",
-  "sha256": "6d6df5294d88c867ccae82100078a79486ec34277111b61ee1979e935c1a59aa"
-}
-{
-  "src": "/mnt/c/Users/admin/Desktop/두리백업/2025/08/20/INCR__2025-08-20__1312__host-duri-head.tar.zst",
-  "sha256": "6d6df5294d88c867ccae82100078a79486ec34277111b61ee1979e935c1a59aa"
-}
-{
-  "src": "/mnt/c/Users/admin/Desktop/두리백업/2025/08/20/INCR__2025-08-20__1329__host-duri-head.tar.zst",
-  "sha256": "f79f532f856c0b3cbc96961372361993518c43513534c84ac17b0be798936fa9"
+  "src": "/home/duri/DuRiWorkspace/backups/current_backup/",
+  "sha256": "디렉토리_백업",
+  "status": "active",
+  "date": "2025-07-28",
+  "type": "WORKSPACE_BACKUP"
 }

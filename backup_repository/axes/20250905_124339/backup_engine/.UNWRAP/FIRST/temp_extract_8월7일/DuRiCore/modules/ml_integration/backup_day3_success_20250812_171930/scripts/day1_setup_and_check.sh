@@ -1,0 +1,1 @@
+../..//mnt/h/ARCHIVE/.UNWRAP/FIRST/temp_extract_8월7일/DuRiCore/modules/ml_integration/backup_day3_success_20250812_171930/scripts/day1_setup_and_check.sh

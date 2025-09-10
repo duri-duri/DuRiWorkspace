@@ -1,0 +1,1 @@
+../..//mnt/h/ARCHIVE/.UNWRAP/STAGE1/scripts/verify_day1_5_simple.sh

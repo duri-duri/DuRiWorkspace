@@ -1,0 +1,1 @@
+../..//mnt/h/ARCHIVE/.UNWRAP/STAGE2/scripts/day5_promote_and_schedule.sh

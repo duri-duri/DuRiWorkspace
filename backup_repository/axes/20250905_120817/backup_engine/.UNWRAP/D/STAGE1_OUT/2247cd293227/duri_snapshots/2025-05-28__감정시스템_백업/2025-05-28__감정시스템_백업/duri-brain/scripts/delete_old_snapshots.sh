@@ -1,0 +1,1 @@
+../..//mnt/h/ARCHIVE/.UNWRAP/D/STAGE1_OUT/2247cd293227/duri_snapshots/2025-05-28__감정시스템_백업/2025-05-28__감정시스템_백업/duri-brain/scripts/delete_old_snapshots.sh

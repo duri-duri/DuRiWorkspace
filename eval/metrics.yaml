@@ -76,3 +76,19 @@ tasks:
       failures: {target: 0}
       flaky_rate: {target: 0.02}
       stability_score: {target: 0.98}
+
+# Trace v2 성능 튜닝 설정 (Day 20)
+trace_v2:
+  tuning:
+    # 제약조건(글로벌)
+    max_overhead_pct: 5.0      # (p95_candidate - p95_base)/p95_base * 100 ≤ 5
+    max_error_rate: 0.005      # ≤ 0.5%
+    # 목적함수 가중치(정책)
+    weight:
+      overhead: 0.60
+      error: 0.30
+      size: 0.10               # 로그/트레이스 크기 증가율 페널티
+    # 선택적 정책(없으면 기본)
+    policy:
+      prefer_compression: true
+      prefer_binary_ser: true   # msgpack/protobuf 선호 힌트

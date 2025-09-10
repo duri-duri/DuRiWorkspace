@@ -1,0 +1,1 @@
+../..//mnt/h/ARCHIVE/.UNWRAP/FIRST/cursor_extension/install_dependencies.sh

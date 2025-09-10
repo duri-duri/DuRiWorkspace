@@ -6,6 +6,8 @@ backup_destinations:
   primary: /mnt/hdd/ARCHIVE/FULL
   secondary: /mnt/usb/두리백업
   tertiary: /mnt/c/Users/admin/Desktop/두리백업
+  cold_home: /mnt/f/DuRiSafe_HOME/FULL
+  cold_hosp: /mnt/e/DuRiSafe_HOSP/FULL
 
 # 선택 기준
 selection_criteria:

@@ -1,0 +1,1 @@
+../..//mnt/h/ARCHIVE/.UNWRAP/D/STAGE2_INNER/740154824eb6/duri_snapshots/2025-05-28__감정시스템_백업/2025-05-28__감정시스템_백업/duri-evolution/scripts/delete_old_snapshots.sh

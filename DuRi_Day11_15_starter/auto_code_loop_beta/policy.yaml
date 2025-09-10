@@ -1,0 +1,21 @@
+allowed_paths:
+  - "duRi_core/"
+  - "tools/"
+blocked_paths:
+  - "secrets/"
+  - "prod_infra/"
+ops:
+  - "edit_code"
+  - "run_tests"
+  - "create_pr"
+promote_requirements:
+  min_pass_rate: 0.80
+  max_new_risks: 0
+  human_ack_required: true
+
+risk_guards:
+  delta_p95_le: 0.05        # 5% (상대 증가 허용)
+  p99_le_slo_multiplier: 1.05
+  canary_pct_lt: 25
+  pass_rate_ge: 0.80
+  require_no_freeze: true

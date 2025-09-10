@@ -1,0 +1,11 @@
+=== 드라이브 접근성 테스트 결과 ===
+C: 드라이브: /mnt/c/ (정상)
+D: 드라이브: /mnt/d/ (정상)
+H: 드라이브: /mnt/h/ (정상)
+I: 드라이브: /mnt/i/ (정상)
+=== 백업 디렉터리 접근성 ===
+HDD ARCHIVE: /mnt/h/ARCHIVE/ (정상, 49GB+)
+USB ARCHIVE_SNAPSHOT: /mnt/i/ARCHIVE_SNAPSHOT_2025-09-01_1937/ (정상, 63GB+)
+=== 이전 오류 원인 ===
+오류: /mnt/hdd/, /mnt/usb/ 경로로 접근 시도
+실제: /mnt/h/, /mnt/i/가 올바른 마운트 포인트

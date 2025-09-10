@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+requests
+python-dotenv
+pydantic
+psutil
+psycopg2-binary
+docker
+APScheduler 
+PyJWT 
