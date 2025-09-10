@@ -22,3 +22,8 @@ python failure_budget_alerts.py
 # 4) 실패→학습목표 변환
 python error_to_goal.py --in auto_code_loop_beta/logs/test_result.json --out auto_code_loop_beta/logs/goals.json
 ```
+
+## Trace v2 실벤치 요구사항
+- 실행 전 `TRACE_BENCH_CMD` 설정 필수
+- 벤치가 `--self-check` 또는 `--version` 지원해야 함
+- 더미/시뮬레이터 사용 금지 (CI에서 차단)
