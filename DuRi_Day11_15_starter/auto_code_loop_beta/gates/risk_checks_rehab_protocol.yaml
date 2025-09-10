@@ -1,0 +1,18 @@
+schema: risk.rules.v1
+banned_phrases:
+  - "통증을 무시하고 계속"
+  - "무조건 한계까지"
+  - "휴식 불필요"
+high_risk_triggers:
+  - { regex: "(급성통증|붓기 악화|저림 악화)", action: "stop_and_consult" }
+  - { regex: "(어지러움|실신 전조|흉통)", action: "advise_emergency" }
+dosing_guards:
+  session_minutes_max: 30
+  weekly_volume_growth_pct_max: 10
+  pain_ceiling_nrs: 5
+sustainability_rules:
+  min_adherence_two_weeks: 0.6
+  fallback_plan: "시간 30% 축소 + 운동 1개 제거 + RPE-1"
+disclaimer_required: true
+policy_notes:
+  - "관리 중심: 관리 불가 루틴은 권고하지 않음(Trace policy_hits)"

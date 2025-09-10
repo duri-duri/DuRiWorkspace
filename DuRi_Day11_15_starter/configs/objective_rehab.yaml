@@ -1,0 +1,29 @@
+schema: rehab.objective.v1
+weights:
+  efficiency: 0.40
+  sustainability: 0.30
+  safety: 0.20
+  adherence: 0.10
+metrics:
+  effect_score_name: "effect_score"
+  time_minutes_name: "time_minutes"
+  efficiency_formula: "effect_score / max(time_minutes, 10)"
+  sustainability_name: "sustainability_score"
+  risk_score_name: "risk_score"
+  safety_formula: "1 - risk_score"
+  adherence_name: "adherence_ratio"
+thresholds:
+  min_safety: 0.9
+  min_sustainability: 0.7
+  min_efficiency: 0.04
+  min_adherence: 0.6
+aggregation:
+  formula: "w_e*efficiency + w_sus*sustainability + w_safe*safety + w_adh*adherence"
+  rename:
+    w_e: "weights.efficiency"
+    w_sus: "weights.sustainability"
+    w_safe: "weights.safety"
+    w_adh: "weights.adherence"
+explain:
+  include_terms: ["efficiency","sustainability","safety","adherence"]
+  return_contributions: true
