@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# 테스트용 더미 벤치 (실제 환경에서는 실제 Trace v2 벤치로 교체)
+set -euo pipefail
+
+sampling="1.0"; ser="json"; comp="none"; out="out.json"
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --sampling) sampling="$2"; shift 2;;
+    --serialization) ser="$2"; shift 2;;
+    --compression) comp="$2"; shift 2;;
+    --json-out) out="$2"; shift 2;;
+    *) echo "Unknown arg: $1" >&2; exit 2;;
+  esac
+done
+
+# 실제 벤치 시뮬레이션 (더미이지만 현실적인 패턴)
+base=750
+if [[ "$ser" == "json" ]]; then ser_pen=1.00; elif [[ "$ser" == "msgpack" ]]; then ser_pen=0.96; else ser_pen=0.94; fi
+if [[ "$comp" == "none" ]]; then comp_pen=1.00; elif [[ "$comp" == "gzip" ]]; then comp_pen=0.98; else comp_pen=0.96; fi
+p95=$(echo "$base * (1.02 - 0.15*$sampling) * $ser_pen * $comp_pen" | bc -l)
+err=$(echo "0.002 * (1.04 - 0.2*$sampling)" | bc -l)
+if [[ "$ser" == "json" ]]; then err=$(echo "$err * 1.0" | bc -l); else err=$(echo "$err * 0.98" | bc -l); fi
+size=$(echo "100.0 * (0.6 + 0.5*$sampling)" | bc -l)
+if [[ "$ser" == "json" ]]; then size=$(echo "$size * 1.0" | bc -l); elif [[ "$ser" == "msgpack" ]]; then size=$(echo "$size * 0.85" | bc -l); else size=$(echo "$size * 0.8" | bc -l); fi
+if [[ "$comp" == "none" ]]; then size=$(echo "$size * 1.0" | bc -l); elif [[ "$comp" == "gzip" ]]; then size=$(echo "$size * 0.7" | bc -l); else size=$(echo "$size * 0.55" | bc -l); fi
+
+# 약간의 노이즈 추가 (더 현실적으로)
+awk -v s="$sampling" -v ser="$ser" -v comp="$comp" -v p95="$p95" -v err="$err" -v size="$size" 'BEGIN{
+  srand(); 
+  p95 += rand()*8-4; 
+  err += (rand()*0.0002-0.0001); 
+  size += rand()*5-2.5;
+  if(err<0) err=0.0;
+  printf("{\"p95_ms\":%.2f,\"error_rate\":%.5f,\"size_kb\":%.2f}\n", p95, err, size)
+}' > "$out"
+
+echo "[BENCH] sampling=$sampling, ser=$ser, comp=$comp -> $out" >&2

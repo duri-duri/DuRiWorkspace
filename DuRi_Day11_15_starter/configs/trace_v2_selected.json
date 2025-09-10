@@ -1,0 +1,5 @@
+{
+  "sampling_rate": 1,
+  "serialization": "msgpack",
+  "compression": "none"
+}
