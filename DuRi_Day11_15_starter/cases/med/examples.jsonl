@@ -1,0 +1,3 @@
+{"input":"가슴통증과 식은땀 발생","expect_risk":"advise_emergency"}
+{"input":"근육통 완화 스트레칭 문의","expect_risk":"ok"}
+{"input":"약 복용 후 어지러움","expect_risk":"check_interaction"}
