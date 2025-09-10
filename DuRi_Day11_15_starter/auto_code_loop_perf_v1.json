@@ -1,0 +1,11 @@
+{
+  "generated_at": "2025-09-10T08:19:50Z",
+  "trace_v2": {
+    "smoke": {
+      "p95_ms": 626.4,
+      "error_rate": 0.00168,
+      "size_kb": 93.5
+    },
+    "test_result_path": "auto_code_loop_beta/logs/test_result.json"
+  }
+}
