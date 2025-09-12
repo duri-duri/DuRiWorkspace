@@ -55,3 +55,11 @@ log "안전 커밋 실행"
 "$WORKSPACE_DIR/safe_additive_commit.sh"
 
 log "최종 검증 완료"
+
+# (옵션) 기준선 존재 시 회귀 검사
+if [ -d "$WORKSPACE_DIR/.benchmarks" ] && [ -x "$WORKSPACE_DIR/scripts/bench_compare.sh" ]; then
+  log "벤치 회귀 검사 실행 (baseline 대비)"
+  "$WORKSPACE_DIR/scripts/bench_compare.sh" || { log "벤치 회귀 실패"; exit 1; }
+else
+  log "벤치 회귀 검사는 건너뜀(기준선 없음)"
+fi

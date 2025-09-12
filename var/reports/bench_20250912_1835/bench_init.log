@@ -1,0 +1,16 @@
+...                                                                      [100%]
+Saved benchmark data in: /home/duri/DuRiWorkspace/.benchmarks/Linux-CPython-3.10-64bit/0001_baseline.json
+
+
+-------------------------------------------------- benchmark 'reasoning.process': 3 tests -------------------------------------------------
+Name (time in ns)                   Min                  Mean                StdDev                Median            OPS (Kops/s)          
+-------------------------------------------------------------------------------------------------------------------------------------------
+reasoning_advanced_bench       224.3810 (1.0)        244.4738 (1.0)        184.0877 (1.0)        239.1904 (1.0)        4,090.4182 (1.0)    
+reasoning_general_bench        467.0001 (2.08)       566.8605 (2.32)       615.5143 (3.34)       546.9992 (2.29)       1,764.1026 (0.43)   
+reasoning_math_bench         2,335.0003 (10.41)    2,747.1616 (11.24)    3,448.4595 (18.73)    2,524.9974 (10.56)        364.0121 (0.09)   
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+Legend:
+  Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
+  OPS: Operations Per Second, computed as 1 / Mean
+3 passed in 4.07s

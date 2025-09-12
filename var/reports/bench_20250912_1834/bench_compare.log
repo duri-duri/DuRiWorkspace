@@ -1,0 +1,30 @@
+/home/duri/.local/lib/python3.10/site-packages/pytest_benchmark/logger.py:39: PytestBenchmarkWarning: Can't compare. No benchmark files in '/home/duri/DuRiWorkspace/.benchmarks'. Can't load the previous benchmark.
+  warner(PytestBenchmarkWarning(text))
+...                                                                      [100%]
+--------------------------------------------------------------------------------
+
+Traceback (most recent call last):
+  File "/home/duri/.local/lib/python3.10/site-packages/pytest_benchmark/plugin.py", line 383, in pytest_terminal_summary
+    terminalreporter.config._benchmarksession.display(terminalreporter)
+  File "/home/duri/.local/lib/python3.10/site-packages/pytest_benchmark/session.py", line 226, in display
+    self.check_regressions()
+  File "/home/duri/.local/lib/python3.10/site-packages/pytest_benchmark/session.py", line 232, in check_regressions
+    raise pytest.UsageError('--benchmark-compare-fail requires valid --benchmark-compare.')
+_pytest.config.exceptions.UsageError: --benchmark-compare-fail requires valid --benchmark-compare.
+
+--------------------------------------------------------------------------------
+ERROR: --benchmark-compare-fail requires valid --benchmark-compare.
+
+
+
+-------------------------------------------------- benchmark 'reasoning.process': 3 tests -------------------------------------------------
+Name (time in ns)                   Min                  Mean                StdDev                Median            OPS (Kops/s)          
+-------------------------------------------------------------------------------------------------------------------------------------------
+reasoning_advanced_bench       224.0500 (1.0)        252.0805 (1.0)        538.6024 (1.0)        237.5000 (1.0)        3,966.9865 (1.0)    
+reasoning_general_bench        470.9982 (2.10)       582.4494 (2.31)     1,204.8919 (2.24)       553.9987 (2.33)       1,716.8874 (0.43)   
+reasoning_math_bench         2,346.0016 (10.47)    2,835.1681 (11.25)    7,418.4502 (13.77)    2,524.0006 (10.63)        352.7128 (0.09)   
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+Legend:
+  Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
+  OPS: Operations Per Second, computed as 1 / Mean

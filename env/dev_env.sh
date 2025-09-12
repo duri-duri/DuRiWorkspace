@@ -13,5 +13,8 @@ command -v pytest >/dev/null 2>&1 || python3 -m pip install -U pytest >/dev/null
 echo "[OK] PYTHONPATH set."
 python3 -c "import sys;print('[PY]', *sys.path, sep='\n - ')" >/dev/null
 
+# 통합 파사드 라우팅 플래그 로드
+source "$(dirname "${BASH_SOURCE[0]}")/feature_flags.sh"
+
 # 빠른 계약 테스트 수집만 체크 (실행은 길 수 있으니 -q)
 pytest -q tests/contracts || echo '[WARN] 계약 테스트 보완 필요'
