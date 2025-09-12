@@ -1,0 +1,8 @@
+2025-09-11 23:54:24,543 - coding_pr_assistant - INFO - Analyzed code file: example.py
+2025-09-11 23:54:24,543 - coding_pr_assistant - INFO - Generating code review for example.py
+2025-09-11 23:54:24,543 - coding_pr_assistant - INFO - Found 2 security issues in example.py
+2025-09-11 23:54:24,544 - coding_pr_assistant - INFO - Found 0 performance issues in example.py
+2025-09-11 23:54:24,544 - coding_pr_assistant - INFO - Analyzed code file: example.js
+2025-09-11 23:54:24,544 - coding_pr_assistant - INFO - Generating code review for example.js
+2025-09-11 23:54:24,544 - coding_pr_assistant - INFO - Found 1 security issues in example.js
+2025-09-11 23:54:24,544 - coding_pr_assistant - INFO - Found 0 performance issues in example.js

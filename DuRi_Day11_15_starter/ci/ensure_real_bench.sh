@@ -16,7 +16,7 @@ if grep -RIl --exclude-dir=.git -E 'dummy|simulator|AWK.*rand\(|/bin/true|auto-g
 fi
 
 # 3) run_trace_bench.sh: 실벤치 검증 필수 플로우 확인
-runner="$ROOT/tools/run_trace_bench.sh"
+runner="tools/run_trace_bench.sh"
 [[ -x "$runner" ]] || fail "tools/run_trace_bench.sh not executable."
 
 # self-check 또는 version 체크를 코드에 포함했는지 정적 점검(간단한 검증)

@@ -16,3 +16,4 @@ sustainability_rules:
   min_adherence_two_weeks: 0.6
   fallback_plan: 시간 30% 축소 + 운동1개 제거 + RPE-1
 disclaimer_required: true
+

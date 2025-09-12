@@ -31,3 +31,4 @@ report={"items":rows,"summary":{"mean_J":round(sum(r["J"] for r in rows)/len(row
                                "violations_total":sum(len(r["violations"]) for r in rows)}}
 pathlib.Path(a.out).write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')
 print(f"[OK] rehab objective report -> {a.out}")
+

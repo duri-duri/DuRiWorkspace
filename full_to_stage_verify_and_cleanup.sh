@@ -163,3 +163,4 @@ echo "DRYRUN=$DRYRUN  (실제 이동하려면 DRYRUN=0으로 변경)"
 
 
 
+

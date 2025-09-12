@@ -1,0 +1,44 @@
+{
+  "timestamp": "2025-09-12T00:03:00.347010",
+  "overall_status": "healthy",
+  "pilots": {
+    "medical": {
+      "status": "healthy",
+      "last_updated": "2025-09-12T00:03:00.347181",
+      "quality_score": 88.0,
+      "safety_score": 99.0,
+      "performance_ms": 838.0,
+      "error_rate_percent": 0.62,
+      "trace_coverage_percent": 96.9
+    },
+    "rehab": {
+      "status": "healthy",
+      "last_updated": "2025-09-12T00:03:00.347355",
+      "quality_score": 91.0,
+      "safety_score": 99.5,
+      "performance_ms": 836.0,
+      "error_rate_percent": 0.33,
+      "trace_coverage_percent": 95.9
+    },
+    "coding": {
+      "status": "healthy",
+      "last_updated": "2025-09-12T00:03:00.347469",
+      "quality_score": 91.2,
+      "safety_score": 100.0,
+      "performance_ms": 794.0,
+      "error_rate_percent": 0.23,
+      "trace_coverage_percent": 96.8
+    }
+  },
+  "summary_metrics": {
+    "avg_quality_score": 90.0,
+    "avg_safety_score": 99.5,
+    "avg_performance_ms": 823.0,
+    "avg_error_rate_percent": 0.4,
+    "avg_trace_coverage_percent": 96.5,
+    "active_pilots": 3,
+    "total_alerts": 0
+  },
+  "alerts": [],
+  "recommendations": []
+}

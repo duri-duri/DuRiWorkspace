@@ -57,3 +57,4 @@ def main():
     pathlib.Path(args.out).write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')
     print(f"[OK] med_smoke report -> {args.out}")
 if __name__=="__main__": main()
+

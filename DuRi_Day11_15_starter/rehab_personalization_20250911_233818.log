@@ -1,0 +1,9 @@
+2025-09-11 23:38:18,294 - rehab_personalization - INFO - Created user profile for user_001
+2025-09-11 23:38:18,294 - rehab_personalization - INFO - Generating personalized routine for user_001
+2025-09-11 23:38:18,294 - rehab_personalization - INFO - Generated routine routine_user_001_1757601498 with 5 exercises
+2025-09-11 23:38:18,294 - rehab_personalization - INFO - Created user profile for user_002
+2025-09-11 23:38:18,294 - rehab_personalization - INFO - Generating personalized routine for user_002
+2025-09-11 23:38:18,294 - rehab_personalization - INFO - Generated routine routine_user_002_1757601498 with 5 exercises
+2025-09-11 23:38:18,294 - rehab_personalization - INFO - Optimizing routine routine_user_001_1757601498
+2025-09-11 23:38:18,294 - rehab_personalization - INFO - Optimized routine routine_user_001_1757601498 -> optimized_routine_user_001_1757601498
+2025-09-11 23:38:18,294 - rehab_personalization - INFO - Generating rehab personalization report

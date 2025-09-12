@@ -9,3 +9,4 @@ metrics:
   safety_formula: "1 - risk_score"
   adherence_name: "adherence_ratio"
 thresholds: {min_safety: 0.9, min_sustainability: 0.7, min_efficiency: 0.04, min_adherence: 0.6}
+

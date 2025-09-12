@@ -1,0 +1,1 @@
+{"day": 21, "status": "PASS", "message": "OK", "metrics": {"pou_success_rate":0.88,"safety_score_avg":0.98,"error_rate_avg":0.004,"latency_ms_avg":700}, "ts": "2025-09-12T10:19:22+09:00"}

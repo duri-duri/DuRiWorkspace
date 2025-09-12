@@ -1,0 +1,108 @@
+{
+  "report_type": "PoU Comprehensive Report",
+  "generated_at": "2025-09-11T23:46:28.611217",
+  "period": "Day 31-32",
+  "dashboard": {
+    "timestamp": "2025-09-11T23:46:28.611198",
+    "total_domains": 3,
+    "active_pilots": 0,
+    "completed_pilots": 3,
+    "failed_pilots": 0,
+    "overall_status": "healthy",
+    "domains": {
+      "medical": {
+        "status": "completed",
+        "version": "v1",
+        "progress": 100.0,
+        "quality_score": 87,
+        "safety_score": 97,
+        "performance_score": 92,
+        "error_count": 1,
+        "start_time": "2025-09-11T23:46:27.407434",
+        "end_time": "2025-09-11T23:46:27.808491",
+        "last_update": "2025-09-11T23:46:27.808499",
+        "metrics": {
+          "total_sessions": 17,
+          "successful_sessions": 14,
+          "failed_sessions": 3,
+          "avg_quality_score": 87,
+          "avg_safety_score": 97,
+          "avg_performance_score": 92,
+          "avg_session_duration": 27.0,
+          "user_satisfaction": 0.8700000000000001,
+          "retention_rate": 0.92
+        }
+      },
+      "rehab": {
+        "status": "completed",
+        "version": "v1",
+        "progress": 100.0,
+        "quality_score": 97,
+        "safety_score": 97,
+        "performance_score": 92,
+        "error_count": 1,
+        "start_time": "2025-09-11T23:46:27.808630",
+        "end_time": "2025-09-11T23:46:28.209628",
+        "last_update": "2025-09-11T23:46:28.209637",
+        "metrics": {
+          "total_sessions": 27,
+          "successful_sessions": 22,
+          "failed_sessions": 5,
+          "avg_quality_score": 97,
+          "avg_safety_score": 97,
+          "avg_performance_score": 92,
+          "avg_session_duration": 27.0,
+          "user_satisfaction": 0.9700000000000001,
+          "retention_rate": 0.8200000000000001
+        }
+      },
+      "coding": {
+        "status": "completed",
+        "version": "v1",
+        "progress": 100.0,
+        "quality_score": 91,
+        "safety_score": 96,
+        "performance_score": 91,
+        "error_count": 0,
+        "start_time": "2025-09-11T23:46:28.209769",
+        "end_time": "2025-09-11T23:46:28.610893",
+        "last_update": "2025-09-11T23:46:28.610903",
+        "metrics": {
+          "total_sessions": 21,
+          "successful_sessions": 17,
+          "failed_sessions": 4,
+          "avg_quality_score": 91,
+          "avg_safety_score": 96,
+          "avg_performance_score": 91,
+          "avg_session_duration": 26.0,
+          "user_satisfaction": 0.91,
+          "retention_rate": 0.96
+        }
+      }
+    },
+    "summary": {
+      "avg_quality_score": 91.66666666666667,
+      "avg_safety_score": 96.66666666666667,
+      "avg_performance_score": 91.66666666666667,
+      "avg_progress": 100.0,
+      "total_errors": 2
+    }
+  },
+  "recommendations": [],
+  "next_steps": [
+    "Day 33: 코딩 PR 보조 PoU 파일럿 시작",
+    "Day 34: PoU 주간 성능 수집/비교 자동화 구현",
+    "Day 35: 멀티목표 목적함수 파라미터 튜닝",
+    "PoU 통합 테스트 및 성능 최적화",
+    "사용자 피드백 수집 및 분석"
+  ],
+  "risk_assessment": {
+    "low_risk": [
+      "medical 도메인 낮은 오류율",
+      "rehab 도메인 낮은 오류율",
+      "coding 도메인 낮은 오류율"
+    ],
+    "medium_risk": [],
+    "high_risk": []
+  }
+}

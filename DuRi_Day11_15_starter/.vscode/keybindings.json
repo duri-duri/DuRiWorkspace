@@ -1,0 +1,18 @@
+[
+    {
+        "key": "ctrl+shift+t",
+        "command": "workbench.action.terminal.openNative"
+    },
+    {
+        "key": "ctrl+`",
+        "command": "workbench.action.terminal.toggleTerminal"
+    },
+    {
+        "key": "ctrl+shift+`",
+        "command": "workbench.action.terminal.new"
+    },
+    {
+        "key": "f5",
+        "command": "workbench.action.terminal.openNative"
+    }
+]

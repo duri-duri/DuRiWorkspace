@@ -1,0 +1,61 @@
+{
+  "timestamp": "2025-09-11T23:31:10.310937",
+  "total_pilots": 3,
+  "active_pilots": 3,
+  "domains": [
+    "medical",
+    "rehab",
+    "coding"
+  ],
+  "summary": {
+    "avg_quality_score": 87.83333333333333,
+    "avg_safety_score": 99.83333333333333,
+    "avg_performance_ms": 602.3333333333334,
+    "avg_error_rate": 0.12333333333333334,
+    "avg_trace_coverage": 97.0
+  },
+  "details": {
+    "medical": {
+      "domain": "medical",
+      "version": "v1",
+      "start_time": "2025-09-11T23:31:10.310709",
+      "canary_percentage": 10.0,
+      "status": "running",
+      "metrics": {
+        "quality_score": 89.5,
+        "safety_score": 99.8,
+        "performance_ms": 654,
+        "error_rate": 0.14,
+        "trace_coverage": 94.0
+      }
+    },
+    "rehab": {
+      "domain": "rehab",
+      "version": "v1",
+      "start_time": "2025-09-11T23:31:10.310823",
+      "canary_percentage": 5.0,
+      "status": "running",
+      "metrics": {
+        "quality_score": 87.5,
+        "safety_score": 99.8,
+        "performance_ms": 522,
+        "error_rate": 0.12000000000000001,
+        "trace_coverage": 98.0
+      }
+    },
+    "coding": {
+      "domain": "coding",
+      "version": "v1",
+      "start_time": "2025-09-11T23:31:10.310846",
+      "canary_percentage": 5.0,
+      "status": "running",
+      "metrics": {
+        "quality_score": 86.5,
+        "safety_score": 99.89999999999999,
+        "performance_ms": 631,
+        "error_rate": 0.11,
+        "trace_coverage": 99.0
+      }
+    }
+  }
+}

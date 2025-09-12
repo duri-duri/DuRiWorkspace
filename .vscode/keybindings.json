@@ -1,0 +1,32 @@
+{
+  "commands": [
+    {
+      "command": "workbench.action.terminal.openInTerminal",
+      "title": "Open in Terminal",
+      "category": "Terminal",
+      "when": "resourceScheme == file"
+    },
+    {
+      "command": "workbench.action.terminal.new",
+      "title": "New Terminal",
+      "category": "Terminal"
+    },
+    {
+      "command": "workbench.action.terminal.split",
+      "title": "Split Terminal",
+      "category": "Terminal"
+    }
+  ],
+  "keybindings": [
+    {
+      "key": "ctrl+shift+`",
+      "command": "workbench.action.terminal.openInTerminal",
+      "when": "resourceScheme == file"
+    },
+    {
+      "key": "ctrl+`",
+      "command": "workbench.action.terminal.new"
+    }
+  ]
+}
+

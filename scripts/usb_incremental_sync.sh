@@ -214,3 +214,4 @@ fi
 
 log "=== DuRi USB 증분 동기화 완료 ===" | tee -a "$LOG_FILE"
 log "로그 파일: $LOG_FILE" | tee -a "$LOG_FILE"
+

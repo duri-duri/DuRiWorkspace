@@ -18,7 +18,6 @@ def test_ethical_engine():
     print("⚖️ 윤리 판단 엔진 테스트 시작...")
     
     ethical_engine = EthicalReasoningEngine()
-    
     # 테스트 케이스들
     test_cases = [
         {

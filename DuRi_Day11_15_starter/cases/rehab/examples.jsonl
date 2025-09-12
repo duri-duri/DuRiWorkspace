@@ -1,3 +1,4 @@
 {"input":"무릎 통증 감소 목표, 15분 루틴 원함, 최근 어지러움 없음, RPE 5 선호","effect_score":0.45,"time_minutes":15,"risk_score":0.05,"adherence_ratio":0.8,"sustainability_score":0.75}
 {"input":"어깨 충돌증후군 의심, 30분 루틴, 통증 NRS 6로 악화됨","effect_score":0.40,"time_minutes":30,"risk_score":0.25,"adherence_ratio":0.5,"sustainability_score":0.5}
 {"input":"허리 통증 관리, 20분 루틴, 주 4회 가능, 증상 안정적","effect_score":0.5,"time_minutes":20,"risk_score":0.05,"adherence_ratio":0.7,"sustainability_score":0.8}
+

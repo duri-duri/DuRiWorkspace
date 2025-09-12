@@ -72,3 +72,4 @@ if [[ "${1:-}" == "--export-env" ]]; then
 fi
 
 info "적용 완료"
+

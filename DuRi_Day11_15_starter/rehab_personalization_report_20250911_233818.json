@@ -1,0 +1,21 @@
+{
+  "timestamp": "2025-09-11T23:38:18.294746",
+  "total_users": 2,
+  "total_routines": 3,
+  "exercise_database_size": 5,
+  "summary": {
+    "avg_difficulty_score": 1.2133333333333332,
+    "avg_safety_score": 100.0,
+    "avg_effectiveness_score": 53.333333333333336,
+    "avg_routine_duration": 40.0
+  },
+  "user_profiles": [
+    "user_001",
+    "user_002"
+  ],
+  "routines": [
+    "routine_user_001_1757601498",
+    "routine_user_002_1757601498",
+    "optimized_routine_user_001_1757601498"
+  ]
+}
