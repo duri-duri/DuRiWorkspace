@@ -21,8 +21,19 @@
   "explorer.confirmDelete": false,
   "explorer.confirmDragAndDrop": false,
   "workbench.editor.enablePreview": false,
-  "workbench.editor.enablePreviewFromQuickOpen": false
+  "workbench.editor.enablePreviewFromQuickOpen": false,
+  
+  "terminal.integrated.copyOnSelection": true,
+  "terminal.integrated.rightClickBehavior": "copyPaste",
+  "terminal.integrated.enableMultiLinePasteWarning": false,
+  "terminal.integrated.allowlist": false,
+  "terminal.integrated.openInTerminal": true,
+  "terminal.integrated.sendKeybindingsToShell": false,
+  "terminal.integrated.commandsToSkipShell": ["workbench.action.terminal.copySelection", "workbench.action.terminal.paste"],
+  "terminal.integrated.macOptionIsMeta": false,
+  "terminal.integrated.macOptionClickBehavior": "selectWord"
 }
+
 
 
 

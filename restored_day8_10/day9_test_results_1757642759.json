@@ -1,0 +1,2071 @@
+{
+  "test_id": "day9_integration_1757642758",
+  "start_time": "2025-09-12T11:05:58.033007",
+  "systems": {
+    "advanced_ai": {
+      "system_name": "Advanced AI System",
+      "tests": [
+        {
+          "test_name": "Pattern Recognition",
+          "status": "success",
+          "result": {
+            "type": "pattern_recognition",
+            "pattern": null,
+            "confidence": 0.0,
+            "status": "success",
+            "processing_time": 0.001024007797241211,
+            "system_status": "active"
+          }
+        },
+        {
+          "test_name": "Problem Solving",
+          "status": "success",
+          "result": {
+            "type": "problem_solving",
+            "solution": {
+              "problem_id": "problem_1757642758",
+              "solution_type": "유추적 사고",
+              "solution_description": "유사한 상황과의 유추를 통해 효율적인 시간 관리 방법 해결",
+              "creativity_score": 0.9,
+              "effectiveness_score": 0.8,
+              "implementation_steps": [
+                "자연 현상과의 유추: 효율적인 시간 관리 방법",
+                "다른 분야의 해결책 적용: 효율적인 시간 관리 방법",
+                "역사적 사례 참조: 효율적인 시간 관리 방법"
+              ],
+              "created_at": "2025-09-12 11:05:58.034094"
+            },
+            "creativity_score": 0.9,
+            "effectiveness_score": 0.8,
+            "status": "success",
+            "processing_time": 2.6226043701171875e-05,
+            "system_status": "active"
+          }
+        },
+        {
+          "test_name": "Decision Making",
+          "status": "success",
+          "result": {
+            "type": "decision_making",
+            "decision": {
+              "decision_id": "decision_1757642758",
+              "context_id": "context_1757642758",
+              "selected_option": "옵션 A",
+              "confidence": 0.33333333333333337,
+              "reasoning": "다중 기준 평가 결과: 옵션 A (점수: 0.60)",
+              "alternatives": [
+                "옵션 A",
+                "옵션 B",
+                "옵션 C"
+              ],
+              "created_at": "2025-09-12 11:05:58.034124"
+            },
+            "confidence": 0.33333333333333337,
+            "status": "success",
+            "processing_time": 2.574920654296875e-05,
+            "system_status": "active"
+          }
+        },
+        {
+          "test_name": "Inference",
+          "status": "success",
+          "result": {
+            "type": "inference",
+            "inference_result": {
+              "inference_id": "inference_1757642758",
+              "input_data": {
+                "premises": [
+                  true,
+                  true,
+                  false
+                ],
+                "probabilities": {
+                  "A": 0.8,
+                  "B": 0.6,
+                  "C": 0.9
+                },
+                "causal_factors": [
+                  "요인1",
+                  "요인2",
+                  "요인3"
+                ]
+              },
+              "inference_type": "logical",
+              "conclusion": "일부 전제가 거짓이므로 결론을 신중히 검토해야 합니다.",
+              "confidence": 0.6,
+              "reasoning_steps": [
+                "전제 분석: [True, True, False]"
+              ],
+              "alternatives": [
+                "대안적 결론 1",
+                "대안적 결론 2"
+              ],
+              "created_at": "2025-09-12 11:05:58.034144"
+            },
+            "confidence": 0.6,
+            "status": "success",
+            "processing_time": 1.6689300537109375e-05,
+            "system_status": "active"
+          }
+        }
+      ],
+      "status": "success"
+    },
+    "nlp": {
+      "system_name": "Natural Language Processing System",
+      "tests": [
+        {
+          "test_name": "Text Analysis",
+          "status": "success",
+          "result": {
+            "processing_type": "comprehensive",
+            "detected_language": "ko",
+            "text_analysis": {
+              "text_id": "text_1757642758",
+              "original_text": "오늘은 정말 좋은 날씨입니다. 친구들과 함께 공원에서 피크닉을 즐겼어요.",
+              "processed_text": "오늘은 정말 좋은 날씨입니다. 친구들과 함께 공원에서 피크닉을 즐겼어요.",
+              "analysis_type": "comprehensive",
+              "features": {
+                "length": 40,
+                "word_count": 9,
+                "sentence_count": 3,
+                "paragraph_count": 1,
+                "unique_words": 9,
+                "vocabulary_diversity": 1.0,
+                "avg_sentence_length": 4.5,
+                "sentence_length_std": 0.5,
+                "avg_word_length": 3.5555555555555554,
+                "formal_indicators": 3,
+                "informal_indicators": 2
+              },
+              "sentiment_score": 1.0,
+              "confidence": 0.7,
+              "created_at": "2025-09-12 11:05:58.035069"
+            },
+            "semantic_extraction": {
+              "extraction_id": "extraction_1757642758",
+              "source_text": "오늘은 정말 좋은 날씨입니다. 친구들과 함께 공원에서 피크닉을 즐겼어요.",
+              "extracted_entities": [
+                {
+                  "text": "친구들",
+                  "type": "noun",
+                  "confidence": 0.7,
+                  "position": 17
+                },
+                {
+                  "text": "피크닉",
+                  "type": "noun",
+                  "confidence": 0.7,
+                  "position": 30
+                }
+              ],
+              "extracted_concepts": [],
+              "relationships": [
+                {
+                  "source": "친구들",
+                  "target": "피크닉",
+                  "type": "proximity",
+                  "confidence": 0.74,
+                  "distance": 13
+                }
+              ],
+              "semantic_graph": {
+                "nodes": [
+                  {
+                    "id": "친구들",
+                    "type": "entity",
+                    "entity_type": "noun",
+                    "confidence": 0.7
+                  },
+                  {
+                    "id": "피크닉",
+                    "type": "entity",
+                    "entity_type": "noun",
+                    "confidence": 0.7
+                  }
+                ],
+                "edges": [
+                  {
+                    "source": "친구들",
+                    "target": "피크닉",
+                    "type": "proximity",
+                    "confidence": 0.74
+                  }
+                ],
+                "metadata": {
+                  "node_count": 2,
+                  "edge_count": 1,
+                  "created_at": "2025-09-12T11:05:58.035887"
+                }
+              },
+              "confidence": 0.48,
+              "created_at": "2025-09-12 11:05:58.035917"
+            },
+            "contextual_analysis": {
+              "context_id": "context_1757642758",
+              "text": "오늘은 정말 좋은 날씨입니다. 친구들과 함께 공원에서 피크닉을 즐겼어요.",
+              "context_type": "general",
+              "contextual_features": {
+                "temporal_context": {
+                  "time_expressions": [
+                    "오늘"
+                  ],
+                  "temporal_density": 0.1111111111111111
+                },
+                "spatial_context": {
+                  "location_expressions": [
+                    "친구"
+                  ],
+                  "spatial_density": 0.1111111111111111
+                },
+                "social_context": {
+                  "social_indicators": [
+                    "친구"
+                  ],
+                  "social_density": 0.1111111111111111
+                },
+                "topical_context": {
+                  "detected_topics": []
+                },
+                "emotional_context": {
+                  "detected_emotions": []
+                }
+              },
+              "context_score": 0.6000000000000001,
+              "related_contexts": [
+                "키워드 '오늘은' 관련 문맥",
+                "키워드 '정말' 관련 문맥",
+                "키워드 '좋은' 관련 문맥",
+                "키워드 '날씨입니다.' 관련 문맥",
+                "키워드 '친구들과' 관련 문맥"
+              ],
+              "created_at": "2025-09-12 11:05:58.037952"
+            },
+            "multilingual_processing": {
+              "original_text": "오늘은 정말 좋은 날씨입니다. 친구들과 함께 공원에서 피크닉을 즐겼어요.",
+              "detected_language": "ko",
+              "target_language": "ko",
+              "processing_result": {
+                "preprocessing": "오늘은 정말 좋은 날씨입니다. 친구들과 함께 공원에서 피크닉을 즐겼어요.",
+                "tokenization": [
+                  "오늘은",
+                  "정말",
+                  "좋은",
+                  "날씨입니다.",
+                  "친구들과",
+                  "함께",
+                  "공원에서",
+                  "피크닉을",
+                  "즐겼어요."
+                ],
+                "normalization": "오늘은 정말 좋은 날씨입니다. 친구들과 함께 공원에서 피크닉을 즐겼어요."
+              }
+            },
+            "processing_time": 0.0037839412689208984,
+            "system_status": "active"
+          }
+        },
+        {
+          "test_name": "Semantic Extraction",
+          "status": "success",
+          "result": {
+            "processing_type": "semantic",
+            "detected_language": "ko",
+            "text_analysis": {
+              "text_id": "text_1757642758",
+              "original_text": "인공지능 기술이 비즈니스 분야에서 혁신을 가져오고 있습니다.",
+              "processed_text": "인공지능 기술이 비즈니스 분야에서 혁신을 가져오고 있습니다.",
+              "analysis_type": "comprehensive",
+              "features": {
+                "length": 33,
+                "word_count": 7,
+                "sentence_count": 2,
+                "paragraph_count": 1,
+                "unique_words": 7,
+                "vocabulary_diversity": 1.0,
+                "avg_sentence_length": 7.0,
+                "sentence_length_std": 0.0,
+                "avg_word_length": 3.857142857142857,
+                "formal_indicators": 2,
+                "informal_indicators": 1
+              },
+              "sentiment_score": 0.0,
+              "confidence": 0.6,
+              "created_at": "2025-09-12 11:05:58.038043"
+            },
+            "semantic_extraction": {
+              "extraction_id": "extraction_1757642758",
+              "source_text": "인공지능 기술이 비즈니스 분야에서 혁신을 가져오고 있습니다.",
+              "extracted_entities": [
+                {
+                  "text": "기술",
+                  "type": "noun",
+                  "confidence": 0.7,
+                  "position": 5
+                },
+                {
+                  "text": "혁신",
+                  "type": "noun",
+                  "confidence": 0.7,
+                  "position": 19
+                }
+              ],
+              "extracted_concepts": [
+                {
+                  "text": "기술",
+                  "type": "topic",
+                  "confidence": 0.8,
+                  "keywords": [
+                    "기술"
+                  ]
+                },
+                {
+                  "text": "비즈니스",
+                  "type": "topic",
+                  "confidence": 0.8,
+                  "keywords": [
+                    "비즈니스"
+                  ]
+                }
+              ],
+              "relationships": [
+                {
+                  "source": "기술",
+                  "target": "혁신",
+                  "type": "proximity",
+                  "confidence": 0.72,
+                  "distance": 14
+                },
+                {
+                  "source": "기술",
+                  "target": "기술",
+                  "type": "contains",
+                  "confidence": 0.8
+                }
+              ],
+              "semantic_graph": {
+                "nodes": [
+                  {
+                    "id": "기술",
+                    "type": "entity",
+                    "entity_type": "noun",
+                    "confidence": 0.7
+                  },
+                  {
+                    "id": "혁신",
+                    "type": "entity",
+                    "entity_type": "noun",
+                    "confidence": 0.7
+                  },
+                  {
+                    "id": "기술",
+                    "type": "concept",
+                    "concept_type": "topic",
+                    "confidence": 0.8
+                  },
+                  {
+                    "id": "비즈니스",
+                    "type": "concept",
+                    "concept_type": "topic",
+                    "confidence": 0.8
+                  }
+                ],
+                "edges": [
+                  {
+                    "source": "기술",
+                    "target": "혁신",
+                    "type": "proximity",
+                    "confidence": 0.72
+                  },
+                  {
+                    "source": "기술",
+                    "target": "기술",
+                    "type": "contains",
+                    "confidence": 0.8
+                  }
+                ],
+                "metadata": {
+                  "node_count": 4,
+                  "edge_count": 2,
+                  "created_at": "2025-09-12T11:05:58.038070"
+                }
+              },
+              "confidence": 0.7533333333333333,
+              "created_at": "2025-09-12 11:05:58.038094"
+            },
+            "contextual_analysis": {
+              "context_id": "context_1757642758",
+              "text": "인공지능 기술이 비즈니스 분야에서 혁신을 가져오고 있습니다.",
+              "context_type": "general",
+              "contextual_features": {
+                "temporal_context": {
+                  "time_expressions": [],
+                  "temporal_density": 0.0
+                },
+                "spatial_context": {
+                  "location_expressions": [],
+                  "spatial_density": 0.0
+                },
+                "social_context": {
+                  "social_indicators": [],
+                  "social_density": 0.0
+                },
+                "topical_context": {
+                  "detected_topics": [
+                    "기술",
+                    "비즈니스"
+                  ]
+                },
+                "emotional_context": {
+                  "detected_emotions": []
+                }
+              },
+              "context_score": 0.2,
+              "related_contexts": [
+                "키워드 '인공지능' 관련 문맥",
+                "키워드 '기술이' 관련 문맥",
+                "키워드 '비즈니스' 관련 문맥",
+                "키워드 '분야에서' 관련 문맥",
+                "키워드 '혁신을' 관련 문맥"
+              ],
+              "created_at": "2025-09-12 11:05:58.038124"
+            },
+            "multilingual_processing": {
+              "original_text": "인공지능 기술이 비즈니스 분야에서 혁신을 가져오고 있습니다.",
+              "detected_language": "ko",
+              "target_language": "ko",
+              "processing_result": {
+                "preprocessing": "인공지능 기술이 비즈니스 분야에서 혁신을 가져오고 있습니다.",
+                "tokenization": [
+                  "인공지능",
+                  "기술이",
+                  "비즈니스",
+                  "분야에서",
+                  "혁신을",
+                  "가져오고",
+                  "있습니다."
+                ],
+                "normalization": "인공지능 기술이 비즈니스 분야에서 혁신을 가져오고 있습니다."
+              }
+            },
+            "processing_time": 0.00016450881958007812,
+            "system_status": "active"
+          }
+        },
+        {
+          "test_name": "Contextual Analysis",
+          "status": "success",
+          "result": {
+            "processing_type": "contextual",
+            "detected_language": "ko",
+            "text_analysis": {
+              "text_id": "text_1757642758",
+              "original_text": "2024년 3월 15일 서울에서 열린 AI 컨퍼런스에서 새로운 기술이 발표되었습니다.",
+              "processed_text": "2024년 3월 15일 서울에서 열린 AI 컨퍼런스에서 새로운 기술이 발표되었습니다.",
+              "analysis_type": "comprehensive",
+              "features": {
+                "length": 47,
+                "word_count": 10,
+                "sentence_count": 2,
+                "paragraph_count": 1,
+                "unique_words": 10,
+                "vocabulary_diversity": 1.0,
+                "avg_sentence_length": 10.0,
+                "sentence_length_std": 0.0,
+                "avg_word_length": 3.8,
+                "formal_indicators": 2,
+                "informal_indicators": 0
+              },
+              "sentiment_score": 0.0,
+              "confidence": 0.6,
+              "created_at": "2025-09-12 11:05:58.038196"
+            },
+            "semantic_extraction": {
+              "extraction_id": "extraction_1757642758",
+              "source_text": "2024년 3월 15일 서울에서 열린 AI 컨퍼런스에서 새로운 기술이 발표되었습니다.",
+              "extracted_entities": [
+                {
+                  "text": "기술",
+                  "type": "noun",
+                  "confidence": 0.7,
+                  "position": 35
+                },
+                {
+                  "text": "2024",
+                  "type": "number",
+                  "confidence": 0.9,
+                  "position": 0
+                },
+                {
+                  "text": "3",
+                  "type": "number",
+                  "confidence": 0.9,
+                  "position": 6
+                },
+                {
+                  "text": "15",
+                  "type": "number",
+                  "confidence": 0.9,
+                  "position": 9
+                },
+                {
+                  "text": "2024년 3월 15일",
+                  "type": "date",
+                  "confidence": 0.8,
+                  "position": 0
+                }
+              ],
+              "extracted_concepts": [
+                {
+                  "text": "기술",
+                  "type": "topic",
+                  "confidence": 0.8,
+                  "keywords": [
+                    "기술"
+                  ]
+                }
+              ],
+              "relationships": [
+                {
+                  "source": "기술",
+                  "target": "2024",
+                  "type": "proximity",
+                  "confidence": 0.30000000000000004,
+                  "distance": 35
+                },
+                {
+                  "source": "기술",
+                  "target": "3",
+                  "type": "proximity",
+                  "confidence": 0.42000000000000004,
+                  "distance": 29
+                },
+                {
+                  "source": "기술",
+                  "target": "15",
+                  "type": "proximity",
+                  "confidence": 0.48,
+                  "distance": 26
+                },
+                {
+                  "source": "기술",
+                  "target": "2024년 3월 15일",
+                  "type": "proximity",
+                  "confidence": 0.30000000000000004,
+                  "distance": 35
+                },
+                {
+                  "source": "2024",
+                  "target": "3",
+                  "type": "proximity",
+                  "confidence": 0.88,
+                  "distance": 6
+                },
+                {
+                  "source": "2024",
+                  "target": "15",
+                  "type": "proximity",
+                  "confidence": 0.8200000000000001,
+                  "distance": 9
+                },
+                {
+                  "source": "2024",
+                  "target": "2024년 3월 15일",
+                  "type": "proximity",
+                  "confidence": 1.0,
+                  "distance": 0
+                },
+                {
+                  "source": "3",
+                  "target": "15",
+                  "type": "proximity",
+                  "confidence": 0.94,
+                  "distance": 3
+                },
+                {
+                  "source": "3",
+                  "target": "2024년 3월 15일",
+                  "type": "proximity",
+                  "confidence": 0.88,
+                  "distance": 6
+                },
+                {
+                  "source": "15",
+                  "target": "2024년 3월 15일",
+                  "type": "proximity",
+                  "confidence": 0.8200000000000001,
+                  "distance": 9
+                },
+                {
+                  "source": "기술",
+                  "target": "기술",
+                  "type": "contains",
+                  "confidence": 0.8
+                }
+              ],
+              "semantic_graph": {
+                "nodes": [
+                  {
+                    "id": "기술",
+                    "type": "entity",
+                    "entity_type": "noun",
+                    "confidence": 0.7
+                  },
+                  {
+                    "id": "2024",
+                    "type": "entity",
+                    "entity_type": "number",
+                    "confidence": 0.9
+                  },
+                  {
+                    "id": "3",
+                    "type": "entity",
+                    "entity_type": "number",
+                    "confidence": 0.9
+                  },
+                  {
+                    "id": "15",
+                    "type": "entity",
+                    "entity_type": "number",
+                    "confidence": 0.9
+                  },
+                  {
+                    "id": "2024년 3월 15일",
+                    "type": "entity",
+                    "entity_type": "date",
+                    "confidence": 0.8
+                  },
+                  {
+                    "id": "기술",
+                    "type": "concept",
+                    "concept_type": "topic",
+                    "confidence": 0.8
+                  }
+                ],
+                "edges": [
+                  {
+                    "source": "기술",
+                    "target": "2024",
+                    "type": "proximity",
+                    "confidence": 0.30000000000000004
+                  },
+                  {
+                    "source": "기술",
+                    "target": "3",
+                    "type": "proximity",
+                    "confidence": 0.42000000000000004
+                  },
+                  {
+                    "source": "기술",
+                    "target": "15",
+                    "type": "proximity",
+                    "confidence": 0.48
+                  },
+                  {
+                    "source": "기술",
+                    "target": "2024년 3월 15일",
+                    "type": "proximity",
+                    "confidence": 0.30000000000000004
+                  },
+                  {
+                    "source": "2024",
+                    "target": "3",
+                    "type": "proximity",
+                    "confidence": 0.88
+                  },
+                  {
+                    "source": "2024",
+                    "target": "15",
+                    "type": "proximity",
+                    "confidence": 0.8200000000000001
+                  },
+                  {
+                    "source": "2024",
+                    "target": "2024년 3월 15일",
+                    "type": "proximity",
+                    "confidence": 1.0
+                  },
+                  {
+                    "source": "3",
+                    "target": "15",
+                    "type": "proximity",
+                    "confidence": 0.94
+                  },
+                  {
+                    "source": "3",
+                    "target": "2024년 3월 15일",
+                    "type": "proximity",
+                    "confidence": 0.88
+                  },
+                  {
+                    "source": "15",
+                    "target": "2024년 3월 15일",
+                    "type": "proximity",
+                    "confidence": 0.8200000000000001
+                  },
+                  {
+                    "source": "기술",
+                    "target": "기술",
+                    "type": "contains",
+                    "confidence": 0.8
+                  }
+                ],
+                "metadata": {
+                  "node_count": 6,
+                  "edge_count": 11,
+                  "created_at": "2025-09-12T11:05:58.038228"
+                }
+              },
+              "confidence": 0.7781818181818183,
+              "created_at": "2025-09-12 11:05:58.038266"
+            },
+            "contextual_analysis": {
+              "context_id": "context_1757642758",
+              "text": "2024년 3월 15일 서울에서 열린 AI 컨퍼런스에서 새로운 기술이 발표되었습니다.",
+              "context_type": "general",
+              "contextual_features": {
+                "temporal_context": {
+                  "time_expressions": [
+                    "2024년",
+                    "3월",
+                    "15일"
+                  ],
+                  "temporal_density": 0.3
+                },
+                "spatial_context": {
+                  "location_expressions": [],
+                  "spatial_density": 0.0
+                },
+                "social_context": {
+                  "social_indicators": [],
+                  "social_density": 0.0
+                },
+                "topical_context": {
+                  "detected_topics": [
+                    "기술"
+                  ]
+                },
+                "emotional_context": {
+                  "detected_emotions": []
+                }
+              },
+              "context_score": 0.4,
+              "related_contexts": [
+                "키워드 '2024년' 관련 문맥",
+                "키워드 '3월' 관련 문맥",
+                "키워드 '15일' 관련 문맥",
+                "키워드 '서울에서' 관련 문맥",
+                "키워드 '열린' 관련 문맥"
+              ],
+              "created_at": "2025-09-12 11:05:58.038352"
+            },
+            "multilingual_processing": {
+              "original_text": "2024년 3월 15일 서울에서 열린 AI 컨퍼런스에서 새로운 기술이 발표되었습니다.",
+              "detected_language": "ko",
+              "target_language": "ko",
+              "processing_result": {
+                "preprocessing": "2024년 3월 15일 서울에서 열린 AI 컨퍼런스에서 새로운 기술이 발표되었습니다.",
+                "tokenization": [
+                  "2024년",
+                  "3월",
+                  "15일",
+                  "서울에서",
+                  "열린",
+                  "AI",
+                  "컨퍼런스에서",
+                  "새로운",
+                  "기술이",
+                  "발표되었습니다."
+                ],
+                "normalization": "2024년 3월 15일 서울에서 열린 AI 컨퍼런스에서 새로운 기술이 발표되었습니다."
+              }
+            },
+            "processing_time": 0.0002269744873046875,
+            "system_status": "active"
+          }
+        },
+        {
+          "test_name": "Multilingual Support",
+          "status": "success",
+          "result": {
+            "processing_type": "multilingual",
+            "detected_language": "en",
+            "text_analysis": {
+              "text_id": "text_1757642758",
+              "original_text": "Today is a beautiful day. I enjoyed a picnic with friends in the park.",
+              "processed_text": "Today is a beautiful day. I enjoyed a picnic with friends in the park.",
+              "analysis_type": "comprehensive",
+              "features": {
+                "length": 70,
+                "word_count": 14,
+                "sentence_count": 3,
+                "paragraph_count": 1,
+                "unique_words": 13,
+                "vocabulary_diversity": 0.9285714285714286,
+                "avg_sentence_length": 7.0,
+                "sentence_length_std": 2.0,
+                "avg_word_length": 4.071428571428571,
+                "formal_indicators": 0,
+                "informal_indicators": 0
+              },
+              "sentiment_score": 0.0,
+              "confidence": 0.7999999999999999,
+              "created_at": "2025-09-12 11:05:58.038435"
+            },
+            "semantic_extraction": {
+              "extraction_id": "extraction_1757642758",
+              "source_text": "Today is a beautiful day. I enjoyed a picnic with friends in the park.",
+              "extracted_entities": [],
+              "extracted_concepts": [],
+              "relationships": [],
+              "semantic_graph": {
+                "nodes": [],
+                "edges": [],
+                "metadata": {
+                  "node_count": 0,
+                  "edge_count": 0,
+                  "created_at": "2025-09-12T11:05:58.038460"
+                }
+              },
+              "confidence": 0.0,
+              "created_at": "2025-09-12 11:05:58.038464"
+            },
+            "contextual_analysis": {
+              "context_id": "context_1757642758",
+              "text": "Today is a beautiful day. I enjoyed a picnic with friends in the park.",
+              "context_type": "general",
+              "contextual_features": {
+                "temporal_context": {
+                  "time_expressions": [],
+                  "temporal_density": 0.0
+                },
+                "spatial_context": {
+                  "location_expressions": [],
+                  "spatial_density": 0.0
+                },
+                "social_context": {
+                  "social_indicators": [],
+                  "social_density": 0.0
+                },
+                "topical_context": {
+                  "detected_topics": []
+                },
+                "emotional_context": {
+                  "detected_emotions": []
+                }
+              },
+              "context_score": 0.0,
+              "related_contexts": [
+                "키워드 'Today' 관련 문맥",
+                "키워드 'is' 관련 문맥",
+                "키워드 'beautiful' 관련 문맥",
+                "키워드 'day.' 관련 문맥"
+              ],
+              "created_at": "2025-09-12 11:05:58.038493"
+            },
+            "multilingual_processing": {
+              "original_text": "Today is a beautiful day. I enjoyed a picnic with friends in the park.",
+              "detected_language": "en",
+              "target_language": "en",
+              "processing_result": {
+                "preprocessing": "Today is a beautiful day. I enjoyed a picnic with friends in the park.",
+                "tokenization": [
+                  "Today",
+                  "is",
+                  "a",
+                  "beautiful",
+                  "day.",
+                  "I",
+                  "enjoyed",
+                  "a",
+                  "picnic",
+                  "with",
+                  "friends",
+                  "in",
+                  "the",
+                  "park."
+                ],
+                "normalization": "today is a beautiful day. i enjoyed a picnic with friends in the park."
+              }
+            },
+            "processing_time": 0.0001404285430908203,
+            "system_status": "active"
+          }
+        }
+      ],
+      "status": "success"
+    },
+    "dss": {
+      "system_name": "Decision Support System",
+      "tests": [
+        {
+          "test_name": "Multi-Criteria Decision",
+          "status": "success",
+          "result": {
+            "type": "multi_criteria_decision",
+            "decision_result": {
+              "decision_id": "decision_1757642758",
+              "selected_option": "DecisionOption(option_id='option_1', name='옵션 A', description='첫 번째 옵션', criteria_scores={'cost': 0.3, 'benefit': 0.8, 'risk': 0.4}, risk_factors=['낮은 위험'], cost=5000, benefit=0.8, probability=0.9, created_at=datetime.datetime(2025, 9, 12, 11, 5, 58, 38623))",
+              "confidence": 0.54,
+              "reasoning": "옵션 '옵션 A'이(가) 선택되었습니다. 종합 점수: 0.57. 주요 기준: benefit(0.80), cost(0.30), risk(0.40).",
+              "alternatives": [
+                "DecisionOption(option_id='option_1', name='옵션 A', description='첫 번째 옵션', criteria_scores={'cost': 0.3, 'benefit': 0.8, 'risk': 0.4}, risk_factors=['낮은 위험'], cost=5000, benefit=0.8, probability=0.9, created_at=datetime.datetime(2025, 9, 12, 11, 5, 58, 38623))",
+                "DecisionOption(option_id='option_2', name='옵션 B', description='두 번째 옵션', criteria_scores={'cost': 0.7, 'benefit': 0.6, 'risk': 0.2}, risk_factors=['중간 위험'], cost=8000, benefit=0.6, probability=0.7, created_at=datetime.datetime(2025, 9, 12, 11, 5, 58, 38627))"
+              ],
+              "score_details": {
+                "option_1": {
+                  "option": "DecisionOption(option_id='option_1', name='옵션 A', description='첫 번째 옵션', criteria_scores={'cost': 0.3, 'benefit': 0.8, 'risk': 0.4}, risk_factors=['낮은 위험'], cost=5000, benefit=0.8, probability=0.9, created_at=datetime.datetime(2025, 9, 12, 11, 5, 58, 38623))",
+                  "score": 0.5700000000000001,
+                  "details": {
+                    "cost": {
+                      "score": 0.3,
+                      "weight": 0.3,
+                      "weighted_score": 0.09
+                    },
+                    "benefit": {
+                      "score": 0.8,
+                      "weight": 0.5,
+                      "weighted_score": 0.4
+                    },
+                    "risk": {
+                      "score": 0.4,
+                      "weight": 0.2,
+                      "weighted_score": 0.08000000000000002
+                    }
+                  }
+                },
+                "option_2": {
+                  "option": "DecisionOption(option_id='option_2', name='옵션 B', description='두 번째 옵션', criteria_scores={'cost': 0.7, 'benefit': 0.6, 'risk': 0.2}, risk_factors=['중간 위험'], cost=8000, benefit=0.6, probability=0.7, created_at=datetime.datetime(2025, 9, 12, 11, 5, 58, 38627))",
+                  "score": 0.55,
+                  "details": {
+                    "cost": {
+                      "score": 0.7,
+                      "weight": 0.3,
+                      "weighted_score": 0.21
+                    },
+                    "benefit": {
+                      "score": 0.6,
+                      "weight": 0.5,
+                      "weighted_score": 0.3
+                    },
+                    "risk": {
+                      "score": 0.2,
+                      "weight": 0.2,
+                      "weighted_score": 0.04000000000000001
+                    }
+                  }
+                }
+              },
+              "criteria_weights": {
+                "cost": 0.3,
+                "benefit": 0.5,
+                "risk": 0.2
+              }
+            },
+            "status": "success",
+            "processing_time": 3.266334533691406e-05,
+            "system_status": "active"
+          }
+        },
+        {
+          "test_name": "Risk Assessment",
+          "status": "success",
+          "result": {
+            "type": "risk_assessment",
+            "risk_assessment": {
+              "assessment_id": "risk_1757642758",
+              "option_id": "option_1",
+              "risk_factors": [
+                {
+                  "factor": "cost",
+                  "description": "비용 관련 리스크",
+                  "score": 0.7,
+                  "level": "high"
+                },
+                {
+                  "factor": "probability",
+                  "description": "성공 확률 관련 리스크",
+                  "score": 0.5,
+                  "level": "medium"
+                },
+                {
+                  "factor": "custom",
+                  "description": "높은 비용",
+                  "score": 0.8,
+                  "level": "high"
+                },
+                {
+                  "factor": "custom",
+                  "description": "불확실한 시장",
+                  "score": 0.8,
+                  "level": "high"
+                }
+              ],
+              "overall_risk_score": 0.7,
+              "risk_level": "high",
+              "mitigation_strategies": [
+                "비용 관련 리스크에 대한 상세한 계획 수립 필요",
+                "성공 확률 관련 리스크에 대한 모니터링 강화",
+                "높은 비용에 대한 상세한 계획 수립 필요",
+                "불확실한 시장에 대한 상세한 계획 수립 필요"
+              ],
+              "created_at": "2025-09-12 11:05:58.038669"
+            },
+            "status": "success",
+            "processing_time": 1.71661376953125e-05,
+            "system_status": "active"
+          }
+        },
+        {
+          "test_name": "Scenario Simulation",
+          "status": "success",
+          "result": {
+            "type": "scenario_simulation",
+            "simulation_result": {
+              "simulation_id": "simulation_1757642758",
+              "scenario_name": "기본 시나리오",
+              "base_scenario": {
+                "name": "기본 시나리오",
+                "type": "business",
+                "base_value": 0.6,
+                "growth_rate": 0.1,
+                "risk_factor": 0.3,
+                "variables": {
+                  "market_size": 1000000,
+                  "competition": 5
+                },
+                "constraints": [
+                  "budget_limit",
+                  "time_constraint"
+                ],
+                "stakeholders": [
+                  "investors",
+                  "customers",
+                  "employees"
+                ],
+                "time_horizon": 12
+              },
+              "alternative_scenarios": [
+                {
+                  "name": "낙관적 시나리오",
+                  "type": "business",
+                  "base_value": 0.6,
+                  "growth_rate": 0.30000000000000004,
+                  "risk_factor": 0.21,
+                  "variables": {
+                    "market_size": 1000000,
+                    "competition": 5
+                  },
+                  "constraints": [
+                    "budget_limit",
+                    "time_constraint"
+                  ],
+                  "stakeholders": [
+                    "investors",
+                    "customers",
+                    "employees"
+                  ],
+                  "time_horizon": 12
+                },
+                {
+                  "name": "비관적 시나리오",
+                  "type": "business",
+                  "base_value": 0.6,
+                  "growth_rate": -0.1,
+                  "risk_factor": 0.39,
+                  "variables": {
+                    "market_size": 1000000,
+                    "competition": 5
+                  },
+                  "constraints": [
+                    "budget_limit",
+                    "time_constraint"
+                  ],
+                  "stakeholders": [
+                    "investors",
+                    "customers",
+                    "employees"
+                  ],
+                  "time_horizon": 12
+                },
+                {
+                  "name": "중립적 시나리오",
+                  "type": "business",
+                  "base_value": 0.6,
+                  "growth_rate": 0.1,
+                  "risk_factor": 0.3,
+                  "variables": {
+                    "market_size": 1000000,
+                    "competition": 5
+                  },
+                  "constraints": [
+                    "budget_limit",
+                    "time_constraint"
+                  ],
+                  "stakeholders": [
+                    "investors",
+                    "customers",
+                    "employees"
+                  ],
+                  "time_horizon": 12
+                }
+              ],
+              "outcomes": [
+                {
+                  "scenario_name": "낙관적 시나리오",
+                  "outcome": 0.4798687112446903,
+                  "timestamp": "2025-09-12T11:05:58.039298"
+                },
+                {
+                  "scenario_name": "비관적 시나리오",
+                  "outcome": 0.24421415329617815,
+                  "timestamp": "2025-09-12T11:05:58.039306"
+                },
+                {
+                  "scenario_name": "비관적 시나리오",
+                  "outcome": 0.26531864239798203,
+                  "timestamp": "2025-09-12T11:05:58.039311"
+                },
+                {
+                  "scenario_name": "낙관적 시나리오",
+                  "outcome": 0.5114422161706319,
+                  "timestamp": "2025-09-12T11:05:58.039314"
+                },
+                {
+                  "scenario_name": "중립적 시나리오",
+                  "outcome": 0.48039489922762013,
+                  "timestamp": "2025-09-12T11:05:58.039318"
+                },
+                {
+                  "scenario_name": "기본 시나리오",
+                  "outcome": 0.27826338566232633,
+                  "timestamp": "2025-09-12T11:05:58.039321"
+                },
+                {
+                  "scenario_name": "낙관적 시나리오",
+                  "outcome": 0.5919431688314749,
+                  "timestamp": "2025-09-12T11:05:58.039325"
+                },
+                {
+                  "scenario_name": "기본 시나리오",
+                  "outcome": 0.5830327876266774,
+                  "timestamp": "2025-09-12T11:05:58.039329"
+                },
+                {
+                  "scenario_name": "기본 시나리오",
+                  "outcome": 0.41818893704107285,
+                  "timestamp": "2025-09-12T11:05:58.039332"
+                },
+                {
+                  "scenario_name": "낙관적 시나리오",
+                  "outcome": 0.5345994268507049,
+                  "timestamp": "2025-09-12T11:05:58.039336"
+                },
+                {
+                  "scenario_name": "낙관적 시나리오",
+                  "outcome": 0.6408145122338057,
+                  "timestamp": "2025-09-12T11:05:58.039339"
+                },
+                {
+                  "scenario_name": "중립적 시나리오",
+                  "outcome": 0.3339613422571489,
+                  "timestamp": "2025-09-12T11:05:58.039343"
+                },
+                {
+                  "scenario_name": "비관적 시나리오",
+                  "outcome": 0.3501673077160449,
+                  "timestamp": "2025-09-12T11:05:58.039347"
+                },
+                {
+                  "scenario_name": "비관적 시나리오",
+                  "outcome": 0.3806695055794747,
+                  "timestamp": "2025-09-12T11:05:58.039350"
+                },
+                {
+                  "scenario_name": "중립적 시나리오",
+                  "outcome": 0.3710839291862649,
+                  "timestamp": "2025-09-12T11:05:58.039353"
+                },
+                {
+                  "scenario_name": "비관적 시나리오",
+                  "outcome": 0.34999011557406573,
+                  "timestamp": "2025-09-12T11:05:58.039357"
+                },
+                {
+                  "scenario_name": "기본 시나리오",
+                  "outcome": 0.4573069105699876,
+                  "timestamp": "2025-09-12T11:05:58.039360"
+                },
+                {
+                  "scenario_name": "기본 시나리오",
+                  "outcome": 0.38191780762412314,
+                  "timestamp": "2025-09-12T11:05:58.039365"
+                },
+                {
+                  "scenario_name": "낙관적 시나리오",
+                  "outcome": 0.6558090943173046,
+                  "timestamp": "2025-09-12T11:05:58.039369"
+                },
+                {
+                  "scenario_name": "비관적 시나리오",
+                  "outcome": 0.2162235357225561,
+                  "timestamp": "2025-09-12T11:05:58.039372"
+                },
+                {
+                  "scenario_name": "중립적 시나리오",
+                  "outcome": 0.6673792044454252,
+                  "timestamp": "2025-09-12T11:05:58.039376"
+                },
+                {
+                  "scenario_name": "낙관적 시나리오",
+                  "outcome": 0.6956224880917844,
+                  "timestamp": "2025-09-12T11:05:58.039379"
+                },
+                {
+                  "scenario_name": "기본 시나리오",
+                  "outcome": 0.43219882363360246,
+                  "timestamp": "2025-09-12T11:05:58.039385"
+                },
+                {
+                  "scenario_name": "낙관적 시나리오",
+                  "outcome": 0.5628962834845361,
+                  "timestamp": "2025-09-12T11:05:58.039388"
+                },
+                {
+                  "scenario_name": "기본 시나리오",
+                  "outcome": 0.5122840797829717,
+                  "timestamp": "2025-09-12T11:05:58.039392"
+                },
+                {
+                  "scenario_name": "낙관적 시나리오",
+                  "outcome": 0.5533214147544123,
+                  "timestamp": "2025-09-12T11:05:58.039395"
+                },
+                {
+                  "scenario_name": "비관적 시나리오",
+                  "outcome": 0.3794209415197055,
+                  "timestamp": "2025-09-12T11:05:58.039399"
+                },
+                {
+                  "scenario_name": "낙관적 시나리오",
+                  "outcome": 0.5861912539003895,
+                  "timestamp": "2025-09-12T11:05:58.039402"
+                },
+                {
+                  "scenario_name": "중립적 시나리오",
+                  "outcome": 0.635915988999253,
+                  "timestamp": "2025-09-12T11:05:58.039405"
+                },
+                {
+                  "scenario_name": "비관적 시나리오",
+                  "outcome": 0.43899488812758897,
+                  "timestamp": "2025-09-12T11:05:58.039409"
+                },
+                {
+                  "scenario_name": "기본 시나리오",
+                  "outcome": 0.29591849427327543,
+                  "timestamp": "2025-09-12T11:05:58.039412"
+                },
+                {
+                  "scenario_name": "낙관적 시나리오",
+                  "outcome": 0.5889667403811956,
+                  "timestamp": "2025-09-12T11:05:58.039416"
+                },
+                {
+                  "scenario_name": "낙관적 시나리오",
+                  "outcome": 0.6952298575465906,
+                  "timestamp": "2025-09-12T11:05:58.039419"
+                },
+                {
+                  "scenario_name": "기본 시나리오",
+                  "outcome": 0.457786093934428,
+                  "timestamp": "2025-09-12T11:05:58.039423"
+                },
+                {
+                  "scenario_name": "낙관적 시나리오",
+                  "outcome": 0.727841524803428,
+                  "timestamp": "2025-09-12T11:05:58.039426"
+                },
+                {
+                  "scenario_name": "낙관적 시나리오",
+                  "outcome": 0.5862248374079708,
+                  "timestamp": "2025-09-12T11:05:58.039430"
+                },
+                {
+                  "scenario_name": "비관적 시나리오",
+                  "outcome": 0.32968410835154943,
+                  "timestamp": "2025-09-12T11:05:58.039433"
+                },
+                {
+                  "scenario_name": "기본 시나리오",
+                  "outcome": 0.5480803198588908,
+                  "timestamp": "2025-09-12T11:05:58.039436"
+                },
+                {
+                  "scenario_name": "비관적 시나리오",
+                  "outcome": 0.23314798158624656,
+                  "timestamp": "2025-09-12T11:05:58.039440"
+                },
+                {
+                  "scenario_name": "비관적 시나리오",
+                  "outcome": 0.3753671983366233,
+                  "timestamp": "2025-09-12T11:05:58.039445"
+                },
+                {
+                  "scenario_name": "기본 시나리오",
+                  "outcome": 0.4478925876176886,
+                  "timestamp": "2025-09-12T11:05:58.039450"
+                },
+                {
+                  "scenario_name": "중립적 시나리오",
+                  "outcome": 0.5858028172462346,
+                  "timestamp": "2025-09-12T11:05:58.039453"
+                },
+                {
+                  "scenario_name": "비관적 시나리오",
+                  "outcome": 0.267573157946481,
+                  "timestamp": "2025-09-12T11:05:58.039457"
+                },
+                {
+                  "scenario_name": "비관적 시나리오",
+                  "outcome": 0.434035385909209,
+                  "timestamp": "2025-09-12T11:05:58.039460"
+                },
+                {
+                  "scenario_name": "낙관적 시나리오",
+                  "outcome": 0.7776816668339399,
+                  "timestamp": "2025-09-12T11:05:58.039464"
+                },
+                {
+                  "scenario_name": "비관적 시나리오",
+                  "outcome": 0.46301346342175653,
+                  "timestamp": "2025-09-12T11:05:58.039467"
+                },
+                {
+                  "scenario_name": "비관적 시나리오",
+                  "outcome": 0.48356434273672055,
+                  "timestamp": "2025-09-12T11:05:58.039471"
+                },
+                {
+                  "scenario_name": "중립적 시나리오",
+                  "outcome": 0.5815667138169114,
+                  "timestamp": "2025-09-12T11:05:58.039475"
+                },
+                {
+                  "scenario_name": "기본 시나리오",
+                  "outcome": 0.2861273754713095,
+                  "timestamp": "2025-09-12T11:05:58.039479"
+                },
+                {
+                  "scenario_name": "기본 시나리오",
+                  "outcome": 0.36550227403043317,
+                  "timestamp": "2025-09-12T11:05:58.039482"
+                },
+                {
+                  "scenario_name": "낙관적 시나리오",
+                  "outcome": 0.6765293435886809,
+                  "timestamp": "2025-09-12T11:05:58.039486"
+                },
+                {
+                  "scenario_name": "중립적 시나리오",
+                  "outcome": 0.4182979283672003,
+                  "timestamp": "2025-09-12T11:05:58.039489"
+                },
+                {
+                  "scenario_name": "비관적 시나리오",
+                  "outcome": 0.3697072243973706,
+                  "timestamp": "2025-09-12T11:05:58.039492"
+                },
+                {
+                  "scenario_name": "중립적 시나리오",
+                  "outcome": 0.49320346501272444,
+                  "timestamp": "2025-09-12T11:05:58.039496"
+                },
+                {
+                  "scenario_name": "비관적 시나리오",
+                  "outcome": 0.3229074246768642,
+                  "timestamp": "2025-09-12T11:05:58.039499"
+                },
+                {
+                  "scenario_name": "비관적 시나리오",
+                  "outcome": 0.4554135150313817,
+                  "timestamp": "2025-09-12T11:05:58.039503"
+                },
+                {
+                  "scenario_name": "기본 시나리오",
+                  "outcome": 0.5383969063470333,
+                  "timestamp": "2025-09-12T11:05:58.039506"
+                },
+                {
+                  "scenario_name": "낙관적 시나리오",
+                  "outcome": 0.5641360761757416,
+                  "timestamp": "2025-09-12T11:05:58.039509"
+                },
+                {
+                  "scenario_name": "기본 시나리오",
+                  "outcome": 0.5240888169349871,
+                  "timestamp": "2025-09-12T11:05:58.039513"
+                },
+                {
+                  "scenario_name": "기본 시나리오",
+                  "outcome": 0.5587606609513114,
+                  "timestamp": "2025-09-12T11:05:58.039516"
+                },
+                {
+                  "scenario_name": "중립적 시나리오",
+                  "outcome": 0.5497918142281321,
+                  "timestamp": "2025-09-12T11:05:58.039520"
+                },
+                {
+                  "scenario_name": "기본 시나리오",
+                  "outcome": 0.6508701138135489,
+                  "timestamp": "2025-09-12T11:05:58.039523"
+                },
+                {
+                  "scenario_name": "중립적 시나리오",
+                  "outcome": 0.47647867134131994,
+                  "timestamp": "2025-09-12T11:05:58.039528"
+                },
+                {
+                  "scenario_name": "중립적 시나리오",
+                  "outcome": 0.44495950581862437,
+                  "timestamp": "2025-09-12T11:05:58.039531"
+                },
+                {
+                  "scenario_name": "낙관적 시나리오",
+                  "outcome": 0.49853466151930537,
+                  "timestamp": "2025-09-12T11:05:58.039535"
+                },
+                {
+                  "scenario_name": "기본 시나리오",
+                  "outcome": 0.30748748631853273,
+                  "timestamp": "2025-09-12T11:05:58.039538"
+                },
+                {
+                  "scenario_name": "낙관적 시나리오",
+                  "outcome": 0.6534314993433115,
+                  "timestamp": "2025-09-12T11:05:58.039542"
+                },
+                {
+                  "scenario_name": "중립적 시나리오",
+                  "outcome": 0.3813138102880773,
+                  "timestamp": "2025-09-12T11:05:58.039545"
+                },
+                {
+                  "scenario_name": "비관적 시나리오",
+                  "outcome": 0.2683716720086057,
+                  "timestamp": "2025-09-12T11:05:58.039549"
+                },
+                {
+                  "scenario_name": "중립적 시나리오",
+                  "outcome": 0.5183189608814587,
+                  "timestamp": "2025-09-12T11:05:58.039552"
+                },
+                {
+                  "scenario_name": "기본 시나리오",
+                  "outcome": 0.4207000482263564,
+                  "timestamp": "2025-09-12T11:05:58.039556"
+                },
+                {
+                  "scenario_name": "중립적 시나리오",
+                  "outcome": 0.46912128269406556,
+                  "timestamp": "2025-09-12T11:05:58.039559"
+                },
+                {
+                  "scenario_name": "중립적 시나리오",
+                  "outcome": 0.3847538507705166,
+                  "timestamp": "2025-09-12T11:05:58.039563"
+                },
+                {
+                  "scenario_name": "비관적 시나리오",
+                  "outcome": 0.32139109017291223,
+                  "timestamp": "2025-09-12T11:05:58.039567"
+                },
+                {
+                  "scenario_name": "기본 시나리오",
+                  "outcome": 0.3043104909274241,
+                  "timestamp": "2025-09-12T11:05:58.039570"
+                },
+                {
+                  "scenario_name": "기본 시나리오",
+                  "outcome": 0.3566664410841364,
+                  "timestamp": "2025-09-12T11:05:58.039573"
+                },
+                {
+                  "scenario_name": "낙관적 시나리오",
+                  "outcome": 0.46097421028718544,
+                  "timestamp": "2025-09-12T11:05:58.039577"
+                },
+                {
+                  "scenario_name": "중립적 시나리오",
+                  "outcome": 0.40586283053326305,
+                  "timestamp": "2025-09-12T11:05:58.039580"
+                },
+                {
+                  "scenario_name": "낙관적 시나리오",
+                  "outcome": 0.5045030998582452,
+                  "timestamp": "2025-09-12T11:05:58.039584"
+                },
+                {
+                  "scenario_name": "비관적 시나리오",
+                  "outcome": 0.3506146951460626,
+                  "timestamp": "2025-09-12T11:05:58.039587"
+                },
+                {
+                  "scenario_name": "비관적 시나리오",
+                  "outcome": 0.3447708100109337,
+                  "timestamp": "2025-09-12T11:05:58.039591"
+                },
+                {
+                  "scenario_name": "기본 시나리오",
+                  "outcome": 0.6488884438406726,
+                  "timestamp": "2025-09-12T11:05:58.039594"
+                },
+                {
+                  "scenario_name": "비관적 시나리오",
+                  "outcome": 0.4145050684199307,
+                  "timestamp": "2025-09-12T11:05:58.039598"
+                },
+                {
+                  "scenario_name": "비관적 시나리오",
+                  "outcome": 0.42235884495964116,
+                  "timestamp": "2025-09-12T11:05:58.039601"
+                },
+                {
+                  "scenario_name": "기본 시나리오",
+                  "outcome": 0.41003289148443944,
+                  "timestamp": "2025-09-12T11:05:58.039604"
+                },
+                {
+                  "scenario_name": "중립적 시나리오",
+                  "outcome": 0.3887701531356038,
+                  "timestamp": "2025-09-12T11:05:58.039608"
+                },
+                {
+                  "scenario_name": "낙관적 시나리오",
+                  "outcome": 0.5624107137818218,
+                  "timestamp": "2025-09-12T11:05:58.039612"
+                },
+                {
+                  "scenario_name": "비관적 시나리오",
+                  "outcome": 0.3218624003397472,
+                  "timestamp": "2025-09-12T11:05:58.039615"
+                },
+                {
+                  "scenario_name": "중립적 시나리오",
+                  "outcome": 0.44786652837409513,
+                  "timestamp": "2025-09-12T11:05:58.039619"
+                },
+                {
+                  "scenario_name": "비관적 시나리오",
+                  "outcome": 0.48932347509010143,
+                  "timestamp": "2025-09-12T11:05:58.039622"
+                },
+                {
+                  "scenario_name": "비관적 시나리오",
+                  "outcome": 0.36123968927518124,
+                  "timestamp": "2025-09-12T11:05:58.039626"
+                },
+                {
+                  "scenario_name": "중립적 시나리오",
+                  "outcome": 0.2690525645784875,
+                  "timestamp": "2025-09-12T11:05:58.039629"
+                },
+                {
+                  "scenario_name": "중립적 시나리오",
+                  "outcome": 0.42468697240246783,
+                  "timestamp": "2025-09-12T11:05:58.039633"
+                },
+                {
+                  "scenario_name": "낙관적 시나리오",
+                  "outcome": 0.6490642459352942,
+                  "timestamp": "2025-09-12T11:05:58.039636"
+                },
+                {
+                  "scenario_name": "비관적 시나리오",
+                  "outcome": 0.35499526057558706,
+                  "timestamp": "2025-09-12T11:05:58.039640"
+                },
+                {
+                  "scenario_name": "비관적 시나리오",
+                  "outcome": 0.26068929919350065,
+                  "timestamp": "2025-09-12T11:05:58.039643"
+                },
+                {
+                  "scenario_name": "낙관적 시나리오",
+                  "outcome": 0.5230271361269715,
+                  "timestamp": "2025-09-12T11:05:58.039647"
+                },
+                {
+                  "scenario_name": "중립적 시나리오",
+                  "outcome": 0.6406900071296522,
+                  "timestamp": "2025-09-12T11:05:58.039650"
+                },
+                {
+                  "scenario_name": "중립적 시나리오",
+                  "outcome": 0.4210516808578717,
+                  "timestamp": "2025-09-12T11:05:58.039653"
+                },
+                {
+                  "scenario_name": "낙관적 시나리오",
+                  "outcome": 0.6685622899874469,
+                  "timestamp": "2025-09-12T11:05:58.039657"
+                }
+              ],
+              "probability_distribution": {
+                "mean": 0.46194188769624517,
+                "std": 0.12848756753031756,
+                "min": 0.2162235357225561,
+                "max": 0.7776816668339399,
+                "median": 0.45165305132453515,
+                "probability_distribution": {
+                  "excellent": 0.0,
+                  "good": 0.15,
+                  "fair": 0.5,
+                  "poor": 0.35
+                }
+              },
+              "created_at": "2025-09-12 11:05:58.051474"
+            },
+            "status": "success",
+            "processing_time": 0.012810707092285156,
+            "system_status": "active"
+          }
+        },
+        {
+          "test_name": "Optimization",
+          "status": "success",
+          "result": {
+            "type": "optimization",
+            "optimization_result": {
+              "optimization_id": "optimization_1757642758",
+              "objective_function": "maximize_efficiency",
+              "constraints": {
+                "budget_limit": 10000,
+                "time_limit": 6
+              },
+              "optimal_solution": {
+                "solution": {
+                  "investment": 3857.9937217753068,
+                  "time_allocation": 11.142820417191006
+                },
+                "optimal_value": 0.0,
+                "iterations": 10,
+                "converged": true
+              },
+              "optimal_value": 0.0,
+              "convergence_info": {
+                "iterations": 10,
+                "converged": true,
+                "final_value": 0.0,
+                "convergence_time": 1757642758.0515184
+              },
+              "created_at": "2025-09-12 11:05:58.051521"
+            },
+            "status": "success",
+            "processing_time": 3.337860107421875e-05,
+            "system_status": "active"
+          }
+        }
+      ],
+      "status": "success"
+    },
+    "aos": {
+      "system_name": "Automation and Optimization System",
+      "tests": [
+        {
+          "test_name": "Workflow Automation",
+          "status": "success",
+          "result": {
+            "type": "workflow_automation",
+            "workflow_id": "workflow_1757642758",
+            "execution_result": {
+              "execution_id": "execution_1757642758",
+              "workflow_name": "테스트 워크플로우",
+              "steps": [
+                "WorkflowStep(step_id='step_1', name='데이터 수집', description='데이터 수집 단계', step_type='task', dependencies=[], parameters={'duration': 0.1, 'result': '작업 완료: 데이터 수집'}, status='completed', start_time=datetime.datetime(2025, 9, 12, 11, 5, 58, 51689), end_time=datetime.datetime(2025, 9, 12, 11, 5, 58, 151932), created_at=datetime.datetime(2025, 9, 12, 11, 5, 58, 51600))",
+                "WorkflowStep(step_id='step_2', name='데이터 처리', description='데이터 처리 단계', step_type='task', dependencies=['step_1'], parameters={'duration': 0.1, 'result': '작업 완료: 데이터 처리'}, status='completed', start_time=datetime.datetime(2025, 9, 12, 11, 5, 58, 151941), end_time=datetime.datetime(2025, 9, 12, 11, 5, 58, 252177), created_at=datetime.datetime(2025, 9, 12, 11, 5, 58, 51603))",
+                "WorkflowStep(step_id='step_3', name='결과 분석', description='결과 분석 단계', step_type='task', dependencies=['step_2'], parameters={'duration': 0.1, 'result': '작업 완료: 결과 분석'}, status='completed', start_time=datetime.datetime(2025, 9, 12, 11, 5, 58, 252186), end_time=datetime.datetime(2025, 9, 12, 11, 5, 58, 352417), created_at=datetime.datetime(2025, 9, 12, 11, 5, 58, 51605))"
+              ],
+              "status": "completed",
+              "start_time": "2025-09-12 11:05:58.051683",
+              "end_time": "2025-09-12 11:05:58.352425",
+              "performance_metrics": {
+                "total_duration": 0.300742,
+                "completed_steps": 3,
+                "total_steps": 3,
+                "success_rate": 1.0,
+                "average_step_duration": 0.10024733333333334
+              },
+              "created_at": "2025-09-12 11:05:58.051687"
+            },
+            "status": "success",
+            "processing_time": 0.3008451461791992
+          }
+        },
+        {
+          "test_name": "Performance Optimization",
+          "status": "success",
+          "result": {
+            "type": "performance_optimization",
+            "optimization_result": {
+              "optimization_id": "optimization_1757642758",
+              "optimization_type": "performance",
+              "original_metrics": {},
+              "optimized_metrics": {},
+              "improvement_rate": 0.0,
+              "recommendations": [],
+              "created_at": "2025-09-12 11:05:58.352464"
+            },
+            "status": "success",
+            "processing_time": 1.6450881958007812e-05
+          }
+        },
+        {
+          "test_name": "Resource Management",
+          "status": "success",
+          "result": {
+            "type": "resource_management",
+            "action": "monitor",
+            "resource_usage": [
+              {
+                "resource_id": "cpu",
+                "resource_type": "processor",
+                "current_usage": 0.0,
+                "max_capacity": 100.0,
+                "utilization_rate": 0.0,
+                "status": "normal",
+                "timestamp": "2025-09-12 11:05:59.353768"
+              },
+              {
+                "resource_id": "memory",
+                "resource_type": "memory",
+                "current_usage": 0.70147705078125,
+                "max_capacity": 15.530769348144531,
+                "utilization_rate": 0.066,
+                "status": "normal",
+                "timestamp": "2025-09-12 11:05:59.353822"
+              },
+              {
+                "resource_id": "disk",
+                "resource_type": "storage",
+                "current_usage": 158.39385223388672,
+                "max_capacity": 1006.853931427002,
+                "utilization_rate": 0.166,
+                "status": "normal",
+                "timestamp": "2025-09-12 11:05:59.353837"
+              }
+            ],
+            "status": "success",
+            "processing_time": 1.0013751983642578
+          }
+        },
+        {
+          "test_name": "Auto Tuning",
+          "status": "success",
+          "result": {
+            "type": "auto_tuning",
+            "tuned_parameters": {
+              "learning_rate": 0.0105,
+              "batch_size": 33.6,
+              "epochs": 105.0
+            },
+            "target_metric": "accuracy",
+            "target_value": 0.95,
+            "status": "success",
+            "processing_time": 7.414817810058594e-05
+          }
+        }
+      ],
+      "status": "success"
+    },
+    "integration": {
+      "system_name": "System Integration",
+      "tests": [
+        {
+          "test_name": "AI + NLP Integration",
+          "status": "failed",
+          "result": {
+            "nlp_result": {
+              "processing_type": "comprehensive",
+              "detected_language": "ko",
+              "text_analysis": {
+                "text_id": "text_1757642758",
+                "original_text": "인공지능 기술이 비즈니스 분야에서 혁신을 가져오고 있습니다.",
+                "processed_text": "인공지능 기술이 비즈니스 분야에서 혁신을 가져오고 있습니다.",
+                "analysis_type": "comprehensive",
+                "features": {
+                  "length": 33,
+                  "word_count": 7,
+                  "sentence_count": 2,
+                  "paragraph_count": 1,
+                  "unique_words": 7,
+                  "vocabulary_diversity": 1.0,
+                  "avg_sentence_length": 7.0,
+                  "sentence_length_std": 0.0,
+                  "avg_word_length": 3.857142857142857,
+                  "formal_indicators": 2,
+                  "informal_indicators": 1
+                },
+                "sentiment_score": 0.0,
+                "confidence": 0.6,
+                "created_at": "2025-09-12 11:05:58.038043"
+              },
+              "semantic_extraction": {
+                "extraction_id": "extraction_1757642758",
+                "source_text": "인공지능 기술이 비즈니스 분야에서 혁신을 가져오고 있습니다.",
+                "extracted_entities": [
+                  {
+                    "text": "기술",
+                    "type": "noun",
+                    "confidence": 0.7,
+                    "position": 5
+                  },
+                  {
+                    "text": "혁신",
+                    "type": "noun",
+                    "confidence": 0.7,
+                    "position": 19
+                  }
+                ],
+                "extracted_concepts": [
+                  {
+                    "text": "기술",
+                    "type": "topic",
+                    "confidence": 0.8,
+                    "keywords": [
+                      "기술"
+                    ]
+                  },
+                  {
+                    "text": "비즈니스",
+                    "type": "topic",
+                    "confidence": 0.8,
+                    "keywords": [
+                      "비즈니스"
+                    ]
+                  }
+                ],
+                "relationships": [
+                  {
+                    "source": "기술",
+                    "target": "혁신",
+                    "type": "proximity",
+                    "confidence": 0.72,
+                    "distance": 14
+                  },
+                  {
+                    "source": "기술",
+                    "target": "기술",
+                    "type": "contains",
+                    "confidence": 0.8
+                  }
+                ],
+                "semantic_graph": {
+                  "nodes": [
+                    {
+                      "id": "기술",
+                      "type": "entity",
+                      "entity_type": "noun",
+                      "confidence": 0.7
+                    },
+                    {
+                      "id": "혁신",
+                      "type": "entity",
+                      "entity_type": "noun",
+                      "confidence": 0.7
+                    },
+                    {
+                      "id": "기술",
+                      "type": "concept",
+                      "concept_type": "topic",
+                      "confidence": 0.8
+                    },
+                    {
+                      "id": "비즈니스",
+                      "type": "concept",
+                      "concept_type": "topic",
+                      "confidence": 0.8
+                    }
+                  ],
+                  "edges": [
+                    {
+                      "source": "기술",
+                      "target": "혁신",
+                      "type": "proximity",
+                      "confidence": 0.72
+                    },
+                    {
+                      "source": "기술",
+                      "target": "기술",
+                      "type": "contains",
+                      "confidence": 0.8
+                    }
+                  ],
+                  "metadata": {
+                    "node_count": 4,
+                    "edge_count": 2,
+                    "created_at": "2025-09-12T11:05:58.038070"
+                  }
+                },
+                "confidence": 0.7533333333333333,
+                "created_at": "2025-09-12 11:05:58.038094"
+              },
+              "contextual_analysis": {
+                "context_id": "context_1757642758",
+                "text": "인공지능 기술이 비즈니스 분야에서 혁신을 가져오고 있습니다.",
+                "context_type": "general",
+                "contextual_features": {
+                  "temporal_context": {
+                    "time_expressions": [],
+                    "temporal_density": 0.0
+                  },
+                  "spatial_context": {
+                    "location_expressions": [],
+                    "spatial_density": 0.0
+                  },
+                  "social_context": {
+                    "social_indicators": [],
+                    "social_density": 0.0
+                  },
+                  "topical_context": {
+                    "detected_topics": [
+                      "기술",
+                      "비즈니스"
+                    ]
+                  },
+                  "emotional_context": {
+                    "detected_emotions": []
+                  }
+                },
+                "context_score": 0.2,
+                "related_contexts": [
+                  "키워드 '인공지능' 관련 문맥",
+                  "키워드 '기술이' 관련 문맥",
+                  "키워드 '비즈니스' 관련 문맥",
+                  "키워드 '분야에서' 관련 문맥",
+                  "키워드 '혁신을' 관련 문맥"
+                ],
+                "created_at": "2025-09-12 11:05:58.038124"
+              },
+              "multilingual_processing": {
+                "original_text": "인공지능 기술이 비즈니스 분야에서 혁신을 가져오고 있습니다.",
+                "detected_language": "ko",
+                "target_language": "ko",
+                "processing_result": {
+                  "preprocessing": "인공지능 기술이 비즈니스 분야에서 혁신을 가져오고 있습니다.",
+                  "tokenization": [
+                    "인공지능",
+                    "기술이",
+                    "비즈니스",
+                    "분야에서",
+                    "혁신을",
+                    "가져오고",
+                    "있습니다."
+                  ],
+                  "normalization": "인공지능 기술이 비즈니스 분야에서 혁신을 가져오고 있습니다."
+                }
+              },
+              "processing_time": 5.173683166503906e-05,
+              "system_status": "active"
+            },
+            "ai_result": {
+              "type": "pattern_recognition",
+              "pattern": null,
+              "confidence": 0.0,
+              "status": "success",
+              "processing_time": 3.123283386230469e-05,
+              "system_status": "active"
+            }
+          }
+        },
+        {
+          "test_name": "DSS + AOS Integration",
+          "status": "success",
+          "result": {
+            "dss_result": {
+              "type": "multi_criteria_decision",
+              "decision_result": {
+                "decision_id": "decision_1757642759",
+                "selected_option": "DecisionOption(option_id='option_1', name='자동화 옵션', description='자동화를 통한 효율성 향상', criteria_scores={'efficiency': 0.8, 'cost': 0.4, 'time': 0.7}, risk_factors=['기술적 위험'], cost=5000, benefit=0.8, probability=0.9, created_at=datetime.datetime(2025, 9, 12, 11, 5, 59, 354083))",
+                "confidence": 1.0,
+                "reasoning": "옵션 '자동화 옵션'이(가) 선택되었습니다. 종합 점수: 0.66. 주요 기준: efficiency(0.80), cost(0.40), time(0.70).",
+                "alternatives": [
+                  "DecisionOption(option_id='option_1', name='자동화 옵션', description='자동화를 통한 효율성 향상', criteria_scores={'efficiency': 0.8, 'cost': 0.4, 'time': 0.7}, risk_factors=['기술적 위험'], cost=5000, benefit=0.8, probability=0.9, created_at=datetime.datetime(2025, 9, 12, 11, 5, 59, 354083))"
+                ],
+                "score_details": {
+                  "option_1": {
+                    "option": "DecisionOption(option_id='option_1', name='자동화 옵션', description='자동화를 통한 효율성 향상', criteria_scores={'efficiency': 0.8, 'cost': 0.4, 'time': 0.7}, risk_factors=['기술적 위험'], cost=5000, benefit=0.8, probability=0.9, created_at=datetime.datetime(2025, 9, 12, 11, 5, 59, 354083))",
+                    "score": 0.66,
+                    "details": {
+                      "efficiency": {
+                        "score": 0.8,
+                        "weight": 0.5,
+                        "weighted_score": 0.4
+                      },
+                      "cost": {
+                        "score": 0.4,
+                        "weight": 0.3,
+                        "weighted_score": 0.12
+                      },
+                      "time": {
+                        "score": 0.7,
+                        "weight": 0.2,
+                        "weighted_score": 0.13999999999999999
+                      }
+                    }
+                  }
+                },
+                "criteria_weights": {
+                  "efficiency": 0.5,
+                  "cost": 0.3,
+                  "time": 0.2
+                }
+              },
+              "status": "success",
+              "processing_time": 2.8848648071289062e-05,
+              "system_status": "active"
+            },
+            "aos_result": {
+              "type": "workflow_automation",
+              "workflow_id": "workflow_1757642759",
+              "execution_result": {
+                "execution_id": "execution_1757642759",
+                "workflow_name": "의사결정 기반 자동화 워크플로우",
+                "steps": [
+                  "WorkflowStep(step_id='step_1', name='의사결정 분석', description='의사결정 결과 분석', step_type='task', dependencies=[], parameters={'duration': 0.1, 'result': '작업 완료: 의사결정 분석'}, status='completed', start_time=datetime.datetime(2025, 9, 12, 11, 5, 59, 354217), end_time=datetime.datetime(2025, 9, 12, 11, 5, 59, 454468), created_at=datetime.datetime(2025, 9, 12, 11, 5, 59, 354115))"
+                ],
+                "status": "completed",
+                "start_time": "2025-09-12 11:05:59.354211",
+                "end_time": "2025-09-12 11:05:59.454475",
+                "performance_metrics": {
+                  "total_duration": 0.100264,
+                  "completed_steps": 1,
+                  "total_steps": 1,
+                  "success_rate": 1.0,
+                  "average_step_duration": 0.100264
+                },
+                "created_at": "2025-09-12 11:05:59.354215"
+              },
+              "status": "success",
+              "processing_time": 0.10037684440612793
+            }
+          }
+        }
+      ],
+      "status": "success"
+    }
+  },
+  "overall_status": "success",
+  "end_time": "2025-09-12T11:05:59.454490",
+  "total_duration": 1.4214918613433838,
+  "summary": {
+    "total_systems": 5,
+    "successful_systems": 5,
+    "failed_systems": 0,
+    "total_tests": 18,
+    "successful_tests": 17,
+    "failed_tests": 1,
+    "success_rate": 0.9444444444444444
+  }
+}

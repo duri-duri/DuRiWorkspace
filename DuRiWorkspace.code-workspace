@@ -1,7 +1,21 @@
 {
-    "folders": [
-        {
-            "path": "."
-        }
-    ]
+  "folders": [
+    { "path": "." }
+  ],
+  "settings": {
+    "files.watcherExclude": {
+      "**/node_modules/**": true,
+      "**/.git/**": true,
+      "**/dist/**": true,
+      "**/.venv/**": true,
+      "**/build/**": true,
+      "**/logs/**": true,
+      "**/data/**": true,
+      "**/tmp/**": true
+    },
+    "git.autoRepositoryDetection": "openEditors",
+    "search.useIgnoreFiles": true,
+    "extensions.autoUpdate": false,
+    "update.mode": "none"
+  }
 }

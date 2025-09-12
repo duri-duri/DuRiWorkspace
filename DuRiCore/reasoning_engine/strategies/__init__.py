@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
-DuRi 추론 엔진 - 추론 전략 모듈
-Phase 3 리팩토링: logical_reasoning_engine.py에서 분리
+DuRiCore Phase 3: 추론 엔진 Strategies 모듈
+
+추론 전략들을 제공하는 모듈입니다.
+기존 학습 시스템 전략 패턴을 따라 구현됩니다.
 """
 
-from .deductive_reasoning import DeductiveReasoning
-from .inductive_reasoning import InductiveReasoning
-from .abductive_reasoning import AbductiveReasoning
+from .deductive_solver import DeductiveSolver
+from .inductive_solver import InductiveSolver  
+from .abductive_solver import AbductiveSolver
 
 __all__ = [
-    'DeductiveReasoning',
-    'InductiveReasoning', 
-    'AbductiveReasoning'
+    "DeductiveSolver",
+    "InductiveSolver", 
+    "AbductiveSolver"
 ]
