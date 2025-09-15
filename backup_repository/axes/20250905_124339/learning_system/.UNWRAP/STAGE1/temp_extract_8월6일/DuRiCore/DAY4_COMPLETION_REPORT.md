@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/STAGE1/temp_extract_8월6일/DuRiCore/DAY4_COMPLETION_REPORT.md

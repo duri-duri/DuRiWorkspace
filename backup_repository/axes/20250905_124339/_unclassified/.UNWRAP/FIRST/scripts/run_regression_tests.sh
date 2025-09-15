@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/FIRST/scripts/run_regression_tests.sh

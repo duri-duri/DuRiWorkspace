@@ -1,3 +1,0 @@
-
-def safe_function():
-    return "test"

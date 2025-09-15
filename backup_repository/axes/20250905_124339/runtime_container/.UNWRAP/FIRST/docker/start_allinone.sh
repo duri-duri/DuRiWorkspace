@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/FIRST/docker/start_allinone.sh

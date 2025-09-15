@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/SECOND/push_all_snapshot.sh

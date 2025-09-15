@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/SECOND/scripts/common/save_snapshot.sh

@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/SECOND/tools/day7_gate_check.sh

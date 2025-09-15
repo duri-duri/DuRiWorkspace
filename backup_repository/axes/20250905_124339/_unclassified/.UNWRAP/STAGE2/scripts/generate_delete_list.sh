@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/STAGE2/scripts/generate_delete_list.sh

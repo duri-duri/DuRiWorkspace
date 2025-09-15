@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/FIRST/backups/current_backup/docker/wait-for-postgres.sh

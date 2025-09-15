@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/SECOND/duri_snapshots/evolution/snapshot_2025-05-27__07-30/scripts/pre_work_backup.sh

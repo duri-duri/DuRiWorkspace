@@ -1,27 +1,16 @@
 #!/usr/bin/env bash
-set -Eeuo pipefail
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-OUT="$ROOT/var/reports/bench_$(date +%Y%m%d_%H%M)"
-mkdir -p "$OUT"
-echo "[BENCH] compare → $OUT"
+set -euo pipefail
 
-# 기준선 없으면 안내
-if [ ! -d "$ROOT/.benchmarks" ]; then
-  echo "[WARN] no .benchmarks baseline found. run scripts/bench_init.sh first."
-  exit 2
-fi
+# 설정
+BASELINE_JSON="${BASELINE_JSON:-var/reports/bench/0001_baseline.json}"   # 필요 시 경로 조정
+NOW_JSON="${NOW_JSON:-var/reports/bench_now.json}"
+THRESH_PCT="${THRESH_PCT:-10}"
 
-# 현재 측정
-pytest -q tests/perf --benchmark-compare --benchmark-compare-fail=mean:10% \
-  --benchmark-min-rounds=5 \
-  --benchmark-name=short --benchmark-columns=min,mean,stddev,median,ops \
-  2>&1 | tee "$OUT/bench_compare.log"
+mkdir -p "$(dirname "$NOW_JSON")"
 
-# 결과 로그에 회귀 문구가 있으면 실패 처리
-if grep -qi "FAILED benchmark" "$OUT/bench_compare.log"; then
-  echo "[FAIL] regression detected (>10% mean slowdown). See $OUT/bench_compare.log"
-  exit 1
-fi
+echo "[1/2] running benchmarks → $NOW_JSON"
+# 벤치 실행(예시: tests/benchmarks 패턴은 환경에 맞게 조정)
+pytest -q tests -k "bench" --benchmark-only --benchmark-json="$NOW_JSON"
 
-echo "$OUT" > "$ROOT/var/reports/LAST_BENCH_DIR"
-echo "[OK] no regression. artifacts at $OUT"
+echo "[2/2] guarding (only-fail-on-regression, threshold ${THRESH_PCT}%)"
+scripts/bench_guard.py "$BASELINE_JSON" "$NOW_JSON" "$THRESH_PCT"

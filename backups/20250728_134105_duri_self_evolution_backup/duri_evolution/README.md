@@ -1,2 +1,0 @@
-# duri-evolution
-

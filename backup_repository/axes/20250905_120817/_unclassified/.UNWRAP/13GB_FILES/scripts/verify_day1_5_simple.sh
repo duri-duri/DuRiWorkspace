@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/13GB_FILES/scripts/verify_day1_5_simple.sh

@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/13GB_FILES/scripts/run_day8_phase2.sh

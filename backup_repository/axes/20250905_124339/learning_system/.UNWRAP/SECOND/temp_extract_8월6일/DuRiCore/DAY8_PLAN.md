@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/SECOND/temp_extract_8월6일/DuRiCore/DAY8_PLAN.md

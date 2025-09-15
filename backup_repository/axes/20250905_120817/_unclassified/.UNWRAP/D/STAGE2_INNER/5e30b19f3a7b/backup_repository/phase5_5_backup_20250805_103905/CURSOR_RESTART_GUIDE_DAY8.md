@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/D/STAGE2_INNER/5e30b19f3a7b/backup_repository/phase5_5_backup_20250805_103905/CURSOR_RESTART_GUIDE_DAY8.md

@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/SECOND/backup_repository/duri_brain_phase11_complete_backup/wait-for-postgres.sh

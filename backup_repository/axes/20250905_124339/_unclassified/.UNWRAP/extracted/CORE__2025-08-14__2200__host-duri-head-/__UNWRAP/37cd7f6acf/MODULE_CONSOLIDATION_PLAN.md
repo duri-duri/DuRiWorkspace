@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/extracted/CORE__2025-08-14__2200__host-duri-head-/__UNWRAP/37cd7f6acf/MODULE_CONSOLIDATION_PLAN.md

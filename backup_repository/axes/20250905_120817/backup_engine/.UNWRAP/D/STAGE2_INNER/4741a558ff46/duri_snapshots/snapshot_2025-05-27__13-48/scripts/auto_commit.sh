@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/D/STAGE2_INNER/4741a558ff46/duri_snapshots/snapshot_2025-05-27__13-48/scripts/auto_commit.sh

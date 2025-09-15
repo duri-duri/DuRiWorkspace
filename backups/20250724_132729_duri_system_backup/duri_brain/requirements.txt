@@ -1,6 +1,0 @@
-flask
-uvicorn[standard]
-fastapi
-python-dotenv
-requests
-psycopg2-binary

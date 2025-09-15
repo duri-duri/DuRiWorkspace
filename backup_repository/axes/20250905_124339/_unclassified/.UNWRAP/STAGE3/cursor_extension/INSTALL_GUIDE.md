@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/STAGE3/cursor_extension/INSTALL_GUIDE.md

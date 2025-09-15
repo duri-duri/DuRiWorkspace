@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/FIRST/duri_snapshots/2025-05-28__감정시스템_백업/2025-05-28__감정시스템_백업/duri-core/scripts/pre_work_backup.sh

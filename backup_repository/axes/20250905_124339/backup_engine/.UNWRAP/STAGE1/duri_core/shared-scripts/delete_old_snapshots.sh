@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/STAGE1/duri_core/shared-scripts/delete_old_snapshots.sh

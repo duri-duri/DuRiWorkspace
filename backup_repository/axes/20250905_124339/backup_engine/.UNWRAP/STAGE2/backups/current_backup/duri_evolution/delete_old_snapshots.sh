@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/STAGE2/backups/current_backup/duri_evolution/delete_old_snapshots.sh

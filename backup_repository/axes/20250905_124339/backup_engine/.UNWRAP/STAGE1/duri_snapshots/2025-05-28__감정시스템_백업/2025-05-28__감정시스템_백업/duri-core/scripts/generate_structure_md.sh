@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/STAGE1/duri_snapshots/2025-05-28__감정시스템_백업/2025-05-28__감정시스템_백업/duri-core/scripts/generate_structure_md.sh

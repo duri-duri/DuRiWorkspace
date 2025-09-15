@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/FIRST/duri_core/shared-scripts/save_snapshot.sh

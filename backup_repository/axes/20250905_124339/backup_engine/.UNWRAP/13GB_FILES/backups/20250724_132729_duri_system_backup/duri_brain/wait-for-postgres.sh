@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/13GB_FILES/backups/20250724_132729_duri_system_backup/duri_brain/wait-for-postgres.sh

@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/FIRST/temp_extract_8월7일/DuRiCore/modules/ml_integration/scripts/day5_promote_and_schedule.sh

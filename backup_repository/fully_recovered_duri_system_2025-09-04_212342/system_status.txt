@@ -1,8 +1,0 @@
-NAME                       IMAGE                          COMMAND                  SERVICE          CREATED          STATUS                     PORTS
-duri-postgres              postgres:14                    "docker-entrypoint.s…"   duri-postgres    29 minutes ago   Up 28 minutes              0.0.0.0:5432->5432/tcp, :::5432->5432/tcp
-duri-redis                 redis:7-alpine                 "docker-entrypoint.s…"   duri-redis       29 minutes ago   Up 28 minutes              0.0.0.0:6379->6379/tcp, :::6379->6379/tcp
-duri_brain_container       duriworkspace-duri_brain       "python duri_brain/r…"   duri_brain       27 minutes ago   Up 27 minutes              0.0.0.0:8081->8081/tcp, :::8081->8081/tcp
-duri_control_container     duriworkspace-duri_control     "python duri_control…"   duri_control     6 minutes ago    Up 6 minutes (unhealthy)   0.0.0.0:8083->8083/tcp, :::8083->8083/tcp
-duri_core_container        duriworkspace-duri_core        "python duri_core/ru…"   duri_core        27 minutes ago   Up 27 minutes              0.0.0.0:8080->8080/tcp, :::8080->8080/tcp
-duri_evolution_container   duriworkspace-duri_evolution   "python duri_evoluti…"   duri_evolution   27 minutes ago   Up 27 minutes              0.0.0.0:8082->8082/tcp, :::8082->8082/tcp
-Docker Compose version v2.29.7

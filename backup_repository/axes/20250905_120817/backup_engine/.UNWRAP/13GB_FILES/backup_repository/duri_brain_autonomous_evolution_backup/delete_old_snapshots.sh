@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/13GB_FILES/backup_repository/duri_brain_autonomous_evolution_backup/delete_old_snapshots.sh

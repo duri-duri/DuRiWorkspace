@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/SECOND/duri_snapshots/brain/snapshot_2025-05-28__02-30/scripts/pre_work_backup.sh

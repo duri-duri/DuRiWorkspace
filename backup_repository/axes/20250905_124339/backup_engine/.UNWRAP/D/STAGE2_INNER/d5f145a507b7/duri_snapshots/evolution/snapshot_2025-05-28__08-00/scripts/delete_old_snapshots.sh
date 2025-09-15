@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/D/STAGE2_INNER/d5f145a507b7/duri_snapshots/evolution/snapshot_2025-05-28__08-00/scripts/delete_old_snapshots.sh

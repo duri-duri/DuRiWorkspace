@@ -2,7 +2,7 @@ from __future__ import annotations
 import os, random
 from typing import Dict, Any
 from DuRiCore.unified.reasoning.service import UnifiedReasoningService
-from logical_reasoning_engine import ReasoningEngine  # 기존 파사드 유지
+from DuRiCore.reasoning_engine.core.reasoning_engine import ReasoningEngine  # 기존 파사드 유지
 
 _svc = UnifiedReasoningService()
 _base = ReasoningEngine()

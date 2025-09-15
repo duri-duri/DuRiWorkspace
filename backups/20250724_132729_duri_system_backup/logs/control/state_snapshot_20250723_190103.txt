@@ -1,5 +1,0 @@
-{"service":"duri-core","status":"healthy","timestamp":"2025-07-23T09:58:07.007902"}
-{"status":"brain alive"}
-{"status":"evolution alive"}
----
----

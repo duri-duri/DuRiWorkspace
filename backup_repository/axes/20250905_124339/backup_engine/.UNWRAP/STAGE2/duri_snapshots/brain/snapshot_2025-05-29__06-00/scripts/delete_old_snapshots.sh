@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/STAGE2/duri_snapshots/brain/snapshot_2025-05-29__06-00/scripts/delete_old_snapshots.sh

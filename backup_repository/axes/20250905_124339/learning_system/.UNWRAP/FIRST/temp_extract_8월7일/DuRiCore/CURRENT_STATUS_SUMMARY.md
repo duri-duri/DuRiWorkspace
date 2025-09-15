@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/FIRST/temp_extract_8월7일/DuRiCore/CURRENT_STATUS_SUMMARY.md

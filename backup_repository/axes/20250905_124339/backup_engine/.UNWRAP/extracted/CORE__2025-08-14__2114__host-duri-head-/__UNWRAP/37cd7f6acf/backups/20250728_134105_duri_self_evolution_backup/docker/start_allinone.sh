@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/extracted/CORE__2025-08-14__2114__host-duri-head-/__UNWRAP/37cd7f6acf/backups/20250728_134105_duri_self_evolution_backup/docker/start_allinone.sh

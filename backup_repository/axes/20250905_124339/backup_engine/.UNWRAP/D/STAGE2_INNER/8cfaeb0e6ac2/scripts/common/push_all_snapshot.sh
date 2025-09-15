@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/D/STAGE2_INNER/8cfaeb0e6ac2/scripts/common/push_all_snapshot.sh

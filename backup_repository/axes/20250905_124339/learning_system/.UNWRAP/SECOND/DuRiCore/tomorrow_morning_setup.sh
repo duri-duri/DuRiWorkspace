@@ -1,1 +1,0 @@
-../..//mnt/h/ARCHIVE/.UNWRAP/SECOND/DuRiCore/tomorrow_morning_setup.sh

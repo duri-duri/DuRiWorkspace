@@ -1,40 +1,28 @@
-!logs/.gitkeep
-.env
-<<<<<<< HEAD
-=======
-# 백업 및 아카이브는 기본 차단
-DuRiCore_backup_*.tar.gz
-DuRiCore_Day*.tar.gz
-DuRiCore_Phase*.tar.gz
-*.tar
-*.tar.gz
-*.tgz
-*.zst
-backup/
+# 백업/스냅샷
+backup_repository/
+backup_phase*/ 
+duri_snapshots/
 
-# --- 아래 3개만 예외 허용(화이트리스트) ---
-!DuRiCore_Backup_20250807_002146.tar.gz
-!DuRiCore_ChatGPT_Analysis_Backup_20250807_100544.tar.gz
-!DuRiCore_backup_20250807_20250807_131858_current_state_after_strategic_learning_completion.tar.gz
-# 대용량 백업 파일 제외
-*.tar.zst
-backup/*/src/
-DuRi_Backup_Phase*.tar.gz
-# 중첩된 Git 저장소 제외
-# Python 캐시
+# 리포트/벤치/미러 산출물
+var/reports/
+.benchmarks/
+
+# 가상환경/캐시
+.venv/
 __pycache__/
-*.pyc
-# 런타임 산출물
-var/logs/
-var/backups/
-var/state/
-# 잘못 add된 홈 디렉토리 무시
-~/
-# 중첩된 Git 저장소 제외
-**/.git/
-.local/
-var/test_restore/
+.ipynb_checkpoints/
 
-.test-artifacts/
---json-summary --quiet*
->>>>>>> gate-test
+# 로그/아카이브/대용량
+*.log
+*.jsonl
+*.tar
+*.tar.*
+*.zip
+*.7z
+*.zst
+*.bak
+*.db
+*.sqlitebackups/
+backups/
+backup_repository/
+cursor_extension/node_modules/
