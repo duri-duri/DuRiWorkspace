@@ -1,0 +1,1 @@
+../..//mnt/h/ARCHIVE/.UNWRAP/13GB_FILES/backup/Day07_Performance_Tuning_20250813_1503/src/duri_snapshots/2025-05-28__감정시스템_백업/2025-05-28__감정시스템_백업/duri-brain/scripts/delete_old_snapshots.sh

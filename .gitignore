@@ -25,3 +25,9 @@ var/state/
 **/.git/
 .local/
 var/test_restore/
+# generated / artifacts
+backups/
+logs/
+verify_out/
+var/
+usb_backup_analysis/
