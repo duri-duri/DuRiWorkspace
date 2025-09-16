@@ -1,0 +1,22 @@
+{
+  "summary": {
+    "total": 12,
+    "passed": 12,
+    "failed": 0,
+    "skipped": 0
+  },
+  "tests": [
+    {"name": "trace_parse_simple", "status": "PASS"},
+    {"name": "trace_branching_reason", "status": "PASS"},
+    {"name": "code_edit_small", "status": "PASS"},
+    {"name": "code_edit_medium", "status": "PASS"},
+    {"name": "math_tool_use", "status": "PASS"},
+    {"name": "long_context_ground", "status": "PASS"},
+    {"name": "medical_risk_flag", "status": "PASS"},
+    {"name": "rehab_routine_check", "status": "PASS"},
+    {"name": "ab_gate_eval", "status": "PASS"},
+    {"name": "rollback_dryrun", "status": "PASS"},
+    {"name": "latency_budget_case", "status": "PASS"},
+    {"name": "explanation_score_case", "status": "PASS"}
+  ]
+}
