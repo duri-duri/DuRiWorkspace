@@ -1,5 +1,5 @@
 name: No Artifacts in VCS
-on: [push, pull_request]
+on: [push]
 jobs:
   guard:
     runs-on: ubuntu-latest
