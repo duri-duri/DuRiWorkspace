@@ -1,0 +1,54 @@
+acceptance_criteria:
+  max_failure_rate: 0.02
+  max_p95_latency_ms: 2000
+  min_accuracy: 0.86
+  min_explainability: 0.7
+notes: '- Targets/steepness are initial anchors; calibrate with Day31~34 logs.
+
+  - ''explainability'' is a rubric score in [0,1] or [0,100] (auto-normalized).
+
+  - If metrics are given in %, the tools will auto-convert to 0..1.
+
+  '
+objective:
+  epsilon: 1.0e-06
+  form: weighted_sum
+  transforms:
+    accuracy:
+      kind: linear_minmax
+      max: 0.98
+      min: 0.8
+    explainability:
+      kind: linear_minmax
+      max: 0.95
+      min: 0.6
+    failure:
+      k_rate: 0.003
+      kind: logistic_inverse
+      target_rate: 0.01
+    latency:
+      k_ms: 250
+      kind: logistic_inverse
+      target_ms: 1200
+version: 1
+weights:
+  balanced:
+    accuracy: 0.35
+    explainability: 0.25
+    failure: 0.15
+    latency: 0.25
+  quality:
+    accuracy: 0.45
+    explainability: 0.3
+    failure: 0.1
+    latency: 0.15
+  safety_first:
+    accuracy: 0.3
+    explainability: 0.15
+    failure: 0.45
+    latency: 0.09999999999999999
+  speed:
+    accuracy: 0.3
+    explainability: 0.15
+    failure: 0.1
+    latency: 0.45

@@ -1,0 +1,23 @@
+{
+  "metrics": {
+    "latency_ms": 1357.0,
+    "accuracy": 0.9033333333333333,
+    "explainability": 0.8666666666666667,
+    "failure_rate": 0.0
+  },
+  "utilities": {
+    "latency": 0.34796416993212265,
+    "accuracy": 0.574074074074074,
+    "explainability": 0.7619047619047621,
+    "failure": 0.9655548043337888
+  },
+  "weights": {
+    "latency": 0.15,
+    "accuracy": 0.45,
+    "explainability": 0.3,
+    "failure": 0.1
+  },
+  "J": 0.6356548678279592,
+  "constraints_ok": true,
+  "violations": []
+}

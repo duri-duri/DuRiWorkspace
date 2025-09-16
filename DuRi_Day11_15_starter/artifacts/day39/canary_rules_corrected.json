@@ -1,0 +1,8 @@
+{
+  "failure_rate_threshold": 0.008,
+  "failure_persist_minutes": 30,
+  "latency_threshold_ms": 1800,
+  "latency_persist_minutes": 30,
+  "rollback_action": "REVERT_TO_PREVIOUS",
+  "monitoring_integration": true
+}
