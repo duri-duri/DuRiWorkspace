@@ -1,4 +1,4 @@
-name: CI
+name: Phase-2 Suite
 
 on:
   push:
