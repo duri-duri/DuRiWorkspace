@@ -1,0 +1,14 @@
+day: 37
+variants: [A, B]
+paths:
+  inputs: artifacts/day37
+  outputs: outputs/day37
+metrics:
+  primary: "objective_delta"
+  additional: ["t_stat", "p_value"]
+stat_test: "welch_t"
+promotion:
+  enabled: true
+  rule: "policy"
+  policy: "policies/promotion.yaml"
+seed: 42

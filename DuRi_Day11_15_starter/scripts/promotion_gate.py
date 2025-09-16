@@ -4,6 +4,8 @@ from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
+__all__ = ["evaluate", "load_policy", "as_decimal", "eval_rule"]
+
 OPS = {
     "gt":  lambda a,b: a >  b,
     "ge":  lambda a,b: a >= b,
