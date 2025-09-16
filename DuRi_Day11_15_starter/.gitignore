@@ -1,2 +1,5 @@
 bin/trace_bench
 **/bin/trace_bench
+artifacts/
+experiments/
+*.jsonl

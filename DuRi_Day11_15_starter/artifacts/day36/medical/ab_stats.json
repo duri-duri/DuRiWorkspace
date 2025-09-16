@@ -1,9 +1,0 @@
-{
-  "n_A": 15,
-  "n_B": 15,
-  "mean_A": 0.7368732495162275,
-  "mean_B": 0.6617467191141353,
-  "t_stat": 5.570424099317316,
-  "df": 27.71116113189724,
-  "note": "Compute p-value externally or compare |t|>2 as heuristic (~p<0.05 for large df)."
-}
