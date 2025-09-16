@@ -79,3 +79,23 @@ jobs:
             code_pilot_v2_logs/logs.jsonl
             slo_sla_dashboard_v1/metrics.json
           retention-days: 14
+
+  # 집계 잡: 보호 규칙이 요구하는 "tests" 상태 체크 제공
+  tests:
+    name: tests
+    needs: [ab-days, pilot-logs]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Check upstream jobs
+        run: |
+          echo "Checking upstream job status..."
+          if [[ "${{ needs.ab-days.result }}" == "success" && "${{ needs.pilot-logs.result }}" == "success" ]]; then
+            echo "✅ All upstream jobs passed"
+            exit 0
+          else
+            echo "❌ Some upstream jobs failed"
+            echo "ab-days: ${{ needs.ab-days.result }}"
+            echo "pilot-logs: ${{ needs.pilot-logs.result }}"
+            exit 1
+          fi
