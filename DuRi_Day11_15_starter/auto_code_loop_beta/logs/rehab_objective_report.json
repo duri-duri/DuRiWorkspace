@@ -1,0 +1,44 @@
+{
+  "items": [
+    {
+      "input": "무릎 통증 감소 목표, 15분 루틴 원함, 최근 어지러움 없음, RPE 5 선호",
+      "efficiency": 0.03,
+      "safety": 0.95,
+      "sustainability": 0.75,
+      "adherence": 0.8,
+      "J": 0.507,
+      "violations": {
+        "efficiency": "0.030<0.04"
+      }
+    },
+    {
+      "input": "어깨 충돌증후군 의심, 30분 루틴, 통증 NRS 6로 악화됨",
+      "efficiency": 0.0133,
+      "safety": 0.75,
+      "sustainability": 0.5,
+      "adherence": 0.5,
+      "J": 0.3553,
+      "violations": {
+        "safety": "0.75<0.9",
+        "sustainability": "0.50<0.7",
+        "efficiency": "0.013<0.04",
+        "adherence": "0.50<0.6"
+      }
+    },
+    {
+      "input": "허리 통증 관리, 20분 루틴, 주 4회 가능, 증상 안정적",
+      "efficiency": 0.025,
+      "safety": 0.95,
+      "sustainability": 0.8,
+      "adherence": 0.7,
+      "J": 0.51,
+      "violations": {
+        "efficiency": "0.025<0.04"
+      }
+    }
+  ],
+  "summary": {
+    "mean_J": 0.4574,
+    "violations_total": 6
+  }
+}

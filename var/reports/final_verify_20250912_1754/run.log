@@ -1,0 +1,144 @@
+[2025-09-12 17:54:16] Phase 3 최종 검증 시작
+[2025-09-12 17:54:16] 환경 준비
+[OK] PYTHONPATH set.
+...........                                                              [100%]
+11 passed in 0.24s
+[2025-09-12 17:54:16] 계약 테스트 실행
+...........                                                              [100%]
+11 passed in 0.15s
+[2025-09-12 17:54:17] 스모크 테스트 실행
+.........                                                                [100%]
+9 passed, 2 deselected in 0.17s
+[2025-09-12 17:54:17] 정적 분석 실행
+[2025-09-12 17:54:17] Ruff 없음, 스타일 검사 건너뜀
+[2025-09-12 17:54:17] MyPy 없음, 타입 검사 건너뜀
+[2025-09-12 17:54:17] 안전 커밋 실행
+Switched to a new branch 'feat/additive_250912_1754'
+M  .vscode/launch.json
+M  .vscode/settings.json
+M  DuRi2_Phase1_Execution_Plan_Final_Time_Optimized.md
+M  DuRi2_Phase1_Execution_Plan_Reviewed.md
+A  DuRiCore/__init__.py
+A  DuRiCore/reasoning_engine/core/decision_maker.py
+ M DuRiCore/reasoning_engine/core/reasoning_engine.py
+ M DuRiCore/reasoning_engine/strategies/__init__.py
+M  DuRiWorkspace.code-workspace
+M  DuRi_Day11_15_starter/.vscode/settings.json
+M  DuRi_Day11_15_starter/scripts/run_verification_sweep_fixed.sh
+M  DuRi_Day11_15_starter/v1_protocol_rehab_system.py
+ M duri_control
+ M duri_core
+A  env/dev_env.sh
+M  ops/alerts/alert_rules.yml
+M  ops/grafana/provisioning/datasources/datasources.yaml
+M  ops/observability/prometheus.yml
+A  restart_verification.sh
+A  restored_day8_10/adaptive_learning_system.py
+A  restored_day8_10/advanced_ai_system.py
+A  restored_day8_10/advanced_system_interaction.py
+A  restored_day8_10/automation_optimization_system.py
+A  restored_day8_10/comprehensive_testing_platform.py
+A  restored_day8_10/day10_final_integration_test.py
+A  restored_day8_10/day10_final_test_results.json
+A  restored_day8_10/day8_integration_test.py
+A  restored_day8_10/day9_integration_test.py
+A  restored_day8_10/day9_test_results_1757642759.json
+A  restored_day8_10/decision_support_system.py
+A  restored_day8_10/final_integration_system.py
+A  restored_day8_10/integrated_day1_7_test.py
+A  restored_day8_10/natural_language_processing_system.py
+A  restored_day8_10/performance_monitoring_system.py
+A  restored_day8_10/system_validation_engine.py
+A  restored_day8_10/user_interface_system.py
+A  safe_workspace/shared-scripts/auto_commit_push.sh
+A  safe_workspace/shared-scripts/autosave_scripts.sh
+A  safe_workspace/shared-scripts/autosave_snapshots.sh
+A  safe_workspace/shared-scripts/delete_old_snapshots.sh
+A  safe_workspace/shared-scripts/restore_brain.sh
+A  safe_workspace/shared-scripts/restore_evolution.sh
+A  safe_workspace/shared-scripts/restore_from_tag.sh
+A  safe_workspace/shared-scripts/save_snapshot.sh
+A  scripts/run_verification_sweep.sh
+M  scripts/terminal_helper.js
+A  scripts/verify_day.sh
+A  shared-scripts/ssd_fast_restore.sh
+A  shared-scripts/ssd_fast_snapshot.sh
+A  tests/conftest.py
+A  tests/contracts/test_reasoning_contract.py
+A  tests/contracts/test_reasoning_smoke.py
+A  verify_out/summary_day08_10.json
+A  verify_out/temp_results.jsonl
+?? DuRiCore/reasoning_engine/core/logical_reasoning_engine.py
+?? DuRiCore/reasoning_engine/integration/legacy_adapter.py
+?? DuRiCore/reasoning_engine/integration/service_entrypoint.py
+?? DuRiCore/reasoning_engine/optimization/confidence_tuning.py
+?? DuRiCore/reasoning_engine/strategies/abductive_solver.py
+?? DuRiCore/reasoning_engine/strategies/deductive_solver.py
+?? DuRiCore/reasoning_engine/strategies/inductive_solver.py
+?? env/final_verify.sh
+?? logical_reasoning_engine.py
+?? safe_additive_commit.sh
+?? scripts/final_verify.sh
+?? scripts/run_final_verify_and_archive.sh
+?? var/reports/
+...........                                                              [100%]
+11 passed in 0.19s
+[feat/additive_250912_1754 91d7542ed] additive: new modules/scaffolds only (no deletions)
+ 65 files changed, 17059 insertions(+), 965 deletions(-)
+ create mode 100644 DuRiCore/__init__.py
+ create mode 100644 DuRiCore/reasoning_engine/core/decision_maker.py
+ create mode 100644 DuRiCore/reasoning_engine/core/logical_reasoning_engine.py
+ rewrite DuRiCore/reasoning_engine/core/reasoning_engine.py (99%)
+ create mode 100644 DuRiCore/reasoning_engine/integration/legacy_adapter.py
+ create mode 100644 DuRiCore/reasoning_engine/integration/service_entrypoint.py
+ create mode 100644 DuRiCore/reasoning_engine/optimization/confidence_tuning.py
+ rewrite DuRiCore/reasoning_engine/strategies/__init__.py (88%)
+ create mode 100644 DuRiCore/reasoning_engine/strategies/abductive_solver.py
+ create mode 100644 DuRiCore/reasoning_engine/strategies/deductive_solver.py
+ create mode 100644 DuRiCore/reasoning_engine/strategies/inductive_solver.py
+ rewrite DuRiWorkspace.code-workspace (97%)
+ rewrite DuRi_Day11_15_starter/.vscode/settings.json (99%)
+ create mode 100755 env/dev_env.sh
+ create mode 100755 env/final_verify.sh
+ create mode 100644 logical_reasoning_engine.py
+ create mode 100755 restart_verification.sh
+ create mode 100644 restored_day8_10/adaptive_learning_system.py
+ create mode 100644 restored_day8_10/advanced_ai_system.py
+ create mode 100644 restored_day8_10/advanced_system_interaction.py
+ create mode 100644 restored_day8_10/automation_optimization_system.py
+ create mode 100644 restored_day8_10/comprehensive_testing_platform.py
+ create mode 100644 restored_day8_10/day10_final_integration_test.py
+ create mode 100644 restored_day8_10/day10_final_test_results.json
+ create mode 100644 restored_day8_10/day8_integration_test.py
+ create mode 100644 restored_day8_10/day9_integration_test.py
+ create mode 100644 restored_day8_10/day9_test_results_1757642759.json
+ create mode 100644 restored_day8_10/decision_support_system.py
+ create mode 100644 restored_day8_10/final_integration_system.py
+ create mode 100644 restored_day8_10/integrated_day1_7_test.py
+ create mode 100644 restored_day8_10/natural_language_processing_system.py
+ create mode 100644 restored_day8_10/performance_monitoring_system.py
+ create mode 100644 restored_day8_10/system_validation_engine.py
+ create mode 100644 restored_day8_10/user_interface_system.py
+ create mode 100755 safe_additive_commit.sh
+ create mode 100644 safe_workspace/shared-scripts/auto_commit_push.sh
+ create mode 100755 safe_workspace/shared-scripts/autosave_scripts.sh
+ create mode 100755 safe_workspace/shared-scripts/autosave_snapshots.sh
+ create mode 100755 safe_workspace/shared-scripts/delete_old_snapshots.sh
+ create mode 100755 safe_workspace/shared-scripts/restore_brain.sh
+ create mode 100755 safe_workspace/shared-scripts/restore_evolution.sh
+ create mode 100755 safe_workspace/shared-scripts/restore_from_tag.sh
+ create mode 100755 safe_workspace/shared-scripts/save_snapshot.sh
+ create mode 100755 scripts/final_verify.sh
+ create mode 100755 scripts/run_final_verify_and_archive.sh
+ create mode 100755 scripts/run_verification_sweep.sh
+ create mode 100755 scripts/verify_day.sh
+ create mode 100755 shared-scripts/ssd_fast_restore.sh
+ create mode 100755 shared-scripts/ssd_fast_snapshot.sh
+ create mode 100644 tests/conftest.py
+ create mode 100644 tests/contracts/test_reasoning_contract.py
+ create mode 100644 tests/contracts/test_reasoning_smoke.py
+ create mode 100644 var/reports/final_verify_20250912_1754/run.log
+ create mode 100644 verify_out/summary_day08_10.json
+ create mode 100644 verify_out/temp_results.jsonl
+[OK] branch feat/additive_250912_1754 committed.
+[2025-09-12 17:54:20] 최종 검증 완료

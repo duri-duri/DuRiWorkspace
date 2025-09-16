@@ -8,6 +8,12 @@ DuRi Control System의 모든 중요한 변경사항이 이 파일에 기록됩�
 ## [Unreleased]
 
 ### Added
+<<<<<<< HEAD
+- 새로운 기능들 (아직 릴리스되지 않은)
+
+### Changed
+- 기존 기능의 변경사항
+=======
 - Day 7: 자기 진화 시스템 구현
 - 자기 진화 서비스 (`duri_control/app/services/self_evolution_service.py`)
 - 자기 진화 API (`duri_control/app/api/self_evolution.py`)
@@ -45,6 +51,7 @@ DuRi Control System의 모든 중요한 변경사항이 이 파일에 기록됩�
 - 진화 API (`duri_control/app/api/evolution.py`)
 - 패턴 기반 Truth Memory 진화 로직
 - 진화 통계 및 메트릭 시스템
+>>>>>>> gate-test
 
 ### Deprecated
 - 곧 제거될 기능들

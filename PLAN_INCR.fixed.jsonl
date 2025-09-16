@@ -1,0 +1,70 @@
+{
+  "src": "/mnt/usb/두리백업/2025/08/19/INCR__2025-08-19__1354__host-duri-head.tar.zst",
+  "sha256": "e0380aff52c99b0608d3f4385302d5c9513c46a2fd64c9cd1bda6047ad74170c",
+  "dst": "/mnt/hdd/ARCHIVE/INCR/INCR__2025-08-19__1354__host-duri-head.tar.zst"
+}
+{
+  "src": "/mnt/usb/두리백업/2025/08/20/INCR__2025-08-20__1309__host-duri-head.tar.zst",
+  "sha256": "fa09c3572f71b75ecc5df3304d37628cc5568681a2b71bb57c9c6855c2a311aa",
+  "dst": "/mnt/hdd/ARCHIVE/INCR/INCR__2025-08-20__1309__host-duri-head.tar.zst"
+}
+{
+  "src": "/mnt/usb/두리백업/2025/08/20/INCR__2025-08-20__1311__host-duri-head.tar.zst",
+  "sha256": "6d6df5294d88c867ccae82100078a79486ec34277111b61ee1979e935c1a59aa",
+  "dst": "/mnt/hdd/ARCHIVE/INCR/INCR__2025-08-20__1311__host-duri-head.tar.zst"
+}
+{
+  "src": "/mnt/usb/두리백업/2025/08/20/INCR__2025-08-20__1312__host-duri-head.tar.zst",
+  "sha256": "6d6df5294d88c867ccae82100078a79486ec34277111b61ee1979e935c1a59aa",
+  "dst": "/mnt/hdd/ARCHIVE/INCR/INCR__2025-08-20__1312__host-duri-head.tar.zst"
+}
+{
+  "src": "/mnt/usb/두리백업/2025/08/20/INCR__2025-08-20__1329__host-duri-head.tar.zst",
+  "sha256": "f79f532f856c0b3cbc96961372361993518c43513534c84ac17b0be798936fa9",
+  "dst": "/mnt/hdd/ARCHIVE/INCR/INCR__2025-08-20__1329__host-duri-head.tar.zst"
+}
+{
+  "src": "/mnt/c/Users/admin/Desktop/두리백업/2025/08/18/INCR__2025-08-18__1057__host-duri-head.tar.zst",
+  "sha256": "f1fd74b746b7b76f0097b3c06c2c7e1cc1c6ea9d05ea8a215060ea738b42969c",
+  "dst": "/mnt/hdd/ARCHIVE/INCR/INCR__2025-08-18__1057__host-duri-head.tar.zst"
+}
+{
+  "src": "/mnt/c/Users/admin/Desktop/두리백업/2025/08/18/INCR__2025-08-18__1301__host-duri-head.tar.zst",
+  "sha256": "7879db1b6663410ca7aeb1ee8f0d470a326a8398442769baf9fa87909f4f15c7",
+  "dst": "/mnt/hdd/ARCHIVE/INCR/INCR__2025-08-18__1301__host-duri-head.tar.zst"
+}
+{
+  "src": "/mnt/c/Users/admin/Desktop/두리백업/2025/08/18/INCR__2025-08-18__1310__host-duri-head.tar.zst",
+  "sha256": "205a4bfefe692638a86abd94fdac1bb73f7a4f8bc77e7a7a09e53b9c56134642",
+  "dst": "/mnt/hdd/ARCHIVE/INCR/INCR__2025-08-18__1310__host-duri-head.tar.zst"
+}
+{
+  "src": "/mnt/c/Users/admin/Desktop/두리백업/2025/08/18/INCR__2025-08-18__1830__host-duri-head.tar.zst",
+  "sha256": "285614ac3d1b07912dcea19ec3c2811b06861c3a175f356aedef56b9da2b04ba",
+  "dst": "/mnt/hdd/ARCHIVE/INCR/INCR__2025-08-18__1830__host-duri-head.tar.zst"
+}
+{
+  "src": "/mnt/c/Users/admin/Desktop/두리백업/2025/08/19/INCR__2025-08-19__1354__host-duri-head.tar.zst",
+  "sha256": "e0380aff52c99b0608d3f4385302d5c9513c46a2fd64c9cd1bda6047ad74170c",
+  "dst": "/mnt/hdd/ARCHIVE/INCR/INCR__2025-08-19__1354__host-duri-head.tar.zst"
+}
+{
+  "src": "/mnt/c/Users/admin/Desktop/두리백업/2025/08/20/INCR__2025-08-20__1309__host-duri-head.tar.zst",
+  "sha256": "fa09c3572f71b75ecc5df3304d37628cc5568681a2b71bb57c9c6855c2a311aa",
+  "dst": "/mnt/hdd/ARCHIVE/INCR/INCR__2025-08-20__1309__host-duri-head.tar.zst"
+}
+{
+  "src": "/mnt/c/Users/admin/Desktop/두리백업/2025/08/20/INCR__2025-08-20__1311__host-duri-head.tar.zst",
+  "sha256": "6d6df5294d88c867ccae82100078a79486ec34277111b61ee1979e935c1a59aa",
+  "dst": "/mnt/hdd/ARCHIVE/INCR/INCR__2025-08-20__1311__host-duri-head.tar.zst"
+}
+{
+  "src": "/mnt/c/Users/admin/Desktop/두리백업/2025/08/20/INCR__2025-08-20__1312__host-duri-head.tar.zst",
+  "sha256": "6d6df5294d88c867ccae82100078a79486ec34277111b61ee1979e935c1a59aa",
+  "dst": "/mnt/hdd/ARCHIVE/INCR/INCR__2025-08-20__1312__host-duri-head.tar.zst"
+}
+{
+  "src": "/mnt/c/Users/admin/Desktop/두리백업/2025/08/20/INCR__2025-08-20__1329__host-duri-head.tar.zst",
+  "sha256": "f79f532f856c0b3cbc96961372361993518c43513534c84ac17b0be798936fa9",
+  "dst": "/mnt/hdd/ARCHIVE/INCR/INCR__2025-08-20__1329__host-duri-head.tar.zst"
+}

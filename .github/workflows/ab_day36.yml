@@ -1,0 +1,29 @@
+name: day36-ab
+on:
+  push:
+    branches: [ feat/phase4_day35_refactor ]
+  workflow_dispatch: {}
+
+jobs:
+  ab-smoke:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: [ '3.10', '3.11' ]
+        var: [ 'A', 'B' ]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: ${{ matrix.python }} }
+      - run: python -m pip install -r requirements.txt
+      - name: Run Day36
+        run: make run AS_OF_DAY=36 VAR=${{ matrix.var }} SEED=42
+      - name: Promotion gate
+        run: |
+          python scripts/promotion_gate.py outputs/day36/var_${{ matrix.var }}/results.json
+      - name: Upload outputs (non-VCS)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: day36-${{ matrix.var }}-py${{ matrix.python }}
+          path: outputs/day36/var_${{ matrix.var }}/

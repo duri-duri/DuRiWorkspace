@@ -1,0 +1,11 @@
+# derived / caches (지워도 복구 가능한 것들)
+.UNWRAP/
+.TRASH/
+.QUAR_*/
+.OPS/
+*/_logs/
+lost+found/
+# node_modules 디렉터리 제외 (I/O 병목 방지)
+node_modules/
+node_modules
+*/node_modules

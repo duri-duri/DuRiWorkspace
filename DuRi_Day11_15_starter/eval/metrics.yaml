@@ -1,0 +1,11 @@
+trace_v2:
+  tuning:
+    max_overhead_pct: 5.0      # (p95_candidate - p95_base)/p95_base * 100 ≤ 5
+    max_error_rate: 0.005      # ≤ 0.5%
+    weight:
+      overhead: 0.60
+      error: 0.30
+      size: 0.10
+    policy:
+      prefer_compression: true
+      prefer_binary_ser: true

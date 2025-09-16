@@ -1,0 +1,208 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+# ---- DEBUG PROBE (ERR trap) ----
+trap 'echo "ERR @ ${BASH_SOURCE}:${LINENO}: ${BASH_COMMAND}" >&2' ERR
+
+# =========================
+# 옵션 파싱
+# =========================
+VERIFY_ONLY=0
+KEEP_TMP=0
+FULL_MANIFEST=0
+QUIET=0
+for arg in "$@"; do
+  case "$arg" in
+    --verify-only) VERIFY_ONLY=1 ;;
+    --keep-tmp) KEEP_TMP=1 ;;
+    --full-manifest) FULL_MANIFEST=1 ;;
+    --quiet) QUIET=1 ;;
+  esac
+done
+
+# =========================
+# 환경변수
+# =========================
+APPLY="${APPLY:-0}"                 # 0=DRY, 1=실행
+USB="${USB:-/mnt/usb}"
+HDD="${HDD:-/mnt/hdd}"
+PLAN="${PLAN:?need PLAN.jsonl}"
+
+CORE_OUT="$USB/CORE_PROTECTED"
+FINAL_OUT="$USB/FINAL"
+HDD_AR="$HDD/ARCHIVE"
+META_DIR="${META_DIR:-$CORE_OUT/META}"
+
+# =========================
+# PLAN 사전 가드레일
+# =========================
+if jq -r 'if type=="array" then .[] else . end | .dst // empty' "$PLAN" | grep -E -v '^/mnt/hdd/ARCHIVE/(FULL|INCR)/' | grep . >/dev/null 2>&1; then
+  echo "[ERR] invalid dst in plan (must start with /mnt/hdd/ARCHIVE/(FULL|INCR)/)"
+  exit 2
+fi
+
+# =========================
+# 정확 매칭 해시 검증 함수
+# =========================
+check_one_exact() {
+  local f="$1" base stem meta line hfile hmeta
+  base="$(basename "$f")"
+  stem="${base%.tar.zst}"
+  meta="$META_DIR/SHA256SUMS.${stem}.txt"
+
+  if [[ -f "$meta" ]]; then
+    line="$(grep -F -- "  $base" "$meta" | head -1)"
+    [[ -z "$line" ]] && { [[ $QUIET -eq 0 ]] && echo "[META-NOLINE] $base in $(basename "$meta")"; return 2; }
+    hmeta="$(printf '%s\n' "$line" | tr -d '\r' | awk '{print $1}')"
+  else
+    meta="$(grep -RIl --include='SHA256SUMS.*' -e "  $base\$" "$META_DIR" | head -1 || true)"
+    [[ -z "$meta" ]] && { [[ $QUIET -eq 0 ]] && echo "[NO META] $base"; return 2; }
+    hmeta="$(grep -F -- "  $base" "$meta" | head -1 | tr -d '\r' | awk '{print $1}')"
+  fi
+
+  hfile="$(sha256sum -- "$f" | awk '{print $1}')"
+  if [[ "$hfile" == "$hmeta" ]]; then
+    [[ $QUIET -eq 0 ]] && echo "[OK] $base"
+  else
+    [[ $QUIET -eq 0 ]] && echo "[MISMATCH] $base (file=$hfile meta=$hmeta) [meta=$(basename "$meta")]"
+    return 1
+  fi
+}
+
+# =========================
+# 디렉토리 준비
+# =========================
+mkdir -p "$META_DIR" "$FINAL_OUT"
+if [[ $VERIFY_ONLY -eq 0 ]]; then
+  mkdir -p "$CORE_OUT/CORE"
+  if [ -d "$HDD" ]; then
+    mkdir -p "$HDD_AR/FULL" "$HDD_AR/CHECKPOINTS" "$HDD_AR/META" "$HDD_AR/INCR"
+    [[ $QUIET -eq 0 ]] && echo "[INFO] HDD 디렉토리 생성 완료: $HDD_AR"
+  else
+    [[ $QUIET -eq 0 ]] && echo "[WARN] HDD 마운트되지 않음: $HDD (HDD 이관 건너뜀)"
+  fi
+fi
+
+# =========================
+# 복사 래퍼
+# =========================
+copy() {
+  local src="$1" dst="$2"
+  if [ "$APPLY" = "1" ]; then
+    mkdir -p "$(dirname "$dst")"
+    rsync -a --info=NAME,PROGRESS2 -- "$src" "$dst"
+  else
+    if [[ $VERIFY_ONLY -eq 1 ]]; then
+      [[ $QUIET -eq 0 ]] && echo "[VERIFY-SKIP] $src"
+    else
+      [[ $QUIET -eq 0 ]] && echo "[DRY] $src -> $dst"
+    fi
+  fi
+}
+
+[[ $QUIET -eq 0 ]] && echo "== apply.sh :: APPLY=$APPLY VERIFY_ONLY=$VERIFY_ONLY KEEP_TMP=$KEEP_TMP FULL_MANIFEST=$FULL_MANIFEST QUIET=$QUIET =="
+[[ $QUIET -eq 0 ]] && echo "[PLAN] $PLAN"
+
+# =========================
+# 메인 실행부
+# =========================
+if [[ $VERIFY_ONLY -eq 0 ]]; then
+  [[ $QUIET -eq 0 ]] && echo "== [APPLY MODE] 파일 이관 및 메타 생성 수행 =="
+
+  # 1) 이관
+  [[ $QUIET -eq 0 ]] && echo "[1/3] 백업 파일 이관:"
+  jq -r 'if type=="array" then .[] else . end | .src' "$PLAN" | while IFS= read -r f; do
+    [[ -z "$f" ]] && continue
+    base="$(basename "$f")"
+    [[ $QUIET -eq 0 ]] && echo "[COPY] $base"
+    if [ -d "$HDD" ]; then
+      subdir="$( [[ $base == FULL__* ]] && echo FULL || echo INCR )"
+      copy "$f" "$HDD_AR/$subdir/$base"
+    else
+      [[ $QUIET -eq 0 ]] && echo "[SKIP] HDD 없음: $base"
+    fi
+  done
+
+  # 2) SHA256SUMS
+  [[ $QUIET -eq 0 ]] && echo "[2/3] SHA256SUMS 메타데이터 생성:"
+  jq -r 'if type=="array" then .[] else . end | select(.sha256 != null) | "\(.src)|\(.sha256)"' "$PLAN" \
+  | while IFS='|' read -r f hash; do
+      [[ -z "$f" ]] && continue
+      base="$(basename "$f")"
+      meta_file="$META_DIR/SHA256SUMS.${base%.tar.zst}.txt"
+      printf "%s  %s\n" "$hash" "$base" > "$meta_file"
+      [[ $QUIET -eq 0 ]] && echo "[META] 생성: $meta_file"
+      [ -d "$HDD" ] && copy "$meta_file" "$HDD_AR/META/$(basename "$meta_file")"
+    done
+
+  # 3) GOLD
+  [[ $QUIET -eq 0 ]] && echo "[3/3] GOLD FULL 메타데이터 생성:"
+  GOLD="$(ls -1t "$HDD_AR/FULL"/FULL__*.tar.zst 2>/dev/null | head -1 || true)"
+  if [[ -n "$GOLD" ]]; then
+    base="$(basename "$GOLD")"
+    src_from_plan="$(jq -r --arg b "$base" 'if type=="array" then .[] else . end | select(.src|endswith($b)) | .src' "$PLAN" | head -1 || true)"
+    meta="$META_DIR/${base%.tar.zst}.GOLD.txt"
+    {
+      echo "GOLD_FULL=$base"
+      echo "SOURCE_PATH=${src_from_plan:-UNKNOWN}"
+      echo "HDD_PATH=$HDD_AR/FULL/$base"
+    } > "$meta"
+    copy "$meta" "$FINAL_OUT/"
+    [[ $QUIET -eq 0 ]] && echo "[GOLD] 최신 GOLD 지정: $base"
+  fi
+
+  # 4) 봉인
+  if [ "$APPLY" = "1" ]; then
+    chmod -R a-w "$CORE_OUT/CORE" 2>/dev/null || true
+    fs="$(stat -f -c %T "$USB" 2>/dev/null || echo '?')"
+    [[ "$fs" =~ ext4|ext2 ]] && sudo chattr +i "$CORE_OUT/CORE"/* 2>/dev/null || true
+  fi
+fi
+
+# =========================
+# 검증 & 요약
+# =========================
+[[ $QUIET -eq 0 ]] && echo && echo "====================" && echo "[VERIFY & SUMMARY]" && echo "===================="
+
+tmpdir="$(mktemp -d)"
+[[ $KEEP_TMP -eq 0 ]] && trap 'rm -rf "$tmpdir"' EXIT
+
+jq -r 'if type=="array" then .[] else . end | select(.src|test("/FULL__")) | (.src|capture("(?<base>FULL__.*)").base)' "$PLAN" | sort -u > "$tmpdir/full.list" || true
+jq -r 'if type=="array" then .[] else . end | select(.src|test("/INCR__")) | (.src|capture("(?<base>INCR__.*)").base)' "$PLAN" | sort -u > "$tmpdir/incr.list" || true
+
+FULL_DIR="$HDD_AR/FULL"
+INCR_DIR="$HDD_AR/INCR"
+
+ok_full=0; bad_full_cnt=0
+while IFS= read -r base; do
+  f="$FULL_DIR/$base"
+  [[ -f "$f" ]] || { [[ $QUIET -eq 0 ]] && echo "[MISS-FULL] $base"; continue; }
+  if check_one_exact "$f" >/dev/null; then ((ok_full++)); else ((bad_full_cnt++)); fi
+done < "$tmpdir/full.list"
+
+ok_incr=0; bad_incr_cnt=0
+while IFS= read -r base; do
+  f="$INCR_DIR/$base"
+  [[ -f "$f" ]] || { [[ $QUIET -eq 0 ]] && echo "[MISS-INCR] $base"; continue; }
+  if check_one_exact "$f" >/dev/null; then ((ok_incr++)); else ((bad_incr_cnt++)); fi
+done < "$tmpdir/incr.list"
+
+if [[ $FULL_MANIFEST -eq 1 && $QUIET -eq 0 ]]; then
+  echo "— FULL 전수 결과"; while IFS= read -r f; do check_one_exact "$FULL_DIR/$f" || true; done < "$tmpdir/full.list"
+  echo "— INCR 전수 결과"; while IFS= read -r f; do check_one_exact "$INCR_DIR/$f" || true; done < "$tmpdir/incr.list"
+fi
+
+[[ $QUIET -eq 0 ]] && echo && echo "====================" && echo "SUMMARY" && echo "===================="
+printf "개수: FULL 기대=%d 실제=%d | INCR 기대=%d 실제=%d\n" "$(<"$tmpdir/full.list" wc -l)" "$(ls -1 "$FULL_DIR" 2>/dev/null | wc -l)" "$(<"$tmpdir/incr.list" wc -l)" "$(ls -1 "$INCR_DIR" 2>/dev/null | wc -l)"
+printf "무결성: FULL OK=%d BAD=%d | INCR OK=%d BAD=%d\n" "$ok_full" "$bad_full_cnt" "$ok_incr" "$bad_incr_cnt"
+
+  rc=$(( bad_full_cnt + bad_incr_cnt ))
+  if [[ $QUIET -eq 0 ]]; then
+    if (( rc==0 )); then
+      echo "[ALL GREEN] 무결성 이상 없음 ✅"
+    else
+      echo "[ATTENTION] 무결성 불일치 존재 ❗"
+  echo "[DBG] counts: ok_full=$ok_full bad_full=$bad_full_cnt ok_incr=$ok_incr bad_incr=$bad_incr_cnt" >&2
+  echo "[DBG] rc=$rc (QUIET=$QUIET)" >&2
+    fi
+  fi
+  exit $rc

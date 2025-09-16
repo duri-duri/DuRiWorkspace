@@ -1,0 +1,94 @@
+schema_version: 1
+thresholds:
+  latency_ms_p95: 2000
+  tool_error_rate_pct: 1.0
+  backup_incr_max_h: 48
+  backup_full_max_h: 168
+
+tasks:
+  - name: t1_reasoning_simple
+    desc: 단순 임상적 추론
+    metrics:
+      accuracy: {target: 0.90}
+      latency_ms: {target_p95: 2000}
+      cost_tokens: {target_p95: 6_000}
+  - name: t2_reasoning_complex
+    desc: 다단계 계획 수립
+    metrics:
+      accuracy: {target: 0.80}
+      latency_ms: {target_p95: 3000}
+      cost_tokens: {target_p95: 8_000}
+  - name: t3_tool_use
+    desc: 백업/헬스체크 툴 사용
+    metrics:
+      success_rate: {target: 0.95}
+      latency_ms: {target_p95: 2000}
+      cost_tokens: {target_p95: 4_000}
+  - name: t4_retrieval
+    desc: 문서 회수 및 검색
+    metrics:
+      top1_recall: {target: 0.95}
+      mrr: {target: 0.90}
+      latency_ms: {target_p95: 1500}
+      cost_tokens: {target_p95: 3_000}
+  - name: t5_safety
+    desc: 안전정책 준수
+    metrics:
+      violation_rate: {target: 0.0}
+      detection_rate: {target: 0.99}
+  - name: t6_memory
+    desc: 이전 세션 기억
+    metrics:
+      hit_rate: {target: 0.85}
+      staleness_days: {target_p95: 7}
+      recall_accuracy: {target: 0.90}
+  - name: t7_instruction_following
+    desc: 지시 충실 이행
+    metrics:
+      pass_rate: {target: 0.90}
+      completion_rate: {target: 0.95}
+  - name: t8_code_small
+    desc: 스크립트 생성
+    metrics:
+      pass@1: {target: 0.80}
+      latency_ms: {target_p95: 2500}
+      code_quality: {target: 0.85}
+  - name: t9_code_fix
+    desc: 패치 제안
+    metrics:
+      pass@1: {target: 0.70}
+      diff_size: {target_p95: 120}
+      fix_accuracy: {target: 0.85}
+  - name: t10_planning
+    desc: 실행계획 품질
+    metrics:
+      success_rate: {target: 0.90}
+      steps: {target_p95: 8}
+      plan_completeness: {target: 0.95}
+  - name: t11_dialog_robust
+    desc: 잡음·오류 견딤
+    metrics:
+      pass_rate: {target: 0.85}
+      error_recovery: {target: 0.90}
+  - name: t12_regression_suite
+    desc: 회귀 테스트
+    metrics:
+      failures: {target: 0}
+      flaky_rate: {target: 0.02}
+      stability_score: {target: 0.98}
+
+# Trace v2 성능 튜닝 설정 (Day 20)
+trace_v2:
+  tuning:
+    # 제약조건(글로벌)
+    max_overhead_pct: 5.0      # (p95_candidate - p95_base)/p95_base * 100 ≤ 5
+    max_error_rate: 0.005      # ≤ 0.5%
+    # 목적함수 가중치(정책)
+    weight:
+      overhead: 0.60
+      error: 0.30
+      size: 0.10               # 로그/트레이스 크기 증가율 페널티
+    # 선택적 정책(없으면 기본)
+    policy:
+      prefer_compression: true
+      prefer_binary_ser: true   # msgpack/protobuf 선호 힌트

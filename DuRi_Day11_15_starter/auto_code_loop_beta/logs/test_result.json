@@ -1,0 +1,7 @@
+{
+  "pass_rate": 0.83,
+  "failures": [
+    {"task": "qa_fact_01", "type": "Validation", "msg": "mismatch on entity"},
+    {"task": "tool_latency_02", "type": "System", "msg": "timeout p95"}
+  ]
+}

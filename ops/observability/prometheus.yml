@@ -1,0 +1,48 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: duri-metrics
+    static_configs:
+      - targets: ['localhost:9108']
+
+rule_files:
+  - 'rules/latency_quantiles.yml'
+  - 'rules/alerts.yml'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,30 @@
+[
+  {
+    "goal_type": "Hardening",
+    "spec": {
+      "task": "tool_latency_02",
+      "type": "System",
+      "msg": "timeout p95",
+      "confidence": 0.5
+    },
+    "priority": 5,
+    "suggested_data_ops": [
+      "sandbox_limit",
+      "timeout_tune"
+    ]
+  },
+  {
+    "goal_type": "Improve_Facts",
+    "spec": {
+      "task": "qa_fact_01",
+      "type": "Validation",
+      "msg": "mismatch on entity",
+      "confidence": 0.5
+    },
+    "priority": 4,
+    "suggested_data_ops": [
+      "augment_retrieval",
+      "add_faq_pairs"
+    ]
+  }
+]

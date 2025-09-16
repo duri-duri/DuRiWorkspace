@@ -1,8 +1,0 @@
-fastapi
-uvicorn
-requests
-psycopg2-binary
-sqlalchemy
-numpy
-python-multipart
-python-dotenv

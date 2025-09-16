@@ -1,0 +1,337 @@
+{
+  "as_of": "2025-09-12T10:19:22.658771",
+  "days": [
+    {
+      "day": 8,
+      "status": "PASS",
+      "message": "OK",
+      "metrics": {
+        "pou_success_rate": 1,
+        "safety_score_avg": 1,
+        "error_rate_avg": 0,
+        "latency_ms_avg": 500
+      },
+      "ts": "2025-09-12T10:19:22+09:00"
+    },
+    {
+      "day": 9,
+      "status": "PASS",
+      "message": "OK",
+      "metrics": {
+        "pou_success_rate": 1,
+        "safety_score_avg": 1,
+        "error_rate_avg": 0,
+        "latency_ms_avg": 500
+      },
+      "ts": "2025-09-12T10:19:22+09:00"
+    },
+    {
+      "day": 10,
+      "status": "PASS",
+      "message": "OK",
+      "metrics": {
+        "pou_success_rate": 1,
+        "safety_score_avg": 1,
+        "error_rate_avg": 0,
+        "latency_ms_avg": 500
+      },
+      "ts": "2025-09-12T10:19:22+09:00"
+    },
+    {
+      "day": 11,
+      "status": "PASS",
+      "message": "OK",
+      "metrics": {
+        "pou_success_rate": 1,
+        "safety_score_avg": 1,
+        "error_rate_avg": 0,
+        "latency_ms_avg": 200
+      },
+      "ts": "2025-09-12T10:19:22+09:00"
+    },
+    {
+      "day": 12,
+      "status": "PASS",
+      "message": "OK",
+      "metrics": {
+        "pou_success_rate": 0.9,
+        "safety_score_avg": 0.99,
+        "error_rate_avg": 0.002,
+        "latency_ms_avg": 700
+      },
+      "ts": "2025-09-12T10:19:22+09:00"
+    },
+    {
+      "day": 13,
+      "status": "PASS",
+      "message": "OK",
+      "metrics": {
+        "pou_success_rate": 0.9,
+        "safety_score_avg": 0.99,
+        "error_rate_avg": 0.002,
+        "latency_ms_avg": 700
+      },
+      "ts": "2025-09-12T10:19:22+09:00"
+    },
+    {
+      "day": 14,
+      "status": "PASS",
+      "message": "OK",
+      "metrics": {
+        "pou_success_rate": 0.9,
+        "safety_score_avg": 0.99,
+        "error_rate_avg": 0.002,
+        "latency_ms_avg": 700
+      },
+      "ts": "2025-09-12T10:19:22+09:00"
+    },
+    {
+      "day": 15,
+      "status": "PASS",
+      "message": "OK",
+      "metrics": {
+        "pou_success_rate": 0.85,
+        "safety_score_avg": 0.98,
+        "error_rate_avg": 0.005,
+        "latency_ms_avg": 800
+      },
+      "ts": "2025-09-12T10:19:22+09:00"
+    },
+    {
+      "day": 16,
+      "status": "PASS",
+      "message": "OK",
+      "metrics": {
+        "pou_success_rate": 0.9,
+        "safety_score_avg": 0.97,
+        "error_rate_avg": 0.004,
+        "latency_ms_avg": 600
+      },
+      "ts": "2025-09-12T10:19:22+09:00"
+    },
+    {
+      "day": 17,
+      "status": "PASS",
+      "message": "OK",
+      "metrics": {
+        "pou_success_rate": 0.9,
+        "safety_score_avg": 0.99,
+        "error_rate_avg": 0.003,
+        "latency_ms_avg": 650
+      },
+      "ts": "2025-09-12T10:19:22+09:00"
+    },
+    {
+      "day": 18,
+      "status": "PASS",
+      "message": "OK",
+      "metrics": {
+        "pou_success_rate": 0.9,
+        "safety_score_avg": 0.99,
+        "error_rate_avg": 0.003,
+        "latency_ms_avg": 650
+      },
+      "ts": "2025-09-12T10:19:22+09:00"
+    },
+    {
+      "day": 19,
+      "status": "PASS",
+      "message": "OK",
+      "metrics": {
+        "pou_success_rate": 0.88,
+        "safety_score_avg": 0.98,
+        "error_rate_avg": 0.004,
+        "latency_ms_avg": 700
+      },
+      "ts": "2025-09-12T10:19:22+09:00"
+    },
+    {
+      "day": 20,
+      "status": "PASS",
+      "message": "OK",
+      "metrics": {
+        "pou_success_rate": 0.88,
+        "safety_score_avg": 0.98,
+        "error_rate_avg": 0.004,
+        "latency_ms_avg": 700
+      },
+      "ts": "2025-09-12T10:19:22+09:00"
+    },
+    {
+      "day": 21,
+      "status": "PASS",
+      "message": "OK",
+      "metrics": {
+        "pou_success_rate": 0.88,
+        "safety_score_avg": 0.98,
+        "error_rate_avg": 0.004,
+        "latency_ms_avg": 700
+      },
+      "ts": "2025-09-12T10:19:22+09:00"
+    },
+    {
+      "day": 22,
+      "status": "PASS",
+      "message": "OK",
+      "metrics": {
+        "pou_success_rate": 0.88,
+        "safety_score_avg": 0.98,
+        "error_rate_avg": 0.004,
+        "latency_ms_avg": 700
+      },
+      "ts": "2025-09-12T10:19:22+09:00"
+    },
+    {
+      "day": 23,
+      "status": "PASS",
+      "message": "OK",
+      "metrics": {
+        "pou_success_rate": 0.88,
+        "safety_score_avg": 0.98,
+        "error_rate_avg": 0.004,
+        "latency_ms_avg": 700
+      },
+      "ts": "2025-09-12T10:19:22+09:00"
+    },
+    {
+      "day": 24,
+      "status": "PASS",
+      "message": "OK",
+      "metrics": {
+        "pou_success_rate": 0.88,
+        "safety_score_avg": 0.98,
+        "error_rate_avg": 0.004,
+        "latency_ms_avg": 700
+      },
+      "ts": "2025-09-12T10:19:22+09:00"
+    },
+    {
+      "day": 25,
+      "status": "PASS",
+      "message": "OK",
+      "metrics": {
+        "pou_success_rate": 0.88,
+        "safety_score_avg": 0.98,
+        "error_rate_avg": 0.004,
+        "latency_ms_avg": 700
+      },
+      "ts": "2025-09-12T10:19:22+09:00"
+    },
+    {
+      "day": 26,
+      "status": "PASS",
+      "message": "OK",
+      "metrics": {
+        "pou_success_rate": 0.88,
+        "safety_score_avg": 0.98,
+        "error_rate_avg": 0.004,
+        "latency_ms_avg": 700
+      },
+      "ts": "2025-09-12T10:19:22+09:00"
+    },
+    {
+      "day": 27,
+      "status": "PASS",
+      "message": "OK",
+      "metrics": {
+        "pou_success_rate": 0.88,
+        "safety_score_avg": 0.98,
+        "error_rate_avg": 0.004,
+        "latency_ms_avg": 700
+      },
+      "ts": "2025-09-12T10:19:22+09:00"
+    },
+    {
+      "day": 28,
+      "status": "PASS",
+      "message": "OK",
+      "metrics": {
+        "pou_success_rate": 0.88,
+        "safety_score_avg": 0.98,
+        "error_rate_avg": 0.004,
+        "latency_ms_avg": 700
+      },
+      "ts": "2025-09-12T10:19:22+09:00"
+    },
+    {
+      "day": 29,
+      "status": "PASS",
+      "message": "OK",
+      "metrics": {
+        "pou_success_rate": 0.88,
+        "safety_score_avg": 0.98,
+        "error_rate_avg": 0.004,
+        "latency_ms_avg": 700
+      },
+      "ts": "2025-09-12T10:19:22+09:00"
+    },
+    {
+      "day": 30,
+      "status": "PASS",
+      "message": "OK",
+      "metrics": {
+        "pou_success_rate": 0.88,
+        "safety_score_avg": 0.98,
+        "error_rate_avg": 0.004,
+        "latency_ms_avg": 700
+      },
+      "ts": "2025-09-12T10:19:22+09:00"
+    },
+    {
+      "day": 31,
+      "status": "PASS",
+      "message": "OK",
+      "metrics": {
+        "pou_success_rate": 0.878,
+        "safety_score_avg": 0.998,
+        "error_rate_avg": 0.0012,
+        "latency_ms_avg": 602
+      },
+      "ts": "2025-09-12T10:19:22+09:00"
+    },
+    {
+      "day": 32,
+      "status": "PASS",
+      "message": "OK",
+      "metrics": {
+        "pou_success_rate": 0.9,
+        "safety_score_avg": 0.985,
+        "error_rate_avg": 0.003,
+        "latency_ms_avg": 700
+      },
+      "ts": "2025-09-12T10:19:22+09:00"
+    },
+    {
+      "day": 33,
+      "status": "PASS",
+      "message": "OK",
+      "metrics": {
+        "pou_success_rate": 0.85,
+        "safety_score_avg": 0.97,
+        "error_rate_avg": 0.004,
+        "latency_ms_avg": 800
+      },
+      "ts": "2025-09-12T10:19:22+09:00"
+    },
+    {
+      "day": 34,
+      "status": "PASS",
+      "message": "OK",
+      "metrics": {
+        "pou_success_rate": 0.9,
+        "safety_score_avg": 0.995,
+        "error_rate_avg": 0.004,
+        "latency_ms_avg": 823
+      },
+      "ts": "2025-09-12T10:19:22+09:00"
+    }
+  ],
+  "pass_rate": 1.0,
+  "metrics_avg": {
+    "pou_success_rate": 0.9014074074074074,
+    "safety_score_avg": 0.9854814814814817,
+    "error_rate_avg": 0.003007407407407409,
+    "latency_ms_avg": 660.1851851851852
+  },
+  "loss": 0.0
+}

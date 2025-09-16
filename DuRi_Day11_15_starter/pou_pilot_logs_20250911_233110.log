@@ -1,0 +1,9 @@
+2025-09-11 23:31:10,310 - pou_pilot_manager - INFO - Running PoU pilot batch for domains: ['medical', 'rehab', 'coding']
+2025-09-11 23:31:10,310 - pou_pilot_manager - INFO - Starting PoU pilot for domain: medical
+2025-09-11 23:31:10,310 - pou_pilot_manager - INFO - Successfully started pilot for medical
+2025-09-11 23:31:10,310 - pou_pilot_manager - INFO - Starting PoU pilot for domain: rehab
+2025-09-11 23:31:10,310 - pou_pilot_manager - INFO - Successfully started pilot for rehab
+2025-09-11 23:31:10,310 - pou_pilot_manager - INFO - Starting PoU pilot for domain: coding
+2025-09-11 23:31:10,310 - pou_pilot_manager - INFO - Successfully started pilot for coding
+2025-09-11 23:31:10,310 - pou_pilot_manager - INFO - Monitoring PoU pilots
+2025-09-11 23:31:10,310 - pou_pilot_manager - INFO - Generating PoU pilot report

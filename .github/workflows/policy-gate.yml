@@ -1,0 +1,26 @@
+name: policy-gate
+on:
+  workflow_dispatch:
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - name: Install Python deps
+        run: python -m pip install --upgrade pip && pip install pyyaml
+      - run: sudo apt-get update && sudo apt-get install -y jq coreutils
+      - name: Smoke plan
+        run: |
+          d=$(date +%F)
+          mkdir -p logs/auto_code_loop_beta/$d docs
+          echo '{"plan":[{"file":"docs/test.md"}]}' > logs/auto_code_loop_beta/$d/plan.json
+          : > docs/test.md
+      - name: Gate verify
+        run: |
+          bash tools/policy_verify.sh \
+            --policy policies/auto_code_loop/gate_policy.yaml \
+            --plan logs/auto_code_loop_beta/$(date +%F)/plan.json --explain
+      - name: Regression tests
+        run: bash tests/policy/test_policy_verify.sh

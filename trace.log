@@ -1,0 +1,70 @@
++ ./apply.sh:2:MAIN: set -Eeuo pipefail
++ ./apply.sh:7:MAIN: VERIFY_ONLY=0
++ ./apply.sh:8:MAIN: KEEP_TMP=0
++ ./apply.sh:9:MAIN: FULL_MANIFEST=0
++ ./apply.sh:10:MAIN: QUIET=0
++ ./apply.sh:11:MAIN: for arg in "$@"
++ ./apply.sh:12:MAIN: case "$arg" in
++ ./apply.sh:13:MAIN: VERIFY_ONLY=1
++ ./apply.sh:23:MAIN: APPLY=0
++ ./apply.sh:24:MAIN: USB=/mnt/usb
++ ./apply.sh:25:MAIN: HDD=/mnt/hdd
++ ./apply.sh:26:MAIN: PLAN=PLAN_FULL.jsonl
++ ./apply.sh:28:MAIN: CORE_OUT=/mnt/usb/CORE_PROTECTED
++ ./apply.sh:29:MAIN: FINAL_OUT=/mnt/usb/FINAL
++ ./apply.sh:30:MAIN: HDD_AR=/mnt/hdd/ARCHIVE
++ ./apply.sh:31:MAIN: META_DIR=/mnt/usb/CORE_PROTECTED/META
++ ./apply.sh:36:MAIN: jq -r 'if type=="array" then .[] else . end | .dst // empty' PLAN_FULL.jsonl
++ ./apply.sh:36:MAIN: grep -E -v '^/mnt/hdd/ARCHIVE/(FULL|INCR)/'
++ ./apply.sh:36:MAIN: grep .
++ ./apply.sh:72:MAIN: mkdir -p /mnt/usb/CORE_PROTECTED/META /mnt/usb/FINAL
++ ./apply.sh:73:MAIN: [[ 1 -eq 0 ]]
++ ./apply.sh:100:MAIN: [[ 0 -eq 0 ]]
++ ./apply.sh:100:MAIN: echo '== apply.sh :: APPLY=0 VERIFY_ONLY=1 KEEP_TMP=0 FULL_MANIFEST=0 QUIET=0 =='
++ ./apply.sh:101:MAIN: [[ 0 -eq 0 ]]
++ ./apply.sh:101:MAIN: echo '[PLAN] PLAN_FULL.jsonl'
++ ./apply.sh:106:MAIN: [[ 1 -eq 0 ]]
++ ./apply.sh:162:MAIN: [[ 0 -eq 0 ]]
++ ./apply.sh:162:MAIN: echo
++ ./apply.sh:162:MAIN: echo ====================
++ ./apply.sh:162:MAIN: echo '[VERIFY & SUMMARY]'
++ ./apply.sh:162:MAIN: echo ====================
+++ ./apply.sh:164:MAIN: mktemp -d
++ ./apply.sh:164:MAIN: tmpdir=/tmp/tmp.Fq9INcgM0Q
++ ./apply.sh:165:MAIN: [[ 0 -eq 0 ]]
++ ./apply.sh:165:MAIN: trap 'rm -rf "$tmpdir"' EXIT
++ ./apply.sh:167:MAIN: jq -r 'if type=="array" then .[] else . end | select(.src|test("/FULL__")) | (.src|capture("(?<base>FULL__.*)").base)' PLAN_FULL.jsonl
++ ./apply.sh:167:MAIN: sort -u
++ ./apply.sh:168:MAIN: jq -r 'if type=="array" then .[] else . end | select(.src|test("/INCR__")) | (.src|capture("(?<base>INCR__.*)").base)' PLAN_FULL.jsonl
++ ./apply.sh:168:MAIN: sort -u
++ ./apply.sh:170:MAIN: FULL_DIR=/mnt/hdd/ARCHIVE/FULL
++ ./apply.sh:171:MAIN: INCR_DIR=/mnt/hdd/ARCHIVE/INCR
++ ./apply.sh:173:MAIN: ok_full=0
++ ./apply.sh:173:MAIN: bad_full_cnt=0
++ ./apply.sh:174:MAIN: IFS=
++ ./apply.sh:174:MAIN: read -r base
++ ./apply.sh:175:MAIN: f=/mnt/hdd/ARCHIVE/FULL/FULL__2025-08-22__2044__host-duri-head.tar.zst
++ ./apply.sh:176:MAIN: [[ -f /mnt/hdd/ARCHIVE/FULL/FULL__2025-08-22__2044__host-duri-head.tar.zst ]]
++ ./apply.sh:177:MAIN: check_one_exact /mnt/hdd/ARCHIVE/FULL/FULL__2025-08-22__2044__host-duri-head.tar.zst
++ ./apply.sh:45:check_one_exact: local f=/mnt/hdd/ARCHIVE/FULL/FULL__2025-08-22__2044__host-duri-head.tar.zst base stem meta line hfile hmeta
+++ ./apply.sh:46:check_one_exact: basename /mnt/hdd/ARCHIVE/FULL/FULL__2025-08-22__2044__host-duri-head.tar.zst
++ ./apply.sh:46:check_one_exact: base=FULL__2025-08-22__2044__host-duri-head.tar.zst
++ ./apply.sh:47:check_one_exact: stem=FULL__2025-08-22__2044__host-duri-head
++ ./apply.sh:48:check_one_exact: meta=/mnt/usb/CORE_PROTECTED/META/SHA256SUMS.FULL__2025-08-22__2044__host-duri-head.txt
++ ./apply.sh:50:check_one_exact: [[ -f /mnt/usb/CORE_PROTECTED/META/SHA256SUMS.FULL__2025-08-22__2044__host-duri-head.txt ]]
+++ ./apply.sh:51:check_one_exact: grep -F -- '  FULL__2025-08-22__2044__host-duri-head.tar.zst' /mnt/usb/CORE_PROTECTED/META/SHA256SUMS.FULL__2025-08-22__2044__host-duri-head.txt
+++ ./apply.sh:51:check_one_exact: head -1
++ ./apply.sh:51:check_one_exact: line='1041c3aa87d6ef51a06a7e1c314cf72a33596f3903f2fb368d31d3727f0dcbf2  FULL__2025-08-22__2044__host-duri-head.tar.zst'
++ ./apply.sh:52:check_one_exact: [[ -z 1041c3aa87d6ef51a06a7e1c314cf72a33596f3903f2fb368d31d3727f0dcbf2  FULL__2025-08-22__2044__host-duri-head.tar.zst ]]
+++ ./apply.sh:53:check_one_exact: printf '%s\n' '1041c3aa87d6ef51a06a7e1c314cf72a33596f3903f2fb368d31d3727f0dcbf2  FULL__2025-08-22__2044__host-duri-head.tar.zst'
+++ ./apply.sh:53:check_one_exact: tr -d '\r'
+++ ./apply.sh:53:check_one_exact: awk '{print $1}'
++ ./apply.sh:53:check_one_exact: hmeta=1041c3aa87d6ef51a06a7e1c314cf72a33596f3903f2fb368d31d3727f0dcbf2
+++ ./apply.sh:60:check_one_exact: sha256sum -- /mnt/hdd/ARCHIVE/FULL/FULL__2025-08-22__2044__host-duri-head.tar.zst
+++ ./apply.sh:60:check_one_exact: awk '{print $1}'
++ ./apply.sh:60:check_one_exact: hfile=1041c3aa87d6ef51a06a7e1c314cf72a33596f3903f2fb368d31d3727f0dcbf2
++ ./apply.sh:61:check_one_exact: [[ 1041c3aa87d6ef51a06a7e1c314cf72a33596f3903f2fb368d31d3727f0dcbf2 == \1\0\4\1\c\3\a\a\8\7\d\6\e\f\5\1\a\0\6\a\7\e\1\c\3\1\4\c\f\7\2\a\3\3\5\9\6\f\3\9\0\3\f\2\f\b\3\6\8\d\3\1\d\3\7\2\7\f\0\d\c\b\f\2 ]]
++ ./apply.sh:62:check_one_exact: [[ 0 -eq 0 ]]
++ ./apply.sh:62:check_one_exact: echo '[OK] FULL__2025-08-22__2044__host-duri-head.tar.zst'
++ ./apply.sh:177:MAIN: (( ok_full++ ))
++ ./apply.sh:1:MAIN: rm -rf /tmp/tmp.Fq9INcgM0Q

@@ -1,13 +1,31 @@
+<<<<<<< HEAD
+# 백업 제외 파일 목록
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.log
+*.tmp
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+=======
 # DuRi Control System 백업 제외 파일 목록
 
 # 기존 백업 파일들
 *.tar.gz
 *.zip
 *.backup
+>>>>>>> gate-test
 
 # Git 관련
 .git/
 .gitignore
+<<<<<<< HEAD
+=======
 .gitmodules
 
 # 로그 파일들
@@ -32,10 +50,26 @@ env/
 *.db
 *.sqlite
 *.sqlite3
+>>>>>>> gate-test
 
 # Docker 관련
 .dockerignore
 
+<<<<<<< HEAD
+# 환경 변수 (보안상 제외)
+.env
+.env.local
+.env.prod
+
+# 로그 파일들
+logs/
+*.log
+
+# 백업 폴더들 (중복 방지)
+duri_snapshots/
+backups/
+backup/
+=======
 # IDE 설정
 .vscode/
 .idea/
@@ -49,10 +83,35 @@ backups/
 # 테스트 관련
 tests/
 test_*.py
+>>>>>>> gate-test
 
 # 임시 파일들
 *.tmp
 *.temp
+<<<<<<< HEAD
+*.bak
+
+# IDE 설정
+.vscode/
+.idea/
+*.sublime-*
+
+# OS 생성 파일
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Python 가상환경
+venv/
+env/
+.venv/
+.env/
+
+# Node.js (있다면)
+node_modules/
+npm-debug.log*
+
+=======
 .DS_Store
 Thumbs.db
 
@@ -66,3 +125,57 @@ brain_logs.txt
 
 # 스크립트 파일들
 *.sh 
+# 백업 제외 파일 목록
+*.pyd
+.Python
+*.swp
+*.swo
+*~
+# 환경 변수 (보안상 제외)
+# .env
+# .env.local
+# .env.prod
+# 백업 폴더들 (중복 방지)
+# backup/  # disabled to include docs/scripts
+*.bak
+*.sublime-*
+# OS 생성 파일
+desktop.ini
+# Python 가상환경
+# .env/
+# Node.js (있다면)
+node_modules/
+npm-debug.log*
+>>>>>>> gate-test
+# 빌드 결과물
+dist/
+build/
+*.egg-info/
+<<<<<<< HEAD
+
+# 테스트 결과
+.coverage
+.pytest_cache/
+htmlcov/
+
+# Docker 볼륨 데이터
+postgres_data/
+redis_data/ 
+=======
+# 테스트 결과
+.coverage
+htmlcov/
+# Docker 볼륨 데이터
+postgres_data/
+redis_data/
+var/test_restore/
+var/test_restore/**
+**/node_modules/**
+**/__pycache__/**
+var/test_restore
+var/test_restore/
+var/test_restore/**
+./var/test_restore
+./var/test_restore/
+./var/test_restore/**
+>>>>>>> gate-test

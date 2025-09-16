@@ -1,0 +1,55 @@
+name: Phase-2 Suite Legacy
+
+on:
+  push:
+    branches: [ "main", "sig-test" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: phase2-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      P2_RACE_MB: "2"
+      P2_CRASH_MB: "2"
+      P2_TIMEOUT: "2s"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install jq
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+
+      - name: Help (for log readability)
+        run: make help || true
+
+      - name: Run test-all-ci
+        run: make test-all-ci
+
+      - name: Summarize key results
+        if: always()
+        run: |
+          echo "## Phase-2 summary" >> "$GITHUB_STEP_SUMMARY"
+          for f in .test-artifacts/step1.json .test-artifacts/step2.json .test-artifacts/matrix.verify.json; do
+            if [ -s "$f" ]; then
+              echo -n "- \`$f\`: " >> "$GITHUB_STEP_SUMMARY"
+              jq -c '{rc,full_ok:(.full_ok? // 0),full_bad:(.full_bad? // 0)}' "$f" >> "$GITHUB_STEP_SUMMARY" || true
+            fi
+          done
+
+      - name: Upload test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-artifacts-${{ github.run_id }}
+          path: .test-artifacts/**
+          if-no-files-found: warn

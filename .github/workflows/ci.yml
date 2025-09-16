@@ -1,0 +1,49 @@
+name: Phase-2 Suite
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  ab-days:
+    name: ab-days
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "run ab suites ok"
+
+  pilot-logs:
+    name: pilot-logs
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "pilot logs ok"
+
+  repo-guards:
+    name: guards
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "guards ok"
+
+  tests:
+    name: tests
+    runs-on: ubuntu-latest
+    # ✅ 집계 대상 잡을 한 파일 안에서 needs로 연결
+    needs: [ab-days, pilot-logs, repo-guards]
+    # ✅ 상위 잡 실패/취소여도 항상 실행
+    if: ${{ always() }}
+    steps:
+      - name: Print results
+        run: |
+          echo "ab-days:      ${{ needs.ab-days.result }}"
+          echo "pilot-logs:   ${{ needs.pilot-logs.result }}"
+          echo "repo-guards:  ${{ needs.repo-guards.result }}"
+      - name: Decide
+        run: |
+          ok_ab="${{ needs.ab-days.result }}"
+          ok_pl="${{ needs.pilot-logs.result }}"
+          ok_rg="${{ needs.repo-guards.result }}"
+          if [ "$ok_ab" = "success" ] && [ "$ok_pl" = "success" ] && [ "$ok_rg" = "success" ]; then
+            echo "ALL GREEN"
+          else
+            echo "At least one dependency failed or was skipped"
+            exit 1
+          fi

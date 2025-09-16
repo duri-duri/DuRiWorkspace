@@ -1,0 +1,13 @@
+{
+  "verification_summary": {
+    "total_days": 0,
+    "pass_count": 0,
+    "fail_count": 0,
+    "skip_count": 0,
+    "pass_rate": 0,
+    "loss_function": 0
+  },
+  "average_metrics": {},
+  "day_results": [],
+  "timestamp": "2025-09-12T10:55:03.661485"
+}

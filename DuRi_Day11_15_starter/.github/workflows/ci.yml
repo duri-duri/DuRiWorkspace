@@ -1,0 +1,52 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash ci/ensure_real_bench.sh
+
+  ab-matrix:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.10", "3.11"]
+        day: [36, 37, 38, 39]
+        variant: ["A", "B"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install
+        run: pip install -r requirements.txt
+      - name: Run A/B
+        run: make run AS_OF_DAY=${{ matrix.day }} VAR=${{ matrix.variant }} SEED=42 CONFIG=configs/day${{ matrix.day }}.yaml
+      - name: Promotion gate
+        run: python scripts/promotion_gate.py outputs/day${{ matrix.day }}/var_${{ matrix.variant }}/results.json policies/promotion.yaml || true
+      - name: Upload results artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: "day${{ matrix.day }}_${{ matrix.variant }}_results"
+          path: outputs/day${{ matrix.day }}/var_${{ matrix.variant }}/results.json
+          retention-days: 7
+
+      - name: Summarize gate
+        if: always()
+        run: |
+          echo "### Day ${{ matrix.day }} VAR=${{ matrix.variant }}" >> $GITHUB_STEP_SUMMARY
+          cat outputs/day${{ matrix.day }}/var_${{ matrix.variant }}/results.json | jq -r '"- delta: \(.objective_delta)\n- p: \(.p_value)\n- gate: \(.gate_pass)"' >> $GITHUB_STEP_SUMMARY
+
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install
+        run: pip install -r requirements.txt
+      - name: Run tests
+        run: pytest -v

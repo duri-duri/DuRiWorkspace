@@ -1,0 +1,50 @@
+{
+  "reviews": [
+    {
+      "review_id": "REVIEW_a5d004f9",
+      "file_path": "example.py",
+      "overall_score": 65.0,
+      "security_score": 60,
+      "performance_score": 100,
+      "maintainability_score": 100,
+      "test_coverage_score": 0.0,
+      "issues_count": 2,
+      "suggestions_count": 0,
+      "approved": false
+    },
+    {
+      "review_id": "REVIEW_b959578e",
+      "file_path": "example.js",
+      "overall_score": 70.0,
+      "security_score": 80,
+      "performance_score": 100,
+      "maintainability_score": 100,
+      "test_coverage_score": 0.0,
+      "issues_count": 1,
+      "suggestions_count": 0,
+      "approved": false
+    }
+  ],
+  "summary": {
+    "pr_summary": {
+      "total_files": 2,
+      "approved_files": 0,
+      "rejected_files": 2,
+      "approval_rate": 0.0,
+      "avg_overall_score": 67.5,
+      "avg_security_score": 70.0,
+      "avg_performance_score": 100.0,
+      "avg_maintainability_score": 100.0,
+      "avg_test_coverage_score": 0.0,
+      "total_issues": 3,
+      "total_suggestions": 0
+    },
+    "recommendations": [
+      "보안 점수가 낮습니다. 보안 이슈를 우선적으로 해결하세요.",
+      "테스트 커버리지가 낮습니다. 테스트 코드를 추가하세요."
+    ],
+    "next_steps": [
+      "PR 수정 필요"
+    ]
+  }
+}

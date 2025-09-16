@@ -1,0 +1,15 @@
+# Day20 업그레이드: grid와 runner만 정의, baseline/목표/가중치는 eval/metrics.yaml + 운영 metrics.json에서 해석
+grid:
+  sampling_rate: [0.25, 0.5, 0.75, 1.0]
+  serialization: ["json", "msgpack", "protobuf"]
+  compression: ["none", "gzip", "zstd"]
+
+runner:
+  cmd: "bash tools/run_trace_bench.sh --sampling {sampling_rate} --ser {serialization} --comp {compression} --out {out_json}"
+
+io:
+  # 실운영 SLI/SLO 파일(기준 p95를 여기서 취득)
+  slo_metrics_json: "slo_sla_dashboard_v1/metrics.json"
+  # 리포트/산출물 기본 위치
+  out_dir: "trace_v2_perf_tuned/sweeps"
+

@@ -1,0 +1,4 @@
+# 통합 파사드 라우팅 비율(0,25,50,100)
+export DURI_UNIFIED_REASONING_ROLLOUT="${DURI_UNIFIED_REASONING_ROLLOUT:-0}"
+# 강제 사용(테스트용): force, off, auto
+export DURI_UNIFIED_REASONING_MODE="${DURI_UNIFIED_REASONING_MODE:-auto}"

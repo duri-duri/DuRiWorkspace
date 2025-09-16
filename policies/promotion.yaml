@@ -1,0 +1,9 @@
+version: 1
+delta:   { op: gt, value: 0 }      # 개선이어야 함
+p_value: { op: le, value: 0.05 }   # 유의수준 통과 (경계 포함)
+
+# 선택 게이트(필요 시 주석 해제)
+# mes:      { op: ge, value: 0.02 }   # 최소 실질 효과
+# ci_width: { op: le, value: 0.02 }   # 95%CI 폭 상한
+# n_A:      { min: 10 }
+# n_B:      { min: 10 }

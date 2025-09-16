@@ -1,0 +1,92 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PoU Pilot Log Entry Schema",
+  "description": "Schema for PoU pilot log entries across medical, rehab, and coding domains",
+  "type": "object",
+  "required": ["timestamp", "domain", "user_id", "session_id", "event_type", "metrics", "schema_version"],
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "UTC ISO timestamp with Z suffix"
+    },
+    "domain": {
+      "type": "string",
+      "enum": ["medical", "med", "medicine", "rehab", "rehabilitation", "coding", "code", "developer"],
+      "description": "PoU domain identifier (supports aliases)"
+    },
+    "user_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique user identifier"
+    },
+    "session_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Session identifier for grouping related events"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": ["session_start", "task_complete", "error", "session_end", "heartbeat"],
+      "description": "Type of logged event"
+    },
+    "metrics": {
+      "type": "object",
+      "required": ["latency_ms", "success_rate", "quality_score"],
+      "properties": {
+        "latency_ms": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Response latency in milliseconds"
+        },
+        "success_rate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Success rate as decimal (0.0 to 1.0)"
+        },
+        "quality_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Quality score (0 to 100)"
+        },
+        "error_count": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of errors in this session"
+        },
+        "canary_flag": {
+          "type": "boolean",
+          "description": "Whether this is a canary deployment"
+        }
+      },
+      "additionalProperties": false
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "PoU version identifier"
+        },
+        "environment": {
+          "type": "string",
+          "enum": ["dev", "staging", "prod"],
+          "description": "Deployment environment"
+        },
+        "region": {
+          "type": "string",
+          "description": "Geographic region"
+        }
+      },
+      "additionalProperties": false
+    },
+    "schema_version": {
+      "type": "string",
+      "enum": ["1.0.0"],
+      "description": "Schema version for compatibility tracking"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+rc=0
+remote="${1:-}"  # origin 등
+
+# stdin으로 다수 ref가 들어올 수 있음
+while read -r lref lsha rref rsha; do
+  if [[ "$remote" == "origin" && "$rref" == "refs/heads/main" ]]; then
+    echo "❌ Push to main blocked. Use PR."
+    rc=1
+  fi
+done
+
+exit "$rc"

@@ -1,0 +1,40 @@
+# Day41~43: PoU Pilot Canary Configurations
+# 기존 PoU 설정을 활용한 도메인별 canary 설정
+
+# Medical Domain Canary
+medical_canary:
+  percentage: 10.0
+  latency_threshold_ms: 800
+  quality_threshold: 85.0
+  success_rate_threshold: 0.95
+  error_rate_threshold: 0.05
+  rollout_strategy: "gradual"
+  monitoring_window_hours: 24
+
+# Rehab Domain Canary  
+rehab_canary:
+  percentage: 5.0
+  latency_threshold_ms: 1000
+  quality_threshold: 80.0
+  success_rate_threshold: 0.90
+  error_rate_threshold: 0.10
+  rollout_strategy: "gradual"
+  monitoring_window_hours: 48
+
+# Coding Domain Canary
+coding_canary:
+  percentage: 5.0
+  latency_threshold_ms: 2000
+  quality_threshold: 85.0
+  success_rate_threshold: 0.95
+  error_rate_threshold: 0.05
+  rollout_strategy: "gradual"
+  monitoring_window_hours: 12
+
+# Global Canary Settings
+global_canary:
+  max_rollout_percentage: 50.0
+  min_monitoring_hours: 12
+  auto_rollback_enabled: true
+  alert_channels: ["slack", "email"]
+  escalation_threshold_minutes: 30

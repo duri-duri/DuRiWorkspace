@@ -1,0 +1,24 @@
+2025-09-11 23:46:27,407 - pou_manager - INFO - Initialized PoU domain: medical
+2025-09-11 23:46:27,407 - pou_manager - INFO - Initialized PoU domain: rehab
+2025-09-11 23:46:27,407 - pou_manager - INFO - Initialized PoU domain: coding
+2025-09-11 23:46:27,407 - pou_manager - INFO - Started PoU pilot for domain: medical
+2025-09-11 23:46:27,407 - pou_manager - INFO - Updated PoU progress for medical: 25%
+2025-09-11 23:46:27,507 - pou_manager - INFO - Updated PoU progress for medical: 50%
+2025-09-11 23:46:27,608 - pou_manager - INFO - Updated PoU progress for medical: 75%
+2025-09-11 23:46:27,708 - pou_manager - INFO - Updated PoU progress for medical: 100%
+2025-09-11 23:46:27,808 - pou_manager - INFO - Completed PoU pilot for domain: medical
+2025-09-11 23:46:27,808 - pou_manager - INFO - Started PoU pilot for domain: rehab
+2025-09-11 23:46:27,808 - pou_manager - INFO - Updated PoU progress for rehab: 25%
+2025-09-11 23:46:27,908 - pou_manager - INFO - Updated PoU progress for rehab: 50%
+2025-09-11 23:46:28,009 - pou_manager - INFO - Updated PoU progress for rehab: 75%
+2025-09-11 23:46:28,109 - pou_manager - INFO - Updated PoU progress for rehab: 100%
+2025-09-11 23:46:28,209 - pou_manager - INFO - Completed PoU pilot for domain: rehab
+2025-09-11 23:46:28,209 - pou_manager - INFO - Started PoU pilot for domain: coding
+2025-09-11 23:46:28,209 - pou_manager - INFO - Updated PoU progress for coding: 25%
+2025-09-11 23:46:28,310 - pou_manager - INFO - Updated PoU progress for coding: 50%
+2025-09-11 23:46:28,410 - pou_manager - INFO - Updated PoU progress for coding: 75%
+2025-09-11 23:46:28,510 - pou_manager - INFO - Updated PoU progress for coding: 100%
+2025-09-11 23:46:28,610 - pou_manager - INFO - Completed PoU pilot for domain: coding
+2025-09-11 23:46:28,611 - pou_manager - INFO - Generating PoU dashboard
+2025-09-11 23:46:28,611 - pou_manager - INFO - Generating PoU report
+2025-09-11 23:46:28,611 - pou_manager - INFO - Generating PoU dashboard

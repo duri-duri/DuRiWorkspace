@@ -1,16 +1,33 @@
-!logs/.gitkeep
-.env
-# 백업 및 아카이브는 기본 차단
-DuRiCore_backup_*.tar.gz
-DuRiCore_Day*.tar.gz
-DuRiCore_Phase*.tar.gz
-*.tar
-*.tar.gz
-*.tgz
-*.zst
-backup/
 
-# --- 아래 3개만 예외 허용(화이트리스트) ---
-!DuRiCore_Backup_20250807_002146.tar.gz
-!DuRiCore_ChatGPT_Analysis_Backup_20250807_100544.tar.gz
-!DuRiCore_backup_20250807_20250807_131858_current_state_after_strategic_learning_completion.tar.gz
+# Day41~43: PoU Pilot Logs (all variants, kept via CI artifacts)
+# Day41~43: PoU Pilot Logs (kept via CI artifacts)
+# 가상환경/캐시
+# 로그/아카이브/대용량
+# 리포트/벤치/미러 산출물
+# 백업/스냅샷
+*.7z
+*.bak
+*.db
+*.jsonl
+*.log
+*.sqlitebackups/
+*.tar
+*.tar.*
+*.zip
+*.zst
+.benchmarks/
+.ipynb_checkpoints/
+.venv/
+DuRi_Day11_15_starter/outputs/**
+__pycache__/
+backup_phase*/ 
+backup_repository/
+backups/
+code_pilot_v2_logs/logs.jsonl
+coding_pilot_v2_logs/logs.jsonl
+cursor_extension/node_modules/
+duri_snapshots/
+med_pilot_v2_logs/logs.jsonl
+medical_pilot_v2_logs/logs.jsonl
+rehab_pilot_v2_logs/logs.jsonl
+var/reports/

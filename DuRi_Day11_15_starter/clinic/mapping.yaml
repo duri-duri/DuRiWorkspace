@@ -1,0 +1,16 @@
+schema: clinic.mapping.v1
+# source 키에 병원자료 파일명/키워드를 매핑합니다.
+contraindications:
+  source: ["*금기*", "*주의*", "contraindication*"]
+  target: auto_code_loop_beta/gates/risk_checks_rehab_protocol.yaml:high_risk_triggers
+dosing_rules:
+  source: ["*세션*", "*분/세션*", "*주당*", "*볼륨*", "RPE*"]
+  target:
+    - auto_code_loop_beta/gates/risk_checks_rehab_protocol.yaml:dosing_guards
+    - configs/objective_rehab.yaml:thresholds
+efficiency_principles:
+  source: ["*시간 대비*", "*효율*", "*지속가능*", "*순응*"]
+  target: configs/objective_rehab.yaml:weights
+exercise_cases:
+  source: ["*운동 루틴*", "*운동 예시*", "*케이스*", "*사례*"]
+  target: cases/rehab/examples.jsonl

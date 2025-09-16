@@ -1,1 +1,0 @@
-web: gunicorn app.services.real_family_interaction_mvp:app

@@ -1,0 +1,26 @@
+# Promotion Gate Policy v1.1
+# 변경사항: 효과크기/CI폭/검정력/최소샘플 기준 추가
+policy_version: "v1.1"
+
+# 기본 규칙 (항상 활성화)
+delta:
+  op: "gt"
+  value: 0
+p_value:
+  op: "le"
+  value: 0.05
+
+# 확장 규칙 (선택적 활성화 - 기본적으로 비활성화)
+# ci_width:
+#   op: "le"
+#   value: 0.03
+# mes:
+#   op: "ge"
+#   value: 0.02
+# n_A:
+#   min: 30
+# n_B:
+#   min: 30
+# power:
+#   op: "ge"
+#   value: 0.8

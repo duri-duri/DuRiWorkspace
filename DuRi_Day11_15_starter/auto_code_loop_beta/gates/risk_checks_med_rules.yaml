@@ -1,0 +1,14 @@
+schema: risk.rules.v1
+banned_phrases:
+  - "진단을 확정"
+  - "처방전을 발급"
+  - "응급이 아님"      # triage 단정 금지
+high_risk_triggers:
+  - regex: "(가슴통증|호흡곤란|의식저하)"
+    action: "advise_emergency"
+  - regex: "(대량출혈|성폭력|자살)"
+    action: "advise_emergency"
+disclaimer_required: true
+pii_guard:
+  detect: ["주민등록번호","전화번호","주소"]
+  action: "mask_or_block"

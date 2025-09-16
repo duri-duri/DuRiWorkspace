@@ -1,0 +1,10 @@
+{
+  "plan": [
+    {
+      "file": "docs/e1.md"
+    },
+    {
+      "file": "duri_modules/e2.py"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "requests": 10000,
+  "failures": 80,
+  "updated_at": "2025-09-10 01:44 ",
+  "baseline_p95_ms": 750,
+  "p95_ms": 780,
+  "p99_ms": 1100,
+  "slo_p99_ms": 1100,
+  "canary_traffic_pct": 10
+}

@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+echo "=== WSL 마운트 및 이미지 확인 ==="
+ls -la /mnt/ | grep -E "(g|G|usb|USB)" || echo "USB 관련 없음"
+echo ""
+echo "=== /mnt/duri2_usb 확인 ==="
+ls -la /mnt/duri2_usb/ 2>/dev/null || echo "duri2_usb 없음"
+echo ""
+echo "=== /mnt/usb 확인 ==="
+ls -la /mnt/usb/ 2>/dev/null || echo "usb 없음"
+echo ""
+echo "=== 이미지 파일 확인 ==="
+find /mnt -name "duri2.img" 2>/dev/null || echo "duri2.img 없음"
+echo ""
+echo "=== 루프백 디바이스 확인 ==="
+losetup -a || echo "루프백 디바이스 없음"
+echo ""
+echo "=== 현재 마운트된 모든 디바이스 ==="
+mount | grep -E "(usb|USB|/mnt/|/media/)" || echo "USB 마운트 없음"
+echo ""
+echo "=== /dev/sd* 디바이스 확인 ==="
+ls -la /dev/sd* 2>/dev/null || echo "/dev/sd* 디바이스 없음"
+echo ""
+echo "=== /proc/mounts 확인 ==="
+cat /proc/mounts | grep -E "(usb|USB|/mnt/|/media/)" || echo "USB 마운트 없음"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

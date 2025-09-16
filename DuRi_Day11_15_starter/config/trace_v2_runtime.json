@@ -1,0 +1,10 @@
+{
+  "schema": "trace_v2.runtime.v1",
+  "updated_at": "2025-09-10T17:10:56+09:00",
+  "source": "configs/trace_v2_selected.json",
+  "trace": {
+    "sampling_rate": 1,
+    "serialization": "msgpack",
+    "compression": "none"
+  }
+}

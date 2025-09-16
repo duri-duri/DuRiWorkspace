@@ -1,0 +1,35 @@
+{
+  "timestamp": "2025-09-11T23:43:50.380901",
+  "v1_protocol_version": "1.0",
+  "total_users": 2,
+  "total_routines": 2,
+  "v1_protocol_config": {
+    "session_duration_min": 20,
+    "weekly_frequency": 4,
+    "checkup_weeks": 4,
+    "rpe_range": [
+      4,
+      6
+    ],
+    "pain_threshold": 5,
+    "volume_increase_limit": 0.1,
+    "compliance_threshold": 0.6
+  },
+  "summary": {
+    "avg_difficulty_score": 1.11,
+    "avg_safety_score": 92.5,
+    "avg_effectiveness_score": 51.66666666666667,
+    "avg_v1_compliance_score": 85.0,
+    "avg_rpe_score": 50.0,
+    "avg_pain_management_score": 100.0,
+    "avg_routine_duration": 17.5
+  },
+  "user_profiles": [
+    "v1_user_001",
+    "v1_user_002"
+  ],
+  "routines": [
+    "v1_routine_v1_user_001_1757601830",
+    "v1_routine_v1_user_002_1757601830"
+  ]
+}
