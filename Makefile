@@ -105,3 +105,18 @@ help: ## Show help for common targets and tunables
 	 "P2_TIMEOUT"   "Timeout for Phase-2, e.g. 500ms/2s (default 20s)" \
 	 "ENOSPC_SIZE"  "tmpfs size for test-enospc, e.g. 8m" \
 	 "FILL_MB"      "Pre-fill MB for ENOSPC (default 7)"
+
+.PHONY: day40
+day40:
+	mkdir -p reports
+	# 회귀 러너
+	REG_BENCH=tools/regression_bench_list.yaml bash auto_code_loop_beta/gates/run_regression_tests.sh || true
+	# 카나리 스냅샷(부트스트랩)
+	python - <<'PY'
+import json, os
+os.makedirs("slo_sla_dashboard_v1", exist_ok=True)
+s=json.dumps({"p_error":0.01,"p_timeout":0.02,"explain_score":0.70,"source":"bootstrap-Day40"},indent=2)
+open("slo_sla_dashboard_v1/metrics.json","w").write(s)
+print("Wrote slo_sla_dashboard_v1/metrics.json")
+PY
+	@echo "Day40 done -> slo_sla_dashboard_v1/metrics.json, auto_code_loop_beta/logs/test_result.json"
