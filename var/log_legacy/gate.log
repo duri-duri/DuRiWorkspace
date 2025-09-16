@@ -1,8 +1,0 @@
-[2025-08-14 20:52:07] ▶ PRE-REWRITE gate start
-[2025-08-14 21:59:07] ▶ PRE-REWRITE gate start
-[2025-08-14 22:00:03] ✅ CORE backup ok
-[2025-08-14 22:00:04] ✅ PRE-REWRITE done
-[2025-08-14 22:00:30] ▶ POST-REWRITE gate start
-[2025-08-14 22:00:32] ✅ quality check passed
-[2025-08-14 22:01:26] ✅ CORE backup ok
-[2025-08-14 22:01:26] ✅ POST-REWRITE done

@@ -36,3 +36,8 @@ verify_out/
 var/
 usb_backup_analysis/
 logs/
+# 산출물/아티팩트 (VCS 제외)
+usb_backup_analysis/
+var/
+backups/
+temp_extract_*
