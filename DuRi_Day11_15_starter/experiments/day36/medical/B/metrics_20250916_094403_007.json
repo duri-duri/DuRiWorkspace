@@ -1,0 +1,6 @@
+{
+  "latency_ms": 1587.0,
+  "accuracy": 0.9566666666666667,
+  "explainability": 0.8966666666666666,
+  "failure_rate": 0.0
+}
