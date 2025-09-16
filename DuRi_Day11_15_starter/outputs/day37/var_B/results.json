@@ -1,0 +1,14 @@
+{
+  "objective_delta": -0.075127,
+  "t_stat": -5.57,
+  "p_value": 0.05,
+  "n_A": 15,
+  "n_B": 15,
+  "mean_A": 0.661747,
+  "mean_B": 0.736873,
+  "gate_pass": false,
+  "gate_reasons": [
+    "delta fail: -0.075127 !gt 0",
+    "p_value ok"
+  ]
+}

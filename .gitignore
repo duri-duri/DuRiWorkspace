@@ -26,3 +26,14 @@ __pycache__/
 backups/
 backup_repository/
 cursor_extension/node_modules/
+# Day41~43: PoU Pilot Logs (kept via CI artifacts)
+medical_pilot_v2_logs/logs.jsonl
+rehab_pilot_v2_logs/logs.jsonl
+code_pilot_v2_logs/logs.jsonl
+
+# Day41~43: PoU Pilot Logs (all variants, kept via CI artifacts)
+medical_pilot_v2_logs/logs.jsonl
+med_pilot_v2_logs/logs.jsonl
+rehab_pilot_v2_logs/logs.jsonl
+coding_pilot_v2_logs/logs.jsonl
+code_pilot_v2_logs/logs.jsonl
