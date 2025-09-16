@@ -50,43 +50,41 @@ def eval_rule(name: str, value: Any, rule: Dict[str, Any]) -> Tuple[bool, str]:
     return ok, (f"{name} ok" if ok else f"{name} fail: {val} !{op} {thr}")
 
 def evaluate(results: Dict[str, Any], policy: Dict[str, Any]) -> Tuple[bool, List[str]]:
-    reasons: List[str] = []
-    checks: List[Tuple[bool, str]] = []
+    """일반화된 정책 평가: 모든 정책 규칙을 자동으로 평가"""
+    
+    def ci_width_val(r: Dict[str, Any]):
+        """CI 폭 계산"""
+        lo, hi = r.get("ci_low"), r.get("ci_high")
+        if lo is None or hi is None:
+            return None
+        try:
+            return Decimal(str(hi)) - Decimal(str(lo))
+        except Exception:
+            return None
 
-    # results 키 매핑
-    keymap = {
-        "delta": "objective_delta",
-        "p_value": "p_value",
-        "t_stat": "t_stat",
-        "n_A": "n_A",
-        "n_B": "n_B",
+    # 특별한 getter들 (계산형 파생지표)
+    getters = {
+        "delta":    lambda r: r.get("objective_delta"),
+        "p_value":  lambda r: r.get("p_value"),
+        "ci_width": ci_width_val,
+        "mes":      lambda r: abs(float(r.get("objective_delta", 0))) if r.get("objective_delta") is not None else None,
     }
-    for pol_key, res_key in keymap.items():
-        if pol_key in policy:
-            checks.append(eval_rule(pol_key, results.get(res_key), policy[pol_key]))
 
-    # 최소 효과크기(|delta|)
-    if "mes" in policy:
-        delta_val = as_decimal(results.get("objective_delta"))
-        thr = as_decimal(policy["mes"].get("value"))
-        op = policy["mes"].get("op", "ge")
-        if delta_val is None or thr is None or op not in OPS:
-            checks.append((False, f"mes invalid"))
-        else:
-            ok = OPS[op](abs(delta_val), thr)
-            checks.append((ok, "mes ok" if ok else f"mes fail: |{delta_val}| !{op} {thr}"))
+    checks: List[Tuple[bool, str]] = []
+    
+    # 정책에 정의된 모든 키를 평가 (메타데이터 제외)
+    for name, rule in (policy or {}).items():
+        # 메타데이터 필드들은 평가에서 제외
+        if name in ["policy_version"] or not isinstance(rule, dict):
+            continue
+            
+        # 정의된 getter가 있으면 사용, 없으면 동명이의 결과 필드 사용
+        value = getters.get(name, lambda r: r.get(name))(results)
+        ok, msg = eval_rule(name, value, rule)
+        checks.append((ok, msg))
 
-    # CI 폭(ci_high - ci_low)
-    if "ci_width" in policy:
-        hi = as_decimal(results.get("ci_high"))
-        lo = as_decimal(results.get("ci_low"))
-        width = (hi - lo) if (hi is not None and lo is not None) else None
-        checks.append(eval_rule("ci_width", width, policy["ci_width"]))
-
-    ok_all = True
-    for ok, msg in checks:
-        reasons.append(msg)
-        ok_all &= ok
+    ok_all = all(ok for ok, _ in checks) if checks else True
+    reasons = [msg for _, msg in checks] if checks else ["no_policy_rules"]
     return ok_all, reasons
 
 def cli(argv: List[str]) -> int:

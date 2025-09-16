@@ -21,6 +21,17 @@ def file_hash(path: Path) -> str:
     h.update(path.read_bytes() if path.exists() else b"")
     return h.hexdigest()[:12]
 
+def load_policy_version() -> str:
+    """정책 파일에서 버전 정보 추출"""
+    policy_path = Path("policies/promotion.yaml")
+    if not policy_path.exists():
+        return "unknown"
+    try:
+        policy = yaml.safe_load(policy_path.read_text(encoding="utf-8"))
+        return policy.get("policy_version", "v1.0")
+    except Exception:
+        return "parse_error"
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--day", type=int, required=True)
@@ -39,6 +50,7 @@ def main():
         "dirty": bool(os.popen("git status --porcelain").read().strip()),
         "config": args.config,
         "config_hash": file_hash(Path(args.config)),
+        "policy_version": load_policy_version(),
         "seed": args.seed,
         "variant": args.variant,
         "day": args.day,
@@ -48,6 +60,10 @@ def main():
 
     # --- 코어 러너 호출 (게이트 훅 포함) ---
     from src.ab.core_runner import run_ab_with_gate  # type: ignore
+    from src.utils.seed import set_deterministic_seed  # type: ignore
+    
+    # 플래키 방지: 결정적 시드 설정
+    set_deterministic_seed(args.seed)
     
     # 게이트 정책 설정 읽기
     promotion_cfg = cfg.get("promotion", {}) or {}

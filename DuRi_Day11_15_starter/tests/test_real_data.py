@@ -52,5 +52,23 @@ def test_results_schema():
     # 데이터 타입 검증
     assert isinstance(results["objective_delta"], (int, float))
     assert isinstance(results["p_value"], (int, float))
+    assert isinstance(results["t_stat"], (int, float))
     assert isinstance(results["gate_pass"], (bool, type(None)))
     assert isinstance(results["gate_reasons"], list)
+    
+    # 선택적 확장 필드 검증 (있으면 타입 체킹)
+    optional_fields = {
+        "ci_low": (int, float),
+        "ci_high": (int, float), 
+        "power": (int, float),
+        "n_A": int,
+        "n_B": int,
+        "policy_version": str
+    }
+    
+    for field, expected_type in optional_fields.items():
+        if field in results:
+            if isinstance(expected_type, tuple):
+                assert isinstance(results[field], expected_type), f"{field} 타입 오류: {type(results[field])}"
+            else:
+                assert isinstance(results[field], expected_type), f"{field} 타입 오류: {type(results[field])}"

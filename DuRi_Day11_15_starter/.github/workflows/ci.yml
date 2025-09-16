@@ -25,12 +25,19 @@ jobs:
         run: make run AS_OF_DAY=${{ matrix.day }} VAR=${{ matrix.variant }} SEED=42 CONFIG=configs/day${{ matrix.day }}.yaml
       - name: Promotion gate
         run: python scripts/promotion_gate.py outputs/day${{ matrix.day }}/var_${{ matrix.variant }}/results.json policies/promotion.yaml || true
-      - name: Upload results (always)
+      - name: Upload results artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: day${{ matrix.day }}-var${{ matrix.variant }}-py${{ matrix.python }}
-          path: outputs/day${{ matrix.day }}/var_${{ matrix.variant }}/
+          name: "day${{ matrix.day }}_${{ matrix.variant }}_results"
+          path: outputs/day${{ matrix.day }}/var_${{ matrix.variant }}/results.json
+          retention-days: 7
+
+      - name: Summarize gate
+        if: always()
+        run: |
+          echo "### Day ${{ matrix.day }} VAR=${{ matrix.variant }}" >> $GITHUB_STEP_SUMMARY
+          cat outputs/day${{ matrix.day }}/var_${{ matrix.variant }}/results.json | jq -r '"- delta: \(.objective_delta)\n- p: \(.p_value)\n- gate: \(.gate_pass)"' >> $GITHUB_STEP_SUMMARY
 
   tests:
     runs-on: ubuntu-latest
