@@ -1,41 +1,33 @@
-# 백업/스냅샷
-backup_repository/
-backup_phase*/ 
-duri_snapshots/
 
-# 리포트/벤치/미러 산출물
-var/reports/
-.benchmarks/
-
+# Day41~43: PoU Pilot Logs (all variants, kept via CI artifacts)
+# Day41~43: PoU Pilot Logs (kept via CI artifacts)
 # 가상환경/캐시
-.venv/
-__pycache__/
-.ipynb_checkpoints/
-
 # 로그/아카이브/대용량
-*.log
+# 리포트/벤치/미러 산출물
+# 백업/스냅샷
+*.7z
+*.bak
+*.db
 *.jsonl
+*.log
+*.sqlitebackups/
 *.tar
 *.tar.*
 *.zip
-*.7z
 *.zst
-*.bak
-*.db
-*.sqlitebackups/
-backups/
-backup_repository/
-cursor_extension/node_modules/
-# Day41~43: PoU Pilot Logs (kept via CI artifacts)
-medical_pilot_v2_logs/logs.jsonl
-rehab_pilot_v2_logs/logs.jsonl
-code_pilot_v2_logs/logs.jsonl
-
-# Day41~43: PoU Pilot Logs (all variants, kept via CI artifacts)
-medical_pilot_v2_logs/logs.jsonl
-med_pilot_v2_logs/logs.jsonl
-rehab_pilot_v2_logs/logs.jsonl
-coding_pilot_v2_logs/logs.jsonl
-code_pilot_v2_logs/logs.jsonl
-
+.benchmarks/
+.ipynb_checkpoints/
+.venv/
 DuRi_Day11_15_starter/outputs/**
+__pycache__/
+backup_phase*/ 
+backup_repository/
+backups/
+code_pilot_v2_logs/logs.jsonl
+coding_pilot_v2_logs/logs.jsonl
+cursor_extension/node_modules/
+duri_snapshots/
+med_pilot_v2_logs/logs.jsonl
+medical_pilot_v2_logs/logs.jsonl
+rehab_pilot_v2_logs/logs.jsonl
+var/reports/
