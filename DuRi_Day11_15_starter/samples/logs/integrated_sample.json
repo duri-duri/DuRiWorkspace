@@ -1,0 +1,7 @@
+[
+  {"timestamp": "2025-01-16T09:00:00Z", "latency_ms": 1400, "accuracy": 0.91, "explainability": 0.80, "failure_rate": 0.001, "domain": "medical"},
+  {"timestamp": "2025-01-16T09:01:00Z", "latency_ms": 1350, "accuracy": 0.92, "explainability": 0.81, "failure_rate": 0.000, "domain": "rehab"},
+  {"timestamp": "2025-01-16T09:02:00Z", "latency_ms": 1500, "accuracy": 0.90, "explainability": 0.79, "failure_rate": 0.002, "domain": "coding"},
+  {"timestamp": "2025-01-16T09:03:00Z", "latency_ms": 1380, "accuracy": 0.93, "explainability": 0.82, "failure_rate": 0.000, "domain": "medical"},
+  {"timestamp": "2025-01-16T09:04:00Z", "latency_ms": 1420, "accuracy": 0.89, "explainability": 0.78, "failure_rate": 0.001, "domain": "rehab"}
+]

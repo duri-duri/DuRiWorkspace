@@ -1,0 +1,2 @@
+ts_utc,n,latency_ms_p95,accuracy_mean,explain_mean,failure_rate,J,dJ_dfail,dJ_dlat
+2025-01-16T10:00:00+00:00,45,1587.0,0.942889,0.861333,0.0,0.762676368,-5.192271,-8.1227e-05

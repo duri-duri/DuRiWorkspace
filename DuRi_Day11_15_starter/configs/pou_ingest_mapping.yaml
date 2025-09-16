@@ -1,0 +1,52 @@
+# Day36 PoU 지표 수집 매핑 설정
+# 기존 로그 분석 코드와 통합된 키 매핑 규칙
+
+keys:
+  latency:        ["p95_latency_ms", "latency_ms", "latency", "p95", "response_time_ms", "processing_time_ms"]
+  accuracy:       ["accuracy", "acc", "score_acc", "correct_rate", "precision", "recall", "f1_score"]
+  explainability: ["explainability", "explain", "exp_score", "rubric", "trace_coverage", "rationale_score"]
+  failure:        ["failure_rate", "fail_rate", "error_rate", "error_count", "exception_rate"]
+  status:         ["status", "ok", "success", "passed", "result", "outcome"]
+
+# 집계 방법 설정
+aggregate:
+  latency: "p95"   # p95 | mean | median
+  accuracy: "mean"
+  explainability: "mean"
+  failure: "mean"
+
+# 도메인별 특화 설정
+domains:
+  medical:
+    priority_keys:
+      accuracy: ["accuracy", "correct_rate", "precision"]
+      failure: ["failure_rate", "error_rate"]
+  rehab:
+    priority_keys:
+      explainability: ["explainability", "rubric", "trace_coverage"]
+      accuracy: ["accuracy", "correct_rate"]
+  coding:
+    priority_keys:
+      accuracy: ["accuracy", "precision", "f1_score"]
+      explainability: ["explainability", "rationale_score"]
+
+# 정규화 규칙
+normalization:
+  accuracy:
+    min: 0.0
+    max: 1.0
+    auto_percent: true
+  explainability:
+    min: 0.0
+    max: 1.0
+    auto_percent: true
+  failure_rate:
+    min: 0.0
+    max: 1.0
+    auto_percent: true
+
+# 품질 검증 규칙
+validation:
+  required_fields: ["latency_ms", "accuracy", "explainability", "failure_rate"]
+  min_samples: 1
+  max_missing_ratio: 0.5

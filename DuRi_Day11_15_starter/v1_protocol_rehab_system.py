@@ -23,6 +23,10 @@ class V1ProtocolConfig:
     pain_threshold: int = 5  # 통증 ≥5/10
     volume_increase_limit: float = 0.1  # 주간 볼륨 +5-10%
     compliance_threshold: float = 0.6  # 순응도 <60%
+    
+    # 자세 관리 원칙
+    posture_check_weight_threshold: float = 0.7  # 자세 체크 무게 임계값 (최대 무게의 70%)
+    posture_collapse_reduction: float = 0.2  # 자세 붕괴 시 무게 감소율 (20%)
 
 @dataclass
 class UserProfileV1:

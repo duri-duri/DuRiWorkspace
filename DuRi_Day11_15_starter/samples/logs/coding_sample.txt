@@ -1,0 +1,5 @@
+timestamp=2025-01-16T09:00:00Z latency=1480 accuracy=92 rubric=81 status=success domain=coding
+timestamp=2025-01-16T09:01:00Z latency=1520 accuracy=90 rubric=80 status=success domain=coding
+timestamp=2025-01-16T09:02:00Z latency=1490 accuracy=93 rubric=82 status=ok domain=coding
+timestamp=2025-01-16T09:03:00Z latency=1510 accuracy=91 rubric=79 status=success domain=coding
+timestamp=2025-01-16T09:04:00Z latency=1470 accuracy=94 rubric=83 status=success domain=coding

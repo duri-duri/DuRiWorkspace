@@ -1,0 +1,59 @@
+{
+  "timestamp": "2025-09-16T01:33:17.651251+00:00",
+  "overall_status": "healthy",
+  "pilots": {
+    "medical": {
+      "status": "healthy",
+      "last_updated": "2025-01-16T10:00:00+00:00",
+      "quality_score": 94.3,
+      "safety_score": 100.0,
+      "performance_ms": 1587.0,
+      "error_rate_percent": 0.0,
+      "explainability_score": 86.1,
+      "objective_function_J": 0.762676,
+      "sensitivity_failure": -5.192,
+      "sensitivity_latency": -8.1e-05
+    },
+    "rehab": {
+      "status": "healthy",
+      "last_updated": "2025-01-16T12:00:00+00:00",
+      "quality_score": 94.0,
+      "safety_score": 100.0,
+      "performance_ms": 1421.0,
+      "error_rate_percent": 0.0,
+      "explainability_score": 85.9,
+      "objective_function_J": 0.773894,
+      "sensitivity_failure": -5.192,
+      "sensitivity_latency": -0.000119
+    },
+    "coding": {
+      "status": "healthy",
+      "last_updated": "2025-01-16T14:00:00+00:00",
+      "quality_score": 94.9,
+      "safety_score": 100.0,
+      "performance_ms": 1640.0,
+      "error_rate_percent": 0.0,
+      "explainability_score": 86.5,
+      "objective_function_J": 0.770378,
+      "sensitivity_failure": -5.192,
+      "sensitivity_latency": -7e-05
+    }
+  },
+  "summary_metrics": {
+    "avg_quality_score": 94.4,
+    "avg_safety_score": 100.0,
+    "avg_performance_ms": 1549.0,
+    "avg_error_rate_percent": 0.0,
+    "avg_objective_function_J": 0.768983,
+    "active_pilots": 3,
+    "total_alerts": 0
+  },
+  "alerts": [],
+  "recommendations": [],
+  "day38_features": {
+    "objective_function": true,
+    "sensitivity_analysis": true,
+    "time_series": true,
+    "enhanced_alerts": true
+  }
+}
