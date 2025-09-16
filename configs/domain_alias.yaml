@@ -1,0 +1,4 @@
+canonical:
+  medical: [med, medicine]
+  rehab:   [rehabilitation]
+  coding:  [code, developer]

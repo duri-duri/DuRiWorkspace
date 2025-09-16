@@ -53,7 +53,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install -U pip
-          pip install jsonschema
+          pip install -r requirements.txt
       - name: Generate pilot logs
         run: |
           make day${{ matrix.day }}
@@ -63,7 +63,7 @@ jobs:
       - name: Rollup pilot metrics
         run: |
           make rollup
-      - name: Gate metrics check
+      - name: Gate metrics check (fail on breach)
         run: |
           make gate-metrics
       - name: Upload pilot logs (always)
