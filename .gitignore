@@ -31,3 +31,8 @@ med_pilot_v2_logs/logs.jsonl
 medical_pilot_v2_logs/logs.jsonl
 rehab_pilot_v2_logs/logs.jsonl
 var/reports/
+backups/
+verify_out/
+var/
+usb_backup_analysis/
+logs/
