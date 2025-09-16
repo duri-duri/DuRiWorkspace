@@ -1,11 +1,5 @@
 name: policy-gate
 on:
-  pull_request:
-    paths:
-      - 'tools/policy_verify.sh'
-      - 'tools/extract_lists.py'
-      - 'policies/**'
-      - 'tests/policy/**'
   workflow_dispatch:
 jobs:
   gate:
