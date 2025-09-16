@@ -1,9 +1,9 @@
 {
   "p_error": 0.0,
   "p_timeout": 0.0,
-  "explain_score": 0.8899,
+  "explain_score": 0.8904,
   "source": "rollup-from-logs",
-  "total_entries": 334,
+  "total_entries": 340,
   "error_count": 0,
   "timeout_count": 0
 }

@@ -109,14 +109,19 @@ def main():
     # 모든 도메인 로그 수집
     all_logs = []
     
-    # 가능한 모든 로그 파일 경로 시도
-    log_paths = [
-        "medical_pilot_v2_logs/logs.jsonl",
-        "med_pilot_v2_logs/logs.jsonl", 
-        "rehab_pilot_v2_logs/logs.jsonl",
-        "coding_pilot_v2_logs/logs.jsonl",
-        "code_pilot_v2_logs/logs.jsonl"
-    ]
+    # SSOT 매핑: 도메인별 가능한 모든 경로 (첫 존재 파일만 채택)
+    DOMAIN_ALIASES = {
+        "medical": ["medical_pilot_v2_logs/logs.jsonl", "med_pilot_v2_logs/logs.jsonl"],
+        "rehab": ["rehab_pilot_v2_logs/logs.jsonl", "rehabilitation_pilot_v2_logs/logs.jsonl"],
+        "coding": ["coding_pilot_v2_logs/logs.jsonl", "code_pilot_v2_logs/logs.jsonl"]
+    }
+    
+    log_paths = []
+    for domain, paths in DOMAIN_ALIASES.items():
+        for path in paths:
+            if pathlib.Path(path).exists():
+                log_paths.append(path)
+                break  # 첫 존재 파일만 채택
     
     for log_path in log_paths:
         logs = load_logs(log_path)

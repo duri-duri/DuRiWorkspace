@@ -3,7 +3,7 @@
   "title": "PoU Pilot Log Entry Schema",
   "description": "Schema for PoU pilot log entries across medical, rehab, and coding domains",
   "type": "object",
-  "required": ["timestamp", "domain", "user_id", "session_id", "event_type", "metrics"],
+  "required": ["timestamp", "domain", "user_id", "session_id", "event_type", "metrics", "schema_version"],
   "properties": {
     "timestamp": {
       "type": "string",
@@ -12,8 +12,8 @@
     },
     "domain": {
       "type": "string",
-      "enum": ["medical", "rehab", "coding"],
-      "description": "PoU domain identifier"
+      "enum": ["medical", "med", "medicine", "rehab", "rehabilitation", "coding", "code", "developer"],
+      "description": "PoU domain identifier (supports aliases)"
     },
     "user_id": {
       "type": "string",
@@ -81,6 +81,11 @@
         }
       },
       "additionalProperties": false
+    },
+    "schema_version": {
+      "type": "string",
+      "enum": ["1.0.0"],
+      "description": "Schema version for compatibility tracking"
     }
   },
   "additionalProperties": false

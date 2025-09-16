@@ -77,7 +77,8 @@ def generate_pilot_log_entry(domain: str, user_id: str, session_id: str,
         "session_id": session_id,
         "event_type": event_type,
         "metrics": metrics,
-        "metadata": metadata
+        "metadata": metadata,
+        "schema_version": "1.0.0"
     }
 
 def append_log_entry(log_file: str, entry: Dict[str, Any]) -> None:
