@@ -5,7 +5,7 @@ param(
   [string]$Mode = "test",
 
   [string]$RepoRoot = "\\wsl$\Ubuntu-22.04\home\duri\DuRiWorkspace",
-  [string]$HRoot = "H:\ARCHIVE",
+  [string]$HRoot = "H:\DuRiBackup",
   [string]$IRoot = "I:\DuRiBackup",
   [int]$Threads = 8
 )
