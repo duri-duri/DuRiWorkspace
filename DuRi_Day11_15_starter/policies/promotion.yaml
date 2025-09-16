@@ -1,0 +1,6 @@
+delta:
+  op: "gt"
+  value: 0
+p_value:
+  op: "le"
+  value: 0.05
