@@ -1,10 +1,8 @@
-name: Phase-2 Suite
+name: Phase-2 Suite Legacy
 
 on:
   push:
     branches: [ "main", "sig-test" ]
-  pull_request:
-    branches: [ "main" ]
   workflow_dispatch:
 
 permissions:
