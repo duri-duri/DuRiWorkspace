@@ -1,25 +1,51 @@
 name: required-checks-alias
 on:
   pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
+    types: [opened, synchronize, reopened]
+
 permissions:
+  checks: read
   statuses: write
+  contents: read
+
 jobs:
-  emit-required-contexts:
+  alias:
     runs-on: ubuntu-latest
     steps:
-      - name: Emit legacy required statuses
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SHA: ${{ github.event.pull_request.head.sha }}
-          REPO: ${{ github.repository }}
-        run: |
-          post() {
-            curl -s -X POST \
-              -H "Authorization: Bearer $GH_TOKEN" \
-              -H "Accept: application/vnd.github+json" \
-              https://api.github.com/repos/$REPO/statuses/$SHA \
-              -d "{\"state\":\"success\",\"context\":\"$1\",\"description\":\"alias from Actions\"}"
-          }
-          post "repo-guard"
-          post "phase-2 Suites / test"
+      - name: Map real checks
+        id: map
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const sha   = context.payload.pull_request.head.sha;
+            const owner = context.repo.owner;
+            const repo  = context.repo.repo;
+
+            const { data } = await github.rest.checks.listForRef({
+              owner, repo, ref: sha, per_page: 100
+            });
+            const runs = data.check_runs;
+
+            const ok = name =>
+              runs.some(r => r.name === name && r.conclusion === 'success');
+
+            // 👇 실제 잡 이름을 그대로 넣어주세요
+            const testsOK = ok('Phase-2 Suite/tests') || ok('Phase-2 Suite/tests (pull_request)');
+            const guardOK = ok('repo-guards/guards')   || ok('repo-guards/guards (pull_request)');
+
+            core.setOutput('tests_ok', testsOK ? 'success' : 'failure');
+            core.setOutput('guard_ok', guardOK ? 'success' : 'failure');
+      - name: alias: phase-2 Suites / test
+        uses: peter-evans/create-status@v5
+        with:
+          sha: ${{ github.event.pull_request.head.sha }}
+          state: ${{ steps.map.outputs.tests_ok }}
+          context: phase-2 Suites / test
+          description: Alias of Phase-2 Suite/tests
+      - name: alias: repo-guard
+        uses: peter-evans/create-status@v5
+        with:
+          sha: ${{ github.event.pull_request.head.sha }}
+          state: ${{ steps.map.outputs.guard_ok }}
+          context: repo-guard
+          description: Alias of repo-guards/guards

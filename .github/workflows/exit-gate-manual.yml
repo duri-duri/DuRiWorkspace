@@ -1,0 +1,46 @@
+name: exit-gate (manual-soft)
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "Git ref to check"
+        required: false
+        default: "main"
+      soft:
+        description: "Don't fail the run when gate fails"
+        required: false
+        default: "true"
+
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Exit gate
+        run: |
+          set -o pipefail
+          make -s gate-exit | tee out.txt
+        continue-on-error: ${{ inputs.soft == 'true' }}
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo '### exit-gate result'
+            echo '```'
+            cat out.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: exit-gate-log
+          path: out.txt
