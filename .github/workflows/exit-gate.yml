@@ -1,34 +1,55 @@
 name: exit-gate
+
 on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "Git ref to check out (default: main)"
+        required: false
+        default: main
+  push:
+    branches: [ main ]
+    paths:
+      - 'Makefile'
+      - 'tools/**'
+      - 'configs/**'
+      - 'slo_sla_dashboard_v1/**'
+      - '.github/workflows/exit-gate.yml'
   pull_request:
+    paths:
+      - 'Makefile'
+      - 'tools/**'
+      - 'configs/**'
+      - 'slo_sla_dashboard_v1/**'
+      - '.github/workflows/exit-gate.yml'
   schedule:
-<<<<<<< HEAD
     - cron: "17 3 * * *" # nightly
+
+concurrency:
+  group: exit-gate-${{ github.ref_name }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
-=======
-    - cron: '17 2 * * *'  # UTC 기준
->>>>>>> origin/main
 
 jobs:
   gate:
+    # PR 이벤트면서 lane:ci 라벨이면 생략
+    if: github.event_name != 'pull_request' || !contains(github.event.pull_request.labels.*.name, 'lane:ci')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-<<<<<<< HEAD
+        with:
+          ref: ${{ github.event.inputs.ref || github.sha }}
+          fetch-depth: 0
 
       - name: Roll metrics & tune + gates
-=======
-      - name: Make gate
->>>>>>> origin/main
         run: |
           make rollup
           make day49
           make day50
           make gate-objective
           make gate-exit
-<<<<<<< HEAD
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -57,5 +78,3 @@ print(f"|n|{n}|"); print(f"|explain|{expl}|"); print(f"|p_error|{pe}|"); print(f
 print(f"|metrics.json age (h)|{age_h('slo_sla_dashboard_v1/metrics.json'):.2f}|")
 print(f"|summary age (h)|{age_h('reports/objective_tuning_summary.json'):.2f}|")
 PY
-=======
->>>>>>> origin/main
