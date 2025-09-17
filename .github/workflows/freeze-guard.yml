@@ -38,6 +38,7 @@ jobs:
             MATCHED=0
             while IFS= read -r pattern; do
               [ -z "$pattern" ] && continue
+              # glob 패턴 매칭
               if [[ "$f" == $pattern ]]; then
                 MATCHED=1
                 break
