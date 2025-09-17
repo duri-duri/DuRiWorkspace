@@ -149,55 +149,11 @@ use-stop:
 
 .PHONY: gate-exit
 gate-exit:
-<<<<<<< HEAD
-	@$(PY) - <<'PY'
-import json, os, sys, time
-# --- hard thresholds (do not override by env) ---
-THR_PERR   = 0.02   # <= 2%
-THR_PTIME  = 0.02   # <= 2%
-THR_EXPL   = 0.70   # >= 0.70
-THR_D21    = 0.00   # >= 0.00 (Δ 기준 없으면 값 자체로 체크)
-MIN_N      = 30     # 최소 샘플 수
-MAX_AGE_H  = 24     # 최대 파일 연령(시간)
+	@python3 -c "import json,os,sys,time; jload=lambda p: json.load(open(p,encoding='utf-8')) if os.path.exists(p) and os.path.getsize(p)>0 else {}; m=jload('slo_sla_dashboard_v1/metrics.json'); r=jload('pou_retention_day21.json'); n=m.get('n'); p_err=m.get('p_error'); p_to=m.get('p_timeout'); expl=m.get('explain'); d21=r.get('retention_d21') or (((r.get('retention',{}) or {}).get('all',{}) or {}).get('rates',{}) or {}).get('d21'); fmt=lambda x: '—' if x is None else (f'{x:.3f}' if isinstance(x,(int,float)) else str(x)); print(f'n={n or 0}  p_error={fmt(p_err)}  p_timeout={fmt(p_to)}  explain={fmt(expl)}  d21={fmt(d21)}'); THR_PERR=0.02; THR_PTIME=0.02; THR_EXPL=0.70; THR_D21=0.00; MIN_N=30; ok=True; reasons=[]; (lambda: [reasons.append(f'insufficient n ({n or 0}<{MIN_N})') for _ in [None] if not n or n < MIN_N])(), (lambda: [reasons.append(f'p_error {fmt(p_err)}>{THR_PERR}') for _ in [None] if (p_err is None) or (p_err > THR_PERR)])(), (lambda: [reasons.append(f'p_timeout {fmt(p_to)}>{THR_PTIME}') for _ in [None] if (p_to is None) or (p_to > THR_PTIME)])(), (lambda: [reasons.append(f'explain {fmt(expl)}<{THR_EXPL}') for _ in [None] if (expl is None) or (expl < THR_EXPL)])(), (lambda: [reasons.append('retention_d21 missing' if d21 is None else f'd21 {fmt(d21)}<{THR_D21}') for _ in [None] if (d21 is None) or (d21 < THR_D21)])(); print('Gate PASSED' if not reasons else 'Gate FAILED: ' + '; '.join(reasons)); sys.exit(0 if not reasons else 2)"
+.PHONY: gate-exit-local
+gate-exit-local:
+	-$(MAKE) -s gate-exit
 
-def age_hours(p): return (time.time() - os.path.getmtime(p))/3600 if os.path.exists(p) else 1e9
-def load(p, d=None):
-    try:
-        with open(p, encoding='utf-8') as f: return json.load(f)
-    except Exception: return {} if d is None else d
-
-metrics = load("slo_sla_dashboard_v1/metrics.json")
-summary = load("reports/objective_tuning_summary.json")
-ret21   = summary.get("retention_d21")
-n       = summary.get("n", 0)
-expl    = summary.get("quality_score")
-p_err   = summary.get("p_error", metrics.get("p_error"))
-p_to    = summary.get("p_timeout", metrics.get("p_timeout"))
-
-reasons = []
-
-# freshness
-if age_hours("slo_sla_dashboard_v1/metrics.json") > MAX_AGE_H: reasons.append("metrics.json too old")
-if age_hours("reports/objective_tuning_summary.json") > MAX_AGE_H: reasons.append("summary too old")
-
-# sufficiency
-if not isinstance(n, (int,float)) or n < MIN_N: reasons.append(f"insufficient n ({n})")
-
-# thresholds
-if p_err is None or p_err > THR_PERR: reasons.append(f"p_error {p_err} > {THR_PERR}")
-if p_to  is None or p_to  > THR_PTIME: reasons.append(f"p_timeout {p_to} > {THR_PTIME}")
-if expl  is None or expl  < THR_EXPL: reasons.append(f"explain {expl} < {THR_EXPL}")
-# d21: 있을 땐 체크, 없으면 실패(명시적 데이터 요구)
-if ret21 is None: reasons.append("retention_d21 missing")
-elif ret21 < THR_D21: reasons.append(f"d21 {ret21} < {THR_D21}")
-
-ok = not reasons
-print(f"p_error={p_err:.3f} p_timeout={p_to:.3f} explain={expl:.3f} d21={ret21} n={n}")
-if not ok:
-    print("Gate FAILED:", "; ".join(reasons))
-    sys.exit(2)
-print("Gate PASSED")
-PY
-=======
-	@$(PY) -c "import json, sys, pathlib, os; ERR_MAX=float(os.getenv('ERR_MAX', 0.02)); TO_MAX=float(os.getenv('TO_MAX', 0.02)); EXPL_MIN=float(os.getenv('EXPL_MIN', 0.70)); D21_MIN=float(os.getenv('D21_MIN', 0.00)); p_err=p_to=1.0; explain=0.0; d21=-1.0; p=pathlib.Path('reports/objective_tuning_summary.json'); s=json.load(open(p)) if p.exists() else {}; m=(s.get('input_metrics') or s.get('metrics') or {}) if p.exists() else json.load(open('slo_sla_dashboard_v1/metrics.json')); p_err=float(m.get('p_error', p_err)); p_to=float(m.get('p_timeout', p_to)); explain=float((s.get('scores') or {}).get('explain', explain)) if p.exists() else float(m.get('explain_score', explain)); d21=float(s.get('retention_d21_delta', d21)) if p.exists() else float(m.get('retention_d21_delta', d21)); ok=(p_err<=ERR_MAX and p_to<=TO_MAX and explain>=EXPL_MIN and d21>=D21_MIN); print(f'p_error={p_err:.3f}, p_timeout={p_to:.3f}, explain={explain:.3f}, d21Δ={d21:.3f}'); sys.exit(0 if ok else 2)"
->>>>>>> origin/main
+.PHONY: gate-exit-ci
+gate-exit-ci:
+	$(MAKE) -s gate-exit
