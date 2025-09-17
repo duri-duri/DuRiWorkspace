@@ -2,17 +2,60 @@ name: exit-gate
 on:
   pull_request:
   schedule:
+<<<<<<< HEAD
+    - cron: "17 3 * * *" # nightly
+
+permissions:
+  contents: read
+=======
     - cron: '17 2 * * *'  # UTC 기준
+>>>>>>> origin/main
 
 jobs:
   gate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+<<<<<<< HEAD
+
+      - name: Roll metrics & tune + gates
+=======
       - name: Make gate
+>>>>>>> origin/main
         run: |
           make rollup
           make day49
           make day50
           make gate-objective
           make gate-exit
+<<<<<<< HEAD
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: exit-gate-artifacts
+          path: |
+            slo_sla_dashboard_v1/metrics.json
+            reports/objective_tuning_summary.json
+            pou_retention_day21.json
+
+      - name: Summarize
+        shell: bash
+        run: |
+          echo "## Exit Gate Summary" >> $GITHUB_STEP_SUMMARY
+          python3 - <<'PY' >> $GITHUB_STEP_SUMMARY
+import json,os,sys,time,datetime as dt
+def age_h(p): 
+    return (time.time()-os.path.getmtime(p))/3600 if os.path.exists(p) else 1e9
+m=json.load(open("slo_sla_dashboard_v1/metrics.json")) if os.path.exists("slo_sla_dashboard_v1/metrics.json") else {}
+s=json.load(open("reports/objective_tuning_summary.json")) if os.path.exists("reports/objective_tuning_summary.json") else {}
+n=s.get("n",0); expl=s.get("quality_score"); d21=s.get("retention_d21")
+pe=s.get("p_error", m.get("p_error")); pt=s.get("p_timeout", m.get("p_timeout"))
+print(f"|metric|value|")
+print(f"|---|---|")
+print(f"|n|{n}|"); print(f"|explain|{expl}|"); print(f"|p_error|{pe}|"); print(f"|p_timeout|{pt}|"); print(f"|d21|{d21}|")
+print(f"|metrics.json age (h)|{age_h('slo_sla_dashboard_v1/metrics.json'):.2f}|")
+print(f"|summary age (h)|{age_h('reports/objective_tuning_summary.json'):.2f}|")
+PY
+=======
+>>>>>>> origin/main
