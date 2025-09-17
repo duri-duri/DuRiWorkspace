@@ -65,9 +65,12 @@ validate-logs:
 		fi; \
 	done
 
+# Python runtime
+PY ?= python3
+
 rollup:
 	@echo "Rolling up pilot metrics..."
-	@$(PY) tools/pilot_metrics_rollup.py --output slo_sla_dashboard_v1/metrics.json
+	$(PY) tools/pilot_metrics_rollup.py --output slo_sla_dashboard_v1/metrics.json
 
 gate-metrics: rollup
 	@echo "Checking metrics against thresholds..."
@@ -109,9 +112,27 @@ day50:
 
 .PHONY: gate-objective
 gate-objective:
-	@python3 -c "import json,sys; s=json.load(open('reports/objective_tuning_summary.json')); ok = s.get('tuning_success', False); print('J_proxy =', s.get('j_proxy')); sys.exit(0 if ok else 1)"
+	@$(PY) - <<'PY'
+import json,sys
+s=json.load(open("reports/objective_tuning_summary.json"))
+ok = s.get("tuning_success", False)
+print("J_proxy =", s.get("j_proxy"))
+sys.exit(0 if ok else 1)
+PY
 
 .PHONY: use-start use-check use-report use-stop
+
+use-check:
+	@$(PY) tools/pilot_metrics_rollup.py --output slo_sla_dashboard_v1/metrics.json || true
+	@$(PY) tools/objective_tuning_v2.py --out-yaml configs/objective_params_v2.yaml --out-summary reports/objective_tuning_summary.json || true
+	@$(PY) - <<'PY'
+import json
+with open("reports/objective_tuning_summary.json") as f:
+    s=json.load(f)
+print("J_proxy:", s.get("j_proxy"), "tuning_success:", s.get("tuning_success"))
+print("input_metrics:", s.get("input_metrics"))
+print("scores:", s.get("scores"))
+PY
 
 use-start:
 	@python3 - <<'PY'

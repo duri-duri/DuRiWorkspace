@@ -142,10 +142,16 @@ def main():
         json.dump(metrics, f, ensure_ascii=False, indent=2)
     
     print(f"✅ Metrics written to {args.output}")
-    print(f"   Total entries: {metrics['total_entries']}")
-    print(f"   Error rate: {metrics['p_error']:.3f}")
-    print(f"   Timeout rate: {metrics['p_timeout']:.3f}")
-    print(f"   Explain score: {metrics['explain_score']:.3f}" if metrics['explain_score'] else "   Explain score: N/A")
+    total = metrics.get('total_entries') or 0
+    def fmt(x):
+        try:
+            return f"{float(x):.3f}"
+        except Exception:
+            return "0.000"
+    print(f"   Total entries: {total}")
+    print(f"   Error rate: {fmt(metrics.get('p_error'))}")
+    print(f"   Timeout rate: {fmt(metrics.get('p_timeout'))}")
+    print(f"   Explain score: {fmt(metrics.get('explain_score'))}")
 
 if __name__ == "__main__":
     main()
