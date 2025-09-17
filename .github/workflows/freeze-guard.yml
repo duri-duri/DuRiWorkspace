@@ -1,4 +1,5 @@
 name: freeze-guard
+
 on:
   pull_request:
     types: [opened, synchronize, reopened, labeled, unlabeled]
@@ -6,26 +7,47 @@ on:
 jobs:
   guard:
     runs-on: ubuntu-latest
+    # PR에 'override:freeze' 라벨이 붙어있으면 가드 우회
+    if: "!contains(join(github.event.pull_request.labels.*.name, ' '), 'override:freeze')"
     steps:
-      - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
-      - uses: tj-actions/changed-files@v45
-        id: cf
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          separator: "\n"
-      - name: Enforce freeze allowlist
+          fetch-depth: 0
+
+      - name: Compute changed files
+        shell: bash
         run: |
-          ALLOW='^(configs/|tools/|reports/|slo_sla_dashboard_v1/|Makefile|\.github/|\.githooks/|\.gitignore|\.gitattributes|scripts/|README\.md|.*\.md)'
-          CHANGED="${{ steps.cf.outputs.all_changed_files }}"
-          if [ -z "$CHANGED" ]; then echo "No changed files → allow."; exit 0; fi
-          BAD=0
-          while IFS= read -r f; do
-            [ -z "$f" ] && continue
-            echo "• $f"
-            echo "$f" | grep -Eq "$ALLOW" || { echo "❌ blocked: $f"; BAD=1; }
-          done <<EOF
-          $CHANGED
-          EOF
-          if [ $BAD -ne 0 ]; then
-            echo "Freeze-guard failed (allowlist only)."; exit 1
+          set -euo pipefail
+          base="${{ github.base_ref }}"
+          git fetch --no-tags --depth=1 origin "$base"
+          git diff --name-only "origin/$base"...HEAD | tee changed.txt
+          # 빈 변경이면 바로 통과
+          if [[ ! -s changed.txt ]]; then
+            echo "No changes."
+            exit 0
           fi
+
+      - name: Enforce allowlist
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ ! -f .github/freeze-allow.txt ]]; then
+            echo "❌ Missing allowlist: .github/freeze-allow.txt"
+            exit 1
+          fi
+          # 주석/빈줄 제거 → 단일 정규식으로 결합
+          awk 'NF && $0 !~ /^#/' .github/freeze-allow.txt | paste -sd'|' - > allow.re
+          echo "Allow regex:"
+          cat allow.re
+          # 허용되지 않은 변경 추출
+          grep -Evf allow.re changed.txt > blocked.txt || true
+          if [[ -s blocked.txt ]]; then
+            echo "❌ Blocked by freeze-guard:"
+            sed 's/^/ - /' blocked.txt
+            echo
+            echo "➡ 허용하려면 .github/freeze-allow.txt 에 패턴을 추가하거나,"
+            echo "   PR에 'override:freeze' 라벨을 붙이세요(관리자 승인)."
+            exit 1
+          fi
+          echo "✅ All changes are allowlisted."
