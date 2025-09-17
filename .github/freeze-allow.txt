@@ -1,0 +1,24 @@
+# Freeze-guard allowlist (regex, repo-root 상대 경로)
+# 줄 단위 정규식. 공백/주석은 무시됨.
+
+# 문서/메타
+^README\.md$
+^CHANGELOG\.md$
+^LICENSE$
+^\.gitignore$
+^\.gitattributes$
+^\.github/pull_request_template\.md$
+
+# 레포 훅/스크립트/문서 폴더
+^\.githooks/
+^scripts/
+^docs/
+
+# freeze-guard 자체 수정 허용(옵션)
+^\.github/workflows/freeze-guard\.yml$
+
+# allowlist 파일 자체 수정 허용
+^\.github/freeze-allow\.txt$
+
+# 모든 Markdown 문서 허용
+\.md$
