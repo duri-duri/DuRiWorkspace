@@ -41,3 +41,4 @@ usb_backup_analysis/
 var/
 backups/
 temp_extract_*
+slo_sla_dashboard_v1/metrics.json
