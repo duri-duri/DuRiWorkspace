@@ -14,42 +14,15 @@ jobs:
         with:
           separator: "\n"
       - name: Enforce freeze allowlist
-        env:
-          ALLOWLIST: |
-            .github/**
-            .githooks/**
-            scripts/**
-            .gitignore
-            .gitattributes
-            README.md
-            configs/**
-            tools/**
-            reports/**
-            slo_sla_dashboard_v1/**
-            Makefile
         run: |
+          ALLOW='^(configs/|tools/|reports/|slo_sla_dashboard_v1/|Makefile|\.github/|\.githooks/|\.gitignore|\.gitattributes|scripts/|README\.md)'
           CHANGED="${{ steps.cf.outputs.all_changed_files }}"
           if [ -z "$CHANGED" ]; then echo "No changed files → allow."; exit 0; fi
           BAD=0
           while IFS= read -r f; do
             [ -z "$f" ] && continue
             echo "• $f"
-            # allowlist 패턴과 매칭 확인
-            MATCHED=0
-            while IFS= read -r pattern; do
-              [ -z "$pattern" ] && continue
-              # glob 패턴 매칭
-              if [[ "$f" == $pattern ]]; then
-                MATCHED=1
-                break
-              fi
-            done <<EOF
-            $ALLOWLIST
-            EOF
-            if [ $MATCHED -eq 0 ]; then
-              echo "❌ blocked: $f"
-              BAD=1
-            fi
+            echo "$f" | grep -Eq "$ALLOW" || { echo "❌ blocked: $f"; BAD=1; }
           done <<EOF
           $CHANGED
           EOF
