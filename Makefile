@@ -3,11 +3,12 @@ VAR ?= A
 SEED ?= 42
 CONFIG ?= configs/day36.yaml
 PYTHONPATH := $(PWD)
+PY ?= python3
 
 GATE_RESULTS ?= outputs/day$(AS_OF_DAY)/var_$(VAR)/results.json
 POLICY ?= policies/promotion.yaml
 
-.PHONY: run clean check promote test gate day41 day42 day43 validate-logs rollup gate-metrics
+.PHONY: run clean check promote test gate day41 day42 day43 day44 day45 day46 day47 day48 day49 day50 validate-logs rollup gate-metrics report
 
 check:
 	@test -f $(CONFIG) || (echo "Missing $(CONFIG)"; exit 1)
@@ -64,10 +65,109 @@ validate-logs:
 		fi; \
 	done
 
+# Python runtime
+PY ?= python3
+
 rollup:
 	@echo "Rolling up pilot metrics..."
-	python tools/pilot_metrics_rollup.py --output slo_sla_dashboard_v1/metrics.json
+	$(PY) tools/pilot_metrics_rollup.py --output slo_sla_dashboard_v1/metrics.json
 
 gate-metrics: rollup
 	@echo "Checking metrics against thresholds..."
 	@python -c "import json, sys; m=json.load(open('slo_sla_dashboard_v1/metrics.json')); th={'p_error_max': 0.02, 'p_timeout_max': 0.02, 'explain_min': 0.70}; bad=[]; [bad.append(f'p_error {m[\"p_error\"]:.3f} > {th[\"p_error_max\"]}') if m['p_error'] > th['p_error_max'] else None]; [bad.append(f'p_timeout {m[\"p_timeout\"]:.3f} > {th[\"p_timeout_max\"]}') if m['p_timeout'] > th['p_timeout_max'] else None]; [bad.append(f'explain {m[\"explain_score\"]:.3f} < {th[\"explain_min\"]}') if m['explain_score'] < th['explain_min'] else None]; print('❌ GATE=FAIL | ' + '; '.join(bad)) if bad else print('✅ GATE=PASS'); sys.exit(2 if bad else 0)"
+
+report:
+	@mkdir -p reports
+	@$(PY) tools/pou_weekly_report.py --out reports/pou_midterm_report.md
+
+day44: rollup report
+	@echo "Day44 done -> reports/pou_midterm_report.md"
+
+day45:
+	@$(PY) tools/auto_patch_weekly_stats.py --threshold 0.80
+	@echo "Day45 done -> auto_patch_weekly_stats.json"
+
+day46:
+	@echo "Generating model card v1..."
+	@$(PY) tools/gen_model_card.py && echo "Day46 done -> model_card_v1.md"
+
+day47:
+	@echo "Seeding patent drafts..."
+	@ls -la patent_drafts && echo "Day47 done -> patent_drafts/"
+
+day48:
+	@echo "Probing cost & writing plan..."
+	@$(PY) tools/cost_probe.py > reports/cost_probe.json || true
+	@echo "Day48 done -> cost_optimization_plan.md, reports/cost_probe.json"
+
+day49:
+	@echo "Calculating retention rates..."
+	@$(PY) tools/retention_calc.py --out pou_retention_day21.json
+	@echo "Day49 done -> pou_retention_day21.json"
+
+day50:
+	@echo "Auto-tuning objective function v2..."
+	@$(PY) tools/objective_tuning_v2.py
+	@echo "Day50 done -> configs/objective_params_v2.yaml, reports/objective_tuning_summary.json"
+
+.PHONY: gate-objective
+gate-objective:
+	@$(PY) - <<'PY'
+import json,sys
+s=json.load(open("reports/objective_tuning_summary.json"))
+ok = s.get("tuning_success", False)
+print("J_proxy =", s.get("j_proxy"))
+sys.exit(0 if ok else 1)
+PY
+
+.PHONY: use-start use-check use-report use-stop
+
+use-check:
+	@$(PY) tools/pilot_metrics_rollup.py --output slo_sla_dashboard_v1/metrics.json || true
+	@$(PY) tools/objective_tuning_v2.py --out-yaml configs/objective_params_v2.yaml --out-summary reports/objective_tuning_summary.json || true
+	@$(PY) - <<'PY'
+import json
+with open("reports/objective_tuning_summary.json") as f:
+    s=json.load(f)
+print("J_proxy:", s.get("j_proxy"), "tuning_success:", s.get("tuning_success"))
+print("input_metrics:", s.get("input_metrics"))
+print("scores:", s.get("scores"))
+PY
+
+use-start:
+	@python3 - <<'PY'
+import yaml,sys
+p="configs/canary_settings.yaml"
+cfg=yaml.safe_load(open(p)) if open(p).read().strip() else {}
+cfg={"medical":{"canary":0.05},"rehab":{"canary":0.0},"coding":{"canary":0.0}}
+open(p,"w").write(yaml.dump(cfg,allow_unicode=True,default_flow_style=False))
+print("Set canary -> medical 5%, others 0%")
+PY
+	@git fetch origin
+	@branch=ops/canary-5-medical-$(shell date +%F-%H%M%S); \
+	git switch -c $$branch; \
+	git add configs/canary_settings.yaml; \
+	git commit -m "ops: canary 5% (medical), others 0%" || true; \
+	git push -u origin $$branch; \
+	(gh pr create --base main --head $$branch \
+	  --title "ops: canary 5% (medical)" \
+	  --body "Enable medical canary at 5%. Others 0%. Includes use-mode wiring." \
+	 || echo "➡️  GitHub UI에서 $$branch 로 PR 열어주세요"); \
+	git switch main; git reset --hard origin/main
+
+use-check:
+	@echo "Rolling metrics & tuning objective..."
+	make rollup
+	make day49
+	make day50
+	make gate-objective
+
+use-report:
+	@echo "Objective summary:"
+	@cat reports/objective_tuning_summary.json 2>/dev/null | jq '.j_proxy, .input_metrics, .scores' || true
+
+use-stop:
+	@python3 -c "import yaml, os; p='configs/canary_settings.yaml'; d = yaml.safe_load(open(p)) if os.path.exists(p) else {}; [d.setdefault(k, {}) for k in ('medical','rehab','coding')]; [d[k].update({'canary': 0.00}) for k in d]; open(p,'w',encoding='utf-8').write(yaml.dump(d, allow_unicode=True, default_flow_style=False)); print('Set canary -> all 0% (panic)')"
+	git add configs/canary_settings.yaml
+	git commit -m "ops: canary 0% (panic)" || true
+	git push || true
