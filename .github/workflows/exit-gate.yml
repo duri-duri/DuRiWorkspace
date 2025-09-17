@@ -2,24 +2,33 @@ name: exit-gate
 on:
   pull_request:
   schedule:
+<<<<<<< HEAD
     - cron: "17 3 * * *" # nightly
 
 permissions:
   contents: read
+=======
+    - cron: '17 2 * * *'  # UTC 기준
+>>>>>>> origin/main
 
 jobs:
   gate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+<<<<<<< HEAD
 
       - name: Roll metrics & tune + gates
+=======
+      - name: Make gate
+>>>>>>> origin/main
         run: |
           make rollup
           make day49
           make day50
           make gate-objective
           make gate-exit
+<<<<<<< HEAD
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -48,3 +57,5 @@ print(f"|n|{n}|"); print(f"|explain|{expl}|"); print(f"|p_error|{pe}|"); print(f
 print(f"|metrics.json age (h)|{age_h('slo_sla_dashboard_v1/metrics.json'):.2f}|")
 print(f"|summary age (h)|{age_h('reports/objective_tuning_summary.json'):.2f}|")
 PY
+=======
+>>>>>>> origin/main

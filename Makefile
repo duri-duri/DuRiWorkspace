@@ -149,6 +149,7 @@ use-stop:
 
 .PHONY: gate-exit
 gate-exit:
+<<<<<<< HEAD
 	@$(PY) - <<'PY'
 import json, os, sys, time
 # --- hard thresholds (do not override by env) ---
@@ -197,3 +198,6 @@ if not ok:
     sys.exit(2)
 print("Gate PASSED")
 PY
+=======
+	@$(PY) -c "import json, sys, pathlib, os; ERR_MAX=float(os.getenv('ERR_MAX', 0.02)); TO_MAX=float(os.getenv('TO_MAX', 0.02)); EXPL_MIN=float(os.getenv('EXPL_MIN', 0.70)); D21_MIN=float(os.getenv('D21_MIN', 0.00)); p_err=p_to=1.0; explain=0.0; d21=-1.0; p=pathlib.Path('reports/objective_tuning_summary.json'); s=json.load(open(p)) if p.exists() else {}; m=(s.get('input_metrics') or s.get('metrics') or {}) if p.exists() else json.load(open('slo_sla_dashboard_v1/metrics.json')); p_err=float(m.get('p_error', p_err)); p_to=float(m.get('p_timeout', p_to)); explain=float((s.get('scores') or {}).get('explain', explain)) if p.exists() else float(m.get('explain_score', explain)); d21=float(s.get('retention_d21_delta', d21)) if p.exists() else float(m.get('retention_d21_delta', d21)); ok=(p_err<=ERR_MAX and p_to<=TO_MAX and explain>=EXPL_MIN and d21>=D21_MIN); print(f'p_error={p_err:.3f}, p_timeout={p_to:.3f}, explain={explain:.3f}, d21Δ={d21:.3f}'); sys.exit(0 if ok else 2)"
+>>>>>>> origin/main
