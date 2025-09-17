@@ -1,0 +1,20 @@
+name: exit-gate
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "Git ref to check"
+        required: false
+        default: main
+
+jobs:
+  gate:
+    # lane:ci PR 라벨로는 실행 안 하고, 수동 디스패치에서만 쓰일 워크플로라 단순화
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.ref }}
+      - name: Exit gate
+        run: make gate-exit
