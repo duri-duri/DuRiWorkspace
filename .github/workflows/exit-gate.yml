@@ -34,8 +34,8 @@ permissions:
 
 jobs:
   gate:
-    # lane:ci 라벨이 붙은 PR이면 스킵 (push나 수동 실행은 그대로 수행)
-    if: github.event_name != 'pull_request' || !contains(join(github.event.pull_request.labels.*.name, ','), 'lane:ci')
+    # PR 이벤트면서 lane:ci 라벨이면 생략
+    if: github.event_name != 'pull_request' || !contains(github.event.pull_request.labels.*.name, 'lane:ci')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
