@@ -11,6 +11,16 @@ permissions:
 
 jobs:
   alias:
+    # PR 이벤트이면서 해당 워크플로가 성공했고, 포크 PR이 아닌 경우만
+    if: >
+      ${{
+        github.event.workflow_run.event == 'pull_request' &&
+        github.event.workflow_run.conclusion == 'success' &&
+        github.event.workflow_run.pull_requests[0].head_repository.full_name == github.repository
+      }}
+    concurrency:
+      group: alias-${{ github.event.workflow_run.head_sha }}
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     steps:
       - name: Post alias statuses when required checks are green
@@ -20,11 +30,18 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          ok=$(gh api repos/$REPO/commits/$SHA/check-runs --jq \
-            '[.check_runs[] | select(.name=="tests" or .name=="guards" or .name=="guard")] 
-             | group_by(.name) 
-             | map(max_by(.started_at).conclusion) 
-             | all(.=="success")')
+
+          # 짧은 재시도: 체크런 인덱싱 레이스 대비
+          for i in {1..6}; do
+            ok=$(gh api repos/$REPO/commits/$SHA/check-runs --jq \
+              '[.check_runs[] | select(.name=="tests" or .name=="guards" or .name=="guard")]
+               | group_by(.name)
+               | map(max_by(.started_at).conclusion)
+               | all(.=="success")' || echo false)
+            [[ "$ok" == "true" ]] && break
+            sleep 5
+          done
+
           if [[ "$ok" == "true" ]]; then
             for ctx in "phase-2 Suites / test" "repo-guard"; do
               gh api repos/$REPO/statuses/$SHA \
