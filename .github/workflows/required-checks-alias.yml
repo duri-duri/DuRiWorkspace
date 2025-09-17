@@ -1,51 +1,35 @@
 name: required-checks-alias
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+  workflow_run:
+    workflows: ["repo-guards", "Phase-2 Suite", "freeze-guard"]
+    types: [completed]
 
 permissions:
-  checks: read
   statuses: write
   contents: read
+  actions: read
 
 jobs:
   alias:
     runs-on: ubuntu-latest
     steps:
-      - name: Map real checks
-        id: map
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const sha   = context.payload.pull_request.head.sha;
-            const owner = context.repo.owner;
-            const repo  = context.repo.repo;
-
-            const { data } = await github.rest.checks.listForRef({
-              owner, repo, ref: sha, per_page: 100
-            });
-            const runs = data.check_runs;
-
-            const ok = name =>
-              runs.some(r => r.name === name && r.conclusion === 'success');
-
-            // 👇 실제 잡 이름을 그대로 넣어주세요
-            const testsOK = ok('Phase-2 Suite/tests') || ok('Phase-2 Suite/tests (pull_request)');
-            const guardOK = ok('repo-guards/guards')   || ok('repo-guards/guards (pull_request)');
-
-            core.setOutput('tests_ok', testsOK ? 'success' : 'failure');
-            core.setOutput('guard_ok', guardOK ? 'success' : 'failure');
-      - name: alias: phase-2 Suites / test
-        uses: peter-evans/create-status@v5
-        with:
-          sha: ${{ github.event.pull_request.head.sha }}
-          state: ${{ steps.map.outputs.tests_ok }}
-          context: phase-2 Suites / test
-          description: Alias of Phase-2 Suite/tests
-      - name: alias: repo-guard
-        uses: peter-evans/create-status@v5
-        with:
-          sha: ${{ github.event.pull_request.head.sha }}
-          state: ${{ steps.map.outputs.guard_ok }}
-          context: repo-guard
-          description: Alias of repo-guards/guards
+      - name: Post alias statuses when required checks are green
+        env:
+          REPO: ${{ github.repository }}
+          SHA:  ${{ github.event.workflow_run.head_sha }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          ok=$(gh api repos/$REPO/commits/$SHA/check-runs --jq \
+            '[.check_runs[] | select(.name=="tests" or .name=="guards" or .name=="guard")] 
+             | group_by(.name) 
+             | map(max_by(.started_at).conclusion) 
+             | all(.=="success")')
+          if [[ "$ok" == "true" ]]; then
+            for ctx in "phase-2 Suites / test" "repo-guard"; do
+              gh api repos/$REPO/statuses/$SHA \
+                -f state=success -f context="$ctx" -f description='auto alias'
+            done
+          else
+            echo "Required checks not all green yet. Skipping."
+          fi
