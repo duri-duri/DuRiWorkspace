@@ -1,0 +1,28 @@
+name: freeze-guard
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: tj-actions/changed-files@v45
+        id: cf
+        with:
+          separator: "\n"
+      - name: Enforce freeze allowlist
+        run: |
+          ALLOW='^(configs/|tools/|reports/|slo_sla_dashboard_v1/|Makefile|\.github/)'
+          BAD=0
+          while IFS= read -r f; do
+            echo "• $f"
+            echo "$f" | grep -Eq "$ALLOW" || { echo "❌ blocked: $f"; BAD=1; }
+          done <<EOF
+          ${{ steps.cf.outputs.all_changed_files }}
+          EOF
+          if [ $BAD -ne 0 ]; then
+            echo "Freeze-guard failed (allowlist only)."; exit 1
+          fi
