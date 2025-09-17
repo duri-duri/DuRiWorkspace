@@ -3,17 +3,148 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, labeled, unlabeled]
 
+permissions:
+  contents: read
+  pull-requests: read
+
 jobs:
-  ensure-one-lane:
+  guard:
     runs-on: ubuntu-latest
+    env:
+      OWNER_REPO: ${{ github.repository }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      LABELS_JSON: ${{ toJson(github.event.pull_request.labels) }}
+      # 우회용 라벨 (있으면 '승인'이 있어야 허용)
+      OVERRIDE_LABEL: override:gate
+      # 우회 승인에 필요한 최소 APPROVED 리뷰 수 (코드오너 강제는 ruleset에서 켜는 것이 정석)
+      MIN_OVERRIDE_APPROVALS: "1"
     steps:
-      - uses: actions/github-script@v7
-        with:
-          script: |
-            const allowed = ["lane:experiment","lane:ops","lane:ci"];
-            const labels = context.payload.pull_request.labels.map(l=>l.name);
-            const lanes = labels.filter(l=>allowed.includes(l));
-            core.info(`labels: ${labels.join(", ")}`);
-            if (lanes.length !== 1) {
-              core.setFailed(`Exactly one lane label required (${allowed.join(", ")}), got: ${lanes.join(", ")||"none"}`);
-            }
+      - uses: actions/checkout@v4
+
+      - name: Gather PR labels
+        id: lab
+        shell: bash
+        run: |
+          set -e
+          echo "$LABELS_JSON" | jq -r '.[].name' | sort > labels.txt
+          cat labels.txt
+          # lane 라벨 추출
+          awk '/^lane:/{print}' labels.txt > lane.txt || true
+          LANE_COUNT=$(wc -l < lane.txt || echo 0)
+          echo "lane_count=$LANE_COUNT" >> $GITHUB_OUTPUT
+          if [ "$LANE_COUNT" -ne 1 ]; then
+            echo "❌ 정확히 하나의 lane 라벨이 필요합니다 (lane:experiment | lane:ops | lane:ci)."
+            echo "현재: "; cat lane.txt || true
+            exit 1
+          fi
+          LANE=$(cat lane.txt)
+          echo "lane=$LANE" >> $GITHUB_OUTPUT
+          echo "Lane: $LANE"
+
+      - name: List changed files
+        id: files
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -e
+          owner="${OWNER_REPO%/*}"; repo="${OWNER_REPO#*/}"
+          page=1
+          > files.txt
+          while : ; do
+            url="https://api.github.com/repos/$owner/$repo/pulls/${PR_NUMBER}/files?per_page=100&page=$page"
+            json=$(curl -fsSL -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" "$url")
+            cnt=$(jq 'length' <<<"$json")
+            jq -r '.[].filename' <<<"$json" >> files.txt
+            [ "$cnt" -lt 100 ] && break
+            page=$((page+1))
+          done
+          echo "변경 파일 수: $(wc -l < files.txt)"
+          cat files.txt
+
+      - name: Enforce lane ↔ paths mapping (strict)
+        id: map
+        shell: bash
+        run: |
+          set -e
+          LANE="${{ steps.lab.outputs.lane }}"
+          echo "검증중 Lane=$LANE"
+          # Lane 별 허용 경로(글롭). 필요시 여기만 조정하면 됨.
+          python3 - <<'PY'
+import sys, fnmatch, json, os
+lane = os.environ["LANE"]
+files = [x.strip() for x in open("files.txt").read().splitlines() if x.strip()]
+
+ALLOW = {
+  "lane:experiment": [
+    "tools/**", "configs/**", "reports/**",
+    "slo_sla_dashboard_v1/**", "Makefile"
+  ],
+  "lane:ops": [
+    "configs/canary_settings.yaml", "shared-scripts/**", "infra/**",
+    "Makefile", ".github/workflows/**"
+  ],
+  "lane:ci": [
+    ".github/**", "Makefile"
+  ],
+}
+
+deny = []
+allows = ALLOW.get(lane, [])
+for f in files:
+    ok = any(fnmatch.fnmatch(f, p) for p in allows)
+    if not ok:
+        deny.append(f)
+
+summary = {
+  "lane": lane,
+  "changed": files,
+  "denied": deny,
+  "allow_globs": allows,
+}
+open("lane-guard-summary.json","w").write(json.dumps(summary, indent=2, ensure_ascii=False))
+print(json.dumps(summary, indent=2, ensure_ascii=False))
+
+if deny:
+    print("DENY:", "\n".join(deny))
+    sys.exit(78)  # 임시 실패코드, 다음 스텝에서 우회 검토
+PY
+
+      - name: Maybe allow by override (needs approvals)
+        if: failure()  # 이전 스텝에서 막혔을 때만 실행
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -e
+          echo "Lane-guard 위반 → 우회 조건 확인..."
+          if ! grep -q "^${OVERRIDE_LABEL}$" labels.txt; then
+            echo "❌ '${OVERRIDE_LABEL}' 라벨 없음 → 우회 불가"
+            cat lane-guard-summary.json
+            exit 1
+          fi
+          owner="${OWNER_REPO%/*}"; repo="${OWNER_REPO#*/}"
+          # 승인 리뷰 개수
+          approvals=$(curl -fsSL -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$owner/$repo/pulls/${PR_NUMBER}/reviews?per_page=100" \
+            | jq '[.[]|select(.state=="APPROVED")] | length')
+          echo "승인 리뷰 수: $approvals"
+          if [ "$approvals" -lt "$MIN_OVERRIDE_APPROVALS" ]; then
+            echo "❌ 승인 부족(필요: ${MIN_OVERRIDE_APPROVALS}) → 우회 불가"
+            cat lane-guard-summary.json
+            exit 1
+          fi
+          echo "✅ '${OVERRIDE_LABEL}' + 승인 충족 → 일시 우회 허용"
+
+      - name: Write summary
+        if: always()
+        shell: bash
+        run: |
+          echo "## Lane Guard Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Lane:** ${{ steps.lab.outputs.lane }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          cat lane-guard-summary.json >> $GITHUB_STEP_SUMMARY || true
+          echo '```' >> $GITHUB_STEP_SUMMARY
