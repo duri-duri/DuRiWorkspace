@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+blocked=0
+# 1) 푸시 ref 검사
+while read -r local_ref local_sha remote_ref remote_sha; do
+  if [[ "$remote_ref" =~ ^refs/heads/(main|release/.*)$ ]]; then
+    echo "❌ $remote_ref 에 직접 push 금지. PR로 진행하세요."
+    blocked=1
+  fi
+done
+# 2) 혹시 STDIN이 비어 있거나 ref 파싱 못했을 때 현재 브랜치로도 차단
+branch="$(git symbolic-ref --quiet --short HEAD || true)"
+if [[ $blocked -eq 1 || "$branch" =~ ^(main|release/.*)$ ]]; then
+  exit 1
+fi
