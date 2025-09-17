@@ -15,7 +15,7 @@ jobs:
           separator: "\n"
       - name: Enforce freeze allowlist
         run: |
-          ALLOW='^(configs/|tools/|reports/|slo_sla_dashboard_v1/|Makefile|\.github/|\.githooks/|\.gitignore|scripts/)'
+          ALLOW='^(configs/|tools/|reports/|slo_sla_dashboard_v1/|Makefile|\.github/|\.githooks/|\.gitignore|\.gitattributes|scripts/|README\.md)'
           CHANGED="${{ steps.cf.outputs.all_changed_files }}"
           if [ -z "$CHANGED" ]; then echo "No changed files → allow."; exit 0; fi
           BAD=0

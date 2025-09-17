@@ -76,6 +76,7 @@ DuRi 시스템의 중앙 제어 허브 API 서버입니다. 모든 DuRi 서비�
 ```bash
 git clone <repository-url>
 cd DuRiWorkspace
+./scripts/bootstrap.sh   # 클론 후 1회 실행
 ```
 
 ### 2. 부트스트랩 (새 팀원용)
