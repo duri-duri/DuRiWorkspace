@@ -1,4 +1,4 @@
-name: exit-gate
+name: exit-gate (manual-soft)
 on:
   workflow_dispatch:
     inputs:
