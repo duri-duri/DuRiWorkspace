@@ -78,13 +78,32 @@ git clone <repository-url>
 cd DuRiWorkspace
 ```
 
-### 2. 환경 변수 설정
+### 2. 부트스트랩 (새 팀원용)
+```bash
+# Git 훅 설정 및 권한 부여 (한 번만 실행)
+./scripts/bootstrap.sh
+```
+
+### 3. 개발 워크플로우 (자동화)
+```bash
+git pr-start           # 새 작업 시작(브랜치+PR+자동머지 예약)
+# 작업 후
+git add -A && git commit -m "msg" && git push
+gh wait && git sync-main  # 체크 모니터링 + main 동기화
+```
+
+### 4. 안전장치
+- **main/release/* 브랜치 커밋 차단**: pre-commit 훅으로 자동 차단
+- **실수 시 구조**: `git rescue-main`으로 10초 컷 구조
+- **자동 PR/머지**: `git pr-start`로 브랜치 생성 + PR + 자동머지 예약
+
+### 5. 환경 변수 설정
 ```bash
 cp deploy/env.prod.example .env
 # .env 파일을 편집하여 필요한 설정을 변경하세요
 ```
 
-### 3. 시스템 빌드 및 시작
+### 6. 시스템 빌드 및 시작
 ```bash
 # 전체 시스템 빌드
 ./deploy/build_all.sh
@@ -93,7 +112,7 @@ cp deploy/env.prod.example .env
 ./deploy/start_services.sh --wait --health-check
 ```
 
-### 4. 접속 확인
+### 7. 접속 확인
 - **API 문서**: http://localhost:8083/docs
 - **헬스 체크**: http://localhost:8083/health/
 - **서비스 상태**: http://localhost:8083/monitor/services
