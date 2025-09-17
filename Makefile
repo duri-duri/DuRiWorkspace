@@ -112,37 +112,12 @@ day50:
 
 .PHONY: gate-objective
 gate-objective:
-	@$(PY) - <<'PY'
-import json,sys
-s=json.load(open("reports/objective_tuning_summary.json"))
-ok = s.get("tuning_success", False)
-print("J_proxy =", s.get("j_proxy"))
-sys.exit(0 if ok else 1)
-PY
+	@$(PY) -c "import json,sys; s=json.load(open('reports/objective_tuning_summary.json')); ok = s.get('tuning_success', False); print('J_proxy =', s.get('j_proxy')); sys.exit(0 if ok else 1)"
 
 .PHONY: use-start use-check use-report use-stop
 
-use-check:
-	@$(PY) tools/pilot_metrics_rollup.py --output slo_sla_dashboard_v1/metrics.json || true
-	@$(PY) tools/objective_tuning_v2.py --out-yaml configs/objective_params_v2.yaml --out-summary reports/objective_tuning_summary.json || true
-	@$(PY) - <<'PY'
-import json
-with open("reports/objective_tuning_summary.json") as f:
-    s=json.load(f)
-print("J_proxy:", s.get("j_proxy"), "tuning_success:", s.get("tuning_success"))
-print("input_metrics:", s.get("input_metrics"))
-print("scores:", s.get("scores"))
-PY
-
 use-start:
-	@python3 - <<'PY'
-import yaml,sys
-p="configs/canary_settings.yaml"
-cfg=yaml.safe_load(open(p)) if open(p).read().strip() else {}
-cfg={"medical":{"canary":0.05},"rehab":{"canary":0.0},"coding":{"canary":0.0}}
-open(p,"w").write(yaml.dump(cfg,allow_unicode=True,default_flow_style=False))
-print("Set canary -> medical 5%, others 0%")
-PY
+	@python3 -c "import yaml,sys; p='configs/canary_settings.yaml'; cfg=yaml.safe_load(open(p)) if open(p).read().strip() else {}; cfg={'medical':{'canary':0.05},'rehab':{'canary':0.0},'coding':{'canary':0.0}}; open(p,'w').write(yaml.dump(cfg,allow_unicode=True,default_flow_style=False)); print('Set canary -> medical 5%, others 0%')"
 	@git fetch origin
 	@branch=ops/canary-5-medical-$(shell date +%F-%H%M%S); \
 	git switch -c $$branch; \
@@ -171,3 +146,7 @@ use-stop:
 	git add configs/canary_settings.yaml
 	git commit -m "ops: canary 0% (panic)" || true
 	git push || true
+
+.PHONY: gate-exit
+gate-exit:
+	@$(PY) -c "import json, sys, pathlib, os; ERR_MAX=float(os.getenv('ERR_MAX', 0.02)); TO_MAX=float(os.getenv('TO_MAX', 0.02)); EXPL_MIN=float(os.getenv('EXPL_MIN', 0.70)); D21_MIN=float(os.getenv('D21_MIN', 0.00)); p_err=p_to=1.0; explain=0.0; d21=-1.0; p=pathlib.Path('reports/objective_tuning_summary.json'); s=json.load(open(p)) if p.exists() else {}; m=(s.get('input_metrics') or s.get('metrics') or {}) if p.exists() else json.load(open('slo_sla_dashboard_v1/metrics.json')); p_err=float(m.get('p_error', p_err)); p_to=float(m.get('p_timeout', p_to)); explain=float((s.get('scores') or {}).get('explain', explain)) if p.exists() else float(m.get('explain_score', explain)); d21=float(s.get('retention_d21_delta', d21)) if p.exists() else float(m.get('retention_d21_delta', d21)); ok=(p_err<=ERR_MAX and p_to<=TO_MAX and explain>=EXPL_MIN and d21>=D21_MIN); print(f'p_error={p_err:.3f}, p_timeout={p_to:.3f}, explain={explain:.3f}, d21Δ={d21:.3f}'); sys.exit(0 if ok else 2)"
