@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+branch="$(git symbolic-ref --quiet --short HEAD || true)"
+if [[ "$branch" =~ ^(main|release/.*)$ ]]; then
+  echo "❌ '$branch' 브랜치에서는 커밋 금지. 'git pr-start' 로 작업 브랜치를 만드세요."
+  exit 1
+fi
