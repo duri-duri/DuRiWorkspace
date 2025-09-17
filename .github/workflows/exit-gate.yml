@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       ref:
-        description: "Git ref to check out (default: main)"
+        description: "Git ref to check"
         required: false
         default: main
   push:
