@@ -17,5 +17,8 @@
 # freeze-guard 자체 수정 허용(옵션)
 ^\.github/workflows/freeze-guard\.yml$
 
+# allowlist 파일 자체 수정 허용
+^\.github/freeze-allow\.txt$
+
 # 모든 Markdown 문서 허용
 \.md$
