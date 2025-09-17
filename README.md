@@ -87,16 +87,17 @@ cd DuRiWorkspace
 
 ### 3. 개발 워크플로우 (자동화)
 ```bash
-git pr-start           # 새 작업 시작(브랜치+PR+자동머지 예약)
+git pr-start           # 새 작업 시작(브랜치 생성)
 # 작업 후
-git add -A && git commit -m "msg" && git push
+git add -A && git commit -m "msg"
+git pr-open            # PR 생성 + 자동머지 예약
 gh wait && git sync-main  # 체크 모니터링 + main 동기화
 ```
 
 ### 4. 안전장치
 - **main/release/* 브랜치 커밋 차단**: pre-commit 훅으로 자동 차단
 - **실수 시 구조**: `git rescue-main`으로 10초 컷 구조
-- **자동 PR/머지**: `git pr-start`로 브랜치 생성 + PR + 자동머지 예약
+- **자동 PR/머지**: `git pr-open`으로 PR 생성 + 자동머지 예약
 
 ### 5. 환경 변수 설정
 ```bash
