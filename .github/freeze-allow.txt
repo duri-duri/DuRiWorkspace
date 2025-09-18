@@ -1,67 +1,15 @@
-# Freeze-guard allowlist (regex, repo-root 상대 경로)
-# 줄 단위 정규식. 공백/주석은 무시됨.
+# freeze-guard allowlist (regex per line)
 
-# 문서/메타
-^README\.md$
-^CHANGELOG\.md$
-^LICENSE$
-^\.gitignore$
-^\.gitattributes$
-^\.github/pull_request_template\.md$
-
-# 레포 훅/스크립트/문서 폴더
-^\.githooks/
-^scripts/
-^docs/
-
-# freeze-guard 자체 수정 허용(옵션)
-^\.github/workflows/freeze-guard\.yml$
-
-# allowlist 파일 자체 수정 허용
-^\.github/freeze-allow\.txt$
-
-# 모든 Markdown 문서 허용
-\.md$
-.github/workflows/automerge-ops.yml
-# ----- Insight Engine (β) scaffold -----
-insight/
-tests/test_insight_engine.py
-docs/insight/spec.md
-scripts/run_insight.sh
-.github/workflows/insight-ci.yml
-# ----- Prompt Pipeline v1 -----
-insight/pipeline.py
-scripts/insight_dataset_clean.py
-tests/test_pipeline.py
-
-# ----- Cache/Log files (ignore) -----
-__pycache__/
-.*\.pyc$
-.*\.pyo$
-.*\.log$
-
-# --- insight engine + pipeline scaffold ---
-insight/
-scripts/run_insight.sh
-scripts/insight_dataset_clean.py
-tests/test_pipeline.py
-docs/insight/spec.md
-.github/workflows/insight-ci.yml
-
-# ----- Phase 19: 메트릭 리포트 CI -----
-insight/metrics.py
-insight/cli.py
-tests/test_metrics.py
-.github/workflows/insight-metrics-report.yml
-
-# ----- 서브모듈 포인터 변경 허용 -----
+# submodule pointer bumps
 ^duri_core$
-^duri_brain$
-^duri_control$
-^duri_evolution$
-^duri_all_scripts$
 
-# ----- Phase 19-2: 샘플셋 리그/회귀 -----
-samplesets/
-baselines/
-.github/workflows/insight-league.yml
+# workflows explicitly allowed
+^\.github/workflows/insight-metrics-report\.yml$
+^\.github/workflows/insight-league\.yml$
+
+# DX files that are safe to change in ops/*
+^Makefile$
+
+# Phase 19-2 regression assets
+^samplesets/.*$
+^baselines/.*$
