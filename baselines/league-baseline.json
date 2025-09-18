@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "sampleset": {
+    "name": "basic",
+    "total": 2
+  },
+  "run": {
+    "name": "current"
+  },
+  "overall": {
+    "avg_composite": 0.6355770639964045,
+    "min": 0.6350261576690301,
+    "max": 0.6361279703237788,
+    "std": 0.000550906327374312
+  },
+  "by_group": [
+    {
+      "group": "simple",
+      "count": 2,
+      "avg_composite": 0.6355770639964045
+    }
+  ],
+  "results": [
+    {
+      "id": "s1",
+      "group": "simple",
+      "tag": "baseline",
+      "prompt": "Say the pangram.",
+      "text": "The quick brown fox jumps over the lazy dog.",
+      "composite_score": 0.6361279703237788,
+      "details": {
+        "metrics": {
+          "distinct_1": 0.8888888888888888,
+          "distinct_2": 1.0,
+          "repeat_penalty": 0.1111111111111111,
+          "brevity_prior": 0.18063985161889395,
+          "bleu_like": 1.0
+        }
+      }
+    },
+    {
+      "id": "s2",
+      "group": "simple",
+      "tag": "baseline",
+      "prompt": "Describe the dog.",
+      "text": "The dog is lazy and sleeps all day.",
+      "composite_score": 0.6350261576690301,
+      "details": {
+        "metrics": {
+          "distinct_1": 1.0,
+          "distinct_2": 1.0,
+          "repeat_penalty": 0.0,
+          "brevity_prior": 0.17513078834515095,
+          "bleu_like": 1.0
+        }
+      }
+    }
+  ]
+}

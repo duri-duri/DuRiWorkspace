@@ -1,10 +1,12 @@
 import argparse
 import json
 import sys
+from pathlib import Path
 from typing import List, Dict, Any, Optional
 
 from .engine import rank, score_candidate
 from .metrics import distinct_n, repeat_penalty, brevity_prior, bleu_like, composite, evaluate_text, evaluate_candidates
+from .league import load_sampleset, evaluate_league, save_md_table, regress, regression_md
 
 def main():
     parser = argparse.ArgumentParser(description="Insight Engine CLI for prompt evaluation and ranking.")
@@ -31,6 +33,23 @@ def main():
     eval_parser.add_argument("--weights", type=json.loads, default=None, help="JSON string for custom weights for composite score.")
     eval_parser.add_argument("--detailed", action="store_true", help="Output detailed scores for each metric.")
     eval_parser.add_argument("--output", type=str, help="Output file path for results (JSON).")
+
+    # League command
+    league_parser = subparsers.add_parser("league", help="Evaluate a sample set and produce a league table")
+    league_parser.add_argument("--set", required=True, help="Path to sampleset yaml")
+    league_parser.add_argument("--outputs", help="JSONL of model outputs (id,text,tag)")
+    league_parser.add_argument("--run-name", default="current")
+    league_parser.add_argument("--out-json", default="league.json")
+    league_parser.add_argument("--out-md", default="league.md")
+
+    # Regress command
+    regress_parser = subparsers.add_parser("regress", help="Compare current league result with baseline")
+    regress_parser.add_argument("--baseline", required=True, help="Baseline league.json")
+    regress_parser.add_argument("--current", required=True, help="Current league.json")
+    regress_parser.add_argument("--out-md", default="regression.md")
+    regress_parser.add_argument("--threshold-overall", type=float, default=0.005)
+    regress_parser.add_argument("--threshold-group", type=float, default=0.010)
+    regress_parser.add_argument("--fail-on-drop", action="store_true")
 
     args = parser.parse_args()
 
@@ -73,6 +92,22 @@ def main():
                 print(f"Evaluation results saved to {args.output}")
             else:
                 print(json.dumps(results, ensure_ascii=False, indent=2))
+    elif args.command == "league":
+        ss = load_sampleset(Path(args.set))
+        rep = evaluate_league(ss, Path(args.outputs) if args.outputs else None, run_name=args.run_name)
+        Path(args.out_json).write_text(json.dumps(rep, ensure_ascii=False, indent=2), encoding="utf-8")
+        Path(args.out_md).write_text(save_md_table(rep), encoding="utf-8")
+        print(f"[league] wrote {args.out_json}, {args.out_md}")
+    elif args.command == "regress":
+        baseline = json.loads(Path(args.baseline).read_text(encoding="utf-8"))
+        current  = json.loads(Path(args.current).read_text(encoding="utf-8"))
+        summary = regress(baseline, current,
+                          threshold_overall=args.threshold_overall,
+                          threshold_group=args.threshold_group)
+        Path(args.out_md).write_text(regression_md(summary), encoding="utf-8")
+        print(f"[regress] wrote {args.out_md} (passed={summary['passed']})")
+        if args.fail_on_drop and not summary["passed"]:
+            sys.exit(2)
     else:
         parser.print_help()
 

@@ -1,0 +1,27 @@
+version: 1
+name: basic
+description: Minimal sample set for Phase 19-2 scaffolding
+groups:
+  - id: simple
+    weight: 1.0
+samples:
+  - id: s1
+    group: simple
+    prompt: "Say the pangram."
+    references:
+      - "The quick brown fox jumps over the lazy dog."
+    candidates:  # (옵션) 내장 후보. 외부 outputs로 대체 가능
+      - tag: baseline
+        text: "The quick brown fox jumps over the lazy dog."
+      - tag: variantA
+        text: "A fast brown fox leaps over a sleepy canine."
+  - id: s2
+    group: simple
+    prompt: "Describe the dog."
+    references:
+      - "The dog is lazy and sleeps all day."
+    candidates:
+      - tag: baseline
+        text: "The dog is lazy and sleeps all day."
+      - tag: variantA
+        text: "The dog is very lazy and sleeps a lot."
