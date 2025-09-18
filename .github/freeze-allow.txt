@@ -1,15 +1,14 @@
-# freeze-guard allowlist (regex per line)
-
-# submodule pointer bumps
-^duri_core$
-
-# workflows explicitly allowed
-^\.github/workflows/insight-metrics-report\.yml$
-^\.github/workflows/insight-league\.yml$
 
 # DX files that are safe to change in ops/*
-^Makefile$
-
 # Phase 19-2 regression assets
-^samplesets/.*$
+# freeze-guard allowlist (regex per line)
+# submodule pointer bumps
+# workflows explicitly allowed
+^Makefile$
+^\.github/workflows/insight-league\.yml$
+^\.github/workflows/insight-metrics-report\.yml$
 ^baselines/.*$
+^duri_core$
+^insight/cli\.py$
+^insight/league\.py$
+^samplesets/.*$
