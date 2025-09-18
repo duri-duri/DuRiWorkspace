@@ -33,3 +33,17 @@ scripts/run_insight.sh
 insight/pipeline.py
 scripts/insight_dataset_clean.py
 tests/test_pipeline.py
+
+# ----- Cache/Log files (ignore) -----
+__pycache__/
+.*\.pyc$
+.*\.pyo$
+.*\.log$
+
+# --- insight engine + pipeline scaffold ---
+insight/
+scripts/run_insight.sh
+scripts/insight_dataset_clean.py
+tests/test_pipeline.py
+docs/insight/spec.md
+.github/workflows/insight-ci.yml
