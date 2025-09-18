@@ -53,3 +53,10 @@ insight/metrics.py
 insight/cli.py
 tests/test_metrics.py
 .github/workflows/insight-metrics-report.yml
+
+# ----- 서브모듈 포인터 변경 허용 -----
+^duri_core$
+^duri_brain$
+^duri_control$
+^duri_evolution$
+^duri_all_scripts$
