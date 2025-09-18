@@ -47,3 +47,19 @@ scripts/insight_dataset_clean.py
 tests/test_pipeline.py
 docs/insight/spec.md
 .github/workflows/insight-ci.yml
+
+# ----- Phase 19: 메트릭 리포트 CI -----
+insight/metrics.py
+insight/cli.py
+tests/test_metrics.py
+.github/workflows/insight-metrics-report.yml
+
+# ----- 서브모듈 포인터 변경 허용 -----
+^duri_core$
+^duri_brain$
+^duri_control$
+^duri_evolution$
+^duri_all_scripts$
+
+# allow submodule pointer bumps
+^duri_core$
