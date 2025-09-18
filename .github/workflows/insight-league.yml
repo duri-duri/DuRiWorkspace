@@ -8,6 +8,13 @@ on:
       - 'samplesets/**'
       - 'baselines/**'
       - '.github/workflows/insight-league.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'insight/**'
+      - 'samplesets/**'
+      - 'baselines/**'
+      - '.github/workflows/insight-league.yml'
   workflow_dispatch: {}
   # schedule:
   #   - cron: "0 3 * * *"  # UTC 03:00 daily (옵션)
@@ -63,11 +70,13 @@ jobs:
               --baseline baselines/league-baseline.json \
               --current league.json \
               --out-md regression.md \
+              --out-json tmp/regression_summary.json \
               --threshold-overall 0.005 \
               --threshold-group 0.010 \
               --fail-on-drop
           else
             echo "No baseline found; skipping regression" > regression.md
+            echo '{"passed": true, "mean_baseline": 0.0, "mean_current": 0.0, "delta": 0.0, "threshold": 0.005}' > tmp/regression_summary.json
           fi
 
       - name: Upload regression artifact
@@ -75,8 +84,33 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: insight-regression
-          path: regression.md
+          path: |
+            regression.md
+            tmp/regression_summary.json
           retention-days: 30
+
+      - name: Build Shields.io badge endpoint JSON
+        run: |
+          mkdir -p public
+          python3 - <<'PY'
+          import json, sys, pathlib
+          s = json.load(open('tmp/regression_summary.json'))
+          color = 'brightgreen' if s.get('passed') else 'red'
+          msg = ('pass' if s.get('passed') else 'fail') + f" ({s.get('delta',0):+.3f})"
+          payload = {"schemaVersion":1, "label":"regression", "message": msg, "color": color}
+          pathlib.Path('public').mkdir(parents=True, exist_ok=True)
+          with open('public/regression.json','w', encoding='utf-8') as f:
+              json.dump(payload, f, ensure_ascii=False)
+          PY
+
+      - name: Publish regression badge (branch=badges)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: badges
+          publish_dir: public
+          keep_files: true
 
       - name: Comment PR with league/regression summary
         if: ${{ github.event_name == 'pull_request' }}
@@ -99,6 +133,8 @@ jobs:
 
             const body = [
               '## 🏟️ Insight League & Regression',
+              '',
+              '**Main status:** ![Regression](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/duri-duri/DuRiWorkspace/badges/regression.json)',
               '',
               '**League (current):**',
               `- Avg: \`${(o.avg_composite ?? 0).toFixed(3)}\`  •  Min: \`${(o.min ?? 0).toFixed(3)}\`  •  Max: \`${(o.max ?? 0).toFixed(3)}\`  •  Std: \`${(o.std ?? 0).toFixed(3)}\``,

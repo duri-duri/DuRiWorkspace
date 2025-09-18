@@ -47,6 +47,7 @@ def main():
     regress_parser.add_argument("--baseline", required=True, help="Baseline league.json")
     regress_parser.add_argument("--current", required=True, help="Current league.json")
     regress_parser.add_argument("--out-md", default="regression.md")
+    regress_parser.add_argument("--out-json", help="Output JSON summary for badge generation")
     regress_parser.add_argument("--threshold-overall", type=float, default=0.005)
     regress_parser.add_argument("--threshold-group", type=float, default=0.010)
     regress_parser.add_argument("--fail-on-drop", action="store_true")
@@ -106,6 +107,21 @@ def main():
                           threshold_group=args.threshold_group)
         Path(args.out_md).write_text(regression_md(summary), encoding="utf-8")
         print(f"[regress] wrote {args.out_md} (passed={summary['passed']})")
+        
+        # Generate badge JSON if requested
+        if args.out_json:
+            badge_summary = {
+                "passed": summary["passed"],
+                "mean_baseline": float(summary["overall"]["baseline"]),
+                "mean_current": float(summary["overall"]["current"]),
+                "delta": float(summary["overall"]["delta"]),
+                "threshold": float(summary["overall"]["threshold"]),
+            }
+            Path(args.out_json).parent.mkdir(parents=True, exist_ok=True)
+            with open(args.out_json, "w", encoding="utf-8") as f:
+                json.dump(badge_summary, f, ensure_ascii=False, indent=2)
+            print(f"[regress] wrote badge JSON: {args.out_json}")
+        
         if args.fail_on_drop and not summary["passed"]:
             sys.exit(2)
     else:
