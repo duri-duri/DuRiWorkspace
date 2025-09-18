@@ -9,6 +9,10 @@ on:
       - '.github/workflows/insight-metrics-report.yml'
   workflow_dispatch: {}
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
   pull-requests: write
@@ -26,6 +30,7 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
+          cache: 'pip'
 
       - name: Install dependencies
         run: |
@@ -35,6 +40,7 @@ jobs:
         run: python -m pytest tests/test_metrics.py -v
 
       - name: Generate metrics report
+        id: generate
         run: |
           python - <<'PY'
           import json
@@ -65,6 +71,8 @@ jobs:
           with open('metrics_report.json','w', encoding='utf-8') as f:
               json.dump(report, f, ensure_ascii=False, indent=2)
           print('Metrics report generated successfully!')
+          print(f'AVG={report["average_composite_score"]:.3f}')
+          print(f'RANGE={report["summary"]["score_range"]:.3f}')
           PY
 
       - name: Upload metrics report
@@ -74,7 +82,16 @@ jobs:
           path: metrics_report.json
           retention-days: 30
 
-      - name: Comment PR with metrics summary
+      - name: Write job summary
+        run: |
+          echo "## 📊 Insight Metrics Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- Average: ${{ steps.generate.outputs.AVG }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Range: ${{ steps.generate.outputs.RANGE }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Samples: 5" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "See PR comment for detailed results." >> $GITHUB_STEP_SUMMARY
+
+      - name: Comment PR with metrics summary (upsert)
         if: ${{ github.event_name != 'workflow_dispatch' }}
         uses: actions/github-script@v7
         with:
@@ -82,29 +99,32 @@ jobs:
           script: |
             const fs = require('fs');
             const report = JSON.parse(fs.readFileSync('metrics_report.json','utf8'));
-            const esc = (s) => String(s).replace(/[`$\\]/g, (m) => ({'`':'\\`','$':'\\$','\\':'\\\\'}[m]));
+            const esc = s => String(s).replace(/[`$\\]/g, m => ({'`':'\\`','$':'\\$','\\':'\\\\'}[m]));
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
             
             const lines = [];
-            lines.push('## 📊 Insight Metrics Report', '');
-            lines.push('**Summary:**');
-            lines.push(`- 📈 Average Composite Score: ${report.average_composite_score.toFixed(3)}`);
-            lines.push(`- 📊 Score Range: ${report.summary.score_range.toFixed(3)}`);
-            lines.push(`- 📝 Total Samples: ${report.total_samples}`, '');
-            lines.push('**Top Performer:**');
-            lines.push(`> ${esc(report.summary.highest_score.text)}`);
-            lines.push(`> Score: ${report.summary.highest_score.composite_score.toFixed(3)}`, '');
-            lines.push('**Detailed Results:**');
-            for (const [i, r] of report.results.entries()) {
-              const txt = r.text.length > 50 ? r.text.slice(0, 50) + '...' : r.text;
-              lines.push(`${i+1}. Score: ${r.composite_score.toFixed(3)} - ${esc(txt)}`);
+            lines.push('## 📊 Insight Metrics Report','',
+              '**Summary:**',
+              `- 📈 Average Composite Score: ${report.average_composite_score.toFixed(3)}`,
+              `- 📊 Score Range: ${report.summary.score_range.toFixed(3)}`,
+              `- 📝 Total Samples: ${report.total_samples}`,'',
+              '**Top Performer:**',
+              `> ${esc(report.summary.highest_score.text)}`,
+              `> Score: ${report.summary.highest_score.composite_score.toFixed(3)}`,'',
+              '**Detailed Results:**');
+            for (const [i,r] of report.results.entries()) {
+              const t = r.text.length>50 ? r.text.slice(0,50)+'…' : r.text;
+              lines.push(`${i+1}. Score: ${r.composite_score.toFixed(3)} - ${esc(t)}`);
             }
-            lines.push('', '📁 Full report available as artifact: `insight-metrics-report`');
-            
+            lines.push('',`📁 Full report: [Artifacts on this run](${runUrl})`);
             const body = lines.join('\n');
-            
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body
+
+            const {data: comments} = await github.rest.issues.listComments({
+              owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number, per_page: 100
             });
+            const prev = comments.find(c => c.user.type==='Bot' && /Insight Metrics Report/.test(c.body||''));
+            if (prev) {
+              await github.rest.issues.updateComment({ owner: context.repo.owner, repo: context.repo.repo, comment_id: prev.id, body });
+            } else {
+              await github.rest.issues.createComment({ owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number, body });
+            }
