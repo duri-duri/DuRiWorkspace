@@ -19,13 +19,12 @@ jobs:
         with:
           script: |
             const pr = context.payload.pull_request;
-            const MAX_TRIES = 60;           // 최대 5분(60 * 5s)
+            const MAX_TRIES = 60; // 5분
             const SLEEP_MS  = 5000;
-
-            async function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+            const sleep = ms => new Promise(r => setTimeout(r, ms));
 
             async function allGreen() {
-              // check-runs
+              // check runs
               const checks = await github.checks.listForRef({ ...context.repo, ref: pr.head.sha, per_page: 100 });
               const runsOk = checks.data.check_runs.every(c => c.status === 'completed' && c.conclusion === 'success');
 
@@ -36,25 +35,20 @@ jobs:
               return runsOk && statusOk;
             }
 
-            // 대기 루프(레이스 방지)
             let ok = false;
-            for (let i=0; i<MAX_TRIES; i++){
+            for (let i=0; i<MAX_TRIES; i++) {
               if (await allGreen()) { ok = true; break; }
               await sleep(SLEEP_MS);
             }
 
             if (!ok) {
               core.notice('Required checks not all green yet. Skipping without failing.');
-              return; // 실패로 만들지 않음(비차단)
+              return; // 비차단: 실패로 끝내지 않음
             }
 
-            // 머지 시도
             try {
-              await github.pulls.merge({
-                ...context.repo, pull_number: pr.number, merge_method: 'squash'
-              });
+              await github.pulls.merge({ ...context.repo, pull_number: pr.number, merge_method: 'squash' });
               core.notice(`Merged PR #${pr.number} via automerge-ops.`);
             } catch (e) {
-              // 체크는 성공으로 두고 공지 남김 (예: 막 푸시되어 SHA 바뀐 경우 등)
               core.notice(`Automerge skipped (reason: ${e.message}).`);
             }
