@@ -1,5 +1,19 @@
 #!/usr/bin/env bash
 set -euo pipefail
+
+# ---- freeze-guard preflight (with local bypass) ----------------------------
+# 1) 환경변수로 우회 (긴급 시)
+if [[ "${FREEZE_BYPASS:-0}" == "1" ]]; then
+  echo "⚠️  freeze-preflight bypassed via FREEZE_BYPASS=1"
+  exit 0
+fi
+# 2) 커밋 메시지 태그로 우회 (예: 'override:freeze' 또는 '[override:freeze]')
+last_msg="$(git log -1 --pretty=%B || true)"
+if grep -qiE '\[?override:freeze\]?' <<<"$last_msg"; then
+  echo "⚠️  freeze-preflight bypassed via commit message tag 'override:freeze'"
+  exit 0
+fi
+
 blocked=0
 # 1) 푸시 ref 검사
 while read -r local_ref local_sha remote_ref remote_sha; do
@@ -12,4 +26,15 @@ done
 branch="$(git symbolic-ref --quiet --short HEAD || true)"
 if [[ $blocked -eq 1 || "$branch" =~ ^(main|release/.*)$ ]]; then
   exit 1
+fi
+
+# 3) freeze preflight (PR 브랜치에서만)
+if [[ "$branch" != "main" && ! "$branch" =~ ^release/ ]]; then
+  CHANGES=$(./scripts/freeze-preflight.sh)
+  if [[ -n "$CHANGES" ]]; then
+    echo "❌ freeze-guard 실패 예상. 허용되지 않은 변경:"
+    echo "$CHANGES"
+    echo "ℹ️ .github/freeze-allow.txt 수정 또는 (긴급) FREEZE_BYPASS=1 git push"
+    exit 1
+  fi
 fi
