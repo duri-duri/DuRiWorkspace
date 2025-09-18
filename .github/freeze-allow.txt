@@ -22,3 +22,4 @@
 
 # 모든 Markdown 문서 허용
 \.md$
+.github/workflows/automerge-ops.yml
