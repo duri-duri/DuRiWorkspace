@@ -6,6 +6,7 @@
 ^CHANGELOG\.md$
 ^LICENSE$
 ^\.gitignore$
+<<<<<<< HEAD
 ^\.gitattributes$
 ^\.github/pull_request_template\.md$
 
@@ -69,3 +70,5 @@ baselines/
 # ----- Phase 19-3: 회귀 배지 -----
 public/
 tmp/
+=======
+>>>>>>> 63e52de89 (chore(freeze): remove self-allow for freeze-allow.txt (restore strictness))
