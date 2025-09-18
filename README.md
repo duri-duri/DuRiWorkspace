@@ -1,6 +1,14 @@
 # 🚀 DuRi 백업 리팩토링 - 운영자용 스타트 가이드
 
+[![Regression](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/duri-duri/DuRiWorkspace/badges/regression.json)](https://github.com/duri-duri/DuRiWorkspace/actions/workflows/insight-league.yml)
+
 > **⚠️ 중요**: 이 가이드는 백업 리팩토링 실행을 위한 것입니다. 실행 전 반드시 전체 내용을 읽어주세요.
+
+## 🔒 **운영 정책 (Freeze-Guard)**
+
+- **긴급 우회**: 마지막 커밋에 `Override-Freeze: true` 트레일러 + 서명 커밋(필요 시)만 허용
+- **태그 정책**: `vMAJOR.MINOR.PATCH`(annotated; 필요시 signed)만 허용
+- **PR 생성**: `git pr-start` 또는 `git pr-open`으로 생성하세요(원격 브랜치 자동 보장)
 
 ## ✅ **첫 실행 체크리스트 (DRY-RUN→실행) - 5줄 핵심**
 
@@ -355,3 +363,4 @@ git pull origin main
 
 # gate
 # workflow_dispatch test Tue Aug 26 10:02:49 KST 2025
+# Phase 19-3 배지 시스템 활성화 테스트

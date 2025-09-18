@@ -1,4 +1,8 @@
 
+# dev scratch (prevent noisy commits & pre-push blocks)
+allow.re
+changed.txt
+
 # Day41~43: PoU Pilot Logs (all variants, kept via CI artifacts)
 # Day41~43: PoU Pilot Logs (kept via CI artifacts)
 # 가상환경/캐시
@@ -46,6 +50,6 @@ slo_sla_dashboard_v1/metrics.json
 # track repo hooks
 !.githooks/**
 
-# dev scratch
-allow.re
-changed.txt
+# Phase 19-3: 배지/임시 산출물 (CI가 badges 브랜치로 퍼블리시)
+public/
+tmp/
