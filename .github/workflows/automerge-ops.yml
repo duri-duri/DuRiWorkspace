@@ -52,3 +52,4 @@ jobs:
             } catch (e) {
               core.notice(`Automerge skipped (reason: ${e.message}).`);
             }
+    continue-on-error: true
