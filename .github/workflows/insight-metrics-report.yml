@@ -1,0 +1,120 @@
+name: insight-metrics-report
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'insight/**'
+      - 'tests/test_metrics.py'
+      - '.github/workflows/insight-metrics-report.yml'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  metrics-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest
+
+      - name: Run metrics tests
+        run: |
+          python -m pytest tests/test_metrics.py -v
+
+      - name: Generate metrics report
+        run: |
+          python -c "
+          import json
+          import sys
+          sys.path.append('.')
+          from insight.metrics import evaluate_text, evaluate_candidates
+          
+          # 샘플 텍스트들로 메트릭 리포트 생성
+          sample_texts = [
+              'The quick brown fox jumps over the lazy dog.',
+              'A fast brown fox leaps over a sleepy canine.',
+              'The dog is lazy and sleeps all day.',
+              'Innovative solutions require creative thinking and comprehensive analysis.',
+              'This is a very short text.'
+          ]
+          
+          # 각 텍스트 평가
+          results = []
+          for i, text in enumerate(sample_texts):
+              result = evaluate_text(text, detailed=True)
+              result['text'] = text
+              result['index'] = i
+              results.append(result)
+          
+          # 전체 리포트 생성
+          report = {
+              'timestamp': '$(date -u +%Y-%m-%dT%H:%M:%SZ)',
+              'total_samples': len(sample_texts),
+              'average_composite_score': sum(r['composite_score'] for r in results) / len(results),
+              'results': results,
+              'summary': {
+                  'highest_score': max(results, key=lambda x: x['composite_score']),
+                  'lowest_score': min(results, key=lambda x: x['composite_score']),
+                  'score_range': max(r['composite_score'] for r in results) - min(r['composite_score'] for r in results)
+              }
+          }
+          
+          # 리포트 저장
+          with open('metrics_report.json', 'w', encoding='utf-8') as f:
+              json.dump(report, f, ensure_ascii=False, indent=2)
+          
+          print('Metrics report generated successfully!')
+          print(f'Average composite score: {report[\"average_composite_score\"]:.3f}')
+          print(f'Score range: {report[\"summary\"][\"score_range\"]:.3f}')
+          "
+
+      - name: Upload metrics report
+        uses: actions/upload-artifact@v4
+        with:
+          name: insight-metrics-report
+          path: metrics_report.json
+          retention-days: 30
+
+      - name: Comment PR with metrics summary
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = JSON.parse(fs.readFileSync('metrics_report.json', 'utf8'));
+            
+            const comment = `## 📊 Insight Metrics Report
+            
+            **Summary:**
+            - 📈 Average Composite Score: \`${report.average_composite_score.toFixed(3)}\`
+            - 📊 Score Range: \`${report.summary.score_range.toFixed(3)}\`
+            - 📝 Total Samples: \`${report.total_samples}\`
+            
+            **Top Performer:**
+            > ${report.summary.highest_score.text}
+            > Score: \`${report.summary.highest_score.composite_score.toFixed(3)}\`
+            
+            **Detailed Results:**
+            ${report.results.map((r, i) => 
+              \`\${i+1}. Score: \`\${r.composite_score.toFixed(3)}\` - \`\${r.text.substring(0, 50)}\${r.text.length > 50 ? '...' : ''}\`\`
+            ).join('\n')}
+            
+            📁 Full report available as artifact: \`insight-metrics-report\`
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
