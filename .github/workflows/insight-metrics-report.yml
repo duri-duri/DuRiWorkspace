@@ -96,20 +96,20 @@ jobs:
             const comment = `## 📊 Insight Metrics Report
             
             **Summary:**
-            - 📈 Average Composite Score: \`${report.average_composite_score.toFixed(3)}\`
-            - 📊 Score Range: \`${report.summary.score_range.toFixed(3)}\`
-            - 📝 Total Samples: \`${report.total_samples}\`
+            - 📈 Average Composite Score: ${report.average_composite_score.toFixed(3)}
+            - 📊 Score Range: ${report.summary.score_range.toFixed(3)}
+            - 📝 Total Samples: ${report.total_samples}
             
             **Top Performer:**
             > ${report.summary.highest_score.text}
-            > Score: \`${report.summary.highest_score.composite_score.toFixed(3)}\`
+            > Score: ${report.summary.highest_score.composite_score.toFixed(3)}
             
             **Detailed Results:**
             ${report.results.map((r, i) => 
-              \`\${i+1}. Score: \`\${r.composite_score.toFixed(3)}\` - \`\${r.text.substring(0, 50)}\${r.text.length > 50 ? '...' : ''}\`\`
+              `${i+1}. Score: ${r.composite_score.toFixed(3)} - ${r.text.substring(0, 50)}${r.text.length > 50 ? '...' : ''}`
             ).join('\n')}
             
-            📁 Full report available as artifact: \`insight-metrics-report\`
+            📁 Full report available as artifact: insight-metrics-report
             `;
             
             github.rest.issues.createComment({
