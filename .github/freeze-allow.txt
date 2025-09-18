@@ -12,3 +12,4 @@
 ^insight/cli\.py$
 ^insight/league\.py$
 ^samplesets/.*$
+^\.gitignore$
