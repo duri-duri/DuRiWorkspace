@@ -60,3 +60,6 @@ tests/test_metrics.py
 ^duri_control$
 ^duri_evolution$
 ^duri_all_scripts$
+
+# allow submodule pointer bumps
+^duri_core$
