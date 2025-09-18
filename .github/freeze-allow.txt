@@ -13,4 +13,3 @@
 ^insight/league\.py$
 ^samplesets/.*$
 ^\.gitignore$
-^\.github/freeze-allow\.txt$
