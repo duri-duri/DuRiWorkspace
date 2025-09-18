@@ -23,3 +23,9 @@
 # 모든 Markdown 문서 허용
 \.md$
 .github/workflows/automerge-ops.yml
+# ----- Insight Engine (β) scaffold -----
+insight/
+tests/test_insight_engine.py
+docs/insight/spec.md
+scripts/run_insight.sh
+.github/workflows/insight-ci.yml
