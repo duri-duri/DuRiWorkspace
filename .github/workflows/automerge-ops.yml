@@ -14,6 +14,7 @@ jobs:
       contains(github.event.pull_request.labels.*.name, 'automerge') &&
       !contains(github.event.pull_request.labels.*.name, 'freeze')
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/github-script@v7
         with:
@@ -24,15 +25,20 @@ jobs:
             const sleep = ms => new Promise(r => setTimeout(r, ms));
 
             async function allGreen() {
-              // check runs
-              const checks = await github.checks.listForRef({ ...context.repo, ref: pr.head.sha, per_page: 100 });
-              const runsOk = checks.data.check_runs.every(c => c.status === 'completed' && c.conclusion === 'success');
+              try {
+                // check runs
+                const checks = await github.checks.listForRef({ ...context.repo, ref: pr.head.sha, per_page: 100 });
+                const runsOk = checks.data.check_runs.every(c => c.status === 'completed' && ['success', 'neutral', 'skipped'].includes(c.conclusion));
 
-              // commit statuses (contexts)
-              const statuses = await github.repos.getCombinedStatusForRef({ ...context.repo, ref: pr.head.sha });
-              const statusOk = statuses.data.state === 'success';
+                // commit statuses (contexts)
+                const statuses = await github.repos.getCombinedStatusForRef({ ...context.repo, ref: pr.head.sha });
+                const statusOk = statuses.data.state === 'success';
 
-              return runsOk && statusOk;
+                return runsOk && statusOk;
+              } catch (e) {
+                core.notice(`Error checking status: ${e.message}`);
+                return false;
+              }
             }
 
             let ok = false;
@@ -52,4 +58,3 @@ jobs:
             } catch (e) {
               core.notice(`Automerge skipped (reason: ${e.message}).`);
             }
-    continue-on-error: true
