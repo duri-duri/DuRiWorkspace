@@ -23,3 +23,27 @@
 # 모든 Markdown 문서 허용
 \.md$
 .github/workflows/automerge-ops.yml
+# ----- Insight Engine (β) scaffold -----
+insight/
+tests/test_insight_engine.py
+docs/insight/spec.md
+scripts/run_insight.sh
+.github/workflows/insight-ci.yml
+# ----- Prompt Pipeline v1 -----
+insight/pipeline.py
+scripts/insight_dataset_clean.py
+tests/test_pipeline.py
+
+# ----- Cache/Log files (ignore) -----
+__pycache__/
+.*\.pyc$
+.*\.pyo$
+.*\.log$
+
+# --- insight engine + pipeline scaffold ---
+insight/
+scripts/run_insight.sh
+scripts/insight_dataset_clean.py
+tests/test_pipeline.py
+docs/insight/spec.md
+.github/workflows/insight-ci.yml
