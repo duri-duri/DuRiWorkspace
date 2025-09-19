@@ -44,5 +44,6 @@
     "workbench.action.terminal.sendSequence"
   ],
   "terminal.integrated.copySelection": "ctrl+alt+c",
-  "terminal.integrated.paste": "ctrl+alt+v"
+  "terminal.integrated.paste": "ctrl+alt+v",
+  "makefile.configureOnOpen": false
 }

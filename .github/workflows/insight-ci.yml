@@ -27,6 +27,12 @@ jobs:
       - run: pip install pytest numpy
       - run: pytest tests/test_insight_engine.py -q
       - run: pytest tests/test_phase11_*.py -q
+      - name: Upload Phase11 telemetry
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase11-events
+          path: DuRiCore/memory/phase11_traces/**
 
   phase11-tests:
     if: always()

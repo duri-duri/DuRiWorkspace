@@ -19,13 +19,38 @@ class DuRiCoreAdapter:
     """DuRiCore 통합 대화 서비스 어댑터 (실시스템 바인딩 지점)"""
     def reply(self, ctx: TurnContext) -> Message:
         last_user = next((m for m in reversed(ctx.messages) if m.role=="user"), None)
-        text = (last_user.content if last_user else "…")
-        return Message(role="assistant", content=f"[core] {text}")
+        text = (last_user.content.strip() if last_user else "")
+        
+        if not text:
+            return Message(role="assistant", content="[core] 입력을 확인하지 못했어요. 오늘 한 가지 목표부터 알려줘요.")
+        
+        # 아주 간단한 규칙 기반 응답 (에코 방지)
+        wants_plan = any(k in text for k in ("계획", "plan", "할일", "todo", "스케줄"))
+        if wants_plan:
+            plan = [
+                "핵심 목표 1개 정의",
+                "집중 작업 30분 × 2블록", 
+                "막판 점검 10분 + 로그 남기기",
+            ]
+            content = "[core] 오늘 계획안 초안:\n" + "\n".join(f"- {p}" for p in plan)
+        elif text.endswith("?"):
+            content = "[core] 생각해볼 포인트 3가지:\n1) 목표\n2) 제약\n3) 다음 행동"
+        else:
+            content = f"[core] 요청 확인: \"{text}\". 우선 가장 중요한 1가지를 정하고, 실행 단계 3개를 제안할게요."
+        
+        return Message(role="assistant", content=content, meta={"generator":"rule_v1"})
 
 class InnerThoughtAdapter:
     """내부 사고/자기성찰 시스템 어댑터 (실시스템 바인딩 지점)"""
     def reflect(self, ctx: TurnContext, last_assistant: Message) -> Message:
-        return Message(role="inner", content=f"(성찰) '{last_assistant.content}' 적절성 점검 완료")
+        reply = last_assistant.content
+        verdict = "OK" if ("계획안" in reply or "포인트 3가지" in reply or "제안" in reply) else "NEEDS_DETAIL"
+        hints = []
+        if verdict != "OK":
+            hints.append("다음 행동 3개 명시")
+            hints.append("시간/범위 구체화")
+        msg = f"(성찰)[{verdict}] 개선힌트: {', '.join(hints) if hints else '충분함'}"
+        return Message(role="inner", content=msg, meta={"verdict":verdict})
 
 class ExternalLearningAdapter:
     """외부 학습 파이프라인 (크롤/임베딩/인덱싱 바인딩 지점)"""

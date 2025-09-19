@@ -1,12 +1,11 @@
 from pathlib import Path
-import runpy
-import subprocess
+import subprocess as sp
 import sys
 
 def test_phase11_smoke():
-    """기존 contracts/test_reasoning_smoke.py 패턴 활용"""
-    # subprocess로 실행하여 출력 캡처
-    result = subprocess.run([
+    """기존 contracts/test_ops_health_grep.py 패턴 활용"""
+    # subprocess로 실행하여 출력 캡처 (기존 패턴)
+    result = sp.run([
         sys.executable, str(Path("scripts/core/phase11/orchestrator.py"))
     ], capture_output=True, text=True, cwd=Path.cwd())
     
