@@ -75,3 +75,8 @@ tmp/
 ^\.vscode/keybindings\.json$
 ^\.vscode/settings\.json$
 ^pyrightconfig\.json$
+
+# ----- Phase 11: enhanced integration (temporary) -----
+^scripts/core/phase11/
+^docs/phase11/
+^tests/test_phase11_.*\.py$
