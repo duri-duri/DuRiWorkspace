@@ -77,6 +77,7 @@ tmp/
 ^pyrightconfig\.json$
 
 # ----- Phase 11: enhanced integration (temporary) -----
+# TODO(phase11 stabilize): 아래 허용 규칙 제거/축소
 ^scripts/core/phase11/
 ^docs/phase11/
 ^tests/test_phase11_.*\.py$

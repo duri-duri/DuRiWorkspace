@@ -53,3 +53,4 @@ slo_sla_dashboard_v1/metrics.json
 # Phase 19-3: 배지/임시 산출물 (CI가 badges 브랜치로 퍼블리시)
 public/
 tmp/
+DuRiCore/memory/phase11_traces/

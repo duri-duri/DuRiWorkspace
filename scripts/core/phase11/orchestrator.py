@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from dataclasses import dataclass, field
 from typing import Any, Dict, List
+from datetime import datetime
 
 @dataclass
 class Message:
@@ -32,11 +33,51 @@ class ExternalLearningAdapter:
         return {"learned": True}
 
 class Telemetry:
-    """Insight Engine 연동용 계측 포인트 (실제 점수 기록 지점)"""
+    """Insight Engine 연동용 계측 포인트 (기존 시스템 활용)"""
+    def __init__(self):
+        import os
+        from datetime import datetime
+        # 기존 judgment_trace_store.py 패턴 활용
+        self.log_dir = "DuRiCore/memory/phase11_traces"
+        os.makedirs(self.log_dir, exist_ok=True)
+        self.events_file = os.path.join(self.log_dir, "events.jsonl")
+        self.snapshot_file = os.path.join(self.log_dir, "last_context.json")
+    
     def record(self, ctx: TurnContext, event: str, payload: Dict[str, Any]) -> None:
-        # TODO: insight/ 모듈 호출해 점수 산출/저장
-        # print(f"[tm] {event} {payload}")  # 필요시 임시 로그
-        pass
+        """기존 judgment_trace_store.py 패턴으로 JSONL 기록"""
+        import json
+        import time
+        
+        record = {
+            "timestamp": time.time(),
+            "datetime": datetime.now().isoformat(),
+            "conv_id": ctx.conv_id,
+            "event": event,
+            "payload": payload,
+            "phase": "phase11"
+        }
+        
+        # JSONL 형식으로 저장 (기존 패턴 활용)
+        with open(self.events_file, "a", encoding="utf-8") as f:
+            f.write(json.dumps(record, ensure_ascii=False) + "\n")
+        
+        # 최소 가시성 (CI/디버깅용)
+        print(f"[phase11::telemetry] {event} {payload}")
+    
+    def snapshot(self, ctx: TurnContext) -> None:
+        """컨텍스트 스냅샷 저장"""
+        import json
+        from datetime import datetime
+        
+        snapshot = {
+            "conv_id": ctx.conv_id,
+            "messages": [{"role": m.role, "content": m.content, "meta": m.meta} for m in ctx.messages],
+            "memory": ctx.memory,
+            "timestamp": datetime.now().isoformat()
+        }
+        
+        with open(self.snapshot_file, "w", encoding="utf-8") as f:
+            json.dump(snapshot, f, ensure_ascii=False, indent=2)
 
 class Orchestrator:
     def __init__(self):
@@ -64,6 +105,7 @@ class Orchestrator:
         self.tm.record(ctx, "learn", learn)
 
         self.tm.record(ctx, "post_turn", {"n_msgs": len(ctx.messages)})
+        self.tm.snapshot(ctx)
         return ctx
 
 if __name__ == "__main__":
