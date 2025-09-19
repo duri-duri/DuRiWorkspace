@@ -69,3 +69,9 @@ baselines/
 # ----- Phase 19-3: 회귀 배지 -----
 public/
 tmp/
+
+# ----- Phase 20: repo automation & DX -----
+^\.github/workflows/enable-auto-merge\.yml$
+^\.vscode/keybindings\.json$
+^\.vscode/settings\.json$
+^pyrightconfig\.json$
