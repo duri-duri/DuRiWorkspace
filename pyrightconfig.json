@@ -1,0 +1,30 @@
+{
+  "exclude": [
+    "**/.git",
+    "**/.venv",
+    "**/env",
+    "**/node_modules",
+    "**/__pycache__",
+    "**/build",
+    "**/dist",
+    "backup",
+    "backups",
+    "backup_repository",
+    "backup_phase*/",
+    "cursor_extension/node_modules",
+    "/mnt/hdd/ARCHIVE",
+    "/mnt/usb",
+    "/mnt/c/Users/admin/Desktop/두리백업",
+    "**/.UNWRAP",
+    "**/.TRASH",
+    "**/.QUAR_FAIL",
+    "**/duri_snapshots",
+    "**/Desktop_Mirror",
+    "**/Desktop_Snapshots"
+  ],
+  "venvPath": ".",
+  "venv": ".venv",
+  "reportMissingImports": "warning",
+  "reportMissingTypeStubs": false,
+  "pythonVersion": "3.11"
+}
