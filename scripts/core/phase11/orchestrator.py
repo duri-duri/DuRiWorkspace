@@ -88,6 +88,10 @@ class Telemetry:
         
         # 최소 가시성 (CI/디버깅용)
         print(f"[phase11::telemetry] {event} {payload}")
+        
+        # post_turn 이벤트 시 스냅샷 자동 저장
+        if event == "post_turn":
+            self.snapshot(ctx)
     
     def snapshot(self, ctx: TurnContext) -> None:
         """컨텍스트 스냅샷 저장"""
@@ -130,7 +134,6 @@ class Orchestrator:
         self.tm.record(ctx, "learn", learn)
 
         self.tm.record(ctx, "post_turn", {"n_msgs": len(ctx.messages)})
-        self.tm.snapshot(ctx)
         return ctx
 
 if __name__ == "__main__":
