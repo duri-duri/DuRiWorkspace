@@ -23,6 +23,12 @@ try:
     MODULE_REGISTRY_AVAILABLE = True
 except ImportError:
     MODULE_REGISTRY_AVAILABLE = False
+    # ModulePriority가 없을 때 안전한 폴백 제공
+    class ModulePriority:
+        LOW = 10
+        NORMAL = 50
+        HIGH = 80
+        CRITICAL = 100
 
 logger = logging.getLogger(__name__)
 

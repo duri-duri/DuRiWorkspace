@@ -61,7 +61,6 @@ tests/test_metrics.py
 ^duri_evolution$
 ^duri_all_scripts$
 
-<<<<<<< HEAD
 # ----- Phase 19-2: 샘플셋 리그/회귀 -----
 samplesets/
 baselines/
@@ -70,9 +69,25 @@ baselines/
 # ----- Phase 19-3: 회귀 배지 -----
 public/
 tmp/
-=======
+
+# ----- Phase 20: repo automation & DX -----
+^\.github/workflows/enable-auto-merge\.yml$
+^\.github/workflows/insight-ci\.yml$
+^\.vscode/keybindings\.json$
+^\.vscode/settings\.json$
+^pyrightconfig\.json$
+^DuRiWorkspace\.code-workspace$
+
+# ----- Phase 11: enhanced integration (temporary) -----
+# TODO(phase11 stabilize): 아래 허용 규칙 제거/축소
+^scripts/core/phase11/
+^docs/phase11/
+^tests/test_phase11_.*\.py$
+^DuRiCore/system_adapters\.py$
+^pytest\.ini$
+^\.github/workflows/insight-ci\.yml$
+
 # allow submodule pointer bumps
 ^duri_core$
 .github/workflows/insight-metrics-report.yml
 Makefile
->>>>>>> 34981b47d (chore(freeze-allow): permit workflow hardening + Makefile updates for Phase 19-1)

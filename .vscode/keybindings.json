@@ -1,39 +1,20 @@
 [
   {
-    "key": "ctrl+`",
-    "command": "workbench.action.terminal.toggleTerminal"
-  },
-  {
-    "key": "ctrl+shift+enter",
-    "when": "terminalFocus",
+    "key": "ctrl+c",
     "command": "workbench.action.terminal.sendSequence",
-    "args": { "text": "\u000d" }
+    "args": {
+      "text": "\u0003"
+    },
+    "when": "terminalFocus"
   },
   {
-    "key": "ctrl+alt+t",
-    "command": "workbench.action.terminal.newWithCwd",
-    "args": { "cwd": "${workspaceFolder}" }
+    "key": "ctrl+alt+c",
+    "command": "workbench.action.terminal.copySelection",
+    "when": "terminalFocus"
   },
   {
-    "command": "workbench.action.terminal.openInTerminal",
-    "title": "Open in Terminal",
-    "category": "Terminal",
-    "when": "resourceScheme == file"
-  },
-  {
-    "command": "workbench.action.terminal.new",
-    "title": "New Terminal",
-    "category": "Terminal"
-  },
-  {
-    "command": "workbench.action.terminal.split",
-    "title": "Split Terminal",
-    "category": "Terminal"
-  },
-  {
-    "key": "ctrl+shift+t",
-    "command": "workbench.action.terminal.sendSequence",
-    "args": { "text": "echo '터미널에서 직접 실행됨'" }
-  },
+    "key": "ctrl+alt+v",
+    "command": "workbench.action.terminal.paste",
+    "when": "terminalFocus"
+  }
 ]
-
