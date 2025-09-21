@@ -88,3 +88,4 @@ tmp/
 ^duri_core$
 .github/workflows/insight-metrics-report.yml
 Makefile
+^pytest\.ini$
