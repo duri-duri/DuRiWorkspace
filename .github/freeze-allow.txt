@@ -83,9 +83,9 @@ tmp/
 ^scripts/core/phase11/
 ^docs/phase11/
 ^tests/test_phase11_.*\.py$
+^DuRiCore/system_adapters\.py$
 
 # allow submodule pointer bumps
 ^duri_core$
 .github/workflows/insight-metrics-report.yml
 Makefile
-^pytest\.ini$
