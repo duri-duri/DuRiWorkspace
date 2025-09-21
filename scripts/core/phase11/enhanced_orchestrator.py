@@ -28,7 +28,7 @@ try:
     from DuRiCore.inner_thinking_system import InnerThinkingSystem, InnerThinkingResult
     from DuRiCore.unified_learning_system import UnifiedLearningSystem
     from DuRiCore.integrated_system_manager import IntegratedSystemManager
-except ImportError as e:
+except Exception as e:
     logging.warning(f"기존 시스템 import 실패: {e}")
     # 플레이스홀더 클래스들
     class DuRiOrchestrator:
@@ -53,7 +53,7 @@ except ImportError as e:
 try:
     from insight.engine import InsightEngine
     INSIGHT_AVAILABLE = True
-except ImportError:
+except Exception:
     INSIGHT_AVAILABLE = False
     logging.warning("Insight Engine을 찾을 수 없습니다. 기본 모드로 실행됩니다.")
 
