@@ -72,6 +72,7 @@ tmp/
 
 # ----- Phase 20: repo automation & DX -----
 ^\.github/workflows/enable-auto-merge\.yml$
+^\.github/workflows/insight-ci\.yml$
 ^\.vscode/keybindings\.json$
 ^\.vscode/settings\.json$
 ^pyrightconfig\.json$
