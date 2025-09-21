@@ -16,13 +16,10 @@ jobs:
     continue-on-error: true
     
     steps:
-      - name: Enable Auto-merge
+      - name: Enable automerge (label=automerge 일 때만)
+        if: contains(join(github.event.pull_request.labels.*.name), 'automerge')
         uses: peter-evans/enable-pull-request-automerge@v3
         with:
-          merge-method: squash
           token: ${{ secrets.GITHUB_TOKEN }}
-          
-      - name: Log Auto-merge Status
-        run: |
-          echo "✅ Auto-merge enabled for PR #${{ github.event.pull_request.number }}"
-          echo "🔗 PR URL: ${{ github.event.pull_request.html_url }}"
+          pull-request-number: ${{ github.event.pull_request.number }}
+          merge-method: squash
