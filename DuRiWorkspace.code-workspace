@@ -16,6 +16,7 @@
     "git.autoRepositoryDetection": "openEditors",
     "search.useIgnoreFiles": true,
     "extensions.autoUpdate": false,
-    "update.mode": "none"
+    "update.mode": "none",
+    "makefile.configureOnOpen": false
   }
 }

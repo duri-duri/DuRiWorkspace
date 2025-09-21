@@ -10,7 +10,8 @@ permissions:
 
 jobs:
   enable-auto-merge:
-    if: contains(github.event.pull_request.labels.*.name, 'automerge')
+    # PR 이벤트에서만 실행 (main으로 푸시될 때는 실행 안 함)
+    if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'automerge')
     runs-on: ubuntu-latest
     
     steps:

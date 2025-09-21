@@ -388,3 +388,4 @@ class TestPhase11ErrorHandling:
 if __name__ == "__main__":
     # 직접 실행 시 pytest 실행
     pytest.main([__file__, "-v"])
+
