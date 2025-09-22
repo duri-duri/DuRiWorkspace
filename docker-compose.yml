@@ -1,3 +1,5 @@
+version: "3.9"
+
 services:
   duri_core:
     build:
@@ -72,18 +74,13 @@ services:
     environment:
       - PORT=8083
       - PYTHONPATH=/app:/app/duri_common
-      - DATABASE_URL=postgresql://duri:duri@duri-postgres:5432/duri
     env_file:
       - .env
     depends_on:
       - duri-postgres
       - duri-redis
+    command: ["bash", "/app/wait-for-postgres.sh"]
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8083/health"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
 
   duri-postgres:
     image: postgres:14
