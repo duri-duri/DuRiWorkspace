@@ -20,7 +20,7 @@
     "relations":{"type":"array","minItems":52,"maxItems":52,
       "items":{"type":"object","required":["type","src","dst"],
         "properties":{
-          "type":{"enum":["parent_of","sibling_of","spouse_of"]},
+          "type":{"enum":["parent_of","sibling_of","spouse_of","grandparent_of","uncle_aunt_of"]},
           "src":{"type":"string"},
           "dst":{"type":"string"}
         }}
