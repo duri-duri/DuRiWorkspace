@@ -1,3 +1,5 @@
+import hashlib
+MIN_N = 200  # 최소 샘플 수
 # tools/capsule_spotcheck.py
 import json, random, math, sys
 from pathlib import Path

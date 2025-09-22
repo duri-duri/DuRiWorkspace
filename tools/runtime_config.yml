@@ -11,4 +11,7 @@ sprt:
   beta: 0.05
 canary:
   traffic_percent: 10
-pii_fields: ["name_priv","address_priv","phone_priv","email_priv"]
+  p0: 0.97
+  p1: 0.995
+  alpha: 0.10
+  beta: 0.10
