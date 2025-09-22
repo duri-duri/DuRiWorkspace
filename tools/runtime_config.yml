@@ -1,18 +1,14 @@
 # 생각-검증-정답-망각 파라미터
-allow_shortcut: false          # 회상만으로 즉답 금지
-tau_evidence: 0.92             # 근거 임계값(미달 시 보류/재탐색)
-conflict_mode: HARD            # Core 충돌 시 무조건 차단
-self_consistency:
-  k: 5                         # self-consistency 샘플 수 (난이도↑ 시 7까지)
-  depth: 2
-fusion_init:                   # 모노톤 로짓 초기값
-  alpha: 0.0
-  beta_c: 2.0
-  beta_s: 1.2
-  beta_r: 0.6
-  beta_p: 0.8
+allow_shortcut: false
+tau_evidence: 0.92
+conflict_mode: HARD           # HARD|SOFT
+safe_mode: core_only:false    # 긴급시 true로 전환
+self_consistency_k: 5
 sprt:
   p0: 0.98
   p1: 0.995
   alpha: 0.05
   beta: 0.05
+canary:
+  traffic_percent: 10
+pii_fields: ["name_priv","address_priv","phone_priv","email_priv"]

@@ -1,0 +1,43 @@
+groups:
+- name: pzta-cra.core
+  interval: 30s
+  rules:
+  - alert: BundleVerifyFail
+    expr: increase(bundle_verify_fail_total[5m]) > 0
+    for: 1m
+    labels: {severity: page}
+    annotations: {summary: "Bundle verify failed in last 5m"}
+
+  - alert: CoreRagConflictSpike
+    expr: rate(core_rag_conflict_total[5m]) > 0.01
+    for: 10m
+    labels: {severity: page}
+    annotations: {summary: "Core↔RAG conflict spike >1%/5m"}
+
+  - alert: EvidenceAttachLow
+    expr: (sum(rate(rag_evidence_attach_total{status="miss"}[15m]))
+          / sum(rate(rag_evidence_attach_total[15m]))) > 0.05
+    for: 15m
+    labels: {severity: ticket}
+    annotations: {summary: "Evidence attach <95% over 15m"}
+
+  - alert: ReproCapsuleDrop
+    expr: (1 - reproducible_capsule_rate) > 0.001
+    for: 10m
+    labels: {severity: page}
+    annotations: {summary: "Reproducible capsule <99.9%"}
+
+  - alert: CoreStaleness
+    expr: staleness_days_core_max > 180
+    for: 5m
+    labels: {severity: ticket}
+    annotations: {summary: "Core staleness > 180d"}
+
+- name: pzta-cra.canary
+  interval: 30s
+  rules:
+  - alert: CanarySPRTStuck
+    expr: sprt_state{state="continue"} > 0
+    for: 6h
+    labels: {severity: ticket}
+    annotations: {summary: "SPRT stuck > 6h — check golden/cutoff"}
