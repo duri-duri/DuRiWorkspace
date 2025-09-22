@@ -15,6 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - run: pip install pyyaml jcs jsonschema python-dateutil
       - run: python tools/build_bundle.py --in memory/core --out core.bundle.tar.zst --merkle MERKLE.txt --hash HASH.txt
       - run: echo '{}' > SBOM.spdx.json && echo '{}' > SLSA.provenance.json
       - run: echo "dummy-sign" > SIG.cosign
