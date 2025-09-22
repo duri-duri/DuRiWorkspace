@@ -1,0 +1,56 @@
+services:
+  duri_core:
+    healthcheck:
+      test: ["CMD-SHELL","python -c \"import socket; s=socket.socket(); s.settimeout(2); s.connect(('127.0.0.1',8080)); s.close()\""]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 20s
+    depends_on:
+      duri-postgres: {condition: service_healthy}
+      duri-redis:    {condition: service_healthy}
+
+  duri_brain:
+    healthcheck:
+      test: ["CMD-SHELL","python -c \"import socket; s=socket.socket(); s.settimeout(2); s.connect(('127.0.0.1',8081)); s.close()\""]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 20s
+    depends_on:
+      duri-postgres: {condition: service_healthy}
+      duri-redis:    {condition: service_healthy}
+
+  duri_evolution:
+    healthcheck:
+      test: ["CMD-SHELL","python -c \"import socket; s=socket.socket(); s.settimeout(2); s.connect(('127.0.0.1',8082)); s.close()\""]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 20s
+    depends_on:
+      duri-postgres: {condition: service_healthy}
+      duri-redis:    {condition: service_healthy}
+
+  duri-postgres:
+    healthcheck:
+      test: ["CMD-SHELL","pg_isready -U ${POSTGRES_USER:-postgres} -h 127.0.0.1 -p 5432"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 25s
+
+  duri-redis:
+    healthcheck:
+      test: ["CMD","redis-cli","-h","127.0.0.1","-p","6379","ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 15s
+  duri_control:
+    healthcheck:
+      test: ["CMD-SHELL","python -c \"import socket; s=socket.socket(); s.settimeout(2); s.connect(('127.0.0.1',8083)); s.close()\""]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 20s
