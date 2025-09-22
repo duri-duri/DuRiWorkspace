@@ -1,0 +1,32 @@
+name: MemoryPipeline
+on:
+  push:
+    tags: ['milestone/**']
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - run: pip install pyyaml jcs jsonschema python-dateutil
+      - run: python tools/check_core.py --family memory/core/family.yml --ops memory/core/ops.yml --schema memory/core/schema/family.schema.json
+  bundle:
+    needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python tools/build_bundle.py --in memory/core --out core.bundle.tar.zst --merkle MERKLE.txt --hash HASH.txt
+      - run: echo '{}' > SBOM.spdx.json && echo '{}' > SLSA.provenance.json
+      - run: echo "dummy-sign" > SIG.cosign
+  ingest:
+    needs: bundle
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Import Core
+        env: { DURI_TOKEN: ${{ secrets.DURI_TOKEN }}, DURI_ENDPOINT: ${{ secrets.DURI_ENDPOINT }} }
+        run: |
+          test -s core.bundle.tar.zst && test -s MERKLE.txt && test -s HASH.txt
+          curl -fsS -H "Authorization: Bearer $DURI_TOKEN" \
+            -F "bundle=@core.bundle.tar.zst" -F "merkle=@MERKLE.txt" -F "hash=@HASH.txt" \
+            "$DURI_ENDPOINT/api/core/import"

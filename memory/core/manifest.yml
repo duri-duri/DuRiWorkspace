@@ -1,0 +1,19 @@
+schema: manifest.v1
+as_of: "2025-09-22"
+
+pin: "milestone/2025-09-22"
+core:
+  - "memory/core/family.yml"
+  - "memory/core/ops.yml"
+  - "memory/core/schema/family.schema.json"
+
+ttl:
+  - path: "memory/ttl/ports_map.yaml"
+    ttl: "30d"
+
+episodes_index:
+  build: "fts+embedding"
+
+version: "PZTA-CRA-v1"
+created_by: "DuRi System"
+description: "Provable Zero-Trust + Attested Core/RAG with Adaptive Fusion"
