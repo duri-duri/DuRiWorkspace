@@ -1,0 +1,26 @@
+# DuRi Core Service - Optimized Build
+FROM duri-base:latest as builder
+
+# 의존성 파일만 먼저 복사 (캐시 최적화)
+COPY duri_core/requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
+
+# 소스 코드 복사
+COPY duri_core/ /app/duri_core/
+
+# 프로덕션 스테이지
+FROM duri-base:latest as production
+
+# 빌드된 의존성 복사
+COPY --from=builder /usr/local/lib/python3.10/site-packages /usr/local/lib/python3.10/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
+
+# 소스 코드 복사
+COPY duri_core/ /app/duri_core/
+
+# 헬스체크 추가
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:8080/health || exit 1
+
+# 서비스 실행
+CMD ["python", "duri_core/run.py"]
