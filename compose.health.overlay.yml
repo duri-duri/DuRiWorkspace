@@ -150,7 +150,7 @@ services:
     ports: ["9187:9187"]
     restart: unless-stopped
     environment:
-      - DATA_SOURCE_NAME=postgresql://postgres:postgres@duri-postgres:5432/postgres?sslmode=disable
+      - DATA_SOURCE_NAME=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-CHANGE_ME_POSTGRES_PASSWORD}@duri-postgres:5432/postgres?sslmode=disable
       - PG_EXPORTER_AUTO_DISCOVER_DATABASES=true
     healthcheck:
       test: ["CMD-SHELL","wget -qO- http://localhost:9187/metrics >/dev/null 2>&1 || exit 1"]
@@ -173,7 +173,7 @@ services:
     ports: ["3000:3000"]
     environment:
       GF_SECURITY_ADMIN_USER: "duri-duri"
-          GF_SECURITY_ADMIN_PASSWORD: "${GRAFANA_PASSWORD:?set GRAFANA_PASSWORD in .env}"
+      GF_SECURITY_ADMIN_PASSWORD: "${GRAFANA_PASSWORD:-CHANGE_ME_GRAFANA_PASSWORD}"
       GF_USERS_ALLOW_SIGN_UP: "false"
       GF_AUTH_ANONYMOUS_ENABLED: "false"
     volumes:
