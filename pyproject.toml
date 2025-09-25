@@ -6,7 +6,10 @@ build-backend = "setuptools.build_meta"
 name = "duri"
 version = "0.0.0"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0"
+]
 
 [tool.setuptools.packages.find]
 where = ["."]

@@ -3,6 +3,7 @@ pyproject.toml
 duri.egg-info/PKG-INFO
 duri.egg-info/SOURCES.txt
 duri.egg-info/dependency_links.txt
+duri.egg-info/requires.txt
 duri.egg-info/top_level.txt
 duri_archive/full_backup_2025-08-04_15-17-21/conftest.py
 duri_archive/full_backup_2025-08-04_15-17-21/deployment_config.py
@@ -293,6 +294,7 @@ duri_common/config.py
 duri_common/logger.py
 duri_common/logging.py
 duri_common/metrics.py
+duri_common/settings.py
 duri_common/utils.py
 duri_common/config/config.py
 duri_common/config/emotion_labels.py
