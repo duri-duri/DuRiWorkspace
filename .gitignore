@@ -54,3 +54,11 @@ slo_sla_dashboard_v1/metrics.json
 public/
 tmp/
 DuRiCore/memory/phase11_traces/
+
+# Environment files
+.env
+.ops.env
+*.env
+etc/storage.env
+ops/.ops.env
+ops/summary/config.env

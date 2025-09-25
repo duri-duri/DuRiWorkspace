@@ -115,7 +115,7 @@ services:
       start_period: 30s
 
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor:v0.47.2
+    image: gcr.io/cadvisor/cadvisor:latest
     container_name: cadvisor
     ports: ["8089:8080"]
     restart: unless-stopped
@@ -134,7 +134,7 @@ services:
       start_period: 30s
 
   redis_exporter:
-    image: quay.io/prometheus/redis_exporter:v1.64.0
+    image: oliver006/redis_exporter:latest
     container_name: redis_exporter
     ports: ["9121:9121"]
     restart: unless-stopped
@@ -145,7 +145,7 @@ services:
     depends_on: { duri-redis: { condition: service_healthy } }
 
   postgres_exporter:
-    image: quay.io/prometheuscommunity/postgres-exporter:v0.15.0
+    image: quay.io/prometheuscommunity/postgres-exporter:latest
     container_name: postgres_exporter
     ports: ["9187:9187"]
     restart: unless-stopped
