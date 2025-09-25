@@ -63,6 +63,8 @@ services:
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - ./prometheus_rules.yml:/etc/prometheus/rules/prometheus_rules.yml:ro
+      - ./prometheus_rules_enhanced.yml:/etc/prometheus/rules/prometheus_rules_enhanced.yml:ro
+      - ./prometheus_alerts_enhanced.yml:/etc/prometheus/rules/prometheus_alerts_enhanced.yml:ro
       - ./data/prometheus:/prometheus
     command:
       - --config.file=/etc/prometheus/prometheus.yml
