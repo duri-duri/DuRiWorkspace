@@ -46,12 +46,12 @@
     "backup_count": 5
   },
   "database": {
-    "url": "postgresql://duri:duri@duri-postgres:5432/duri",
+    "url": "${DATABASE_URL}",
     "pool_size": 10,
     "max_overflow": 20
   },
   "redis": {
-    "url": "redis://:your_redis_password@duri-redis:6379/0",
+    "url": "${REDIS_URL}",
     "pool_size": 10
   },
   "services": {
@@ -71,7 +71,7 @@
     }
   },
   "security": {
-    "api_key": "your_evolution_api_key_here",
+    "api_key": "${API_KEY}",
     "cors": {
       "origins": ["*"],
       "methods": ["GET", "POST", "PUT", "DELETE"],

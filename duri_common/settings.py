@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-DuRi 통합 설정 관리 시스템 (간단 버전)
+DuRi 통합 설정 관리 시스템 (확장 버전)
 """
 
 import os
-from typing import Optional, Dict, Any, Literal
+from typing import Optional, Dict, Any, Literal, List
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -14,7 +14,9 @@ class DatabaseSettings(BaseModel):
     port: int = 5432
     database: str = "duri"
     user: str = "duri"
-    password: str = "duri"
+    password: str = "CHANGE_ME_DB_PASSWORD"
+    pool_size: int = 10
+    max_overflow: int = 20
     
     @property
     def url(self) -> str:
@@ -26,11 +28,84 @@ class RedisSettings(BaseModel):
     port: int = 6379
     db: int = 0
     password: Optional[str] = None
+    pool_size: int = 10
     
     @property
     def url(self) -> str:
         auth = f":{self.password}@" if self.password else ""
         return f"redis://{auth}{self.host}:{self.port}/{self.db}"
+
+
+class ServerSettings(BaseModel):
+    host: str = "0.0.0.0"
+    port: int = 8080
+    debug: bool = False
+    workers: int = 4
+
+
+class EvolutionSettings(BaseModel):
+    learning_rate: float = 0.1
+    max_cycles_per_session: int = 100
+    pattern_analysis_interval: int = 300
+    insight_generation_interval: int = 600
+    knowledge_update_interval: int = 900
+
+
+class DataSettings(BaseModel):
+    evolution_data_dir: str = "/app/data/evolution_data"
+    patterns_dir: str = "/app/data/patterns"
+    insights_dir: str = "/app/data/insights"
+    knowledge_dir: str = "/app/data/knowledge"
+    cache_enabled: bool = True
+    cache_ttl: int = 1800
+
+
+class AnalysisSettings(BaseModel):
+    pattern_min_confidence: float = 0.6
+    insight_min_confidence: float = 0.7
+    min_data_points: int = 10
+    max_patterns_per_emotion: int = 20
+    max_insights_per_session: int = 5
+
+
+class RecommendationsSettings(BaseModel):
+    max_recommendations: int = 5
+    min_success_rate: float = 0.3
+    weight_recent_results: float = 0.7
+    weight_success_rate: float = 0.3
+
+
+class LoggingSettings(BaseModel):
+    level: str = "INFO"
+    format: str = "json"
+    file: str = "/app/logs/duri.log"
+    max_size: str = "100MB"
+    backup_count: int = 5
+
+
+class ServiceSettings(BaseModel):
+    brain_url: str = "http://duri-brain:8081"
+    brain_timeout: int = 30
+    brain_retries: int = 3
+
+
+class PerformanceSettings(BaseModel):
+    max_concurrent_requests: int = 50
+    request_timeout: int = 60
+    batch_size: int = 100
+    rate_limit_enabled: bool = True
+    requests_per_minute: int = 500
+
+
+class SecuritySettings(BaseModel):
+    api_key: str = "CHANGE_ME_API_KEY"
+    jwt_secret: str = "CHANGE_ME_JWT_SECRET"
+    jwt_algorithm: str = "HS256"
+    access_token_expire_minutes: int = 30
+    refresh_token_expire_days: int = 7
+    cors_origins: List[str] = ["*"]
+    cors_methods: List[str] = ["GET", "POST", "PUT", "DELETE"]
+    cors_headers: List[str] = ["Content-Type", "Authorization"]
 
 
 class MonitoringSettings(BaseModel):
@@ -52,13 +127,33 @@ class DuRiSettings(BaseSettings):
     debug: bool = False
     version: str = "latest"
     
+    # 서비스별 설정
     database: DatabaseSettings = DatabaseSettings()
     redis: RedisSettings = RedisSettings()
+    server: ServerSettings = ServerSettings()
+    evolution: EvolutionSettings = EvolutionSettings()
+    data: DataSettings = DataSettings()
+    analysis: AnalysisSettings = AnalysisSettings()
+    recommendations: RecommendationsSettings = RecommendationsSettings()
+    logging: LoggingSettings = LoggingSettings()
+    services: ServiceSettings = ServiceSettings()
+    performance: PerformanceSettings = PerformanceSettings()
+    security: SecuritySettings = SecuritySettings()
     monitoring: MonitoringSettings = MonitoringSettings()
     
     def to_dict(self) -> Dict[str, Any]:
         """Pydantic 모델을 딕셔너리로 변환 (기존 코드 호환용)"""
         return self.model_dump(mode='json')
+    
+    def get_service_port(self, service: str) -> int:
+        """서비스별 포트 반환"""
+        port_map = {
+            "core": 8080,
+            "brain": 8081,
+            "evolution": 8082,
+            "control": 8083
+        }
+        return port_map.get(service, 8080)
 
 
 # 전역 설정 인스턴스
