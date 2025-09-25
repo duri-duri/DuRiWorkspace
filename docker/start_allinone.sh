@@ -29,7 +29,7 @@ echo "✅ Redis 연결 확인됨"
 # 데이터베이스 마이그레이션 실행
 echo "🗄️ 데이터베이스 마이그레이션 실행 중..."
 if [ -f "/app/duri_control/database/migrations/create_analysis_tables.sql" ]; then
-    PGPASSWORD=duri psql -h duri-postgres -U duri -d duri -f /app/duri_control/database/migrations/create_analysis_tables.sql
+    PGPASSWORD=DuRi@2025! psql -h duri-postgres -U duri -d duri -f /app/duri_control/database/migrations/create_analysis_tables.sql
     echo "✅ 분석 테이블 마이그레이션 완료"
 fi
 

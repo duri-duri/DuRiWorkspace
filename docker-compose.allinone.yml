@@ -42,7 +42,7 @@ services:
       - PYTHONPATH=/app:/app/duri_common
       - DATABASE_URL=postgresql://duri:duri@duri-postgres:5432/duri
       - REDIS_URL=redis://duri-redis:6379
-      - PGPASSWORD=duri
+      - PGPASSWORD=DuRi@2025!
     ports:
       - "8080:8080"  # duri_core
       - "8081:8081"  # duri_brain
