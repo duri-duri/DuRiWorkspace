@@ -37,7 +37,7 @@ class MonitoringSettings(BaseModel):
     prometheus_url: str = "http://prometheus:9090"
     grafana_url: str = "http://grafana:3000"
     grafana_user: str = "duri-duri"
-    grafana_password: str = "DuRi@2025!"
+    grafana_password: str = "CHANGE_ME_GRAFANA_PASSWORD"
 
 
 class DuRiSettings(BaseSettings):

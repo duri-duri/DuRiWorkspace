@@ -173,7 +173,7 @@ services:
     ports: ["3000:3000"]
     environment:
       GF_SECURITY_ADMIN_USER: "duri-duri"
-      GF_SECURITY_ADMIN_PASSWORD: "DuRi@2025!"
+          GF_SECURITY_ADMIN_PASSWORD: "${GRAFANA_PASSWORD:?set GRAFANA_PASSWORD in .env}"
       GF_USERS_ALLOW_SIGN_UP: "false"
       GF_AUTH_ANONYMOUS_ENABLED: "false"
     volumes:
