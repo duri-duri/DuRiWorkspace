@@ -21,3 +21,5 @@ if [[ "$evidence_low" != "0" || "$conflict_spike" != "0" || "$repro_drop" != "0"
 fi
 
 echo "Health gates passed"
+
+

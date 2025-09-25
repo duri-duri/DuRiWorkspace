@@ -88,3 +88,5 @@ echo "  - 캡슐 리플레이: 0 2 * * * /path/to/tools/capsule_auto_replay.sh"
 
 echo "=== 운영 하드닝 완료 ==="
 echo "• 다음 단계: 크론잡 설정 및 모니터링 대시보드 구성"
+
+

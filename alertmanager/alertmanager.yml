@@ -1,0 +1,22 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  group_by: ['alertname','service']
+  group_wait: 10s
+  group_interval: 1m
+  repeat_interval: 2h
+  receiver: default
+  routes:
+    - matchers: [ severity="page" ]
+      receiver: oncall
+
+receivers:
+  - name: default
+    webhook_configs:
+      - url: "http://duri_control_container:8083/ops/alerts"
+        send_resolved: true
+  - name: oncall
+    webhook_configs:
+      - url: "http://duri_control_container:8083/ops/alerts"
+        send_resolved: true

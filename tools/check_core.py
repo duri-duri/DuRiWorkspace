@@ -48,3 +48,5 @@ as_of = date.fromisoformat(fam["as_of"])
 assert (date.today() - as_of) <= timedelta(days=fam.get("review_after_days",180))
 
 print("OK")
+
+

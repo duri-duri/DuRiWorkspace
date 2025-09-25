@@ -125,3 +125,5 @@ python3 tools/build_bundle.py --verify-only
 - [ ] DR 드릴: 최신 태그 부팅 → 골든 20문항 ≥95%
 - [ ] 키 로테이션 준비 (90일 주기)
 - [ ] 골든셋 교체 (2주마다 20%)
+
+

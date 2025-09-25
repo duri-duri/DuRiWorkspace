@@ -20,17 +20,23 @@ LOG_DIR="$PROJECT_DIR/var/logs"; mkdir -p "$LOG_DIR"
 log(){ echo "[$(date '+%F %T')] $*"; }
 cd "$PROJECT_DIR"
 
-# 0) Docker 데몬 보증(서비스 아닌 환경)
-if [ ! -S "$DOCKER_SOCK" ] || ! pgrep -x dockerd >/dev/null 2>&1; then
-  log "dockerd not running → start"
-  if command -v sudo >/dev/null 2>&1 && sudo -n true 2>/dev/null; then
-    nohup sudo dockerd --host=unix://$DOCKER_SOCK >>"$LOG_DIR/dockerd.log" 2>&1 &
-  else
-    nohup dockerd --host=unix://$DOCKER_SOCK >>"$LOG_DIR/dockerd.log" 2>&1 &
+# 0) Docker 데몬 보증(모드별 처리)
+if [[ "${DOCKER_DAEMON_MODE:-desktop}" == "native" ]]; then
+  if [ ! -S "$DOCKER_SOCK" ] || ! pgrep -x dockerd >/dev/null 2>&1; then
+    log "dockerd not running → start (native mode)"
+    if command -v sudo >/dev/null 2>&1 && sudo -n true 2>/dev/null; then
+      nohup sudo dockerd --host=unix://$DOCKER_SOCK >>"$LOG_DIR/dockerd.log" 2>&1 &
+    else
+      nohup dockerd --host=unix://$DOCKER_SOCK >>"$LOG_DIR/dockerd.log" 2>&1 &
+    fi
   fi
+else
+  log "WSL/Desktop mode: won't start dockerd; waiting for Docker Desktop socket..."
 fi
+
+# 공통 대기(Desktop이면 단순 '응답 대기', Native면 '기동+대기')
 for _ in $(seq 1 "$WAIT_DOCKER_SECS"); do docker version >/dev/null 2>&1 && break; sleep 1; done
-docker version >/dev/null 2>&1 || { echo "⛔ dockerd 준비 실패"; exit 2; }
+docker version >/dev/null 2>&1 || { echo "⛔ Docker 데몬 미응답: Desktop 실행(또는 native 설정) 필요"; exit 2; }
 
 # 1) Prometheus 모드 전환에 따른 이름 충돌 가드
 if [[ "$PROM_MODE" == "compose" ]]; then

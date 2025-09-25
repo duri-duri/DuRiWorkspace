@@ -1,0 +1,14 @@
+duri_all_scripts
+duri_archive
+duri_brain
+duri_brain_node
+duri_common
+duri_control
+duri_core
+duri_core_node
+duri_evolution
+duri_evolution_node
+duri_modules
+duri_snapshots
+memory
+tools

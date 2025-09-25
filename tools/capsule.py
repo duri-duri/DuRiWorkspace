@@ -12,3 +12,5 @@ def make_capsule(query, core_tag, bundle_hash, rag_docs, fusion_w, model, prompt
       "output": {"hash": sha256s(output_text), "tokens": tokens, "latency_ms": latency_ms},
       "query_hash": sha256s(query)
     }
+
+

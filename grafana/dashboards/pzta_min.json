@@ -1,0 +1,12 @@
+{
+  "title":"PZTA-CRA — Quick SLO",
+  "timezone":"browser","panels":[
+    {"type":"timeseries","title":"Core Error Ratio (5m)",
+     "targets":[{"expr":"pzta:errors:rate5m / clamp_min(pzta:answers:rate5m,1)"}]},
+    {"type":"timeseries","title":"Bundle Verify Fail",
+     "targets":[{"expr":"increase(bundle_verify_fail_total[15m])"}]},
+    {"type":"timeseries","title":"CoreRAG Conflict",
+     "targets":[{"expr":"rate(core_rag_conflict_total[5m])"}]}
+  ],
+  "schemaVersion":38,"version":1
+}

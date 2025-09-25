@@ -77,3 +77,5 @@ if __name__ == "__main__":
         verify_hashchain_integrity()
     else:
         run_continuous_verification()
+
+

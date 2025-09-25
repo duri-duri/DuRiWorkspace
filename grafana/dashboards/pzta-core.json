@@ -1,0 +1,20 @@
+{
+  "title": "PZTA Core",
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "panels": [
+    { "title": "bundle_verify_fail_total (5m)", "type": "stat",
+      "gridPos": {"x":0,"y":0,"w":6,"h":4},
+      "targets":[{"expr":"sum(rate(bundle_verify_fail_total[5m]))"}] },
+    { "title": "core_rag_conflict_total (5m)", "type":"stat",
+      "gridPos":{"x":6,"y":0,"w":6,"h":4},
+      "targets":[{"expr":"sum(rate(core_rag_conflict_total[5m]))"}] },
+    { "title": "repro_capsule_rate (5m)", "type":"gauge",
+      "gridPos":{"x":0,"y":4,"w":6,"h":8},
+      "targets":[{"expr":"avg_over_time(repro_capsule_rate[5m])"}] },
+    { "title": "HTTP probe (core)", "type":"timeseries",
+      "gridPos":{"x":6,"y":4,"w":6,"h":8},
+      "targets":[{"expr":"probe_success{job=\"blackbox\",instance=\"duri_core_container:8080\"}"}] }
+  ]
+}

@@ -1,4 +1,35 @@
 groups:
+- name: synthetic
+  rules:
+  - alert: SyntheticAlwaysOn
+    expr: vector(1)
+    for: 1m
+    labels: {severity: "page", service: "pzta-cra"}
+    annotations:
+      summary: "Synthetic Always-On"
+      description: "Pipeline end-to-end test"
+
+- name: pzta-cra.platform
+  interval: 30s
+  rules:
+  - alert: ExporterAbsent
+    expr: sum by (job,instance) (up == 0) > 0
+    for: 3m
+    labels: { severity: page }
+    annotations: { summary: "Exporter down ({{ $labels.job }} @ {{ $labels.instance }})" }
+
+  - alert: BlackboxProbeFailed
+    expr: probe_success == 0
+    for: 2m
+    labels: { severity: page }
+    annotations: { summary: "Blackbox probe failed ({{ $labels.instance }})" }
+
+  - alert: HighContainerCPU
+    expr: rate(container_cpu_usage_seconds_total[5m]) * 100 > 80
+    for: 10m
+    labels: { severity: warn }
+    annotations: { summary: "High container CPU (>80% 10m)" }
+
 - name: pzta-cra.core
   interval: 30s
   rules:
@@ -32,6 +63,50 @@ groups:
     for: 5m
     labels: {severity: ticket}
     annotations: {summary: "Core staleness > 180d"}
+
+- name: pzta-cra.slo
+  interval: 30s
+  rules:
+    # --- Core 서비스 가용성 (blackbox) ---
+    # instance 라벨에 core 헬스 엔드포인트가 들어갑니다 (예: duri_core_container:8080/healthz).
+    - record: slo:core:avail:5m
+      expr: avg_over_time(probe_success{job="blackbox", instance=~".*core.*:8080.*"}[5m])
+    - record: slo:core:avail:1h
+      expr: avg_over_time(probe_success{job="blackbox", instance=~".*core.*:8080.*"}[1h])
+
+    - record: slo:core:error:5m
+      expr: 1 - slo:core:avail:5m
+    - record: slo:core:error:1h
+      expr: 1 - slo:core:avail:1h
+
+    # SLO=99.5% → 에러버짓=0.005
+    - record: slo:core:burnrate:5m
+      expr: slo:core:error:5m / 0.005
+    - record: slo:core:burnrate:1h
+      expr: slo:core:error:1h / 0.005
+
+    # 멀티윈도우/멀티번 레이트 알람(구글 SRE 패턴)
+    - alert: SLOCoreFastBurn
+      expr: (slo:core:burnrate:5m > 14.4) and (slo:core:burnrate:1h > 14.4)
+      for: 2m
+      labels:
+        severity: page
+        service: core
+        team: pzta
+      annotations:
+        summary: "Core 가용성 급격 저하 (5m/1h)"
+        runbook_url: "https://runbook.example/core-slo"
+
+    - alert: SLOCoreSlowBurn
+      expr: (slo:core:burnrate:1h > 6) and (1 - avg_over_time(probe_success{job="blackbox", instance=~".*core.*:8080.*"}[6h]) > 0.005)
+      for: 10m
+      labels:
+        severity: ticket
+        service: core
+        team: pzta
+      annotations:
+        summary: "Core 가용성 저하 지속 (1h/6h)"
+        runbook_url: "https://runbook.example/core-slo"
 
 - name: pzta-cra.canary
   interval: 30s
