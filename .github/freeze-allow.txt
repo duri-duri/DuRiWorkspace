@@ -91,3 +91,9 @@ tmp/
 ^duri_core$
 .github/workflows/insight-metrics-report.yml
 Makefile
+
+# ----- Phase 5: proof gates tooling -----
+^tools/
+^grafana/dashboards/
+^docs/performance-tuning-guide\.md$
+^scripts/performance-monitor\.sh$
