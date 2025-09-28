@@ -1,16 +1,13 @@
-[build-system]
-requires = ["setuptools>=68", "wheel"]
-build-backend = "setuptools.build_meta"
-
 [project]
-name = "duri"
-version = "0.0.0"
+name = "duri-finale"
+version = "0.1.0"
 requires-python = ">=3.10"
-dependencies = [
-    "pydantic>=2.0.0",
-    "pydantic-settings>=2.0.0"
-]
+dependencies = []
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["duri_*","tools*","memory*"]
+include = ["duri_finale*"]
