@@ -6,7 +6,9 @@ rules:
         - "ImportError: cannot import name"
     suggest:
       - action: "add_import"
-        params: { module: "duri_common.settings" }
+        params:
+          module: "duri_common.settings"
+  
   - id: flaky-timeout
     match:
       any:
@@ -14,4 +16,6 @@ rules:
         - "Operation timed out"
     suggest:
       - action: "increase_timeout"
-        params: { file_glob: "tests/**/test_*.py", factor: 1.5 }
+        params:
+          file_glob: "tests/**/test_*.py"
+          factor: 1.5

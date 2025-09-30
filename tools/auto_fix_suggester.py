@@ -2,7 +2,14 @@
 import re, sys, json, pathlib, yaml
 
 def load_rules(path="tools/failure_patterns.yml"):
-    return yaml.safe_load(open(path))
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = yaml.safe_load(f) or {}
+        if "rules" not in data:
+            data["rules"] = []
+        return data
+    except Exception as e:
+        return {"rules": []}
 
 def match_rules(log_text, rules):
     hits = []
