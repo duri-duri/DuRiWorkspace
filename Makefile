@@ -1,5 +1,11 @@
 .PHONY: phase25.L0L1 phase25.L2L4 phase25.all ab.test ab.replay ab.power ab.legacy
 
+.PHONY: day38.suggest
+ day38.suggest:
+	@echo "Collecting last CI log..." ; true
+	@cat last_ci.log 2>/dev/null | python3 tools/auto_fix_suggester.py || true
+
+
 phase25.L0L1:
 	pytest -q tests/phases/test_phase25_smoke.py tests/phases/test_phase25_contract.py
 
