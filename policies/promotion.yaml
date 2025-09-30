@@ -1,9 +1,31 @@
-version: 1
-delta:   { op: gt, value: 0 }      # 개선이어야 함
-p_value: { op: le, value: 0.05 }   # 유의수준 통과 (경계 포함)
+version: 2
+# 도메인별 승격 조건 분리
 
-# 선택 게이트(필요 시 주석 해제)
-# mes:      { op: ge, value: 0.02 }   # 최소 실질 효과
-# ci_width: { op: le, value: 0.02 }   # 95%CI 폭 상한
-# n_A:      { min: 10 }
-# n_B:      { min: 10 }
+# 유지율 도메인 (PoU 7일차)
+retention:
+  delta:   { op: ge, value: 0.03 }   # 3%p 이상 개선
+  p_value: { op: le, value: 0.05 }   # 유의수준 통과
+  min_n:   { value: 200 }            # 최소 샘플 수
+
+# 지연 도메인 (성능)
+latency:
+  delta:   { op: le, value: 0 }      # 악화 금지 (0 이하)
+  p_value: { op: le, value: 0.05 }   # 유의수준 통과
+  min_n:   { value: 100 }            # 최소 샘플 수
+
+# 안전성 도메인 (재활)
+safety:
+  delta:   { op: ge, value: 0 }      # 하락 시 무조건 Fail
+  p_value: { op: le, value: 0.05 }   # 유의수준 통과
+  min_n:   { value: 50 }             # 최소 샘플 수
+
+# 다중지표 FDR 5% 적용
+fdr_control: true
+fdr_alpha: 0.05
+
+# 가드레일 (모든 도메인 공통)
+guardrails:
+  - "latency_ms 악화 금지"
+  - "safety_ok 하락 금지"
+  - "SRM p < 0.01 통과"
+  - "A/A 테스트 p 분포 검증"
