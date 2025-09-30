@@ -97,3 +97,8 @@ Makefile
 ^grafana/dashboards/
 ^docs/performance-tuning-guide\.md$
 ^scripts/performance-monitor\.sh$
+ab_test_runner.py
+tests/test_ab_*.py
+policies/promotion.yaml
+pytest.ini
+Makefile
