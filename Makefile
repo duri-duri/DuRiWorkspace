@@ -44,3 +44,10 @@ pou.d7.test:
 	python3 ab_test_runner.py --config configs/experiments/pou_d7.yaml --input data/pou_day7.csv --metric retained_d7 --group variant --output logs/ab --gate-policy policies/promotion.yaml --exp-id pou_d7
 
 pou.d7.all: pou.d7.extract pou.d7.test
+
+.PHONY: day38.patch
+day38.patch:
+	@echo "Generating patches..."
+	@python3 tools/patch_generator.py add_import tests/test_example.py duri_common.settings || true
+	@echo "Dry-run patching..."
+	@echo '{"action":"add_import","file":"tests/test_example.py","module":"duri_common.settings"}' | python3 tools/dry_run_patcher.py || true
