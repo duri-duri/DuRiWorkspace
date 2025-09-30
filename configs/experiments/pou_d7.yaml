@@ -1,0 +1,39 @@
+# Day 37: PoU 7일차 유지율 A/B 테스트 설정
+id: pou_day7
+kind: binary
+metric: retained_d7
+csv_a: data/pou_day7.csv
+group_col: variant
+a_label: A
+b_label: B
+alpha: 0.05
+min_n: 200
+
+# 실험 메타데이터
+experiment:
+  name: "pou_day7_retention"
+  description: "PoU 7일차 유지율 A/B 테스트 (Day37)"
+  owner: "duri"
+  start_date: "2025-09-30"
+  expected_duration: "7 days"
+
+# 통계 검정 설정
+stat_test: "two_prop"  # 이진 지표용
+alpha: 0.05
+power: 0.8
+effect_size: 0.03  # 3%p 개선
+
+# 게이트 설정
+promotion:
+  rule: "retention_improvement > 0.03 and p_value <= 0.05"
+  min_sample_size: 200
+  max_p_value: 0.05
+
+# 기존 시스템 호환성
+legacy_compat:
+  use_existing_gate: true
+  gate_policy_path: "policies/promotion.yaml"
+  preserve_original_output: true
+
+# 시드 설정
+seed: 42
