@@ -1,56 +1,40 @@
-# DuRiWorkspace Makefile
-# 로컬 개발 편의 명령어들
+.PHONY: phase25.L0L1 phase25.L2L4 phase25.all ab.test ab.replay ab.power ab.legacy
 
-.PHONY: metrics test clean help
+phase25.L0L1:
+	pytest -q tests/phases/test_phase25_smoke.py tests/phases/test_phase25_contract.py
 
-# 메트릭 리포트 생성 (로컬)
-metrics:
-	@echo "🧪 Running metrics tests..."
-	python -m pytest tests/test_metrics.py -v
-	@echo "📊 Generating metrics report..."
-	python - <<'PY'
-	from insight.metrics import evaluate_text
-	import json
-	sample = [
-	  'The quick brown fox jumps over the lazy dog.',
-	  'A fast brown fox leaps over a sleepy canine.',
-	  'The dog is lazy and sleeps all day.',
-	  'Innovative solutions require creative thinking and comprehensive analysis.',
-	  'This is a very short text.',
-	]
-	results=[]
-	for i,t in enumerate(sample):
-	  r=evaluate_text(t, detailed=True); r['text']=t; r['index']=i; results.append(r)
-	report={'total_samples':len(sample),'average_composite_score':sum(x['composite_score'] for x in results)/len(results),
-	        'results':results,'summary':{'highest_score':max(results,key=lambda x:x['composite_score']),
-	        'lowest_score':min(results,key=lambda x:x['composite_score']),
-	        'score_range':max(x['composite_score'] for x in results)-min(x['composite_score'] for x in results)}}
-	open('metrics_report.json','w').write(json.dumps(report,indent=2))
-	print('✅ metrics_report.json written')
-	PY
-	@echo "✅ Metrics report generated: metrics_report.json"
+phase25.L2L4:
+	pytest -q tests/phases/test_phase25_behavior.py tests/phases/test_phase25_guard.py tests/phases/test_phase25_invariance.py
 
-# 모든 테스트 실행
-test:
-	@echo "🧪 Running all tests..."
-	python -m pytest tests/ -v
+phase25.all: phase25.L0L1 phase25.L2L4
 
-# 캐시 및 임시 파일 정리
-clean:
-	@echo "🧹 Cleaning up..."
-	rm -f metrics_report.json
-	rm -rf __pycache__/
-	rm -rf .pytest_cache/
-	find . -name "*.pyc" -delete
-	find . -name "*.pyo" -delete
+# A/B 테스트 통합 타겟
+ab.test:
+	pytest -q tests/test_ab_runner_smoke.py tests/test_ab_runner.py tests/test_ab_srm_aa.py tests/test_pou_d7.py
 
-# 도움말
-help:
-	@echo "DuRiWorkspace Development Commands:"
-	@echo ""
-	@echo "  make metrics    - Generate local metrics report"
-	@echo "  make test       - Run all tests"
-	@echo "  make clean      - Clean cache and temp files"
-	@echo "  make help       - Show this help"
-	@echo ""
-	@echo "Phase 19-1: 메트릭 리포트 CI 구현 완료 ✅"
+ab.replay:
+	python3 ab_test_runner.py --config configs/experiments/example.yaml --input data/demo_ab.csv --metric latency_ms --group variant --output logs/ab
+
+ab.power:
+	python3 tools/ab_power_calc.py --alpha 0.05 --power 0.8 --effect-size 0.2
+
+ab.legacy:
+	$(MAKE) -C DuRi_Day11_15_starter run AS_OF_DAY=36 VAR=A SEED=42
+	$(MAKE) -C DuRi_Day11_15_starter run AS_OF_DAY=36 VAR=B SEED=42
+
+ab.replay.rehab:
+	python3 ab_test_runner.py --config configs/experiments/rehab_safety.yaml \
+	 --input data/rehab_day32.csv --metric safety_ok --group variant \
+	 --output logs/ab --gate-policy policies/promotion.yaml --exp-id rehab_safety_d32
+
+ab.report.tree:
+	find logs/ab -type f -name "*.jsonl" | sed 's|.*/logs/ab/||' | sort
+
+# Day 37 PoU 7일차 유지율 분석
+pou.d7.extract:
+	python3 tools/pou_day7_extract.py --synthetic --out data/pou_day7.csv --n-users 1000
+
+pou.d7.test:
+	python3 ab_test_runner.py --config configs/experiments/pou_d7.yaml --input data/pou_day7.csv --metric retained_d7 --group variant --output logs/ab --gate-policy policies/promotion.yaml --exp-id pou_d7
+
+pou.d7.all: pou.d7.extract pou.d7.test

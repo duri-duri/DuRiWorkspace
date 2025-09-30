@@ -1,0 +1,192 @@
+services:
+  duri_core:
+    healthcheck:
+      test: ["CMD-SHELL","python -c \"import socket; s=socket.socket(); s.settimeout(2); s.connect(('127.0.0.1',8080)); s.close()\""]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 20s
+    depends_on:
+      duri-postgres: {condition: service_healthy}
+      duri-redis:    {condition: service_healthy}
+
+  duri_brain:
+    healthcheck:
+      test: ["CMD-SHELL","python -c \"import socket; s=socket.socket(); s.settimeout(2); s.connect(('127.0.0.1',8081)); s.close()\""]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 20s
+    depends_on:
+      duri-postgres: {condition: service_healthy}
+      duri-redis:    {condition: service_healthy}
+
+  duri_evolution:
+    healthcheck:
+      test: ["CMD-SHELL","python -c \"import socket; s=socket.socket(); s.settimeout(2); s.connect(('127.0.0.1',8082)); s.close()\""]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 20s
+    depends_on:
+      duri-postgres: {condition: service_healthy}
+      duri-redis:    {condition: service_healthy}
+
+  duri-postgres:
+    healthcheck:
+      test: ["CMD-SHELL","pg_isready -U ${POSTGRES_USER:-postgres} -h 127.0.0.1 -p 5432"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 25s
+
+  duri-redis:
+    healthcheck:
+      test: ["CMD","redis-cli","-h","127.0.0.1","-p","6379","ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 15s
+  duri_control:
+    healthcheck:
+      test: ["CMD-SHELL","python -c \"import socket; s=socket.socket(); s.settimeout(2); s.connect(('127.0.0.1',8083)); s.close()\""]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 20s
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports: ["9090:9090"]
+    restart: unless-stopped
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus_rules.yml:/etc/prometheus/rules/prometheus_rules.yml:ro
+      - ./prometheus_rules_enhanced.yml:/etc/prometheus/rules/prometheus_rules_enhanced.yml:ro
+      - ./prometheus_alerts_enhanced.yml:/etc/prometheus/rules/prometheus_alerts_enhanced.yml:ro
+      - ./data/prometheus:/prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=15d
+      - --storage.tsdb.wal-compression
+      - --web.enable-lifecycle
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:9090/-/ready >/dev/null 2>&1 || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 45s
+
+  alertmanager:
+    image: quay.io/prometheus/alertmanager:latest
+    container_name: alertmanager
+    ports: ["9093:9093"]
+    command:
+      - --config.file=/etc/alertmanager/alertmanager.yml
+      - --storage.path=/alertmanager
+    volumes:
+      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+    healthcheck:
+      test: ["CMD-SHELL","wget -qO- http://localhost:9093/-/ready >/dev/null 2>&1 || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 45s
+
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:v1.8.1
+    container_name: node_exporter
+    ports: ["9100:9100"]
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - --path.rootfs=/rootfs
+      - --path.procfs=/host/proc
+      - --path.sysfs=/host/sys
+      - --collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($|/)
+    healthcheck:
+      test: ["CMD-SHELL","wget -qO- http://localhost:9100/metrics >/dev/null 2>&1 || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    ports: ["8089:8080"]
+    restart: unless-stopped
+    privileged: true
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    healthcheck:
+      test: ["CMD-SHELL","wget -qO- http://localhost:8080/metrics >/dev/null 2>&1 || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  redis_exporter:
+    image: oliver006/redis_exporter:latest
+    container_name: redis_exporter
+    ports: ["9121:9121"]
+    restart: unless-stopped
+    environment:
+      - REDIS_ADDR=redis://duri-redis:6379
+    depends_on: { duri-redis: { condition: service_healthy } }
+
+  postgres_exporter:
+    image: quay.io/prometheuscommunity/postgres-exporter:latest
+    container_name: postgres_exporter
+    ports: ["9187:9187"]
+    restart: unless-stopped
+    environment:
+      - DATA_SOURCE_NAME=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-CHANGE_ME_POSTGRES_PASSWORD}@duri-postgres:5432/postgres?sslmode=disable
+      - PG_EXPORTER_AUTO_DISCOVER_DATABASES=true
+    healthcheck:
+      test: ["CMD-SHELL","wget -qO- http://localhost:9187/metrics >/dev/null 2>&1 || exit 1"]
+    depends_on: { duri-postgres: { condition: service_healthy } }
+
+  blackbox_exporter:
+    image: quay.io/prometheus/blackbox-exporter:v0.24.0
+    container_name: blackbox_exporter
+    ports: ["9115:9115"]
+    restart: unless-stopped
+    volumes:
+      - ./blackbox.yml:/etc/blackbox_exporter/config.yml:ro
+    command: ["--config.file=/etc/blackbox_exporter/config.yml"]
+    healthcheck:
+      test: ["CMD-SHELL","wget -qO- http://localhost:9115/metrics >/dev/null 2>&1 || exit 1"]
+
+  grafana:
+    image: grafana/grafana:10.4.5
+    container_name: grafana
+    ports: ["3000:3000"]
+    environment:
+      GF_SECURITY_ADMIN_USER: "duri-duri"
+      GF_SECURITY_ADMIN_PASSWORD: "${GRAFANA_PASSWORD:-CHANGE_ME_GRAFANA_PASSWORD}"
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+    volumes:
+      - ./grafana/data:/var/lib/grafana
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    depends_on:
+      prometheus:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL","wget -qO- http://localhost:3000/api/health | grep -q ok"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 45s

@@ -1,0 +1,45 @@
+# DuRi Base Image - Optimized Multi-stage Build
+FROM python:3.10-slim as base
+
+# 시스템 패키지 설치 (한 번에)
+RUN apt-get update && apt-get install -y \
+    postgresql-client \
+    curl \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+# Python 의존성 캐시 레이어
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir -r /tmp/requirements.txt
+
+# 공통 파일 복사
+COPY duri_common/ /app/duri_common/
+COPY docker/wait-for-postgres.sh /wait-for-postgres.sh
+RUN chmod +x /wait-for-postgres.sh
+
+# 공통 환경변수 설정
+ENV PYTHONPATH=/app:/app/duri_common
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+# 개발용 스테이지
+FROM base as development
+RUN pip install --no-cache-dir \
+    pytest \
+    pytest-cov \
+    black \
+    flake8 \
+    mypy
+
+# 프로덕션용 스테이지
+FROM base as production
+# 프로덕션 최적화
+RUN pip install --no-cache-dir --no-deps \
+    && find /usr/local/lib/python3.10 -name "*.pyc" -delete \
+    && find /usr/local/lib/python3.10 -name "__pycache__" -type d -exec rm -rf {} +
+
+# 기본 명령어
+CMD ["bash", "/wait-for-postgres.sh"]

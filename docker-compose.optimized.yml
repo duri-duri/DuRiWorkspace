@@ -1,0 +1,149 @@
+# DuRi Docker Compose - Optimized Version
+# 공통 설정을 YAML 앵커로 정의하여 중복 제거
+
+# 공통 볼륨 설정
+x-common-volumes: &common-volumes
+  - ./logs:/app/logs
+  - ./config:/app/config
+
+# 공통 환경변수 설정
+x-common-environment: &common-environment
+  PYTHONPATH: /app:/app/duri_common
+  DATABASE_URL: ${DATABASE_URL:-postgresql://duri:CHANGE_ME_DB_PASSWORD@duri-postgres:5432/duri}
+  REDIS_URL: ${REDIS_URL:-redis://duri-redis:6379/0}
+
+# 공통 의존성 설정
+x-common-depends: &common-depends
+  depends_on:
+    duri-postgres:
+      condition: service_healthy
+    duri-redis:
+      condition: service_healthy
+
+# 공통 헬스체크 설정
+x-common-healthcheck: &common-healthcheck
+  healthcheck:
+    test: ["CMD", "curl", "-f", "http://localhost:${PORT}/health"]
+    interval: 30s
+    timeout: 10s
+    retries: 3
+    start_period: 40s
+
+services:
+  duri_core:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.core
+    container_name: duri_core_container
+    ports:
+      - "${CORE_PORT:-8080}:8080"
+    volumes:
+      - *common-volumes
+    environment:
+      <<: *common-environment
+      PORT: 8080
+      SERVICE_NAME: core
+    <<: *common-depends
+    <<: *common-healthcheck
+    restart: unless-stopped
+
+  duri_brain:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.brain
+    container_name: duri_brain_container
+    ports:
+      - "${BRAIN_PORT:-8081}:8081"
+    volumes:
+      - *common-volumes
+    environment:
+      <<: *common-environment
+      PORT: 8081
+      SERVICE_NAME: brain
+    <<: *common-depends
+    <<: *common-healthcheck
+    restart: unless-stopped
+
+  duri_evolution:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.evolution
+    container_name: duri_evolution_container
+    ports:
+      - "${EVOLUTION_PORT:-8082}:8082"
+    volumes:
+      - *common-volumes
+    environment:
+      <<: *common-environment
+      PORT: 8082
+      SERVICE_NAME: evolution
+    <<: *common-depends
+    <<: *common-healthcheck
+    restart: unless-stopped
+
+  duri_control:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.control
+    container_name: duri_control_container
+    ports:
+      - "${CONTROL_PORT:-8083}:8083"
+    volumes:
+      - *common-volumes
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./duri_control/wait-for-postgres.sh:/app/wait-for-postgres.sh:ro
+    environment:
+      <<: *common-environment
+      PORT: 8083
+      SERVICE_NAME: control
+    <<: *common-depends
+    <<: *common-healthcheck
+    command: ["bash", "/app/wait-for-postgres.sh"]
+    restart: unless-stopped
+
+  duri-postgres:
+    image: postgres:15
+    container_name: duri-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-duri}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-CHANGE_ME_DB_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-duri}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - duri_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-duri}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  duri-redis:
+    image: redis:7-alpine
+    container_name: duri-redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - duri_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  duri_postgres_data:
+    driver: local
+  duri_redis_data:
+    driver: local
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

@@ -1,0 +1,122 @@
+# DuRi Network Optimization Configuration
+# 네트워크 성능 및 보안 최적화
+
+networks:
+  # 메인 애플리케이션 네트워크
+  duri-app:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.1
+    driver_opts:
+      com.docker.network.bridge.name: duri-app-br
+      com.docker.network.bridge.enable_icc: "true"
+      com.docker.network.bridge.enable_ip_masquerade: "true"
+      com.docker.network.bridge.host_binding_ipv4: "0.0.0.0"
+
+  # 데이터베이스 전용 네트워크 (격리)
+  duri-db:
+    driver: bridge
+    internal: true  # 외부 접근 차단
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16
+          gateway: 172.21.0.1
+
+  # 모니터링 네트워크
+  duri-monitoring:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.22.0.0/16
+          gateway: 172.22.0.1
+
+  # 개발용 네트워크 (디버깅 허용)
+  duri-dev:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.23.0.0/16
+          gateway: 172.23.0.1
+    driver_opts:
+      com.docker.network.bridge.enable_icc: "true"
+      com.docker.network.bridge.enable_ip_masquerade: "true"
+
+# 볼륨 최적화 설정
+volumes:
+  # 데이터베이스 볼륨 (성능 최적화)
+  duri_postgres_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /opt/duri/data/postgres
+    labels:
+      - "duri.service=postgres"
+      - "duri.type=data"
+
+  # Redis 볼륨 (메모리 최적화)
+  duri_redis_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /opt/duri/data/redis
+    labels:
+      - "duri.service=redis"
+      - "duri.type=cache"
+
+  # 로그 볼륨 (로그 로테이션)
+  duri_logs:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /opt/duri/logs
+    labels:
+      - "duri.service=all"
+      - "duri.type=logs"
+
+  # 백업 볼륨 (압축 및 암호화)
+  duri_backups:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /opt/duri/backups
+    labels:
+      - "duri.service=all"
+      - "duri.type=backup"
+
+  # 설정 볼륨 (읽기 전용)
+  duri_config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind,ro
+      device: /opt/duri/config
+    labels:
+      - "duri.service=all"
+      - "duri.type=config"
+
+  # 모니터링 데이터 볼륨
+  prometheus_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /opt/duri/monitoring/prometheus
+    labels:
+      - "duri.service=monitoring"
+      - "duri.type=metrics"
+
+  grafana_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /opt/duri/monitoring/grafana
+    labels:
+      - "duri.service=monitoring"
+      - "duri.type=dashboard"

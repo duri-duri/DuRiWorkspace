@@ -1,7 +1,6 @@
 FROM duri-base:latest
 
 WORKDIR /app
-ENV PYTHONPATH=/app
 
 # Core 서비스 파일 복사
 COPY duri_core/ /app/duri_core/

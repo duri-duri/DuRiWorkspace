@@ -1,0 +1,51 @@
+schema: ops.v1
+as_of: "2025-09-22"
+review_after_days: 90
+
+docker:
+  archive_layout: "standard:v1"
+  healthchecks: true
+  backup_restore: "enabled"
+  services:
+    - name: "duri_core"
+      port: 8080
+      health_check: "python_socket"
+    - name: "duri_brain"
+      port: 8081
+      health_check: "python_socket"
+    - name: "duri_evolution"
+      port: 8082
+      health_check: "python_socket"
+    - name: "duri_control"
+      port: 8083
+      health_check: "python_socket"
+    - name: "duri-postgres"
+      port: 5432
+      health_check: "pg_isready"
+    - name: "duri-redis"
+      port: 6379
+      health_check: "redis_ping"
+
+backup:
+  levels: 3
+  primary: "HDD"
+  secondary: "Desktop_Mirror"
+  tertiary: "USB"
+  retention_days: 365
+
+security:
+  pii_fields: ["name_priv", "birthday", "personal_info"]
+  external_mode_restrictions: true
+  core_conflict_detection: true
+
+monitoring:
+  slo_metrics:
+    - "core_hit_rate >= 0.30"
+    - "rag_evidence >= 0.95"
+    - "conflict_unresolved = 0/분기"
+    - "reproducible_capsule >= 99.9%"
+    - "canary_golden_accuracy >= 0.98"
+    - "bundle_verify_fail_total = 0"
+    - "staleness_core_days <= 180"
+
+

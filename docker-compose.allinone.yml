@@ -1,20 +1,25 @@
 version: '3.8'
 
+secrets:
+  db_password:
+    file: ./secrets/db_password
+
 services:
   # PostgreSQL 데이터베이스
   duri-postgres:
     image: postgres:15
     container_name: duri-postgres-allinone
     environment:
-      POSTGRES_DB: duri
-      POSTGRES_USER: duri
-      POSTGRES_PASSWORD: duri
+      POSTGRES_DB: ${DB_NAME:?set in .env}
+      POSTGRES_USER: ${POSTGRES_USER:?set in .env}
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+    secrets: [db_password]
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U duri"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-duri}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -40,9 +45,8 @@ services:
     environment:
       - DURI_MODE=allinone
       - PYTHONPATH=/app:/app/duri_common
-      - DATABASE_URL=postgresql://duri:duri@duri-postgres:5432/duri
+      - DATABASE_URL=${DATABASE_URL:?export at start script}
       - REDIS_URL=redis://duri-redis:6379
-      - PGPASSWORD=duri
     ports:
       - "8080:8080"  # duri_core
       - "8081:8081"  # duri_brain
@@ -65,4 +69,4 @@ services:
       start_period: 60s
 
 volumes:
-  postgres_data: 
+  postgres_data:

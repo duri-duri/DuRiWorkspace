@@ -1,0 +1,17 @@
+# 생각-검증-정답-망각 파라미터
+allow_shortcut: false
+tau_evidence: 0.92
+conflict_mode: HARD           # HARD|SOFT
+safe_mode: core_only:false    # 긴급시 true로 전환
+self_consistency_k: 5
+sprt:
+  p0: 0.98
+  p1: 0.995
+  alpha: 0.05
+  beta: 0.05
+canary:
+  traffic_percent: 10
+  p0: 0.97
+  p1: 0.995
+  alpha: 0.10
+  beta: 0.10
