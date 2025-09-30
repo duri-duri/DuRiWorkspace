@@ -1,0 +1,21 @@
+rules:
+  - id: import-missing
+    match:
+      any:
+        - "ModuleNotFoundError: No module named"
+        - "ImportError: cannot import name"
+    suggest:
+      - action: "add_import"
+        params:
+          module: "duri_common.settings"
+  
+  - id: flaky-timeout
+    match:
+      any:
+        - "TimeoutError"
+        - "Operation timed out"
+    suggest:
+      - action: "increase_timeout"
+        params:
+          file_glob: "tests/**/test_*.py"
+          factor: 1.5
