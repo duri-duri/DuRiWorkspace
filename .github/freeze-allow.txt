@@ -26,3 +26,4 @@ tools/failure_patterns.yml
 tests/day38/test_auto_fix_suggester.py
 Makefile
 .github/workflows/proof-gates.yml
+.gitignore

@@ -57,3 +57,6 @@ DuRiCore/memory/phase11_traces/
 data/
 var/
 logs/
+
+# local tmp
+Makefile.tmp
