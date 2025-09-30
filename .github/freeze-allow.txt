@@ -20,3 +20,8 @@ tools/ab_report.py
 tests/test_pou_d7.py
 docs/metrics/retention_def.md
 Makefile
+DAY38_AUTO_CODE_LOOP_IMPROVEMENT_PLAN.md
+tools/auto_fix_suggester.py
+tools/failure_patterns.yml
+tests/day38/test_auto_fix_suggester.py
+Makefile
