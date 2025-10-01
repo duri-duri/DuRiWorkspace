@@ -1,0 +1,29 @@
+[flake8]
+max-line-length = 100
+# 문서 규칙(D*)와 길이(E501)는 기본 완화, 라이브러리에서는 docstring만 유지하고 싶은 경우 조정 가능
+extend-ignore = D100,D103,D205,D400,D403,E501,E722,F401,F541,F841,E402,E265,D200,D202,D401,D101,D102,D104,D107,D105,E203,E741,E712,F403,F811,F821,F601,E999,F402,E721
+extend-exclude =
+    backup/,
+    docs/,
+    .git/,
+    .venv/,
+    build/,
+    dist/,
+    duri_snapshots/,
+    DuRiCore/,
+    DuRi_Day11_15_starter/,
+    restored_day8_10/,
+    duri_archive/,
+    backup_phase5_day1_day7/,
+    backup_self_evolving_duri_20250803_133903.py,
+    test_extension_server.py,
+    scripts/,
+    insight/,
+    duri_common/,
+    duri_modules/,
+    monitor_learning_system.py
+
+# 테스트만 문서 규칙 완화 (테스트 가독성 우선)
+per-file-ignores =
+    tests/*.py: D200,D205,D400,D403,E501,F811,F401,E402
+    tools/*.py: D100,D103,D101,D102,D107,D200,D202,D401,F401,F841,E402,E265
