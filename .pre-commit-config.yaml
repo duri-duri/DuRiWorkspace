@@ -1,16 +1,29 @@
-# Skip huge snapshot/backup trees globally for all hooks
+# pre-commit global exclude: snapshots, backups, logs, archives
 exclude: |
-  ^(
+  (?x)^(
     duri_snapshots/|
-    DuRiCore_backup_|
-    backup|
     restored_day8_10/|
     unified_conversations/|
     logs/|
-    \.bundle_tmp/|
+    DuRiCore_backup_.*|
+    backup.*|
+    duri_archive/|
+    safe_workspace/|
     \.benchmarks/|
+    \.bundle_tmp/|
     \.test-artifacts/|
-    duri_archive/
+    \.cache/|
+    dist/|
+    build/|
+    site/|
+    htmlcov/|
+    \.coverage.*|
+    tmp/|
+    temp/|
+    \.DS_Store|
+    \.idea/|
+    \.vscode/|
+    \.pytest_cache/
   )
 
 repos:

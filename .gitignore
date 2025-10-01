@@ -1,24 +1,63 @@
 
-# === auto-generated / archives / logs (never commit) ===
+# === Snapshots / Backups / Archives ===
 duri_snapshots/
+restored_day8_10/
 DuRiCore_backup_*/
 backup*/
-restored_day8_10/
+duri_archive/
 unified_conversations/
-logs/
 safe_workspace/
-safe_workspace/**
+safe_extract_and_verify*.sh
+verify_and_cleanup_first_stage*.sh
 
-# bundle/tmp & build artifacts
-.bundle_tmp/
+# === Logs & Artifacts ===
+logs/
+**/*.log
+**/*.log.*
+**/*.jsonl
+reports/
+tests/**/.pytest_cache/
+.pytest_cache/
+
+# === Tools / Bench / Cache ===
 .benchmarks/
+.bundle_tmp/
+.cache/
+dist/
+build/
+site/
+htmlcov/
+.coverage*
 
-# local run outputs
+# === Temp ===
+tmp/
+temp/
+*.tmp
+*.swp
+*.swo
+
+# === OS / IDE ===
+.DS_Store
+.idea/
+.vscode/
+*.iml
+
+# === Data (generated) ===
+*.db
+*.sqlite*
+*.parquet
+*.feather
+
+# === Examples / Non-secret samples ===
+.env
+!.env.example
+
+# === Local run outputs ===
 test_result.json
 **/test_results_*.json
 **/plan.json
 
-# misc temp & legacy
+# === Misc temp & legacy ===
 scripts/_legacy/
 scripts/._*
 
