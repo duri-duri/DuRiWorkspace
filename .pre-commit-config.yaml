@@ -8,7 +8,9 @@ exclude: |
     unified_conversations/|
     logs/|
     \.bundle_tmp/|
-    \.benchmarks/
+    \.benchmarks/|
+    \.test-artifacts/|
+    duri_archive/
   )
 
 repos:
