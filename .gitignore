@@ -24,7 +24,7 @@ changed.txt
 .venv/
 DuRi_Day11_15_starter/outputs/**
 __pycache__/
-backup_phase*/ 
+backup_phase*/
 backup_repository/
 backups/
 code_pilot_v2_logs/logs.jsonl

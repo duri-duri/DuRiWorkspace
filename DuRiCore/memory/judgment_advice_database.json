@@ -10,7 +10,7 @@
       "description": "사용자가 혼란스러운 상태일 때 정보를 요약하고 명확한 방향을 제시하는 전략"
     },
     {
-      "id": "strategy_002", 
+      "id": "strategy_002",
       "context_pattern": "복잡한 의사결정 상황",
       "improvement": "단계별 분석 및 옵션 제시",
       "success_rate": 0.78,
@@ -24,7 +24,7 @@
       "improvement": "공감 후 논리적 접근",
       "success_rate": 0.92,
       "usage_count": 15,
-      "last_used": "2025-08-07T10:45:00", 
+      "last_used": "2025-08-07T10:45:00",
       "description": "감정적 상황에서 먼저 공감을 표현한 후 논리적으로 접근하는 전략"
     },
     {

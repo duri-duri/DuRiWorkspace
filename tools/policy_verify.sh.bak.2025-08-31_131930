@@ -64,14 +64,3 @@ grep -RIl --exclude-dir=.git -E 'AKIA[0-9A-Z]{16}|-----BEGIN (RSA|EC) PRIVATE KE
 done
 
 (( viol==0 )) && { echo "[PASS] security scan OK"; exit 0; } || { echo "[FAIL] security scan ($viol)"; exit 4; }
-
-
-
-
-
-
-
-
-
-
-

@@ -53,7 +53,7 @@ async def judge(self, context):
     # 상황 분석 → 옵션 생성 → 최적 선택
     return decision
 
-# action_system.py  
+# action_system.py
 async def act(self, decision):
     """실제 행동 로직"""
     # 행동 계획 → 실행 → 결과 확인
@@ -198,5 +198,5 @@ async def feedback(self, action_result):
 
 ---
 
-*DuRi 완전 서머리 작성: 2025-08-05*  
-*DuRiCore Development Team* 
+*DuRi 완전 서머리 작성: 2025-08-05*
+*DuRiCore Development Team*

@@ -80,11 +80,3 @@ jobs:
           command -v tree >/dev/null 2>&1 || sudo apt-get install -y tree
           tree -a -L 3 || true
           find var -maxdepth 3 -type f -ls || true
-
-
-
-
-
-
-
-

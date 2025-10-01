@@ -193,7 +193,7 @@ export class DuRiAPI {
             };
 
             const result = await this.sendUnifiedConversation(unifiedData);
-            
+
             if (result) {
                 return {
                     success: true,
@@ -228,7 +228,7 @@ export class DuRiAPI {
             };
 
             const result = await this.sendUnifiedConversation(unifiedData);
-            
+
             if (result) {
                 return {
                     success: true,
@@ -312,4 +312,4 @@ export class DuRiAPI {
     updateBaseUrl(newUrl: string): void {
         this.baseUrl = newUrl;
     }
-} 
+}

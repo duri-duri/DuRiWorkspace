@@ -14,4 +14,4 @@ npm install
 echo "TypeScript 컴파일 중..."
 npm run compile
 
-echo "설치 완료!" 
+echo "설치 완료!"

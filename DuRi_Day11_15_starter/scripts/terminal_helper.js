@@ -23,4 +23,3 @@ terminal.on('error', (err) => {
 terminal.on('close', (code) => {
     console.log(`✅ Terminal closed with code: ${code}`);
 });
-

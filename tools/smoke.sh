@@ -8,19 +8,19 @@ running_containers=(duri_core_container duri_brain_container duri_evolution_cont
 
 while :; do
   ok=1
-  
+
   # 헬스체크가 있는 컨테이너들 확인
   for s in "${health_containers[@]}"; do
     st=$(docker inspect --format='{{.State.Health.Status}}' "$s" 2>/dev/null || echo none)
     [[ "$st" == "healthy" ]] || { ok=0; break; }
   done
-  
+
   # 헬스체크가 없는 컨테이너들은 실행 상태만 확인
   for s in "${running_containers[@]}"; do
     st=$(docker inspect --format='{{.State.Status}}' "$s" 2>/dev/null || echo none)
     [[ "$st" == "running" ]] || { ok=0; break; }
   done
-  
+
   (( ok==1 )) && break
   (( SECONDS > deadline )) && { echo "SMOKE FAIL"; exit 1; }
   sleep 2

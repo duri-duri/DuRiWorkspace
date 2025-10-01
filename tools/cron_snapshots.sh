@@ -146,8 +146,3 @@ case "$MODE" in
   *)
     echo "[ERR] MODE must be snapshot|diff|purge|status" >&2 ; exit 1 ;;
 esac
-
-
-
-
-

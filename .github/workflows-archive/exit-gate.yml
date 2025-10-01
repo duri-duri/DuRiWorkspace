@@ -66,7 +66,7 @@ jobs:
           echo "## Exit Gate Summary" >> $GITHUB_STEP_SUMMARY
           python3 - <<'PY' >> $GITHUB_STEP_SUMMARY
 import json,os,sys,time,datetime as dt
-def age_h(p): 
+def age_h(p):
     return (time.time()-os.path.getmtime(p))/3600 if os.path.exists(p) else 1e9
 m=json.load(open("slo_sla_dashboard_v1/metrics.json")) if os.path.exists("slo_sla_dashboard_v1/metrics.json") else {}
 s=json.load(open("reports/objective_tuning_summary.json")) if os.path.exists("reports/objective_tuning_summary.json") else {}

@@ -1,6 +1,6 @@
 # DuRi Model Card v1
-_Revision_: 2025-09-10  
-_Channel_: Canary (10%), Internal  
+_Revision_: 2025-09-10
+_Channel_: Canary (10%), Internal
 _Authors_: DuRi Team
 
 ## 1. 개요

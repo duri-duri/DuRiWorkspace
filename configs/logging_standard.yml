@@ -12,7 +12,7 @@ meta:
 # === 로그 디렉토리 구조 ===
 directories:
   root: "var/logs"
-  
+
   # === 백업 관련 로그 ===
   backup:
     path: "var/logs/backup"
@@ -30,7 +30,7 @@ directories:
         description: "월간 백업 로그 (아카이브, 정리)"
         retention: "365일"
         max_size: "1GB"
-  
+
   # === 게이트 백업 로그 ===
   gate:
     path: "var/logs/gate"
@@ -48,7 +48,7 @@ directories:
         description: "FULL 백업 로그"
         retention: "90일"
         max_size: "200MB"
-  
+
   # === 시스템 로그 ===
   system:
     path: "var/logs/system"
@@ -66,7 +66,7 @@ directories:
         description: "알림 및 경고 로그"
         retention: "90일"
         max_size: "50MB"
-  
+
   # === 아카이브 ===
   archive:
     path: "var/logs/archive"
@@ -83,7 +83,7 @@ naming:
     - "gate_full_2025-08-22_14-15.log"
     - "health_2025-08-22_19-00.log"
     - "summary_2025-08-22_19-05.log"
-  
+
   # === 로그 타입별 접두사 ===
   prefixes:
     backup:
@@ -115,14 +115,14 @@ format:
     - "duration_ms"
     - "status"
     - "details"
-  
+
   # === 로그 레벨 정의 ===
   levels:
     INFO: "일반 정보, 성공한 작업"
     WARN: "경고, 주의가 필요한 상황"
     ERROR: "오류, 작업 실패"
     FATAL: "치명적 오류, 시스템 중단 필요"
-  
+
   # === 컴포넌트 정의 ===
   components:
     - "backup"
@@ -139,13 +139,13 @@ rotation:
     max_size: "100MB"
     compress: true
     keep_compressed: true
-  
+
   # === 시간 기반 로테이션 ===
   time_based:
     daily: true
     weekly: true
     monthly: true
-  
+
   # === 보존 정책 ===
   retention:
     daily_logs: "30일"
@@ -165,13 +165,13 @@ content:
       - "성공/실패 상태"
       - "소요 시간"
       - "오류 메시지 (실패 시)"
-    
+
     optional_fields:
       - "백업 크기"
       - "압축률"
       - "체크섬 정보"
       - "의존성 상태"
-  
+
   # === 게이트 백업 로그 ===
   gate_operations:
     required_fields:
@@ -180,12 +180,12 @@ content:
       - "우선순위"
       - "실행 결과"
       - "충돌 해결 방법"
-    
+
     optional_fields:
       - "GitHub 이벤트 정보"
       - "수동 실행자 정보"
       - "긴급 상황 상세"
-  
+
   # === 시스템 상태 로그 ===
   system_status:
     required_fields:
@@ -193,7 +193,7 @@ content:
       - "점검 항목"
       - "점검 결과"
       - "권장 조치"
-    
+
     optional_fields:
       - "시스템 리소스 사용량"
       - "성능 지표"
@@ -212,7 +212,7 @@ aggregation:
       - "성능 지표 (평균/최대 소요 시간)"
       - "오류 및 경고 요약"
       - "다음날 권장 사항"
-  
+
   # === 주간 요약 ===
   weekly_summary:
     time: "일요일 19:15"
@@ -224,7 +224,7 @@ aggregation:
       - "성능 트렌드"
       - "정책 준수 상태"
       - "다음 주 계획"
-  
+
   # === 월간 요약 ===
   monthly_summary:
     time: "월 1일 10:00"
@@ -245,24 +245,24 @@ monitoring:
     - "로그 형식 오류"
     - "필수 필드 누락"
     - "로그 레벨 불일치"
-  
+
   # === 성능 모니터링 ===
   performance_metrics:
     - "로그 쓰기 속도"
     - "로그 압축 효율성"
     - "로그 검색 속도"
     - "디스크 사용량"
-  
+
   # === 알림 규칙 ===
   alerts:
     - condition: "로그 파일 크기 > 100MB"
       level: "WARN"
       action: "로그 로테이션 실행"
-    
+
     - condition: "로그 형식 오류 > 10건/일"
       level: "ERROR"
       action: "로그 생성 스크립트 점검"
-    
+
     - condition: "로그 디스크 사용량 > 80%"
       level: "WARN"
       action: "오래된 로그 정리"
@@ -275,7 +275,7 @@ migration:
     - "기존 로그 파일 매핑"
     - "새 로깅 정책 적용"
     - "로그 집계 시스템 구축"
-  
+
   # === Phase 4: 레거시 정리 ===
   phase4:
     - "레거시 로그 디렉토리 정리"
@@ -290,6 +290,3 @@ operations:
     - "로그 로테이션은 자동화하여 디스크 공간 관리"
     - "일일/주간/월간 요약은 사람이 읽기 쉬운 형태로 생성"
     - "로그 품질 모니터링으로 시스템 안정성 확보"
-
-
-

@@ -124,7 +124,7 @@ class QuestManager:
         self.active_quests = []
         self.completed_quests = []
         self.quest_progress = {}
-    
+
     def check_quest_completion(self, emotion_state, judgment_result, growth_metrics):
         # 퀘스트 조건 달성 확인
         # 커서와의 상호작용 처리
@@ -138,7 +138,7 @@ class GrowthFeedbackLogger:
         self.quest_history = []
         self.emotion_quest_correlation = {}
         self.judgment_quest_impact = {}
-    
+
     def log_quest_attempt(self, quest_id, emotion_state, judgment_result, success):
         # 퀘스트 시도 기록
         # 감정-판단-성장 연결 저장
@@ -150,11 +150,11 @@ class GrowthFeedbackLogger:
 class EmotionJudgmentBridge:
     def calculate_emotion_impact_on_judgment(self, emotion_state):
         # 감정이 판단에 미치는 영향 점수화
-        
+
 class GrowthEmotionRelay:
     def track_growth_impact_on_emotion(self, growth_level, emotion_state):
         # 성장이 감정 조절에 미치는 영향 추적
-        
+
 class JudgmentGrowthFeedback:
     def reflect_judgment_on_growth_quest(self, judgment_result, active_quests):
         # 판단 결과가 성장 퀘스트에 반영
@@ -187,4 +187,4 @@ class LearningLoop:
 3. **모듈 간 브리지**: `judgment_bridge.py`, `emotion_relay.py` 생성
 4. **통합 루프**: `learning_loop.py` 생성으로 전체 시스템 통합
 
-**이 보완된 계획으로 진행하시겠습니까?** 
+**이 보완된 계획으로 진행하시겠습니까?**

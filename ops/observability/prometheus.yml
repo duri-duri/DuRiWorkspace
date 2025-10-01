@@ -10,11 +10,3 @@ scrape_configs:
 rule_files:
   - 'rules/latency_quantiles.yml'
   - 'rules/alerts.yml'
-
-
-
-
-
-
-
-

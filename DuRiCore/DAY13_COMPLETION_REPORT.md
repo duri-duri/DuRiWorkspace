@@ -103,16 +103,16 @@ async def start_continuous_learning(self, context: Dict[str, Any] = None) -> Con
     """지속적 학습 시작"""
     # 1. 학습 내용 분석
     learning_content = await self._analyze_learning_content(context)
-    
+
     # 2. 지식 획득
     knowledge_gained = await self._acquire_knowledge(learning_content)
-    
+
     # 3. 통찰 발견
     insights_discovered = await self._discover_insights(learning_content, knowledge_gained)
-    
+
     # 4. 효율성 평가
     efficiency_score = await self._evaluate_efficiency(learning_content, knowledge_gained)
-    
+
     # 5. 진화 점수 계산
     evolution_score = await self._calculate_evolution_score(knowledge_gained, insights_discovered)
 ```
@@ -132,16 +132,16 @@ async def evolve_knowledge(self, original_knowledge: Dict[str, Any], new_informa
     """지식 진화"""
     # 1. 진화 요인 분석
     evolution_factors = await self._analyze_evolution_factors(original_knowledge, new_information)
-    
+
     # 2. 진화된 지식 생성
     evolved_knowledge = await self._generate_evolved_knowledge(original_knowledge, new_information, evolution_factors)
-    
+
     # 3. 신뢰도 변화 계산
     confidence_change = await self._calculate_confidence_change(original_knowledge, evolved_knowledge)
-    
+
     # 4. 관련성 점수 계산
     relevance_score = await self._calculate_relevance_score(evolved_knowledge, new_information)
-    
+
     # 5. 통합 수준 계산
     integration_level = await self._calculate_integration_level(original_knowledge, evolved_knowledge)
 ```
@@ -161,19 +161,19 @@ async def optimize_learning_efficiency(self, learning_session: ContinuousLearnin
     """학습 효율성 최적화"""
     # 1. 속도 점수 계산
     speed_score = await self._calculate_speed_score(learning_session)
-    
+
     # 2. 품질 점수 계산
     quality_score = await self._calculate_quality_score(learning_session)
-    
+
     # 3. 보존 점수 계산
     retention_score = await self._calculate_retention_score(learning_session)
-    
+
     # 4. 적용 점수 계산
     application_score = await self._calculate_application_score(learning_session)
-    
+
     # 5. 종합 효율성 점수
     overall_efficiency = (speed_score + quality_score + retention_score + application_score) / 4.0
-    
+
     # 6. 최적화 제안 생성
     optimization_suggestions = await self._generate_optimization_suggestions(
         speed_score, quality_score, retention_score, application_score
@@ -196,13 +196,13 @@ async def integrate_knowledge(self, source_knowledge: List[Dict[str, Any]], inte
     """지식 통합"""
     # 1. 통합된 지식 생성
     integrated_knowledge = await self._create_integrated_knowledge(source_knowledge, integration_method)
-    
+
     # 2. 일관성 점수 계산
     coherence_score = await self._calculate_coherence_score(integrated_knowledge)
-    
+
     # 3. 완전성 점수 계산
     completeness_score = await self._calculate_completeness_score(integrated_knowledge, source_knowledge)
-    
+
     # 4. 접근성 점수 계산
     accessibility_score = await self._calculate_accessibility_score(integrated_knowledge)
 ```

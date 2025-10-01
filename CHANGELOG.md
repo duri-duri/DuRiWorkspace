@@ -190,4 +190,4 @@ DuRi Control System의 모든 중요한 변경사항이 이 파일에 기록됩�
 
 - [Keep a Changelog](https://keepachangelog.com/)
 - [Semantic Versioning](https://semver.org/)
-- [Conventional Commits](https://www.conventionalcommits.org/) 
+- [Conventional Commits](https://www.conventionalcommits.org/)

@@ -126,7 +126,7 @@ match_glob() {  # [[ path == pattern ]] with globstar
   local path pat
   path="$(relpath "$1")"
   pat="$(norm_pattern "$2")"
-  
+
   # 1) 직접 매치
   [[ "$path" == $pat ]] && return 0
 
@@ -170,7 +170,7 @@ allow_cnt=0
 deny_cnt=0
 for raw in "${FILES[@]}"; do
   [[ -n "$raw" ]] || continue
-  
+
   raw="$raw"
   f_rel="$(relpath "$raw")"
 
@@ -226,14 +226,3 @@ if (( rc )); then
   exit 1
 fi
 echo "[PASS] policy verified"
-
-
-
-
-
-
-
-
-
-
-

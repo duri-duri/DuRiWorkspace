@@ -6,7 +6,8 @@ DuRi 전략 학습 엔진 - 확장 버전
 
 import json
 from datetime import datetime
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List, Optional
+
 
 class StrategicLearningEngine:
     def __init__(self):
@@ -21,12 +22,12 @@ class StrategicLearningEngine:
             "timestamp": datetime.now().isoformat(),
             "situation": situation,
             "action": action,
-            "reasoning": reasoning
+            "reasoning": reasoning,
         }
-        
+
         self.history.append(trace)
         self.latest_trace = trace
-        
+
         return trace
 
     def generate_strategic_insight(self):
@@ -62,5 +63,5 @@ class StrategicLearningEngine:
             "total_traces": len(self.history),
             "latest_trace": self.latest_trace,
             "all_traces": self.history,
-            "exported_at": datetime.now().isoformat()
+            "exported_at": datetime.now().isoformat(),
         }

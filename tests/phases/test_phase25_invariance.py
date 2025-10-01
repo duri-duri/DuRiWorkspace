@@ -1,5 +1,6 @@
 from duri_finale.phase_25_future_design_system import FutureDesignSystem
 
+
 def test_invariance_seed_stability():
     fd = FutureDesignSystem()
     # analyze_trends 메서드 사용 (실제 API에 맞게 수정)
@@ -11,6 +12,7 @@ def test_invariance_seed_stability():
     if x1 and x2:
         assert x1[0].category == x2[0].category
         assert x1[0].trend_name == x2[0].trend_name
+
 
 def test_invariance_order_independence():
     fd = FutureDesignSystem()

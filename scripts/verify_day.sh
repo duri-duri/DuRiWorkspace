@@ -30,13 +30,13 @@ emit_json(){
 require_files(){
     local files=("$@")
     local missing=()
-    
+
     for file in "${files[@]}"; do
         if [[ ! -f "$file" ]]; then
             missing+=("$file")
         fi
     done
-    
+
     if [[ ${#missing[@]} -gt 0 ]]; then
         log "Missing files: ${missing[*]}"
         return 1
@@ -52,7 +52,7 @@ judge_metrics(){
 import json, sys
 data = json.load(sys.stdin)
 th_pou = $TH_POU
-th_safe = $TH_SAFE  
+th_safe = $TH_SAFE
 th_err = $TH_ERR
 th_lat = $TH_LAT
 
@@ -126,5 +126,3 @@ case "$DAY" in
         emit_json "$DAY" "SKIP" "Day $DAY 검증 로직 없음"
         ;;
 esac
-
-

@@ -1,13 +1,15 @@
-import pathlib, re, sys
+import pathlib
+import re
+import sys
 
 PKG = "duri_finale"
 root = pathlib.Path(__file__).resolve().parents[1]
 tgt = root / PKG
 
 # 패턴들
-pat_from = re.compile(r'^\s*from\s+\.(\w+)\s+import\s+', re.M)
-pat_import = re.compile(r'^\s*import\s+\.(\w+)\s*$', re.M)
-pat_from_parent = re.compile(r'^\s*from\s+\.\.(\w+)\s+import\s+', re.M)
+pat_from = re.compile(r"^\s*from\s+\.(\w+)\s+import\s+", re.M)
+pat_import = re.compile(r"^\s*import\s+\.(\w+)\s*$", re.M)
+pat_from_parent = re.compile(r"^\s*from\s+\.\.(\w+)\s+import\s+", re.M)
 
 changed = 0
 for py in tgt.glob("*.py"):

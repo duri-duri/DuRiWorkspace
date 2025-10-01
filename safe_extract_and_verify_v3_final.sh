@@ -218,8 +218,3 @@ rm -f -- "$ARC.to_delete"
 echo "✅ 원본 삭제 완료"
 rm -f "$ORIGINAL_LIST" "$EXTRACTED_LIST"
 echo "=== 완료: $DEST ==="
-
-
-
-
-

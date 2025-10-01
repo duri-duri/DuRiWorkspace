@@ -4,11 +4,13 @@ DuRi 판단 시스템 - 간단한 버전
 StrategicLearningEngine과 연동하여 판단 및 학습을 수행
 """
 
-import sys
 import os
+import sys
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from learning.strategic_learning_engine import StrategicLearningEngine
+
 
 class JudgmentSystem:
     def __init__(self):

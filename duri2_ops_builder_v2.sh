@@ -195,20 +195,3 @@ echo
 echo "✅ 생성 완료"
 echo "폴더: $PKG_DIR"
 echo "패키지: $KIT_DIR/${KIT_NAME}-${STAMP}.tar.gz"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

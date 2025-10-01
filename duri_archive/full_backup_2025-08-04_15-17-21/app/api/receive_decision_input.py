@@ -1,10 +1,12 @@
 # duri_brain/app/api/receive_decision_input.py
 
+import json
+import os
+from datetime import datetime
+
+from dotenv import load_dotenv
 from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
-import os, json
-from datetime import datetime
-from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -23,6 +25,7 @@ LOG_FILE = os.path.join(LOG_DIR, "brain_receive.log")
 # APIRouter 선언
 router = APIRouter()
 
+
 def append_decision_log(entry):
     logs = []
     if os.path.exists(DECISION_LOG):
@@ -34,6 +37,7 @@ def append_decision_log(entry):
     logs.append(entry)
     with open(DECISION_LOG, "w") as f:
         json.dump(logs[-500:], f, indent=2, ensure_ascii=False)
+
 
 @router.post("/")
 async def receive_brain_input(request: Request):
@@ -47,14 +51,13 @@ async def receive_brain_input(request: Request):
 
         decision = {"action": "reflect", "confidence": 0.95}
 
-        append_decision_log({
-            "timestamp": now,
-            "input": data,
-            "decision": decision
-        })
+        append_decision_log({"timestamp": now, "input": data, "decision": decision})
 
         return JSONResponse(content={"decision": decision, "timestamp": now})
     except Exception as e:
         import traceback
+
         traceback.print_exc()
-        return JSONResponse(status_code=500, content={"status": "error", "detail": str(e)})
+        return JSONResponse(
+            status_code=500, content={"status": "error", "detail": str(e)}
+        )

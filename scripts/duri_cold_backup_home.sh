@@ -63,19 +63,19 @@ LATEST_HOME="$COLD_HOME/FULL/$BASENAME_HOSP"
 
 if [[ -f "$LATEST_HOME" ]]; then
     log "✅ 집용에 이미 동일한 백업 파일 존재: $BASENAME_HOSP" | tee -a "$LOG_FILE"
-    
+
     # 파일 크기 비교
     SIZE_HOSP=$(stat -c %s "$LATEST_HOSP")
     SIZE_HOME=$(stat -c %s "$LATEST_HOME")
-    
+
     if [[ "$SIZE_HOSP" -eq "$SIZE_HOME" ]]; then
         log "✅ 파일 크기 일치: ${SIZE_HOSP} bytes" | tee -a "$LOG_FILE"
-        
+
         # SHA256 해시 비교
         if command -v sha256sum >/dev/null 2>&1; then
             HASH_HOSP=$(sha256sum "$LATEST_HOSP" | cut -d' ' -f1)
             HASH_HOME=$(sha256sum "$LATEST_HOME" | cut -d' ' -f1)
-            
+
             if [[ "$HASH_HOSP" == "$HASH_HOME" ]]; then
                 log "✅ SHA256 해시 일치: $HASH_HOSP" | tee -a "$LOG_FILE"
                 log "집용 콜드 백업이 이미 최신 상태입니다." | tee -a "$LOG_FILE"
@@ -127,7 +127,7 @@ done
 # 8) REPORTS 디렉토리 동기화
 if [[ -d "$COLD_HOSP/REPORTS" ]]; then
     log "📁 REPORTS 디렉토리 동기화 시작" | tee -a "$LOG_FILE"
-    
+
     if rsync -av --delete "$COLD_HOSP/REPORTS/" "$COLD_HOME/REPORTS/" 2>>"$LOG_FILE"; then
         log "✅ REPORTS 디렉토리 동기화 완료" | tee -a "$LOG_FILE"
     else
@@ -139,7 +139,7 @@ fi
 if [[ -f "$LATEST_HOME" ]]; then
     SIZE_FINAL=$(stat -c %s "$LATEST_HOME")
     log "✅ 최종 검증 완료: $BASENAME_HOSP (${SIZE_FINAL} bytes)" | tee -a "$LOG_FILE"
-    
+
     # 스탬프 파일 생성
     echo "$(date '+%F %T') $(hostname) $(whoami) $BASENAME_HOSP" > "$COLD_HOME/FULL/.last_cold_backup.txt"
     log "✅ 스탬프 파일 생성 완료" | tee -a "$LOG_FILE"

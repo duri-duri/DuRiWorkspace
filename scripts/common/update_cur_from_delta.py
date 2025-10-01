@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-import os
 import json
+import os
 from datetime import datetime
 
 DATE = datetime.now().strftime("%Y-%m-%d")
@@ -10,10 +10,12 @@ DELTA_PATH = os.path.join(BASE_DIR, "delta.json")
 CUR_PATH = os.path.join(BASE_DIR, "cur.json")
 LOG_PATH = "/home/duri/../logs/update_cur.log"
 
+
 def log(msg):
     os.makedirs(os.path.dirname(LOG_PATH), exist_ok=True)
     with open(LOG_PATH, "a") as f:
         f.write(f"[{datetime.now().strftime('%F %T')}] {msg}\n")
+
 
 def copy_delta_to_cur():
     if not os.path.isfile(DELTA_PATH) or os.path.getsize(DELTA_PATH) == 0:
@@ -28,6 +30,7 @@ def copy_delta_to_cur():
         log("✅ delta.json → cur.json 복사 완료")
     except Exception as e:
         log(f"❌ 오류 발생: {e}")
+
 
 if __name__ == "__main__":
     copy_delta_to_cur()

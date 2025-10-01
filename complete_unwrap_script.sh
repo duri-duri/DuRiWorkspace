@@ -63,7 +63,7 @@ unpack_archive(){
     local size="$2"
     local base="$(basename "$file")"
     local name="$base"
-    
+
     # 확장자 제거
     case "$base" in
         *.tar.zst) name="${base%.tar.zst}";;
@@ -73,17 +73,17 @@ unpack_archive(){
         *.zip)     name="${base%.zip}";;
         *.7z)      name="${base%.7z}";;
     esac
-    
+
     local dst="$OUT/$name"
     local tmp="$dst.tmp.$$"
     local lock="$dst.lock"
-    
+
     # 이미 완료된 경우 스킵
     if [[ -d "$dst" ]] && [[ -f "$dst/.unpack_complete" ]]; then
         log "SKIP" "$base (이미 완료됨)"
         return 0
     fi
-    
+
     # 락 파일로 중복 실행 방지
     if [[ -f "$lock" ]]; then
         local pid=$(cat "$lock" 2>/dev/null || echo "")
@@ -92,17 +92,17 @@ unpack_archive(){
             return 0
         fi
     fi
-    
+
     echo $$ > "$lock"
     trap "rm -f '$lock'" EXIT
-    
+
     log "START" "$base (${size} bytes)"
     local start_time=$(date +%s)
-    
+
     # 임시 디렉토리 생성
     rm -rf "$tmp"
     mkdir -p "$tmp"
-    
+
     # 언팩 명령어 결정
     local cmd=""
     if [[ "$base" =~ \.tar\.zst$ ]]; then
@@ -120,7 +120,7 @@ unpack_archive(){
         rm -rf "$tmp"
         return 1
     fi
-    
+
     # 언팩 실행
     if eval "$cmd" 2>&1 | tee -a "$OUT/logs/${name}.log"; then
         # 언팩 검증
@@ -130,11 +130,11 @@ unpack_archive(){
             rm -rf "$dst"
             mv "$tmp" "$dst"
             touch "$dst/.unpack_complete"
-            
+
             local end_time=$(date +%s)
             local duration=$((end_time - start_time))
             log "SUCCESS" "$base -> $dst (${duration}s)"
-            
+
             # 내부 압축 파일 검사
             local inner_count=$(find "$dst" -type f \( -name "*.tar.zst" -o -name "*.tar.gz" -o -name "*.zip" \) | wc -l)
             if (( inner_count > 0 )); then
@@ -150,7 +150,7 @@ unpack_archive(){
         rm -rf "$tmp"
         return 1
     fi
-    
+
     rm -f "$lock"
 }
 
@@ -165,18 +165,18 @@ idx=0
 while IFS=$'\t' read -r size file; do
     idx=$((idx + 1))
     log "PROGRESS" "[$idx/$TOTAL] 처리 중..."
-    
+
     if unpack_archive "$file" "$size"; then
         success_count=$((success_count + 1))
     else
         error_count=$((error_count + 1))
     fi
-    
+
     # 진행상황 출력
     if (( idx % 5 == 0 )); then
         log "STATUS" "진행률: $idx/$TOTAL (성공: $success_count, 실패: $error_count)"
     fi
-    
+
 done < "$ARCHIVE_LIST"
 
 # === 4) 최종 요약 ===
@@ -195,13 +195,3 @@ if (( error_count > 0 )); then
 fi
 
 echo "완료! 결과는 $OUT 에 있습니다."
-
-
-
-
-
-
-
-
-
-

@@ -35,11 +35,3 @@ groups:
     expr: duri_alert_missing_rate{job="duri-core"} > 0.0025
     for: 2m
     labels: { severity: critical, team: duri, scope: day10_stabilization, mode: tight }
-
-
-
-
-
-
-
-

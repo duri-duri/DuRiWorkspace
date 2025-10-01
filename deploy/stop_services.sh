@@ -88,4 +88,4 @@ echo "  또는"
 echo "  docker-compose up -d"
 echo ""
 
-log_success "🎉 DuRi Control System 서비스 중지가 완료되었습니다!" 
+log_success "🎉 DuRi Control System 서비스 중지가 완료되었습니다!"

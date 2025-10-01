@@ -1,4 +1,8 @@
-import json, subprocess, textwrap, os
+import json
+import os
+import subprocess
+import textwrap
+
 
 def run(log):
     p = subprocess.run(
@@ -9,9 +13,11 @@ def run(log):
     )
     return json.loads(p.stdout.decode())
 
+
 def test_import_missing_rule_triggers():
     out = run("E   ModuleNotFoundError: No module named 'foo_bar'")
     assert "import-missing" in out["matched_rules"]
+
 
 def test_timeout_rule_triggers():
     out = run("E   TimeoutError: operation timed out")

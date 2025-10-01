@@ -30,14 +30,14 @@ shutdown_targets:
         reason: "Shadow 검증 PASS - 표준 시스템으로 완전 대체"
         risk_level: "LOW"
         rollback_plan: "즉시 복구 가능 (백업본 보존)"
-      
+
       - name: "duri_backup_progress.sh"
         location: "scripts/"
         shutdown_date: "2025-08-25"
         reason: "Shadow 검증 PASS - enhanced_summary_report.sh로 대체"
         risk_level: "LOW"
         rollback_plan: "즉시 복구 가능 (백업본 보존)"
-      
+
       - name: "shared-scripts/autosave_scripts.sh"
         location: "shared-scripts/"
         shutdown_date: "2025-08-25"
@@ -61,7 +61,7 @@ shutdown_targets:
           - "표준 시스템 대체 구현"
           - "테스트 및 검증"
           - "종료 및 정리"
-      
+
       - name: "backup_analyzer.sh"
         location: "scripts/"
         shutdown_date: "2025-08-30"
@@ -96,13 +96,13 @@ shutdown_process:
       systems: ["duri_backup.sh", "duri_backup_progress.sh", "autosave_scripts.sh"]
       duration: "1일"
       validation: "Shadow 검증 PASS 확인"
-    
+
     - phase: "2단계: 점진적 종료"
       date: "2025-08-26 ~ 2025-08-30"
       systems: ["rotate_backups.sh", "backup_analyzer.sh"]
       duration: "5일"
       validation: "기능 마이그레이션 완료 확인"
-    
+
     - phase: "3단계: 최종 정리"
       date: "2025-09-01"
       systems: ["Freeze된 unified_backup_*.sh"]
@@ -126,13 +126,13 @@ lock_retry_policy:
       timeout: "30분"
       retry_interval: "5분"
       max_retries: "6회"
-    
+
     - name: "시스템별 종료 락"
       pattern: "var/state/legacy_shutdown_{system}.lock"
       timeout: "15분"
       retry_interval: "3분"
       max_retries: "10회"
-    
+
     - name: "백업 작업 락"
       file: "var/state/backup_in_progress.lock"
       priority: "HIGH"
@@ -147,12 +147,12 @@ lock_retry_policy:
       initial_delay: "1초"
       max_delay: "60초"
       max_attempts: "5회"
-    
+
     - scenario: "권한 문제"
       action: "즉시 중단, 수동 개입 필요"
       retry: "false"
       escalation: "운영자 알림"
-    
+
     - scenario: "의존성 충돌"
       action: "의존성 해결 후 재시도"
       retry_interval: "5분"
@@ -165,20 +165,20 @@ risk_reduction:
     - step: "1) 사전 검증"
       action: "표준 시스템 정상 동작 확인"
       validation: "성공률, 의존성, 오류율 체크"
-    
+
     - step: "2) 백업 생성"
       action: "종료 대상 시스템 완전 백업"
       location: "var/backups/legacy_shutdown_{date}_{system}"
       retention: "90일"
-    
+
     - step: "3) 기능 중단"
       action: "실행 권한 제거 및 서비스 중단"
       method: "chmod -x, systemctl stop (해당되는 경우)"
-    
+
     - step: "4) 종료 확인"
       action: "프로세스 종료 및 파일 접근 불가 확인"
       validation: "ps, lsof, 파일 접근 테스트"
-    
+
     - step: "5) 로그 기록"
       action: "종료 완료 로그 및 상태 기록"
       location: "var/logs/legacy/shutdown_{system}_{date}.log"
@@ -189,12 +189,12 @@ risk_reduction:
       action: "즉시 레거시 시스템 복구"
       timeframe: "1시간 내"
       method: "백업본 복원, 실행 권한 복구"
-    
+
     - trigger: "의존성 위반 발생"
       action: "전체 시스템 롤백"
       timeframe: "즉시"
       method: "모든 종료된 시스템 복구"
-    
+
     - trigger: "백업 실패 발생"
       action: "레거시 시스템 부분 복구"
       timeframe: "4시간 내"
@@ -208,12 +208,12 @@ monitoring_alerting:
       threshold: "≥99.9%"
       alert_level: "WARN (95%), ERROR (90%)"
       action: "성공률 하락 시 즉시 알림"
-    
+
     - metric: "의존성 준수율"
       threshold: "100%"
       alert_level: "ERROR (100% 미만)"
       action: "의존성 위반 시 즉시 롤백"
-    
+
     - metric: "오류 발생률"
       threshold: "≤1%"
       alert_level: "WARN (2%), ERROR (5%)"
@@ -253,6 +253,3 @@ operations:
     - "문제 발생 시 즉시 롤백, 안전 우선"
     - "모든 종료 과정은 상세히 문서화"
     - "종료 완료 후 최종 검증 및 정리 작업 수행"
-
-
-

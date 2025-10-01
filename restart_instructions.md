@@ -108,4 +108,4 @@ PYTHONPATH=/home/duri/DuRiWorkspace DB_HOST=localhost DB_PASSWORD=duri123 DB_USE
 ---
 
 **마지막 업데이트**: 2025-08-01
-**상태**: 서버 정상 작동 중, 노드 분리 준비 완료 
+**상태**: 서버 정상 작동 중, 노드 분리 준비 완료

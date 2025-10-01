@@ -138,7 +138,7 @@ echo " 8월 20일 아침 상황에서 이어서 진행 완료!"
 
 ### [TODO: Dedup 용량 계산]
 # 나중에 HDD 붙이기 전에 실제 필요 용량(중복 제외) 계산을 자동화할 때 사용
-# 
+#
 # META=/mnt/usb/CORE_PROTECTED/META
 #
 # # 전체 용량 합계

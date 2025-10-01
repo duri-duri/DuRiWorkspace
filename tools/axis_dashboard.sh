@@ -15,7 +15,7 @@ ok=$(tail -n +2 "$M" | awk -F, '$11==1{c++} END{print c+0}')
 # 가시성 V 계산
 V=$(awk -v v=$vis -v t=$tot 'BEGIN{if(t==0)print 0; else printf "%.3f", v/t}')
 
-# 재현성 R 계산  
+# 재현성 R 계산
 R=$(awk -v o=$ok -v t=$tot 'BEGIN{if(t==0)print 0; else printf "%.3f", o/t}')
 
 # 신선도 F 계산 (핵심축의 평균 mtime)
@@ -34,7 +34,7 @@ Success Files: $ok
 
 === KEY METRICS ===
 V(가시성): $V (목표: ≥0.95)
-R(재현성): $R (목표: ≥0.98)  
+R(재현성): $R (목표: ≥0.98)
 F(신선도,일): $F (목표: ≤7)
 
 === STATUS ===
@@ -74,8 +74,3 @@ END{
 }' "$M" | sort -nr > "$OUT/cross_counts_sorted.tsv"
 
 echo "Dashboard generated -> $OUT"
-
-
-
-
-

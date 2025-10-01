@@ -60,13 +60,8 @@ MAILTO=""
 # 첫째 월요일 11:30: 월 1회 복구 드릴
 30 11 1-7 * 1 cd /home/duri/DuRiWorkspace && flock -n var/locks/drill.cron.lock -c './scripts/dr_monthly_drill.sh' >> var/logs/drill.log 2>&1
 # 매주 수요일 17:10: SHA256 원장 검증
-10 17 * * 3 cd /home/duri/DuRiWorkspace && flock -n var/locks/ledger.cron.lock -c './scripts/verify_full_sha256.sh' >> var/logs/sha256_verify.log 2>&1        
+10 17 * * 3 cd /home/duri/DuRiWorkspace && flock -n var/locks/ledger.cron.lock -c './scripts/verify_full_sha256.sh' >> var/logs/sha256_verify.log 2>&1
 # 매일 03:35: 유저 로그 로테이션
 35 3 * * * cd /home/duri/DuRiWorkspace && ./scripts/rotate_dr_logs.sh >> var/logs/dr-disk.log 2>&1
 # === user-ops-hardening end ===
 55 15 * * 0 cd $HOME/DuRiWorkspace && flock -n var/locks/weekly-report.lock ./scripts/ops_weekly_report.sh >> var/logs/weekly-report.cron.log 2>&1
-
-
-
-
-

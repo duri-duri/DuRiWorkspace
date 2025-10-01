@@ -37,10 +37,10 @@ acquire_lock() {
 # === 최종 검증 ===
 final_validation() {
     log "🔍 Phase 5 최종 검증 시작..."
-    
+
     local validation_results=()
     local overall_success=true
-    
+
     # 1) 표준 시스템 성공률 검증
     log "  📋 1단계: 표준 시스템 성공률 검증"
     local success_rate=$(get_standard_system_success_rate)
@@ -52,7 +52,7 @@ final_validation() {
         validation_results+=("{\"metric\": \"success_rate\", \"status\": \"FAIL\", \"value\": \"${success_rate}%\"}")
         overall_success=false
     fi
-    
+
     # 2) 의존성 준수율 검증
     log "  📋 2단계: 의존성 준수율 검증"
     local dependency_compliance=$(get_dependency_compliance_rate)
@@ -64,7 +64,7 @@ final_validation() {
         validation_results+=("{\"metric\": \"dependency_compliance\", \"status\": \"FAIL\", \"value\": \"$dependency_compliance\"}")
         overall_success=false
     fi
-    
+
     # 3) 오류 발생률 검증
     log "  📋 3단계: 오류 발생률 검증"
     local error_rate=$(get_error_rate)
@@ -76,7 +76,7 @@ final_validation() {
         validation_results+=("{\"metric\": \"error_rate\", \"status\": \"FAIL\", \"value\": \"${error_rate}%\"}")
         overall_success=false
     fi
-    
+
     # 4) 백업 성공률 검증
     log "  📋 4단계: 백업 성공률 검증"
     local backup_success_rate=$(get_backup_success_rate)
@@ -88,7 +88,7 @@ final_validation() {
         validation_results+=("{\"metric\": \"backup_success_rate\", \"status\": \"FAIL\", \"value\": \"${backup_success_rate}%\"}")
         overall_success=false
     fi
-    
+
     # 5) 복원 테스트 성공률 검증
     log "  📋 5단계: 복원 테스트 성공률 검증"
     local restore_success_rate=$(get_restore_success_rate)
@@ -100,11 +100,11 @@ final_validation() {
         validation_results+=("{\"metric\": \"restore_success_rate\", \"status\": \"FAIL\", \"value\": \"$restore_success_rate\"}")
         overall_success=false
     fi
-    
+
     # 검증 결과 저장
     local validation_file="$FINAL_VALIDATION_FILE"
     mkdir -p "$(dirname "$validation_file")"
-    
+
     cat > "$validation_file" <<EOF
 {
   "validation": {
@@ -125,9 +125,9 @@ $(printf '%s\n' "${validation_results[@]}" | paste -sd ',' -)
   }
 }
 EOF
-    
+
     log "✅ 최종 검증 결과 저장: $validation_file"
-    
+
     if [[ "$overall_success" == "true" ]]; then
         log "🎉 모든 검증 항목 통과!"
         return 0
@@ -140,26 +140,26 @@ EOF
 # === Freeze된 시스템 정리 ===
 cleanup_frozen_systems() {
     log "🧹 Freeze된 시스템 최종 정리 시작..."
-    
+
     local frozen_systems=(
         "scripts/_legacy/unified_backup_core.sh"
         "scripts/_legacy/unified_backup_extended.sh"
         "scripts/_legacy/unified_backup_full.sh"
     )
-    
+
     local cleanup_success=0
     local cleanup_total=${#frozen_systems[@]}
-    
+
     for system_path in "${frozen_systems[@]}"; do
         if [[ -f "$system_path" ]]; then
             local system_name=$(basename "$system_path")
             log "  📋 $system_name 정리 중..."
-            
+
             # Git 히스토리로 보존
             if git add "$system_path" 2>/dev/null; then
                 log "    ✅ Git에 추가됨"
             fi
-            
+
             # 파일 완전 제거
             if rm -f "$system_path"; then
                 log "    ✅ 파일 제거 완료"
@@ -171,38 +171,38 @@ cleanup_frozen_systems() {
             log "  ⚠️  $system_path 파일이 존재하지 않음"
         fi
     done
-    
+
     log "📊 Freeze된 시스템 정리 결과"
     log "  - 총 대상: $cleanup_total개"
     log "  - 성공: $cleanup_success개"
     log "  - 실패: $((cleanup_total - cleanup_success))개"
-    
+
     return $([[ $cleanup_success -eq $cleanup_total ]] && echo 0 || echo 1)
 }
 
 # === 레거시 디렉토리 정리 ===
 cleanup_legacy_directories() {
     log "🧹 레거시 디렉토리 정리 시작..."
-    
+
     local legacy_dirs=(
         "scripts/_legacy"
         "var/logs/legacy"
     )
-    
+
     local cleanup_success=0
     local cleanup_total=${#legacy_dirs[@]}
-    
+
     for dir_path in "${legacy_dirs[@]}"; do
         if [[ -d "$dir_path" ]]; then
             log "  📋 $dir_path 정리 중..."
-            
+
             # 중요 파일 백업 (Git에 커밋)
             if [[ -n "$(find "$dir_path" -name "*.log" -o -name "*.json" 2>/dev/null)" ]]; then
                 if git add "$dir_path"/*.log "$dir_path"/*.json 2>/dev/null; then
                     log "    ✅ 중요 파일 Git에 추가됨"
                 fi
             fi
-            
+
             # 디렉토리 정리 (빈 디렉토리만)
             if [[ -z "$(find "$dir_path" -type f 2>/dev/null)" ]]; then
                 if rmdir "$dir_path" 2>/dev/null; then
@@ -219,28 +219,28 @@ cleanup_legacy_directories() {
             log "  ⚠️  $dir_path 디렉토리가 존재하지 않음"
         fi
     done
-    
+
     log "📊 레거시 디렉토리 정리 결과"
     log "  - 총 대상: $cleanup_total개"
     log "  - 성공: $cleanup_success개"
     log "  - 실패: $((cleanup_total - cleanup_success))개"
-    
+
     return $([[ $cleanup_success -eq $cleanup_total ]] && echo 0 || echo 1)
 }
 
 # === 시스템 복잡도 감소 분석 ===
 analyze_complexity_reduction() {
     log "📊 시스템 복잡도 감소 분석..."
-    
+
     # 레거시 시스템 제거율 계산
     local total_legacy_systems=6  # Phase 4에서 정의된 총 레거시 시스템 수
     local removed_systems=0
-    
+
     # 종료된 시스템 확인
     if [[ -f "var/state/legacy_shutdown_progress.json" ]]; then
         removed_systems=$(grep -o '"status": "SHUTDOWN_COMPLETE"' "var/state/legacy_shutdown_progress.json" | wc -l)
     fi
-    
+
     # Freeze된 시스템 확인
     local frozen_systems=0
     for system in "unified_backup_core.sh" "unified_backup_extended.sh" "unified_backup_full.sh"; do
@@ -248,16 +248,16 @@ analyze_complexity_reduction() {
             frozen_systems=$((frozen_systems + 1))
         fi
     done
-    
+
     local total_removed=$((removed_systems + frozen_systems))
     local removal_rate=$((total_removed * 100 / total_legacy_systems))
-    
+
     log "  📋 시스템 복잡도 감소 분석 결과"
     log "    - 총 레거시 시스템: $total_legacy_systems개"
     log "    - 종료된 시스템: $removed_systems개"
     log "    - Freeze된 시스템: $frozen_systems개"
     log "    - 총 제거율: ${removal_rate}%"
-    
+
     # 복잡도 감소 목표 달성 확인
     if [[ $removal_rate -ge 100 ]]; then
         log "    ✅ 시스템 복잡도 감소 목표 달성 (100%)"
@@ -271,27 +271,27 @@ analyze_complexity_reduction() {
 # === 최종 정리 요약 리포트 생성 ===
 generate_final_cleanup_summary() {
     local summary_file="$CLEANUP_LOGS_DIR/final_cleanup_summary_$(date +%F).md"
-    
+
     log "📊 최종 정리 요약 리포트 생성: $summary_file"
-    
+
     # 검증 결과 로드
     local validation_status="UNKNOWN"
     if [[ -f "$FINAL_VALIDATION_FILE" ]]; then
         validation_status=$(grep -o '"overall_status": "[^"]*"' "$FINAL_VALIDATION_FILE" | cut -d'"' -f4)
     fi
-    
+
     # 진행 상황 로드
     local shutdown_progress="{}"
     if [[ -f "var/state/legacy_shutdown_progress.json" ]]; then
         shutdown_progress=$(cat "var/state/legacy_shutdown_progress.json")
     fi
-    
+
     # 종료된 시스템 수 계산
     local shutdown_completed=0
     if [[ -f "var/state/legacy_shutdown_progress.json" ]]; then
         shutdown_completed=$(grep -o '"status": "SHUTDOWN_COMPLETE"' "var/state/legacy_shutdown_progress.json" | wc -l)
     fi
-    
+
     cat > "$summary_file" <<EOF
 # 🧹 Phase 5 최종 정리 요약 — $(date +%F)
 
@@ -381,11 +381,11 @@ fi)
 
 ---
 
-> **🎉 축하합니다!**: Phase 5가 완료되어 레거시 시스템이 완전히 제거되었습니다!  
-> **📊 모니터링**: 표준 시스템의 성능을 지속적으로 모니터링하세요.  
+> **🎉 축하합니다!**: Phase 5가 완료되어 레거시 시스템이 완전히 제거되었습니다!
+> **📊 모니터링**: 표준 시스템의 성능을 지속적으로 모니터링하세요.
 > **🔄 다음 단계**: Phase 6로 진행하여 시스템을 더욱 최적화하세요.
 EOF
-    
+
     log "✅ 최종 정리 요약 리포트 생성 완료: $summary_file"
 }
 
@@ -418,37 +418,37 @@ get_restore_success_rate() {
 # === 메인 실행 로직 ===
 main() {
     log "🚀 Phase 5 최종 정리 및 검증 시작"
-    
+
     # 락 획득
     acquire_lock
-    
+
     # 디렉토리 생성
     mkdir -p "$CLEANUP_LOGS_DIR"
-    
+
     # 1) 최종 검증
     if ! final_validation; then
         log "❌ 최종 검증 실패, 정리 작업 중단"
         exit 1
     fi
-    
+
     # 2) Freeze된 시스템 정리
     if ! cleanup_frozen_systems; then
         log "⚠️  Freeze된 시스템 정리 실패, 계속 진행"
     fi
-    
+
     # 3) 레거시 디렉토리 정리
     if ! cleanup_legacy_directories; then
         log "⚠️  레거시 디렉토리 정리 실패, 계속 진행"
     fi
-    
+
     # 4) 시스템 복잡도 감소 분석
     if ! analyze_complexity_reduction; then
         log "⚠️  시스템 복잡도 감소 목표 미달성"
     fi
-    
+
     # 5) 최종 정리 요약 리포트 생성
     generate_final_cleanup_summary
-    
+
     # 6) Git 커밋
     if git add . 2>/dev/null; then
         if git commit -m "Phase 5 완료: 레거시 시스템 완전 제거 및 최종 정리" 2>/dev/null; then
@@ -459,7 +459,7 @@ main() {
     else
         log "⚠️  Git add 실패"
     fi
-    
+
     log "🎉 Phase 5 최종 정리 및 검증 완료!"
     log "다음 단계: Phase 6 성능 최적화 및 안정성 강화"
 }
@@ -468,6 +468,3 @@ main() {
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     main "$@"
 fi
-
-
-

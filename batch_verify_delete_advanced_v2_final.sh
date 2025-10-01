@@ -199,6 +199,3 @@ if [[ "$RETRIES" -gt 0 ]]; then
 fi
 
 echo "=== 배치 종료 ==="
-
-
-

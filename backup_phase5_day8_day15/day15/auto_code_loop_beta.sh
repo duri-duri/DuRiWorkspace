@@ -65,7 +65,7 @@ def touchup_text(s):
     return s
 for item in plan["plan"]:
     fp = item["file"]
-    if not os.path.exists(fp): 
+    if not os.path.exists(fp):
         continue
     try:
         if fp.endswith(('.py', '.sh', '.md', '.yaml', '.yml')):

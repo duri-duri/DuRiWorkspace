@@ -5,16 +5,14 @@
 이 파일은 API 예외 발생 시 ErrorResponse 스키마로 변환하는 공통 함수입니다.
 """
 
-from fastapi import Request, HTTPException
+import logging
+
+from fastapi import HTTPException, Request
 from fastapi.responses import JSONResponse
 from schemas.responses import ErrorResponse
-import logging
+
 
 def handle_internal_error(request: Request, exc: Exception):
     logging.error(f"[ERROR] {request.url}: {exc}")
-    err = ErrorResponse(
-        error="Internal Server Error",
-        detail=str(exc),
-        status_code=500
-    )
-    return JSONResponse(status_code=500, content=err.dict()) 
+    err = ErrorResponse(error="Internal Server Error", detail=str(exc), status_code=500)
+    return JSONResponse(status_code=500, content=err.dict())

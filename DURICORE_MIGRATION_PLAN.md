@@ -23,11 +23,11 @@
 
 class EmotionEngine:
     """감정 엔진 - LLM 기반 감정 분석으로 업그레이드"""
-    
+
     def __init__(self):
         self.emotion_dimensions = ["joy", "anger", "fear", "trust", "surprise", "sadness", "anticipation", "disgust"]
         self.llm_interface = LLMInterface()  # 새로운 LLM 인터페이스
-    
+
     def analyze_complex_emotion(self, input_data: Dict[str, Any]) -> EmotionalAnalysis:
         """LLM 기반 복합 감정 분석"""
         # 기존 로직 유지하면서 LLM 통합
@@ -41,12 +41,12 @@ class EmotionEngine:
 
 class SelfEvolutionEngine:
     """자기 진화 엔진 - 실제 AI 자기 개선 기능"""
-    
+
     def __init__(self):
         self.analysis_interval = 3600
         self.improvement_threshold = 0.1
         self.llm_interface = LLMInterface()
-    
+
     def analyze_and_evolve(self) -> EvolutionResult:
         """LLM 기반 자기 진화 분석"""
         # 기존 성능 분석 로직 + LLM 통합
@@ -60,11 +60,11 @@ class SelfEvolutionEngine:
 
 class MemoryManager:
     """메모리 매니저 - 벡터 DB 기반으로 업그레이드"""
-    
+
     def __init__(self):
         self.vector_db = VectorDatabase()  # FAISS/Pinecone
         self.sql_db = SQLDatabase()  # 기존 SQL 유지
-    
+
     def store_memory(self, memory_data: Dict[str, Any]) -> MemoryEntry:
         """벡터 + SQL 하이브리드 저장"""
         # 벡터 임베딩 생성
@@ -83,12 +83,12 @@ class MemoryManager:
 # 통합된 학습 엔진
 class LearningEngine:
     """통합 학습 엔진"""
-    
+
     def __init__(self):
         self.text_learning = TextLearningSystem()
         self.metacognitive_learning = MetacognitiveLearningSystem()
         self.llm_interface = LLMInterface()
-    
+
     def process_learning(self, content: str, context: Dict[str, Any]) -> LearningResult:
         """LLM 기반 학습 처리"""
         return self._llm_enhanced_learning(content, context)
@@ -99,12 +99,12 @@ class LearningEngine:
 # 통합된 윤리 판단 엔진
 class EthicalReasoningEngine:
     """윤리 판단 엔진"""
-    
+
     def __init__(self):
         self.creative_thinking = CreativeThinkingService()
         self.enhanced_ethical = EnhancedEthicalSystem()
         self.llm_interface = LLMInterface()
-    
+
     def analyze_ethical_dilemma(self, situation: str) -> EthicalAnalysis:
         """LLM 기반 윤리 분석"""
         return self._llm_enhanced_ethical_analysis(situation)
@@ -260,6 +260,4 @@ mkdir -p DuRiCore/{modules,core,interface,utils}
 - ✅ **리스크 최소화**
 - ✅ **성능 극대화**
 
-**지금 바로 시작하시겠습니까?** 
- 
- 
+**지금 바로 시작하시겠습니까?**

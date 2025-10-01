@@ -17,7 +17,7 @@
 <body>
     <div class="container">
         <a href="/" class="btn">← 홈으로 돌아가기</a>
-        
+
         {% if question %}
         <div class="question-detail">
             <h2>{{ question.question_text }}</h2>
@@ -25,7 +25,7 @@
             <p><strong>유형:</strong> {{ question.question_type }}</p>
             <p><strong>생성 시간:</strong> {{ question.timestamp.strftime('%Y-%m-%d %H:%M') }}</p>
         </div>
-        
+
         <h3>답변들</h3>
         {% for response in responses %}
         <div class="response-card">
@@ -34,7 +34,7 @@
             <p><small>감정: {{ response.emotional_tone }} | 만족도: {{ response.satisfaction_score }}/10 | 시간: {{ response.timestamp.strftime('%H:%M') }}</small></p>
         </div>
         {% endfor %}
-        
+
         {% if not responses %}
         <p>아직 답변이 없습니다.</p>
         {% endif %}
@@ -44,4 +44,3 @@
     </div>
 </body>
 </html>
-    

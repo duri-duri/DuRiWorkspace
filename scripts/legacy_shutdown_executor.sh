@@ -31,14 +31,14 @@ acquire_global_lock() {
     local timeout_minutes=30
     local retry_interval=300  # 5분
     local max_retries=6
-    
+
     log "🔒 전역 종료 락 획득 시도..."
-    
+
     for ((i=0; i<max_retries; i++)); do
         if [[ -e "$lock_file" ]]; then
             local lock_pid=$(cat "$lock_file" 2>/dev/null || echo "")
             local lock_age=$(( $(date +%s) - $(stat -c %Y "$lock_file" 2>/dev/null || echo 0) ))
-            
+
             # 락 타임아웃 확인
             if [[ $lock_age -gt $((timeout_minutes * 60)) ]]; then
                 log "⚠️  오래된 락 감지, 강제 제거: $lock_file"
@@ -49,18 +49,18 @@ acquire_global_lock() {
                 continue
             fi
         fi
-        
+
         # 락 획득 시도
         if (set -C; echo "$$" > "$lock_file") 2>/dev/null; then
             log "✅ 전역 종료 락 획득 성공"
             trap 'rm -f "$lock_file"' EXIT
             return 0
         fi
-        
+
         log "❌ 락 획득 실패, 재시도 중... ($((i+1))/$max_retries)"
         sleep $retry_interval
     done
-    
+
     error_exit "전역 종료 락 획득 실패 (최대 재시도 횟수 초과)"
 }
 
@@ -70,14 +70,14 @@ acquire_system_lock() {
     local timeout_minutes=15
     local retry_interval=180  # 3분
     local max_retries=10
-    
+
     log "🔒 $system_name 시스템 종료 락 획득 시도..."
-    
+
     for ((i=0; i<max_retries; i++)); do
         if [[ -e "$lock_file" ]]; then
             local lock_pid=$(cat "$lock_file" 2>/dev/null || echo "")
             local lock_age=$(( $(date +%s) - $(stat -c %Y "$lock_file" 2>/dev/null || echo 0) ))
-            
+
             # 락 타임아웃 확인
             if [[ $lock_age -gt $((timeout_minutes * 60)) ]]; then
                 log "⚠️  오래된 시스템 락 감지, 강제 제거: $lock_file"
@@ -88,27 +88,27 @@ acquire_system_lock() {
                 continue
             fi
         fi
-        
+
         # 락 획득 시도
         if (set -C; echo "$$" > "$lock_file") 2>/dev/null; then
             log "✅ $system_name 시스템 종료 락 획득 성공"
             echo "$lock_file"  # 락 파일 경로 반환
             return 0
         fi
-        
+
         log "❌ $system_name 락 획득 실패, 재시도 중... ($((i+1))/$max_retries)"
         sleep $retry_interval
     done
-    
+
     error_exit "$system_name 시스템 종료 락 획득 실패 (최대 재시도 횟수 초과)"
 }
 
 # === 사전 검증 ===
 pre_shutdown_validation() {
     local system_name="$1"
-    
+
     log "🔍 $system_name 사전 검증 시작..."
-    
+
     # 1) 표준 시스템 성공률 확인
     log "  📋 1단계: 표준 시스템 성공률 확인"
     local standard_success_rate=$(get_standard_system_success_rate)
@@ -118,7 +118,7 @@ pre_shutdown_validation() {
         log "    ❌ 표준 시스템 성공률 부족: ${standard_success_rate}% (<99.9%)"
         return 1
     fi
-    
+
     # 2) 의존성 준수율 확인
     log "  📋 2단계: 의존성 준수율 확인"
     local dependency_compliance=$(get_dependency_compliance_rate)
@@ -128,7 +128,7 @@ pre_shutdown_validation() {
         log "    ❌ 의존성 준수율 부족: $dependency_compliance"
         return 1
     fi
-    
+
     # 3) 오류 발생률 확인
     log "  📋 3단계: 오류 발생률 확인"
     local error_rate=$(get_error_rate)
@@ -138,7 +138,7 @@ pre_shutdown_validation() {
         log "    ❌ 오류 발생률 과다: ${error_rate}% (>1%)"
         return 1
     fi
-    
+
     log "✅ $system_name 사전 검증 통과"
     return 0
 }
@@ -148,18 +148,18 @@ create_shutdown_backup() {
     local system_name="$1"
     local system_path="$2"
     local backup_dir="$SHUTDOWN_BACKUP_DIR/$(date +%Y%m%d)_${system_name%.*}"
-    
+
     log "💾 $system_name 종료 백업 생성..."
-    
+
     mkdir -p "$backup_dir"
-    
+
     # 1) 파일 백업
     if [[ -f "$system_path" ]]; then
         log "  📋 1단계: 파일 백업"
         cp "$system_path" "$backup_dir/"
         log "    ✅ 파일 백업 완료: $backup_dir/$(basename "$system_path")"
     fi
-    
+
     # 2) 메타데이터 백업
     log "  📋 2단계: 메타데이터 백업"
     local metadata_file="$backup_dir/metadata.json"
@@ -176,7 +176,7 @@ create_shutdown_backup() {
 }
 EOF
     log "    ✅ 메타데이터 백업 완료: $metadata_file"
-    
+
     # 3) 백업 검증
     log "  📋 3단계: 백업 검증"
     if [[ -f "$backup_dir/$(basename "$system_path")" ]] && [[ -f "$metadata_file" ]]; then
@@ -193,9 +193,9 @@ shutdown_system() {
     local system_name="$1"
     local system_path="$2"
     local backup_dir="$3"
-    
+
     log "🚫 $system_name 시스템 종료 시작..."
-    
+
     # 1) 실행 권한 제거
     log "  📋 1단계: 실행 권한 제거"
     if [[ -f "$system_path" ]]; then
@@ -207,7 +207,7 @@ shutdown_system() {
             return 1
         fi
     fi
-    
+
     # 2) 프로세스 종료 확인
     log "  📋 2단계: 프로세스 종료 확인"
     local running_processes=$(pgrep -f "$(basename "$system_name")" 2>/dev/null || echo "")
@@ -226,7 +226,7 @@ shutdown_system() {
             return 1
         fi
     fi
-    
+
     # 3) 파일 접근 불가 확인
     log "  📋 3단계: 파일 접근 불가 확인"
     if [[ -f "$system_path" ]]; then
@@ -237,7 +237,7 @@ shutdown_system() {
             log "    ✅ 파일 접근 불가 확인"
         fi
     fi
-    
+
     # 4) 종료 완료 로그 기록
     log "  📋 4단계: 종료 완료 로그 기록"
     local shutdown_log="$SHUTDOWN_LOGS_DIR/legacy_shutdown_${system_name%.*}_$(date +%F).log"
@@ -251,7 +251,7 @@ $(date -Iseconds): $system_name 시스템 종료 완료
   - 롤백 방법: $backup_dir에서 복원
 EOF
     log "    ✅ 종료 완료 로그 기록: $shutdown_log"
-    
+
     log "✅ $system_name 시스템 종료 완료"
     return 0
 }
@@ -261,15 +261,15 @@ rollback_system() {
     local system_name="$1"
     local system_path="$2"
     local backup_dir="$3"
-    
+
     log "🔄 $system_name 시스템 롤백 시작..."
-    
+
     # 1) 백업본 존재 확인
     if [[ ! -d "$backup_dir" ]]; then
         log "❌ 백업 디렉토리를 찾을 수 없음: $backup_dir"
         return 1
     fi
-    
+
     # 2) 원본 파일 복원
     local backup_file="$backup_dir/$(basename "$system_path")"
     if [[ -f "$backup_file" ]]; then
@@ -280,7 +280,7 @@ rollback_system() {
         log "❌ 백업 파일을 찾을 수 없음: $backup_file"
         return 1
     fi
-    
+
     # 3) 실행 권한 복구
     log "  📋 2단계: 실행 권한 복구"
     chmod +x "$system_path"
@@ -290,7 +290,7 @@ rollback_system() {
         log "    ❌ 실행 권한 복구 실패"
         return 1
     fi
-    
+
     # 4) 롤백 완료 로그 기록
     log "  📋 3단계: 롤백 완료 로그 기록"
     local rollback_log="$SHUTDOWN_LOGS_DIR/legacy_rollback_${system_name%.*}_$(date +%F).log"
@@ -303,7 +303,7 @@ $(date -Iseconds): $system_name 시스템 롤백 완료
   - 복원 방법: 백업본에서 원본 복원
 EOF
     log "    ✅ 롤백 완료 로그 기록: $rollback_log"
-    
+
     log "✅ $system_name 시스템 롤백 완료"
     return 0
 }
@@ -313,19 +313,19 @@ update_progress() {
     local system_name="$1"
     local status="$2"
     local details="$3"
-    
+
     local progress_file="$SHUTDOWN_PROGRESS_FILE"
     mkdir -p "$(dirname "$progress_file")"
-    
+
     # 기존 진행 상황 로드
     local existing_progress="{}"
     if [[ -f "$progress_file" ]]; then
         existing_progress=$(cat "$progress_file")
     fi
-    
+
     # 진행 상황 업데이트
     local updated_progress=$(echo "$existing_progress" | jq --arg name "$system_name" --arg status "$status" --arg details "$details" --arg timestamp "$(date -Iseconds)" '. + {($name): {"status": $status, "details": $details, "timestamp": $timestamp}}' 2>/dev/null || echo "$existing_progress")
-    
+
     echo "$updated_progress" > "$progress_file"
     log "📝 진행 상황 업데이트: $system_name - $status"
 }
@@ -350,28 +350,28 @@ get_error_rate() {
 shutdown_legacy_system() {
     local system_name="$1"
     local system_path="$2"
-    
+
     log "🚀 $system_name 레거시 시스템 종료 시작"
-    
+
     # 시스템별 락 획득
     local system_lock_file=$(acquire_system_lock "$system_name")
-    
+
     # 락 해제 함수 등록
     trap 'rm -f "$system_lock_file"' EXIT
-    
+
     # 1) 사전 검증
     if ! pre_shutdown_validation "$system_name"; then
         log "❌ $system_name 사전 검증 실패, 종료 중단"
         return 1
     fi
-    
+
     # 2) 백업 생성
     local backup_dir
     if ! backup_dir=$(create_shutdown_backup "$system_name" "$system_path"); then
         log "❌ $system_name 백업 생성 실패, 종료 중단"
         return 1
     fi
-    
+
     # 3) 시스템 종료
     if ! shutdown_system "$system_name" "$system_path" "$backup_dir"; then
         log "❌ $system_name 시스템 종료 실패, 롤백 시도"
@@ -382,10 +382,10 @@ shutdown_legacy_system() {
         fi
         return 1
     fi
-    
+
     # 4) 진행 상황 업데이트
     update_progress "$system_name" "SHUTDOWN_COMPLETE" "시스템 종료 완료, 백업: $backup_dir"
-    
+
     log "🎉 $system_name 레거시 시스템 종료 완료!"
     return 0
 }
@@ -393,22 +393,22 @@ shutdown_legacy_system() {
 # === 메인 실행 로직 ===
 main() {
     local target_system="${1:-}"
-    
+
     log "🚀 Phase 5 레거시 순차 종료 시스템 시작"
-    
+
     # 전역 락 획득
     acquire_global_lock
-    
+
     # 디렉토리 생성
     mkdir -p "$SHUTDOWN_LOGS_DIR" "$SHUTDOWN_BACKUP_DIR"
-    
+
     # 종료 대상 시스템 정의
     declare -A SHUTDOWN_TARGETS=(
         ["duri_backup.sh"]="scripts/"
         ["duri_backup_progress.sh"]="scripts/"
         ["shared-scripts/autosave_scripts.sh"]=""
     )
-    
+
     if [[ -n "$target_system" ]]; then
         # 특정 시스템만 종료
         if [[ -n "${SHUTDOWN_TARGETS[$target_system]:-}" ]]; then
@@ -426,24 +426,24 @@ main() {
         # 모든 대상 시스템 순차 종료
         local shutdown_success=0
         local shutdown_total=${#SHUTDOWN_TARGETS[@]}
-        
+
         for system_name in "${!SHUTDOWN_TARGETS[@]}"; do
             local system_path="${SHUTDOWN_TARGETS[$system_name]}"
-            
+
             if shutdown_legacy_system "$system_name" "$system_path"; then
                 shutdown_success=$((shutdown_success + 1))
             fi
-            
+
             # 시스템 간 간격
             sleep 5
         done
-        
+
         # 결과 요약
         log "📊 레거시 시스템 종료 결과 요약"
         log "  - 총 대상: $shutdown_total개"
         log "  - 성공: $shutdown_success개"
         log "  - 실패: $((shutdown_total - shutdown_success))개"
-        
+
         if [[ $shutdown_success -eq $shutdown_total ]]; then
             log "🎉 모든 레거시 시스템 종료 완료!"
             log "다음 단계: 최종 정리 및 검증"
@@ -459,6 +459,3 @@ main() {
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     main "$@"
 fi
-
-
-

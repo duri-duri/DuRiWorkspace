@@ -25,7 +25,7 @@ jq -s '
 # 2. GOLD 선택 (일자별 최고 품질)
 echo "🏆 GOLD 백업 선택..."
 jq -s '
-  [.[] | 
+  [.[] |
     (.src | capture("(?<day>\\d{4}-\\d{2}-\\d{2}).*__(?<hm>\\d{4})")) as $t |
     {day: $t.day, hm: ($t.hm | tonumber), bytes, src}
   ] |

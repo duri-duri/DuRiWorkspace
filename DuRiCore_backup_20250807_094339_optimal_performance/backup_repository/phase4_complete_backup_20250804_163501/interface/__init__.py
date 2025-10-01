@@ -8,7 +8,5 @@ from .api import router as api_router
 from .services import *
 
 __all__ = [
-    'api_router',
-] 
- 
- 
+    "api_router",
+]

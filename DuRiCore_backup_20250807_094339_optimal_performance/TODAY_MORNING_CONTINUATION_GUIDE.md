@@ -128,15 +128,15 @@ class CursorIntegrationSystem:
         self.reasoning_learning_system = ReasoningLearningIntegrationSystem()
         self.context_manager = ContextManager()
         self.response_generator = ResponseGenerator()
-        
+
     async def process_user_input(self, user_input: str) -> str:
         # 사용자 입력 처리
         pass
-        
+
     async def generate_response(self, context: Dict[str, Any]) -> str:
         # 응답 생성
         pass
-        
+
     async def manage_context(self, session_id: str) -> Dict[str, Any]:
         # 컨텍스트 관리
         pass
@@ -261,4 +261,3 @@ python3 test_phase13_reasoning_learning_integration.py
 ```
 
 **오늘 아침에 커서를 켜면 바로 Phase 14부터 시작하시면 됩니다! 🎯**
-

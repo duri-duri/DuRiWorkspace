@@ -75,7 +75,7 @@ self.cache_max_size = 1000
 async def _execute_parallel_tasks_with_optimization(self, tasks: List[ParallelTask]) -> List[Any]:
     # 작업을 우선순위별로 정렬
     sorted_tasks = sorted(tasks, key=lambda x: x.priority.value)
-    
+
     # asyncio.gather를 사용한 병렬 실행
     results = await asyncio.gather(*coroutines, return_exceptions=True)
 ```
@@ -151,7 +151,7 @@ self.performance_metrics = {
 
 #### **1단계: 캐시 히트율 향상** (1-2일)
 - **목표**: 캐시 히트율을 80% 이상으로 향상
-- **방법**: 
+- **방법**:
   - 캐시 키 최적화
   - 캐시 전략 개선
   - 캐시 크기 조정
@@ -191,4 +191,4 @@ self.performance_metrics = {
 - ✅ **안정성 확보**: 기존 검증된 시스템 활용
 - ✅ **확장성 확보**: 모듈화된 구조로 향후 확장 가능
 
-**다음 단계**: 캐시 히트율 향상 및 병렬 처리 최적화를 통한 추가 성능 개선! 🚀 
+**다음 단계**: 캐시 히트율 향상 및 병렬 처리 최적화를 통한 추가 성능 개선! 🚀

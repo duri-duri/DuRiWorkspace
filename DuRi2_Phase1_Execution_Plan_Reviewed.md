@@ -77,8 +77,8 @@ SNAP_FILE="${SNAP_DIR}/${HOST}_workspace.snar"   # tar 증분 스냅샷
 mkdir -p "$DESK_DIR" "$LOG_DIR" "$SNAP_DIR"
 
 # 원자적 쓰기 보조
-make_sha() { 
-  ( cd "$(dirname "$1")" && sha256sum "$(basename "$1")" > "SHA256SUMS.$(basename "$1").txt" ); 
+make_sha() {
+  ( cd "$(dirname "$1")" && sha256sum "$(basename "$1")" > "SHA256SUMS.$(basename "$1").txt" );
 }
 
 # USB 미러링 함수
@@ -129,7 +129,7 @@ do_incr() {
   local tmp="${art}.part"
 
   log "Creating INCREMENTAL backup on Desktop..."
-  
+
   # 증분: GNU tar --listed-incremental 스냅샷 사용 (권한/ACL/XATTR 보존)
   if tar --numeric-owner --acls --xattrs \
          --listed-incremental="$SNAP_FILE" \
@@ -382,7 +382,7 @@ tail -f /var/log/duri2-backup/phase1_backup.log
 ## ✅ **Phase 1 완료 기준**
 
 - [ ] **매일 증분 백업**: 03:00 자동 실행
-- [ ] **주 1회 풀백업**: 일요일 02:00 자동 실행  
+- [ ] **주 1회 풀백업**: 일요일 02:00 자동 실행
 - [ ] **보관 정책**: 04:00 자동 실행 (30일 보관)
 - [ ] **시간 겹침 없음**: 각 작업 간 1시간 간격
 - [ ] **로그 기록**: 모든 작업 로그에 기록
@@ -414,44 +414,6 @@ Phase 1 완료 후:
 
 ---
 
-**문서 생성일**: 2025년 8월 17일  
-**작성자**: DuRi AI Assistant  
+**문서 생성일**: 2025년 8월 17일
+**작성자**: DuRi AI Assistant
 **상태**: ✅ **Phase 1 실행 계획 검토 완료 (시간 겹침 해결)**
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

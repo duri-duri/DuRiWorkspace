@@ -19,12 +19,12 @@ echo "" >> "$LOG_FILE"
 while true; do
     TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
     echo "[$TIMESTAMP] 상태 체크"
-    
+
     # 1. 롤아웃 상태
     echo "  📊 롤아웃 상태:"
     ROLLOUT_STATUS=$(bash scripts/rollout_ops.sh status 2>/dev/null | head -n 5)
     echo "$ROLLOUT_STATUS" | sed 's/^/    /'
-    
+
     # 2. 에러 로그 스캔
     echo "  🔍 에러 로그 스캔:"
     ERROR_CHECK=$(grep -Eri "error|fail|traceback" var/reports/final_verify_*/*.log 2>/dev/null || echo "OK")
@@ -34,7 +34,7 @@ while true; do
         echo "    ❌ 에러 발견:"
         echo "$ERROR_CHECK" | sed 's/^/      /'
     fi
-    
+
     # 3. 테스트 상태 (간단 체크)
     echo "  🧪 테스트 상태:"
     if [ -f "var/reports/pytest-report.xml" ]; then
@@ -42,12 +42,12 @@ while true; do
     else
         echo "    ⚠️  pytest 리포트 없음"
     fi
-    
+
     # 4. 시스템 리소스 (간단 체크)
     echo "  💻 시스템 리소스:"
     MEMORY_USAGE=$(free -h | grep "Mem:" | awk '{print $3"/"$2}')
     echo "    📊 메모리: $MEMORY_USAGE"
-    
+
     # 로그 파일에 기록
     {
         echo "[$TIMESTAMP]"
@@ -57,7 +57,7 @@ while true; do
         echo "MEMORY: $MEMORY_USAGE"
         echo "---"
     } >> "$LOG_FILE"
-    
+
     echo ""
     echo "⏰ 다음 체크까지 ${INTERVAL}초 대기... (Ctrl+C로 중단)"
     sleep "$INTERVAL"

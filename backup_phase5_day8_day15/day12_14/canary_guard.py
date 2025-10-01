@@ -16,22 +16,30 @@ SLO 초과 비율의 Wilson Upper Bound로 유의하게 악화되었는지 판�
   2 = 하나 이상 실패(경보)
 """
 from __future__ import annotations
-import argparse, json, math, sys, time
+
+import argparse
+import json
+import math
+import sys
+import time
 from urllib.parse import urlencode
-from urllib.request import urlopen, Request
+from urllib.request import Request, urlopen
+
 
 def _z_from_conf(conf: float) -> float:
     # 양측 95% ≈ 1.96, 90% ≈ 1.64
     table = {0.90: 1.6449, 0.95: 1.96, 0.975: 2.24, 0.99: 2.5758}
     return table.get(conf, 1.96)
 
+
 def wilson_upper(p_hat: float, n: int, z: float) -> float:
     if n == 0:
         return 0.0
     denom = 1 + z**2 / n
-    center = p_hat + z*z/(2*n)
-    rad = z * math.sqrt((p_hat*(1-p_hat)/n) + (z*z)/(4*n*n))
+    center = p_hat + z * z / (2 * n)
+    rad = z * math.sqrt((p_hat * (1 - p_hat) / n) + (z * z) / (4 * n * n))
     return (center + rad) / denom
+
 
 def prom_query_range(base: str, query: str, start: float, end: float, step_s: int):
     params = {
@@ -47,6 +55,7 @@ def prom_query_range(base: str, query: str, start: float, end: float, step_s: in
         raise RuntimeError(f"Prometheus error: {payload}")
     return payload["data"]["result"]
 
+
 def parse_step(step: str) -> int:
     step = step.strip().lower()
     if step.endswith("ms"):
@@ -59,8 +68,10 @@ def parse_step(step: str) -> int:
         return int(float(step[:-1]) * 3600)
     return int(step)
 
+
 def parse_window(w: str) -> int:
     return parse_step(w)
+
 
 def series_to_floats(series):
     vals = []
@@ -73,14 +84,15 @@ def series_to_floats(series):
             pass
     return vals
 
+
 def guard(args):
     now = time.time()
     start = now - parse_window(args.window)
     step_s = parse_step(args.step)
     z = _z_from_conf(args.confidence)
 
-    q_p95 = 'duri:latency_p95'
-    q_p99 = 'duri:latency_p99'
+    q_p95 = "duri:latency_p95"
+    q_p99 = "duri:latency_p99"
 
     p95 = prom_query_range(args.prom_url, q_p95, start, now, step_s)
     p99 = prom_query_range(args.prom_url, q_p99, start, now, step_s)
@@ -115,7 +127,9 @@ def guard(args):
 
     # 출력
     def print_block(rep, slo_ms):
-        print(f"\n=== Guard against SLO {rep[0][0]} <= {slo_ms:.0f} ms (window={args.window}, step={args.step}, conf={args.confidence}) ===")
+        print(
+            f"\n=== Guard against SLO {rep[0][0]} <= {slo_ms:.0f} ms (window={args.window}, step={args.step}, conf={args.confidence}) ==="
+        )
         print("metric  phase          n   exceed  p_hat   wilson_UB  status")
         for m, phase, n, ex, p, ub, st in rep:
             print(f"{m:<6} {phase:<12} {n:4d} {ex:7d}  {p:6.3f}   {ub:9.3f}  {st}")
@@ -130,36 +144,31 @@ def guard(args):
     print("\n✅ Canary guard PASSED for all phases")
     return 0
 
+
 def main():
     ap = argparse.ArgumentParser(description="DuRi Canary Guard")
-    ap.add_argument("--prom-url", default="http://localhost:9090", help="Prometheus URL")
+    ap.add_argument(
+        "--prom-url", default="http://localhost:9090", help="Prometheus URL"
+    )
     ap.add_argument("--window", default="15m", help="분석 윈도우 (예: 10m, 1h)")
     ap.add_argument("--step", default="15s", help="샘플 간격 (예: 15s, 30s)")
     ap.add_argument("--p95-slo-ms", type=float, default=350.0, help="p95 SLO (ms)")
     ap.add_argument("--p99-slo-ms", type=float, default=500.0, help="p99 SLO (ms)")
-    ap.add_argument("--min-exceed-ratio", type=float, default=0.2, help="위반 비율의 윌슨 상한이 이 값 초과면 실패")
-    ap.add_argument("--confidence", type=float, default=0.95, help="윌슨 상한 신뢰수준 (0.90/0.95/0.99)")
+    ap.add_argument(
+        "--min-exceed-ratio",
+        type=float,
+        default=0.2,
+        help="위반 비율의 윌슨 상한이 이 값 초과면 실패",
+    )
+    ap.add_argument(
+        "--confidence",
+        type=float,
+        default=0.95,
+        help="윌슨 상한 신뢰수준 (0.90/0.95/0.99)",
+    )
     args = ap.parse_args()
     sys.exit(guard(args))
 
+
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

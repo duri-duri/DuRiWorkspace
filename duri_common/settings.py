@@ -4,7 +4,8 @@ DuRi 통합 설정 관리 시스템 (확장 버전)
 """
 
 import os
-from typing import Optional, Dict, Any, Literal, List
+from typing import Any, Dict, List, Literal, Optional
+
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -17,7 +18,7 @@ class DatabaseSettings(BaseModel):
     password: str = "CHANGE_ME_DB_PASSWORD"
     pool_size: int = 10
     max_overflow: int = 20
-    
+
     @property
     def url(self) -> str:
         return f"postgresql://{self.user}:{self.password}@{self.host}:{self.port}/{self.database}"
@@ -29,7 +30,7 @@ class RedisSettings(BaseModel):
     db: int = 0
     password: Optional[str] = None
     pool_size: int = 10
-    
+
     @property
     def url(self) -> str:
         auth = f":{self.password}@" if self.password else ""
@@ -122,11 +123,11 @@ class DuRiSettings(BaseSettings):
         extra="ignore",
         case_sensitive=False,
     )
-    
+
     env: Literal["dev", "ops", "prod", "test"] = "dev"
     debug: bool = False
     version: str = "latest"
-    
+
     # 서비스별 설정
     database: DatabaseSettings = DatabaseSettings()
     redis: RedisSettings = RedisSettings()
@@ -140,19 +141,14 @@ class DuRiSettings(BaseSettings):
     performance: PerformanceSettings = PerformanceSettings()
     security: SecuritySettings = SecuritySettings()
     monitoring: MonitoringSettings = MonitoringSettings()
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Pydantic 모델을 딕셔너리로 변환 (기존 코드 호환용)"""
-        return self.model_dump(mode='json')
-    
+        return self.model_dump(mode="json")
+
     def get_service_port(self, service: str) -> int:
         """서비스별 포트 반환"""
-        port_map = {
-            "core": 8080,
-            "brain": 8081,
-            "evolution": 8082,
-            "control": 8083
-        }
+        port_map = {"core": 8080, "brain": 8081, "evolution": 8082, "control": 8083}
         return port_map.get(service, 8080)
 
 

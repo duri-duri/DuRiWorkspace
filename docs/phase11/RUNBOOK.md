@@ -33,7 +33,7 @@ gh api repos/:owner/:repo/branches/main/protection | jq '.required_status_checks
 
 ## D03 즉시 착수 항목 (실연동)
 - **DuRiCoreAdapter.reply()** → 실제 Core API/모듈 바인딩
-- **InnerThoughtAdapter.reflect()** → 자기성찰 엔진 호출  
+- **InnerThoughtAdapter.reflect()** → 자기성찰 엔진 호출
 - **ExternalLearningAdapter.learn()** → 문서 인덱싱/임베딩 파이프라인 트리거
 - **Telemetry.record()** → `insight/` 점수(예: coherence/novelty/brevity) 계산 후 JSONL 기록
 

@@ -36,10 +36,10 @@ if [ -d "$USB_DIR" ] && [ -w "$USB_DIR" ]; then
   # USB에 올바른 디렉토리 구조 생성
   USB_BACKUP_DIR="${USB_DIR}/두리백업/${TODAY}"
   mkdir -p "$USB_BACKUP_DIR" || true
-  
+
   # USB 백업 경로 수정
   ART_USB="${USB_BACKUP_DIR}/${BASENAME}"
-  
+
   if command -v rsync >/dev/null 2>&1; then
     rsync --inplace --partial "$ART_DESK" "$ART_USB" && USB_OK=true || true
   else
@@ -68,18 +68,3 @@ else
   echo "$(date -Iseconds) PENDING_USB $(basename "$ART_DESK")" >> "${DESK_DIR}/.pending_usb_mirror"
   log "SUMMARY: Desktop=OK, USB=MISS → success (보완 필요)"; exit 0
 fi
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

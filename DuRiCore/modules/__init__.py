@@ -4,34 +4,30 @@ DuRi Core Modules Package
 통합된 모듈 시스템을 제공합니다.
 """
 
-from .judgment_system import JudgmentTraceLogger, JudgmentTrace, StrategicLearningEngine
-from .thought_flow import DuRiThoughtFlow, SelfReflectionLoop, ReflectionInsight
-from .memory import MemoryManager
-from .evolution import SelfEvolutionManager, EvolutionStep
+from .evolution import EvolutionStep, SelfEvolutionManager
 from .integrated_learning_system import IntegratedLearningSystem, LearningCycle
+from .judgment_system import JudgmentTrace, JudgmentTraceLogger, StrategicLearningEngine
+from .memory import MemoryManager
+from .thought_flow import DuRiThoughtFlow, ReflectionInsight, SelfReflectionLoop
 
 __version__ = "2.0.0"
 __author__ = "DuRi"
 
 __all__ = [
     # Judgment System
-    'JudgmentTraceLogger',
-    'JudgmentTrace', 
-    'StrategicLearningEngine',
-    
+    "JudgmentTraceLogger",
+    "JudgmentTrace",
+    "StrategicLearningEngine",
     # Thought Flow
-    'DuRiThoughtFlow',
-    'SelfReflectionLoop',
-    'ReflectionInsight',
-    
+    "DuRiThoughtFlow",
+    "SelfReflectionLoop",
+    "ReflectionInsight",
     # Memory
-    'MemoryManager',
-    
+    "MemoryManager",
     # Evolution
-    'SelfEvolutionManager',
-    'EvolutionStep',
-    
+    "SelfEvolutionManager",
+    "EvolutionStep",
     # Integrated Learning System
-    'IntegratedLearningSystem',
-    'LearningCycle'
+    "IntegratedLearningSystem",
+    "LearningCycle",
 ]

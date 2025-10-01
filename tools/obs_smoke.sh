@@ -15,25 +15,3 @@ echo "[3/3] Quick checks"
 grep -E '"trace_id":"[0-9a-f]{32}"' -q /tmp/gate_run.log && echo "✓ trace_id present in logs" || echo "! trace_id not found (check logger wiring)"
 grep -E 'latency_seconds_bucket\{phase=' -q /tmp/gate_run.log || echo "i metrics emitted by process; scrape via /metrics if service exposes"
 echo "Done."
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

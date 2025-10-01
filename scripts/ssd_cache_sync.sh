@@ -28,13 +28,13 @@ find_latest_full() {
     if [[ -n "$latest" ]]; then
         latest=$(readlink -f "$latest" 2>/dev/null || echo "$latest")
     fi
-    
+
     if [[ -z "$latest" || ! -f "$latest" ]]; then
         latest=$(find /mnt/h/ARCHIVE/FULL /mnt/hdd/ARCHIVE/FULL \
                 -maxdepth 2 -type f -name 'FULL__*.tar.zst' -printf '%T@ %p\n' 2>/dev/null \
                 | sort -nr | awk 'NR==1{print $2}')
     fi
-    
+
     [[ -n "$latest" && -f "$latest" ]] || { err "최신 FULL을 찾지 못했습니다"; exit 1; }
     echo "$latest"
 }
@@ -46,13 +46,13 @@ find_latest_incr() {
     if [[ -n "$latest" ]]; then
         latest=$(readlink -f "$latest" 2>/dev/null || echo "$latest")
     fi
-    
+
     if [[ -z "$latest" || ! -f "$latest" ]]; then
         latest=$(find /mnt/h/ARCHIVE/INCR /mnt/hdd/ARCHIVE/INCR \
                 -maxdepth 2 -type f -name 'INCR__*.tar.zst' -printf '%T@ %p\n' 2>/dev/null \
                 | sort -nr | awk 'NR==1{print $2}')
     fi
-    
+
     [[ -n "$latest" && -f "$latest" ]] || { log "최신 INCR을 찾지 못했습니다 (선택사항)"; return 0; }
     echo "$latest"
 }
@@ -63,23 +63,23 @@ sync_to_cache() {
     local cache_type="$2"  # FULL 또는 INCR
     local base_name=$(basename "$src")
     local dst="$I_CACHE/$cache_type/$base_name"
-    
+
     log "캐시 동기화 시작: $src → $dst"
-    
+
     # rsync로 안전한 복사 (재개 가능, 권한 문제 회피)
     if rsync -avh --progress --partial --append-verify --no-perms --no-owner --no-group "$src" "$dst"; then
         log "캐시 복사 완료: $cache_type"
-        
+
         # SHA256 파일 복사
         if [[ -f "${src}.sha256" ]]; then
             cp "${src}.sha256" "${dst}.sha256"
             log "SHA256 파일 복사 완료: $cache_type"
         fi
-        
+
         # LATEST 포인터 생성
         echo "$base_name" > "$I_CACHE/$cache_type/LATEST.txt"
         log "LATEST 포인터 생성: $cache_type → $base_name"
-        
+
         return 0
     else
         err "캐시 복사 실패: $cache_type"
@@ -90,21 +90,21 @@ sync_to_cache() {
 # 메인 실행
 main() {
     log "=== SSD 캐시 동기화 시작 ==="
-    
+
     preflight
-    
+
     # FULL 백업 캐시
     local latest_full
     latest_full=$(find_latest_full)
     log "최신 FULL 발견: $latest_full"
-    
+
     if sync_to_cache "$latest_full" "FULL"; then
         log "FULL 캐시 동기화 완료"
     else
         err "FULL 캐시 동기화 실패"
         return 1
     fi
-    
+
     # INCR 백업 캐시 (선택사항)
     local latest_incr
     latest_incr=$(find_latest_incr)
@@ -116,7 +116,7 @@ main() {
             log "INCR 캐시 동기화 실패 (선택사항이므로 계속)"
         fi
     fi
-    
+
     log "=== SSD 캐시 동기화 완료 ==="
     return 0
 }

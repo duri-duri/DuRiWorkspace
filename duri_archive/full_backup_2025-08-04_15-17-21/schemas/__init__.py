@@ -8,9 +8,4 @@
 from .emotion import EmotionData, EmotionType
 from .responses import BaseResponse, ErrorResponse
 
-__all__ = [
-    "EmotionData",
-    "EmotionType", 
-    "BaseResponse",
-    "ErrorResponse"
-] 
+__all__ = ["EmotionData", "EmotionType", "BaseResponse", "ErrorResponse"]

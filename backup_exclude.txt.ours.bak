@@ -65,4 +65,4 @@ brain_logs.txt
 *_logs.txt
 
 # 스크립트 파일들
-*.sh 
+*.sh

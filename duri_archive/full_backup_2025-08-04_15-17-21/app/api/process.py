@@ -1,17 +1,21 @@
+from datetime import datetime
+
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from datetime import datetime
 
 router = APIRouter()
 
+
 class ProcessInput(BaseModel):
     input: str
+
 
 class ProcessOutput(BaseModel):
     status: str
     message: str
     data: dict
     timestamp: str
+
 
 @router.post("/", response_model=ProcessOutput)
 async def process_handler(payload: ProcessInput):
@@ -23,7 +27,9 @@ async def process_handler(payload: ProcessInput):
     # 예시 분석 로직
     if "reflect" in user_input:
         action = "reflect"
-        explanation = "입력에 'reflect' 키워드가 포함되어 있습니다. 반성 동작을 추천합니다."
+        explanation = (
+            "입력에 'reflect' 키워드가 포함되어 있습니다. 반성 동작을 추천합니다."
+        )
     elif "think" in user_input:
         action = "analyze"
         explanation = "생각 관련 입력이 감지되어 분석 동작을 추천합니다."
@@ -34,10 +40,7 @@ async def process_handler(payload: ProcessInput):
     response = {
         "status": "success",
         "message": "입력 처리 완료",
-        "data": {
-            "action": action,
-            "explanation": explanation
-        },
-        "timestamp": datetime.utcnow().isoformat()
+        "data": {"action": action, "explanation": explanation},
+        "timestamp": datetime.utcnow().isoformat(),
     }
     return response

@@ -19,11 +19,11 @@ def _optimize_cache_key(self, input_data: Dict[str, Any], context: Dict[str, Any
     # 1. 중요도 기반 필터링 (타임스탬프 제외)
     important_data = self._extract_important_data(input_data)
     important_context = self._extract_important_context(context)
-    
+
     # 2. 정규화된 키 생성 (타임스탬프 제외)
     normalized_data = self._normalize_data(important_data)
     normalized_context = self._normalize_data(important_context)
-    
+
     # 3. 해시 생성
     key_content = f"{normalized_data}:{normalized_context}"
     return hashlib.md5(key_content.encode()).hexdigest()
@@ -55,7 +55,7 @@ def _cleanup_lru_cache(self):
         self.cache.items(),
         key=lambda x: x[1].get('last_accessed', x[1]['timestamp'])
     )
-    
+
     # 필요한 만큼만 제거
     if len(sorted_items) > target_size:
         items_to_remove = len(sorted_items) - target_size
@@ -166,4 +166,4 @@ def _predictive_cache_system(self):
 - ✅ **성능 개선**: 캐시 히트 시 99.9% 실행 시간 단축
 - ✅ **시스템 안정성**: 100% 성공률 유지
 
-**다음 단계**: 캐시 히트율을 80% 이상으로 추가 향상시키겠습니다! 🚀 
+**다음 단계**: 캐시 히트율을 80% 이상으로 추가 향상시키겠습니다! 🚀

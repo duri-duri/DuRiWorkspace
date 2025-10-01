@@ -186,7 +186,7 @@ async def learn_from_result(self, result):
 ### **1단계: 실제 기능 구현 (이번 주)**
 ```bash
 # 1. judgment_system.py에 실제 판단 함수 추가
-# 2. action_system.py에 실제 행동 함수 추가  
+# 2. action_system.py에 실제 행동 함수 추가
 # 3. feedback_system.py 새로 생성
 # 4. 시스템 간 연결 테스트
 ```
@@ -236,5 +236,5 @@ async def learn_from_result(self, result):
 
 ---
 
-*DuRi Phase 5.5 다음 단계 계획 작성: 2025-08-05*  
-*DuRiCore Development Team* 
+*DuRi Phase 5.5 다음 단계 계획 작성: 2025-08-05*
+*DuRiCore Development Team*

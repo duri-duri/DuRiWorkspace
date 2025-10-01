@@ -8,4 +8,3 @@ clean:
 	rm -rf bin
 
 .PHONY: build clean
-

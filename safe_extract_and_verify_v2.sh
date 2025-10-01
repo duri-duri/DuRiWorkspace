@@ -236,8 +236,3 @@ echo "✅ 원본 삭제 완료"
 rm -f "$ORIGINAL_LIST" "$EXTRACTED_LIST"
 echo "=== 모든 작업 완료 ==="
 echo "추출 폴더: $DEST"
-
-
-
-
-

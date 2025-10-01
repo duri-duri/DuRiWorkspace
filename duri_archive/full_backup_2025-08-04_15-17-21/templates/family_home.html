@@ -34,7 +34,7 @@
             <h1>🏠 DuRi 가족 상호작용</h1>
             <p>가족과 함께하는 의미 있는 대화를 시작해보세요</p>
         </div>
-        
+
         <div class="stats">
             <div class="stat-card">
                 <div class="stat-number" id="total-questions">0</div>
@@ -53,7 +53,7 @@
                 <div>온라인 가족</div>
             </div>
         </div>
-        
+
         <div class="family-members">
             {% for member in family_members.values() %}
             <div class="member-card {% if member.is_online %}online{% endif %}">
@@ -62,19 +62,19 @@
             </div>
             {% endfor %}
         </div>
-        
+
         <div style="text-align: center; margin-bottom: 30px;">
             <button class="btn" onclick="generateQuestions()">새 질문 생성</button>
         </div>
-        
+
         <div class="questions-section">
             <h2>오늘의 질문들</h2>
             {% for question in questions %}
             <div class="question-card">
                 <div class="question-text">{{ question.question_text }}</div>
                 <div class="question-meta">
-                    대상: {{ question.target_member }} | 
-                    유형: {{ question.question_type }} | 
+                    대상: {{ question.target_member }} |
+                    유형: {{ question.question_type }} |
                     {% if question.is_answered %}
                     <span style="color: green;">✓ 답변 완료</span>
                     {% else %}
@@ -82,7 +82,7 @@
                     {% endif %}
                 </div>
                 <button class="btn" onclick="showResponseForm('{{ question.id }}')">답변하기</button>
-                
+
                 <div id="response-form-{{ question.id }}" class="response-form" style="display: none;">
                     <form onsubmit="submitResponse(event, '{{ question.id }}')">
                         <div class="form-group">
@@ -116,7 +116,7 @@
             {% endfor %}
         </div>
     </div>
-    
+
     <script>
         function generateQuestions() {
             fetch('/generate_questions', {
@@ -131,17 +131,17 @@
                 }
             });
         }
-        
+
         function showResponseForm(questionId) {
             const form = document.getElementById('response-form-' + questionId);
             form.style.display = form.style.display === 'none' ? 'block' : 'none';
         }
-        
+
         function submitResponse(event, questionId) {
             event.preventDefault();
             const form = event.target;
             const formData = new FormData(form);
-            
+
             const data = {
                 question_id: questionId,
                 responder_id: formData.get('responder_id'),
@@ -149,7 +149,7 @@
                 emotional_tone: formData.get('emotional_tone'),
                 satisfaction_score: formData.get('satisfaction_score')
             };
-            
+
             fetch('/answer', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -162,7 +162,7 @@
                 }
             });
         }
-        
+
         // 통계 업데이트
         function updateStats() {
             fetch('/api/stats')
@@ -174,7 +174,7 @@
                 document.getElementById('online-members').textContent = data.online_family_members;
             });
         }
-        
+
         // 페이지 로드 시 통계 업데이트
         updateStats();
         // 30초마다 통계 업데이트
@@ -182,4 +182,3 @@
     </script>
 </body>
 </html>
-    

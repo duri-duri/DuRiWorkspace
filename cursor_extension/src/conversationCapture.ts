@@ -29,10 +29,10 @@ export class ConversationCapture {
 
         // Cursor 채팅 패널 모니터링
         this.monitorCursorChat();
-        
+
         // 파일 변경 모니터링 (코드 생성 결과)
         this.monitorFileChanges();
-        
+
         // 명령어 실행 모니터링
         this.monitorCommands();
     }
@@ -69,7 +69,7 @@ export class ConversationCapture {
 
     private checkForChatContent(document: vscode.TextDocument): void {
         const fileName = document.fileName.toLowerCase();
-        
+
         // Cursor 채팅 관련 파일인지 확인
         if (fileName.includes('chat') || fileName.includes('cursor') || fileName.includes('duri')) {
             const content = document.getText();
@@ -168,10 +168,10 @@ export class ConversationCapture {
     }
 
     private async sendConversationToDuRi(userInput: string, assistantResponse: string): Promise<void> {
-        if (userInput && assistantResponse && 
-            userInput !== this.lastUserInput && 
+        if (userInput && assistantResponse &&
+            userInput !== this.lastUserInput &&
             assistantResponse !== this.lastAssistantResponse) {
-            
+
             this.lastUserInput = userInput;
             this.lastAssistantResponse = assistantResponse;
 
@@ -191,7 +191,7 @@ export class ConversationCapture {
                 const result = await this.duriAPI.sendUnifiedConversation(unifiedData);
                 if (result) {
                     console.log(`✅ DuRi 통합 학습 성공: 사용자 입력 (${userInput.length}자), AI 응답 (${assistantResponse.length}자), 점수: ${result.integrated_score}`);
-                    
+
                     // 개선 제안이 있으면 알림
                     if (result.improvement_suggestions && result.improvement_suggestions.length > 0) {
                         vscode.window.showInformationMessage(
@@ -242,4 +242,4 @@ export class ConversationCapture {
         this.learningManager.sendConversation('user', userInput);
         this.learningManager.sendConversation('assistant', assistantResponse);
     }
-} 
+}

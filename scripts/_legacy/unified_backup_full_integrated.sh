@@ -49,15 +49,15 @@ trap cleanup INT TERM EXIT
 echo "📝 메타데이터 생성 중..."
 (
   cd "$WORKSPACE"
-  
+
   # 파일 목록 생성
   echo "   - 파일 목록 생성..."
   find . -xdev -type f -print0 | tr '\0' '\n' > "$FILELIST_TMP"
-  
+
   # 해시 목록 생성
   echo "   - 해시 목록 생성..."
   find . -xdev -type f -print0 | xargs -0 -I{} sha256sum "{}" > "$HASHLIST_TMP"
-  
+
   # 매니페스트 생성
   echo "   - 매니페스트 생성..."
   cat > "$MANIFEST_TMP" <<EOF
@@ -94,7 +94,7 @@ echo "   - 진행상황: pv를 사용한 실시간 표시"
 
 (
   cd "$WORKSPACE"
-  
+
   # tar → pv → zstd 파이프라인
   tar --posix --no-xattrs --no-acls --numeric-owner --owner=0 --group=0 \
       --exclude=.git \

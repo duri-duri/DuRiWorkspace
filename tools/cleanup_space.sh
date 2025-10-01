@@ -120,8 +120,3 @@ if [[ "$MODE" == "purge" ]]; then
   log "[INFO] PURGE 완료"
   exit 0
 fi
-
-
-
-
-

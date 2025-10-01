@@ -19,4 +19,4 @@ cd ..
 rm -rf temp_extension
 
 echo "확장 프로그램 패키지 생성 완료: duri-cursor-extension.tar.gz"
-echo "이 파일을 Cursor에서 로드할 수 있습니다." 
+echo "이 파일을 Cursor에서 로드할 수 있습니다."

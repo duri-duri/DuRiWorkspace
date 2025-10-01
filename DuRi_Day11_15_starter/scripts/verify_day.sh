@@ -41,7 +41,7 @@ judge_metrics(){
 import json, sys
 data = json.load(sys.stdin)
 th_pou = $TH_POU
-th_safe = $TH_SAFE  
+th_safe = $TH_SAFE
 th_err = $TH_ERR
 th_lat = $TH_LAT
 
@@ -189,10 +189,10 @@ case "$DAY" in
     # 최신 리포트 파일 찾기
     LATEST_V1_REPORT=$(ls -t v1_protocol_report_*.json 2>/dev/null | head -1)
     LATEST_REHAB_REPORT=$(ls -t rehab_personalization_report_*.json 2>/dev/null | head -1)
-    
+
     require_files "$DAY" "$ROOT/rehab_personalization_engine.py" "$ROOT/v1_protocol_rehab_system.py" || {
       emit_json "$DAY" "FAIL" "rehab/v1 artifacts missing" '{}'; exit 0; }
-    
+
     # 최신 리포트 파일이 있으면 실제 메트릭 사용, 없으면 기본값
     if [ -n "$LATEST_V1_REPORT" ] && [ -s "$LATEST_V1_REPORT" ]; then
       # 실제 안전성 점수 추출 (0.985 = 98.5%)
@@ -202,7 +202,7 @@ case "$DAY" in
       # 기본값 (개선된 안전성 점수)
       MET='{"pou_success_rate":0.90,"safety_score_avg":0.985,"error_rate_avg":0.003,"latency_ms_avg":700}'
     fi
-    
+
     STATUS=$(printf "%s" "$MET" | judge_metrics)
     emit_json "$DAY" "${STATUS%%$'\t'*}" "${STATUS#*$'\t'}" "$MET"
     ;;

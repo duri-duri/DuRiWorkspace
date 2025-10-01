@@ -37,26 +37,26 @@ acquire_lock() {
 # === 백업 압축 최적화 ===
 optimize_backup_compression() {
     log "🔧 백업 압축 최적화 시작..."
-    
+
     local test_dir="var/test_compression_$(date +%Y%m%d_%H%M%S)"
     mkdir -p "$test_dir"
-    
+
     # 테스트 데이터 생성 (var/reports 폴더 복사)
     if [[ -d "var/reports" ]]; then
         cp -r "var/reports" "$test_dir/"
-        
+
         local original_size=$(du -sb "$test_dir" 2>/dev/null | cut -f1 || echo "0")
         log "  📋 원본 크기: ${original_size}바이트"
-        
+
         # 다양한 압축 방식 테스트
         local compression_methods=("gzip" "bzip2" "xz" "lz4" "zstd")
         local best_compression="gzip"
         local best_ratio=0
-        
+
         for method in "${compression_methods[@]}"; do
             if command -v "$method" >/dev/null 2>&1; then
                 log "  📋 $method 압축 테스트..."
-                
+
                 local compressed_file="${test_dir}.${method}"
                 case "$method" in
                     "gzip")
@@ -75,36 +75,36 @@ optimize_backup_compression() {
                         tar -cf - -C "$test_dir" . | zstd > "$compressed_file" 2>/dev/null || continue
                         ;;
                 esac
-                
+
                 if [[ -f "$compressed_file" ]]; then
                     local compressed_size=$(stat -c %s "$compressed_file" 2>/dev/null || echo "0")
                     local ratio=0
-                    
+
                     if [[ $original_size -gt 0 ]]; then
                         ratio=$(echo "scale=2; (1 - $compressed_size / $original_size) * 100" | bc -l 2>/dev/null || echo "0")
                     fi
-                    
+
                     log "    ✅ $method: 압축률 ${ratio}% (${compressed_size}바이트)"
-                    
+
                     if [[ $(echo "$ratio > $best_ratio" | bc -l 2>/dev/null || echo "0") -eq 1 ]]; then
                         best_ratio=$ratio
                         best_compression=$method
                     fi
-                    
+
                     rm -f "$compressed_file"
                 fi
             fi
         done
-        
+
         log "  🏆 최적 압축 방식: $best_compression (압축률: ${best_ratio}%)"
-        
+
         # 정리
         rm -rf "$test_dir"
-        
+
         # 결과 저장
         echo "$best_compression" > "$OPTIMIZATION_RESULTS_DIR/best_compression_method.txt"
         echo "$best_ratio" > "$OPTIMIZATION_RESULTS_DIR/best_compression_ratio.txt"
-        
+
         return 0
     else
         log "  ⚠️  var/reports 폴더가 존재하지 않음"
@@ -115,48 +115,48 @@ optimize_backup_compression() {
 # === 백업 병렬 처리 최적화 ===
 optimize_backup_parallelization() {
     log "🔧 백업 병렬 처리 최적화 시작..."
-    
+
     # 시스템 CPU 코어 수 확인
     local cpu_cores=$(nproc 2>/dev/null || echo "1")
     local optimal_jobs=$((cpu_cores * 2))  # CPU 코어의 2배
-    
+
     log "  📋 시스템 CPU 코어: ${cpu_cores}개"
     log "  📋 최적 병렬 작업 수: ${optimal_jobs}개"
-    
+
     # 병렬 처리 테스트
     local test_dir="var/test_parallel_$(date +%Y%m%d_%H%M%S)"
     mkdir -p "$test_dir"
-    
+
     # 테스트 파일 생성
     for i in {1..100}; do
         echo "Test file $i content for parallel processing optimization" > "$test_dir/test_file_$i.txt"
     done
-    
+
     # 병렬 복사 테스트
     local start_time=$(date +%s.%N)
-    
+
     # rsync 병렬 옵션 테스트
     local rsync_start=$(date +%s.%N)
     rsync -av --delete "$test_dir/" "$test_dir"_copy/ >/dev/null 2>&1
     local rsync_end=$(date +%s.%N)
     local rsync_duration=$(echo "$rsync_end - $rsync_start" | bc -l 2>/dev/null || echo "0")
-    
+
     # 병렬 tar 테스트
     local tar_start=$(date +%s.%N)
     tar -cf "$test_dir.tar" -C "$test_dir" . >/dev/null 2>&1
     local tar_end=$(date +%s.%N)
     local tar_duration=$(echo "$tar_end - $tar_start" | bc -l 2>/dev/null || echo "0")
-    
+
     local end_time=$(date +%s.%N)
     local total_duration=$(echo "$end_time - $start_time" | bc -l 2>/dev/null || echo "0")
-    
+
     log "  ✅ rsync 속도: ${rsync_duration}초"
     log "  ✅ tar 속도: ${tar_duration}초"
     log "  ✅ 전체 처리 시간: ${total_duration}초"
-    
+
     # 정리
     rm -rf "$test_dir" "$test_dir"_copy "$test_dir.tar"
-    
+
     # 결과 저장
     cat > "$OPTIMIZATION_RESULTS_DIR/parallel_optimization.json" <<EOF
 {
@@ -175,44 +175,44 @@ optimize_backup_parallelization() {
   ]
 }
 EOF
-    
+
     return 0
 }
 
 # === 백업 I/O 최적화 ===
 optimize_backup_io() {
     log "🔧 백업 I/O 최적화 시작..."
-    
+
     # 디스크 I/O 성능 측정
     local iostat_output=$(iostat -x 1 1 2>/dev/null | tail -1 || echo "")
-    
+
     if [[ -n "$iostat_output" ]]; then
         local device=$(echo "$iostat_output" | awk '{print $1}')
         local await=$(echo "$iostat_output" | awk '{print $10}')
         local svctm=$(echo "$iostat_output" | awk '{print $11}')
         local util=$(echo "$iostat_output" | awk '{print $14}')
-        
+
         log "  📋 디스크 I/O 성능 분석"
         log "    - 디바이스: $device"
         log "    - 평균 대기 시간: ${await}ms"
         log "    - 평균 서비스 시간: ${svctm}ms"
         log "    - 디스크 사용률: ${util}%"
-        
+
         # I/O 최적화 권장사항
         local io_recommendations=()
-        
+
         if [[ $(echo "$await > 10" | bc -l 2>/dev/null || echo "0") -eq 1 ]]; then
             io_recommendations+=("디스크 I/O 병목 현상 감지 - SSD 업그레이드 고려")
         fi
-        
+
         if [[ $(echo "$util > 80" | bc -l 2>/dev/null || echo "0") -eq 1 ]]; then
             io_recommendations+=("디스크 사용률 높음 - 백업 작업 분산 고려")
         fi
-        
+
         if [[ ${#io_recommendations[@]} -eq 0 ]]; then
             io_recommendations+=("현재 I/O 성능 양호")
         fi
-        
+
         # 결과 저장
         cat > "$OPTIMIZATION_RESULTS_DIR/io_optimization.json" <<EOF
 {
@@ -228,67 +228,67 @@ optimize_backup_io() {
   ]
 }
 EOF
-        
+
         log "  ✅ I/O 최적화 분석 완료"
     else
         log "  ⚠️  iostat 명령어를 사용할 수 없음"
     fi
-    
+
     return 0
 }
 
 # === 백업 중복 제거 최적화 ===
 optimize_backup_deduplication() {
     log "🔧 백업 중복 제거 최적화 시작..."
-    
+
     local test_dir="var/test_dedup_$(date +%Y%m%d_%H%M%S)"
     mkdir -p "$test_dir"
-    
+
     # 중복 파일 생성
     for i in {1..50}; do
         echo "Duplicate content for deduplication test" > "$test_dir/file_$i.txt"
         echo "Unique content $i" > "$test_dir/unique_$i.txt"
     done
-    
+
     # 추가 중복 파일 (동일한 내용)
     for i in {1..25}; do
         cp "$test_dir/file_1.txt" "$test_dir/duplicate_$i.txt"
     done
-    
+
     local original_size=$(du -sb "$test_dir" 2>/dev/null | cut -f1 || echo "0")
     log "  📋 원본 크기: ${original_size}바이트"
-    
+
     # 중복 파일 수 계산
     local total_files=$(find "$test_dir" -type f | wc -l)
     local unique_files=$(find "$test_dir" -type f -exec sha256sum {} \; | sort | uniq -w64 | wc -l)
     local duplicate_files=$((total_files - unique_files))
-    
+
     log "  📋 총 파일 수: ${total_files}개"
     log "  📋 고유 파일 수: ${unique_files}개"
     log "  📋 중복 파일 수: ${duplicate_files}개"
-    
+
     # 중복 제거 후 크기 계산
     local dedup_dir="${test_dir}_dedup"
     mkdir -p "$dedup_dir"
-    
+
     # 고유 파일만 복사
     find "$test_dir" -type f -exec sha256sum {} \; | sort | uniq -w64 | while read hash filename; do
         cp "$filename" "$dedup_dir/"
     done
-    
+
     local dedup_size=$(du -sb "$dedup_dir" 2>/dev/null | cut -f1 || echo "0")
     local space_saved=0
-    
+
     if [[ $original_size -gt 0 ]]; then
         space_saved=$(echo "scale=2; (1 - $dedup_size / $original_size) * 100" | bc -l 2>/dev/null || echo "0")
     fi
-    
+
     log "  ✅ 중복 제거 후 크기: ${dedup_size}바이트"
     log "  ✅ 공간 절약: ${space_saved}%"
-    
+
     # 정리
     rm -rf "$test_dir" "$dedup_dir"
-    
+
     # 결과 저장
     cat > "$OPTIMIZATION_RESULTS_DIR/deduplication_optimization.json" <<EOF
 {
@@ -308,65 +308,65 @@ optimize_backup_deduplication() {
   ]
 }
 EOF
-    
+
     return 0
 }
 
 # === 최적화 결과 통합 분석 ===
 analyze_optimization_results() {
     log "📊 최적화 결과 통합 분석 시작..."
-    
+
     local analysis_file="$OPTIMIZATION_RESULTS_DIR/backup_optimization_analysis_$(date +%F).json"
-    
+
     # 각 최적화 결과 수집
     local compression_method="N/A"
     local compression_ratio="N/A"
     local cpu_cores="N/A"
     local optimal_jobs="N/A"
     local space_saved="N/A"
-    
+
     if [[ -f "$OPTIMIZATION_RESULTS_DIR/best_compression_method.txt" ]]; then
         compression_method=$(cat "$OPTIMIZATION_RESULTS_DIR/best_compression_method.txt")
     fi
-    
+
     if [[ -f "$OPTIMIZATION_RESULTS_DIR/best_compression_ratio.txt" ]]; then
         compression_ratio=$(cat "$OPTIMIZATION_RESULTS_DIR/best_compression_ratio.txt")
     fi
-    
+
     if [[ -f "$OPTIMIZATION_RESULTS_DIR/parallel_optimization.json" ]]; then
         cpu_cores=$(grep -o '"cpu_cores": [0-9]*' "$OPTIMIZATION_RESULTS_DIR/parallel_optimization.json" | cut -d' ' -f2)
         optimal_jobs=$(grep -o '"optimal_jobs": [0-9]*' "$OPTIMIZATION_RESULTS_DIR/parallel_optimization.json" | cut -d' ' -f2)
     fi
-    
+
     if [[ -f "$OPTIMIZATION_RESULTS_DIR/deduplication_optimization.json" ]]; then
         space_saved=$(grep -o '"space_saved_percent": [0-9.]*' "$OPTIMIZATION_RESULTS_DIR/deduplication_optimization.json" | cut -d' ' -f2)
     fi
-    
+
     # 최적화 효과 분석
     local optimization_score=0
     local total_improvements=0
-    
+
     if [[ "$compression_ratio" != "N/A" && $(echo "$compression_ratio > 15" | bc -l 2>/dev/null || echo "0") -eq 1 ]]; then
         optimization_score=$((optimization_score + 25))
         total_improvements=$((total_improvements + 1))
     fi
-    
+
     if [[ "$cpu_cores" != "N/A" && $cpu_cores -gt 1 ]]; then
         optimization_score=$((optimization_score + 25))
         total_improvements=$((total_improvements + 1))
     fi
-    
+
     if [[ "$space_saved" != "N/A" && $(echo "$space_saved > 15" | bc -l 2>/dev/null || echo "0") -eq 1 ]]; then
         optimization_score=$((optimization_score + 25))
         total_improvements=$((total_improvements + 1))
     fi
-    
+
     # I/O 최적화 점수
     if [[ -f "$OPTIMIZATION_RESULTS_DIR/io_optimization.json" ]]; then
         optimization_score=$((optimization_score + 25))
         total_improvements=$((total_improvements + 1))
     fi
-    
+
     # 통합 분석 결과 저장
     cat > "$analysis_file" <<EOF
 {
@@ -401,19 +401,19 @@ analyze_optimization_results() {
   ]
 }
 EOF
-    
+
     log "✅ 최적화 결과 통합 분석 완료: $analysis_file"
     log "📊 최적화 점수: ${optimization_score}% (${total_improvements}/4개 개선사항)"
-    
+
     return 0
 }
 
 # === 최적화 요약 리포트 생성 ===
 generate_optimization_summary() {
     local summary_file="$OPTIMIZATION_LOGS_DIR/backup_optimization_summary_$(date +%F).md"
-    
+
     log "📊 백업 최적화 요약 리포트 생성: $summary_file"
-    
+
     # 최적화 결과 로드
     local optimization_score="N/A"
     local optimization_grade="N/A"
@@ -421,7 +421,7 @@ generate_optimization_summary() {
         optimization_score=$(grep -o '"optimization_score_percent": [0-9]*' "$OPTIMIZATION_RESULTS_DIR/backup_optimization_analysis_$(date +%F).json" | cut -d' ' -f2)
         optimization_grade=$(grep -o '"optimization_grade": "[^"]*"' "$OPTIMIZATION_RESULTS_DIR/backup_optimization_analysis_$(date +%F).json" | cut -d'"' -f4)
     fi
-    
+
     cat > "$summary_file" <<EOF
 # 🔧 Phase 6 백업 성능 최적화 요약 — $(date +%F)
 
@@ -497,52 +497,52 @@ generate_optimization_summary() {
 
 ---
 
-> **💡 운영 팁**: 최적화 결과를 바탕으로 체계적인 백업 성능 개선을 진행하세요.  
-> **📊 모니터링**: 최적화 과정에서 시스템 안정성을 지속적으로 모니터링하세요.  
+> **💡 운영 팁**: 최적화 결과를 바탕으로 체계적인 백업 성능 개선을 진행하세요.
+> **📊 모니터링**: 최적화 과정에서 시스템 안정성을 지속적으로 모니터링하세요.
 > **🔄 반복**: 정기적인 성능 측정으로 최적화 효과를 검증하고 추가 개선을 진행하세요.
 EOF
-    
+
     log "✅ 백업 최적화 요약 리포트 생성 완료: $summary_file"
 }
 
 # === 메인 실행 로직 ===
 main() {
     log "🚀 Phase 6 백업 성능 최적화 시작"
-    
+
     # 락 획득
     acquire_lock
-    
+
     # 디렉토리 생성
     mkdir -p "$OPTIMIZATION_LOGS_DIR" "$OPTIMIZATION_RESULTS_DIR"
-    
+
     # 1) 백업 압축 최적화
     if ! optimize_backup_compression; then
         log "❌ 백업 압축 최적화 실패"
     fi
-    
+
     # 2) 백업 병렬 처리 최적화
     if ! optimize_backup_parallelization; then
         log "❌ 백업 병렬 처리 최적화 실패"
     fi
-    
+
     # 3) 백업 I/O 최적화
     if ! optimize_backup_io; then
         log "❌ 백업 I/O 최적화 실패"
     fi
-    
+
     # 4) 백업 중복 제거 최적화
     if ! optimize_backup_deduplication; then
         log "❌ 백업 중복 제거 최적화 실패"
     fi
-    
+
     # 5) 최적화 결과 통합 분석
     if ! analyze_optimization_results; then
         log "❌ 최적화 결과 통합 분석 실패"
     fi
-    
+
     # 6) 최적화 요약 리포트 생성
     generate_optimization_summary
-    
+
     log "🎉 Phase 6 백업 성능 최적화 완료!"
     log "다음 단계: 최적화된 백업 시스템 적용 및 성능 재측정"
 }
@@ -551,6 +551,3 @@ main() {
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     main "$@"
 fi
-
-
-

@@ -6,9 +6,9 @@ set -euo pipefail
 
 echo "🔒 Secret hardening pre-commit check..."
 
-# 하드코딩된 시크릿 스캔
+# 하드코딩된 시크릿 스캔 (환경변수 사용 제외)
 if git diff --cached | grep -Ei '(password|secret|token)=' | \
-   grep -vE '\.example|CHANGE_ME|POSTGRES_PASSWORD_FILE|secrets/'; then
+   grep -vE '\.example|CHANGE_ME|POSTGRES_PASSWORD_FILE|secrets/|os\.getenv|os\.environ\.get|getenv\(|environ\.get\('; then
   echo "❌ Hardcoded secrets detected in staged changes."
   echo "   Please use environment variables or secrets/ directory."
   echo "   Allowed patterns: .example files, CHANGE_ME_*, POSTGRES_PASSWORD_FILE"

@@ -6,6 +6,4 @@ DuRi의 창의성 시스템 (Dream)
 
 from .dream_engine import get_dream_engine
 
-__all__ = [
-    'get_dream_engine'
-] 
+__all__ = ["get_dream_engine"]

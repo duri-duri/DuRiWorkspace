@@ -1,17 +1,22 @@
 #!/usr/bin/env python3
-import json, sys, math, pathlib
+import json
+import math
+import pathlib
+import sys
 
 if len(sys.argv) < 3:
     print("usage: bench_guard.py <baseline.json> <now.json> [THRESH_PCT=10]")
     sys.exit(2)
 
 baseline_p = pathlib.Path(sys.argv[1])
-now_p      = pathlib.Path(sys.argv[2])
-thresh     = float(sys.argv[3]) if len(sys.argv) > 3 else 10.0  # percent
+now_p = pathlib.Path(sys.argv[2])
+thresh = float(sys.argv[3]) if len(sys.argv) > 3 else 10.0  # percent
+
 
 def load(path):
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
+
 
 # pytest-benchmark JSON 구조 가정:
 # {
@@ -21,7 +26,8 @@ def load(path):
 #   ]
 # }
 base = load(baseline_p)
-now  = load(now_p)
+now = load(now_p)
+
 
 # fullname -> mean 매핑
 def to_means(doc):
@@ -33,8 +39,9 @@ def to_means(doc):
             out[name] = mean
     return out
 
+
 bm_base = to_means(base)
-bm_now  = to_means(now)
+bm_now = to_means(now)
 
 missing = [k for k in bm_base.keys() if k not in bm_now]
 if missing:
@@ -43,7 +50,7 @@ if missing:
 worse, better = [], []
 for name, base_mean in bm_base.items():
     now_mean = bm_now.get(name)
-    if now_mean is None: 
+    if now_mean is None:
         continue
     # mean: 낮을수록 좋음(시간)
     delta_pct = (now_mean - base_mean) / base_mean * 100.0

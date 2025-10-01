@@ -1,22 +1,37 @@
 from __future__ import annotations
-from typing import Any, Dict
+
 import ast
 import operator as op
+from typing import Any, Dict
 
-from DuRiCore.reasoning_engine.core.logical_reasoning_engine import LogicalReasoningEngine
+from DuRiCore.reasoning_engine.core.logical_reasoning_engine import (
+    LogicalReasoningEngine,
+)
 
 # 안전 수식 평가용(사칙연산만)
 _ALLOWED = {
-    ast.Add: op.add, ast.Sub: op.sub, ast.Mult: op.mul, ast.Div: op.truediv,
-    ast.USub: op.neg, ast.Pow: op.pow, ast.Mod: op.mod,
+    ast.Add: op.add,
+    ast.Sub: op.sub,
+    ast.Mult: op.mul,
+    ast.Div: op.truediv,
+    ast.USub: op.neg,
+    ast.Pow: op.pow,
+    ast.Mod: op.mod,
 }
+
+
 def _safe_eval(expr: str) -> float:
     def _eval(node):
-        if isinstance(node, ast.Num): return node.n
-        if isinstance(node, ast.UnaryOp) and type(node.op) in _ALLOWED: return _ALLOWED[type(node.op)](_eval(node.operand))
-        if isinstance(node, ast.BinOp) and type(node.op) in _ALLOWED: return _ALLOWED[type(node.op)](_eval(node.left), _eval(node.right))
+        if isinstance(node, ast.Num):
+            return node.n
+        if isinstance(node, ast.UnaryOp) and type(node.op) in _ALLOWED:
+            return _ALLOWED[type(node.op)](_eval(node.operand))
+        if isinstance(node, ast.BinOp) and type(node.op) in _ALLOWED:
+            return _ALLOWED[type(node.op)](_eval(node.left), _eval(node.right))
         raise ValueError("unsafe")
+
     return _eval(ast.parse(expr, mode="eval").body)
+
 
 class ReasoningEngine:
     """
@@ -24,6 +39,7 @@ class ReasoningEngine:
     내부 구현은 LogicalReasoningEngine 에 위임하되,
     `process(payload)` 형태의 단일 진입점을 보장한다.
     """
+
     def __init__(self) -> None:
         self.impl = LogicalReasoningEngine()
 
@@ -33,7 +49,7 @@ class ReasoningEngine:
           payload = {"query": str, "context": str}
           return  = {"result": Any, "confidence": float}
         """
-        query   = (payload or {}).get("query", "") or ""
+        query = (payload or {}).get("query", "") or ""
         context = (payload or {}).get("context", "general") or "general"
 
         # 1) 간단한 수식은 빠르게 처리 (테스트 계약 충족)

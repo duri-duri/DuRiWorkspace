@@ -1,4 +1,6 @@
-import subprocess as sp, re
+import re
+import subprocess as sp
+
 
 def test_ops_logs_have_no_errors():
     cmd = r"tail -n 200 var/reports/final_verify_*/run.log 2>/dev/null | grep -Ei 'error|fail' || true"

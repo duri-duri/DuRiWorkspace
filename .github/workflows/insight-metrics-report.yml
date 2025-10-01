@@ -101,7 +101,7 @@ jobs:
             const report = JSON.parse(fs.readFileSync('metrics_report.json','utf8'));
             const esc = s => String(s).replace(/[`$\\]/g, m => ({'`':'\\`','$':'\\$','\\':'\\\\'}[m]));
             const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
-            
+
             const lines = [];
             lines.push('## 📊 Insight Metrics Report','',
               '**Summary:**',

@@ -36,10 +36,10 @@ acquire_lock() {
 # === 회로 차단기 (Circuit Breaker) 구현 ===
 implement_circuit_breaker() {
     log "🔧 회로 차단기 (Circuit Breaker) 구현 시작..."
-    
+
     local circuit_breaker_dir="$ERROR_RESULTS_DIR/circuit_breaker"
     mkdir -p "$circuit_breaker_dir"
-    
+
     # 회로 차단기 설정 파일 생성
     cat > "$circuit_breaker_dir/circuit_breaker_config.json" <<EOF
 {
@@ -63,7 +63,7 @@ implement_circuit_breaker() {
   ]
 }
 EOF
-    
+
     # 회로 차단기 상태 관리 스크립트 생성
     cat > "$circuit_breaker_dir/circuit_breaker.sh" <<'EOF'
 #!/usr/bin/env bash
@@ -75,7 +75,7 @@ FAILURE_COUNT_FILE="var/state/stability_enhancement/circuit_breaker/failure_coun
 # 초기 상태 설정
 initialize_circuit_breaker() {
     mkdir -p "$(dirname "$CIRCUIT_STATE_FILE")"
-    
+
     if [[ ! -f "$CIRCUIT_STATE_FILE" ]]; then
         cat > "$CIRCUIT_STATE_FILE" <<'INNER_EOF'
 {
@@ -86,7 +86,7 @@ initialize_circuit_breaker() {
 }
 INNER_EOF
     fi
-    
+
     if [[ ! -f "$FAILURE_COUNT_FILE" ]]; then
         echo "0" > "$FAILURE_COUNT_FILE"
     fi
@@ -106,15 +106,15 @@ increment_failure_count() {
     local current_count=$(cat "$FAILURE_COUNT_FILE" 2>/dev/null || echo "0")
     local new_count=$((current_count + 1))
     echo "$new_count" > "$FAILURE_COUNT_FILE"
-    
+
     # 상태 업데이트
     local state_file="$CIRCUIT_STATE_FILE"
     local temp_file="${state_file}.tmp"
-    
+
     jq --arg count "$new_count" --arg timestamp "$(date -Iseconds)" \
        '.failure_count = ($count | tonumber) | .last_failure = $timestamp' \
        "$state_file" > "$temp_file" 2>/dev/null && mv "$temp_file" "$state_file"
-    
+
     echo "$new_count"
 }
 
@@ -123,11 +123,11 @@ change_circuit_state() {
     local new_state="$1"
     local state_file="$CIRCUIT_STATE_FILE"
     local temp_file="${state_file}.tmp"
-    
+
     jq --arg state "$new_state" --arg timestamp "$(date -Iseconds)" \
        '.state = $state | .last_state_change = $timestamp' \
        "$state_file" > "$temp_file" 2>/dev/null && mv "$temp_file" "$state_file"
-    
+
     echo "회로 상태가 $new_state로 변경되었습니다."
 }
 
@@ -136,7 +136,7 @@ execute_with_circuit_breaker() {
     local command="$1"
     local current_state=$(get_circuit_state)
     local failure_count=$(cat "$FAILURE_COUNT_FILE" 2>/dev/null || echo "0")
-    
+
     case "$current_state" in
         "OPEN")
             echo "회로가 열려있습니다. 명령 실행을 건너뜁니다."
@@ -149,33 +149,33 @@ execute_with_circuit_breaker() {
             echo "회로가 닫혀있습니다. 정상 실행을 시도합니다."
             ;;
     esac
-    
+
     # 명령 실행
     if eval "$command"; then
         # 성공 시 실패 횟수 초기화
         echo "0" > "$FAILURE_COUNT_FILE"
         echo "명령 실행 성공. 실패 횟수가 초기화되었습니다."
-        
+
         # HALF_OPEN에서 성공 시 CLOSED로 변경
         if [[ "$current_state" == "HALF_OPEN" ]]; then
             change_circuit_state "CLOSED"
         fi
-        
+
         return 0
     else
         # 실패 시 처리
         local new_failure_count=$(increment_failure_count)
         echo "명령 실행 실패. 실패 횟수: $new_failure_count"
-        
+
         # 실패 임계값 도달 시 회로 열기
         if [[ $new_failure_count -ge 5 ]]; then
             change_circuit_state "OPEN"
             echo "실패 임계값에 도달했습니다. 회로가 열렸습니다."
-            
+
             # 60초 후 HALF_OPEN으로 변경
             (sleep 60 && change_circuit_state "HALF_OPEN") &
         fi
-        
+
         return 1
     fi
 }
@@ -185,7 +185,7 @@ monitor_circuit_state() {
     local state=$(get_circuit_state)
     local failure_count=$(cat "$FAILURE_COUNT_FILE" 2>/dev/null || echo "0")
     local last_failure=$(jq -r '.last_failure // "N/A"' "$CIRCUIT_STATE_FILE" 2>/dev/null || echo "N/A")
-    
+
     echo "=== 회로 차단기 상태 ==="
     echo "현재 상태: $state"
     echo "실패 횟수: $failure_count"
@@ -231,12 +231,12 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     main "$@"
 fi
 EOF
-    
+
     chmod +x "$circuit_breaker_dir/circuit_breaker.sh"
-    
+
     # 회로 차단기 초기화
     "$circuit_breaker_dir/circuit_breaker.sh" init
-    
+
     log "✅ 회로 차단기 구현 완료: $circuit_breaker_dir"
     return 0
 }
@@ -244,10 +244,10 @@ EOF
 # === 자동 복구 메커니즘 구현 ===
 implement_auto_recovery() {
     log "🔧 자동 복구 메커니즘 구현 시작..."
-    
+
     local recovery_dir="$ERROR_RESULTS_DIR/auto_recovery"
     mkdir -p "$recovery_dir"
-    
+
     # 자동 복구 설정 파일 생성
     cat > "$recovery_dir/auto_recovery_config.json" <<EOF
 {
@@ -283,7 +283,7 @@ implement_auto_recovery() {
   ]
 }
 EOF
-    
+
     # 자동 복구 스크립트 생성
     cat > "$recovery_dir/auto_recovery.sh" <<'EOF'
 #!/usr/bin/env bash
@@ -301,9 +301,9 @@ log_recovery() {
 attempt_recovery() {
     local issue_type="$1"
     local retry_count="$2"
-    
+
     log_recovery "복구 시도: $issue_type (시도 $retry_count)"
-    
+
     case "$issue_type" in
         "backup_failure")
             # 백업 실패 복구 시도
@@ -324,7 +324,7 @@ attempt_recovery() {
             log_recovery "디스크 공간 정리 시도..."
             find var/backups -name "*.tar.gz" -mtime +30 -delete 2>/dev/null || true
             find var/logs -name "*.log" -mtime +7 -delete 2>/dev/null || true
-            
+
             local available_space=$(df . | tail -1 | awk '{print $4}')
             if [[ $available_space -gt 1000000 ]]; then
                 log_recovery "디스크 공간 정리 완료"
@@ -355,36 +355,36 @@ attempt_recovery() {
 # 자동 복구 실행
 execute_auto_recovery() {
     local issue_type="$1"
-    
+
     if [[ ! -f "$RECOVERY_CONFIG_FILE" ]]; then
         log_recovery "복구 설정 파일을 찾을 수 없음"
         return 1
     fi
-    
+
     # 설정에서 복구 전략 로드
     local max_retries=$(jq -r ".recovery_strategies.$issue_type.retry_count" "$RECOVERY_CONFIG_FILE" 2>/dev/null || echo "3")
     local fallback_action=$(jq -r ".recovery_strategies.$issue_type.fallback_action" "$RECOVERY_CONFIG_FILE" 2>/dev/null || echo "알 수 없음")
     local escalation_threshold=$(jq -r ".recovery_strategies.$issue_type.escalation_threshold" "$RECOVERY_CONFIG_FILE" 2>/dev/null || echo "3")
-    
+
     log_recovery "자동 복구 시작: $issue_type"
     log_recovery "최대 재시도: $max_retries, 폴백 액션: $fallback_action"
-    
+
     # 복구 시도
     for ((i=1; i<=max_retries; i++)); do
         if attempt_recovery "$issue_type" "$i"; then
             log_recovery "복구 성공!"
             return 0
         fi
-        
+
         if [[ $i -lt $max_retries ]]; then
             log_recovery "복구 실패. ${i}초 후 재시도..."
             sleep "$i"
         fi
     done
-    
+
     # 모든 복구 시도 실패
     log_recovery "모든 복구 시도 실패. 폴백 액션 실행: $fallback_action"
-    
+
     # 폴백 액션 실행
     case "$fallback_action" in
         "로컬 백업으로 전환")
@@ -403,23 +403,23 @@ execute_auto_recovery() {
             log_recovery "알 수 없는 폴백 액션: $fallback_action"
             ;;
     esac
-    
+
     # 에스컬레이션 필요 여부 확인
     if [[ $max_retries -ge $escalation_threshold ]]; then
         log_recovery "에스컬레이션 필요: 운영자 개입 요청"
         # 운영자 알림 발송 (실제로는 이메일이나 슬랙 등)
         echo "URGENT: $issue_type 복구 실패. 운영자 개입 필요." > "var/state/escalation_required.flag"
     fi
-    
+
     return 1
 }
 
 # 복구 상태 모니터링
 monitor_recovery_status() {
     local recovery_logs=$(find var/logs/stability/error_handling -name "auto_recovery_*.log" 2>/dev/null | head -5)
-    
+
     echo "=== 자동 복구 상태 모니터링 ==="
-    
+
     if [[ -n "$recovery_logs" ]]; then
         for log_file in $recovery_logs; do
             echo "로그 파일: $log_file"
@@ -430,7 +430,7 @@ monitor_recovery_status() {
     else
         echo "복구 로그 파일을 찾을 수 없음"
     fi
-    
+
     # 복구 플래그 파일 확인
     local flags=("local_backup_mode.flag" "local_mode.flag" "escalation_required.flag")
     echo "복구 플래그 상태:"
@@ -476,9 +476,9 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     main "$@"
 fi
 EOF
-    
+
     chmod +x "$recovery_dir/auto_recovery.sh"
-    
+
     log "✅ 자동 복구 메커니즘 구현 완료: $recovery_dir"
     return 0
 }
@@ -486,10 +486,10 @@ EOF
 # === 오류 격리 시스템 구현 ===
 implement_error_isolation() {
     log "🔧 오류 격리 시스템 구현 시작..."
-    
+
     local isolation_dir="$ERROR_RESULTS_DIR/error_isolation"
     mkdir -p "$isolation_dir"
-    
+
     # 오류 격리 설정 파일 생성
     cat > "$isolation_dir/error_isolation_config.json" <<EOF
 {
@@ -524,7 +524,7 @@ implement_error_isolation() {
   }
 }
 EOF
-    
+
     # 오류 격리 스크립트 생성
     cat > "$isolation_dir/error_isolation.sh" <<'EOF'
 #!/usr/bin/env bash
@@ -542,13 +542,13 @@ log_isolation() {
 create_isolation_boundary() {
     local component="$1"
     local isolation_level="$2"
-    
+
     log_isolation "격리 경계 생성: $component (수준: $isolation_level)"
-    
+
     # 격리 디렉토리 생성
     local isolation_dir="var/state/isolation_${component}_${isolation_level}"
     mkdir -p "$isolation_dir"
-    
+
     # 격리 상태 파일 생성
     cat > "$isolation_dir/isolation_status.json" <<'INNER_EOF'
 {
@@ -558,7 +558,7 @@ create_isolation_boundary() {
   "status": "ISOLATED"
 }
 INNER_EOF
-    
+
     # 격리 액션 실행
     case "$isolation_level" in
         "LOW")
@@ -581,7 +581,7 @@ INNER_EOF
             touch "var/state/emergency_recovery.flag"
             ;;
     esac
-    
+
     echo "$isolation_dir"
 }
 
@@ -589,9 +589,9 @@ INNER_EOF
 remove_isolation() {
     local component="$1"
     local isolation_dir="$2"
-    
+
     log_isolation "격리 해제: $component"
-    
+
     if [[ -d "$isolation_dir" ]]; then
         # 격리 상태 업데이트
         local status_file="$isolation_dir/isolation_status.json"
@@ -599,10 +599,10 @@ remove_isolation() {
             jq --arg timestamp "$(date -Iseconds)" '.status = "RELEASED" | .released_at = $timestamp' \
                "$status_file" > "${status_file}.tmp" 2>/dev/null && mv "${status_file}.tmp" "$status_file"
         fi
-        
+
         # 격리 플래그 파일 정리
         rm -f "$isolation_dir"/*.flag
-        
+
         log_isolation "격리 해제 완료: $component"
         return 0
     else
@@ -614,18 +614,18 @@ remove_isolation() {
 # 격리 상태 모니터링
 monitor_isolation_status() {
     local isolation_dirs=$(find var/state -name "isolation_*" -type d 2>/dev/null)
-    
+
     echo "=== 오류 격리 상태 모니터링 ==="
-    
+
     if [[ -n "$isolation_dirs" ]]; then
         for dir in $isolation_dirs; do
             local component=$(basename "$dir" | sed 's/isolation_\([^_]*\)_.*/\1/')
             local level=$(basename "$dir" | sed 's/isolation_[^_]*_\([^_]*\)/\1/')
             local status_file="$dir/isolation_status.json"
-            
+
             echo "컴포넌트: $component"
             echo "격리 수준: $level"
-            
+
             if [[ -f "$status_file" ]]; then
                 local status=$(jq -r '.status' "$status_file" 2>/dev/null || echo "UNKNOWN")
                 local isolated_at=$(jq -r '.isolated_at // "N/A"' "$status_file" 2>/dev/null || echo "N/A")
@@ -634,7 +634,7 @@ monitor_isolation_status() {
             else
                 echo "상태: UNKNOWN"
             fi
-            
+
             # 격리 플래그 파일 확인
             local flags=$(find "$dir" -name "*.flag" 2>/dev/null)
             if [[ -n "$flags" ]]; then
@@ -643,7 +643,7 @@ monitor_isolation_status() {
                     echo "  - $(basename "$flag")"
                 done
             fi
-            
+
             echo "---"
         done
     else
@@ -655,18 +655,18 @@ monitor_isolation_status() {
 test_isolation() {
     local test_component="test_backup_engine"
     local test_level="MEDIUM"
-    
+
     log_isolation "격리 테스트 시작: $test_component"
-    
+
     # 테스트 격리 생성
     local isolation_dir=$(create_isolation_boundary "$test_component" "$test_level")
-    
+
     if [[ -n "$isolation_dir" ]]; then
         log_isolation "테스트 격리 생성 성공: $isolation_dir"
-        
+
         # 5초 후 격리 해제
         sleep 5
-        
+
         if remove_isolation "$test_component" "$isolation_dir"; then
             log_isolation "테스트 격리 해제 성공"
         else
@@ -717,9 +717,9 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     main "$@"
 fi
 EOF
-    
+
     chmod +x "$isolation_dir/error_isolation.sh"
-    
+
     log "✅ 오류 격리 시스템 구현 완료: $isolation_dir"
     return 0
 }
@@ -727,47 +727,47 @@ EOF
 # === 오류 처리 강화 결과 통합 분석 ===
 analyze_error_handling_enhancement() {
     log "📊 오류 처리 강화 결과 통합 분석 시작..."
-    
+
     local analysis_file="$ERROR_RESULTS_DIR/error_handling_enhancement_analysis_$(date +%F).json"
-    
+
     # 각 강화 시스템 결과 수집
     local circuit_breaker_status="IMPLEMENTED"
     local auto_recovery_status="IMPLEMENTED"
     local error_isolation_status="IMPLEMENTED"
-    
+
     # 구현 상태 확인
     if [[ ! -f "$ERROR_RESULTS_DIR/circuit_breaker/circuit_breaker.sh" ]]; then
         circuit_breaker_status="FAILED"
     fi
-    
+
     if [[ ! -f "$ERROR_RESULTS_DIR/auto_recovery/auto_recovery.sh" ]]; then
         auto_recovery_status="FAILED"
     fi
-    
+
     if [[ ! -f "$ERROR_RESULTS_DIR/error_isolation/error_isolation.sh" ]]; then
         error_isolation_status="FAILED"
     fi
-    
+
     # 강화 점수 계산
     local enhancement_score=0
     local total_systems=3
     local implemented_systems=0
-    
+
     if [[ "$circuit_breaker_status" == "IMPLEMENTED" ]]; then
         enhancement_score=$((enhancement_score + 33))
         implemented_systems=$((implemented_systems + 1))
     fi
-    
+
     if [[ "$auto_recovery_status" == "IMPLEMENTED" ]]; then
         enhancement_score=$((enhancement_score + 34))
         implemented_systems=$((implemented_systems + 1))
     fi
-    
+
     if [[ "$error_isolation_status" == "IMPLEMENTED" ]]; then
         enhancement_score=$((enhancement_score + 33))
         implemented_systems=$((implemented_systems + 1))
     fi
-    
+
     # 통합 분석 결과 저장
     cat > "$analysis_file" <<EOF
 {
@@ -807,19 +807,19 @@ analyze_error_handling_enhancement() {
   ]
 }
 EOF
-    
+
     log "✅ 오류 처리 강화 결과 통합 분석 완료: $analysis_file"
     log "📊 오류 처리 강화 점수: ${enhancement_score}% (${implemented_systems}/${total_systems} 시스템)"
-    
+
     return 0
 }
 
 # === 오류 처리 강화 요약 리포트 생성 ===
 generate_error_handling_summary() {
     local summary_file="$ERROR_LOGS_DIR/error_handling_enhancement_summary_$(date +%F).md"
-    
+
     log "📊 오류 처리 강화 요약 리포트 생성: $summary_file"
-    
+
     # 분석 결과 로드
     local enhancement_score="N/A"
     local enhancement_grade="N/A"
@@ -827,7 +827,7 @@ generate_error_handling_summary() {
         enhancement_score=$(grep -o '"enhancement_score_percent": [0-9]*' "$ERROR_RESULTS_DIR/error_handling_enhancement_analysis_$(date +%F).json" | cut -d' ' -f2)
         enhancement_grade=$(grep -o '"enhancement_grade": "[^"]*"' "$ERROR_RESULTS_DIR/error_handling_enhancement_analysis_$(date +%F).json" | cut -d'"' -f4)
     fi
-    
+
     cat > "$summary_file" <<EOF
 # 🔧 Phase 6 Week 2 오류 처리 강화 요약 — $(date +%F)
 
@@ -903,47 +903,47 @@ generate_error_handling_summary() {
 
 ---
 
-> **💡 운영 팁**: 강화된 오류 처리 시스템을 활용하여 시스템 안정성을 지속적으로 향상시키세요.  
-> **📊 모니터링**: 강화 과정에서 시스템 성능을 지속적으로 모니터링하세요.  
+> **💡 운영 팁**: 강화된 오류 처리 시스템을 활용하여 시스템 안정성을 지속적으로 향상시키세요.
+> **📊 모니터링**: 강화 과정에서 시스템 성능을 지속적으로 모니터링하세요.
 > **🔄 반복**: 정기적인 테스트로 강화 효과를 검증하고 추가 개선을 진행하세요.
 EOF
-    
+
     log "✅ 오류 처리 강화 요약 리포트 생성 완료: $summary_file"
 }
 
 # === 메인 실행 로직 ===
 main() {
     log "🚀 Phase 6 Week 2 오류 처리 강화 시스템 시작"
-    
+
     # 락 획득
     acquire_lock
-    
+
     # 디렉토리 생성
     mkdir -p "$ERROR_LOGS_DIR" "$ERROR_RESULTS_DIR"
-    
+
     # 1) 회로 차단기 구현
     if ! implement_circuit_breaker; then
         log "❌ 회로 차단기 구현 실패"
     fi
-    
+
     # 2) 자동 복구 메커니즘 구현
     if ! implement_auto_recovery; then
         log "❌ 자동 복구 메커니즘 구현 실패"
     fi
-    
+
     # 3) 오류 격리 시스템 구현
     if ! implement_error_isolation; then
         log "❌ 오류 격리 시스템 구현 실패"
     fi
-    
+
     # 4) 오류 처리 강화 결과 통합 분석
     if ! analyze_error_handling_enhancement; then
         log "❌ 오류 처리 강화 결과 통합 분석 실패"
     fi
-    
+
     # 5) 오류 처리 강화 요약 리포트 생성
     generate_error_handling_summary
-    
+
     log "🎉 Phase 6 Week 2 오류 처리 강화 완료!"
     log "다음 단계: 장애 대응 및 복구 자동화 시스템 구축"
 }

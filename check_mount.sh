@@ -22,20 +22,3 @@ ls -la /dev/sd* 2>/dev/null || echo "/dev/sd* 디바이스 없음"
 echo ""
 echo "=== /proc/mounts 확인 ==="
 cat /proc/mounts | grep -E "(usb|USB|/mnt/|/media/)" || echo "USB 마운트 없음"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

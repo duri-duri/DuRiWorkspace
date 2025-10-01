@@ -77,8 +77,3 @@ done
 } > "$OUT/stats.txt"
 
 echo "DONE -> $OUT"
-
-
-
-
-

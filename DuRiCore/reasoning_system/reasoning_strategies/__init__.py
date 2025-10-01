@@ -6,32 +6,51 @@ DuRi 추론 시스템 - 추론 전략 패키지
 다양한 추론 전략들을 포함합니다.
 """
 
-from .deductive_reasoning import DeductiveReasoning, DeductiveRuleType, DeductivePremise, DeductiveConclusion, DeductiveRule, DeductiveAnalysis
-from .inductive_reasoning import InductiveReasoning, InductiveType, InductiveObservation, InductivePattern, InductiveGeneralization, InductiveAnalysis
-from .abductive_reasoning import AbductiveReasoning, AbductiveType, AbductiveObservation, AbductiveHypothesis, AbductiveExplanation, AbductiveAnalysis
+from .abductive_reasoning import (
+    AbductiveAnalysis,
+    AbductiveExplanation,
+    AbductiveHypothesis,
+    AbductiveObservation,
+    AbductiveReasoning,
+    AbductiveType,
+)
+from .deductive_reasoning import (
+    DeductiveAnalysis,
+    DeductiveConclusion,
+    DeductivePremise,
+    DeductiveReasoning,
+    DeductiveRule,
+    DeductiveRuleType,
+)
+from .inductive_reasoning import (
+    InductiveAnalysis,
+    InductiveGeneralization,
+    InductiveObservation,
+    InductivePattern,
+    InductiveReasoning,
+    InductiveType,
+)
 
 __all__ = [
     # Deductive Reasoning
-    'DeductiveReasoning',
-    'DeductiveRuleType',
-    'DeductivePremise',
-    'DeductiveConclusion',
-    'DeductiveRule',
-    'DeductiveAnalysis',
-    
+    "DeductiveReasoning",
+    "DeductiveRuleType",
+    "DeductivePremise",
+    "DeductiveConclusion",
+    "DeductiveRule",
+    "DeductiveAnalysis",
     # Inductive Reasoning
-    'InductiveReasoning',
-    'InductiveType',
-    'InductiveObservation',
-    'InductivePattern',
-    'InductiveGeneralization',
-    'InductiveAnalysis',
-    
+    "InductiveReasoning",
+    "InductiveType",
+    "InductiveObservation",
+    "InductivePattern",
+    "InductiveGeneralization",
+    "InductiveAnalysis",
     # Abductive Reasoning
-    'AbductiveReasoning',
-    'AbductiveType',
-    'AbductiveObservation',
-    'AbductiveHypothesis',
-    'AbductiveExplanation',
-    'AbductiveAnalysis'
+    "AbductiveReasoning",
+    "AbductiveType",
+    "AbductiveObservation",
+    "AbductiveHypothesis",
+    "AbductiveExplanation",
+    "AbductiveAnalysis",
 ]

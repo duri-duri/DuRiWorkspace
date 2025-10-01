@@ -18,7 +18,7 @@ groups:
         summary: "컨테이너 다운: {{ $labels.instance }}"
         description: "{{ $labels.job }} 컨테이너가 1분 이상 다운 상태입니다."
         runbook_url: "https://runbook.example/container-down"
-    
+
     # CPU 사용률 알람
     - alert: HighCPUUsage
       expr: rate(container_cpu_usage_seconds_total[5m]) * 100 > 80
@@ -31,7 +31,7 @@ groups:
         summary: "높은 CPU 사용률: {{ $labels.instance }}"
         description: "{{ $labels.instance }}의 CPU 사용률이 80%를 초과했습니다."
         runbook_url: "https://runbook.example/high-cpu"
-    
+
     - alert: CriticalCPUUsage
       expr: rate(container_cpu_usage_seconds_total[5m]) * 100 > 95
       for: 2m
@@ -43,7 +43,7 @@ groups:
         summary: "치명적 CPU 사용률: {{ $labels.instance }}"
         description: "{{ $labels.instance }}의 CPU 사용률이 95%를 초과했습니다."
         runbook_url: "https://runbook.example/critical-cpu"
-    
+
     # 메모리 사용률 알람
     - alert: HighMemoryUsage
       expr: (container_memory_usage_bytes / container_spec_memory_limit_bytes) * 100 > 85
@@ -56,7 +56,7 @@ groups:
         summary: "높은 메모리 사용률: {{ $labels.instance }}"
         description: "{{ $labels.instance }}의 메모리 사용률이 85%를 초과했습니다."
         runbook_url: "https://runbook.example/high-memory"
-    
+
     - alert: CriticalMemoryUsage
       expr: (container_memory_usage_bytes / container_spec_memory_limit_bytes) * 100 > 95
       for: 2m
@@ -68,7 +68,7 @@ groups:
         summary: "치명적 메모리 사용률: {{ $labels.instance }}"
         description: "{{ $labels.instance }}의 메모리 사용률이 95%를 초과했습니다."
         runbook_url: "https://runbook.example/critical-memory"
-    
+
     # 디스크 사용률 알람
     - alert: HighDiskUsage
       expr: (node_filesystem_avail_bytes / node_filesystem_size_bytes) * 100 < 20
@@ -81,7 +81,7 @@ groups:
         summary: "높은 디스크 사용률: {{ $labels.instance }}"
         description: "{{ $labels.instance }}의 디스크 사용률이 80%를 초과했습니다."
         runbook_url: "https://runbook.example/high-disk"
-    
+
     - alert: CriticalDiskUsage
       expr: (node_filesystem_avail_bytes / node_filesystem_size_bytes) * 100 < 10
       for: 2m
@@ -110,7 +110,7 @@ groups:
         summary: "높은 HTTP 에러율: {{ $labels.instance }}"
         description: "{{ $labels.instance }}의 5xx 에러율이 5%를 초과했습니다."
         runbook_url: "https://runbook.example/high-http-error-rate"
-    
+
     - alert: CriticalHTTPErrorRate
       expr: rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m]) > 0.1
       for: 2m
@@ -122,7 +122,7 @@ groups:
         summary: "치명적 HTTP 에러율: {{ $labels.instance }}"
         description: "{{ $labels.instance }}의 5xx 에러율이 10%를 초과했습니다."
         runbook_url: "https://runbook.example/critical-http-error-rate"
-    
+
     # 응답 시간 알람
     - alert: HighResponseTime
       expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 1
@@ -135,7 +135,7 @@ groups:
         summary: "높은 응답 시간: {{ $labels.instance }}"
         description: "{{ $labels.instance }}의 95%ile 응답 시간이 1초를 초과했습니다."
         runbook_url: "https://runbook.example/high-response-time"
-    
+
     - alert: CriticalResponseTime
       expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 5
       for: 2m
@@ -147,7 +147,7 @@ groups:
         summary: "치명적 응답 시간: {{ $labels.instance }}"
         description: "{{ $labels.instance }}의 95%ile 응답 시간이 5초를 초과했습니다."
         runbook_url: "https://runbook.example/critical-response-time"
-    
+
     # 처리량 알람
     - alert: LowThroughput
       expr: rate(http_requests_total[5m]) < 10
@@ -177,7 +177,7 @@ groups:
         summary: "PostgreSQL 높은 연결 수: {{ $labels.instance }}"
         description: "{{ $labels.instance }}의 활성 연결 수가 80을 초과했습니다."
         runbook_url: "https://runbook.example/postgres-high-connections"
-    
+
     # PostgreSQL 느린 쿼리 알람
     - alert: PostgreSQLSlowQueries
       expr: rate(pg_stat_database_tup_returned[5m]) < 1000
@@ -190,7 +190,7 @@ groups:
         summary: "PostgreSQL 느린 쿼리: {{ $labels.instance }}"
         description: "{{ $labels.instance }}에서 느린 쿼리가 감지되었습니다."
         runbook_url: "https://runbook.example/postgres-slow-queries"
-    
+
     # Redis 메모리 사용률 알람
     - alert: RedisHighMemoryUsage
       expr: (redis_memory_used_bytes / redis_memory_max_bytes) * 100 > 85
@@ -203,7 +203,7 @@ groups:
         summary: "Redis 높은 메모리 사용률: {{ $labels.instance }}"
         description: "{{ $labels.instance }}의 메모리 사용률이 85%를 초과했습니다."
         runbook_url: "https://runbook.example/redis-high-memory"
-    
+
     # Redis 연결 수 알람
     - alert: RedisHighConnections
       expr: redis_connected_clients > 100
@@ -233,7 +233,7 @@ groups:
         summary: "Prometheus 타겟 다운: {{ $labels.instance }}"
         description: "{{ $labels.job }} 타겟이 1분 이상 다운 상태입니다."
         runbook_url: "https://runbook.example/prometheus-target-down"
-    
+
     # Grafana 접근 불가 알람
     - alert: GrafanaUnavailable
       expr: up{job="grafana"} == 0
@@ -246,7 +246,7 @@ groups:
         summary: "Grafana 접근 불가"
         description: "Grafana 서비스에 접근할 수 없습니다."
         runbook_url: "https://runbook.example/grafana-unavailable"
-    
+
     # Alertmanager 알람
     - alert: AlertmanagerDown
       expr: up{job="alertmanager"} == 0
@@ -276,7 +276,7 @@ groups:
         summary: "높은 인증 실패율: {{ $labels.instance }}"
         description: "{{ $labels.instance }}에서 인증 실패가 급증했습니다."
         runbook_url: "https://runbook.example/high-auth-failures"
-    
+
     # 권한 거부 알람
     - alert: HighPermissionDenied
       expr: rate(http_requests_total{status="403"}[5m]) > 5
@@ -289,7 +289,7 @@ groups:
         summary: "높은 권한 거부율: {{ $labels.instance }}"
         description: "{{ $labels.instance }}에서 권한 거부가 급증했습니다."
         runbook_url: "https://runbook.example/high-permission-denied"
-    
+
     # 의심스러운 활동 알람
     - alert: SuspiciousActivity
       expr: rate(http_requests_total{status=~"4.."}[5m]) > 50

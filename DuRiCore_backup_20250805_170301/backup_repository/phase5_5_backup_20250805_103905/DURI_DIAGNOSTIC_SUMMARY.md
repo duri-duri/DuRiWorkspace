@@ -55,13 +55,13 @@ class DuriStateInspector:
         # 3. 의존성 매핑
         # 4. 연결성 테스트
         return SystemAnalysisReport()
-    
+
     def test_module_connectivity(self):
         # 1. import 테스트
         # 2. 함수 호출 테스트
         # 3. 데이터 흐름 테스트
         return ConnectivityReport()
-    
+
     def identify_problems(self):
         # 1. 단절 지점 발견
         # 2. 문제점 분류
@@ -167,5 +167,5 @@ cd /home/duri/DuRiWorkspace/DuRiCore
 
 ---
 
-*DuRi 진단 분석 서머리 작성: 2025-08-05*  
-*DuRiCore Development Team* 
+*DuRi 진단 분석 서머리 작성: 2025-08-05*
+*DuRiCore Development Team*

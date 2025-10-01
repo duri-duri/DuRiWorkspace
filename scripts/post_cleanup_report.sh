@@ -75,7 +75,7 @@ if [ -f "/tmp/metrics_before.txt" ] && [ -f "/tmp/metrics_after.txt" ]; then
     echo "📊 Repository size change:"
     BEFORE_SIZE=$(grep "size-pack" /tmp/metrics_before.txt | awk '{print $2}')
     AFTER_SIZE=$(grep "size-pack" /tmp/metrics_after.txt | awk '{print $2}')
-    
+
     if [ -n "$BEFORE_SIZE" ] && [ -n "$AFTER_SIZE" ]; then
         REDUCTION=$((BEFORE_SIZE - AFTER_SIZE))
         REDUCTION_PCT=$((REDUCTION * 100 / BEFORE_SIZE))

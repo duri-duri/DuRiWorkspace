@@ -42,7 +42,7 @@ log "🔄 3단계: 핸드오프 시그널 확인" | tee -a "$LOG_FILE"
 if [[ -f "$HANDOFF_ROOT/.handoff_READY" ]]; then
     SEQ=$(cat "$HANDOFF_ROOT/.handoff.seq" 2>/dev/null || echo 0)
     log "✅ 핸드오프 시그널 확인됨 (seq=$SEQ)" | tee -a "$LOG_FILE"
-    
+
     # 병원 콜드 동기 (백스톱)
     if [[ -x "/usr/local/bin/coldsync_hosp_from_usb.sh" ]]; then
         log "🔄 병원 콜드 동기 실행" | tee -a "$LOG_FILE"
@@ -53,5 +53,3 @@ else
 fi
 
 log "=== DuRi 캐스케이드 워커 완료 ===" | tee -a "$LOG_FILE"
-
-

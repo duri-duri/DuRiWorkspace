@@ -16,9 +16,9 @@
 ## 🛑 절대 잊지 말 것
 
 - 중복 파일은 반드시 모듈화. 복붙 구조는 장기적으로 제거한다.
-- `duri-core`는 전체 흐름의 **심장(heart)**.  
+- `duri-core`는 전체 흐름의 **심장(heart)**.
   → 통신, 데이터 흐름, 백업 모두 이곳을 중심으로 통제되어야 한다.
-- **Emotion vector**는 이 시스템의 공통 언어다.  
+- **Emotion vector**는 이 시스템의 공통 언어다.
   → 모든 모듈은 감정 벡터 기반으로 소통한다.
 
 ---
@@ -59,4 +59,4 @@
 | duri-brain     | 판단/추론 API               | ❌  | ❌              | CLI-only |
 | duri-evolution | 학습/변화 감지                | ❌  | ❌              | CLI-only |
 | duri-head      | **주 개발 GUI 터미널**         | ✅  | ✅              | VSCode, Cursor 허용 |
-| duri-control   | **보조 개발 + 현장 대응 터미널** | ✅  | ✅ (예외 허용)   | Cursor 개발 가능 | 
+| duri-control   | **보조 개발 + 현장 대응 터미널** | ✅  | ✅ (예외 허용)   | Cursor 개발 가능 |

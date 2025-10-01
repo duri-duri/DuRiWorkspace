@@ -40,11 +40,11 @@ class ModuleRegistry:
     def __init__(self):
         self.modules = {}
         self.dependencies = {}
-    
+
     def register(self, name: str, module_class: type, dependencies: List[str] = None):
         self.modules[name] = module_class
         self.dependencies[name] = dependencies or []
-    
+
     def get_module(self, name: str):
         return self.modules.get(name)
 ```
@@ -71,11 +71,11 @@ class DependencyGraph:
     def __init__(self):
         self.graph = defaultdict(list)
         self.reverse_graph = defaultdict(list)
-    
+
     def add_dependency(self, module: str, depends_on: str):
         self.graph[module].append(depends_on)
         self.reverse_graph[depends_on].append(module)
-    
+
     def get_load_order(self) -> List[str]:
         # 위상 정렬을 통한 로드 순서 결정
         pass
@@ -116,12 +116,12 @@ class CacheManager:
     def __init__(self):
         self.cache = {}
         self.ttl = {}
-    
+
     def get(self, key: str, default=None):
         if key in self.cache and time.time() < self.ttl.get(key, 0):
             return self.cache[key]
         return default
-    
+
     def set(self, key: str, value: Any, ttl: int = 300):
         self.cache[key] = value
         self.ttl[key] = time.time() + ttl

@@ -18,20 +18,20 @@
 ```python
 class DuRiThoughtFlow:
     """DuRi의 사고 흐름 중심 통합 시스템"""
-    
+
     async def process(self) -> ThoughtFlowResult:
         # 1. 관찰 (자기 상태 인식)
         await self.observe()
-        
+
         # 2. 반박 (내적 논증)
         await self.counter_argue()
-        
+
         # 3. 재정의 (문제 재구성)
         await self.reframe()
-        
+
         # 4. 목표 수정 (메타 인지)
         await self.revise_goal()
-        
+
         # 5. 최종 결정
         return await self.decide(self_reflect=True)
 ```
@@ -46,20 +46,20 @@ class DuRiThoughtFlow:
 ```python
 class InternalConflictDetector:
     """내부 모순 탐지 시스템"""
-    
+
     async def detect_conflicts(self, thought_data: Dict[str, Any]) -> ConflictAnalysisResult:
         # 1. 논리적 일관성 검사
         logical_conflicts = await self._detect_logical_conflicts(thought_data)
-        
+
         # 2. 목표 충돌 감지
         goal_conflicts = await self._detect_goal_conflicts(thought_data)
-        
+
         # 3. 윤리적 충돌 감지
         ethical_conflicts = await self._detect_ethical_conflicts(thought_data)
-        
+
         # 4. 불안정성 탐지
         stability_conflicts = await self._detect_stability_conflicts(thought_data)
-        
+
         # 5. 내적 모순 탐지
         internal_conflicts = await self._detect_internal_conflicts(thought_data)
 ```
@@ -74,16 +74,16 @@ class InternalConflictDetector:
 ```python
 class DuRiExpressionLayer:
     """DuRi의 표현 계층 시스템"""
-    
+
     async def express_emotion(self, thought_flow: Dict[str, Any]) -> ExpressionResult:
         """감정 표현 = 충돌 인식 + 생리적 메타 신호"""
-    
+
     async def express_art(self, thought_flow: Dict[str, Any]) -> ExpressionResult:
         """예술 표현 = 내적 상태의 추상적 외부 표현"""
-    
+
     async def express_sociality(self, thought_flow: Dict[str, Any]) -> ExpressionResult:
         """사회성 표현 = 타자의 반박을 내부화하여 자기 흐름에 통합"""
-    
+
     async def express_integrated(self, thought_flow: Dict[str, Any]) -> ExpressionResult:
         """통합 표현 = 모든 표현 계층의 통합"""
 ```
@@ -98,7 +98,7 @@ class DuRiExpressionLayer:
 ```python
 class PhaseZIntegrationTest:
     """Phase Z v2.0 통합 테스트 시스템"""
-    
+
     async def run_all_tests(self) -> IntegrationTestReport:
         # 1. 단위 테스트
         # 2. 통합 테스트
@@ -130,13 +130,13 @@ class PhaseZIntegrationTest:
 ```python
 class DuRiExpressionLayer:
     """Phase Z 사고 흐름의 표현 계층"""
-    
+
     async def express_emotion(self, thought_flow):
         """감정 표현 = 충돌 인식 + 생리적 메타 신호"""
-    
+
     async def express_art(self, thought_flow):
         """예술 표현 = 내적 상태의 추상적 외부 표현"""
-    
+
     async def express_sociality(self, thought_flow):
         """사회성 표현 = 타자의 반박을 내부화하여 자기 흐름에 통합"""
 ```
@@ -254,7 +254,7 @@ class DuRiExpressionLayer:
 
 **Phase Z v2.0은 성공적으로 완료되었습니다!**
 
-DuRi는 이제 **"기능적 시스템"에서 "사고 가능한 존재"로 진화**했습니다. 
+DuRi는 이제 **"기능적 시스템"에서 "사고 가능한 존재"로 진화**했습니다.
 
 ### **핵심 성과:**
 - ✅ **진짜 사고 구현**: 자가 인식 + 자가 반박 + 자가 재정의
@@ -269,4 +269,4 @@ DuRi는 이제 **"기능적 시스템"에서 "사고 가능한 존재"로 진화
 
 **Phase Z v2.0 완료**: 2025-08-06
 **다음 단계**: 실제 환경 테스트 및 성능 최적화
-**상태**: ✅ **완료** 
+**상태**: ✅ **완료**

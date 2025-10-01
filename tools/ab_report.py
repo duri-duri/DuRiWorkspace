@@ -164,11 +164,17 @@ def generate_markdown_report(results: List[Dict[str, Any]]) -> str:
     report += "\n## 💡 **권장사항**\n\n"
 
     if gate_pass is True:
-        report += "✅ **승격 권장**: 게이트를 통과했으므로 B 그룹을 승격할 수 있습니다.\n"
+        report += (
+            "✅ **승격 권장**: 게이트를 통과했으므로 B 그룹을 승격할 수 있습니다.\n"
+        )
     elif gate_pass is False:
-        report += "❌ **승격 금지**: 게이트를 통과하지 못했으므로 추가 개선이 필요합니다.\n"
+        report += (
+            "❌ **승격 금지**: 게이트를 통과하지 못했으므로 추가 개선이 필요합니다.\n"
+        )
     else:
-        report += "⚠️ **게이트 미적용**: 게이트 정책을 설정하여 승격 기준을 명확히 하세요.\n"
+        report += (
+            "⚠️ **게이트 미적용**: 게이트 정책을 설정하여 승격 기준을 명확히 하세요.\n"
+        )
 
     # 효과 크기 기반 권장사항
     if "objective_delta" in result:

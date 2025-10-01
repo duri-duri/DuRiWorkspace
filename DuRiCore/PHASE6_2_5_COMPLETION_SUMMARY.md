@@ -70,7 +70,7 @@ learning_optimization = await self.learning_optimizer.optimize_learning(
 
 #### **3. CLARION 최적화 적용**
 ```python
-def _apply_clarion_optimization(self, base_optimization: Dict[str, Any], 
+def _apply_clarion_optimization(self, base_optimization: Dict[str, Any],
                                clarion_result: Dict[str, Any]) -> Dict[str, Any]:
     # 패턴 강도 기반 효율성 보정
     # 학습 단계 기반 속도 조정
@@ -184,4 +184,4 @@ def _apply_clarion_optimization(self, base_optimization: Dict[str, Any],
 
 **완료일**: 2025-08-05
 **상태**: Phase 6.2.5 완료 ✅
-**다음 단계**: Phase 6.2.6 (시맨틱 지식 연결망) 시작 준비 완료 
+**다음 단계**: Phase 6.2.6 (시맨틱 지식 연결망) 시작 준비 완료

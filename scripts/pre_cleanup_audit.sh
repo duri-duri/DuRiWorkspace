@@ -38,7 +38,7 @@ echo "-----------------------------"
 jq -r '.must_exist[] | "\(.sha256)  \(.path)"' "$MANIFEST" | while read -r line; do
     sha256=$(echo "$line" | awk '{print $1}')
     path=$(echo "$line" | awk '{for(i=2;i<=NF;i++) printf "%s%s", $i, (i==NF?"":" ")}')
-    
+
     if ! echo "$sha256  $path" | sha256sum -c --status; then
         echo "❌ SHA256 MISMATCH: $path"
         echo "   Expected: $sha256"

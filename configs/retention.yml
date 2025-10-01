@@ -18,23 +18,3 @@ profiles:
   duri-full-weekly-monthly:
     level: FULL
     policy: "8w+monthly"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

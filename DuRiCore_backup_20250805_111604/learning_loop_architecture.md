@@ -2,7 +2,7 @@
 
 ## 📅 Phase 5 Day 1: 학습 루프 아키텍처 설계
 
-**설계 일시**: 2025-08-04  
+**설계 일시**: 2025-08-04
 **목표**: 기억 + 판단 변화 + 행동 진화 구조의 전체 아키텍처 설계
 
 ---
@@ -244,26 +244,26 @@ class IntegratedLearningLoop:
         self.action_system = ActionSystem()
         self.evolution_system = EvolutionSystem()
         self.feedback_system = FeedbackSystem()
-    
+
     async def process_input(self, input_data: Dict[str, Any]) -> LearningResult:
         # 1. 기억 저장
         memory_id = await self.memory_system.store_memory(input_data)
-        
+
         # 2. 판단 수행
         judgment = await self.judgment_system.make_decision(input_data)
-        
+
         # 3. 행동 실행
         action_result = await self.action_system.execute_action(judgment)
-        
+
         # 4. 결과 분석
         result_analysis = await self.action_system.analyze_result(action_result)
-        
+
         # 5. 진화 수행
         evolution_result = await self.evolution_system.evolve(result_analysis)
-        
+
         # 6. 피드백 수집
         feedback = await self.feedback_system.collect_feedback(result_analysis)
-        
+
         return LearningResult(
             memory_id=memory_id,
             judgment=judgment,
@@ -326,5 +326,5 @@ class IntegratedLearningLoop:
 
 ---
 
-*설계 완료: 2025-08-04 16:40:00*  
-*DuRiCore Development Team* 
+*설계 완료: 2025-08-04 16:40:00*
+*DuRiCore Development Team*

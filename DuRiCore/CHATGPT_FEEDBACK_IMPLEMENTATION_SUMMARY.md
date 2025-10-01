@@ -32,16 +32,16 @@ ChatGPT의 피드백이 매우 정확했습니다:
 # ABC와 ModuleMeta를 결합한 메타클래스
 class ABCModuleMeta(ABCMeta):
     """ABC와 ModuleMeta를 결합한 메타클래스"""
-    
+
     def __new__(cls, name: str, bases: tuple, namespace: dict):
         """새로운 클래스 생성 시 자동 등록"""
         module_class = super().__new__(cls, name, bases, namespace)
-        
+
         # BaseModule을 상속받는 클래스인지 확인 (BaseModule 자체는 제외)
-        if (name != 'BaseModule' and 
+        if (name != 'BaseModule' and
             (any(issubclass(base, BaseModule) for base in bases if isinstance(base, type)) or
              BaseModule in bases)):
-            
+
             # 모듈 이름 확인
             module_name = getattr(module_class, 'module_name', None)
             if module_name:
@@ -51,7 +51,7 @@ class ABCModuleMeta(ABCMeta):
                     # ... 등록 로직
                 except Exception as e:
                     logger.error(f"❌ 모듈 자동 등록 중 오류 발생 (메타클래스): {module_name} - {e}")
-        
+
         return module_class
 
 
@@ -69,15 +69,15 @@ class BaseModule(ABC, metaclass=ABCModuleMeta):
 
 #### **구현 내용**:
 ```python
-def register_module(name: str = None, dependencies: List[str] = None, 
+def register_module(name: str = None, dependencies: List[str] = None,
                    priority: ModulePriority = ModulePriority.NORMAL,
-                   version: str = "1.0.0", description: str = "", 
+                   version: str = "1.0.0", description: str = "",
                    author: str = "DuRi") -> Callable:
     """모듈 등록 데코레이터"""
     def decorator(cls: Type) -> Type:
         # 모듈 이름 결정
         module_name = name or getattr(cls, 'module_name', None) or cls.__name__
-        
+
         # 레지스트리에 등록
         registry = ModuleRegistry.get_instance()
         success = registry.register_module(
@@ -89,9 +89,9 @@ def register_module(name: str = None, dependencies: List[str] = None,
             description=description,
             author=author
         )
-        
+
         return cls
-    
+
     return decorator
 ```
 
@@ -111,10 +111,10 @@ def register_module(self, name: str, module_class: Type, ...) -> bool:
         if name in self.modules:
             logger.warning(f"⚠️ 모듈이 이미 등록되어 있습니다: {name}")
             return False
-        
+
         # 모듈 정보 생성 및 등록
         # ...
-        
+
     except Exception as e:
         logger.error(f"❌ 모듈 등록 실패: {name} - {e}")
         return False

@@ -58,7 +58,7 @@ cat > "$OUT_DIR/axis_network.dot" << 'EOF'
 digraph AxisNetwork {
     rankdir=LR;
     node [shape=box, style=filled];
-    
+
     // 축 노드 (파란색)
     subgraph cluster_axes {
         label="Axes (Core Functions)";
@@ -71,7 +71,7 @@ awk -F, 'NR>1 {print "        " $4 " [color=blue, fillcolor=lightblue];"}' "$MAN
 
 cat >> "$OUT_DIR/axis_network.dot" << 'EOF'
     }
-    
+
     // 태그 노드 (초록색)
     subgraph cluster_tags {
         label="Tags (Relationships)";
@@ -91,7 +91,7 @@ awk -F, 'NR>1 && $6!="" {
 
 cat >> "$OUT_DIR/axis_network.dot" << 'EOF'
     }
-    
+
     // 관계 엣지
 EOF
 
@@ -139,8 +139,3 @@ EOF
 echo "Graph generated -> $OUT_DIR"
 echo "Summary:"
 cat "$OUT_DIR/summary.txt"
-
-
-
-
-

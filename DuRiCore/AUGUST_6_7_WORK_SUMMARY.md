@@ -251,4 +251,3 @@ DuRi 시스템은 현재까지 구축된 reasoning / learning / monitoring / mem
 - **자동화된 최적화**: 100% 최적화 적용률
 
 **8월 6-7일 작업 완료! 🎯**
-

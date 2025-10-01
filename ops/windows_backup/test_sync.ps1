@@ -16,6 +16,3 @@ robocopy $SrcReports $Idst *.* /E /R:2 /W:1 /MT:$Threads /NP /LOG:$Ilog
 Write-Host "✅ test sync done. Logs:" -ForegroundColor Green
 Write-Host "  - $Hlog"
 Write-Host "  - $Ilog"
-
-
-

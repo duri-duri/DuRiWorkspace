@@ -8,10 +8,16 @@
 from fastapi import APIRouter, Request, status
 from schemas.emotion import EmotionData
 from schemas.responses import BaseResponse
-from services.emotion_service import analyze_emotion, store_emotion_data, generate_recommendation
+from services.emotion_service import (
+    analyze_emotion,
+    generate_recommendation,
+    store_emotion_data,
+)
+
 from utils.error_handler import handle_internal_error
 
 router = APIRouter()
+
 
 @router.post("/", response_model=BaseResponse)
 async def emotion_endpoint(request: Request, payload: EmotionData):
@@ -25,10 +31,7 @@ async def emotion_endpoint(request: Request, payload: EmotionData):
         return BaseResponse(
             status="success",
             message="감정 데이터가 성공적으로 처리되었습니다",
-            data={
-                "analysis": analysis,
-                "recommendation": recommendation
-            }
+            data={"analysis": analysis, "recommendation": recommendation},
         )
     except Exception as exc:
-        return handle_internal_error(request, exc) 
+        return handle_internal_error(request, exc)

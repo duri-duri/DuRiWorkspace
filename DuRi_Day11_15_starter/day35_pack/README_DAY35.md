@@ -38,4 +38,3 @@ python tools/pareto.py --inputs out_*.json
 ## Next (Day36)
 - 동일 조건에서 A/B(가중치 프리셋 또는 시스템 파라미터)로 여러 샘플을 수집 → `evaluate_objective.py`로 J 산출 → `ab_test_runner.py`로 차이 검정.
 ```
-

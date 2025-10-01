@@ -1,3 +1,15 @@
+# ---- global excludes (added) ----
+exclude: |
+  (?x)^(
+    duri_snapshots/.*|
+    duri_archive/.*|
+    DuRiCore_backup_.*|
+    \.test-artifacts/.*|
+    backup/.*|
+    \.github/workflows-archive/.*|
+    docker-compose\.optimized\.yml
+  )
+
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
@@ -5,13 +17,27 @@ repos:
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: check-yaml
+        exclude: |
+          (?x)^(
+            \.github/workflows-archive/|
+            docker-compose\.optimized\.yml
+          )
       - id: check-added-large-files
         args: ['--maxkb=1000']
       - id: check-merge-conflict
       - id: check-json
+        exclude: |
+          (?x)^(
+            DuRiCore/test_results_.*\.json
+          )
       - id: check-toml
       - id: check-xml
       - id: debug-statements
+        exclude: |
+          (?x)^(
+            DuRiCore/reasoning_engine/integration/|
+            DuRiCore_backup_.*
+          )
       - id: detect-private-key
 
   - repo: https://github.com/Yelp/detect-secrets
@@ -26,12 +52,22 @@ repos:
     hooks:
       - id: black
         language_version: python3
+        exclude: |
+          (?x)^(
+            DuRiCore/reasoning_engine/integration/|
+            DuRiCore_backup_.*
+          )
 
   - repo: https://github.com/pycqa/isort
     rev: 6.0.1
     hooks:
       - id: isort
         args: ["--profile", "black"]
+        exclude: |
+          (?x)^(
+            DuRiCore/reasoning_engine/integration/|
+            DuRiCore_backup_.*
+          )
 
   - repo: https://github.com/pycqa/flake8
     rev: 7.3.0

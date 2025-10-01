@@ -12,7 +12,7 @@ for lvl in CORE EXTENDED FULL; do
     echo "- ${lvl}: $(basename "${f}")  ($(du -h "${f}" | awk '{print $1}'))"
     s="$(ls -t ${BASE}/SHA256SUMS.${lvl}.*.txt 2>/dev/null | head -n1 || true)"
     [[ -n "${s}" ]] && echo "  sha256sum: ${s##*/}"
-    
+
     # --- manifest.full.json 상태 표시 (FULL 레벨만) ---
     if [[ "$lvl" == "FULL" ]]; then
       MF_FULL="${BASE}/manifest.full.json"

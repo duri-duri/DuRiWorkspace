@@ -1,1 +1,1 @@
-# Configuration package for DuRi Emotion Processing System 
+# Configuration package for DuRi Emotion Processing System

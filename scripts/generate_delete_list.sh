@@ -51,7 +51,7 @@ echo ""
 if [ "$DELETE_COUNT" -gt 0 ]; then
     echo "📝 Top 20 deletion candidates:"
     head -20 /tmp/to_delete.txt | sed 's/^/   - /'
-    
+
     if [ "$DELETE_COUNT" -gt 20 ]; then
         echo "... and $((DELETE_COUNT - 20)) more files"
     fi

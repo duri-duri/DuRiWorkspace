@@ -5,12 +5,15 @@
 /health, /info 엔드포인트를 관리합니다.
 """
 
-from fastapi import APIRouter, Request
-from schemas.responses import BaseResponse
-from utils.error_handler import handle_internal_error
 from datetime import datetime
 
+from fastapi import APIRouter, Request
+from schemas.responses import BaseResponse
+
+from utils.error_handler import handle_internal_error
+
 router = APIRouter()
+
 
 @router.get("/", response_model=BaseResponse)
 async def health_check(request: Request):
@@ -19,10 +22,11 @@ async def health_check(request: Request):
             status="healthy",
             message="DuRi Brain 모듈 정상 동작 중",
             data=None,
-            timestamp=datetime.now()
+            timestamp=datetime.now(),
         )
     except Exception as exc:
         return handle_internal_error(request, exc)
+
 
 @router.get("/info", response_model=BaseResponse)
 async def info(request: Request):
@@ -36,9 +40,9 @@ async def info(request: Request):
                 "description": "DuRi Brain 모듈 - 감정 처리 및 학습 시스템",
                 "module": "brain",
                 "endpoints": ["/health", "/info", "/emotion", "/process"],
-                "timestamp": datetime.now().isoformat()
+                "timestamp": datetime.now().isoformat(),
             },
-            timestamp=datetime.now()
+            timestamp=datetime.now(),
         )
     except Exception as exc:
-        return handle_internal_error(request, exc) 
+        return handle_internal_error(request, exc)

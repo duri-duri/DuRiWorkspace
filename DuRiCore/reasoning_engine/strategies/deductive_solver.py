@@ -7,15 +7,20 @@ DuRiCore Phase 3: 연역적 추론 전략
 """
 
 from __future__ import annotations
-from typing import Dict, Any
-from DuRiCore.reasoning_system.reasoning_strategies.deductive_reasoning import DeductiveReasoning
+
+from typing import Any, Dict
+
+from DuRiCore.reasoning_system.reasoning_strategies.deductive_reasoning import (
+    DeductiveReasoning,
+)
+
 
 class DeductiveSolver:
     """연역적 추론 전략: 기존 DeductiveReasoning 활용"""
-    
+
     def __init__(self):
         self.reasoner = DeductiveReasoning()
-    
+
     def solve(self, data: Dict[str, Any]) -> Dict[str, Any]:
         """연역적 추론 실행"""
         q = str(data.get("query", "")).strip()

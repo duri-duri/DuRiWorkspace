@@ -7,6 +7,3 @@ powershell -NoProfile -ExecutionPolicy Bypass -File ".\duri_backup_automation.ps
 echo.
 echo Done. Check logs under H:\DuRiBackup\_logs and I:\DuRiBackup\_logs
 pause
-
-
-

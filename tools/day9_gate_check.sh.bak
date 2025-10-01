@@ -57,30 +57,30 @@ for S in "${SEEDS[@]}"; do
     --seed "$S" \
     --out "var/reports/day9_latency_result_${S}.json" \
     --save-samples "var/reports/day9_latency_samples_${S}.json"
-  
+
   echo "[GATE] Day 9 스위프 실행 (seed=${S})..."
   python3 tools/day9_sweep.py --seed "$S" \
     --out "var/reports/day9_sim_sweep_${S}.json"
-  
+
   # 단일 측정 p95 수집
   P95_VALUE=$(python3 -c "import json; print(json.load(open('var/reports/day9_latency_result_${S}.json'))['p95_ms'])")
   P95_LIST+=("$P95_VALUE")
-  
+
   # 단일 측정 카운트 집계 (Wilson 상한 계산용)
   TO_COUNT=$(( TO_COUNT + $(jq -r '.timeouts' "var/reports/day9_latency_result_${S}.json") ))
   MI_COUNT=$(( MI_COUNT + $(jq -r '.missings' "var/reports/day9_latency_result_${S}.json") ))
   N_COUNT=$(( N_COUNT + $(jq -r '.total'    "var/reports/day9_latency_result_${S}.json") ))
-  
+
   # 스위프 전역 최악값 누적
   TO=$(python3 -c "import json; print(max(row['timeout_rate'] for row in json.load(open('var/reports/day9_sim_sweep_${S}.json'))))")
   P9=$(python3 -c "import json; print(max(row['p95_ms'] for row in json.load(open('var/reports/day9_sim_sweep_${S}.json'))))")
   MI=$(python3 -c "import json; print(max(row['missing_rate'] for row in json.load(open('var/reports/day9_sim_sweep_${S}.json'))))")
-  
+
   # 최대값 업데이트
   SWEEP_MAX_TO=$(python3 -c "print(max($SWEEP_MAX_TO, $TO))")
   SWEEP_MAX_P95=$(python3 -c "print(max($SWEEP_MAX_P95, $P9))")
   SWEEP_MAX_MI=$(python3 -c "print(max($SWEEP_MAX_MI, $MI))")
-  
+
   echo "[INFO] Seed ${S}: p95=${P95_VALUE}ms, max_timeout=${TO}, max_p95=${P9}ms, max_missing=${MI}"
 done
 
@@ -341,21 +341,21 @@ try:
     # 설정 제공자 로드
     from DuRiCore.config_new.provider import build_provider
     provider = build_provider()
-    
+
     # 임계값 로드
     to_thr = float(provider.get("day9.alert_timeout_rate", 0.02))
     p95_thr = float(provider.get("day9.alert_latency_p95_ms", 1500))
     mi_thr = float(provider.get("day9.alert_missing_rate", 0.005))
-    
+
     print(f"[INFO] 스위프 전역 임계값: timeout_rate={to_thr}, p95_ms={p95_thr}ms, missing_rate={mi_thr}")
-    
+
     # Seed-matrix에서 누적된 최대값 사용
     max_to = float("${SWEEP_MAX_TO}")
     max_p95 = float("${SWEEP_MAX_P95}")
     max_mi = float("${SWEEP_MAX_MI}")
-    
+
     print(f"[INFO] 스위프 전역 최대값: timeout_rate={max_to}, p95_ms={max_p95}ms, missing_rate={max_mi}")
-    
+
     # 전역 판정
     fails = []
     if not (max_to <= to_thr):
@@ -364,7 +364,7 @@ try:
         fails.append(f"sweep_p95 {max_p95} > {p95_thr}")
     if not (max_mi <= mi_thr):
         fails.append(f"sweep_missing_rate {max_mi} > {mi_thr}")
-    
+
     if fails:
         # 기존 JUnit에 스위프 실패 케이스 추가
         junit_path = Path("var/reports/junit_day9_alerts.xml")
@@ -379,12 +379,12 @@ try:
                         name = fail.split()[0]
                         content += f'  <testcase classname="alerts" name="{name}"><failure message="{fail}"></failure></testcase>\n'
                     content += '</testsuite>'
-                    
+
                     # 파일에 다시 쓰기
                     f.seek(0)
                     f.write(content)
                     f.truncate()
-        
+
         print("SWEEP_FAILS:", len(fails))
         print("FAILURES:", "; ".join(fails))
         sys.exit(1)
@@ -471,7 +471,7 @@ wilson_ub_py='
 import sys,math
 # args: x n alpha
 x=int(sys.argv[1]); n=int(sys.argv[2]); alpha=float(sys.argv[3])
-if n<=0: 
+if n<=0:
     print(0.0); sys.exit(0)
 z=1.959963984540054 # for 95%
 phat=x/n

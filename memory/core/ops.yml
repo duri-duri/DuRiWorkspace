@@ -47,5 +47,3 @@ monitoring:
     - "canary_golden_accuracy >= 0.98"
     - "bundle_verify_fail_total = 0"
     - "staleness_core_days <= 180"
-
-

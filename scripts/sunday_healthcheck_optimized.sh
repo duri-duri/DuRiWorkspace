@@ -52,16 +52,16 @@ get_disk_usage() {
 # ---- 1) 시스템 기본 상태 점검 ----
 check_system_basics() {
     banner "1) 시스템 기본 상태 점검"
-    
+
     # 시스템 부하 확인
     local load=$(get_system_load)
     local memory=$(get_memory_usage)
     local disk=$(get_disk_usage)
-    
+
     log "시스템 부하: $load"
     log "메모리 사용량: $memory"
     log "디스크 사용량: $disk%"
-    
+
     # 임계값 체크 (부동소수 안전 비교)
     load1="$(cut -d' ' -f1 /proc/loadavg)"
     threshold="${LOAD_THRESHOLD:-2.0}"
@@ -70,13 +70,13 @@ check_system_basics() {
     else
         ok "시스템 부하 정상: $load"
     fi
-    
+
     if awk -v m="${memory%.*}" 'BEGIN{exit !(m>80)}'; then
         warn "메모리 사용량이 높습니다: $memory"
     else
         ok "메모리 사용량 정상: $memory"
     fi
-    
+
     if awk -v d="$disk" 'BEGIN{exit !(d>85)}'; then
         warn "디스크 사용량이 높습니다: $disk%"
     else
@@ -87,7 +87,7 @@ check_system_basics() {
 # ---- 2) 핵심 스크립트 존재 확인 ----
 check_core_scripts() {
     banner "2) 핵심 스크립트 존재 확인"
-    
+
     local scripts=(
         "scripts/duri_backup_phase1.sh"
         "scripts/run_health_and_mark.sh"
@@ -97,7 +97,7 @@ check_core_scripts() {
         "scripts/ops_alert.sh"
         "tools/canary_guard.py"
     )
-    
+
     local missing=0
     for script in "${scripts[@]}"; do
         if [[ -f "$ROOT/$script" ]]; then
@@ -107,7 +107,7 @@ check_core_scripts() {
             ((missing++))
         fi
     done
-    
+
     if [[ $missing -eq 0 ]]; then
         ok "모든 핵심 스크립트 존재"
     else
@@ -119,19 +119,19 @@ check_core_scripts() {
 # ---- 3) 학습 엔진 성능 테스트 ----
 test_learning_engine() {
     banner "3) 학습 엔진 성능 테스트"
-    
+
     if [[ ! -f "$ROOT/test_learning_engine.py" ]]; then
         ng "test_learning_engine.py 없음"
         return 1
     fi
-    
+
     local start_time=$(date +%s)
     cd "$ROOT"
-    
+
     # 성능 측정
     local duration=$(measure_performance python3 test_learning_engine.py > /dev/null 2>&1)
     local exit_code=$?
-    
+
     if [[ $exit_code -eq 0 ]]; then
         ok "학습 엔진 테스트 성공 (${duration}s)"
         log "학습 엔진 실행 시간: ${duration}초"
@@ -144,15 +144,15 @@ test_learning_engine() {
 # ---- 4) 백업 시스템 상태 확인 ----
 check_backup_system() {
     banner "4) 백업 시스템 상태 확인"
-    
+
     # 최근 백업 파일 확인
     local latest_full=$(find "$FULL_DIR" -name "FULL__*.tar.*" -type f -printf '%T@ %p\n' 2>/dev/null | sort -n | tail -1 | cut -d' ' -f2-)
     local latest_incr=$(find "$INCR_DIR" -name "INCR__*.tar.*" -type f -printf '%T@ %p\n' 2>/dev/null | sort -n | tail -1 | cut -d' ' -f2-)
-    
+
     if [[ -n "$latest_full" ]]; then
         local full_age=$(( $(date +%s) - $(stat -c %Y "$latest_full") ))
         local full_age_hours=$(( full_age / 3600 ))
-        
+
         if [[ $full_age_hours -lt 48 ]]; then
             ok "최근 FULL 백업 존재 (${full_age_hours}시간 전)"
         else
@@ -161,11 +161,11 @@ check_backup_system() {
     else
         ng "FULL 백업 파일 없음"
     fi
-    
+
     if [[ -n "$latest_incr" ]]; then
         local incr_age=$(( $(date +%s) - $(stat -c %Y "$latest_incr") ))
         local incr_age_hours=$(( incr_age / 3600 ))
-        
+
         if [[ $incr_age_hours -lt 24 ]]; then
             ok "최근 INCR 백업 존재 (${incr_age_hours}시간 전)"
         else
@@ -179,16 +179,16 @@ check_backup_system() {
 # ---- 5) Canary 시스템 상태 확인 ----
 check_canary_system() {
     banner "5) Canary 시스템 상태 확인"
-    
+
     if [[ ! -f "$ROOT/tools/canary_guard.py" ]]; then
         ng "canary_guard.py 없음"
         return 1
     fi
-    
+
     # Canary 시스템 테스트
     local duration=$(measure_performance python3 "$ROOT/tools/canary_guard.py" > /dev/null 2>&1)
     local exit_code=$?
-    
+
     if [[ $exit_code -eq 0 ]]; then
         ok "Canary 시스템 정상 (${duration}s)"
     else
@@ -200,21 +200,21 @@ check_canary_system() {
 # ---- 6) 메일 라우팅 테스트 ----
 test_mail_routing() {
     banner "6) 메일 라우팅 테스트"
-    
+
     # msmtp 설정 확인
     if ! command -v msmtp >/dev/null 2>&1; then
         warn "msmtp 명령어 없음 (메일 테스트 스킵)"
         return 0
     fi
-    
+
     # 간단한 테스트 메일 전송
     local test_subject="[HEALTHCHECK] $(date +%F_%H%M%S)"
     local test_body="DuRi 시스템 안정성 점검 테스트"
-    
+
     echo "Subject: $test_subject" > /tmp/test_mail.txt
     echo "" >> /tmp/test_mail.txt
     echo "$test_body" >> /tmp/test_mail.txt
-    
+
     # 테스트 전송 (실제 전송은 하지 않고 설정만 확인)
     if msmtp --serverinfo > /dev/null 2>&1; then
         ok "메일 서버 연결 정상"
@@ -226,10 +226,10 @@ test_mail_routing() {
 # ---- 7) 통합 성능 측정 ----
 measure_integrated_performance() {
     banner "7) 통합 성능 측정"
-    
+
     # 전체 시스템 초기화 시간 측정
     local start_time=$(date +%s.%N)
-    
+
     # 주요 모듈들 로드 테스트
     cd "$ROOT"
     python3 -c "
@@ -243,10 +243,10 @@ except Exception as e:
     print(f'LearningEngine 로드 실패: {e}')
     sys.exit(1)
 " > /dev/null 2>&1
-    
+
     local end_time=$(date +%s.%N)
     local duration=$(echo "$end_time - $start_time" | bc -l)
-    
+
     if [[ $? -eq 0 ]]; then
         ok "통합 시스템 로드 성공 (${duration}s)"
         log "통합 시스템 로드 시간: ${duration}초"
@@ -259,11 +259,11 @@ except Exception as e:
 # ---- 8) 최종 안정성 평가 ----
 evaluate_stability() {
     banner "8) 최종 안정성 평가"
-    
+
     local total_checks=7
     local passed_checks=0
     local failed_checks=0
-    
+
     # 각 섹션 결과 집계
     if [[ $system_basics_ok -eq 1 ]]; then ((passed_checks++)); else ((failed_checks++)); fi
     if [[ $core_scripts_ok -eq 1 ]]; then ((passed_checks++)); else ((failed_checks++)); fi
@@ -272,13 +272,13 @@ evaluate_stability() {
     if [[ $canary_system_ok -eq 1 ]]; then ((passed_checks++)); else ((failed_checks++)); fi
     if [[ $mail_routing_ok -eq 1 ]]; then ((passed_checks++)); else ((failed_checks++)); fi
     if [[ $integrated_performance_ok -eq 1 ]]; then ((passed_checks++)); else ((failed_checks++)); fi
-    
+
     local stability_score=$(echo "scale=2; $passed_checks / $total_checks" | bc -l)
     local stability_percentage=$(echo "scale=0; $stability_score * 100" | bc -l)
-    
+
     log "통과한 검사: $passed_checks/$total_checks"
     log "안정성 점수: $stability_score ($stability_percentage%)"
-    
+
     if [[ $stability_percentage -ge 95 ]]; then
         ok "시스템 안정성 우수: $stability_percentage%"
         echo "🎉 안정성 ≥ 0.95 → 90일 계획 재개 GO!"
@@ -297,10 +297,10 @@ evaluate_stability() {
 # ---- 메인 실행 함수 ----
 main() {
     local mode="${1:---full}"
-    
+
     log "=== DuRi 일요일 시스템 안정성 점검 시작 ==="
     log "모드: $mode, 시간: $(date)"
-    
+
     # 결과 변수 초기화
     system_basics_ok=0
     core_scripts_ok=0
@@ -309,7 +309,7 @@ main() {
     canary_system_ok=0
     mail_routing_ok=0
     integrated_performance_ok=0
-    
+
     # 각 섹션 실행 및 결과 저장
     check_system_basics && system_basics_ok=1
     check_core_scripts && core_scripts_ok=1
@@ -318,14 +318,14 @@ main() {
     check_canary_system && canary_system_ok=1
     test_mail_routing && mail_routing_ok=1
     measure_integrated_performance && integrated_performance_ok=1
-    
+
     # 최종 평가
     evaluate_stability
     local final_result=$?
-    
+
     log "=== DuRi 일요일 시스템 안정성 점검 완료 ==="
     log "최종 결과: $([ $final_result -eq 0 ] && echo '성공' || echo '실패')"
-    
+
     return $final_result
 }
 

@@ -85,14 +85,3 @@ print(f'Total days processed: {len(day_results)}')
 mkdir -p "$AXIS/day34"
 cp "$OUT"/day_*.json "$OUT/summary_day08_34.json" "$AXIS/day34/" 2>/dev/null || true
 echo "[OK] Verification sweep complete → $AXIS/day34/summary_day08_34.json"
-
-
-
-
-
-
-
-
-
-
-

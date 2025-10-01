@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
-from flask import Flask, request, jsonify
-import os, json
+import json
+import os
 from datetime import datetime
 
+from flask import Flask, jsonify, request
+
 EVOLUTION_LOG = "/data/evolution_data/evolution_log.json"
+
 
 def get_recent_result_for(emotion):
     """가장 최근 해당 감정의 결과를 찾는다"""
@@ -21,7 +24,9 @@ def get_recent_result_for(emotion):
             return exp.get("result")
     return None
 
+
 app = Flask(__name__)
+
 
 @app.route("/brain", methods=["POST"])
 def brain_decision():
@@ -40,6 +45,7 @@ def brain_decision():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8081))

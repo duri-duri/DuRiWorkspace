@@ -133,5 +133,5 @@ cd /home/duri/DuRiWorkspace/DuRiCore
 
 ---
 
-*DuRi 진단 결과 서머리 작성: 2025-08-05*  
-*DuRiCore Development Team* 
+*DuRi 진단 결과 서머리 작성: 2025-08-05*
+*DuRiCore Development Team*

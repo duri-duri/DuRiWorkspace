@@ -17,7 +17,7 @@ show_progress_bar() {
     local filled=$((current * width / total))
     local empty=$((width - filled))
     local percent=$((current * 100 / total))
-    
+
     printf "\r["
     printf "%${filled}s" | tr ' ' '█'
     printf "%${empty}s" | tr ' ' '░'
@@ -29,7 +29,7 @@ show_step_progress() {
     local total_steps=$2
     local current_step=$3
     local message="$4"
-    
+
     echo -e "\n[${current_step}/${total_steps}] ${step}: ${message}"
 }
 
@@ -37,10 +37,10 @@ show_file_progress() {
     local current_file="$1"
     local current_count=$2
     local total_count=$3
-    
+
     # 진행률 바 업데이트
     show_progress_bar "$current_count" "$total_count"
-    
+
     # 현재 파일 정보 (긴 파일명은 줄임)
     local display_file=$(basename "$current_file")
     if [[ ${#display_file} -gt 40 ]]; then
@@ -117,9 +117,9 @@ DEST_DESK="${DEST_DESKTOP_DIR}/${ARCH_NAME}"
 # exclude 규칙 구성
 EX_ARGS=()
 if [[ -n "${EXCLUDES_FILE}" && -f "${EXCLUDES_FILE}" ]]; then
-  while IFS= read -r p; do 
-    [[ -z "$p" || "$p" =~ ^# ]] && continue; 
-    EX_ARGS+=(--exclude="$p"); 
+  while IFS= read -r p; do
+    [[ -z "$p" || "$p" =~ ^# ]] && continue;
+    EX_ARGS+=(--exclude="$p");
   done < "${EXCLUDES_FILE}"
 fi
 
@@ -164,7 +164,7 @@ show_step_progress "zstd 압축" 4 3 "zstd 압축 중..."
 if [[ -n "$USB" && -d "$USB" ]]; then
   log "📁 USB 백업 시작: ${DEST_USB}"
   echo "USB 백업 진행률:"
-  
+
   if command -v pv >/dev/null 2>&1; then
       # pv로 진행률 표시
       pv "${tmp_tar}" | zstd -T0 -19 -f -o "${DEST_USB}" 2>>"$RUNLOG"
@@ -172,7 +172,7 @@ if [[ -n "$USB" && -d "$USB" ]]; then
       # 기본 zstd 실행
       zstd -T0 -19 -f "${tmp_tar}" -o "${DEST_USB}" 2>>"$RUNLOG"
   fi
-  
+
   if [[ $? -eq 0 ]]; then
     log "✅ USB 백업 완료: ${DEST_USB}"
   else
@@ -209,7 +209,7 @@ if [[ "$MODE" == "full" ]]; then
     IMG="${USB}/duri2.img"
     if [[ -e "$IMG" ]]; then
       log "🔍 USB 롤백 검증 시작..."
-      
+
       MNT="/mnt/duri2_usb"
       mkdir -p "$MNT" 2>/dev/null || true
       LOOP="$(losetup -f --show "$IMG" 2>/dev/null)" || { log "[WARN] losetup 실패, 검증 스킵"; exit 0; }
@@ -217,7 +217,7 @@ if [[ "$MODE" == "full" ]]; then
 
       log "mkfs.ext4 -F ${LOOP}"
       mkfs.ext4 -F -L DURI2 "$LOOP" >>"$RUNLOG" 2>&1 || { log "[WARN] mkfs 실패, 검증 스킵"; exit 0; }
-      
+
       log "mount ${LOOP} ${MNT}"
       mount "$LOOP" "$MNT" 2>/dev/null || { log "[WARN] mount 실패, 검증 스킵"; exit 0; }
 
@@ -228,7 +228,7 @@ if [[ "$MODE" == "full" ]]; then
       ORIG_COUNT=$(find "${SRC_DIR}" -type f 2>/dev/null | wc -l)
       REST_COUNT=$(find "${MNT}" -type f 2>/dev/null | wc -l)
       log "compare count: orig=${ORIG_COUNT} restored=${REST_COUNT}"
-      
+
       if [[ "$ORIG_COUNT" -gt 0 && "$REST_COUNT" -gt 0 ]]; then
         RESTORE_RATIO=$(echo "scale=1; $REST_COUNT * 100 / $ORIG_COUNT" | bc 2>/dev/null || echo "0")
         log "✅ 복원률: ${RESTORE_RATIO}%"
@@ -259,8 +259,3 @@ echo "   파일 수: ${TOTAL_FILES}개"
 echo "   총 크기: $(numfmt --to=iec-i --suffix=B "${TOTAL_SIZE}")"
 echo "   백업 파일: ${ARCH_NAME}"
 echo "   로그: ${RUNLOG}"
-
-
-
-
-

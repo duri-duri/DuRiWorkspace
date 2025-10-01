@@ -5,11 +5,7 @@ DuRi Judgment Module
 """
 
 from .bias_detector import BiasDetector
-from .level_up_approval import LevelUpApproval
 from .judgment_manager import JudgmentManager
+from .level_up_approval import LevelUpApproval
 
-__all__ = [
-    'BiasDetector',
-    'LevelUpApproval',
-    'JudgmentManager'
-] 
+__all__ = ["BiasDetector", "LevelUpApproval", "JudgmentManager"]

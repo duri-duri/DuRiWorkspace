@@ -213,4 +213,4 @@ curl -X POST http://localhost:8090/automation/trigger \
 curl http://localhost:8090/automation/stats
 ```
 
-**🎉 모든 시스템이 정상 작동하며, 자동화 파이프라인이 완전히 구현되었습니다!** 
+**🎉 모든 시스템이 정상 작동하며, 자동화 파이프라인이 완전히 구현되었습니다!**

@@ -126,12 +126,12 @@ TOTAL_FILES=0
 if [[ -s "$TMP_LIST" ]]; then
   # 방법 1: awk NUL 처리
   TOTAL_FILES=$(awk -v RS='\0' 'END{print NR}' "$TMP_LIST" 2>/dev/null || echo 0)
-  
+
   # 방법 2: tr로 개행 변환 후 wc
   if [[ "$TOTAL_FILES" -eq 0 ]]; then
     TOTAL_FILES=$(tr '\0' '\n' < "$TMP_LIST" | wc -l | tr -d ' ' 2>/dev/null || echo 0)
   fi
-  
+
   # 방법 3: 직접 카운트
   if [[ "$TOTAL_FILES" -eq 0 ]]; then
     TOTAL_FILES=$(grep -c . "$TMP_LIST" 2>/dev/null || echo 0)
@@ -146,7 +146,7 @@ show_progress() {
     local current_size="$1"
     local processed_files="$2"
     local elapsed_time="$3"
-    
+
     local progress_percent=$((processed_files * 100 / TOTAL_FILES))
     echo "[$(date +'%H:%M:%S')] 진행률: ${progress_percent}% (${processed_files}/${TOTAL_FILES} 파일) - 크기: ${current_size} - 경과시간: ${elapsed_time}"
 }
@@ -194,7 +194,7 @@ TOTAL_BYTES=$(du -sb --files0-from="$TMP_LIST" 2>/dev/null | awk '{s+=$1} END{pr
 if [[ "$TOTAL_BYTES" -gt 0 ]]; then
     echo "총 크기: $(numfmt --to=iec $TOTAL_BYTES) (${TOTAL_BYTES} bytes)"
     echo "pv를 사용한 실시간 진행률 표시 시작..."
-    
+
     # pv를 사용한 실시간 진행률 (인터넷 다운로드처럼!)
     tar -C "$WORKSPACE_ROOT" "${TAR_COMMON_OPTS[@]}" --null -T "$TMP_LIST" -cf - \
     | pv -s "$TOTAL_BYTES" -p -t -e -r \

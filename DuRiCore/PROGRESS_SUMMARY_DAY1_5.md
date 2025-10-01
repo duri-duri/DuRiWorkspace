@@ -129,7 +129,7 @@ DuRiCore/
 ### **이전 상태 (문자열 나열)**
 ```python
 # 예시: 단순 키워드 매칭
-if "거짓말" in situation: 
+if "거짓말" in situation:
     return "ethical_dilemma"
 ```
 
@@ -153,7 +153,7 @@ cd /home/duri/DuRiWorkspace/DuRiCore
 # Day 1-2 테스트
 python3 semantic_situation_classifier.py
 
-# Day 3-4 테스트  
+# Day 3-4 테스트
 python3 philosophical_reasoning_system.py
 
 # Day 5 테스트
@@ -169,4 +169,4 @@ python3 reasoning_graph_system.py
 ---
 
 **마지막 업데이트**: Day 5 완료 (추론 그래프 시스템 구현 완료)
-**다음 목표**: Day 6-7 학습 피드백 및 통찰 평가 시스템 구현 
+**다음 목표**: Day 6-7 학습 피드백 및 통찰 평가 시스템 구현

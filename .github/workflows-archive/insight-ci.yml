@@ -28,19 +28,19 @@ jobs:
         with:
           python-version: "3.11"
           cache: "pip"
-      
+
       - name: Install core dependencies
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt || true
           python -m pip install pytest pytest-asyncio anyio
-      
+
       - name: Install test-specific dependencies
         run: |
           # 로그에서 확인된 누락 의존성들
           python -m pip install psutil requests aiohttp fastapi
           python -m pip install "opentelemetry-api>=1.25" "opentelemetry-sdk>=1.25"
-      
+
       - name: Create duri_core alias (case sensitivity fix)
         run: |
           python -c "
@@ -56,20 +56,20 @@ def __getattr__(name):
     return getattr(_target, name)
 ''')
           "
-      
+
       - name: Run scoped test suite
         env:
           PYTHONPATH: ${{ github.workspace }}:${{ github.workspace }}/DuRiCore
         run: |
           # pytest.ini 설정을 신뢰하여 수집 범위 제한
           pytest -c pytest.ini
-      
+
       - name: Run Phase 11 specific tests
         env:
           PYTHONPATH: ${{ github.workspace }}:${{ github.workspace }}/DuRiCore
         run: |
           pytest -q tests/test_phase11_*.py
-      
+
       - name: Upload Phase11 traces
         if: always()
         uses: actions/upload-artifact@v4

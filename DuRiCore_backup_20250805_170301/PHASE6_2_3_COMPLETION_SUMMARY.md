@@ -45,7 +45,7 @@ async def apply_emotion_to_judgment(self, original_judgment: Dict[str, Any]) -> 
     """판단에 감정 가중치 적용"""
     # 감정 영향 계산
     emotion_influence = self._calculate_emotion_influence(emotion_weight)
-    
+
     # 판단 조정
     adjusted_decision = self._adjust_decision(original_decision, emotion_weight)
     adjusted_confidence = self._adjust_confidence(original_confidence, emotion_weight)
@@ -196,4 +196,4 @@ Phase 6.2.4에서 Goal Stack 시스템을 구현할 예정입니다.
 
 **마지막 업데이트**: 2025-08-05
 **상태**: Phase 6.2.3 완료 ✅
-**다음 단계**: Phase 6.2.4 시작 준비 완료 
+**다음 단계**: Phase 6.2.4 시작 준비 완료

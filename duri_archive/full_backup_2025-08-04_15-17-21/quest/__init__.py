@@ -6,6 +6,4 @@ DuRi Quest Module
 
 from .auto_generator import QuestAutoGenerator
 
-__all__ = [
-    'QuestAutoGenerator'
-] 
+__all__ = ["QuestAutoGenerator"]
