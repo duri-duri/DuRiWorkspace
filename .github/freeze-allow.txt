@@ -33,22 +33,22 @@ label: ^maintenance$
 label: ^chore$
 
 # allow paths (정규식)
-path: ^\.pre-commit-config\.yaml$
-path: ^\.gitignore$
-path: ^\.gitattributes$
-path: ^pyproject\.toml$
-path: ^\.github/workflows/verify-artifacts\.yml$
-path: ^\.github/workflows/pre-commit\.yml$
-path: ^\.github/freeze-allow\.txt$
+path-allow: ^\.pre-commit-config\.yaml$
+path-allow: ^\.gitignore$
+path-allow: ^\.gitattributes$
+path-allow: ^pyproject\.toml$
+path-allow: ^\.github/workflows/verify-artifacts\.yml$
+path-allow: ^\.github/workflows/pre-commit\.yml$
+path-allow: ^\.github/freeze-allow\.txt$
 
 # allow non-source noisy paths
-path: duri_snapshots/**
-path: restored_day8_10/**
-path: unified_conversations/**
-path: logs/**
-path: DuRiCore_backup_*/
-path: backup*/
-path: duri_archive/**
+path-allow: duri_snapshots/**
+path-allow: restored_day8_10/**
+path-allow: unified_conversations/**
+path-allow: logs/**
+path-allow: DuRiCore_backup_*/
+path-allow: backup*/
+path-allow: duri_archive/**
 
 .github/workflows/proof-gates.yml
 .gitignore
