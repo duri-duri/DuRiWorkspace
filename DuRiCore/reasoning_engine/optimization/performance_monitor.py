@@ -4,13 +4,13 @@ DuRi 추론 엔진 - 성능 모니터링
 Phase 3 리팩토링: logical_reasoning_engine.py에서 분리
 """
 
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
 import json
 import logging
 import statistics
 import time
-from dataclasses import dataclass
-from datetime import datetime
-from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np

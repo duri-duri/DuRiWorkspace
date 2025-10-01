@@ -7,10 +7,10 @@ DuRi 통합 진화 시스템 - 캐시 히트율 향상 테스트
 """
 
 import asyncio
+from datetime import datetime
 import json
 import logging
 import time
-from datetime import datetime
 
 from integrated_evolution_system import DuRiIntegratedEvolutionSystem
 

@@ -3,10 +3,10 @@
 DuRi 진화 보고서 생성 시스템
 자가 진화 분석 결과를 보고서 형태로 생성하는 시스템
 """
-import json
-import logging
 from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta
+import json
+import logging
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)

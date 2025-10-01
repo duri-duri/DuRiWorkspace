@@ -5,8 +5,8 @@ DuRi 진짜 인공지능화 프로젝트 - Day 1-7 통합 테스트
 """
 
 import asyncio
-import json
 from datetime import datetime
+import json
 from typing import Any, Dict, List
 
 # Day 7: 통찰 평가 시스템

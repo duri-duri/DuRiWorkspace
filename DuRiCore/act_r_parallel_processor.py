@@ -11,13 +11,13 @@ DuRi Phase 6.1 - 성능 23% 향상 목표
 """
 
 import asyncio
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from enum import Enum
 import json
 import logging
 import statistics
 import time
-from dataclasses import asdict, dataclass
-from datetime import datetime
-from enum import Enum
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
 # 로깅 설정

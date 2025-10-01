@@ -6,12 +6,12 @@ DuRi 의식적 인지 시스템 (Phase 4.2)
 """
 
 import asyncio
+from dataclasses import asdict, dataclass
+from datetime import datetime
 import json
 import logging
 import random
 import time
-from dataclasses import asdict, dataclass
-from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
 # 로깅 설정

@@ -3,10 +3,10 @@
 DuRi 진화 분석 시스템
 양적/질적/시간적 진화를 종합적으로 분석하는 시스템
 """
-import json
-import logging
 from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta
+import json
+import logging
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)

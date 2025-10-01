@@ -9,10 +9,10 @@ DuRi 언어 이해 시스템 - 의미 분석기
 - 학습 통찰 추출
 """
 
-import logging
-import re
 from collections import Counter
 from dataclasses import dataclass
+import logging
+import re
 from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)

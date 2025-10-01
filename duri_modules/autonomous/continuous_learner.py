@@ -4,13 +4,13 @@ DuRi 24/7 자동 학습 시스템
 백그라운드에서 지속적으로 학습하고, 문제 발생 시에만 사용자에게 보고
 """
 import asyncio
+from dataclasses import dataclass
+from datetime import datetime, timedelta
 import json
 import logging
 import os
 import threading
 import time
-from dataclasses import dataclass
-from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
 # 로깅 설정

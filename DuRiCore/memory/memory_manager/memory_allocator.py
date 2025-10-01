@@ -11,16 +11,16 @@ DuRiCore Phase 2-5: 메모리 할당/해제 모듈
 """
 
 import asyncio
-import hashlib
-import json
-import logging
-import time
-import uuid
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
+import hashlib
+import json
+import logging
+import time
 from typing import Any, Dict, List, Optional, Tuple, Union
+import uuid
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)

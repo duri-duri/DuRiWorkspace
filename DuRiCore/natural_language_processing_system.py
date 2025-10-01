@@ -11,16 +11,16 @@ DuRi Phase 1-3 Week 3 Day 9 - 자연어 처리 시스템
 """
 
 import asyncio
+from collections import Counter, defaultdict
+from dataclasses import dataclass, field
+from datetime import datetime
 import hashlib
 import json
 import logging
 import re
 import time
-import unicodedata
-from collections import Counter, defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
+import unicodedata
 
 import numpy as np
 

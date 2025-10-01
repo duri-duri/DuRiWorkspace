@@ -12,11 +12,11 @@ MetaGenerator - meta.json 자동 생성 시스템
 """
 
 import ast
+from datetime import datetime
 import json
 import logging
 import os
 import re
-from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)

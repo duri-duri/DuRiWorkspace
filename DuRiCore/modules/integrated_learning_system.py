@@ -4,11 +4,11 @@ DuRi 3단계 통합 학습 시스템
 판단 기록 → 자가 반성 → 자기개선의 완전한 진화 사이클을 관리하는 시스템
 """
 
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
 import json
 import os
 import time
-from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
 

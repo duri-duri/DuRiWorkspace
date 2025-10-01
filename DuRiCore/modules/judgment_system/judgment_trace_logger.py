@@ -4,10 +4,10 @@ DuRi 판단 과정 기록 시스템 (JudgmentTrace)
 판단이 발생한 모든 순간에 대해 구조화된 기록을 저장하는 시스템
 """
 
-import json
-import os
 from dataclasses import asdict, dataclass
 from datetime import datetime
+import json
+import os
 from typing import Any, Dict, List, Optional
 
 

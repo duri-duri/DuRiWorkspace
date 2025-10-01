@@ -5,14 +5,14 @@ DuRiCore Phase 5.5.3 - 자기 개선 시스템
 """
 
 import asyncio
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
+from enum import Enum
 import json
 import logging
 import math
 import random
 import time
-from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
-from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 # 로깅 설정

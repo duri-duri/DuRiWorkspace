@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 import json
 import os
+from pathlib import Path
 import re
 import subprocess as sp
 import time
-from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 LOGCSV = ROOT / "var/reports/rollout_watch.csv"

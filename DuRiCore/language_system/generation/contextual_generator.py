@@ -8,8 +8,8 @@ DuRi 언어 생성 시스템 - 맥락 기반 생성기
 - 맥락 관련성 평가
 """
 
-import logging
 from dataclasses import dataclass
+import logging
 from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)

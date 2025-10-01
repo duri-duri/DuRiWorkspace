@@ -4,14 +4,14 @@ DuRiCore - FastAPI 메인 애플리케이션
 새로운 엔진들과 연동된 API 서버
 """
 
+from datetime import datetime
 import os
 import sys
-from datetime import datetime
 
-import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+import uvicorn
 
 # DuRiCore 모듈 임포트를 위한 경로 추가
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))

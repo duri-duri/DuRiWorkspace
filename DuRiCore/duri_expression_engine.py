@@ -14,14 +14,14 @@ DuRi Expression Engine - DuRi의 판단 결과를 자연어로 변환하는 엔�
 """
 
 import asyncio
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
 import json
 import logging
 import random
 import re
 import time
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 # 모듈 레지스트리 시스템 import

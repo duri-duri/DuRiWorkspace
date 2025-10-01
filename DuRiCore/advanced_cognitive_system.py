@@ -4,10 +4,10 @@ DuRi 고급 인지 시스템
 상황 감지, 모듈 라우팅, 자원 분배, 프리페치를 통합하는 시스템
 """
 
+from datetime import datetime
 import json
 import os
 import sys
-from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 # DuRiCore 모듈 경로 추가

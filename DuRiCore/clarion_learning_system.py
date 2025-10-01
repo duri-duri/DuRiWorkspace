@@ -5,14 +5,14 @@ DuRiCore Phase 6.2.5 - CLARION 이중 학습 시스템
 """
 
 import asyncio
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
+from enum import Enum
 import json
 import logging
 import math
 import random
 import time
-from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
-from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np

@@ -4,8 +4,8 @@ DuRi 사고 흐름 관리 시스템
 사고의 흐름을 추적하고 관리하는 시스템
 """
 
-import json
 from datetime import datetime
+import json
 from typing import Any, Dict, List, Optional
 
 

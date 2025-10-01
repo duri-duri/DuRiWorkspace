@@ -3,11 +3,11 @@ Phase 25: 미래 예측 및 설계 시스템 (Future Design System)
 트렌드 분석, 장기적 시나리오 구축, 혁신적 아이디어 생성
 """
 
+from dataclasses import dataclass
+from enum import Enum
 import json
 import random
 import time
-from dataclasses import dataclass
-from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 

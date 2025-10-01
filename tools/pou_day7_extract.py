@@ -7,12 +7,12 @@ Day 37: PoU 7일차 유지율 ETL 스크립트
 
 import argparse
 import csv
+from datetime import datetime, timedelta
 import json
 import logging
 import os
-import sys
-from datetime import datetime, timedelta
 from pathlib import Path
+import sys
 from typing import Any, Dict, List, Optional, Tuple
 
 # 로깅 설정
@@ -175,8 +175,8 @@ def create_synthetic_data(output_file: str, n_users: int = 1000) -> Dict[str, An
     """
     logger.info(f"Creating synthetic data with {n_users} users")
 
-    import random
     from datetime import datetime, timedelta
+    import random
 
     # 시드 설정 (재현 가능한 결과)
     random.seed(42)

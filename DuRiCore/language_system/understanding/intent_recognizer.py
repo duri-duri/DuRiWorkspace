@@ -10,9 +10,9 @@ DuRi 언어 이해 시스템 - 의도 인식기
 - 감정표현 의도 인식
 """
 
+from dataclasses import dataclass
 import logging
 import re
-from dataclasses import dataclass
 from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)

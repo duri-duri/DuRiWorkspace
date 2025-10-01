@@ -4,13 +4,13 @@ DuRiCore Phase 5 Day 2 - 기억 분류 시스템
 4가지 기억 타입 자동 분류 및 태깅 시스템
 """
 
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
 import json
 import logging
 import math
 import re
-from dataclasses import dataclass
-from datetime import datetime
-from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)

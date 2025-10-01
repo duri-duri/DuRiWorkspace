@@ -10,8 +10,8 @@ DuRi 언어 생성 시스템 - 대화 생성기
 - 일반 응답 생성
 """
 
-import logging
 from dataclasses import dataclass
+import logging
 from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)

@@ -5,8 +5,8 @@ Day 7: 창의적 문제 해결 시스템 간단 테스트
 """
 
 import asyncio
-import json
 from datetime import datetime
+import json
 
 from creative_problem_solving_system import (
     CreativeProblem,

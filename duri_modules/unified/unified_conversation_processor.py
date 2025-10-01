@@ -4,14 +4,14 @@ DuRi 통합 대화 처리 시스템
 모든 대화 관련 기능을 하나의 시스템으로 통합
 """
 import asyncio
+from dataclasses import dataclass
+from datetime import datetime
 import json
 import logging
 
 # 기존 모듈들 import
 import sys
 import time
-from dataclasses import dataclass
-from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 sys.path.append(".")

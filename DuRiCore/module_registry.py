@@ -13,16 +13,16 @@ DuRi 모듈 레지스트리 시스템
 - 타입 안전성 보장
 """
 
-import asyncio
-import inspect
-import logging
-import time
 from abc import ABC, ABCMeta, abstractmethod
+import asyncio
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
+import inspect
+import logging
 from pathlib import Path
+import time
 from typing import (
     Any,
     Callable,

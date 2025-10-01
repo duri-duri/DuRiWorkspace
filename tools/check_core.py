@@ -4,8 +4,8 @@ import datetime
 import json
 import sys
 
-import yaml
 from jsonschema import validate
+import yaml
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--family", required=True)

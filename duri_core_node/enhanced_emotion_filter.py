@@ -4,12 +4,12 @@ DuRi 고도화된 감정 필터 시스템
 ChatGPT 제안 기반 감정 범주화, 세기 추정, 판단 연결, 메타 인식 구현
 """
 
-import logging
-import time
 from collections import defaultdict
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from enum import Enum
+import logging
+import time
 from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)

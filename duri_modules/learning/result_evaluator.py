@@ -3,10 +3,10 @@
 DuRi 결과 평가 시스템 (Result Evaluator)
 대화와 행동의 결과를 정밀하게 평가
 """
+from datetime import datetime
 import json
 import logging
 import re
-from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)

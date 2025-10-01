@@ -8,8 +8,8 @@ DuRi 언어 생성 시스템 - 다국어 생성기
 - 다국어 지원 정보
 """
 
-import logging
 from dataclasses import dataclass
+import logging
 from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)

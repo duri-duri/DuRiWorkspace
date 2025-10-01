@@ -6,13 +6,13 @@ DuRiCore Phase 2.2: 내적 동기 시스템 (Intrinsic Motivation System)
 """
 
 import asyncio
-import logging
-import random
-import time
 from collections import defaultdict
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
+import logging
+import random
+import time
 from typing import Any, Dict, List, Optional, Tuple
 
 # 로깅 설정

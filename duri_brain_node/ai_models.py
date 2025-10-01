@@ -4,11 +4,11 @@ DuRi Brain Node - AI 모델 연동 시스템
 실제 AI 모델을 사용한 고급 분석 기능
 """
 import asyncio
+from datetime import datetime
 import json
 import logging
 import re
 import time
-from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)

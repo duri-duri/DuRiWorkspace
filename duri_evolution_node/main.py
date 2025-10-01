@@ -4,8 +4,8 @@ DuRi Evolution Node - 자가 학습, 평가, 개선 시스템
 포트 8092에서 Evolution 기능 제공
 """
 import asyncio
-import time
 from datetime import datetime
+import time
 from typing import Any, Dict, Optional
 
 from fastapi import FastAPI, HTTPException

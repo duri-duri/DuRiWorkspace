@@ -5,23 +5,23 @@ Extension 연결을 위한 실제 학습 기능이 구현된 서버 + 통합 시
 
 import ast
 import base64
+from collections import defaultdict
+from datetime import datetime, timedelta
 import io
 import json
 import os
+from pathlib import Path
 import re
 import shutil
 import subprocess
 import tempfile
-from collections import defaultdict
-from datetime import datetime, timedelta
-from pathlib import Path
 from typing import Any, Dict, List
 
-import matplotlib.pyplot as plt
-import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
+import matplotlib.pyplot as plt
+import uvicorn
 
 app = FastAPI(
     title="DuRi Extension Learning Server",

@@ -4,11 +4,11 @@ DuRi 존재적 리팩토링 - meta.json 자동 생성 도구
 Phase 3 리팩토링: 자동화 도구 구현
 """
 
+from dataclasses import dataclass
 import json
 import logging
-import re
-from dataclasses import dataclass
 from pathlib import Path
+import re
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)

@@ -4,11 +4,11 @@ DuRi 논리적 추론 엔진 - 논리 처리 핵심 모듈
 Phase 3 리팩토링: logical_reasoning_engine.py에서 분리
 """
 
+from dataclasses import dataclass
+from enum import Enum
 import logging
 import re
 import statistics
-from dataclasses import dataclass
-from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np

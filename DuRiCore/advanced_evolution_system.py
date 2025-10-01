@@ -5,14 +5,14 @@ DuRiCore Phase 8 - 고급 학습 및 진화 시스템
 """
 
 import asyncio
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from enum import Enum
 import json
 import logging
 import random
 import statistics
 import time
-from dataclasses import asdict, dataclass
-from datetime import datetime
-from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 # 기존 시스템들 import

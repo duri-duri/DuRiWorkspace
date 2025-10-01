@@ -4,15 +4,15 @@ DuRi Core Node - API Gateway
 포트 8080에서 사용자 요청을 받아 Brain과 Evolution 노드로 라우팅
 """
 import asyncio
-import time
 from datetime import datetime
+import time
 from typing import Any, Dict, Optional
 
-import httpx
-import uvicorn
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse
+import httpx
 from pydantic import BaseModel
+import uvicorn
 
 # DuRi 로깅 시스템 초기화
 from DuRiCore.bootstrap import bootstrap_logging

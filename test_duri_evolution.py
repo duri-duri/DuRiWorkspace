@@ -5,9 +5,9 @@ DuRi 진화 결과 테스트
 """
 
 import asyncio
+from datetime import datetime
 import os
 import sys
-from datetime import datetime
 
 # DuRiCore 모듈 경로 추가
 sys.path.append(os.path.join(os.path.dirname(__file__), "DuRiCore"))

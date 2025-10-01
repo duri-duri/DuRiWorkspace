@@ -4,13 +4,13 @@ DuRiCore Phase 5 Day 3 - 상황 분석 엔진
 입력 데이터 분석, 컨텍스트 추출, 상황 패턴 인식 시스템
 """
 
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
 import json
 import logging
 import math
 import re
-from dataclasses import dataclass
-from datetime import datetime
-from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)

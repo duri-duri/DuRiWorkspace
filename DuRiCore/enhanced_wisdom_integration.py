@@ -5,12 +5,12 @@ DuRi 진짜 초월성 시스템 - 통합 총합 설계
 """
 
 import asyncio
-import json
-import logging
-import time
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from enum import Enum
+import json
+import logging
+import time
 from typing import Any, Dict, List, Optional, Tuple
 
 from ethical_judgment_system import (

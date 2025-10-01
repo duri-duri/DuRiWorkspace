@@ -12,17 +12,17 @@ DuRi Phase 6.2.2.2 - 모듈간 통신 프로토콜 (40% 통신 효율성 향상 
 """
 
 import asyncio
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from enum import Enum
 import json
 import logging
 import queue
 import threading
 import time
-import uuid
-from concurrent.futures import ThreadPoolExecutor
-from dataclasses import asdict, dataclass
-from datetime import datetime
-from enum import Enum
 from typing import Any, Callable, Dict, List, Optional, Type
+import uuid
 
 # 로깅 설정
 logging.basicConfig(

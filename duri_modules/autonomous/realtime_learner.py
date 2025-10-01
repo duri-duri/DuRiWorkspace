@@ -4,10 +4,10 @@ DuRi 실시간 학습 시스템
 대화가 발생하는 즉시 학습을 수행
 """
 import asyncio
+from datetime import datetime
 import logging
 import threading
 import time
-from datetime import datetime
 from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)

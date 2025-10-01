@@ -5,10 +5,10 @@ DuRiCore Phase 6.2.6 - 시맨틱 지식 연결망 통합 테스트
 """
 
 import asyncio
+from datetime import datetime
 import json
 import logging
 import time
-from datetime import datetime
 from typing import Any, Dict, List
 
 from enhanced_memory_system import EnhancedMemorySystem

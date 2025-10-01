@@ -3,9 +3,9 @@ Common emotion handling utilities for DuRi system.
 This module provides core functionality for emotion vector handling, logging, and communication.
 """
 
+from datetime import datetime
 import json
 import os
-from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 
 import requests

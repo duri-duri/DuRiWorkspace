@@ -7,17 +7,17 @@ DuRi 언어 시스템 - 공통 데이터 구조
 """
 
 import asyncio
+from collections import Counter, defaultdict
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
 import hashlib
 import json
 import logging
 import re
 import time
-import unicodedata
-from collections import Counter, defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
+import unicodedata
 
 import numpy as np
 

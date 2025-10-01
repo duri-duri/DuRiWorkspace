@@ -4,9 +4,9 @@ DuRi 전략 판단 4단계 통합 시스템
 전략 판단을 사고 흐름, 기억, 진화, 외부 피드백까지 4단계로 통합하는 시스템
 """
 
+from datetime import datetime
 import os
 import sys
-from datetime import datetime
 from typing import Any, Dict, Optional
 
 # DuRiCore 모듈 경로 추가

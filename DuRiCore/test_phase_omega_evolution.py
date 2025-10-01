@@ -15,12 +15,12 @@ Self-Rewriting, Genetic Programming, MetaCoder가 제대로 통합되어 작동�
 """
 
 import asyncio
+from dataclasses import dataclass
+from datetime import datetime
 import json
 import logging
 import os
 import time
-from dataclasses import dataclass
-from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 from genetic_evolution_engine import EvolutionConfig, GeneticEvolutionEngine

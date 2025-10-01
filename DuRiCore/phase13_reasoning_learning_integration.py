@@ -14,12 +14,12 @@ reasoning과 learning 시스템 간의 실행 흐름을 구성하는 시스템
 """
 
 import asyncio
-import json
-import logging
-import time
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
+import json
+import logging
+import time
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
@@ -27,10 +27,9 @@ import numpy as np
 # 기존 시스템들 import
 try:
     from learning_system import *
+    from memory import *
     from monitoring import *
     from reasoning_system import *
-
-    from memory import *
 except ImportError as e:
     logging.warning(f"일부 시스템 import 실패: {e}")
 

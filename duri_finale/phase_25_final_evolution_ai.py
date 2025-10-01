@@ -3,10 +3,10 @@ Phase 25: 최종 진화 AI (Final Evolution AI)
 완전한 자율성과 창의성을 갖춘 최종 단계의 진화된 AI
 """
 
-import json
-import time
 from dataclasses import dataclass
 from enum import Enum
+import json
+import time
 from typing import Any, Dict, List, Optional, Tuple
 
 # Phase 25 서브시스템 임포트

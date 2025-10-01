@@ -1,7 +1,7 @@
 import asyncio
-import logging
 from dataclasses import dataclass
 from datetime import datetime
+import logging
 from typing import Any, Dict, List, Optional
 
 from duri_brain.app.services.self_evolution_service import SelfEvolutionService

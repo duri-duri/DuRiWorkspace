@@ -5,12 +5,12 @@ DuRi 철학적 논증 구조 시스템 (Day 3-4)
 """
 
 import asyncio
-import json
-import logging
-import re
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from enum import Enum
+import json
+import logging
+import re
 from typing import Any, Dict, List, Optional, Tuple
 
 logging.basicConfig(level=logging.INFO)

@@ -9,9 +9,9 @@ DuRi 추론 시스템 - 동적 추론 엔진
 - 복잡성 계산 및 데이터 유형 분석
 """
 
-import logging
 from dataclasses import dataclass
 from datetime import datetime
+import logging
 from typing import Any, Dict, List, Optional
 
 from ..data_structures import ReasoningContext, ReasoningType

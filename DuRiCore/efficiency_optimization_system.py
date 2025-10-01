@@ -11,15 +11,15 @@ DuRi Phase 1-3 Week 3 Day 14 - 효율성 최적화 시스템
 """
 
 import asyncio
+from collections import Counter, defaultdict
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
 import hashlib
 import json
 import logging
 import re
 import time
-from collections import Counter, defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np

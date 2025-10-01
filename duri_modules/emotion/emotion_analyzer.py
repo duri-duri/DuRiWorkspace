@@ -4,8 +4,8 @@ DuRi 감정 인식 및 적응 모듈
 맥락 정보에서 감정을 추론하고, 반응에 감정적 뉘앙스를 추가
 """
 
-import re
 from datetime import datetime
+import re
 from typing import Any, Dict, List, Optional, Tuple
 
 

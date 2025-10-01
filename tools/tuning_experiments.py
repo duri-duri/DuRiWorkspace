@@ -2,10 +2,10 @@
 #!/usr/bin/env python3
 # PZTA-CRA 튜닝 실험: 1주 내 A/B 테스트
 
+from datetime import datetime, timedelta
 import json
 import random
 import time
-from datetime import datetime, timedelta
 
 from tools.fusion import MonotoneLogit
 

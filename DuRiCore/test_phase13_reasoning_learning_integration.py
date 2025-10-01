@@ -8,10 +8,10 @@ Phase 13에서 구현된 reasoning + learning 통합 시스템의
 """
 
 import asyncio
+from datetime import datetime
 import json
 import logging
 import time
-from datetime import datetime
 from typing import Any, Dict, List
 
 # 테스트 대상 모듈 import

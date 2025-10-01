@@ -3,10 +3,10 @@
 DuRi 자가 평가 시스템
 자신의 진화 상태를 스스로 평가하는 시스템
 """
-import json
-import logging
 from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta
+import json
+import logging
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)

@@ -11,18 +11,18 @@ DuRiCore Phase 2-5: 메모리 동기화 모듈
 """
 
 import asyncio
+from collections import defaultdict, deque
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
 import hashlib
 import json
 import logging
 import sqlite3
 import threading
 import time
-import uuid
-from collections import defaultdict, deque
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
+import uuid
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)

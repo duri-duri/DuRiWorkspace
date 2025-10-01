@@ -4,9 +4,9 @@
 4개 윤리 모듈 통합 테스트
 """
 
+from datetime import datetime
 import os
 import sys
-from datetime import datetime
 
 # DuRiCore 모듈 임포트를 위한 경로 추가
 sys.path.append(os.path.join(os.path.dirname(__file__), "DuRiCore"))

@@ -3,8 +3,8 @@
 DuRi 자가 진화 인식 시스템 테스트
 """
 import asyncio
-import logging
 from datetime import datetime
+import logging
 from typing import Any, Dict
 
 # 자가 진화 인식 시스템 import

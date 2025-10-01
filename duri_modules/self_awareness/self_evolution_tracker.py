@@ -3,10 +3,10 @@
 DuRi 자가 진화 추적 시스템
 자신의 진화를 스스로 추적하고 분석하는 시스템
 """
-import json
-import logging
 from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta
+import json
+import logging
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)

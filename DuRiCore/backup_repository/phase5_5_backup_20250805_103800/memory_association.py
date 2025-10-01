@@ -4,13 +4,13 @@ DuRiCore Phase 5 Day 2 - 기억 연관 시스템
 의미적, 시간적, 감정적 연관성 분석 및 강화 시스템
 """
 
-import json
-import logging
-import math
 from collections import Counter, defaultdict
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from enum import Enum
+import json
+import logging
+import math
 from typing import Any, Dict, List, Optional, Set, Tuple
 
 logger = logging.getLogger(__name__)

@@ -5,12 +5,12 @@ DuRi 의미 벡터 엔진 (Phase 1-1 Day 1)
 """
 
 import asyncio
-import json
-import logging
-import re
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
+import json
+import logging
+import re
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np

@@ -5,11 +5,11 @@ Phase 10의 모든 고급 AI 엔진들의 통합 및 협력 기능을 테스트
 """
 
 import asyncio
+from datetime import datetime
 import json
 import logging
 import random
 import time
-from datetime import datetime
 from typing import Any, Dict, List
 
 # 기존 시스템들 import

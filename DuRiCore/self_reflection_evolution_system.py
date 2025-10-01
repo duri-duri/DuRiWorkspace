@@ -7,13 +7,13 @@ DuRiCore Phase 3.3: 자기 성찰 및 진화 시스템 (Self-Reflection and Evol
 """
 
 import asyncio
-import logging
-import random
-import time
 from collections import defaultdict
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
+import logging
+import random
+import time
 from typing import Any, Dict, List, Optional, Tuple
 
 # 로깅 설정

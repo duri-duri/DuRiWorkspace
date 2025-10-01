@@ -5,9 +5,9 @@ DuRi 통합 대화 시스템 테스트
 """
 
 import asyncio
+from datetime import datetime
 import json
 import time
-from datetime import datetime
 
 import aiohttp
 

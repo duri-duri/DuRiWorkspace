@@ -5,12 +5,12 @@ DuRi 사고 추론 그래프 시스템 (Day 5)
 """
 
 import asyncio
-import json
-import logging
-import re
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from enum import Enum
+import json
+import logging
+import re
 from typing import Any, Dict, List, Optional, Set, Tuple
 
 logging.basicConfig(level=logging.INFO)

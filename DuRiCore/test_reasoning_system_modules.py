@@ -7,10 +7,10 @@ DuRi 추론 시스템 모듈 테스트
 """
 
 import asyncio
+from datetime import datetime
 import logging
 import os
 import sys
-from datetime import datetime
 from typing import Any, Dict, List
 
 # 로깅 설정

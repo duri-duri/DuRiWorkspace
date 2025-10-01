@@ -16,14 +16,14 @@ DuRi Phase Ω: Genetic Programming Engine
 import ast
 import asyncio
 import copy
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
 import json
 import logging
 import os
 import random
 import time
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 # 로깅 설정

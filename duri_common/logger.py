@@ -5,10 +5,10 @@ DuRi Common Logger Module
 공통으로 사용되는 로깅 기능을 제공합니다.
 """
 
+from datetime import datetime
 import logging
 import os
 import sys
-from datetime import datetime
 from typing import Optional
 
 from duri_common.config.config import Config

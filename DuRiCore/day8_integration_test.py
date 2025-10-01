@@ -11,10 +11,10 @@ Day 8에서 구현된 모든 시스템을 통합하고 테스트하는 스크립
 """
 
 import asyncio
+from datetime import datetime
 import json
 import logging
 import time
-from datetime import datetime
 from typing import Any, Dict, List
 
 from adaptive_learning_system import (

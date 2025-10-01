@@ -2,10 +2,10 @@
 #!/usr/bin/env python3
 # 해시체인 자동검증 훅: 5분마다 연속성 검증
 
+from datetime import datetime
 import json
 import os
 import time
-from datetime import datetime
 
 import psycopg2
 from psycopg2.extras import RealDictCursor

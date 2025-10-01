@@ -5,11 +5,11 @@ DuRi 성장 단계별 진화 시스템
 """
 
 import asyncio
-import json
-import random
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from enum import Enum
+import json
+import random
 from typing import Any, Dict, List, Optional
 
 

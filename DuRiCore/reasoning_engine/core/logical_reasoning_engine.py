@@ -5,15 +5,15 @@ DuRi 논리적 추론 엔진 (Phase 1-2 Week 2)
 """
 
 import asyncio
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from enum import Enum
 import json
 import logging
 import random
 import re
 import statistics
 import time
-from dataclasses import asdict, dataclass
-from datetime import datetime
-from enum import Enum
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
 import numpy as np

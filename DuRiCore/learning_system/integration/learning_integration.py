@@ -11,13 +11,13 @@ DuRiCore Phase 2-3: 학습 통합 시스템 (Learning Integration System)
 """
 
 import asyncio
-import json
-import logging
-import time
 from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
+import json
+import logging
+import time
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np

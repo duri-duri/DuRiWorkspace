@@ -15,14 +15,14 @@ DuRi 30일 진화 계획 - Day 1: 내적 사고 프로세스 구현
 """
 
 import asyncio
-import json
-import logging
-import random
-import time
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
+import json
+import logging
+import random
+import time
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np

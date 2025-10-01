@@ -6,11 +6,11 @@ DuRi 학습 시스템 활성화 스크립트
 """
 
 import asyncio
+from datetime import datetime
 import logging
 import os
 import sys
 import time
-from datetime import datetime
 from typing import Any, Dict, List
 
 # 프로젝트 루트를 Python 경로에 추가

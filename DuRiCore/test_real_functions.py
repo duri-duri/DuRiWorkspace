@@ -5,9 +5,9 @@ judgment → action → feedback 루프의 실제 기능 테스트
 """
 
 import asyncio
+from datetime import datetime
 import json
 import logging
-from datetime import datetime
 from typing import Any, Dict
 
 # 로깅 설정

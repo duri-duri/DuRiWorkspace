@@ -3,16 +3,16 @@
 성능 모니터링이 통합된 DuRi 자가진화 AI 시스템 (인간형 AI 모듈 추가)
 """
 
+from datetime import datetime
 import functools
 import os
 import sys
 import time
-from datetime import datetime
 from typing import Any, Dict, Optional
 
-import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+import uvicorn
 
 # 모듈 경로 추가
 sys.path.append(os.path.join(os.path.dirname(__file__), "duri_modules"))

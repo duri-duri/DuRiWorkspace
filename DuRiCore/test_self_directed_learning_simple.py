@@ -5,8 +5,8 @@ Day 6: 자발적 학습 시스템 간단 테스트
 """
 
 import asyncio
-import json
 from datetime import datetime
+import json
 
 from self_directed_learning_system import (
     LearningDomain,

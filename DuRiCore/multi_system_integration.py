@@ -6,13 +6,13 @@ DuRiCore Phase 3.1: 다중 시스템 통합 메커니즘 (Multi-System Integrati
 """
 
 import asyncio
-import logging
-import random
-import time
 from collections import defaultdict
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
+import logging
+import random
+import time
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 

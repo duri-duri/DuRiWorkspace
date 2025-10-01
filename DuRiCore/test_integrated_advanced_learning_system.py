@@ -7,10 +7,10 @@ DuRi Phase 1-3 Week 3 Day 13 - 통합 고급 학습 시스템 테스트
 """
 
 import asyncio
+from datetime import datetime
 import json
 import logging
 import time
-from datetime import datetime
 from typing import Any, Dict, List
 
 # 테스트 대상 시스템 import

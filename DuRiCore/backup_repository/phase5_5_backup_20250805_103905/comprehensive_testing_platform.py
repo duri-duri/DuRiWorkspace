@@ -14,17 +14,17 @@ DuRiCore Phase 5 Day 10 - 종합 테스트 플랫폼
 """
 
 import asyncio
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import asdict, dataclass
+from datetime import datetime
 import json
 import logging
 import random
 import statistics
 import threading
 import time
-import uuid
-from concurrent.futures import ThreadPoolExecutor
-from dataclasses import asdict, dataclass
-from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
+import uuid
 
 # 로깅 설정
 logging.basicConfig(

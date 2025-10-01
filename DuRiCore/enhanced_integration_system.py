@@ -5,11 +5,11 @@ DuRiCore Phase 5.5.4 - 고급 통합 시스템
 """
 
 import asyncio
+from dataclasses import asdict, dataclass
+from datetime import datetime
 import json
 import logging
 import time
-from dataclasses import asdict, dataclass
-from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 from adaptive_learning_system import AdaptiveLearningSystem

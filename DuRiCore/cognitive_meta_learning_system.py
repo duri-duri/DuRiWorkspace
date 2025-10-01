@@ -7,13 +7,13 @@ DuRiCore Phase 3.2: 인지적 메타 학습 시스템 (Cognitive Meta-Learning S
 """
 
 import asyncio
-import logging
-import random
-import time
 from collections import defaultdict
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
+import logging
+import random
+import time
 from typing import Any, Dict, List, Optional, Tuple
 
 # 로깅 설정

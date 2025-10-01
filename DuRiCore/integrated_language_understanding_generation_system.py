@@ -11,19 +11,20 @@ DuRi Phase 1-3 Week 3 Day 12 - 통합 언어 이해 및 생성 시스템
 """
 
 import asyncio
+from collections import Counter, defaultdict
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
 import hashlib
 import json
 import logging
 import re
 import time
-import unicodedata
-from collections import Counter, defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
+import unicodedata
 
 import numpy as np
+
 from integrated_social_intelligence_system import IntegratedSocialIntelligenceSystem
 
 # 기존 시스템들 import

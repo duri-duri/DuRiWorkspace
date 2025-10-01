@@ -6,9 +6,9 @@ DuRi 초기 학습 데이터 주입 스크립트
 성공/실패 케이스를 혼합한 초기 데이터를 주입합니다.
 """
 
+from datetime import datetime, timedelta
 import logging
 import random
-from datetime import datetime, timedelta
 from typing import Any, Dict, List
 
 from duri_brain.learning.auto_retrospector import get_auto_retrospector

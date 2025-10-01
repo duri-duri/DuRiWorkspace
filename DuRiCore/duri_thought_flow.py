@@ -15,13 +15,13 @@ DuRi Phase Z v2.0: DuRiThoughtFlow - 흐름 중심 통합 시스템
 """
 
 import asyncio
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
 import json
 import logging
 import time
 import traceback
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 # 기존 시스템들 import
@@ -32,9 +32,8 @@ try:
         DynamicReasoningGraphAnalyzer,
         DynamicReasoningGraphBuilder,
     )
-    from semantic_vector_engine import SemanticVectorEngine
-
     from logical_reasoning_engine import LogicalReasoningEngine
+    from semantic_vector_engine import SemanticVectorEngine
 except ImportError as e:
     logging.warning(f"일부 기존 시스템 import 실패: {e}")
 

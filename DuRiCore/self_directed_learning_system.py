@@ -15,14 +15,14 @@ DuRi 30일 진화 계획 - Day 6: 자발적 학습 시스템
 """
 
 import asyncio
-import json
-import logging
-import random
-import time
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
+import json
+import logging
+import random
+import time
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np

@@ -4,10 +4,10 @@ DuRi 자가 반성 루프 시스템
 매일 또는 일정 트리거마다 판단 기록들을 분석하고 자기 신념과 행동 패턴을 업데이트하는 시스템
 """
 
-import json
-import os
 from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta
+import json
+import os
 from typing import Any, Dict, List, Optional
 
 

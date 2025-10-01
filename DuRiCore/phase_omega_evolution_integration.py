@@ -15,13 +15,13 @@ Self-Rewriting, Genetic Programming, MetaCoder를 통합하여 DuRi가 스스로
 """
 
 import asyncio
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
 import json
 import logging
 import os
 import time
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 # Phase Z 및 Phase Ω 모듈들 import

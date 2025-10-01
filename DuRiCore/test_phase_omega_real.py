@@ -8,10 +8,10 @@ DuRi Phase Ω: 실제 핵심 기능 검증 테스트
 """
 
 import asyncio
+from datetime import datetime
 import json
 import logging
 import time
-from datetime import datetime
 from typing import Any, Dict
 
 from evolution_system import EvolutionSystem

@@ -15,16 +15,16 @@ DuRi Phase Ω: Self-Rewriting Module
 
 import ast
 import asyncio
+from dataclasses import dataclass, field
+from datetime import datetime
 import difflib
+from enum import Enum
 import json
 import logging
 import os
 import shutil
 import tempfile
 import time
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 # 로깅 설정

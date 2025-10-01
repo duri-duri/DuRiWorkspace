@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+from datetime import datetime
 import hashlib
 import json
 import pathlib
 import re
 import sys
-from datetime import datetime
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 SRC = ROOT / "clinic" / "source_materials"

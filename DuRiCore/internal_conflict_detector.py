@@ -14,12 +14,12 @@ DuRi Phase Z v2.0: 내부 모순 탐지 시스템
 """
 
 import asyncio
-import json
-import logging
-import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
+import json
+import logging
+import time
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np

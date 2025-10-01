@@ -11,9 +11,9 @@ DuRi 언어 이해 시스템 - 맥락 분석기
 - 감정적 맥락 분석
 """
 
+from dataclasses import dataclass
 import logging
 import re
-from dataclasses import dataclass
 from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)

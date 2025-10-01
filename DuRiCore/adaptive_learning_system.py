@@ -11,19 +11,19 @@ DuRi 실시간 학습 및 적응 시스템 - Phase 1-3 Week 3 Day 8
 """
 
 import asyncio
+from collections import defaultdict, deque
+from dataclasses import asdict, dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
 import json
 import logging
 import queue
 import statistics
 import threading
 import time
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 import uuid
 import weakref
-from collections import defaultdict, deque
-from dataclasses import asdict, dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 
 import numpy as np
 

@@ -4,10 +4,10 @@ API Test Script for DuRi Emotion Processing System
 """
 
 import argparse
+from datetime import datetime
 import json
 import sys
 import time
-from datetime import datetime
 from typing import Dict, List, Optional
 
 import requests

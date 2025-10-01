@@ -5,9 +5,9 @@ ChatGPT 제안을 바탕으로 한 감정 기반 자기주도적 성장 시스�
 """
 
 import asyncio
+from datetime import datetime
 import json
 import time
-from datetime import datetime
 
 import aiohttp
 

@@ -5,10 +5,10 @@ DuRiCore Phase 6.3 - 고급 인지 시스템 통합 테스트
 """
 
 import asyncio
+from datetime import datetime
 import json
 import logging
 import time
-from datetime import datetime
 from typing import Any, Dict, List
 
 # 테스트 대상 시스템들

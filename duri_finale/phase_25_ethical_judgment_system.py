@@ -3,10 +3,10 @@ Phase 25: 윤리적 판단 시스템 (Ethical Judgment System)
 책임 있는 AI 의사결정과 사회적 영향 고려
 """
 
-import json
-import time
 from dataclasses import dataclass
 from enum import Enum
+import json
+import time
 from typing import Any, Dict, List, Optional, Tuple
 
 

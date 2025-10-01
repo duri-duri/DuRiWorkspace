@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+from datetime import datetime
 import itertools
 import json
 import pathlib
@@ -7,7 +8,6 @@ import shutil
 import subprocess
 import sys
 import time
-from datetime import datetime
 
 try:
     import yaml

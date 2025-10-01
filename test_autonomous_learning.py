@@ -2,9 +2,9 @@
 """
 DuRi 24/7 자동 학습 시스템 테스트
 """
+from datetime import datetime
 import json
 import time
-from datetime import datetime
 
 import requests
 

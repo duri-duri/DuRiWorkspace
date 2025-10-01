@@ -3,8 +3,8 @@
 ChatGPT 6차원 평가 시스템 모듈
 """
 
-import re
 from datetime import datetime
+import re
 from typing import Any, Dict, List
 
 

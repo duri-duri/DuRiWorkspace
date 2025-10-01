@@ -6,8 +6,8 @@ Day41~43: PoU Pilot Log Schema Validator
 
 import argparse
 import json
-import sys
 from pathlib import Path
+import sys
 
 import jsonschema
 

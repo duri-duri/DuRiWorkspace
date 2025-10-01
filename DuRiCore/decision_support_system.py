@@ -11,14 +11,14 @@ DuRi Phase 1-3 Week 3 Day 9 - 의사결정 지원 시스템
 """
 
 import asyncio
+from collections import defaultdict, deque
+from dataclasses import dataclass, field
+from datetime import datetime
 import json
 import logging
 import math
 import random
 import time
-from collections import defaultdict, deque
-from dataclasses import dataclass, field
-from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np

@@ -4,10 +4,10 @@ DuRiCore - 자기 성찰 시스템
 스스로 판단을 평가하고 개선하는 시스템
 """
 
-import logging
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
+import logging
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)

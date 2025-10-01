@@ -3,14 +3,14 @@
 모듈화된 DuRi 자가진화 AI 시스템
 """
 
+from datetime import datetime
 import os
 import sys
-from datetime import datetime
 from typing import Any, Dict
 
-import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+import uvicorn
 
 # 모듈 경로 추가
 sys.path.append(os.path.join(os.path.dirname(__file__), "duri_modules"))

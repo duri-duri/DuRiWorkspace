@@ -3,8 +3,8 @@ from __future__ import annotations
 import dataclasses
 import json
 import math
-import statistics
 from pathlib import Path
+import statistics
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 import yaml  # pyyaml 필요

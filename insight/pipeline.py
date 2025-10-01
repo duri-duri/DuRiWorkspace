@@ -7,9 +7,9 @@ from .engine import rank, tokenize
 
 # 기존 시스템 통합
 try:
-    from duri_modules.evaluation.evaluator import ChatGPTEvaluator
     from DuRiCore.genetic_evolution_engine import GeneticEvolutionEngine
     from DuRiCore.judgment_system import JudgmentSystem
+    from duri_modules.evaluation.evaluator import ChatGPTEvaluator
 
     INTEGRATION_AVAILABLE = True
 except ImportError:

@@ -4,9 +4,9 @@ MIN_N = 200  # 최소 샘플 수
 # tools/capsule_spotcheck.py
 import json
 import math
+from pathlib import Path
 import random
 import sys
-from pathlib import Path
 
 
 def wilson(p, n, z=3.29):  # ~99.9% CI

@@ -12,14 +12,14 @@ DuRi Phase 6.2.1 - 인간적 우선순위 기반 판단 (15% 정확도 향상 �
 """
 
 import asyncio
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from enum import Enum
 import json
 import logging
 import random
 import statistics
 import time
-from dataclasses import asdict, dataclass
-from datetime import datetime
-from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 # 로깅 설정

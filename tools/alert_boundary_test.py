@@ -2,9 +2,9 @@
 #!/usr/bin/env python3
 # 알람 룰 바운드 테스트: 5개 알람 강제 트리거 확인
 
+from datetime import datetime
 import json
 import time
-from datetime import datetime
 
 
 def test_alert_boundaries():

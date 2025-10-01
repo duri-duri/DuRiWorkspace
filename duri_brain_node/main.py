@@ -4,8 +4,8 @@ DuRi Brain Node - 판단/기억/철학 시스템
 포트 8091에서 Brain 기능 제공
 """
 import asyncio
-import time
 from datetime import datetime
+import time
 from typing import Any, Dict, Optional
 
 from fastapi import FastAPI, HTTPException

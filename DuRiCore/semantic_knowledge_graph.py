@@ -5,15 +5,15 @@ DuRiCore Phase 6.2.6 - 시맨틱 지식 연결망 시스템
 """
 
 import asyncio
+from collections import defaultdict, deque
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
+from enum import Enum
 import json
 import logging
 import math
 import random
 import time
-from collections import defaultdict, deque
-from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
-from enum import Enum
 from typing import Any, Dict, List, Optional, Set, Tuple
 
 import numpy as np

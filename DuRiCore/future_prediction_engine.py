@@ -5,16 +5,16 @@ DuRiCore Phase 10 - 고급 미래 예측 엔진
 """
 
 import asyncio
+from collections import defaultdict, deque
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
+from enum import Enum
 import json
 import logging
 import math
 import random
 import statistics
 import time
-from collections import defaultdict, deque
-from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
-from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 from advanced_cognitive_system import (

@@ -18,18 +18,18 @@ Phase 5: 성능 최적화 - 최종 실행 준비 완료 적용
 """
 
 import asyncio
+from collections import defaultdict, deque
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
 import gc
 import json
 import logging
 import sys
 import time
 import tracemalloc
-import weakref
-from collections import defaultdict, deque
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
+import weakref
 
 import psutil
 

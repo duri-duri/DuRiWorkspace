@@ -5,14 +5,14 @@ ChatGPT 제안을 바탕으로 한 생물학적 진화 모델
 """
 
 import asyncio
-import json
-import logging
-import random
-import time
 from collections import defaultdict
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from enum import Enum
+import json
+import logging
+import random
+import time
 from typing import Any, Dict, List, Optional, Tuple
 
 # 로깅 설정

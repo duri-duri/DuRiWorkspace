@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
+from datetime import datetime
 import json
 import os
-from datetime import datetime
 
 BASE_DIR = "/home/duri/emotion_data"
 CUR_PATH = os.path.join(BASE_DIR, "cur.json")

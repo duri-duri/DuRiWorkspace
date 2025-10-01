@@ -11,12 +11,12 @@ DuRi 언어 시스템 - 고급 언어 생성 엔진
 - 창의적 생성
 """
 
+from dataclasses import dataclass
+from datetime import datetime
 import hashlib
 import json
 import logging
 import time
-from dataclasses import dataclass
-from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 from ..generation.contextual_generator import ContextualGenerator

@@ -4,9 +4,9 @@ DuRi 맥락 이해 시스템
 대화 흐름, 주제 추적, 감정 추정, 사용자 목표 예측
 """
 
+from datetime import datetime
 import json
 import re
-from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 

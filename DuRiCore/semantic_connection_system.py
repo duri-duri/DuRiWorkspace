@@ -11,15 +11,15 @@ DuRi 의미 기반 노드 연결 시스템 - Phase 1-3 Week 3 Day 5
 """
 
 import asyncio
+from collections import defaultdict, deque
+from dataclasses import asdict, dataclass, field
+from datetime import datetime
+from enum import Enum
 import heapq
 import json
 import logging
 import random
 import re
-from collections import defaultdict, deque
-from dataclasses import asdict, dataclass, field
-from datetime import datetime
-from enum import Enum
 from typing import Any, Dict, List, Optional, Set, Tuple
 
 import numpy as np

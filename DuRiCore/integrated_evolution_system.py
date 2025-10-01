@@ -21,16 +21,16 @@ Phase Z(자가 반성), Phase Ω(생존 본능), Self-Rewriting, Genetic Evoluti
 """
 
 import asyncio
-import hashlib
-import json
-import logging
-import multiprocessing as mp
-import time
 from collections import defaultdict
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
+import hashlib
+import json
+import logging
+import multiprocessing as mp
+import time
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 import numpy as np

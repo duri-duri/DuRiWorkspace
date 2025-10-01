@@ -5,12 +5,12 @@ DuRi 의미 기반 상황 분류 시스템 (Day 1)
 """
 
 import asyncio
-import json
-import logging
-import re
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from enum import Enum
+import json
+import logging
+import re
 from typing import Any, Dict, List, Optional, Tuple
 
 logging.basicConfig(level=logging.INFO)

@@ -3,10 +3,10 @@
 DuRi 통합 자가 진화 인식 시스템
 모든 자가 진화 인식 기능을 통합하는 메인 시스템
 """
-import json
-import logging
 from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta
+import json
+import logging
 from typing import Any, Dict, List, Optional
 
 from duri_modules.self_awareness.evolution_analyzer import evolution_analyzer

@@ -4,10 +4,10 @@ DuRi 3단계 통합 학습 시스템 테스트
 판단 기록 → 자가 반성 → 자기개선의 완전한 진화 사이클을 테스트합니다.
 """
 
+from datetime import datetime
 import json
 import os
 import sys
-from datetime import datetime
 
 # DuRiCore 모듈 경로 추가
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))

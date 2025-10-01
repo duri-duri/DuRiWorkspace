@@ -4,9 +4,9 @@ DuRiCore - Phase 4 간단한 성능 테스트
 """
 
 import asyncio
+from datetime import datetime
 import logging
 import time
-from datetime import datetime
 
 # 로깅 설정
 logging.basicConfig(

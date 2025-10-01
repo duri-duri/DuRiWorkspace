@@ -5,9 +5,9 @@ DuRiCore - 메인 루프
 """
 
 import asyncio
-import logging
 from dataclasses import dataclass
 from datetime import datetime
+import logging
 from typing import Any, Dict, List, Optional
 
 # 모듈 임포트

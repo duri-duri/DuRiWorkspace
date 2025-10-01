@@ -8,8 +8,8 @@ SocialIntelligenceSystem 자동 등록 테스트
 
 import asyncio
 import logging
-import sys
 from pathlib import Path
+import sys
 
 # 현재 디렉토리를 sys.path에 추가
 sys.path.append(str(Path(__file__).parent))

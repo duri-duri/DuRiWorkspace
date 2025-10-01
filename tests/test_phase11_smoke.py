@@ -1,6 +1,6 @@
+from pathlib import Path
 import subprocess as sp
 import sys
-from pathlib import Path
 
 
 def test_phase11_smoke():

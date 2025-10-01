@@ -9,9 +9,9 @@ DuRi 언어 이해 시스템 - 다국어 처리기
 - 다국어 지원
 """
 
+from dataclasses import dataclass
 import logging
 import re
-from dataclasses import dataclass
 from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)

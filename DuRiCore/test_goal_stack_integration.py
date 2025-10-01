@@ -5,10 +5,10 @@ Goal Stack 시스템이 통합 시스템 매니저에 제대로 통합되었는�
 """
 
 import asyncio
+from datetime import datetime
 import json
 import logging
 import time
-from datetime import datetime
 from typing import Any, Dict, List
 
 from goal_stack_system import GoalPriority, GoalStackSystem, GoalStatus, GoalType

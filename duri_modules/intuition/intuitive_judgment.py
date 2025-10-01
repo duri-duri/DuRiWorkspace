@@ -4,8 +4,8 @@ DuRi 직관적 판단 트리거 시스템
 논리 이전에 빠른 의사결정을 유도하는 인간형 반응 경로
 """
 
-import re
 from datetime import datetime
+import re
 from typing import Any, Dict, List, Optional, Tuple
 
 

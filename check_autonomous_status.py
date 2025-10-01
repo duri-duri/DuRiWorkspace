@@ -5,9 +5,9 @@ DuRi 자율 학습 시스템 상태 확인 스크립트
 """
 
 import asyncio
+from datetime import datetime
 import logging
 import sys
-from datetime import datetime
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)

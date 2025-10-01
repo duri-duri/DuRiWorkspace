@@ -5,14 +5,14 @@ Soar 기반 목표/하위목표 구조를 통한 의식적 조절 시스템
 """
 
 import asyncio
-import json
-import logging
-import time
-import uuid
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from enum import Enum
+import json
+import logging
+import time
 from typing import Any, Dict, List, Optional, Union
+import uuid
 
 # 로깅 설정
 logging.basicConfig(

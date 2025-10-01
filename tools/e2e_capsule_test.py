@@ -1,10 +1,10 @@
 # tools/e2e_capsule_test.py
+from datetime import datetime, timedelta, timezone
 import json
 import os
 import random
 import time
 import uuid
-from datetime import datetime, timedelta, timezone
 
 from tools.capsule import make_capsule
 

@@ -5,12 +5,12 @@ Cursor ↔ DuRi 상호 학습 시스템
 """
 
 import asyncio
+from dataclasses import asdict, dataclass
+from datetime import datetime
 import json
 import logging
 import os
 import time
-from dataclasses import asdict, dataclass
-from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)

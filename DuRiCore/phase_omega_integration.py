@@ -15,17 +15,18 @@ Phase Z의 DuRiThoughtFlow와 Phase Ω의 생존 본능 기반 자가 목표 생
 """
 
 import asyncio
-import hashlib
-import json
-import logging
-import time
 from collections import OrderedDict, defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
+import hashlib
+import json
+import logging
+import time
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
+
 from evolution_system import (
     AdaptationResult,
     EvolutionProgress,

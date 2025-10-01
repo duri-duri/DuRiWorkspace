@@ -9,10 +9,10 @@ DuRi 추론 시스템 - 학습 연동 인터페이스
 - 적응 제안 생성
 """
 
-import logging
-import time
 from dataclasses import dataclass
 from datetime import datetime
+import logging
+import time
 from typing import Any, Dict, List, Optional
 
 from ..data_structures import ReasoningSession

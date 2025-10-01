@@ -4,9 +4,9 @@ DuRi 추론 엔진 - 연역적 추론 전략
 Phase 3 리팩토링: logical_reasoning_engine.py에서 분리
 """
 
-import logging
 from dataclasses import dataclass
 from enum import Enum
+import logging
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np

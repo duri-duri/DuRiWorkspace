@@ -11,14 +11,14 @@ DuRi의 중앙 제어 시스템 - DuRi의 심장
 """
 
 import asyncio
+from dataclasses import asdict, dataclass
+from datetime import datetime
 import importlib
 import json
 import logging
+from pathlib import Path
 import sys
 import time
-from dataclasses import asdict, dataclass
-from datetime import datetime
-from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
 
 # 새로운 모듈 레지스트리 시스템 import

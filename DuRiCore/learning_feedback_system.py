@@ -5,14 +5,14 @@ DuRi 학습 피드백 시스템 (Day 6)
 """
 
 import asyncio
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
+from enum import Enum
 import json
 import logging
 import pickle
 import re
 import sqlite3
-from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
-from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 logging.basicConfig(level=logging.INFO)

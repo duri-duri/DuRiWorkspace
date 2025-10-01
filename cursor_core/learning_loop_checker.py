@@ -5,10 +5,10 @@ DuRi 자가학습 루프 중복 확인 및 상태 점검 시스템
 """
 
 import asyncio
-import json
-import logging
 from dataclasses import dataclass, field
 from datetime import datetime
+import json
+import logging
 from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)

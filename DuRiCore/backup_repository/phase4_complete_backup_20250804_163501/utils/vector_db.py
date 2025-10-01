@@ -4,11 +4,11 @@ DuRiCore - Vector Database
 FAISS 기반 벡터 데이터베이스 구현
 """
 
+from datetime import datetime
 import json
 import logging
 import os
 import pickle
-from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
 import faiss

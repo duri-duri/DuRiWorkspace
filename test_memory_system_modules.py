@@ -7,10 +7,10 @@ DuRiCore Phase 2-5: 메모리 시스템 모듈 테스트
 """
 
 import asyncio
+from datetime import datetime, timedelta
 import logging
 import os
 import sys
-from datetime import datetime, timedelta
 from typing import Any, Dict
 
 # 로깅 설정

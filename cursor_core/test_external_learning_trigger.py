@@ -5,11 +5,11 @@ DuRi 외부 학습 트리거 테스트 시스템
 """
 
 import asyncio
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
 import json
 import logging
 import random
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
 from cursor_core.learning_config import (

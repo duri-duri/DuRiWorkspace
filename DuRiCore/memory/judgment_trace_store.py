@@ -3,10 +3,10 @@
 DuRi 판단 추적 시스템 - 판단과 판단 이유를 기록하여 학습 및 자기반성에 활용
 """
 
+from datetime import datetime
 import json
 import logging
 import os
-from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)

@@ -5,9 +5,9 @@ DuRiCore Phase 7 - 실제 응용 시스템 테스트
 """
 
 import asyncio
+from datetime import datetime
 import json
 import time
-from datetime import datetime
 
 from application_system import ApplicationDomain, ApplicationSystem, ProblemType
 

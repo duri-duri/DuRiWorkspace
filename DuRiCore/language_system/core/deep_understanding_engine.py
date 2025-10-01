@@ -11,12 +11,12 @@ DuRi 언어 시스템 - 심층 언어 이해 엔진
 - 다국어 처리
 """
 
+from dataclasses import dataclass
+from datetime import datetime
 import hashlib
 import json
 import logging
 import time
-from dataclasses import dataclass
-from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 import numpy as np

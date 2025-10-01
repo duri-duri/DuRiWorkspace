@@ -3,9 +3,9 @@
 DuRi 새로운 학습 시스템 테스트
 의미 추출 + 결과 평가 시스템
 """
+from datetime import datetime
 import json
 import time
-from datetime import datetime
 
 import requests
 

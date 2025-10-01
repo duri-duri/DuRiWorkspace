@@ -5,13 +5,13 @@ DuRi가 자기 자신의 코드를 분석하고 개선하는 시스템
 """
 
 import ast
+from dataclasses import dataclass
+from datetime import datetime
 import inspect
 import logging
 import os
 import time
 import traceback
-from dataclasses import dataclass
-from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
 import psutil

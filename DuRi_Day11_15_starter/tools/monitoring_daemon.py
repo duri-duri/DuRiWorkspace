@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 import argparse
+from collections import defaultdict
 import csv
+from datetime import datetime, timedelta, timezone
 import glob
 import json
 import os
-import subprocess
-import time
-from collections import defaultdict
-from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from statistics import mean
+import subprocess
+import time
 
 
 def load_cfg(p):

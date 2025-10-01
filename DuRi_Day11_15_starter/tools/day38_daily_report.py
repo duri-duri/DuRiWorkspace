@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 import csv
+from datetime import datetime, timezone
 import json
 import math
 import os
-import subprocess
-from datetime import datetime, timezone
 from pathlib import Path
+import subprocess
 
 CFG = "configs/monitoring.yaml"
 

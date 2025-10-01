@@ -9,8 +9,8 @@ DuRi 언어 이해 시스템 - 감정 분석기
 - 주요 감정 결정
 """
 
-import logging
 from dataclasses import dataclass
+import logging
 from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)

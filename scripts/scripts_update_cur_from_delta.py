@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
+from datetime import datetime
 import json
 import os
-from datetime import datetime
 
 DATE = datetime.now().strftime("%Y-%m-%d")
 BASE_DIR = f"/home/duri/emotion_data/{DATE}"

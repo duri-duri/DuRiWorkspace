@@ -5,8 +5,8 @@ storage_policy.yml과 .gitignore의 일치성을 검증
 """
 
 import os
-import sys
 from pathlib import Path
+import sys
 
 import yaml
 

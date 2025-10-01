@@ -5,16 +5,16 @@ DuRiCore Day 11 - 통합 사회적 지능 시스템
 """
 
 import asyncio
+from collections import defaultdict, deque
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
+from enum import Enum
 import json
 import logging
 import math
 import random
 import statistics
 import time
-from collections import defaultdict, deque
-from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
-from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 # 기존 시스템들 import
