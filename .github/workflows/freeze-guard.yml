@@ -7,15 +7,26 @@ on:
 jobs:
   guard:
     runs-on: ubuntu-latest
-    # PR에 'override:freeze' 라벨이 붙어있으면 가드 우회
-    if: "!contains(join(github.event.pull_request.labels.*.name, ' '), 'override:freeze')"
     steps:
+      - name: Check override label
+        id: check_label
+        shell: bash
+        run: |
+          if [[ "${{ contains(join(github.event.pull_request.labels.*.name, ' '), 'override:freeze') }}" == "true" ]]; then
+            echo "✅ override:freeze label present, bypassing freeze-guard"
+            echo "bypass=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          echo "bypass=false" >> $GITHUB_OUTPUT
+
       - name: Checkout
+        if: steps.check_label.outputs.bypass != 'true'
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Compute changed files
+        if: steps.check_label.outputs.bypass != 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -29,6 +40,7 @@ jobs:
           fi
 
       - name: Enforce allowlist
+        if: steps.check_label.outputs.bypass != 'true'
         shell: bash
         run: |
           set -euo pipefail
