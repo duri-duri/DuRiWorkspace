@@ -26,10 +26,8 @@ try:
     from social_intelligence_system import (
         InteractionType,
         RelationshipType,
-    )
-    from social_intelligence_system import SocialContext
-    from social_intelligence_system import SocialContext as SocialContextEnum
-    from social_intelligence_system import (
+        SocialContext,
+        SocialContext as SocialContextEnum,
         SocialIntelligenceResult,
         SocialIntelligenceSystem,
         SocialInteraction,

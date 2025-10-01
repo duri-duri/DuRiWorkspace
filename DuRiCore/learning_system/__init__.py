@@ -36,13 +36,9 @@ from .core.learning_optimization import (
 from .integration.knowledge_integration import (
     IntegratedKnowledge,
     IntegrationMethod,
-)
-from .integration.knowledge_integration import IntegrationSession as KnowledgeIntegrationSession
-from .integration.knowledge_integration import (
+    IntegrationSession as KnowledgeIntegrationSession,
     KnowledgeIntegrationSystem,
-)
-from .integration.knowledge_integration import KnowledgeQuality as IntegrationKnowledgeQuality
-from .integration.knowledge_integration import (
+    KnowledgeQuality as IntegrationKnowledgeQuality,
     KnowledgeSource,
 )
 
@@ -69,11 +65,7 @@ from .monitoring.learning_monitor import (
 from .monitoring.learning_monitoring import (
     LearningIssue,
     LearningIssueType,
-)
-from .monitoring.learning_monitoring import (
     LearningMonitoringSystem as AdvancedLearningMonitoringSystem,
-)
-from .monitoring.learning_monitoring import (
     LearningPrediction,
     MonitoringLevel,
     OptimizationRecommendation,
@@ -84,9 +76,7 @@ from .strategies.adaptive_learning import (
     AdaptiveLearningStrategy,
     LearningData,
     LearningModel,
-)
-from .strategies.adaptive_learning import LearningResult as AdaptiveLearningResult
-from .strategies.adaptive_learning import (
+    LearningResult as AdaptiveLearningResult,
     LearningStatus,
     LearningType,
 )

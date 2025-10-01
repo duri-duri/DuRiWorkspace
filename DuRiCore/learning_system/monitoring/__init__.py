@@ -18,9 +18,7 @@ from .learning_monitor import (
 from .learning_monitoring import (
     LearningIssue,
     LearningIssueType,
-)
-from .learning_monitoring import LearningMonitoringSystem as AdvancedLearningMonitoringSystem
-from .learning_monitoring import (
+    LearningMonitoringSystem as AdvancedLearningMonitoringSystem,
     LearningPrediction,
     MonitoringLevel,
     OptimizationRecommendation,
