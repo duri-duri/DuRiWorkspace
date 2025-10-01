@@ -6,13 +6,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Ensure no tracked snapshot/backup/logs
+        shell: bash
         run: |
           set -eo pipefail
           PATTERN='^(duri_snapshots|restored_day8_10|unified_conversations|logs|DuRiCore_backup_|backup|duri_archive)/'
-          COUNT=$(git ls-files | grep -E "$PATTERN" | wc -l | xargs)
-          if [ "$COUNT" != "0" ]; then
-            echo "::error ::Still tracked artifacts found ($COUNT)."
-            git ls-files | grep -E "$PATTERN" | sed 's/^/- /'
+          # 화이트리스트: 저장소 유지용 파일/문서 허용
+          WHITELIST_REGEX='/(\.gitkeep|\.keep|README(?:\.md)?|\.placeholder)$'
+
+          mapfile -t FOUND < <(git ls-files | grep -E "$PATTERN" || true)
+
+          # 화이트리스트 제외
+          mapfile -t VIOLATIONS < <(
+            for f in "${FOUND[@]}"; do
+              [[ "$f" =~ $WHITELIST_REGEX ]] || echo "$f"
+            done
+          )
+
+          COUNT=${#VIOLATIONS[@]}
+          if (( COUNT > 0 )); then
+            echo "::error ::Still tracked artifacts found (${COUNT}):"
+            printf -- "- %s\n" "${VIOLATIONS[@]}"
             exit 1
           fi
           echo "✅ No tracked artifacts found"

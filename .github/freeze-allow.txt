@@ -25,13 +25,30 @@ tools/auto_fix_suggester.py
 tools/failure_patterns.yml
 tests/day38/test_auto_fix_suggester.py
 Makefile
-# allow this maintenance branch
-branch: chore/pre-commit-durability-enhancements
+# allow branch
+branch: ^chore/pre-commit-durability-enhancements$
 
-# allow these paths in future maintenance PRs
-path-allow: ^\.pre-commit-config\.yaml$
-path-allow: ^\.gitignore$
-path-allow: ^\.github/freeze-allow\.txt$
+# allow labels
+label: ^maintenance$
+label: ^chore$
+
+# allow paths (정규식)
+path: ^\.pre-commit-config\.yaml$
+path: ^\.gitignore$
+path: ^\.gitattributes$
+path: ^pyproject\.toml$
+path: ^\.github/workflows/verify-artifacts\.yml$
+path: ^\.github/workflows/pre-commit\.yml$
+path: ^\.github/freeze-allow\.txt$
+
+# allow non-source noisy paths
+path: duri_snapshots/**
+path: restored_day8_10/**
+path: unified_conversations/**
+path: logs/**
+path: DuRiCore_backup_*/
+path: backup*/
+path: duri_archive/**
 
 .github/workflows/proof-gates.yml
 .gitignore
