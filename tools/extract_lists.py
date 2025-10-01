@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-import sys, json, yaml
+import json
+import sys
+
+import yaml
+
 
 def flatten(xs):
     out = []
@@ -12,15 +16,18 @@ def flatten(xs):
             out.append(x)
     return out
 
-y = yaml.safe_load(open(sys.argv[1], 'r', encoding='utf-8'))
+
+y = yaml.safe_load(open(sys.argv[1], "r", encoding="utf-8"))
 # allow extra keys but ignore them here; schema check는 쉘에서 수행하거나 별도 경고만
 wl_raw = flatten(y.get("whitelist"))
 bl_raw = flatten(y.get("blacklist"))
+
 
 def norm(seq):
     if not seq:
         return []
     return [str(s).lstrip("./") for s in seq]
+
 
 out = {
     "whitelist": norm(wl_raw),

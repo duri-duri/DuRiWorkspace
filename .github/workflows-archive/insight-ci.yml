@@ -1,0 +1,79 @@
+name: insight-ci
+on:
+  push:
+    paths:
+      - "insight/**"
+      - "tests/**"
+      - "docs/insight/**"
+      - "scripts/core/phase11/**"
+      - "docs/phase11/**"
+      - ".github/workflows/insight-ci.yml"
+      - "pytest.ini"
+  pull_request:
+    paths:
+      - "insight/**"
+      - "tests/**"
+      - "docs/insight/**"
+      - "scripts/core/phase11/**"
+      - "docs/phase11/**"
+      - ".github/workflows/insight-ci.yml"
+      - "pytest.ini"
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install core dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt || true
+          python -m pip install pytest pytest-asyncio anyio
+
+      - name: Install test-specific dependencies
+        run: |
+          # 로그에서 확인된 누락 의존성들
+          python -m pip install psutil requests aiohttp fastapi
+          python -m pip install "opentelemetry-api>=1.25" "opentelemetry-sdk>=1.25"
+
+      - name: Create duri_core alias (case sensitivity fix)
+        run: |
+          python -c "
+          import pathlib
+          alias_dir = pathlib.Path('duri_core')
+          if not alias_dir.exists():
+              alias_dir.mkdir(parents=True, exist_ok=True)
+              (alias_dir / '__init__.py').write_text('''
+from importlib import import_module as _im
+_target = _im(\"DuRiCore\")
+__path__ = _target.__path__
+def __getattr__(name):
+    return getattr(_target, name)
+''')
+          "
+
+      - name: Run scoped test suite
+        env:
+          PYTHONPATH: ${{ github.workspace }}:${{ github.workspace }}/DuRiCore
+        run: |
+          # pytest.ini 설정을 신뢰하여 수집 범위 제한
+          pytest -c pytest.ini
+
+      - name: Run Phase 11 specific tests
+        env:
+          PYTHONPATH: ${{ github.workspace }}:${{ github.workspace }}/DuRiCore
+        run: |
+          pytest -q tests/test_phase11_*.py
+
+      - name: Upload Phase11 traces
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase11-traces
+          path: DuRiCore/memory/phase11_traces/**
+          if-no-files-found: ignore

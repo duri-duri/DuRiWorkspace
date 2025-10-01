@@ -48,13 +48,13 @@ USB_OK=false
 if [[ -d "$USB" && "$(dirname "$DEST_FILE_MAIN")" != "$USB" ]]; then
   log "📁 USB 미러 시작: ${DEST_FILE_USB}"
   mkdir -p "$(dirname "$DEST_FILE_USB")" 2>/dev/null || true
-  
+
   if command -v rsync >/dev/null 2>&1; then
     rsync --inplace --partial "$DEST_FILE_MAIN" "$DEST_FILE_USB" && USB_OK=true || true
   else
     cp -f "$DEST_FILE_MAIN" "$DEST_FILE_USB" && USB_OK=true || true
   fi
-  
+
   if $USB_OK; then
     SUM_M="$(sha256sum "$DEST_FILE_MAIN" | awk '{print $1}')"
     SUM_U="$(sha256sum "$DEST_FILE_USB" | awk '{print $1}')"
@@ -79,7 +79,7 @@ fi
 if [[ "$(dirname "$DEST_FILE_MAIN")" != "$DESK_DIR" ]]; then
   log "📁 Desktop 미러 시작: ${DEST_FILE_DESK}"
   TMP_DESK="${DEST_FILE_DESK}.part"
-  
+
   if tar --numeric-owner --acls --xattrs -C "$SRC" -cpf - . | zstd -T0 -19 -q -o "$TMP_DESK"; then
     sync "$TMP_DESK" || true
     mv -f "$TMP_DESK" "$DEST_FILE_DESK"
@@ -103,18 +103,3 @@ else
   log "SUMMARY: PRIMARY=OK, USB=MISS → success (보완 필요)"
 fi
 exit 0
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

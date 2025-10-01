@@ -22,10 +22,3 @@ for f in docs/model_card_v1.md eval/metrics.yaml risk/risk_register.md; do
   grep -q "$f" "$TMP/list.txt" || echo "[WARN] sample not listed: $f (OK if packed later)"
 done
 echo "[SMOKE] restore drill pass"
-
-
-
-
-
-
-

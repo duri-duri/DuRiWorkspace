@@ -124,7 +124,7 @@ brain_logs.txt
 *_logs.txt
 
 # 스크립트 파일들
-*.sh 
+*.sh
 # 백업 제외 파일 목록
 *.pyd
 .Python
@@ -160,7 +160,7 @@ htmlcov/
 
 # Docker 볼륨 데이터
 postgres_data/
-redis_data/ 
+redis_data/
 =======
 # 테스트 결과
 .coverage

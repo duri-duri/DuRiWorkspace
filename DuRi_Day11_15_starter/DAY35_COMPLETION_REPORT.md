@@ -66,7 +66,7 @@ class MultiObjectiveOptimizer:
             "error": 0.35,
             "size": 0.10
         }
-        
+
     def calculate_objective_function(self, metrics):
         J = (self.objective_weights["overhead"] * metrics["overhead"] +
              self.objective_weights["error"] * metrics["error"] +

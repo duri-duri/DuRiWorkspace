@@ -95,7 +95,7 @@
 
 ### **Exclude 규칙**
 - `scripts/backup_exclude_dev.txt` - 개발 백업용
-- `scripts/backup_exclude_extended.txt` - 확장 백업용  
+- `scripts/backup_exclude_extended.txt` - 확장 백업용
 - `scripts/backup_exclude_artifact.txt` - 아티팩트 백업용
 
 ### **풀백업**
@@ -144,21 +144,6 @@ ls -la /mnt/c/Users/admin/Desktop/두리백업/$(date +%Y)/$(date +%m)/$(date +%
 
 ---
 
-**마지막 업데이트**: 2025-08-17  
-**작성자**: DuRi AI Assistant  
+**마지막 업데이트**: 2025-08-17
+**작성자**: DuRi AI Assistant
 **상태**: ✅ **통합 백업 시스템 완성!**
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

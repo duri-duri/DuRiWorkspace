@@ -40,7 +40,7 @@
 
 #### **1. 일요일 15:00 (오후 3시) - 풀백업**
 - **기존 작업**: `03:00 - unified_backup_full.sh (일요일)` 대체
-- **장점**: 
+- **장점**:
   - 컴퓨터 사용 시간 내 실행으로 안전성 확보
   - 오후 시간으로 충분한 백업 시간 확보
   - 기존 09:00-09:30 작업과 겹침 없음
@@ -95,8 +95,8 @@ SNAP_FILE="${SNAP_DIR}/${HOST}_workspace.snar"   # tar 증분 스냅샷
 mkdir -p "$DESK_DIR" "$LOG_DIR" "$SNAP_DIR"
 
 # 원자적 쓰기 보조
-make_sha() { 
-  ( cd "$(dirname "$1")" && sha256sum "$(basename "$1")" > "SHA256SUMS.$(basename "$1").txt" ); 
+make_sha() {
+  ( cd "$(dirname "$1")" && sha256sum "$(basename "$1")" > "SHA256SUMS.$(basename "$1").txt" );
 }
 
 # USB 미러링 함수
@@ -147,7 +147,7 @@ do_incr() {
   local tmp="${art}.part"
 
   log "Creating INCREMENTAL backup on Desktop..."
-  
+
   # 증분: GNU tar --listed-incremental 스냅샷 사용 (권한/ACL/XATTR 보존)
   if tar --numeric-owner --acls --xattrs \
          --listed-incremental="$SNAP_FILE" \
@@ -479,44 +479,6 @@ Phase 1 완료 후:
 
 ---
 
-**문서 생성일**: 2025년 8월 17일  
-**작성자**: DuRi AI Assistant  
+**문서 생성일**: 2025년 8월 17일
+**작성자**: DuRi AI Assistant
 **상태**: ✅ **Phase 1 실행 계획 최종 완성 (시간 최적화 완료)**
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

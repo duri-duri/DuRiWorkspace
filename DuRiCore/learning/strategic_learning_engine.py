@@ -4,6 +4,7 @@ DuRi 전략 학습 엔진 - 간단한 버전
 판단 결과를 관찰하고 패턴을 분석하여 전략적 통찰을 도출
 """
 
+
 class StrategicLearningEngine:
     def __init__(self):
         self.history = []
@@ -12,11 +13,9 @@ class StrategicLearningEngine:
         """
         판단 결과를 입력받아 전략적 학습을 위한 기록을 남깁니다.
         """
-        self.history.append({
-            "situation": situation,
-            "action": action,
-            "reasoning": reasoning
-        })
+        self.history.append(
+            {"situation": situation, "action": action, "reasoning": reasoning}
+        )
 
     def generate_strategic_insight(self):
         """

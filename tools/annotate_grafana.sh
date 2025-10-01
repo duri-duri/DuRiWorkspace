@@ -78,25 +78,3 @@ curl -sS -X POST \
   "${GRAFANA_URL%/}/api/annotations" | jq .
 
 echo "✅ Grafana annotation created at ${TIME_MS}ms"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

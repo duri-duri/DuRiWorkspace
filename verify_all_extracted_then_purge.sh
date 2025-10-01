@@ -142,7 +142,7 @@ for arc in "${ARCS[@]}"; do
 
   if [[ "$ACTION" == "delete" ]]; then do_delete "$arc"; else do_trash "$arc"; fi
   ((ok++)); bytes=$((bytes + size))
-  
+
   # 임시 파일 정리
   rm -f -- "$a"
 done

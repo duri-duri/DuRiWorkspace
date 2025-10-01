@@ -25,7 +25,7 @@
 ✅ 해결: 모듈 로딩 순서 조정 필요
 ```
 
-**분석 결과**: 
+**분석 결과**:
 - `ModuleMeta`가 `BaseModule` 클래스 정의 시점에 실행됨
 - 이때 `ModuleRegistry.get_instance()`가 아직 초기화되지 않았을 수 있음
 - **우선순위**: **높음** ⭐⭐⭐
@@ -74,10 +74,10 @@
 class ModuleMeta(type):
     def __new__(cls, name: str, bases: tuple, namespace: dict):
         module_class = super().__new__(cls, name, bases, namespace)
-        
+
         # 이 시점에서 registry가 아직 초기화되지 않았을 수 있음
         registry = ModuleRegistry.get_instance()  # ❌ 문제 지점
-        
+
         return module_class
 ```
 
@@ -108,7 +108,7 @@ class ModuleMeta(type):  # 새로운 메타클래스
 # registry.py
 module_registry = {}
 
-def register_module(name: str = None, dependencies: List[str] = None, 
+def register_module(name: str = None, dependencies: List[str] = None,
                    priority: ModulePriority = ModulePriority.NORMAL):
     def decorator(cls):
         module_name = name or cls.__name__
@@ -129,7 +129,7 @@ from registry import register_module
 class MyModule(BaseModule):
     async def initialize(self):
         pass
-    
+
     async def execute(self, context):
         return {"status": "success"}
 ```
@@ -141,15 +141,15 @@ class MyModule(BaseModule):
 class ModuleMeta(type):
     def __new__(cls, name: str, bases: tuple, namespace: dict):
         module_class = super().__new__(cls, name, bases, namespace)
-        
+
         # 지연 등록을 위한 정보만 저장
-        if (BaseModule in bases or 
+        if (BaseModule in bases or
             any(issubclass(base, BaseModule) for base in bases if isinstance(base, type))):
-            
+
             if hasattr(module_class, 'module_name') and module_class.module_name:
                 # 나중에 등록할 수 있도록 정보 저장
                 module_class._pending_registration = True
-        
+
         return module_class
 
 # ModuleRegistry에 지연 등록 메서드 추가
@@ -225,17 +225,17 @@ class AutoTestModule(BaseModule):
     module_name = "auto_test_module"
     dependencies = []
     priority = ModulePriority.NORMAL
-    
+
     async def initialize(self):
         self._initialized = True
-    
+
     async def execute(self, context):
         return {"status": "success"}
 
 # 테스트 실행
 async def test_auto_registration():
     registry = ModuleRegistry.get_instance()
-    
+
     # 자동 등록 확인
     module_info = registry.get_module("auto_test_module")
     if module_info:
@@ -250,7 +250,7 @@ if __name__ == "__main__":
 ### **2. 데코레이터 방식 구현**
 ```python
 # module_registry.py에 추가
-def register_module(name: str = None, dependencies: List[str] = None, 
+def register_module(name: str = None, dependencies: List[str] = None,
                    priority: ModulePriority = ModulePriority.NORMAL):
     def decorator(cls):
         module_name = name or cls.__name__
@@ -288,7 +288,7 @@ def register_module(name: str = None, dependencies: List[str] = None,
 
 ## 🏆 **결론**
 
-**ChatGPT의 피드백이 매우 정확합니다.** 
+**ChatGPT의 피드백이 매우 정확합니다.**
 
 ### **핵심 문제**:
 1. **Import 순서 문제** - 메타클래스가 레지스트리 초기화 전에 실행됨

@@ -40,4 +40,3 @@ cat <<EOF > "$BASE/README.md"
 EOF
 
 echo "✅ 스냅샷 저장 완료: $BASE"
-

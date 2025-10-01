@@ -159,8 +159,3 @@ echo "검증 통과(이동): $ok  |  보류: $skip"
 printf '회수 가능 용량 합계: %.2f GB\n' "$(awk -v b="$bytes" 'BEGIN{printf b/1024/1024/1024}')"
 echo "TRASH: $TRASH"
 echo "DRYRUN=$DRYRUN  (실제 이동하려면 DRYRUN=0으로 변경)"
-
-
-
-
-

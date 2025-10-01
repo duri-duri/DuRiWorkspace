@@ -55,8 +55,8 @@ SNAP_FILE="${SNAP_DIR}/${HOST}_workspace.snar"   # tar 증분 스냅샷
 mkdir -p "$DESK_DIR" "$LOG_DIR" "$SNAP_DIR"
 
 # 원자적 쓰기 보조
-make_sha() { 
-  ( cd "$(dirname "$1")" && sha256sum "$(basename "$1")" > "SHA256SUMS.$(basename "$1").txt" ); 
+make_sha() {
+  ( cd "$(dirname "$1")" && sha256sum "$(basename "$1")" > "SHA256SUMS.$(basename "$1").txt" );
 }
 
 # USB 미러링 함수
@@ -107,7 +107,7 @@ do_incr() {
   local tmp="${art}.part"
 
   log "Creating INCREMENTAL backup on Desktop..."
-  
+
   # 증분: GNU tar --listed-incremental 스냅샷 사용 (권한/ACL/XATTR 보존)
   if tar --numeric-owner --acls --xattrs \
          --listed-incremental="$SNAP_FILE" \

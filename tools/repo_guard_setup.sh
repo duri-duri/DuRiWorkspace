@@ -78,7 +78,7 @@ fi
 exit 0
 HOOK
 run "install -m 0755 /tmp/_precommit.$$ $HOOK"
-rm -f /tmp/_precommit.$$ 
+rm -f /tmp/_precommit.$$
 run "git config core.hooksPath .githooks"
 
 # 3) 이미 추적 중인 산출물 "추적 해제"(파일은 보존)
@@ -113,10 +113,3 @@ else
 fi
 
 say "Done. ✅"
-
-
-
-
-
-
-

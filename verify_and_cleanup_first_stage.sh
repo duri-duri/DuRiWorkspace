@@ -93,8 +93,3 @@ while IFS= read -r -d '' arc; do
 done < <(eval "find \"$MOUNT\" -type f $ARCHIVE_PAT -print0")
 
 echo "완료. (TRASH: $TRASH)"
-
-
-
-
-

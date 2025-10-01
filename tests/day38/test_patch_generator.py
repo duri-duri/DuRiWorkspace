@@ -1,8 +1,9 @@
 import json
-import subprocess
-import tempfile
 import os
 from pathlib import Path
+import subprocess
+import tempfile
+
 
 def run_patch_generator(action, file_path, *args):
     """Run patch generator with given arguments"""
@@ -10,12 +11,13 @@ def run_patch_generator(action, file_path, *args):
     result = subprocess.run(cmd, capture_output=True, text=True)
     return json.loads(result.stdout) if result.returncode == 0 else None
 
+
 def test_add_import_action():
     """Test add_import action"""
-    with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
         f.write("print('hello world')\n")
         temp_file = f.name
-    
+
     try:
         result = run_patch_generator("add_import", temp_file, "duri_common.settings")
         assert result is not None
@@ -25,12 +27,13 @@ def test_add_import_action():
     finally:
         os.unlink(temp_file)
 
+
 def test_increase_timeout_action():
     """Test increase_timeout action"""
-    with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
         f.write("timeout = 30 * timeout\n")
         temp_file = f.name
-    
+
     try:
         result = run_patch_generator("increase_timeout", temp_file, "1.5")
         assert result is not None
@@ -39,6 +42,7 @@ def test_increase_timeout_action():
         assert result["factor"] == 1.5
     finally:
         os.unlink(temp_file)
+
 
 def test_unknown_action():
     """Test unknown action handling"""

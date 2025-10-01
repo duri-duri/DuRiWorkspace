@@ -50,7 +50,7 @@ class JudgmentLogo:
         self.confidence = confidence
         self.data = data
         self.timestamp = datetime.now()
-    
+
     def to_dict(self):
         return {
             "type": self.type,
@@ -76,4 +76,4 @@ class JudgmentLogo:
 
 ---
 **마지막 업데이트**: 2025-08-05 17:03
-**다음 단계**: 중복 코드 통합 및 판단 로고 시스템 구현 
+**다음 단계**: 중복 코드 통합 및 판단 로고 시스템 구현

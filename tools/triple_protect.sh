@@ -75,13 +75,13 @@ PAIR_CNT=0
 for core_file in "${CORE_FILES[@]}"; do
   d="$(dirname "$core_file")"
   filename="$(basename "$core_file")"
-  
+
   # 관련 메타데이터 파일들 찾기
   base_name="${filename%.tar.zst}"
   sha_file="$d/SHA256SUMS.CORE.${base_name#CORE__}.txt"
   hashlist_file="$d/HASHLIST.CORE.${base_name#CORE__}.txt"
   filelist_file="$d/filelist.CORE.${base_name#CORE__}.txt"
-  
+
   echo "{\"core_file\":\"$core_file\",\"sha_file\":\"$sha_file\",\"hashlist_file\":\"$hashlist_file\",\"filelist_file\":\"$filelist_file\"}" >> "$PLAN_JSONL"
   PAIR_CNT=$((PAIR_CNT+1))
 done

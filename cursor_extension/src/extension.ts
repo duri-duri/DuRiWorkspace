@@ -8,10 +8,10 @@ export function activate(context: vscode.ExtensionContext) {
 
     // DuRi API 클라이언트 초기화
     const duriAPI = new DuRiAPI();
-    
+
     // 학습 매니저 초기화
     const learningManager = new DuRiLearningManager(duriAPI);
-    
+
     // 대화 캡처 시스템 초기화
     const conversationCapture = new ConversationCapture(learningManager);
 
@@ -68,7 +68,7 @@ export function activate(context: vscode.ExtensionContext) {
     // 자동 시작 (옵션)
     const config = vscode.workspace.getConfiguration('duri');
     const autoStart = config.get('autoStartCapture', false);
-    
+
     if (autoStart) {
         // 잠시 후 자동 시작
         setTimeout(() => {
@@ -89,4 +89,4 @@ export function activate(context: vscode.ExtensionContext) {
 
 export function deactivate() {
     console.log('DuRi 통합 학습 확장 프로그램이 비활성화되었습니다.');
-} 
+}

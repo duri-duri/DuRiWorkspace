@@ -5,4 +5,3 @@ modules:
     timeout: 5s
     http:
       preferred_ip_protocol: ip4
-

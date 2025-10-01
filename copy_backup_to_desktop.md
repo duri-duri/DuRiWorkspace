@@ -57,5 +57,5 @@ ls -lh ~/Desktop/DuRiWorkspace_v1.0.0_final_20250725_124436.tar.gz
 
 ---
 
-**복사 명령어**: `cp DuRiWorkspace_v1.0.0_final_20250725_124436.tar.gz ~/Desktop/`  
-**상태**: 복사 대기 중 
+**복사 명령어**: `cp DuRiWorkspace_v1.0.0_final_20250725_124436.tar.gz ~/Desktop/`
+**상태**: 복사 대기 중

@@ -39,6 +39,3 @@
 * 삭제 동기화(/MIR)는 사용하지 않음 → 안전 우선.
 * 원본: `\\wsl$\Ubuntu-22.04\home\duri\DuRiWorkspace\var\reports, var\state`.
 * 로그: `H:\DuRiBackup\_logs`, `I:\DuRiBackup\_logs`.
-
-
-

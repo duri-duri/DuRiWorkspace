@@ -59,7 +59,7 @@ FAILS=0
 for file in "${SECURITY_FILES[@]}"; do
     if [[ -f "$file" ]]; then
         log "백업 중: $file"
-        
+
         # 파일 복사
         if cp -p "$file" "$BACKUP_PATH/"; then
             log "✅ $file 백업 완료"

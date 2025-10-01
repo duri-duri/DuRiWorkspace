@@ -8,22 +8,22 @@ day9:
     timeout_rate_max: 0.02  # 타임아웃 비율 최대값 (2%) - 목표: <0.5%
     missing_rate_max: 0.005  # 누락 비율 최대값 (0.5%) - 목표: <0.1%
     wilson_confidence: 0.95  # Wilson 신뢰구간 (95%)
-  
+
   # 시뮬레이션 설정
   simulation:
     iterations: 20  # 시뮬레이션 반복 횟수
     timeout_seconds: 10  # 시뮬레이션 타임아웃 (초)
-  
+
   # 플레이키 테스트 격리
   quarantine:
     enabled: true  # 플레이키 테스트 격리 활성화
     max_violations: 3  # 최대 위반 횟수
-  
+
   # 시뮬레이션 프로필 (baseline_v1 = 안정화된 표준)
   sim:
     profile: "baseline_v1"  # 사용할 시뮬레이션 프로필 (고정)
     seed: 42  # 기본 랜덤 시드
-    
+
     # Baseline v1 프로필 파라미터 (안정적 성능 - 검증됨)
     base_min_ms: 450.0  # 기본 지연시간 최소값
     base_max_ms: 950.0  # 기본 지연시간 최대값

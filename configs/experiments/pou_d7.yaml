@@ -19,7 +19,6 @@ experiment:
 
 # 통계 검정 설정
 stat_test: "two_prop"  # 이진 지표용
-alpha: 0.05
 power: 0.8
 effect_size: 0.03  # 3%p 개선
 

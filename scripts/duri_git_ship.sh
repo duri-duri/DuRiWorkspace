@@ -71,5 +71,3 @@ else
 fi
 
 jlog INFO "git_ship_done"
-
-

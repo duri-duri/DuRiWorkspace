@@ -23,8 +23,8 @@ gh issue create --title "Core-RAG Conflict Detected" \
 ```sql
 -- 충돌 패턴 분석
 SELECT kind, details->>'payload' as conflict_data, created_at
-FROM audit_ledger 
-WHERE kind = 'core_conflict_blocked' 
+FROM audit_ledger
+WHERE kind = 'core_conflict_blocked'
 ORDER BY created_at DESC LIMIT 10;
 ```
 
@@ -57,11 +57,11 @@ curl -X POST "$DURI_ENDPOINT/api/runtime/config" \
 ### 근본 원인 조사 (5-30분)
 ```sql
 -- 근거 부족 패턴 분석
-SELECT 
+SELECT
   capsule->'fusion'->>'w' as fusion_weight,
   capsule->'rag' as rag_docs,
   created_at
-FROM answer_ledger 
+FROM answer_ledger
 WHERE capsule->'fusion'->>'w'::float < 0.92
 ORDER BY created_at DESC LIMIT 10;
 ```
@@ -112,7 +112,7 @@ python3 tools/build_bundle.py --verify-only
 
 ### 매시간 확인
 - [ ] `bundle_verify_fail_total` = 0
-- [ ] `core_rag_conflict_total` = 0  
+- [ ] `core_rag_conflict_total` = 0
 - [ ] `rag_evidence_attach_rate` ≥ 0.95
 - [ ] `reproducible_capsule_rate` ≥ 0.999
 
@@ -125,5 +125,3 @@ python3 tools/build_bundle.py --verify-only
 - [ ] DR 드릴: 최신 태그 부팅 → 골든 20문항 ≥95%
 - [ ] 키 로테이션 준비 (90일 주기)
 - [ ] 골든셋 교체 (2주마다 20%)
-
-

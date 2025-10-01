@@ -125,7 +125,7 @@ git log --oneline -10
 ## ✅ **성공 확인 체크리스트**
 
 - [ ] `ops/summary/summary.json` 생성됨
-- [ ] `ops/summary/summary.md` 생성됨  
+- [ ] `ops/summary/summary.md` 생성됨
 - [ ] README Phase 표에 ✅ 자동 반영됨
 - [ ] Git 커밋 성공 (auto: daily phase update)
 - [ ] 로그에 오류 없음
@@ -134,6 +134,3 @@ git log --oneline -10
 ---
 
 > **💡 팁**: 처음에는 DRY-RUN 모드로 충분히 테스트한 후 실제 실행하세요!
-
-
-

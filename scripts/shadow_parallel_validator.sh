@@ -47,25 +47,25 @@ collect_performance_metrics() {
     local system_name="$1"
     local system_path="$2"
     local log_file="$SHADOW_LOGS_DIR/${system_name%.*}_metrics_$(date +%F).json"
-    
+
     log "📊 $system_name 성능 지표 수집..."
-    
+
     # 시스템 리소스 사용량
     local cpu_usage=$(top -bn1 | grep "Cpu(s)" | awk '{print $2}' | cut -d'%' -f1)
     local memory_usage=$(free | grep Mem | awk '{printf "%.1f", $3/$2 * 100.0}')
     local disk_usage=$(df . | tail -1 | awk '{print $5}' | cut -d'%' -f1)
-    
+
     # 실행 시간 측정 (예시)
     local start_time=$(date +%s)
     # 실제로는 해당 시스템의 실행 시간을 측정해야 함
     sleep 1  # 시뮬레이션용
     local end_time=$(date +%s)
     local execution_time=$((end_time - start_time))
-    
+
     # 성공/실패 상태 (예시)
     local success_status="SUCCESS"
     local error_count=0
-    
+
     # 지표 저장
     cat > "$log_file" <<EOF
 {
@@ -87,7 +87,7 @@ collect_performance_metrics() {
   }
 }
 EOF
-    
+
     log "✅ $system_name 성능 지표 수집 완료: $log_file"
 }
 
@@ -95,32 +95,32 @@ EOF
 compare_with_standard() {
     local legacy_system="$1"
     local comparison_file="$SHADOW_RESULTS_DIR/comparison_${legacy_system%.*}_$(date +%F).json"
-    
+
     log "🔍 $legacy_system vs 표준 시스템 비교 분석..."
-    
+
     # 표준 시스템 지표 (예시)
     local standard_success_rate=99.5
     local standard_execution_time=15
     local standard_error_rate=0.5
-    
+
     # 레거시 시스템 지표 (실제로는 수집된 데이터 사용)
     local legacy_success_rate=98.0
     local legacy_execution_time=18
     local legacy_error_rate=2.0
-    
+
     # 비교 분석
     local success_rate_diff=$((standard_success_rate - legacy_success_rate))
     local execution_time_ratio=$(echo "scale=2; $standard_execution_time / $legacy_execution_time" | bc -l 2>/dev/null || echo "1.0")
     local error_rate_diff=$((standard_error_rate - legacy_error_rate))
-    
+
     # 판정 기준
     local success_rate_ok=$([[ $success_rate_diff -ge 0 ]] && echo "true" || echo "false")
     local execution_time_ok=$([[ $(echo "$execution_time_ratio <= 1.2" | bc -l 2>/dev/null || echo "1") -eq 1 ]] && echo "true" || echo "false")
     local error_rate_ok=$([[ $error_rate_diff -le 0 ]] && echo "true" || echo "false")
-    
+
     # 전체 판정
     local overall_result=$([[ "$success_rate_ok" == "true" && "$execution_time_ok" == "true" && "$error_rate_ok" == "true" ]] && echo "PASS" || echo "FAIL")
-    
+
     # 비교 결과 저장
     cat > "$comparison_file" <<EOF
 {
@@ -160,7 +160,7 @@ compare_with_standard() {
   }
 }
 EOF
-    
+
     log "✅ $legacy_system 비교 분석 완료: $comparison_file"
     log "  - 전체 판정: $overall_result"
     log "  - 성공률: $success_rate_ok"
@@ -172,37 +172,37 @@ EOF
 run_shadow_validation() {
     local system_name="$1"
     local system_path="$2"
-    
+
     log "🔄 $system_name Shadow 병행 검증 시작..."
-    
+
     # 1) 성능 지표 수집
     collect_performance_metrics "$system_name" "$system_path"
-    
+
     # 2) 표준 시스템과 비교 분석
     compare_with_standard "$system_name"
-    
+
     # 3) Shadow 로그 생성
     local shadow_log="$SHADOW_LOGS_DIR/legacy_shadow_${system_name%.*}_$(date +%F).log"
     echo "$(date -Iseconds): $system_name Shadow 검증 완료" > "$shadow_log"
     echo "  - 검증 일시: $(date -Iseconds)" >> "$shadow_log"
     echo "  - 검증 방법: 성능 지표 수집 + 표준 시스템 비교" >> "$shadow_log"
     echo "  - 결과 파일: $SHADOW_RESULTS_DIR/comparison_${system_name%.*}_$(date +%F).json" >> "$shadow_log"
-    
+
     log "✅ $system_name Shadow 병행 검증 완료"
 }
 
 # === Shadow 검증 요약 리포트 생성 ===
 generate_shadow_summary() {
     local summary_file="$SHADOW_LOGS_DIR/shadow_summary_$(date +%F).md"
-    
+
     log "📊 Shadow 검증 요약 리포트 생성: $summary_file"
-    
+
     # 검증 결과 집계
     local total_systems=${#SHADOW_TARGETS[@]}
     local completed_systems=$(find "$SHADOW_RESULTS_DIR" -name "comparison_*_$(date +%F).json" 2>/dev/null | wc -l | xargs)
     local passed_systems=0
     local failed_systems=0
-    
+
     # PASS/FAIL 카운트
     for result_file in "$SHADOW_RESULTS_DIR"/comparison_*_$(date +%F).json 2>/dev/null; do
         if [[ -f "$result_file" ]]; then
@@ -213,7 +213,7 @@ generate_shadow_summary() {
             fi
         fi
     done
-    
+
     cat > "$summary_file" <<EOF
 # 🔄 Shadow 병행 검증 요약 — $(date +%F)
 
@@ -296,45 +296,45 @@ done)
 
 ---
 
-> **💡 운영 팁**: Shadow 검증은 안전한 전환을 위한 중요한 단계입니다.  
-> **📊 모니터링**: 검증 결과를 지속적으로 확인하고 문제점을 파악하세요.  
+> **💡 운영 팁**: Shadow 검증은 안전한 전환을 위한 중요한 단계입니다.
+> **📊 모니터링**: 검증 결과를 지속적으로 확인하고 문제점을 파악하세요.
 > **🔄 전환**: 검증이 완료된 후에만 점진적 전환을 진행하세요.
 EOF
-    
+
     log "✅ Shadow 검증 요약 리포트 생성 완료: $summary_file"
 }
 
 # === 메인 실행 로직 ===
 main() {
     log "🚀 Shadow 병행 검증 시스템 시작"
-    
+
     # 락 획득
     acquire_lock
-    
+
     # 디렉토리 생성
     mkdir -p "$SHADOW_LOGS_DIR" "$SHADOW_RESULTS_DIR"
-    
+
     # Shadow 검증 실행
     local validation_success=0
     local validation_total=${#SHADOW_TARGETS[@]}
-    
+
     for system_name in "${!SHADOW_TARGETS[@]}"; do
         local system_path="${SHADOW_TARGETS[$system_name]}"
-        
+
         if run_shadow_validation "$system_name" "$system_path"; then
             validation_success=$((validation_success + 1))
         fi
     done
-    
+
     # Shadow 검증 요약 리포트 생성
     generate_shadow_summary
-    
+
     # 결과 요약
     log "📊 Shadow 병행 검증 결과 요약"
     log "  - 총 대상: $validation_total개"
     log "  - 성공: $validation_success개"
     log "  - 실패: $((validation_total - validation_success))개"
-    
+
     if [[ $validation_success -eq $validation_total ]]; then
         log "🎉 모든 Shadow 병행 검증 완료!"
         log "다음 단계: 검증 결과 분석 및 점진적 전환 계획"
@@ -349,6 +349,3 @@ main() {
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     main "$@"
 fi
-
-
-

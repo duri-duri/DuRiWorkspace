@@ -67,7 +67,7 @@ class DevelopmentMilestone:
     def __init__(self):
         self.milestones = self._define_milestones()
         self.completion_rates = {}
-    
+
     def _define_milestones(self):
         return {
             "level_1": {
@@ -93,12 +93,12 @@ class SelfReflection:
         emotion_analysis = self.emotion_system.get_current_analysis()
         growth_metrics = self.growth_system.get_metrics()
         judgment_history = self.judgment_system.get_recent_decisions()
-        
+
         # 약점 식별
         weak_points = self._identify_weak_points(
             emotion_analysis, growth_metrics, judgment_history
         )
-        
+
         # 맞춤 퀘스트 생성
         for weak_point in weak_points:
             custom_quest = self._generate_custom_quest(weak_point)
@@ -185,4 +185,4 @@ duri_tests/
 - 자기성찰 시스템 구현
 - 자율 퀘스트 등록 기능
 
-**이 통합 계획으로 진행하시겠습니까?** 
+**이 통합 계획으로 진행하시겠습니까?**

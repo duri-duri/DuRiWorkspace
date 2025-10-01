@@ -110,11 +110,11 @@ class MyModule(BaseModule):
     module_name = "my_module"
     dependencies = ["other_module"]
     priority = ModulePriority.NORMAL
-    
+
     async def initialize(self):
         # 초기화 로직
         pass
-    
+
     async def execute(self, context):
         # 실행 로직
         return result

@@ -9,7 +9,7 @@
         "responsibilities": ["요청 라우팅", "결과 통합", "노드 상태 모니터링"]
       },
       "brain": {
-        "name": "duri_brain_node", 
+        "name": "duri_brain_node",
         "port": 8091,
         "description": "DuRi의 판단, 철학, 기억 시스템을 담당",
         "modules": ["meaning_analysis", "context_analysis", "emotion_analysis", "memory_retrieval", "ethical_judgment", "creative_insights"],
@@ -18,7 +18,7 @@
       },
       "evolution": {
         "name": "duri_evolution_node",
-        "port": 8092, 
+        "port": 8092,
         "description": "DuRi의 자가 학습, 평가, 개선을 담당하는 시스템",
         "modules": ["chatgpt_evaluation", "duri_self_reflection", "discussion", "autonomous_learning", "realtime_learning", "automatic_improvement"],
         "routes": ["/learn", "/health"],
@@ -27,7 +27,7 @@
     },
     "communication": {
       "core_to_brain": "POST /analyze",
-      "core_to_evolution": "POST /learn", 
+      "core_to_evolution": "POST /learn",
       "brain_to_core": "analysis_result",
       "evolution_to_core": "learning_result"
     },
@@ -44,4 +44,4 @@
       "improvement_suggestions": 10
     }
   }
-} 
+}

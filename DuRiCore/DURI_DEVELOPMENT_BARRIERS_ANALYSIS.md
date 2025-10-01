@@ -97,12 +97,12 @@ return alternatives.get(judgment_type, ["기본 접근"])
 async def generate_dynamic_approach(self, context: Dict[str, Any]) -> List[str]:
     """동적 접근 방법 생성"""
     approaches = []
-    
+
     # 컨텍스트 분석
     complexity = context.get('complexity', 0.5)
     urgency = context.get('urgency', 0.5)
     available_resources = context.get('available_resources', [])
-    
+
     if complexity > 0.8:
         approaches.append("체계적 분석 기반 접근")
     elif urgency > 0.8:
@@ -111,7 +111,7 @@ async def generate_dynamic_approach(self, context: Dict[str, Any]) -> List[str]:
         approaches.append("자원 활용 기반 접근")
     else:
         approaches.append("효율적 최적화 기반 접근")
-    
+
     return approaches
 ```
 
@@ -124,12 +124,12 @@ return ["기본 적응 전략"]
 async def generate_adaptive_strategy(self, social_context: Dict[str, Any]) -> List[str]:
     """동적 적응 전략 생성"""
     strategies = []
-    
+
     # 사회적 맥락 분석
     relationship_type = social_context.get('relationship_type', 'formal')
     interaction_history = social_context.get('interaction_history', [])
     cultural_context = social_context.get('cultural_context', {})
-    
+
     if relationship_type == 'intimate':
         strategies.append("친밀감 기반 적응 전략")
     elif len(interaction_history) > 5:
@@ -138,7 +138,7 @@ async def generate_adaptive_strategy(self, social_context: Dict[str, Any]) -> Li
         strategies.append("공식적 맥락 적응 전략")
     else:
         strategies.append("균형적 적응 전략")
-    
+
     return strategies
 ```
 
@@ -148,16 +148,16 @@ async def generate_adaptive_strategy(self, social_context: Dict[str, Any]) -> Li
 ```python
 class IntrinsicLearningSystem:
     """내적 동기 기반 학습 시스템"""
-    
+
     def __init__(self):
         self.curiosity_level = 0.5
         self.achievement_drive = 0.5
         self.exploration_urge = 0.5
-    
+
     async def generate_self_directed_learning_goals(self) -> List[LearningGoal]:
         """자발적 학습 목표 생성"""
         goals = []
-        
+
         # 호기심 기반 목표
         if self.curiosity_level > 0.7:
             goals.append(LearningGoal(
@@ -166,7 +166,7 @@ class IntrinsicLearningSystem:
                 motivation="호기심",
                 priority=0.8
             ))
-        
+
         # 성취욕 기반 목표
         if self.achievement_drive > 0.6:
             goals.append(LearningGoal(
@@ -175,13 +175,13 @@ class IntrinsicLearningSystem:
                 motivation="성취욕",
                 priority=0.7
             ))
-        
+
         return goals
-    
+
     async def execute_voluntary_learning(self):
         """자발적 학습 실행"""
         goals = await self.generate_self_directed_learning_goals()
-        
+
         for goal in goals:
             if goal.priority > 0.8:
                 await self.explore_knowledge_area(goal)
@@ -191,11 +191,11 @@ class IntrinsicLearningSystem:
 ```python
 class ProactiveExplorationSystem:
     """능동적 탐구 시스템"""
-    
+
     async def identify_knowledge_gaps(self) -> List[KnowledgeGap]:
         """지식 격차 자동 식별"""
         gaps = []
-        
+
         # 패턴 분석을 통한 격차 발견
         patterns = await self.analyze_behavioral_patterns()
         for pattern in patterns:
@@ -205,13 +205,13 @@ class ProactiveExplorationSystem:
                     gap_type="understanding",
                     priority=1.0 - pattern.confidence
                 ))
-        
+
         return gaps
-    
+
     async def generate_research_questions(self) -> List[ResearchQuestion]:
         """자발적 연구 질문 생성"""
         questions = []
-        
+
         # 호기심 기반 질문
         if self.curiosity_level > 0.8:
             questions.append(ResearchQuestion(
@@ -219,7 +219,7 @@ class ProactiveExplorationSystem:
                 motivation="호기심",
                 expected_value=0.9
             ))
-        
+
         return questions
 ```
 
@@ -229,15 +229,15 @@ class ProactiveExplorationSystem:
 ```python
 class DynamicGoalGenerationSystem:
     """동적 목표 생성 시스템"""
-    
+
     async def generate_context_aware_goals(self, context: Dict[str, Any]) -> List[Goal]:
         """상황 인식 목표 생성"""
         goals = []
-        
+
         # 현재 성능 분석
         performance_metrics = await self.assess_current_performance()
         knowledge_gaps = await self.identify_knowledge_gaps()
-        
+
         # 성장 기회 기반 목표
         for gap in knowledge_gaps:
             if gap.priority > 0.7:
@@ -247,7 +247,7 @@ class DynamicGoalGenerationSystem:
                     motivation="자기 개선",
                     timeline="ongoing"
                 ))
-        
+
         # 호기심 기반 목표
         if self.curiosity_level > 0.8:
             goals.append(Goal(
@@ -256,7 +256,7 @@ class DynamicGoalGenerationSystem:
                 motivation="호기심",
                 timeline="flexible"
             ))
-        
+
         return goals
 ```
 
@@ -264,10 +264,10 @@ class DynamicGoalGenerationSystem:
 ```python
 class GoalPriorityManager:
     """목표 우선순위 관리자"""
-    
+
     async def adjust_goal_priorities(self, goals: List[Goal]) -> List[Goal]:
         """목표 우선순위 동적 조정"""
-        
+
         for goal in goals:
             # 성과 기반 조정
             if goal.type == "learning":
@@ -276,12 +276,12 @@ class GoalPriorityManager:
                     goal.priority *= 0.8  # 성과가 좋으면 우선순위 낮춤
                 elif progress < 0.3:
                     goal.priority *= 1.2  # 성과가 나쁘면 우선순위 높임
-            
+
             # 호기심 기반 조정
             if goal.motivation == "호기심":
                 if self.curiosity_level > 0.9:
                     goal.priority *= 1.3  # 호기심이 높으면 우선순위 높임
-        
+
         return sorted(goals, key=lambda x: x.priority, reverse=True)
 ```
 
@@ -291,11 +291,11 @@ class GoalPriorityManager:
 ```python
 class ProactiveQuestionGeneration:
     """능동적 질문 생성 시스템"""
-    
+
     async def generate_self_questions(self) -> List[Question]:
         """자발적 질문 생성"""
         questions = []
-        
+
         # 패턴 분석 기반 질문
         patterns = await self.analyze_behavioral_patterns()
         for pattern in patterns:
@@ -305,7 +305,7 @@ class ProactiveQuestionGeneration:
                     motivation="이해 욕구",
                     priority=1.0 - pattern.confidence
                 ))
-        
+
         # 호기심 기반 질문
         if self.curiosity_level > 0.8:
             questions.append(Question(
@@ -313,7 +313,7 @@ class ProactiveQuestionGeneration:
                 motivation="호기심",
                 priority=0.9
             ))
-        
+
         return questions
 ```
 
@@ -321,11 +321,11 @@ class ProactiveQuestionGeneration:
 ```python
 class SelfProblemDiscovery:
     """자발적 문제 발견 시스템"""
-    
+
     async def identify_self_improvement_areas(self) -> List[ImprovementArea]:
         """자기 개선 영역 발견"""
         areas = []
-        
+
         # 성능 분석
         performance_metrics = await self.get_performance_metrics()
         for metric, value in performance_metrics.items():
@@ -336,7 +336,7 @@ class SelfProblemDiscovery:
                     target_level=0.8,
                     motivation="자기 개선"
                 ))
-        
+
         # 학습 패턴 분석
         learning_patterns = await self.analyze_learning_patterns()
         for pattern in learning_patterns:
@@ -347,7 +347,7 @@ class SelfProblemDiscovery:
                     target_level=0.8,
                     motivation="학습 최적화"
                 ))
-        
+
         return areas
 ```
 
@@ -388,4 +388,4 @@ class SelfProblemDiscovery:
 
 **분석 완료일**: 2025-08-05
 **핵심 목표**: DuRi의 발전 저해 요소 제거 및 인간형 AI 진화
-**다음 단계**: "기본" 패턴 제거 및 동적 생성 시스템 구현 
+**다음 단계**: "기본" 패턴 제거 및 동적 생성 시스템 구현

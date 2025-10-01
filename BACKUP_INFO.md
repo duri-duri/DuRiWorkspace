@@ -48,7 +48,7 @@ docker-compose up -d
 
 ---
 *백업 생성: 2025-07-25 10:46:19*
-*생성자: DuRi Control 시스템* 
+*생성자: DuRi Control 시스템*
 =======
 # DuRi Control System 백업 정보
 
@@ -128,5 +128,5 @@ cp deploy/env.prod.example .env
 ### 참고사항
 - 이 백업은 DuRi Control System v1.0.0의 최종 완성 버전입니다.
 - GitHub 100MB 제한을 고려하여 불필요한 파일들을 제외했습니다.
-- 프로덕션 배포 준비가 완료된 상태입니다. 
+- 프로덕션 배포 준비가 완료된 상태입니다.
 >>>>>>> gate-test

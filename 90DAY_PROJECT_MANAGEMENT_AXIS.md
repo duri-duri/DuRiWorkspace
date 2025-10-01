@@ -281,8 +281,7 @@ backup_repository/backup_axes_management/90day_project_management/
 
 ---
 
-**문서 생성일**: 2025-01-27  
-**문서 버전**: 1.0  
-**관리자**: DuRi 시스템  
+**문서 생성일**: 2025-01-27
+**문서 버전**: 1.0
+**관리자**: DuRi 시스템
 **상태**: ✅ 활성
-

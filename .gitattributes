@@ -1,7 +1,10 @@
-# 강제 LF
 * text=auto eol=lf
-*.sh text eol=lf
-*.yml text eol=lf
-*.yaml text eol=lf
-Makefile text eol=lf
-.github/freeze-allow.txt text eol=lf
+
+# 포맷터 대상에서 제외(혹시 로컬 단독 실행 시 영향 줄이기)
+duri_snapshots/** linguist-generated
+restored_day8_10/** linguist-generated
+unified_conversations/** linguist-generated
+logs/** linguist-generated
+DuRiCore_backup_*/** linguist-generated
+backup*/** linguist-generated
+duri_archive/** linguist-generated

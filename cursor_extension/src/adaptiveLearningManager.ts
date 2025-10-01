@@ -40,7 +40,7 @@ export class AdaptiveLearningManager {
 
         this.isAdaptiveLearning = true;
         console.log('DuRi 적응적 학습이 시작되었습니다.');
-        
+
         // 시스템 상태 조회
         await this.updateSystemStatus();
     }
@@ -132,11 +132,11 @@ export class AdaptiveLearningManager {
     async updateSystemStatus(): Promise<void> {
         try {
             const status = await this.apiClient.getAdaptiveSystemStatus();
-            
+
             if (status && status.success) {
                 this.currentOptimalFormat = status.system_status.current_optimal_format;
                 this.explorationRate = status.system_status.exploration_rate;
-                
+
                 console.log('시스템 상태 업데이트:', {
                     optimal_format: this.currentOptimalFormat,
                     exploration_rate: this.explorationRate
@@ -153,7 +153,7 @@ export class AdaptiveLearningManager {
     async getPerformanceMetrics(): Promise<any> {
         try {
             const metrics = await this.apiClient.getAdaptivePerformanceMetrics();
-            
+
             if (metrics && metrics.success) {
                 console.log('성능 지표 조회 완료:', metrics.performance_metrics);
                 return metrics.performance_metrics;
@@ -173,7 +173,7 @@ export class AdaptiveLearningManager {
     async getAvailableFormats(): Promise<any[]> {
         try {
             const formats = await this.apiClient.getAdaptiveFormats();
-            
+
             if (formats && formats.success) {
                 console.log('사용 가능한 형식 조회 완료:', formats.available_formats);
                 return formats.available_formats;
@@ -207,4 +207,4 @@ export class AdaptiveLearningManager {
     getExplorationRate(): number {
         return this.explorationRate;
     }
-} 
+}

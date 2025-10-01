@@ -149,4 +149,4 @@ python3 duri_evolution/app/startup_message.py
 
 ---
 
-*이 계획은 시스템 헌장에 따라 DuRi의 장기적 안정성과 효율성을 보장하기 위한 것입니다.* 
+*이 계획은 시스템 헌장에 따라 DuRi의 장기적 안정성과 효율성을 보장하기 위한 것입니다.*

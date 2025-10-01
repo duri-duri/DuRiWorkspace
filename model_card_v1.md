@@ -1,6 +1,6 @@
 # DuRi Model Card v1 — **Filled Example (Post–Day 11)**
-_Revision_: 2025-09-10  
-_Channel_: Canary (10%) / Internal  
+_Revision_: 2025-09-10
+_Channel_: Canary (10%) / Internal
 _Owner_: DuRi Core (신세계 연합의원 김신 원장 주도)
 
 > ⚠️ **주의**: 본 문서는 **예시 수치**를 포함합니다. 실제 배포 전 아래 `TBD` 항목을 실제 지표로 교체하십시오.
@@ -50,7 +50,7 @@ _Owner_: DuRi Core (신세계 연합의원 김신 원장 주도)
 | HITL 수용률 | **90%** | 의심 사례 승인 비율 |
 
 ### 추적·근거
-- `trace_v2_perf_tuned/` : Trace 오버헤드 **+3.8%** (p95 기준)  
+- `trace_v2_perf_tuned/` : Trace 오버헤드 **+3.8%** (p95 기준)
 - 회귀 실패 1건 요약: **Validation(1)**
 
 ## 6. 설명 가능성(Trace v2)

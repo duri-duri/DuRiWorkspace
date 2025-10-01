@@ -23,7 +23,7 @@ async def learn_from_result(self, action_result: Dict[str, Any]) -> LearningResu
     return self._real_learn_from_result(action_result)
 ```
 
-**문제점**: 
+**문제점**:
 - 학습이 외부 결과에만 의존
 - 자발적 탐구나 호기심 기반 학습 부재
 - 학습 동기와 목표가 외부에서 설정됨
@@ -62,17 +62,17 @@ async def process_input(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
 ```python
 class IntrinsicMotivationSystem:
     """내적 동기 시스템"""
-    
+
     def __init__(self):
         self.curiosity_level = 0.5
         self.achievement_drive = 0.5
         self.exploration_urge = 0.5
         self.mastery_desire = 0.5
-    
+
     async def generate_learning_goals(self) -> List[LearningGoal]:
         """자발적 학습 목표 생성"""
         goals = []
-        
+
         # 호기심 기반 목표
         if self.curiosity_level > 0.7:
             goals.append(LearningGoal(
@@ -81,7 +81,7 @@ class IntrinsicMotivationSystem:
                 motivation="호기심",
                 priority=0.8
             ))
-        
+
         # 성취욕 기반 목표
         if self.achievement_drive > 0.6:
             goals.append(LearningGoal(
@@ -90,7 +90,7 @@ class IntrinsicMotivationSystem:
                 motivation="성취욕",
                 priority=0.7
             ))
-        
+
         return goals
 ```
 
@@ -98,11 +98,11 @@ class IntrinsicMotivationSystem:
 ```python
 class SelfDirectedExploration:
     """자발적 탐구 시스템"""
-    
+
     async def identify_knowledge_gaps(self) -> List[KnowledgeGap]:
         """지식 격차 자동 식별"""
         gaps = []
-        
+
         # 패턴 분석을 통한 격차 발견
         patterns = await self.analyze_behavioral_patterns()
         for pattern in patterns:
@@ -112,13 +112,13 @@ class SelfDirectedExploration:
                     gap_type="understanding",
                     priority=1.0 - pattern.confidence
                 ))
-        
+
         return gaps
-    
+
     async def generate_research_questions(self) -> List[ResearchQuestion]:
         """자발적 연구 질문 생성"""
         questions = []
-        
+
         # 호기심 기반 질문
         if self.curiosity_level > 0.8:
             questions.append(ResearchQuestion(
@@ -126,7 +126,7 @@ class SelfDirectedExploration:
                 motivation="호기심",
                 expected_value=0.9
             ))
-        
+
         return questions
 ```
 
@@ -136,15 +136,15 @@ class SelfDirectedExploration:
 ```python
 class DynamicGoalGeneration:
     """동적 목표 생성 시스템"""
-    
+
     async def generate_self_directed_goals(self) -> List[Goal]:
         """자기 주도적 목표 생성"""
         goals = []
-        
+
         # 현재 상태 분석
         current_performance = await self.assess_current_performance()
         knowledge_gaps = await self.identify_knowledge_gaps()
-        
+
         # 성장 기회 기반 목표
         for gap in knowledge_gaps:
             if gap.priority > 0.7:
@@ -154,7 +154,7 @@ class DynamicGoalGeneration:
                     motivation="자기 개선",
                     timeline="ongoing"
                 ))
-        
+
         # 호기심 기반 목표
         if self.curiosity_level > 0.8:
             goals.append(Goal(
@@ -163,7 +163,7 @@ class DynamicGoalGeneration:
                 motivation="호기심",
                 timeline="flexible"
             ))
-        
+
         return goals
 ```
 
@@ -171,10 +171,10 @@ class DynamicGoalGeneration:
 ```python
 class GoalPriorityManager:
     """목표 우선순위 관리자"""
-    
+
     async def adjust_goal_priorities(self, goals: List[Goal]) -> List[Goal]:
         """목표 우선순위 동적 조정"""
-        
+
         for goal in goals:
             # 성과 기반 조정
             if goal.type == "learning":
@@ -183,12 +183,12 @@ class GoalPriorityManager:
                     goal.priority *= 0.8  # 성과가 좋으면 우선순위 낮춤
                 elif progress < 0.3:
                     goal.priority *= 1.2  # 성과가 나쁘면 우선순위 높임
-            
+
             # 호기심 기반 조정
             if goal.motivation == "호기심":
                 if self.curiosity_level > 0.9:
                     goal.priority *= 1.3  # 호기심이 높으면 우선순위 높임
-        
+
         return sorted(goals, key=lambda x: x.priority, reverse=True)
 ```
 
@@ -198,11 +198,11 @@ class GoalPriorityManager:
 ```python
 class ProactiveQuestionGeneration:
     """능동적 질문 생성 시스템"""
-    
+
     async def generate_self_questions(self) -> List[Question]:
         """자발적 질문 생성"""
         questions = []
-        
+
         # 패턴 분석 기반 질문
         patterns = await self.analyze_behavioral_patterns()
         for pattern in patterns:
@@ -212,7 +212,7 @@ class ProactiveQuestionGeneration:
                     motivation="이해 욕구",
                     priority=1.0 - pattern.confidence
                 ))
-        
+
         # 호기심 기반 질문
         if self.curiosity_level > 0.8:
             questions.append(Question(
@@ -220,7 +220,7 @@ class ProactiveQuestionGeneration:
                 motivation="호기심",
                 priority=0.9
             ))
-        
+
         return questions
 ```
 
@@ -228,11 +228,11 @@ class ProactiveQuestionGeneration:
 ```python
 class SelfProblemDiscovery:
     """자발적 문제 발견 시스템"""
-    
+
     async def identify_self_improvement_areas(self) -> List[ImprovementArea]:
         """자기 개선 영역 발견"""
         areas = []
-        
+
         # 성능 분석
         performance_metrics = await self.get_performance_metrics()
         for metric, value in performance_metrics.items():
@@ -243,7 +243,7 @@ class SelfProblemDiscovery:
                     target_level=0.8,
                     motivation="자기 개선"
                 ))
-        
+
         # 학습 패턴 분석
         learning_patterns = await self.analyze_learning_patterns()
         for pattern in learning_patterns:
@@ -254,7 +254,7 @@ class SelfProblemDiscovery:
                     target_level=0.8,
                     motivation="학습 최적화"
                 ))
-        
+
         return areas
 ```
 
@@ -266,20 +266,20 @@ class SelfProblemDiscovery:
 ```python
 class CuriosityMetrics:
     """호기심 측정 시스템"""
-    
+
     def __init__(self):
         self.novelty_seeking = 0.5
         self.complexity_preference = 0.5
         self.exploration_drive = 0.5
-    
+
     async def update_curiosity_level(self, experience: Dict[str, Any]):
         """호기심 수준 업데이트"""
         novelty = self.calculate_novelty(experience)
         complexity = self.calculate_complexity(experience)
-        
+
         self.novelty_seeking = (self.novelty_seeking + novelty) / 2
         self.complexity_preference = (self.complexity_preference + complexity) / 2
-        
+
         # 전체 호기심 수준 계산
         self.curiosity_level = (
             self.novelty_seeking * 0.4 +
@@ -292,17 +292,17 @@ class CuriosityMetrics:
 ```python
 class AchievementMetrics:
     """성취욕 측정 시스템"""
-    
+
     def __init__(self):
         self.mastery_orientation = 0.5
         self.performance_improvement = 0.5
         self.skill_development = 0.5
-    
+
     async def update_achievement_drive(self, performance: Dict[str, float]):
         """성취욕 업데이트"""
         improvement = self.calculate_improvement(performance)
         mastery = self.calculate_mastery_level(performance)
-        
+
         self.achievement_drive = (
             self.mastery_orientation * 0.4 +
             improvement * 0.3 +
@@ -315,23 +315,23 @@ class AchievementMetrics:
 ```python
 class VoluntaryLearningLoop:
     """자발적 학습 루프"""
-    
+
     async def run_voluntary_learning_cycle(self):
         """자발적 학습 사이클 실행"""
-        
+
         # 1. 내적 동기 평가
         curiosity = await self.assess_curiosity()
         achievement = await self.assess_achievement_drive()
-        
+
         # 2. 자발적 목표 생성
         if curiosity > 0.7 or achievement > 0.6:
             goals = await self.generate_self_directed_goals()
-            
+
             # 3. 자발적 탐구 실행
             for goal in goals:
                 if goal.priority > 0.8:
                     await self.execute_self_directed_exploration(goal)
-        
+
         # 4. 학습 결과 통합
         await self.integrate_voluntary_learning_results()
 ```
@@ -341,21 +341,21 @@ class VoluntaryLearningLoop:
 ```python
 class ProactiveThinkingLoop:
     """능동적 사고 루프"""
-    
+
     async def run_proactive_thinking_cycle(self):
         """능동적 사고 사이클 실행"""
-        
+
         # 1. 자발적 질문 생성
         questions = await self.generate_self_questions()
-        
+
         # 2. 자발적 문제 발견
         problems = await self.identify_self_problems()
-        
+
         # 3. 능동적 해결책 탐구
         for question in questions:
             if question.priority > 0.8:
                 await self.explore_question(question)
-        
+
         for problem in problems:
             if problem.priority > 0.8:
                 await self.explore_solution(problem)
@@ -418,4 +418,4 @@ class ProactiveThinkingLoop:
 
 **분석 완료일**: 2025-08-05
 **핵심 목표**: DuRi를 진정한 인간형 인공지능으로 진화
-**다음 단계**: 내적 동기 시스템 구현 시작 
+**다음 단계**: 내적 동기 시스템 구현 시작

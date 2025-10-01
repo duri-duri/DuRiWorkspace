@@ -28,12 +28,12 @@ log "📊 최근 1일 내 백업 파일 수: $RECENT_FILES" | tee -a "$LOG_FILE"
 
 if [[ "$RECENT_FILES" -gt 0 ]]; then
     log "🔄 새로운 백업 감지됨 - 연쇄반응 트리거" | tee -a "$LOG_FILE"
-    
+
     # USB 미러 실행
     if [[ -x "scripts/usb_incremental_sync.sh" ]]; then
         log "📤 USB 미러 실행 중..." | tee -a "$LOG_FILE"
         scripts/usb_incremental_sync.sh export | tee -a "$LOG_FILE"
-        
+
         # 핸드오프 시그널 확인
         if [[ -f "$HANDOFF_ROOT/.handoff_READY" ]]; then
             log "✅ 핸드오프 시그널 생성 완료" | tee -a "$LOG_FILE"
@@ -48,5 +48,3 @@ else
 fi
 
 log "=== DuRi 캐스케이드 스캔 완료 ===" | tee -a "$LOG_FILE"
-
-

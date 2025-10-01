@@ -47,7 +47,7 @@ if [[ "$HOSP_CONNECTED" == true && "$HOME_CONNECTED" == true ]]; then
     echo "3. 양방향 동기화 (최신 파일 기준)"
     echo ""
     read -p "선택하세요 (1/2/3): " choice
-    
+
     case $choice in
         1)
             echo "📁 병원용 → 집용 동기화 실행..."
@@ -58,15 +58,15 @@ if [[ "$HOSP_CONNECTED" == true && "$HOME_CONNECTED" == true ]]; then
             # 집용에서 병원용으로 동기화하는 스크립트 실행
             COLD_HOME="/mnt/f/DuRiSafe_HOME"
             COLD_HOSP="/mnt/e/DuRiSafe_HOSP"
-            
+
             # 최신 백업 파일 찾기
             LATEST_HOME=$(find "$COLD_HOME/FULL" -name "FULL__*.tar.zst" -type f -printf '%T@ %p\n' | sort -n | tail -1 | cut -d' ' -f2-)
             if [[ -n "$LATEST_HOME" ]]; then
                 BASENAME_HOME=$(basename "$LATEST_HOME")
                 LATEST_HOSP="$COLD_HOSP/FULL/$BASENAME_HOME"
-                
+
                 echo "집용 최신 백업: $BASENAME_HOME"
-                
+
                 if [[ ! -f "$LATEST_HOSP" ]]; then
                     echo "📁 백업 파일 복사 중..."
                     cp "$LATEST_HOME" "$LATEST_HOSP"
@@ -99,15 +99,15 @@ if [[ "$HOSP_CONNECTED" == true && "$HOME_CONNECTED" == true ]]; then
             exit 1
             ;;
     esac
-    
+
 elif [[ "$HOSP_CONNECTED" == true ]]; then
     echo "📁 병원용 드라이브만 연결됨"
     echo "집용 드라이브를 연결한 후 다시 실행하세요"
-    
+
 elif [[ "$HOME_CONNECTED" == true ]]; then
     echo "📁 집용 드라이브만 연결됨"
     echo "병원용 드라이브를 연결한 후 다시 실행하세요"
-    
+
 else
     echo "❌ 콜드 백업 드라이브가 연결되지 않았습니다"
     echo "드라이브를 연결한 후 다시 실행하세요"
@@ -115,4 +115,3 @@ fi
 
 echo ""
 echo "✅ 동기화 작업 완료"
-

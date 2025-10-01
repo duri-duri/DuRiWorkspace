@@ -30,12 +30,12 @@ choose_dest(){
 # 목적지 스탬프 생성 (원자적 쓰기)
 stamp_dest(){
   local d="$1" name="$2" t="$(date '+%F %T')"
-  
+
   # .last_full_backup.txt 원자적 쓰기
   printf '%s %s %s %s\n' "$t" "$(hostname)" "$(whoami)" "$name" > "$d/.last_full_backup.txt.tmp" \
     && mv "$d/.last_full_backup.txt.tmp" "$d/.last_full_backup.txt" \
     || { log "[WARN] .last_full_backup.txt 쓰기 실패"; return 1; }
-  
+
   # .topology.json 원자적 쓰기
   if command -v jq >/dev/null 2>&1; then
     jq -n --arg chosen "$d" \
@@ -44,7 +44,7 @@ stamp_dest(){
           '{chosen:$chosen,candidates:$cands,reason:$reason,ts:now}' \
       > "$d/.topology.json.tmp" 2>/dev/null \
       && mv "$d/.topology.json.tmp" "$d/.topology.json" \
-      || { log "[WARN] jq JSON 생성 실패, 폴백 사용"; 
+      || { log "[WARN] jq JSON 생성 실패, 폴백 사용";
            echo '{"chosen":"'"$d"'","reason":"writable","ts":"'"$t"'"}'> "$d/.topology.json.tmp" \
            && mv "$d/.topology.json.tmp" "$d/.topology.json"; }
   else
@@ -52,7 +52,7 @@ stamp_dest(){
       && mv "$d/.topology.json.tmp" "$d/.topology.json" \
       || { log "[WARN] .topology.json 쓰기 실패"; return 1; }
   fi
-  
+
   log "✅ 스탬프 생성 완료: $d"
   return 0
 }

@@ -55,16 +55,16 @@ class DeepLanguageUnderstandingEngine:
     async def understand_language(self, text: str, context: Dict[str, Any] = None) -> LanguageUnderstandingResult:
         # 1. 맥락 분석
         context_analysis = await self.context_analyzer.analyze_context(text, context)
-        
+
         # 2. 감정 분석
         emotion_analysis = await self.emotion_analyzer.analyze_emotion(text, context)
-        
+
         # 3. 의도 인식
         intent_analysis = await self.intent_recognizer.recognize_intent(text, context)
-        
+
         # 4. 의미 분석
         semantic_analysis = await self.semantic_analyzer.analyze_semantics(text, context)
-        
+
         # 5. 다국어 처리
         multilingual_analysis = await self.multilingual_processor.process_multilingual(text, context)
 ```
@@ -92,16 +92,16 @@ class ContextAnalyzer:
     async def analyze_context(self, text: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
         # 시간적 맥락
         temporal_context = self._extract_temporal_context(text)
-        
+
         # 공간적 맥락
         spatial_context = self._extract_spatial_context(text)
-        
+
         # 사회적 맥락
         social_context = self._extract_social_context(text)
-        
+
         # 주제적 맥락
         topical_context = self._extract_topical_context(text)
-        
+
         # 감정적 맥락
         emotional_context = self._extract_emotional_context(text)
 ```

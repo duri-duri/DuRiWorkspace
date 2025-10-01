@@ -23,7 +23,7 @@ export class DuRiLearningManager {
 
         this.isLearning = true;
         console.log('DuRi 자동 학습이 시작되었습니다.');
-        
+
         // 큐에 있는 대화들 처리
         await this.processQueue();
     }
@@ -62,7 +62,7 @@ export class DuRiLearningManager {
     private async sendToDuRi(data: ConversationData): Promise<void> {
         try {
             const response = await this.apiClient.sendConversation(data);
-            
+
             if (response && response.success) {
                 console.log('DuRi 학습 성공:', {
                     package_id: response.package_id,
@@ -114,4 +114,4 @@ export class DuRiLearningManager {
             items: [...this.conversationQueue]
         };
     }
-} 
+}

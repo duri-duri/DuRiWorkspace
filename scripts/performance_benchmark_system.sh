@@ -38,37 +38,37 @@ acquire_lock() {
 benchmark_backup_performance() {
     local benchmark_name="backup_performance"
     local result_file="$BENCHMARK_RESULTS_DIR/${benchmark_name}_$(date +%F).json"
-    
+
     log "📊 백업 성능 벤치마크 시작..."
-    
+
     # 1) 백업 속도 측정
     log "  📋 1단계: 백업 속도 측정"
     local backup_start_time=$(date +%s)
-    
+
     # 테스트 백업 실행 (var/reports 폴더)
     if [[ -d "var/reports" ]]; then
         local test_backup_dir="var/test_backup_benchmark_$(date +%Y%m%d_%H%M%S)"
         mkdir -p "$test_backup_dir"
-        
+
         # rsync를 사용한 백업 속도 측정
         local rsync_start=$(date +%s.%N)
         rsync -av --stats "var/reports/" "$test_backup_dir/" >/dev/null 2>&1
         local rsync_end=$(date +%s.%N)
         local rsync_duration=$(echo "$rsync_end - $rsync_start" | bc -l 2>/dev/null || echo "0")
-        
+
         # 백업 크기 측정
         local backup_size=$(du -sb "$test_backup_dir" 2>/dev/null | cut -f1 || echo "0")
         local source_size=$(du -sb "var/reports" 2>/dev/null | cut -f1 || echo "0")
-        
+
         # 압축률 계산
         local compression_ratio=0
         if [[ $source_size -gt 0 ]]; then
             compression_ratio=$(echo "scale=2; (1 - $backup_size / $source_size) * 100" | bc -l 2>/dev/null || echo "0")
         fi
-        
+
         # 정리
         rm -rf "$test_backup_dir"
-        
+
         log "    ✅ 백업 속도: ${rsync_duration}초"
         log "    ✅ 백업 크기: ${backup_size}바이트"
         log "    ✅ 압축률: ${compression_ratio}%"
@@ -78,16 +78,16 @@ benchmark_backup_performance() {
         local backup_size=0
         local compression_ratio=0
     fi
-    
+
     local backup_end_time=$(date +%s)
     local backup_duration=$((backup_end_time - backup_start_time))
-    
+
     # 2) 리소스 사용량 측정
     log "  📋 2단계: 리소스 사용량 측정"
     local cpu_usage=$(top -bn1 | grep "Cpu(s)" | awk '{print $2}' | cut -d'%' -f1)
     local memory_usage=$(free | grep Mem | awk '{printf "%.1f", $3/$2 * 100.0}')
     local disk_io=$(iostat -x 1 1 2>/dev/null | tail -1 | awk '{print $6}' || echo "0")
-    
+
     # 3) 결과 저장
     cat > "$result_file" <<EOF
 {
@@ -119,7 +119,7 @@ benchmark_backup_performance() {
   }
 }
 EOF
-    
+
     log "✅ 백업 성능 벤치마크 완료: $result_file"
     return 0
 }
@@ -128,52 +128,52 @@ EOF
 benchmark_logging_performance() {
     local benchmark_name="logging_performance"
     local result_file="$BENCHMARK_RESULTS_DIR/${benchmark_name}_$(date +%F).json"
-    
+
     log "📊 로그 시스템 성능 벤치마크 시작..."
-    
+
     # 1) 로그 쓰기 속도 측정
     log "  📋 1단계: 로그 쓰기 속도 측정"
     local log_file="$BENCHMARK_LOGS_DIR/write_test_$(date +%Y%m%d_%H%M%S).log"
     local write_start=$(date +%s.%N)
-    
+
     # 대량 로그 쓰기 테스트
     for i in {1..1000}; do
         echo "$(date -Iseconds): Test log entry $i - Performance benchmark test for logging system" >> "$log_file"
     done
-    
+
     local write_end=$(date +%s.%N)
     local write_duration=$(echo "$write_end - $write_start" | bc -l 2>/dev/null || echo "0")
     local write_speed=$(echo "scale=2; 1000 / $write_duration" | bc -l 2>/dev/null || echo "0")
-    
+
     log "    ✅ 로그 쓰기 속도: ${write_speed} entries/초"
-    
+
     # 2) 로그 검색 속도 측정
     log "  📋 2단계: 로그 검색 속도 측정"
     local search_start=$(date +%s.%N)
     local search_results=$(grep -c "Performance benchmark" "$log_file" 2>/dev/null || echo "0")
     local search_end=$(date +%s.%N)
     local search_duration=$(echo "$search_end - $search_start" | bc -l 2>/dev/null || echo "0")
-    
+
     log "    ✅ 로그 검색 속도: ${search_duration}초 (${search_results}개 결과)"
-    
+
     # 3) 로그 압축 테스트
     log "  📋 3단계: 로그 압축 테스트"
     local original_size=$(stat -c %s "$log_file" 2>/dev/null || echo "0")
     local compressed_file="${log_file}.gz"
-    
+
     gzip -c "$log_file" > "$compressed_file" 2>/dev/null || true
     local compressed_size=$(stat -c %s "$compressed_file" 2>/dev/null || echo "0")
-    
+
     local compression_ratio=0
     if [[ $original_size -gt 0 ]]; then
         compression_ratio=$(echo "scale=2; (1 - $compressed_size / $original_size) * 100" | bc -l 2>/dev/null || echo "0")
     fi
-    
+
     log "    ✅ 압축률: ${compression_ratio}%"
-    
+
     # 4) 정리
     rm -f "$log_file" "$compressed_file"
-    
+
     # 5) 결과 저장
     cat > "$result_file" <<EOF
 {
@@ -207,7 +207,7 @@ benchmark_logging_performance() {
   }
 }
 EOF
-    
+
     log "✅ 로그 시스템 성능 벤치마크 완료: $result_file"
     return 0
 }
@@ -216,28 +216,28 @@ EOF
 benchmark_monitoring_performance() {
     local benchmark_name="monitoring_performance"
     local result_file="$BENCHMARK_RESULTS_DIR/${benchmark_name}_$(date +%F).json"
-    
+
     log "📊 모니터링 성능 벤치마크 시작..."
-    
+
     # 1) 메트릭 수집 속도 측정
     log "  📋 1단계: 메트릭 수집 속도 측정"
     local collection_start=$(date +%s.%N)
-    
+
     # 시스템 메트릭 수집
     local cpu_usage=$(top -bn1 | grep "Cpu(s)" | awk '{print $2}' | cut -d'%' -f1)
     local memory_usage=$(free | grep Mem | awk '{printf "%.1f", $3/$2 * 100.0}')
     local disk_usage=$(df . | tail -1 | awk '{print $5}' | cut -d'%' -f1)
     local load_average=$(uptime | awk -F'load average:' '{print $2}' | awk '{print $1}' | tr -d ',')
-    
+
     local collection_end=$(date +%s.%N)
     local collection_duration=$(echo "$collection_end - $collection_start" | bc -l 2>/dev/null || echo "0")
-    
+
     log "    ✅ 메트릭 수집 속도: ${collection_duration}초"
-    
+
     # 2) 모니터링 응답 시간 측정
     log "  📋 2단계: 모니터링 응답 시간 측정"
     local response_start=$(date +%s.%N)
-    
+
     # 모니터링 시스템 응답 테스트 (enhanced_summary_report.sh)
     if [[ -f "ops/summary/enhanced_summary_report.sh" ]]; then
         timeout 10s bash "ops/summary/enhanced_summary_report.sh" >/dev/null 2>&1
@@ -248,24 +248,24 @@ benchmark_monitoring_performance() {
         log "    ⚠️  enhanced_summary_report.sh를 찾을 수 없음"
         local response_duration=0
     fi
-    
+
     # 3) 메트릭 처리 효율성 측정
     log "  📋 3단계: 메트릭 처리 효율성 측정"
     local processing_start=$(date +%s.%N)
-    
+
     # 메트릭 처리 시뮬레이션
     for i in {1..100}; do
         local test_metric="test_metric_$i"
         local test_value=$((RANDOM % 100))
         echo "$test_metric:$test_value" >/dev/null
     done
-    
+
     local processing_end=$(date +%s.%N)
     local processing_duration=$(echo "$processing_end - $processing_start" | bc -l 2>/dev/null || echo "0")
     local processing_efficiency=$(echo "scale=2; 100 / $processing_duration" | bc -l 2>/dev/null || echo "0")
-    
+
     log "    ✅ 메트릭 처리 효율성: ${processing_efficiency} metrics/초"
-    
+
     # 4) 결과 저장
     cat > "$result_file" <<EOF
 {
@@ -302,7 +302,7 @@ benchmark_monitoring_performance() {
   }
 }
 EOF
-    
+
     log "✅ 모니터링 성능 벤치마크 완료: $result_file"
     return 0
 }
@@ -310,59 +310,59 @@ EOF
 # === 종합 성능 분석 ===
 analyze_overall_performance() {
     log "📊 종합 성능 분석 시작..."
-    
+
     local analysis_file="$BENCHMARK_RESULTS_DIR/overall_performance_analysis_$(date +%F).json"
-    
+
     # 각 벤치마크 결과 수집
     local backup_file="$BENCHMARK_RESULTS_DIR/backup_performance_$(date +%F).json"
     local logging_file="$BENCHMARK_RESULTS_DIR/logging_performance_$(date +%F).json"
     local monitoring_file="$BENCHMARK_RESULTS_DIR/monitoring_performance_$(date +%F).json"
-    
+
     local overall_score=0
     local total_metrics=0
     local passed_metrics=0
-    
+
     # 백업 성능 분석
     if [[ -f "$backup_file" ]]; then
         local backup_speed_status=$(grep -o '"backup_speed_status": "[^"]*"' "$backup_file" | cut -d'"' -f4)
         local backup_size_status=$(grep -o '"backup_size_status": "[^"]*"' "$backup_file" | cut -d'"' -f4)
         local resource_status=$(grep -o '"resource_usage_status": "[^"]*"' "$backup_file" | cut -d'"' -f4)
-        
+
         total_metrics=$((total_metrics + 3))
         if [[ "$backup_speed_status" == "GOOD" ]]; then passed_metrics=$((passed_metrics + 1)); fi
         if [[ "$backup_size_status" == "GOOD" ]]; then passed_metrics=$((passed_metrics + 1)); fi
         if [[ "$resource_status" == "GOOD" ]]; then passed_metrics=$((passed_metrics + 1)); fi
     fi
-    
+
     # 로깅 성능 분석
     if [[ -f "$logging_file" ]]; then
         local write_status=$(grep -o '"write_speed_status": "[^"]*"' "$logging_file" | cut -d'"' -f4)
         local search_status=$(grep -o '"search_speed_status": "[^"]*"' "$logging_file" | cut -d'"' -f4)
         local compression_status=$(grep -o '"compression_status": "[^"]*"' "$logging_file" | cut -d'"' -f4)
-        
+
         total_metrics=$((total_metrics + 3))
         if [[ "$write_status" == "GOOD" ]]; then passed_metrics=$((passed_metrics + 1)); fi
         if [[ "$search_status" == "GOOD" ]]; then passed_metrics=$((passed_metrics + 1)); fi
         if [[ "$compression_status" == "GOOD" ]]; then passed_metrics=$((passed_metrics + 1)); fi
     fi
-    
+
     # 모니터링 성능 분석
     if [[ -f "$monitoring_file" ]]; then
         local response_status=$(grep -o '"response_time_status": "[^"]*"' "$monitoring_file" | cut -d'"' -f4)
         local collection_status=$(grep -o '"collection_efficiency_status": "[^"]*"' "$monitoring_file" | cut -d'"' -f4)
         local processing_status=$(grep -o '"processing_efficiency_status": "[^"]*"' "$monitoring_file" | cut -d'"' -f4)
-        
+
         total_metrics=$((total_metrics + 3))
         if [[ "$response_status" == "GOOD" ]]; then passed_metrics=$((passed_metrics + 1)); fi
         if [[ "$collection_status" == "GOOD" ]]; then passed_metrics=$((passed_metrics + 1)); fi
         if [[ "$processing_status" == "GOOD" ]]; then passed_metrics=$((passed_metrics + 1)); fi
     fi
-    
+
     # 전체 점수 계산
     if [[ $total_metrics -gt 0 ]]; then
         overall_score=$(echo "scale=1; $passed_metrics * 100 / $total_metrics" | bc -l 2>/dev/null || echo "0")
     fi
-    
+
     # 종합 분석 결과 저장
     cat > "$analysis_file" <<EOF
 {
@@ -390,19 +390,19 @@ analyze_overall_performance() {
   ]
 }
 EOF
-    
+
     log "✅ 종합 성능 분석 완료: $analysis_file"
     log "📊 전체 성능 점수: ${overall_score}% (${passed_metrics}/${total_metrics} 통과)"
-    
+
     return 0
 }
 
 # === 벤치마크 요약 리포트 생성 ===
 generate_benchmark_summary() {
     local summary_file="$BENCHMARK_LOGS_DIR/benchmark_summary_$(date +%F).md"
-    
+
     log "📊 벤치마크 요약 리포트 생성: $summary_file"
-    
+
     # 분석 결과 로드
     local overall_score="N/A"
     local performance_grade="N/A"
@@ -410,7 +410,7 @@ generate_benchmark_summary() {
         overall_score=$(grep -o '"overall_score_percent": [0-9.]*' "$BENCHMARK_RESULTS_DIR/overall_performance_analysis_$(date +%F).json" | cut -d' ' -f2)
         performance_grade=$(grep -o '"performance_grade": "[^"]*"' "$BENCHMARK_RESULTS_DIR/overall_performance_analysis_$(date +%F).json" | cut -d'"' -f4)
     fi
-    
+
     cat > "$summary_file" <<EOF
 # 📊 Phase 6 성능 벤치마크 요약 — $(date +%F)
 
@@ -491,47 +491,47 @@ generate_benchmark_summary() {
 
 ---
 
-> **💡 운영 팁**: 벤치마크 결과를 바탕으로 체계적인 성능 최적화를 진행하세요.  
-> **📊 모니터링**: 최적화 과정에서 시스템 안정성을 지속적으로 모니터링하세요.  
+> **💡 운영 팁**: 벤치마크 결과를 바탕으로 체계적인 성능 최적화를 진행하세요.
+> **📊 모니터링**: 최적화 과정에서 시스템 안정성을 지속적으로 모니터링하세요.
 > **🔄 반복**: 정기적인 벤치마크로 최적화 효과를 검증하고 추가 개선을 진행하세요.
 EOF
-    
+
     log "✅ 벤치마크 요약 리포트 생성 완료: $summary_file"
 }
 
 # === 메인 실행 로직 ===
 main() {
     log "🚀 Phase 6 성능 벤치마킹 시스템 시작"
-    
+
     # 락 획득
     acquire_lock
-    
+
     # 디렉토리 생성
     mkdir -p "$BENCHMARK_LOGS_DIR" "$BENCHMARK_RESULTS_DIR"
-    
+
     # 1) 백업 성능 벤치마크
     if ! benchmark_backup_performance; then
         log "❌ 백업 성능 벤치마크 실패"
     fi
-    
+
     # 2) 로그 시스템 성능 벤치마크
     if ! benchmark_logging_performance; then
         log "❌ 로그 시스템 성능 벤치마크 실패"
     fi
-    
+
     # 3) 모니터링 성능 벤치마크
     if ! benchmark_monitoring_performance; then
         log "❌ 모니터링 성능 벤치마크 실패"
     fi
-    
+
     # 4) 종합 성능 분석
     if ! analyze_overall_performance; then
         log "❌ 종합 성능 분석 실패"
     fi
-    
+
     # 5) 벤치마크 요약 리포트 생성
     generate_benchmark_summary
-    
+
     log "🎉 Phase 6 성능 벤치마킹 완료!"
     log "다음 단계: 벤치마크 결과 분석 및 최적화 계획 수립"
 }
@@ -540,6 +540,3 @@ main() {
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     main "$@"
 fi
-
-
-

@@ -170,11 +170,3 @@ done < "$LIST"
 say ""
 say "[SUMMARY] out: $OUT"
 say "[SUMMARY] trash: $TRASH"
-
-
-
-
-
-
-
-

@@ -33,7 +33,7 @@ class TriggerLayer:
 class LearningExecutor:
     """학습 실행기 - 5단계 학습 루프 실행"""
     - 모방 단계 (IMITATION)
-    - 반복 단계 (REPETITION) 
+    - 반복 단계 (REPETITION)
     - 피드백 단계 (FEEDBACK)
     - 도전 단계 (CHALLENGE)
     - 개선 단계 (IMPROVEMENT)
@@ -80,7 +80,7 @@ class AutomationPipeline:
 
 #### **자동화 파이프라인 API**
 - `POST /automation/start` - 자동화 시작
-- `POST /automation/stop` - 자동화 중지  
+- `POST /automation/stop` - 자동화 중지
 - `POST /automation/trigger` - 수동 트리거
 - `GET /automation/stats` - 자동화 통계
 
@@ -205,4 +205,4 @@ curl http://localhost:8090/automation/stats
 3. **대시보드 확인**: `http://localhost:8090/dashboard`
 4. **API 테스트**: 위의 curl 명령어들 사용
 
-모든 시스템이 정상 작동하며, 자동화 파이프라인이 완전히 구현되었습니다! 🚀 
+모든 시스템이 정상 작동하며, 자동화 파이프라인이 완전히 구현되었습니다! 🚀

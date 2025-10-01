@@ -171,6 +171,6 @@ docker-compose down --remove-orphans
 
 ---
 
-**백업 생성일**: 2025-07-25  
-**DuRi Control System 버전**: v1.0.0  
-**상태**: 최종 완성 버전 
+**백업 생성일**: 2025-07-25
+**DuRi Control System 버전**: v1.0.0
+**상태**: 최종 완성 버전

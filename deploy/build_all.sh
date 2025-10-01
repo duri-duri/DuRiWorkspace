@@ -106,4 +106,4 @@ log_info "또는 직접 실행:"
 echo "  docker-compose up -d"
 echo ""
 
-log_success "🎉 DuRi Control System 빌드가 성공적으로 완료되었습니다!" 
+log_success "🎉 DuRi Control System 빌드가 성공적으로 완료되었습니다!"

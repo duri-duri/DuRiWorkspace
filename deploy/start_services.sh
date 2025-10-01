@@ -87,21 +87,21 @@ docker-compose ps
 # 서비스 대기 (--wait 옵션)
 if [[ "$WAIT_FOR_SERVICES" == "true" ]]; then
     log_info "⏳ 서비스 완전 시작 대기 중..."
-    
+
     # PostgreSQL 대기
     log_info "🔄 PostgreSQL 연결 대기 중..."
     until docker-compose exec -T duri-postgres pg_isready -U duri; do
         sleep 2
     done
     log_success "PostgreSQL 준비 완료"
-    
+
     # Redis 대기
     log_info "🔄 Redis 연결 대기 중..."
     until docker-compose exec -T duri-redis redis-cli ping; do
         sleep 2
     done
     log_success "Redis 준비 완료"
-    
+
     # DuRi Control API 대기
     log_info "🔄 DuRi Control API 대기 중..."
     until curl -s http://localhost:8083/health/ > /dev/null; do
@@ -113,7 +113,7 @@ fi
 # 헬스 체크 (--health-check 옵션)
 if [[ "$HEALTH_CHECK" == "true" ]]; then
     log_info "🏥 헬스 체크 수행 중..."
-    
+
     # 기본 헬스 체크
     if curl -s http://localhost:8083/health/ | grep -q "healthy"; then
         log_success "기본 헬스 체크 통과"
@@ -121,14 +121,14 @@ if [[ "$HEALTH_CHECK" == "true" ]]; then
         log_error "기본 헬스 체크 실패"
         exit 1
     fi
-    
+
     # 서비스 초기화 상태 확인
     if curl -s http://localhost:8083/health/services | grep -q "all_services_ready.*true"; then
         log_success "서비스 초기화 상태 확인 완료"
     else
         log_warning "일부 서비스가 아직 초기화 중입니다"
     fi
-    
+
     # 모니터링 엔드포인트 확인
     if curl -s http://localhost:8083/monitor/services > /dev/null; then
         log_success "모니터링 엔드포인트 정상"
@@ -152,4 +152,4 @@ echo "  - 로그 확인: docker-compose logs -f [서비스명]"
 echo "  - 서비스 재시작: docker-compose restart [서비스명]"
 echo ""
 
-log_success "🎉 DuRi Control System이 성공적으로 시작되었습니다!" 
+log_success "🎉 DuRi Control System이 성공적으로 시작되었습니다!"

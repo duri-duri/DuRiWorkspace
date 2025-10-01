@@ -77,14 +77,14 @@ log "[INFO] buckets: small=${#small[@]} mid=${#mid[@]} large=${#large[@]}"
 # 3) 대상별 목적지 결정 함수 (quarantine 매핑 수정 + 상대경로 보존)
 dest_path(){
   local p="$1" base; base="$(basename "$p")"
-  
+
   # quarantine 파일은 HDD의 quarantine로 매핑 (상대경로 보존)
   if [[ "$p" == *"/.quarantine/"* ]]; then
     rel="${p#*'/.quarantine/'}"
     echo "$DST/.quarantine/$rel"
     return
   fi
-  
+
   # 일반 파일은 상대경로 보존 (이름 충돌 방지)
   rel="${p#"$SRC"/}"
   shopt -s nocasematch
@@ -110,7 +110,7 @@ process_list(){
       *"/CORE_PROTECTED/"*|*"/FINAL/"*|*"/INCR/"*|*"/System Volume Information/"*|*"/SHA256SUMS"*)
         log "[SKIP-PROTECTED] $src"; continue;;
     esac
-    
+
     dst="$(dest_path "$src")"
     log "[COPY] $src -> $dst"
     copy_file "$src" "$dst"

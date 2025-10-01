@@ -1,6 +1,6 @@
 # 🎯 Phase 1: SOoT 확정·정책 정렬 + 검증 2중 루프(기초)
 
-> **생성일**: 2025-08-22  
+> **생성일**: 2025-08-22
 > **Phase 0 완료 확인**: ✅ 안전장치 가동 완료
 
 ## 🏛️ **SOoT (Single Source of Truth) 선언**
@@ -114,6 +114,3 @@ python tools/policy_check_gitignore.py
 **Phase 2**: 스케줄·의존성 표준화 + 검증 2중 루프(강화)
 
 > **⚠️ 주의**: Phase 1 완료 후에만 Phase 2 진행 가능
-
-
-

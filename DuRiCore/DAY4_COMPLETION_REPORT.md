@@ -22,56 +22,56 @@
 def _calculate_context_based_confidence(self, features: Dict[str, float], context: Dict[str, Any]) -> float:
     """Day 4: 컨텍스트 기반 신뢰도 계산"""
     base_confidence = self._calculate_encoding_confidence(features)
-    
+
     # 컨텍스트 요소별 보정
     context_bonus = 0.0
-    
+
     # 이해관계자 수에 따른 보정
     stakeholder_count = len(context.get("actors", []))
     if stakeholder_count > 2:
         context_bonus += 0.15
     elif stakeholder_count > 1:
         context_bonus += 0.1
-    
+
     # 상황 복잡성에 따른 보정
     if features.get("complexity_score", 0.0) > 0.5:
         context_bonus += 0.2
     elif features.get("complexity_score", 0.0) > 0.3:
         context_bonus += 0.15
-    
+
     # 시간적 압박에 따른 보정
     temporal_aspects = context.get("temporal_aspects", [])
     urgency_keywords = ["긴급", "시급", "즉시", "빠른", "신속", "급한", "긴급한"]
     if any(urgency in str(temporal_aspects) for urgency in urgency_keywords):
         context_bonus += 0.1
-    
+
     # 윤리적 요소 강도에 따른 보정
     if features.get("ethical_score", 0.0) > 0.6:
         context_bonus += 0.15
     elif features.get("ethical_score", 0.0) > 0.3:
         context_bonus += 0.1
-    
+
     # 갈등 요소 강도에 따른 보정
     if features.get("conflict_score", 0.0) > 0.6:
         context_bonus += 0.15
     elif features.get("conflict_score", 0.0) > 0.3:
         context_bonus += 0.1
-    
+
     # 일반적 상황에서의 기본 보정
     if features.get("general_score", 0.0) > 0.3:
         context_bonus += 0.1
-    
+
     # 실용적 요소 강도에 따른 보정
     if features.get("practical_score", 0.0) > 0.5:
         context_bonus += 0.1
-    
+
     # 의사결정 요소 강도에 따른 보정
     if features.get("decision_score", 0.0) > 0.5:
         context_bonus += 0.1
-    
+
     # 최종 신뢰도 계산 (상한 0.8로 증가)
     final_confidence = min(base_confidence + context_bonus, 0.8)
-    
+
     # Day 4: 최소 신뢰도 보장 (0.25로 증가)
     return max(final_confidence, 0.25)
 ```
@@ -90,7 +90,7 @@ def _adjust_weights_dynamically(self, features: Dict[str, float], context: Dict[
         "complexity_score": 0.1,
         "general_score": 0.1
     }
-    
+
     # 이해관계자 수에 따른 가중치 조정
     stakeholder_count = len(context.get("actors", []))
     if stakeholder_count > 3:
@@ -99,22 +99,22 @@ def _adjust_weights_dynamically(self, features: Dict[str, float], context: Dict[
     elif stakeholder_count > 1:
         base_weights["complexity_score"] *= 1.1
         base_weights["conflict_score"] *= 1.1
-    
+
     # 윤리적 요소 강도에 따른 가중치 조정
     if features.get("ethical_score", 0.0) > 0.5:
         base_weights["ethical_score"] *= 1.2
         base_weights["privacy_score"] *= 1.1
-    
+
     # 복잡성 요소 강도에 따른 가중치 조정
     if features.get("complexity_score", 0.0) > 0.4:
         base_weights["complexity_score"] *= 1.3
         base_weights["decision_score"] *= 1.1
-    
+
     # 갈등 요소 강도에 따른 가중치 조정
     if features.get("conflict_score", 0.0) > 0.5:
         base_weights["conflict_score"] *= 1.2
         base_weights["decision_score"] *= 1.1
-    
+
     # 일반적 상황에서의 가중치 조정
     if features.get("general_score", 0.0) > 0.3:
         base_weights["general_score"] *= 1.2
@@ -122,13 +122,13 @@ def _adjust_weights_dynamically(self, features: Dict[str, float], context: Dict[
         for key in base_weights:
             if key != "general_score":
                 base_weights[key] *= 0.9
-    
+
     # 가중치 정규화 (합이 1.0이 되도록)
     total_weight = sum(base_weights.values())
     if total_weight > 0:
         for key in base_weights:
             base_weights[key] /= total_weight
-    
+
     return base_weights
 ```
 
@@ -139,26 +139,26 @@ def _optimized_keyword_matching(self, text: str, keywords: List[str]) -> Tuple[f
     """Day 4: 최적화된 키워드 매칭"""
     score = 0.0
     matched = []
-    
+
     # 텍스트를 소문자로 변환하여 매칭 성능 향상
     text_lower = text.lower()
-    
+
     # 키워드를 길이 순으로 정렬하여 긴 키워드를 먼저 매칭
     sorted_keywords = sorted(keywords, key=len, reverse=True)
-    
+
     for keyword in sorted_keywords:
         keyword_lower = keyword.lower()
         if keyword_lower in text_lower:
             # 키워드 길이에 따른 가중치 (긴 키워드가 더 중요)
             keyword_weight = len(keyword) / 10.0
-            
+
             # 복잡성 키워드에 대한 추가 가중치
             if len(keyword) > 5:
                 keyword_weight *= 1.5
-            
+
             score += keyword_weight
             matched.append(keyword)
-    
+
     return score, matched
 ```
 
@@ -170,7 +170,7 @@ def estimate_confidence(self, semantic_vector: SemanticVector, matched_frame: Se
     # 벡터의 신뢰도와 프레임 매칭 유사도를 결합
     frame_vector = self.semantic_frames[matched_frame]
     similarity = self._calculate_cosine_similarity(semantic_vector.vector, frame_vector)
-    
+
     # 프레임별 가중치 적용
     frame_weights = {
         SemanticFrame.ETHICAL_DILEMMA: 1.0,
@@ -179,19 +179,19 @@ def estimate_confidence(self, semantic_vector: SemanticVector, matched_frame: Se
         SemanticFrame.COMPLEX_PROBLEM: 1.0,
         SemanticFrame.GENERAL_SITUATION: 0.9
     }
-    
+
     weight = frame_weights.get(matched_frame, 0.9)
-    
+
     # Day 4: 컨텍스트 기반 신뢰도 계산 사용
     features = semantic_vector.metadata.get("semantic_features", {})
     context = semantic_vector.metadata.get("context_elements", {})
-    
+
     # 컨텍스트 기반 신뢰도 계산
     context_confidence = self._calculate_context_based_confidence(features, context)
-    
+
     # Day 4: 기존 신뢰도와 컨텍스트 신뢰도의 가중 평균 (컨텍스트 비중 증가)
     confidence = (context_confidence * 0.8 + similarity * 0.2) * weight
-    
+
     # Day 4: 복잡성 프레임일 때 추가 보정
     if matched_frame == SemanticFrame.COMPLEX_PROBLEM:
         complexity_score = semantic_vector.vector[75:90].mean()
@@ -199,11 +199,11 @@ def estimate_confidence(self, semantic_vector: SemanticVector, matched_frame: Se
             confidence *= 1.25  # Day 4: 보정 강화
         elif complexity_score > 0.3:
             confidence *= 1.15
-    
+
     # Day 4: 일반적 상황일 때 기본 신뢰도 보장
     if matched_frame == SemanticFrame.GENERAL_SITUATION:
         confidence = max(confidence, 0.35)  # Day 4: 최소 신뢰도 증가
-    
+
     # Day 4: 윤리적 딜레마일 때 추가 보정
     if matched_frame == SemanticFrame.ETHICAL_DILEMMA:
         ethical_score = features.get("ethical_score", 0.0)
@@ -211,7 +211,7 @@ def estimate_confidence(self, semantic_vector: SemanticVector, matched_frame: Se
             confidence *= 1.2  # Day 4: 보정 강화
         elif ethical_score > 0.3:
             confidence *= 1.1
-    
+
     # Day 4: 실용적 결정일 때 추가 보정
     if matched_frame == SemanticFrame.PRACTICAL_DECISION:
         practical_score = features.get("practical_score", 0.0)
@@ -219,7 +219,7 @@ def estimate_confidence(self, semantic_vector: SemanticVector, matched_frame: Se
             confidence *= 1.15  # Day 4: 보정 강화
         elif practical_score > 0.3:
             confidence *= 1.05
-    
+
     # Day 4: 갈등 해결일 때 추가 보정
     if matched_frame == SemanticFrame.CONFLICT_RESOLUTION:
         conflict_score = features.get("conflict_score", 0.0)
@@ -227,15 +227,15 @@ def estimate_confidence(self, semantic_vector: SemanticVector, matched_frame: Se
             confidence *= 1.15  # Day 4: 보정 강화
         elif conflict_score > 0.3:
             confidence *= 1.05
-    
+
     # Day 4: 높은 유사도일 때 추가 보정
     if similarity > 0.7:
         confidence *= 1.1
-    
+
     # Day 4: 최소 신뢰도 보장 (0.35로 증가)
     min_confidence = 0.35
     confidence = max(confidence, min_confidence)
-    
+
     # Day 4: 신뢰도 상한 0.8로 증가
     return min(confidence, 0.8)
 ```
@@ -370,4 +370,4 @@ def estimate_confidence(self, semantic_vector: SemanticVector, matched_frame: Se
 
 ---
 
-**Day 4 완료! 🎉 컨텍스트 기반 신뢰도 계산 시스템과 동적 가중치 조정 시스템이 성공적으로 구현되었으며, 의미 벡터 기반 분석 시스템의 성능이 크게 향상되었습니다.** 
+**Day 4 완료! 🎉 컨텍스트 기반 신뢰도 계산 시스템과 동적 가중치 조정 시스템이 성공적으로 구현되었으며, 의미 벡터 기반 분석 시스템의 성능이 크게 향상되었습니다.**

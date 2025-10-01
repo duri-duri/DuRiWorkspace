@@ -17,6 +17,3 @@ foreach($root in @($H,$I)){
 
 Write-Host "✅ Folders ready:" -ForegroundColor Green
 Get-ChildItem $H,$I -Recurse | Select-Object FullName,Length | Out-Host
-
-
-

@@ -142,7 +142,7 @@ DuRiCore/
 
 ### 2. 다음 작업 우선순위
 1. **Reasoning Engine System** 모듈 분할
-2. **Reasoning Strategies System** 모듈 분할  
+2. **Reasoning Strategies System** 모듈 분할
 3. **Reasoning Optimization System** 모듈 분할
 
 ### 3. 주의사항
@@ -207,6 +207,6 @@ find DuRiCore/ -name "*reasoning*" -type d
 - **strategy_selector.py**: 전략 선택
 
 ---
-**마지막 업데이트**: 2025년 8월 6일 23:26  
-**상태**: Phase 2-5 완료, Phase 2-6 준비 완료  
+**마지막 업데이트**: 2025년 8월 6일 23:26
+**상태**: Phase 2-5 완료, Phase 2-6 준비 완료
 **백업**: `DuRiCore_Phase2-5_Backup_20250806_232659.tar.gz`

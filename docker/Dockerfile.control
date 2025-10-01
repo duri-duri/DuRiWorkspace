@@ -20,4 +20,4 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Control 서비스 실행 (wait-for-postgres 스크립트 사용)
-CMD ["bash", "/app/wait-for-postgres.sh"] 
+CMD ["bash", "/app/wait-for-postgres.sh"]

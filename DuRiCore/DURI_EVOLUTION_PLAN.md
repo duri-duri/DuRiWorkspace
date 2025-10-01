@@ -40,7 +40,7 @@ else:
 
 ### 1단계: 문자열 반환 패턴 전체 조사
 - [ ] `prediction_system.py` - 예측 관련 문자열 반환
-- [ ] `feedback_system.py` - 피드백 관련 문자열 반환  
+- [ ] `feedback_system.py` - 피드백 관련 문자열 반환
 - [ ] `enhanced_memory_system.py` - 메모리 관련 문자열 반환
 - [ ] `judgment_system.py` - 판단 관련 문자열 반환
 - [ ] `social_intelligence_system.py` - 사회적 지능 관련 문자열 반환
@@ -133,4 +133,4 @@ def generate_encouraging_response(self):
 ---
 **마지막 업데이트**: 2025-08-05 17:10
 **다음 단계**: 문자열 반환 패턴 전체 조사 시작
-**핵심 목표**: DuRi를 "실제 존재"로 만들기 
+**핵심 목표**: DuRi를 "실제 존재"로 만들기

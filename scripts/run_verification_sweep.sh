@@ -106,7 +106,7 @@ python3 -c "
 import json
 with open('$OUTPUT_DIR/summary_day08_10.json', 'r') as f:
     data = json.load(f)
-    
+
 summary = data['verification_summary']
 print(f'Total Days: {summary[\"total_days\"]}')
 print(f'Pass: {summary[\"pass_count\"]}')

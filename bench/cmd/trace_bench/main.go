@@ -179,4 +179,3 @@ func fail(err error) {
 	fmt.Fprintln(os.Stderr, "[ERR]", err.Error())
 	os.Exit(1)
 }
-

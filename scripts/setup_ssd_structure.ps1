@@ -11,19 +11,19 @@ try {
     New-Item -Path "I:\FAST_RESTORE" -ItemType Directory -Force | Out-Null
     New-Item -Path "I:\FAST_RESTORE\FULL" -ItemType Directory -Force | Out-Null
     New-Item -Path "I:\FAST_RESTORE\INCR" -ItemType Directory -Force | Out-Null
-    
+
     # WIP (작업/테스트 공간)
     New-Item -Path "I:\WIP" -ItemType Directory -Force | Out-Null
     New-Item -Path "I:\WIP\EXPERIMENTS" -ItemType Directory -Force | Out-Null
     New-Item -Path "I:\WIP\TEMP_EXTRACT" -ItemType Directory -Force | Out-Null
     New-Item -Path "I:\WIP\TEST_DATA" -ItemType Directory -Force | Out-Null
-    
+
     # CACHE (자동화 스크립트 임시 저장소)
     New-Item -Path "I:\CACHE" -ItemType Directory -Force | Out-Null
     New-Item -Path "I:\CACHE\SCRIPTS" -ItemType Directory -Force | Out-Null
     New-Item -Path "I:\CACHE\LOGS" -ItemType Directory -Force | Out-Null
     New-Item -Path "I:\CACHE\METADATA" -ItemType Directory -Force | Out-Null
-    
+
     Write-Host "✅ 폴더 구조 생성 완료!" -ForegroundColor Green
 } catch {
     Write-Host "❌ 폴더 생성 실패: $($_.Exception.Message)" -ForegroundColor Red
@@ -38,7 +38,7 @@ try {
     New-Item -Path "I:\FAST_RESTORE\_touch.ok" -ItemType File -Force | Out-Null
     New-Item -Path "I:\WIP\_touch.ok" -ItemType File -Force | Out-Null
     New-Item -Path "I:\CACHE\_touch.ok" -ItemType File -Force | Out-Null
-    
+
     Write-Host "✅ 쓰기 권한 테스트 성공!" -ForegroundColor Green
 } catch {
     Write-Host "❌ 쓰기 권한 테스트 실패: $($_.Exception.Message)" -ForegroundColor Red

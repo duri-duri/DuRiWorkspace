@@ -5,7 +5,7 @@
 ### **Node 분리 구조**
 ```
 duri-core (포트 8080)     → API 입구 / 사용자 요청 처리
-duri-brain (포트 8081)     → 판단/기억/철학 시스템  
+duri-brain (포트 8081)     → 판단/기억/철학 시스템
 duri-evolution (포트 8082) → 자가 학습, 평가, 개선 시스템
 ```
 
@@ -59,7 +59,7 @@ mkdir -p duri_core_node
 
 ### **Phase 2: Brain 노드 분리 (2-3일)**
 ```bash
-# Brain 노드 생성  
+# Brain 노드 생성
 mkdir -p duri_brain_node
 # 판단 시스템 이전
 # 포트 8081에서 서비스 시작
@@ -68,7 +68,7 @@ mkdir -p duri_brain_node
 ### **Phase 3: Evolution 노드 분리 (3-4일)**
 ```bash
 # Evolution 노드 생성
-mkdir -p duri_evolution_node  
+mkdir -p duri_evolution_node
 # 진화 시스템 이전
 # 포트 8082에서 서비스 시작
 ```
@@ -93,4 +93,4 @@ mkdir -p duri_evolution_node
 - **디버깅**: 분산 환경에서 문제 추적 어려움
 
 ## 🎯 **결론**
-리팩터링과 분산을 병행하여 **"지금이 골든타임"**에 DuRi를 더욱 강력하고 확장 가능한 시스템으로 진화시킵니다. 
+리팩터링과 분산을 병행하여 **"지금이 골든타임"**에 DuRi를 더욱 강력하고 확장 가능한 시스템으로 진화시킵니다.

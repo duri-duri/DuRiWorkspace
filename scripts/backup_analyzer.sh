@@ -70,12 +70,12 @@ MODIFIED_FILES="$OUTPUT_DIR/modified_files.txt"
 while IFS= read -r file; do
     rel_path="${file#$TMP_DIR1/}"
     file2="$TMP_DIR2/$rel_path"
-    
+
     if [ -f "$file2" ]; then
         # 파일 크기 비교
         size1=$(stat -c%s "$file" 2>/dev/null || echo "0")
         size2=$(stat -c%s "$file2" 2>/dev/null || echo "0")
-        
+
         if [ "$size1" != "$size2" ]; then
             echo "$rel_path (크기: ${size1}B → ${size2}B)" >> "$MODIFIED_FILES"
         fi
@@ -150,10 +150,3 @@ log "분석 완료!"
 log "결과 파일들:"
 ls -la "$OUTPUT_DIR/"
 log "요약 파일: $SUMMARY_FILE"
-
-
-
-
-
-
-

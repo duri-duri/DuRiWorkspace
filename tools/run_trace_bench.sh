@@ -35,4 +35,3 @@ awk -v s="$sampling" -v ser="$ser" -v comp="$comp" 'BEGIN{
 
 mv "${out}.tmp" "$out"
 echo "[OK] wrote $out"
-

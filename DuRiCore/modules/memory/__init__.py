@@ -6,4 +6,4 @@ DuRi Memory Module
 
 from .memory_manager import MemoryManager
 
-__all__ = ['MemoryManager']
+__all__ = ["MemoryManager"]

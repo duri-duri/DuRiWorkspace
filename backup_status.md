@@ -4,8 +4,8 @@
 
 ### 현재 상태: 백업 준비 완료 ✅
 
-**백업 시점**: 2025-07-25  
-**DuRi Control System 버전**: v1.0.0 (최종 완성 버전)  
+**백업 시점**: 2025-07-25
+**DuRi Control System 버전**: v1.0.0 (최종 완성 버전)
 **상태**: Day 11/12 작업 완료, 프로덕션 배포 준비 완료
 
 ### 📦 백업 파일 정보
@@ -91,7 +91,7 @@ tar -tzf "$BACKUP_NAME" > /dev/null && echo "백업 파일 정상" || echo "백�
    ```bash
    # 백업 파일 압축 해제
    tar -xzf DuRiWorkspace_v1.0.0_final_YYYYMMDD_HHMMSS.tar.gz
-   
+
    # 시스템 재구축
    cd DuRiWorkspace
    cp deploy/env.prod.example .env
@@ -107,5 +107,5 @@ tar -tzf "$BACKUP_NAME" > /dev/null && echo "백업 파일 정상" || echo "백�
 
 ---
 
-**백업 준비 완료**: 2025-07-25  
-**상태**: 백업 명령어 실행 대기 중 
+**백업 준비 완료**: 2025-07-25
+**상태**: 백업 명령어 실행 대기 중

@@ -12,18 +12,18 @@
   async def judge(self, context):
       """실제 판단 로직"""
       # 1. 상황 분석
-      # 2. 옵션 생성  
+      # 2. 옵션 생성
       # 3. 최적 선택
       return decision
-      
+
   async def analyze_situation(self, input_data):
       """상황 분석"""
       return analysis
-      
+
   async def generate_options(self, situation):
       """옵션 생성"""
       return options
-      
+
   async def select_best_option(self, options):
       """최적 선택"""
       return best_option
@@ -49,15 +49,15 @@
       # 2. 실행
       # 3. 결과 확인
       return action_result
-      
+
   async def create_action_plan(self, decision):
       """행동 계획 수립"""
       return action_plan
-      
+
   async def execute_action(self, action_plan):
       """행동 실행"""
       return execution_result
-      
+
   async def verify_result(self, execution_result):
       """결과 확인"""
       return verification_result
@@ -83,15 +83,15 @@
       # 2. 학습
       # 3. 개선점 도출
       return feedback_result
-      
+
   async def evaluate_result(self, action_result):
       """결과 평가"""
       return evaluation
-      
+
   async def learn_from_result(self, result):
       """결과로부터 학습"""
       return learning_result
-      
+
   async def identify_improvements(self, evaluation):
       """개선점 도출"""
       return improvements
@@ -271,5 +271,5 @@
 
 ---
 
-*DuRi Phase 5.5 일일 계획 작성: 2025-08-05*  
-*DuRiCore Development Team* 
+*DuRi Phase 5.5 일일 계획 작성: 2025-08-05*
+*DuRiCore Development Team*

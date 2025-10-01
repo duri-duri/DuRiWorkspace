@@ -16,4 +16,4 @@ COPY docker/wait-for-postgres.sh /wait-for-postgres.sh
 RUN chmod +x /wait-for-postgres.sh
 
 # 기본 명령어 설정
-CMD ["bash", "/wait-for-postgres.sh"] 
+CMD ["bash", "/wait-for-postgres.sh"]

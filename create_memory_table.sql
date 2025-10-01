@@ -36,9 +36,9 @@ END;
 $$ language 'plpgsql';
 
 -- 업데이트 트리거 생성
-CREATE TRIGGER update_memory_entries_updated_at 
-    BEFORE UPDATE ON memory_entries 
-    FOR EACH ROW 
+CREATE TRIGGER update_memory_entries_updated_at
+    BEFORE UPDATE ON memory_entries
+    FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();
 
 -- 테이블 코멘트
@@ -52,4 +52,4 @@ COMMENT ON COLUMN memory_entries.source IS '이 기억을 만든 주체 (cursor_
 COMMENT ON COLUMN memory_entries.tags IS '관련 키워드들 (JSON 배열)';
 COMMENT ON COLUMN memory_entries.importance_score IS '중요도 점수 (0-100)';
 COMMENT ON COLUMN memory_entries.created_at IS '생성 시간';
-COMMENT ON COLUMN memory_entries.updated_at IS '수정 시간'; 
+COMMENT ON COLUMN memory_entries.updated_at IS '수정 시간';

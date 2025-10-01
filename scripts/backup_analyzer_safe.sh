@@ -136,10 +136,3 @@ log "⚠️  USB 백업 파일은 절대 수정하지 마세요!"
 log "결과 파일들:"
 ls -la "$OUTPUT_DIR/"
 log "요약 파일: $SUMMARY_FILE"
-
-
-
-
-
-
-

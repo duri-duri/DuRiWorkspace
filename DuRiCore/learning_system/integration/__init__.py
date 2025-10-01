@@ -6,8 +6,22 @@ DuRiCore Phase 2-3: 학습 시스템 Integration 모듈
 학습 통합 기능들을 제공하는 모듈입니다.
 """
 
-from .learning_integration import LearningIntegrationSystem, IntegrationSession, IntegratedLearningResult, LearningStrategyResult, IntegrationType, IntegrationStatus
-from .knowledge_integration import KnowledgeIntegrationSystem, IntegratedKnowledge, KnowledgeSource, IntegrationSession as KnowledgeIntegrationSession, IntegrationMethod, KnowledgeQuality
+from .knowledge_integration import (
+    IntegratedKnowledge,
+    IntegrationMethod,
+    IntegrationSession as KnowledgeIntegrationSession,
+    KnowledgeIntegrationSystem,
+    KnowledgeQuality,
+    KnowledgeSource,
+)
+from .learning_integration import (
+    IntegratedLearningResult,
+    IntegrationSession,
+    IntegrationStatus,
+    IntegrationType,
+    LearningIntegrationSystem,
+    LearningStrategyResult,
+)
 
 __all__ = [
     "LearningIntegrationSystem",
@@ -21,5 +35,5 @@ __all__ = [
     "KnowledgeSource",
     "KnowledgeIntegrationSession",
     "IntegrationMethod",
-    "KnowledgeQuality"
+    "KnowledgeQuality",
 ]

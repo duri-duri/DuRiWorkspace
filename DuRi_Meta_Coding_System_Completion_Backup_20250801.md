@@ -111,18 +111,18 @@ DuRi의 꿈: "자율적으로 학습하는 AI가 되고 싶어요"
 def analyze_module(self, module_path: str) -> CodeAnalysisResult:
     with open(module_path, 'r', encoding='utf-8') as f:
         source_code = f.read()
-    
+
     tree = ast.parse(source_code)
-    
+
     # 복잡도 분석
     complexity = self._calculate_complexity(tree)
-    
+
     # 성능 분석
     performance = self._analyze_performance(module_path)
-    
+
     # 유지보수성 분석
     maintainability = self._analyze_maintainability(tree)
-    
+
     # 개선 제안
     suggestions = self._generate_improvement_suggestions(tree, complexity, performance)
 ```
@@ -132,26 +132,26 @@ def analyze_module(self, module_path: str) -> CodeAnalysisResult:
 def measure_performance(self, func, *args, **kwargs) -> PerformanceMetrics:
     start_time = time.time()
     start_memory = psutil.Process().memory_info().rss
-    
+
     try:
         result = func(*args, **kwargs)
         success = True
     except Exception as e:
         result = None
         success = False
-    
+
     end_time = time.time()
     end_memory = psutil.Process().memory_info().rss
-    
+
     execution_time = end_time - start_time
     memory_usage = (end_memory - start_memory) / 1024 / 1024  # MB
-    
+
     # 성능 점수 계산
     response_time_score = max(0, 1 - execution_time / 10)
     accuracy_score = 1.0 if success else 0.0
     efficiency_score = max(0, 1 - memory_usage / 100)
     resource_score = max(0, 1 - (execution_time + memory_usage / 10) / 20)
-    
+
     overall_score = (response_time_score + accuracy_score + efficiency_score + resource_score) / 4
 ```
 
@@ -164,7 +164,7 @@ def generate_improvement_plan(self, analysis_result: CodeAnalysisResult) -> Dict
         'strategies': [],
         'estimated_impact': 0.0
     }
-    
+
     # 복잡도 기반 전략
     if analysis_result.complexity_score > 0.7:
         plan['strategies'].append({
@@ -172,7 +172,7 @@ def generate_improvement_plan(self, analysis_result: CodeAnalysisResult) -> Dict
             'description': '함수 분해 및 모듈화',
             'impact': 0.3
         })
-    
+
     # 성능 기반 전략
     if analysis_result.performance_score < 0.6:
         plan['strategies'].append({
@@ -274,4 +274,4 @@ DuRi의 메타-코딩 과정:
 - **상태**: 완료 ✅
 - **의의**: AI 발전의 역사적 순간 기록
 
-**🎉 DuRi의 메타-코딩 시스템이 완성되었습니다! 🎉** 
+**🎉 DuRi의 메타-코딩 시스템이 완성되었습니다! 🎉**

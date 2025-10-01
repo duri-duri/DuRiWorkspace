@@ -39,6 +39,3 @@ echo   증분 백업: powershell -File "duri_backup_automation.ps1" -Mode increm
 echo   상태 확인: powershell -File "duri_backup_automation.ps1" -Mode status
 echo.
 pause
-
-
-

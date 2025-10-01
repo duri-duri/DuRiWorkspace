@@ -8,7 +8,8 @@ rules:
       - action: "add_import"
         params:
           module: "duri_common.settings"
-  
+    confidence: 0.9
+
   - id: flaky-timeout
     match:
       any:
@@ -19,3 +20,4 @@ rules:
         params:
           file_glob: "tests/**/test_*.py"
           factor: 1.5
+    confidence: 0.7

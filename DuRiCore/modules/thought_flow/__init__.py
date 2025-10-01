@@ -5,6 +5,6 @@ DuRi Thought Flow Module
 """
 
 from .du_ri_thought_flow import DuRiThoughtFlow
-from .self_reflection_loop import SelfReflectionLoop, ReflectionInsight
+from .self_reflection_loop import ReflectionInsight, SelfReflectionLoop
 
-__all__ = ['DuRiThoughtFlow', 'SelfReflectionLoop', 'ReflectionInsight']
+__all__ = ["DuRiThoughtFlow", "SelfReflectionLoop", "ReflectionInsight"]

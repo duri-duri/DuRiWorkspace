@@ -1,5 +1,9 @@
-import os, json, tempfile
+import json
+import os
+import tempfile
+
 from duri_common.settings import DuRiSettings, get_settings
+
 
 def setup_function(_):
     # 매 테스트 전 캐시 비움
@@ -8,14 +12,17 @@ def setup_function(_):
     except Exception:
         pass
 
+
 def test_env_default_is_dev():
     s = DuRiSettings()
-    assert s.env in {"dev","ops","prod","test"}
+    assert s.env in {"dev", "ops", "prod", "test"}
+
 
 def test_env_override_priority(monkeypatch):
     monkeypatch.setenv("DURI_ENV", "prod")
     s = DuRiSettings()  # 싱글톤이 아니라 "새로" 생성
     assert s.env == "prod"
+
 
 def test_json_fallback_compat(tmp_path, monkeypatch):
     cfg = {
@@ -33,6 +40,7 @@ def test_json_fallback_compat(tmp_path, monkeypatch):
     assert s.env == "ops"
     assert s.monitoring.prometheus_url.endswith(":9090")
 
+
 def test_env_beats_json(tmp_path, monkeypatch):
     # JSON은 ops, ENV는 prod → ENV가 이긴다
     cfg = {"env": "ops"}
@@ -43,20 +51,24 @@ def test_env_beats_json(tmp_path, monkeypatch):
     s = DuRiSettings()
     assert s.env == "prod"
 
+
 def test_database_url_generation():
     s = DuRiSettings()
     assert s.database.url.startswith("postgresql://")
     assert "duri-postgres" in s.database.url
+
 
 def test_redis_url_generation():
     s = DuRiSettings()
     assert s.redis.url.startswith("redis://")
     assert "duri-redis" in s.redis.url
 
+
 def test_grafana_credentials():
     s = DuRiSettings()
     assert s.monitoring.grafana_user == "duri-duri"
     assert s.monitoring.grafana_password == "DuRi@2025!"
+
 
 def test_to_dict_compatibility():
     s = DuRiSettings()
@@ -66,10 +78,12 @@ def test_to_dict_compatibility():
     assert "services" in config_dict
     assert "monitoring" in config_dict
 
+
 def test_nested_env_override(monkeypatch):
     monkeypatch.setenv("DURI_MONITORING__PROMETHEUS_URL", "http://x:9091")
     s = DuRiSettings()
     assert s.monitoring.prometheus_url == "http://x:9091"
+
 
 def test_unknown_key_rejected(monkeypatch):
     monkeypatch.setenv("DURI__UNKNOWN_KEY", "x")

@@ -14,8 +14,3 @@ size=$size
 path=$(realpath "$f")
 run_id=$(date '+%Y%m%d')_host-$(hostname)_$(date '+%H%M')
 P
-
-
-
-
-

@@ -108,4 +108,4 @@ ls -lh *.tar.gz 2>/dev/null || echo "  백업 파일이 없습니다."
 
 echo ""
 log_success "🎉 DuRi Control System v1.0.0 최종 백업이 성공적으로 완료되었습니다!"
-log_info "💡 백업 파일을 안전한 곳에 보관하세요." 
+log_info "💡 백업 파일을 안전한 곳에 보관하세요."

@@ -8,7 +8,7 @@ DuRi는 3개 노드로 구성된 분산 구조입니다.
 📁 duri_core_node
 └── main.py # API Gateway 및 외부 입력 통제 (포트 8090)
 
-📁 duri_brain_node  
+📁 duri_brain_node
 └── main.py # 판단, 철학, 기억 처리 (포트 8091)
 
 📁 duri_evolution_node
@@ -26,7 +26,7 @@ DuRi는 3개 노드로 구성된 분산 구조입니다.
 - 각 노드는 독립 서버로 동작함 (`uvicorn`)
 - 포트 지정:
   - Core: `8090`
-  - Brain: `8091` 
+  - Brain: `8091`
   - Evolution: `8092`
 - 각 노드는 서로 RESTful API로 통신
 - Core 노드가 중앙 조정자 역할
@@ -46,6 +46,6 @@ DuRi는 3개 노드로 구성된 분산 구조입니다.
 ## 🔧 다음 단계
 
 1. **Cursor Extension 연동** - 실시간 대화 캡처
-2. **고급 기능 구현** - 실제 AI 모델 연동  
+2. **고급 기능 구현** - 실제 AI 모델 연동
 3. **성능 최적화** - 병렬 처리 및 캐싱
-4. **모니터링 시스템** - 실시간 대시보드 
+4. **모니터링 시스템** - 실시간 대시보드

@@ -132,14 +132,3 @@ if (( rc )); then
   exit 1
 fi
 echo "[PASS] policy verified"
-
-
-
-
-
-
-
-
-
-
-

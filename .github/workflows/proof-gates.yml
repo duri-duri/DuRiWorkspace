@@ -23,13 +23,45 @@ jobs:
       - uses: actions/setup-python@v5
         with: { python-version: '3.10' }
       - run: pip install -r requirements.txt || true
-      - name: Run suggester on last failed log (demo)
+
+      - name: Download failed job artifacts
+        uses: actions/download-artifact@v4
+        if: failure()
+        with:
+          path: ./artifacts
+          pattern: "*"
+          merge-multiple: true
+        continue-on-error: true
+
+      - name: Run suggester on artifacts
         run: |
-          echo "E   ModuleNotFoundError: No module named 'foo_bar'" | python3 tools/auto_fix_suggester.py > suggest.json
+          # Try to find log files in artifacts
+          find ./artifacts -name "*.log" -o -name "*.txt" | head -5 | while read logfile; do
+            echo "Processing: $logfile"
+            cat "$logfile" | python3 tools/auto_fix_suggester.py > suggest.json
+            if [ -s suggest.json ]; then
+              echo "Found suggestions in $logfile"
+              break
+            fi
+          done
+
+          # Fallback to demo if no artifacts
+          if [ ! -s suggest.json ]; then
+            echo "E   ModuleNotFoundError: No module named 'foo_bar'" | python3 tools/auto_fix_suggester.py > suggest.json
+          fi
           cat suggest.json
+
       - name: Comment suggestions
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          body=$(jq -r '. | @json' suggest.json)
-          gh pr comment ${{ github.event.pull_request.number }} --body "🛠️ **Auto Fix Suggestions (M3 demo)**\n\n\`\`\`json\n$(cat suggest.json)\n\`\`\`"
+          if [ -s suggest.json ]; then
+            confidence=$(jq -r '.avg_confidence // 0' suggest.json)
+            total_matches=$(jq -r '.total_matches // 0' suggest.json)
+            body="🛠️ **Auto Fix Suggestions (M4 Enhanced)**\n\n"
+            body+="📊 **Confidence**: ${confidence:.2f} | **Matches**: ${total_matches}\n\n"
+            body+="\`\`\`json\n$(cat suggest.json)\n\`\`\`"
+            gh pr comment ${{ github.event.pull_request.number }} --body "$body"
+          else
+            echo "No suggestions found"
+          fi

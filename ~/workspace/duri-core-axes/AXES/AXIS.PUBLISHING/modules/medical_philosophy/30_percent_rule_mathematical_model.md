@@ -32,7 +32,7 @@ if C < 30% then C = Adjuvant Therapy
 ```
 Priority = {
     C > 50%: Absolute Primary Treatment
-    C ≥ 30%: Primary Treatment  
+    C ≥ 30%: Primary Treatment
     C < 30%: Adjuvant Therapy
 }
 ```

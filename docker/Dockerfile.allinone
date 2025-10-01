@@ -66,4 +66,4 @@ ENV PORT=8080
 EXPOSE 8080 8081 8082 8083
 
 # 통합 시작 스크립트 실행
-CMD ["/app/start_allinone.sh"] 
+CMD ["/app/start_allinone.sh"]

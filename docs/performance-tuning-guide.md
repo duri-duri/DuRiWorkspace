@@ -156,7 +156,7 @@ def profile_function():
     profiler.enable()
     # 실행할 코드
     profiler.disable()
-    
+
     stats = pstats.Stats(profiler)
     stats.sort_stats('cumulative')
     stats.print_stats(10)
@@ -197,11 +197,11 @@ from locust import HttpUser, task, between
 
 class DuRiUser(HttpUser):
     wait_time = between(1, 3)
-    
+
     @task(3)
     def health_check(self):
         self.client.get("/health")
-    
+
     @task(1)
     def api_call(self):
         self.client.get("/api/v1/status")
@@ -227,12 +227,12 @@ test_scenarios:
     users: 50
     duration: "10m"
     expected_response_time: "< 200ms"
-  
+
   - name: "Peak Load"
     users: 200
     duration: "5m"
     expected_response_time: "< 500ms"
-  
+
   - name: "Stress Test"
     users: 500
     duration: "2m"

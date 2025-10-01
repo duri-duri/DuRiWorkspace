@@ -33,12 +33,12 @@ Write-Host "H: 드라이브 대상: $hddDest" -ForegroundColor Gray
 try {
     Write-Host "robocopy 실행 중..." -ForegroundColor Gray
     $hddResult = robocopy $reportsPath $hddDest *.* /E /R:2 /W:1 /NFL /NDL /NP
-    
+
     Write-Host "H: 드라이브 동기화 결과:" -ForegroundColor Cyan
     Write-Host "  복사된 파일: $($hddResult[0])" -ForegroundColor White
     Write-Host "  복사된 디렉토리: $($hddResult[1])" -ForegroundColor White
     Write-Host "  실패한 파일: $($hddResult[2])" -ForegroundColor White
-    
+
     if ($hddResult[0] -gt 0 -or $hddResult[1] -gt 0) {
         Write-Host "✅ H: 드라이브 동기화 성공!" -ForegroundColor Green
     } else {
@@ -64,12 +64,12 @@ Write-Host "I: 드라이브 대상: $ssdDest" -ForegroundColor Gray
 try {
     Write-Host "robocopy 실행 중..." -ForegroundColor Gray
     $ssdResult = robocopy $reportsPath $ssdDest *.* /E /R:2 /W:1 /NFL /NDL /NP
-    
+
     Write-Host "I: 드라이브 동기화 결과:" -ForegroundColor Cyan
     Write-Host "  복사된 파일: $($ssdResult[0])" -ForegroundColor White
     Write-Host "  복사된 디렉토리: $($ssdResult[1])" -ForegroundColor White
     Write-Host "  실패한 파일: $($ssdResult[2])" -ForegroundColor White
-    
+
     if ($ssdResult[0] -gt 0 -or $ssdResult[1] -gt 0) {
         Write-Host "✅ I: 드라이브 동기화 성공!" -ForegroundColor Green
     } else {
@@ -90,6 +90,3 @@ Write-Host "I: 드라이브 (Samsung T7): $ssdFiles 개 파일" -ForegroundColor
 
 Write-Host "`n🎯 동기화 테스트 완료!" -ForegroundColor Green
 Write-Host "이제 백업 자동화 스크립트를 생성할 수 있습니다." -ForegroundColor Yellow
-
-
-

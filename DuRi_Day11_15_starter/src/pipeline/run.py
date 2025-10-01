@@ -1,25 +1,36 @@
 from __future__ import annotations
-import argparse, json, os, sys, time, hashlib
+
+import argparse
+import hashlib
+import json
+import os
 from pathlib import Path
+import sys
+import time
+
 import yaml
 
 # 견고한 리포 루트 추정 (이 파일 기준)
 REPO_ROOT = Path(__file__).resolve().parents[2]
 os.chdir(REPO_ROOT)  # 상대경로( configs/, outputs/ )가 리포 기준으로 동작하도록
 
+
 def load_yaml(p: Path):
     if not p.exists():
         raise FileNotFoundError(f"Config not found: {p}")
     return yaml.safe_load(p.read_text(encoding="utf-8"))
 
+
 def write_json(p: Path, obj):
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(json.dumps(obj, ensure_ascii=False, indent=2), encoding="utf-8")
+
 
 def file_hash(path: Path) -> str:
     h = hashlib.sha256()
     h.update(path.read_bytes() if path.exists() else b"")
     return h.hexdigest()[:12]
+
 
 def load_policy_version() -> str:
     """정책 파일에서 버전 정보 추출"""
@@ -32,10 +43,11 @@ def load_policy_version() -> str:
     except Exception:
         return "parse_error"
 
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--day", type=int, required=True)
-    ap.add_argument("--variant", choices=["A","B"], required=True)
+    ap.add_argument("--variant", choices=["A", "B"], required=True)
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--config", type=str, required=True)
     args = ap.parse_args()
@@ -61,10 +73,10 @@ def main():
     # --- 코어 러너 호출 (게이트 훅 포함) ---
     from src.ab.core_runner import run_ab_with_gate  # type: ignore
     from src.utils.seed import set_deterministic_seed  # type: ignore
-    
+
     # 플래키 방지: 결정적 시드 설정
     set_deterministic_seed(args.seed)
-    
+
     # 게이트 정책 설정 읽기
     promotion_cfg = cfg.get("promotion", {}) or {}
     policy_rel = promotion_cfg.get("policy")
@@ -88,7 +100,10 @@ def main():
     primary = cfg["metrics"]["primary"]
     gate_status = results.get("gate_pass")
     gate_str = f" gate={gate_status}" if gate_status is not None else ""
-    print(f"[OK] Day{args.day} VAR={args.variant} {primary}={results.get(primary)} p={results.get('p_value')}{gate_str}")
+    print(
+        f"[OK] Day{args.day} VAR={args.variant} {primary}={results.get(primary)} p={results.get('p_value')}{gate_str}"
+    )
+
 
 if __name__ == "__main__":
     main()

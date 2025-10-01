@@ -80,4 +80,3 @@ USB를 매개체로 병원용과 집용 콜드 백업을 효율적으로 동기�
 - USB가 마운트되지 않음: `sudo mount /dev/sdX /mnt/g`
 - 권한 문제: `sudo chown -R duri:duri /mnt/g/DuRiSync`
 - 로그 확인: `/var/log/duri2-backup/usb_sync_*.log`
-
