@@ -3,9 +3,9 @@ Test suite for DuRi common emotion modules.
 Tests core functionality of EmotionVector and emotion handlers.
 """
 
+from datetime import datetime
 import json
 import os
-from datetime import datetime
 from unittest.mock import MagicMock, mock_open, patch
 
 import pytest

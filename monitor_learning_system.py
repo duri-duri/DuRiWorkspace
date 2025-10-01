@@ -7,20 +7,20 @@ CPU, 메모리, 학습률, 경험 데이터 수, 전략 변경 횟수를 추적�
 """
 
 import asyncio
+from datetime import datetime, timedelta
 import json
 import logging
 import time
-from datetime import datetime, timedelta
 from typing import Any, Dict, List
 
 import psutil
 
+from DuRiCore.unified_learning_system import get_unified_learning_system
 from duri_brain.learning.auto_retrospector import get_auto_retrospector
 
 # DuRi 모듈 import
 from duri_core.memory.memory_sync import get_memory_sync
 from duri_modules.autonomous.duri_autonomous_core import get_duri_autonomous_core
-from DuRiCore.unified_learning_system import get_unified_learning_system
 
 # 로깅 설정
 logging.basicConfig(

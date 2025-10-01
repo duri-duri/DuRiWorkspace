@@ -78,7 +78,9 @@ repos:
     rev: 6.0.1
     hooks:
       - id: isort
-        args: ["--profile", "black"]
+        args:
+          - --settings-path=pyproject.toml
+          - --filter-files
         exclude: |
           (?x)^(
             DuRiCore/reasoning_engine/integration/|
