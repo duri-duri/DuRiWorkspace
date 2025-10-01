@@ -1,5 +1,0 @@
- 886d96b8aa78639c8b140245b667117b054b5d9b duri_all_scripts (v1.0-7-g886d96b)
- 27a04a477ad5a6c7e5ef8b66f36079311125f451 duri_brain (heads/dev)
- 01c2cd6e46aadc9eed925a05de5d7f1022bf65f5 duri_control (heads/dev-1-g01c2cd6)
- 2ea2f9852a22e7e65520c668a3d47673c03d7d4c duri_core (snapshot_2025-05-30_16-00-10-g2ea2f98)
- e8dfd014c03781ddb0c31cd52a87b1a7e7a58530 duri_evolution (heads/dev)

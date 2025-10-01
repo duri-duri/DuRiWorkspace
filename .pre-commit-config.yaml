@@ -1,13 +1,14 @@
-# ---- global excludes (added) ----
+# Skip huge snapshot/backup trees globally for all hooks
 exclude: |
-  (?x)^(
-    duri_snapshots/.*|
-    duri_archive/.*|
-    DuRiCore_backup_.*|
-    \.test-artifacts/.*|
-    backup/.*|
-    \.github/workflows-archive/.*|
-    docker-compose\.optimized\.yml
+  ^(
+    duri_snapshots/|
+    DuRiCore_backup_|
+    backup|
+    restored_day8_10/|
+    unified_conversations/|
+    logs/|
+    \.bundle_tmp/|
+    \.benchmarks/
   )
 
 repos:

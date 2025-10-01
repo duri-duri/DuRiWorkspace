@@ -1,4 +1,27 @@
 
+# === auto-generated / archives / logs (never commit) ===
+duri_snapshots/
+DuRiCore_backup_*/
+backup*/
+restored_day8_10/
+unified_conversations/
+logs/
+safe_workspace/
+safe_workspace/**
+
+# bundle/tmp & build artifacts
+.bundle_tmp/
+.benchmarks/
+
+# local run outputs
+test_result.json
+**/test_results_*.json
+**/plan.json
+
+# misc temp & legacy
+scripts/_legacy/
+scripts/._*
+
 # dev scratch (prevent noisy commits & pre-push blocks)
 allow.re
 changed.txt

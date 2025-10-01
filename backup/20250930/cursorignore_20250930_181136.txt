@@ -1,6 +1,0 @@
-data/
-.bundle_tmp/
-nohup.out
-*.log
-cursor_extension/dist/
-duri.egg-info/

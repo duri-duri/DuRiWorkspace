@@ -1,2 +1,0 @@
-backup-day22-clinic-ingest-complete
-backup-day22-rehab-complete
