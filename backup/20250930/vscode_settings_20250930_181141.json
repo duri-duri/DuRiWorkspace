@@ -1,0 +1,49 @@
+{
+  "python.analysis.exclude": [
+    "**/.venv", "**/node_modules", "**/__pycache__",
+    "backup*", "backups", "backup_repository",
+    "/mnt/hdd/ARCHIVE", "/mnt/usb", "/mnt/c/Users/admin/Desktop/두리백업",
+    "**/.UNWRAP", "**/.TRASH", "**/.QUAR_FAIL",
+    "**/duri_snapshots", "**/Desktop_Mirror", "**/Desktop_Snapshots"
+  ],
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/.git/**": true,
+    "**/.venv/**": true,
+    "**/backups/**": true,
+    "**/backup_repository/**": true,
+    "**/backup*/**": true,
+    "**/.UNWRAP/**": true,
+    "**/.TRASH/**": true,
+    "**/.QUAR_FAIL/**": true,
+    "**/duri_snapshots/**": true,
+    "**/Desktop_Mirror/**": true,
+    "**/Desktop_Snapshots/**": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.git": true,
+    "**/.venv": true,
+    "**/backups": true,
+    "**/backup_repository": true,
+    "**/.UNWRAP": true,
+    "**/.TRASH": true,
+    "**/.QUAR_FAIL": true,
+    "**/duri_snapshots": true,
+    "**/Desktop_Mirror": true,
+    "**/Desktop_Snapshots": true
+  },
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.typeCheckingMode": "basic",
+  "terminal.integrated.cwd": "${workspaceFolder}",
+  "terminal.integrated.shell.linux": "/bin/bash",
+  "terminal.integrated.copyOnSelection": true,
+  "terminal.integrated.rightClickBehavior": "copyPaste",
+  "terminal.integrated.enableMultiLinePasteWarning": false,
+  "terminal.integrated.commandsToSkipShell": [
+    "workbench.action.terminal.sendSequence"
+  ],
+  "terminal.integrated.copySelection": "ctrl+alt+c",
+  "terminal.integrated.paste": "ctrl+alt+v",
+  "makefile.configureOnOpen": false
+}

@@ -51,3 +51,17 @@ day38.patch:
 	@python3 tools/patch_generator.py add_import tests/test_example.py duri_common.settings || true
 	@echo "Dry-run patching..."
 	@echo '{"action":"add_import","file":"tests/test_example.py","module":"duri_common.settings"}' | python3 tools/dry_run_patcher.py || true
+
+# 개발 편의 타깃 3종
+.PHONY: clean-deep ci-local pr-autofix
+clean-deep:
+	@docker compose down --volumes || true
+	@docker system prune -f || true
+	@echo "Cleaned."
+
+ci-local:
+	@pytest -q tests || true
+	@python tools/policy_gate.py || true
+
+pr-autofix:
+	@gh pr edit $$PR --add-label "auto-fix:suggest" || echo "Set PR environment variable first"

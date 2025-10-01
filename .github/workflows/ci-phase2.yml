@@ -1,8 +1,8 @@
+# name: Phase-2 Suite Legacy
+# NOTE: disabled by policy; kept for reference
 name: Phase-2 Suite Legacy
 
 on:
-  push:
-    branches: [ "main", "sig-test" ]
   workflow_dispatch:
 
 permissions:

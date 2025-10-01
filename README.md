@@ -1,6 +1,9 @@
 # 🚀 DuRi 백업 리팩토링 - 운영자용 스타트 가이드
 
 [![Regression](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/duri-duri/DuRiWorkspace/badges/regression.json)](https://github.com/duri-duri/DuRiWorkspace/actions/workflows/insight-league.yml)
+[![Tests](https://img.shields.io/github/actions/workflow/status/duri-duri/DuRiWorkspace/ci.yml?branch=main&label=tests)](https://github.com/duri-duri/DuRiWorkspace/actions/workflows/ci.yml)
+[![Guards](https://img.shields.io/github/actions/workflow/status/duri-duri/DuRiWorkspace/repo-guards.yml?branch=main&label=guards)](https://github.com/duri-duri/DuRiWorkspace/actions/workflows/repo-guards.yml)
+[![Proof Gates](https://img.shields.io/github/actions/workflow/status/duri-duri/DuRiWorkspace/proof-gates.yml?branch=main&label=gates)](https://github.com/duri-duri/DuRiWorkspace/actions/workflows/proof-gates.yml)
 
 > **⚠️ 중요**: 이 가이드는 백업 리팩토링 실행을 위한 것입니다. 실행 전 반드시 전체 내용을 읽어주세요.
 
@@ -13,7 +16,7 @@
 ## ✅ **첫 실행 체크리스트 (DRY-RUN→실행) - 5줄 핵심**
 
 1. `SAFE_BACKUP` 태그 + 전체 스냅샷 생성 완료 여부 확인
-2. `config.env` 환경변수(경로·브랜치·토큰) 정확히 설정  
+2. `config.env` 환경변수(경로·브랜치·토큰) 정확히 설정
 3. DRY-RUN 모드(`export DRY_RUN=1`)로 `summary_report.sh` 실행 → summary.json/summary.md 생성 확인
 4. 로그에 오류(FAIL/FATAL) 없고 README 미수정 확인
 5. DRY-RUN 해제 후 재실행 → README Phase 표 ✅ 자동 반영 확인

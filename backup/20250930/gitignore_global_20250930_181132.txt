@@ -1,0 +1,16 @@
+*.bak
+*.log
+*.patch
+*COMPLETE.md
+*STATUS*.md
+.cursorignore
+.env
+.ops.env
+.vscode/tasks.json
+DAY*_*.md
+Makefile.tmp
+PR_*.md
+etc/storage.env
+ops/.ops.env
+patent_drafts/
+reports/

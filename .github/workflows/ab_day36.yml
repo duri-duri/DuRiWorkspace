@@ -1,7 +1,7 @@
+# name: day36-ab
+# NOTE: disabled by policy; kept for reference
 name: day36-ab
 on:
-  push:
-    branches: [ feat/phase4_day35_refactor ]
   workflow_dispatch: {}
 
 jobs:
@@ -14,7 +14,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-        with: { python-version: ${{ matrix.python }} }
+        with:
+          python-version: ${{ matrix.python }}
       - run: python -m pip install -r requirements.txt
       - name: Run Day36
         run: make run AS_OF_DAY=36 VAR=${{ matrix.var }} SEED=42

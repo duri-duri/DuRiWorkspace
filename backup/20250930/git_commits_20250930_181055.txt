@@ -1,0 +1,6 @@
+e6d1d1f96 chore: ignore Makefile.tmp (#57)
+1cda90074 [Day38] Auto Code Loop Improvements — M3 (CI integration) (#56)
+12b6011cc feat(day38): M2 dry-run patch generator skeleton (#55)
+f6df5b732 [Day38] Auto Code Loop Improvements (M1 skeleton) (#54)
+dc3a1eeb2 [Day37] PoU D+7 유지율 분석 (ETL+Config+Report) (#53)
+3bdf9fc54 [Day36] A/B 테스트 인프라 v0.1 (CSV+Gate+SRM) (#52)

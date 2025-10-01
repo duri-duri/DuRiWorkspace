@@ -1,0 +1,13 @@
+core.excludesfile=/home/duri/.gitignore_global
+submodule.recurse=false
+submodule.recurse=false
+submodule.duri_all_scripts.active=true
+submodule.duri_all_scripts.url=git@github.com:duri-duri/duri_all_scripts.git
+submodule.duri_brain.active=true
+submodule.duri_brain.url=https://github.com/duri-duri/duri_brain.git
+submodule.duri_control.active=true
+submodule.duri_control.url=git@github.com:duri-duri/duri_control.git
+submodule.duri_core.active=true
+submodule.duri_core.url=https://github.com/duri-duri/duri_core.git
+submodule.duri_evolution.active=true
+submodule.duri_evolution.url=https://github.com/duri-duri/duri_evolution.git
