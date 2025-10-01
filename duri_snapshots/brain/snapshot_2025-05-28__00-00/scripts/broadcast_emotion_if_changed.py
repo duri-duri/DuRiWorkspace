@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
-import os
 import json
-import yaml
+import os
 from datetime import datetime
+
+import yaml
 
 # 🔧 경로 설정
 DATE = datetime.now().strftime("%Y-%m-%d")
@@ -20,8 +21,9 @@ REMOTE_PATH = os.path.join(BASE_DIR, DATE, "delta_from_remote.json")
 TARGETS = {
     "duri-brain": "192.168.0.9",
     "duri-control": "192.168.0.11",
-    "duri-evolution": "192.168.0.20"
+    "duri-evolution": "192.168.0.20",
 }
+
 
 # 📋 로그 기록
 def log(msg):
@@ -29,6 +31,7 @@ def log(msg):
     os.makedirs(os.path.dirname(SEND_LOG), exist_ok=True)
     with open(SEND_LOG, "a") as f:
         f.write(f"[{timestamp}] {msg}\n")
+
 
 # 📋 JSON 이력 로그 기록
 def append_broadcast_json_log(entry):
@@ -43,17 +46,21 @@ def append_broadcast_json_log(entry):
     with open(BROADCAST_JSON_LOG, "w") as f:
         json.dump(logs[-500:], f, indent=2, ensure_ascii=False)
 
+
 # 📋 JSON 파일 다루기
 def file_exists_and_valid(path):
     return os.path.isfile(path) and os.path.getsize(path) > 0
+
 
 def read_json(path):
     with open(path, "r") as f:
         return json.load(f)
 
+
 def write_json(path, data):
     with open(path, "w") as f:
         json.dump(data, f, indent=2, sort_keys=True)
+
 
 # 📋 중요도 기준 불러오기
 def load_importance_threshold(default=0.3):
@@ -64,11 +71,13 @@ def load_importance_threshold(default=0.3):
         log("[⚠️] importance_policy.yaml 읽기 실패, 기본값 사용")
         return default
 
+
 # 📋 실패 시 큐에 백업
 def backup_failed_emotion(data):
     os.makedirs(os.path.dirname(QUEUE_PATH), exist_ok=True)
     with open(QUEUE_PATH, "a") as f:
         f.write(json.dumps(data) + "\n")
+
 
 # 📤 대상 노드로 전송
 def send_to_all_targets(data):
@@ -92,6 +101,7 @@ def send_to_all_targets(data):
             backup_failed_emotion(data)
 
         append_broadcast_json_log(log_entry)
+
 
 # 🚀 메인 로직
 def main():
@@ -124,12 +134,15 @@ def main():
         log(f"[⚠️] last_sent.json 읽기 오류: {e}")
         return
 
-    if json.dumps(current_delta, sort_keys=True) != json.dumps(last_sent, sort_keys=True):
+    if json.dumps(current_delta, sort_keys=True) != json.dumps(
+        last_sent, sort_keys=True
+    ):
         log("[📢] 변화 감지됨 - 전송 실행")
         send_to_all_targets(current_delta)
         write_json(LAST_SENT_FILE, current_delta)
     else:
         log("[⏸️] 변화 없음 - 전송 생략")
+
 
 if __name__ == "__main__":
 

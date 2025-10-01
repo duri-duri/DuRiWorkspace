@@ -19,5 +19,3 @@ git tag "$DATE_TAG"
 git push origin main --tags
 
 echo "✅ [$HOSTNAME] 백업 완료"
-
-

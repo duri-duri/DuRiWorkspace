@@ -1,8 +1,9 @@
-import os
-import yaml
-import shutil
 import json
+import os
+import shutil
 from datetime import datetime, timedelta
+
+import yaml
 
 with open("/home/duri/config/DuRi-memory-policy.yaml", "r") as f:
     policy = yaml.safe_load(f)["memory_policy"]
@@ -11,6 +12,7 @@ root = "/home/duri/emotion_data"
 cutoff = datetime.today() - timedelta(days=policy["archive_after_days"])
 compressed_dir = os.path.join(root, "compressed")
 os.makedirs(compressed_dir, exist_ok=True)
+
 
 # 중요도 계산 함수 (delta 기준)
 def calc_importance_from_delta(delta_path):
@@ -24,6 +26,7 @@ def calc_importance_from_delta(delta_path):
         print(f"[❌] 중요도 계산 실패: {delta_path}, 이유: {e}")
         return 0
 
+
 for subdir in os.listdir(root):
     subpath = os.path.join(root, subdir)
     if not os.path.isdir(subpath) or subdir == "compressed":
@@ -35,7 +38,7 @@ for subdir in os.listdir(root):
             delta_path = os.path.join(subpath, "delta.json")
             if not os.path.exists(delta_path):
                 print(f"[📭] delta.json 없음: {delta_path}")
-            
+
             importance = calc_importance_from_delta(delta_path)
             print(f"[ℹ️] 중요도: {importance:.4f} | 경로: {subpath}")
 

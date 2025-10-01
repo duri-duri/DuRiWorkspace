@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-import os
 import json
+import os
 from datetime import datetime
 
 BASE_DIR = "/home/duri/emotion_data"
@@ -10,27 +10,31 @@ LAST_PATH = os.path.join(BASE_DIR, "last_logged_emotion.json")
 LOG_PATH = os.path.join(BASE_DIR, "emotion_change_log.json")
 THRESHOLD = 0.1  # intensity 변화 기준
 
+
 def load_json(path):
     if not os.path.exists(path) or os.path.getsize(path) == 0:
         return None
-    with open(path, 'r') as f:
+    with open(path, "r") as f:
         return json.load(f)
 
+
 def save_json(path, data):
-    with open(path, 'w') as f:
+    with open(path, "w") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
+
 
 def append_log(entry):
     logs = []
     if os.path.exists(LOG_PATH):
-        with open(LOG_PATH, 'r') as f:
+        with open(LOG_PATH, "r") as f:
             try:
                 logs = json.load(f)
             except:
                 logs = []
     logs.append(entry)
-    with open(LOG_PATH, 'w') as f:
+    with open(LOG_PATH, "w") as f:
         json.dump(logs[-500:], f, indent=2, ensure_ascii=False)  # 최근 500개 유지
+
 
 def emotion_changed(prev, curr):
     if prev is None:
@@ -40,6 +44,7 @@ def emotion_changed(prev, curr):
     if abs(prev["intensity"] - curr["intensity"]) >= THRESHOLD:
         return "intensity_changed"
     return None
+
 
 def main():
     cur = load_json(CUR_PATH)
@@ -54,10 +59,11 @@ def main():
             "timestamp": datetime.now().isoformat(),
             "prev": last if last else "none",
             "new": cur,
-            "reason": reason
+            "reason": reason,
         }
         append_log(log_entry)
         save_json(LAST_PATH, cur)
+
 
 if __name__ == "__main__":
     main()

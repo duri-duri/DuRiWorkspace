@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
-from flask import Flask, request, jsonify
+import json
 import os
 from datetime import datetime
-import json
+
+from flask import Flask, jsonify, request
 
 # 📌 설정
 LOG_DIR = "/home/duri/logs"
@@ -12,6 +13,7 @@ LOG_FILE = os.path.join(LOG_DIR, "emotion_receive.log")
 
 # 📥 수신 이력 기록 로그 설정
 RECEIVE_JSON_LOG = "/home/duri/emotion_data/receive_log.json"
+
 
 def append_receive_json_log(entry):
     logs = []
@@ -25,7 +27,9 @@ def append_receive_json_log(entry):
     with open(RECEIVE_JSON_LOG, "w") as f:
         json.dump(logs[-500:], f, indent=2, ensure_ascii=False)
 
+
 app = Flask(__name__)
+
 
 # 📥 감정 수신 엔드포인트
 @app.route("/emotion", methods=["POST"])
@@ -41,7 +45,7 @@ def receive_emotion():
     log_entry = {
         "timestamp": datetime.now().isoformat(),
         "emotion": data,
-        "status": "success"
+        "status": "success",
     }
     append_receive_json_log(log_entry)
 
@@ -62,6 +66,7 @@ def receive_emotion():
     os.system("python3 /home/duri/scripts/update_cur_from_delta.py")
 
     return jsonify({"status": "received"}), 200
+
 
 # 🚀 서버 실행
 if __name__ == "__main__":

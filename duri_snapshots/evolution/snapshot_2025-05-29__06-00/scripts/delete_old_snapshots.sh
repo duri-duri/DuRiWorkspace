@@ -33,4 +33,3 @@ for dir in $OLD_DIRS; do
 done
 
 echo "✅ 오래된 스냅샷 정리 완료"
-

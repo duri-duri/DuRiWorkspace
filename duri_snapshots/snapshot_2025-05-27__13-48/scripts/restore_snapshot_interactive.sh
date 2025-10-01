@@ -29,4 +29,3 @@ echo "📦 logs 복원 중..."
 cp -r $TAG/logs/* ~/logs/
 
 echo "✅ 복원 완료. 시스템 상태가 [$TAG]로 되돌아갔습니다."
-

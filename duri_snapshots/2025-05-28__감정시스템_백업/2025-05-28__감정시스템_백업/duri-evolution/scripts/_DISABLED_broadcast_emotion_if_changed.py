@@ -1,8 +1,7 @@
-
 #!/usr/bin/env python3
 
-import os
 import json
+import os
 import shutil
 from datetime import datetime
 
@@ -14,25 +13,30 @@ SEND_LOG = "/home/duri/logs/broadcast.log"
 TARGETS = {
     "duri-control": "192.168.0.11",
     "duri-brain": "192.168.0.9",
-    "duri-evolution": "192.168.0.20"
+    "duri-evolution": "192.168.0.20",
 }
 REMOTE_PATH = "/home/duri/emotion_data/delta.json"
+
 
 def log(msg):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     with open(SEND_LOG, "a") as f:
         f.write(f"[{timestamp}] {msg}\n")
 
+
 def file_exists_and_valid(path):
     return os.path.isfile(path) and os.path.getsize(path) > 0
+
 
 def read_json(path):
     with open(path, "r") as f:
         return json.load(f)
 
+
 def write_json(path, data):
     with open(path, "w") as f:
         json.dump(data, f)
+
 
 def send_to_all_nodes():
     for name, ip in TARGETS.items():
@@ -42,6 +46,7 @@ def send_to_all_nodes():
             log(f"[📤] 전송 성공 → {name} ({ip})")
         else:
             log(f"[❌] 전송 실패 → {name} ({ip})")
+
 
 def main():
     if not file_exists_and_valid(DELTA_FILE):
@@ -59,6 +64,7 @@ def main():
     # 변경 감지 → 전송
     send_to_all_nodes()
     shutil.copy2(DELTA_FILE, LAST_SENT_FILE)
+
 
 if __name__ == "__main__":
     main()
