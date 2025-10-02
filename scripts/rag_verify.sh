@@ -34,4 +34,16 @@ ids=$(jq -r '.id' rag/**/*.jsonl 2>/dev/null | sort || true)
 dups=$(printf "%s\n" "$ids" | uniq -d || true)
 if [ -n "${dups:-}" ]; then echo "❌ Duplicate ids:"; printf "%s\n" "$dups"; fail=1; fi
 
+# 5) ISO8601 타임스탬프 검증 (선택적)
+bad_timestamps=$(jq -r 'select(has("updated_at")) | .updated_at' rag/**/*.jsonl 2>/dev/null | grep -Ev '^\d{4}-\d{2}-\d{2}T.*\+\d{2}:\d{2}$' || true)
+if [ -n "${bad_timestamps:-}" ]; then echo "⚠️ bad timestamp (ISO8601 권장):"; printf "%s\n" "$bad_timestamps"; fi
+
+# 6) id 패턴 검증 (영역.주제.v1.xxx)
+bad_ids=$(jq -r '.id' rag/**/*.jsonl 2>/dev/null | grep -Ev '^[a-z0-9_.-]+\.v[0-9]+(\.[0-9]+)?\.[0-9]{3}$' || true)
+if [ -n "${bad_ids:-}" ]; then echo "⚠️ bad id pattern:"; printf "%s\n" "$bad_ids"; fail=1; fi
+
+# 7) body 길이 검증 (검색 품질, 권장사항)
+short_bodies=$(jq -r '.id + "\t" + (.body|tostring)' rag/**/*.jsonl 2>/dev/null | awk -F'\t' '{ if(length($2) < 200) print $1 }' || true)
+if [ -n "${short_bodies:-}" ]; then echo "⚠️ short body (<200 chars, 검색 품질 권장):"; printf "%s\n" "$short_bodies"; fi
+
 exit $fail
