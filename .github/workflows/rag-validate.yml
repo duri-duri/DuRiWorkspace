@@ -11,6 +11,16 @@ jobs:
       - uses: actions/checkout@v4
       - run: sudo apt-get update && sudo apt-get install -y jq
       - run: bash scripts/rag_verify.sh
+      - name: JSONL single-line check (multiline prevention)
+        run: |
+          set -euo pipefail
+          find rag/ -name "*.jsonl" -print0 | xargs -0 -I{} bash -c '
+            L=$(wc -l < "{}"); V=$(jq -c . "{}" | wc -l);
+            if [[ "$L" -ne "$V" ]]; then
+              echo "❌ multiline or invalid: {} (lines=$L, valid=$V)"
+              exit 1
+            fi
+          '
       - name: RAG search smoke (요통)
         run: |
           set -euo pipefail
