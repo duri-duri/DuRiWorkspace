@@ -39,5 +39,5 @@ find rag/ -name "*.jsonl" -print0 \
 ' {} 2>/dev/null \
 | jq -r '
   . as $r
-  | "📄 \($r.id): \($r.title)\n   카테고리: \($r.category)\n   환자용: \($r.patient_facing)\n   내용: \(( $r.body | gsub("\n"; " ") ) | .[0:120])..."
+         | "📄 \($r.id): \($r.title)\n   카테고리: \($r.category)\n   환자용: \($r.patient_facing)\n   내용: \(( $r.body | gsub("\n"; " ") ) | .[0:160])..."
 '
