@@ -4,7 +4,7 @@ set -euo pipefail
 # === Config ===
 ROOT="${ROOT:-$HOME/DuRiWorkspace}"
 POLICY="${POLICY:-$ROOT/policies/auto_code_loop/gate_policy.yaml}"
-LOGDIR="${LOGDIR:-$ROOT/logs/auto_code_loop_beta/$(date +%F)}"
+LOGDIR="${LOGDIR:-$HOME/.local/duri/logs/auto_code_loop_beta/$(date +%F)}"
 REGRESSION="${REGRESSION:-$ROOT/run_regression_tests.sh}"
 SECURITY_CHECK="${SECURITY_CHECK:-$ROOT/tools/policy_verify.sh}"
 RESTORE_SMOKE="${RESTORE_SMOKE:-$ROOT/scripts/smoke_restore_test.sh}"
@@ -23,7 +23,10 @@ echo "[INFO] Day15 auto-code-loop beta start @ $(date)"
 echo "[INFO] ROOT=$ROOT BRANCH=$BRANCH LOGDIR=$LOGDIR POLICY=$POLICY"
 
 cd "$ROOT"
-git rev-parse --abbrev-ref HEAD | grep -qx "$BRANCH" || { echo "[ERR] not on $BRANCH"; exit 2; }
+# DRY_RUN일 때는 브랜치 체크 무시
+if [[ "$DRY_RUN" != "1" ]]; then
+  git rev-parse --abbrev-ref HEAD | grep -qx "$BRANCH" || { echo "[ERR] not on $BRANCH"; exit 2; }
+fi
 
 # === Gate 0: policy file exists ===
 [[ -s "$POLICY" ]] || { echo "[ERR] policy not found: $POLICY"; exit 2; }
