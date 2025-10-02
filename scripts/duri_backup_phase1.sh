@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -Eeuo pipefail
 
 # 동시 실행 방지 (lock 파일)
 exec 9>/tmp/duri_backup_phase1.lock

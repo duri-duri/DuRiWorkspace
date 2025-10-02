@@ -1,4 +1,5 @@
 #!/bin/bash
+set -Eeuo pipefail
 # 📦 delete_old_snapshots.sh
 # 30일 지난 DuRi snapshot 디렉토리를 GitHub + 로컬 모두에서 정리합니다.
 

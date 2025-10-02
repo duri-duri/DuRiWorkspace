@@ -1,4 +1,5 @@
 #!/bin/bash
+set -Eeuo pipefail
 # DuRi 부팅 축 시스템 v1.0
 # 목적: 새로운 작업 세션 시작 시 전체 시스템 상태 확인
 

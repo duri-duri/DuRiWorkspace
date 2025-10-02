@@ -1,4 +1,5 @@
 #!/bin/bash
+set -Eeuo pipefail
 
 GIT_REPOS=(
   "/home/duri/duri-core"

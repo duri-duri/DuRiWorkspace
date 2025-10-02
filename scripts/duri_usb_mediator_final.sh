@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -Eeuo pipefail
 # G:\DuRiSync 의 Dump_*.dump 를 E/F 콜드 저장소로 동기화
 # - 미반영분은 다음 실행 시 재시도
 # - E/F 양쪽 완료된 오래된 덤프는 USB에서 보존개수(N) 외 정리

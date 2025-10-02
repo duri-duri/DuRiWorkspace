@@ -1,4 +1,5 @@
 #!/bin/bash
+set -Eeuo pipefail
 
 # 📌 사용법: ./restore_evolution.sh <commit_hash>
 # 예시: ./restore_evolution.sh 2d4da61

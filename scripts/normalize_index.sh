@@ -1,4 +1,5 @@
 #!/bin/bash
+set -Eeuo pipefail
 INPUT=${1:-/mnt/usb/CORE_PROTECTED/META/INDEX.full.jsonl}
 OUTPUT=${2:-/mnt/usb/CORE_PROTECTED/META/INDEX.full.normalized.jsonl}
 

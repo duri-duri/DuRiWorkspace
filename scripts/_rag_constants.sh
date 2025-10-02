@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -Eeuo pipefail
 # RAG 시스템 공통 상수 정의
 # 사용법: source "$(dirname "$0")/_rag_constants.sh"
 

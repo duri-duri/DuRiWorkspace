@@ -1,4 +1,5 @@
 #!/bin/bash
+set -Eeuo pipefail
 set -e
 
 echo "📡 PostgreSQL 연결 가능 여부 확인 중..."
