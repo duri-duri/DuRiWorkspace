@@ -27,7 +27,15 @@ while IFS= read -r -d '' f; do
       # triage.*는 policy라도 triage 톤으로 오버라이드
       if [[ "$id" == triage.* ]]; then pad="${PAD[triage]}"; fi
       need=$((min - len))
-      add="${pad:0:need}"
+
+      add=""
+      while (( ${#add} < need )); do
+        chunk="${pad:0:$((need - ${#add}))}"
+        # pad가 need보다 짧으면 여러 번 이어붙음
+        add="$add$chunk"
+        # pad가 너무 짧으면 반복해서 누적 (보수적)
+        if [[ -z "$chunk" ]]; then add="$add$pad"; fi
+      done
       j="$(jq --arg add " $add" '.body = (.body // "" + $add)' <<<"$j")"
     fi
     echo "$j" >> "$tmp"
