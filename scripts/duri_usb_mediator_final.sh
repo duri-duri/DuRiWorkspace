@@ -5,12 +5,12 @@
 set -Eeuo pipefail
 export LC_ALL=C
 
-[ -f /etc/duri/backup.env ] && . /etc/duri/backup.env || true
-USB_ROOT="${USB_ROOT:-/mnt/g/DuRiSync}"
+[ -f /etc/duri/backup.env ] && . /etc/duri/backup.env 2>/dev/null || true
+USB_ROOT="${USB_ROOT:-/mnt/usb/두리백업}"
 E_ROOT="${E_ROOT:-/mnt/e/DuRiSafe_HOSP/DAILY}"
 F_ROOT="${F_ROOT:-/mnt/f/DuRiSafe_HOME/DAILY}"
 RETAIN_COUNT="${RETAIN_COUNT:-3}"
-LOG_DIR="/var/log/duri_cold_import"; mkdir -p "$LOG_DIR" || true
+LOG_DIR="${LOG_DIR:-$HOME/.local/var/log/duri_cold_import}"; mkdir -p "$LOG_DIR" || true
 LOCK="/tmp/.duri_usb_mediator.lock"
 exec 9>"$LOCK" && flock -n 9 || { echo "[ERR] another run"; exit 99; }
 
