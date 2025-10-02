@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -Eeuo pipefail
+set -euo pipefail
 
 command -v jq >/dev/null || { echo "[err] jq not found"; exit 2; }
 
@@ -28,7 +28,7 @@ CAT="${2:-}"       # intake / education / ...
 PF="${3:-}"        # "true" | "false" | ""(무시)
 
 if [[ -z "$QUERY" ]]; then
-  echo "사용법: bash scripts/rag_search.sh '<검색어>' [카테고리] [patient_facing:true|false] [--rank] [--k N] [--format ids|json|pretty] [--log path] [--mode literal|regex]" >&2
+  echo "사용법: bash scripts/rag_search_enhanced.sh '<검색어>' [카테고리] [patient_facing:true|false] [--rank] [--k N] [--format ids|json|pretty] [--log path] [--mode literal|regex]" >&2
   exit 1
 fi
 

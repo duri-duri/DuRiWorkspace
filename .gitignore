@@ -127,3 +127,4 @@ Makefile.tmp
 # allow tracked RAG jsonl (explicit)
 !rag/
 !rag/**/*.jsonl
+prom-data/
