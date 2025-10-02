@@ -92,3 +92,11 @@ repos:
     hooks:
       - id: flake8
         additional_dependencies: [flake8-docstrings]
+
+  - repo: local
+    hooks:
+      - id: rag-verify
+        name: RAG JSONL verify
+        entry: bash scripts/rag_verify.sh
+        language: system
+        files: ^rag/.+\.jsonl$
