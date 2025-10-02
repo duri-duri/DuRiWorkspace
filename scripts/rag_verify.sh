@@ -35,15 +35,39 @@ dups=$(printf "%s\n" "$ids" | uniq -d || true)
 if [ -n "${dups:-}" ]; then echo "❌ Duplicate ids:"; printf "%s\n" "$dups"; fail=1; fi
 
 # 5) ISO8601 타임스탬프 검증 (선택적)
-bad_timestamps=$(jq -r 'select(has("updated_at")) | .updated_at' rag/**/*.jsonl 2>/dev/null | grep -Ev '^\d{4}-\d{2}-\d{2}T.*\+\d{2}:\d{2}$' || true)
-if [ -n "${bad_timestamps:-}" ]; then echo "⚠️ bad timestamp (ISO8601 권장):"; printf "%s\n" "$bad_timestamps"; fi
+# ISO8601 (예: 2025-10-02T11:45:00Z | 2025-10-02T11:45:00+09:00 | 2025-10-02T11:45:00.123+09:00)
+ISO_RE='^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}([.][0-9]+)?(Z|[+-][0-9]{2}:[0-9]{2})$'
+
+BAD_TS=0
+while IFS= read -r ts; do
+  [[ "$ts" =~ $ISO_RE ]] || { echo "⚠️ bad timestamp (ISO8601 권장):"; echo "$ts"; BAD_TS=1; }
+done < <(jq -r 'select(has("updated_at")) | .updated_at' rag/**/*.jsonl 2>/dev/null || true)
 
 # 6) id 패턴 검증 (영역.주제.v1.xxx)
 bad_ids=$(jq -r '.id' rag/**/*.jsonl 2>/dev/null | grep -Ev '^[a-z0-9_.-]+\.v[0-9]+(\.[0-9]+)?\.[0-9]{3}$' || true)
 if [ -n "${bad_ids:-}" ]; then echo "⚠️ bad id pattern:"; printf "%s\n" "$bad_ids"; fail=1; fi
 
-# 7) body 길이 검증 (검색 품질, 권장사항)
-short_bodies=$(jq -r '.id + "\t" + (.body|tostring)' rag/**/*.jsonl 2>/dev/null | awk -F'\t' '{ if(length($2) < 200) print $1 }' || true)
-if [ -n "${short_bodies:-}" ]; then echo "⚠️ short body (<200 chars, 검색 품질 권장):"; printf "%s\n" "$short_bodies"; fi
+# 7) body 길이 검증 (카테고리별 권장사항)
+# 카테고리별 권장 최소 길이(한글 기준)
+MIN_LEN_DEFAULT=200
+declare -A MIN_LEN
+MIN_LEN[intake]=200
+MIN_LEN[education]=220
+MIN_LEN[exercise]=180
+MIN_LEN[orders]=120
+MIN_LEN[schedule]=140
+MIN_LEN[policy]=120
+MIN_LEN[diagnosis]=200
+
+while IFS=$'\t' read -r cat id body; do
+  min=${MIN_LEN[$cat]:-$MIN_LEN_DEFAULT}
+  blen=$(echo -n "$body" | wc -m)
+  if (( blen < min )); then
+    echo "⚠️ short body (<$min chars): $id ($cat)"
+  fi
+done < <(
+  jq -r '[.category,.id,.body] | @tsv' rag/**/*.jsonl 2>/dev/null \
+  | sed '/^\t\t$/d'
+)
 
 exit $fail

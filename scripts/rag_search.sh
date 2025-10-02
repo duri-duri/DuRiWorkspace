@@ -1,52 +1,43 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# 간단한 RAG 검색 스크립트 (find + grep + jq)
-# 사용법: bash scripts/rag_search.sh "검색어" [카테고리] [환자용여부]
+QUERY="${1:-}"
+CAT="${2:-}"          # 예: intake / education / (빈칸 허용)
+PF="${3:-}"           # "true" | "false" | ""(무시)
 
-query="${1:-}"
-category="${2:-}"
-patient_facing="${3:-}"
-
-if [ -z "$query" ]; then
-  echo "사용법: $0 '검색어' [카테고리] [patient_facing:true/false]"
-  echo "예시: $0 '요통' 'intake' 'false'"
+if [[ -z "$QUERY" ]]; then
+  echo "사용법: bash scripts/rag_search.sh '<검색어>' [카테고리] [patient_facing:true|false]"
   exit 1
 fi
 
-echo "🔍 RAG 검색: '$query'"
-if [ -n "$category" ]; then echo "   카테고리: $category"; fi
-if [ -n "$patient_facing" ]; then echo "   환자용: $patient_facing"; fi
-echo ""
+echo "🔍 RAG 검색: '$QUERY'"
+[[ -n "$CAT" ]] && echo "   카테고리: $CAT"
+[[ -n "$PF"  ]] && echo "   환자용: $PF"
+echo
 
-# find + grep으로 검색 후 jq로 필터링
-find rag/ -name "*.jsonl" -exec grep -l "$query" {} \; | while read -r file; do
-  while IFS= read -r line; do
-    # JSON 파싱 및 검색어 매칭
-    if echo "$line" | jq -e "select(.title | test(\"$query\"; \"i\")) or
-                            select(.body | test(\"$query\"; \"i\")) or
-                            select(.bullets[]? | test(\"$query\"; \"i\")) or
-                            select(.tags[]? | test(\"$query\"; \"i\"))" >/dev/null 2>&1; then
-
-      # 추가 필터 적용
-      if [ -n "$category" ]; then
-        if ! echo "$line" | jq -e "select(.category == \"$category\")" >/dev/null 2>&1; then
-          continue
-        fi
-      fi
-
-      if [ -n "$patient_facing" ]; then
-        if ! echo "$line" | jq -e "select(.patient_facing == $patient_facing)" >/dev/null 2>&1; then
-          continue
-        fi
-      fi
-
-      # 결과 출력
-      echo "📄 $(echo "$line" | jq -r '.id'): $(echo "$line" | jq -r '.title')"
-      echo "   카테고리: $(echo "$line" | jq -r '.category')"
-      echo "   환자용: $(echo "$line" | jq -r '.patient_facing')"
-      echo "   내용: $(echo "$line" | jq -r '.body' | head -c 100)..."
-      echo ""
-    fi
-  done < "$file"
-done
+# 모든 jsonl을 한 번에 jq로 처리
+find rag/ -name "*.jsonl" -print0 \
+| xargs -0 -I{} jq -r --arg q "$QUERY" --arg cat "$CAT" --arg pf "$PF" '
+  try ( . as $doc
+    | select(type=="object")
+    | select(has("title") and has("body"))  # 최소 키
+    | select(($cat=="" or .category==$cat))
+    | select(($pf==""  or (.patient_facing==($pf=="true"))))
+    | select((((.title // "") + " " +
+               (.body  // "") + " " +
+               ((.bullets // []) | join(" ")) + " " +
+               ((.tags    // []) | join(" "))
+              ) | test($q; "i")))
+    | {
+        id: (.id // "-"),
+        title: (.title // "-"),
+        category: (.category // "-"),
+        patient_facing: (.patient_facing // false),
+        body: (.body // "")
+      }
+  ) catch empty
+' {} 2>/dev/null \
+| jq -r '
+  . as $r
+  | "📄 \($r.id): \($r.title)\n   카테고리: \($r.category)\n   환자용: \($r.patient_facing)\n   내용: \(( $r.body | gsub("\n"; " ") ) | .[0:120])..."
+'
