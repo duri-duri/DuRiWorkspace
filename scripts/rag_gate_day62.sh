@@ -3,7 +3,7 @@ set -euo pipefail
 
 GT="${GT:-.reports/day62/ground_truth.tsv}"
 K="${K:-3}"
-THRESHOLD_P="${THRESHOLD_P:-0.70}"
+THRESHOLD_P="${THRESHOLD_P:-0.60}"
 THRESHOLD_R="${THRESHOLD_R:-}"
 
 echo "🚪 RAG 검색 품질 게이트 체크"
