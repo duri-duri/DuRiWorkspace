@@ -68,6 +68,36 @@ bash scripts/rag_k_sweep.sh .reports/day62/ground_truth_clean.tsv
 - 파이프라인 안전 실패 처리
 - 입력 매개변수 검증
 
+## ⚙️ Configuration Precedence
+
+`rag_gate.sh`의 설정 우선순위:
+
+1. **환경변수** (최우선)
+   ```bash
+   THRESH_P=0.60 K=5 bash scripts/rag_gate.sh ground_truth.tsv
+   ```
+
+2. **`.gate` 파일** (환경변수가 없을 때만)
+   ```bash
+   # ground_truth.tsv.gate
+   THRESH_P=0.30
+   K=3
+   ```
+
+3. **기본값** (둘 다 없을 때)
+   ```bash
+   THRESH_P=0.30, K=3
+   ```
+
+### 예시
+```bash
+# .gate 파일만 있을 때: THRESH_P=0.30 사용
+bash scripts/rag_gate.sh ground_truth.tsv
+
+# 환경변수로 덮어쓰기: THRESH_P=0.60 사용
+THRESH_P=0.60 bash scripts/rag_gate.sh ground_truth.tsv
+```
+
 ## 📈 CI Integration
 
 ```bash

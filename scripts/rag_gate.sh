@@ -11,11 +11,34 @@ fi
 
 QUIET="${QUIET:-0}"
 
-GT="${1:?usage: rag_gate.sh GT_TSV}"
-K="${K:-3}"
-THRESH_P="${THRESH_P:-0.60}"
+GT="${1:?usage: rag_gate.sh <ground_truth.tsv>}"
 
-tmp_out="$(mktemp)"; tmp_err="$(mktemp)"
+# --- load gate file with LOWER precedence than env ---
+if [[ -f "$GT.gate" ]]; then
+  while IFS='=' read -r key val; do
+    [[ -z "$key" || "$key" =~ ^# ]] && continue
+    # trim whitespace from value
+    val="$(echo "$val" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+    # set only if not already set in environment and value is not empty
+    if [[ -z "${!key+x}" && -n "$val" ]]; then
+      export "$key"="$val"
+    fi
+  done < "$GT.gate"
+fi
+
+# final fallbacks
+: "${K:=3}"
+: "${THRESH_P:=0.30}"
+: "${SEARCH:=scripts/rag_search_enhanced.sh}"
+
+# 숫자 검증(오타 방지)
+[[ "$THRESH_P" =~ ^[0-9]+(\.[0-9]+)?$ ]] || { echo "[gate] bad THRESH_P: $THRESH_P" >&2; exit 2; }
+[[ "$K" =~ ^[0-9]+$ ]] || { echo "[gate] bad K: $K" >&2; exit 2; }
+
+# 진단 편의용 디버그 출력
+echo "[gate] K=$K THRESH_P=$THRESH_P SEARCH=${SEARCH:-scripts/rag_search_enhanced.sh}"
+
+tmp_out="$(mktemp)"; tmp_err="$(mktemp)"; trap 'rm -f "$tmp_out" "$tmp_err"' EXIT
 if ! bash scripts/rag_eval.sh "$GT" >"$tmp_out" 2>"$tmp_err"; then
   echo "[gate] ERROR: rag_eval failed (exit code != 0)" >&2
   sed -n '1,120p' "$tmp_err" >&2

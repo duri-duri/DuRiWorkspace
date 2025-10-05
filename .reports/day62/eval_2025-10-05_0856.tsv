@@ -1,0 +1,13 @@
+query	k	hits	p@k	r@k
+요통	5	3	0.6000	0.6000
+경부	5	4	0.8000	1.0000
+어깨	5	1	0.2000	0.3333
+X-ray	5	2	0.4000	1.0000
+무릎	5	0	0.0000	0.0000
+---
+queries	5
+micro_p@5	0.4000
+micro_r@5	0.5882
+gt_md5	cfc6b3910fe94c815629d0d4d9690c1e
+commit	609a71688
+locale	C.UTF-8

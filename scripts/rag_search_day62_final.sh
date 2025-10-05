@@ -34,8 +34,8 @@ find rag/ -name "*.jsonl" -print0 \
   | select(($pf==""  or (.patient_facing==($pf=="true"))))
   | ($d.title // "") as $title
   | ($d.body  // "") as $body
-  | (($d.bullets // []) | join(" ")) as $bullets
-  | (($d.tags    // []) | join(" ")) as $tags
+  | ((.bullets // []) | join(" ")) as $bullets
+  | ((.tags    // []) | join(" ")) as $tags
   | {
       id: ($d.id // "-"),
       title: $title,
@@ -51,19 +51,36 @@ find rag/ -name "*.jsonl" -print0 \
 
 # 2) 정렬 및 출력
 if [[ -s "$TMP" ]]; then
-  echo "✅ 검색 완료, 상위 $TOP개 결과:"
-  if [[ "$RANK" == "1" ]]; then
+  # 머신 출력 모드 (평가용)
+  if [[ "${FORMAT:-pretty}" == "ids" ]]; then
     jq -rs --argjson top "$TOP" '
-      sort_by(-.score)
-      | .[:$top] | .[]
-      | "📄 \(.id): \(.title) (점수:\(.score))\n   카테고리: \(.category)\n   환자용: \(.patient_facing)\n   내용: \((.body | gsub("\n"; " ") | .[0:160]))..."
+      unique_by(.id)
+      | sort_by(-.score)
+      | .[:$top] | .[] | .id
     ' "$TMP"
   else
-    jq -rs --argjson top "$TOP" '
-      .[:$top] | .[]
-      | "📄 \(.id): \(.title)\n   카테고리: \(.category)\n   환자용: \(.patient_facing)\n   내용: \((.body | gsub("\n"; " ") | .[0:160]))..."
-    ' "$TMP"
+    # 예쁜 출력 모드 (사용자용)
+    echo "✅ 검색 완료, 상위 $TOP개 결과:"
+    if [[ "$RANK" == "1" ]]; then
+      jq -rs --argjson top "$TOP" '
+        unique_by(.id)
+        | sort_by(-.score)
+        | .[:$top] | .[]
+        | "📄 \(.id): \(.title) (점수:\(.score))\n   카테고리: \(.category)\n   환자용: \(.patient_facing)\n   내용: \((.body | gsub("\n"; " ") | .[0:160]))..."
+      ' "$TMP"
+    else
+      jq -rs --argjson top "$TOP" '
+        unique_by(.id)
+        | .[:$top] | .[]
+        | "📄 \(.id): \(.title)\n   카테고리: \(.category)\n   환자용: \(.patient_facing)\n   내용: \((.body | gsub("\n"; " ") | .[0:160]))..."
+      ' "$TMP"
+    fi
   fi
 else
-  echo "❌ 검색 결과 없음"
+  if [[ "${FORMAT:-pretty}" == "ids" ]]; then
+    # 머신 출력 모드에서는 빈 결과도 조용히
+    true
+  else
+    echo "❌ 검색 결과 없음"
+  fi
 fi

@@ -98,11 +98,20 @@ if [[ "${PROM_MODE}" == "compose" ]]; then
   fi
 fi
 
-# 2) Compose up (+ health overlay)
+# 2) Prometheus 볼륨 권한 설정 (권한 문제 방지)
+PROM_DATA_DIR="$PROJECT_DIR/data/prometheus"
+if [[ -d "$PROM_DATA_DIR" ]]; then
+  log "fix prometheus data directory permissions"
+  sudo chown -R 65534:65534 "$PROM_DATA_DIR" 2>/dev/null || {
+    log "warning: failed to fix prometheus permissions (may need sudo)"
+  }
+fi
+
+# 3) Compose up (+ health overlay)
 log "compose up -d (+health overlay)"
 docker compose -f "$COMPOSE_BASE" -f "$COMPOSE_HEALTH" up -d
 
-# 3) Prometheus (standalone 모드면 별도 보증)
+# 4) Prometheus (standalone 모드면 별도 보증)
 if [[ "$PROM_MODE" == "standalone" ]]; then
   if ! docker ps -a --format '{{.Names}}' | grep -qx "$PROM_NAME"; then
     log "run $PROM_NAME (standalone + /-/ready)"
@@ -117,7 +126,7 @@ if [[ "$PROM_MODE" == "standalone" ]]; then
   fi
 fi
 
-# 4) Healthy 게이팅
+# 5) Healthy 게이팅
 log "wait-until-healthy (≤ ${HEALTH_TIMEOUT_SECS}s)"
 start_ts=$(date +%s)
 while :; do
@@ -140,7 +149,7 @@ while :; do
   sleep 2
 done
 
-# 5) 요약 & 종료코드
+# 6) 요약 & 종료코드
 echo "=== Container Summary ==="
 docker compose -f "$COMPOSE_BASE" -f "$COMPOSE_HEALTH" ps --format "table {{.Name}}\t{{.State}}\t{{.Publishers}}"
 [[ "$PROM_MODE" == "standalone" ]] && docker ps --filter "name=^${PROM_NAME}$" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" || true

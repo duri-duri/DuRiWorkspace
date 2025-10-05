@@ -18,6 +18,15 @@ fi
 out="$(K="$K" THRESH_P="$THRESH_P" QUIET="$QUIET" bash scripts/rag_gate.sh "$GT" 2>&1 || true)"
 status=$?
 
+# --- 중복 방지 회귀 테스트 ---
+export SEARCH="${SEARCH:-scripts/rag_search.sh}"
+if [[ "$SEARCH" == *"enhanced"* ]]; then
+  # X-ray 중복 검사
+  diff <(bash "$SEARCH" "X-ray" 2>/dev/null | sort) \
+       <(bash "$SEARCH" "X-ray" 2>/dev/null | sort | uniq) \
+  >/dev/null || { echo "[smoke] duplicate ids detected" >&2; exit 1; }
+fi
+
 # --- Minimal, CI-friendly output ---
 echo "$out" | sed -n '1,20p'
 if [[ $status -eq 0 ]]; then
