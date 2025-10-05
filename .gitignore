@@ -128,3 +128,6 @@ Makefile.tmp
 !rag/
 !rag/**/*.jsonl
 prom-data/
+
+data/prometheus/
+
