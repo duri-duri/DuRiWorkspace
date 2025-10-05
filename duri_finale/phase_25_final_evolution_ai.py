@@ -85,13 +85,15 @@ class FinalEvolutionAI:
 
     def _classify_request_type(self, user_input: str) -> str:
         """요청 유형 분류"""
-        if any(keyword in user_input for keyword in ["함께", "협력", "시너지"]):
+        # 방어 코드: user_input이 None일 때 처리
+        safe_input = (user_input or "")
+        if any(keyword in safe_input for keyword in ["함께", "협력", "시너지"]):
             return "collaboration"
-        elif any(keyword in user_input for keyword in ["윤리", "책임", "사회적"]):
+        elif any(keyword in safe_input for keyword in ["윤리", "책임", "사회적"]):
             return "ethical"
-        elif any(keyword in user_input for keyword in ["미래", "트렌드", "예측"]):
+        elif any(keyword in safe_input for keyword in ["미래", "트렌드", "예측"]):
             return "future"
-        elif any(keyword in user_input for keyword in ["혁신", "창조", "새로운"]):
+        elif any(keyword in safe_input for keyword in ["혁신", "창조", "새로운"]):
             return "creative"
         else:
             return "autonomous"

@@ -199,6 +199,18 @@ class DuRiSettings:
                 "pool_size": self.database.pool_size,
                 "max_overflow": self.database.max_overflow,
             },
+            "redis": {
+                "host": self.redis.host,
+                "port": self.redis.port,
+                "db": self.redis.db,
+                "password": self.redis.password,
+                "pool_size": self.redis.pool_size,
+            },
+            "services": {
+                "brain_url": self.services.brain_url,
+                "brain_timeout": self.services.brain_timeout,
+                "brain_retries": self.services.brain_retries,
+            },
             "monitoring": {
                 "prometheus_url": self.monitoring.prometheus_url,
                 "grafana_url": self.monitoring.grafana_url,
