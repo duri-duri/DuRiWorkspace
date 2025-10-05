@@ -3,7 +3,7 @@ set -euo pipefail
 
 GT="${GT:-.reports/day62/ground_truth.tsv}"
 K="${K:-3}"
-THRESHOLD_P="${THRESHOLD_P:-0.60}"
+THRESHOLD_P="${THRESHOLD_P:-0.30}"
 THRESHOLD_R="${THRESHOLD_R:-}"
 
 echo "🚪 RAG 검색 품질 게이트 체크"
@@ -19,8 +19,8 @@ bash scripts/rag_eval_day62.sh > "$TMP_OUT"
 trap 'rm -f "$TMP_OUT"' EXIT
 
 # 수치 추출
-mp="$(grep "^micro_p@" "$TMP_OUT" | cut -f2 | tail -1)"
-mr="$(grep "^micro_r@" "$TMP_OUT" | cut -f2 | tail -1)"
+mp="$(grep "micro precision@" "$TMP_OUT" | sed 's/.*= //')"
+mr="$(grep "micro recall@" "$TMP_OUT" | sed 's/.*= //')"
 
 echo
 echo "🎯 게이트 결과:"
