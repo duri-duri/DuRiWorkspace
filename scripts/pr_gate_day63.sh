@@ -2,6 +2,9 @@
 # Day 63: 코딩 PR 모드 고도화 - PR 게이트 시스템
 set -euo pipefail
 
+# python 명령 해결
+export PATH="$HOME/.local/bin:$PATH"
+
 echo "🚪 PR 게이트 체크 (Day 63)"
 echo "================================"
 
