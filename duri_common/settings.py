@@ -154,3 +154,8 @@ class DuRiSettings(BaseSettings):
 
 # 전역 설정 인스턴스
 settings = DuRiSettings()
+
+# 테스트 호환성을 위한 함수
+def get_settings() -> DuRiSettings:
+    """Backwards-compatible factory expected by tests."""
+    return settings
