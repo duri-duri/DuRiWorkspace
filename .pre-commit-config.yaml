@@ -23,7 +23,8 @@ exclude: |
     \.DS_Store|
     \.idea/|
     \.vscode/|
-    \.pytest_cache/
+    \.pytest_cache/|
+    var/
   )
 
 repos:

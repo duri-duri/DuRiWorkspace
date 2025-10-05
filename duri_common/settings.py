@@ -117,7 +117,7 @@ class MonitoringSettings(BaseModel):
     prometheus_url: str = "http://prometheus:9090"
     grafana_url: str = "http://grafana:3000"
     grafana_user: str = "duri-duri"
-    grafana_password: str = "DuRi@2025!"  # tests expect this
+    grafana_password: str = "DuRi@2025!"  # tests expect this - 로컬/테스트 전용, 실제 배포시 ENV로 오버라이드 필수
 
 
 # 간단한 dataclass 기반 설정 (테스트 호환성 우선)
@@ -149,7 +149,7 @@ class DuRiSettings:
                 "prometheus_url": "http://prometheus:9090",
                 "grafana_url": "http://grafana:3000",
                 "grafana_user": "duri-duri",
-                "grafana_password": "DuRi@2025!",
+                "grafana_password": "DuRi@2025!",  # 로컬/테스트 전용
             },
             "database": {
                 "host": "duri-postgres",

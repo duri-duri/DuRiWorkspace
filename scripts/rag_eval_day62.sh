@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# python 명령 해결
+export PATH="$HOME/.local/bin:$PATH"
+
 GT="${1:-.reports/day62/ground_truth.tsv}"
 K="${K:-3}"
 SEARCH_SCRIPT="${SEARCH_SCRIPT:-scripts/rag_search_day62_final.sh}"

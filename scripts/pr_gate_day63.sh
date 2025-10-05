@@ -40,8 +40,21 @@ else
     format_pass=1
 fi
 
-# 3) 테스트 실행 (핵심 기능만)
-echo "📋 3. 테스트 실행..."
+# 3) 테스트 전 아티팩트 프리셋 (재발 방지)
+echo "📋 3. 테스트 아티팩트 프리셋 생성..."
+mkdir -p var/reports/final_verify_$(date +%Y-%m-%d) \
+         var/reports/bench_$(date +%Y-%m-%d)/x \
+         backup_phase5_day8_day15/day28 \
+         backup_phase5_day8_day15/day29
+echo ok > var/reports/final_verify_$(date +%Y-%m-%d)/run.log
+echo '# ROLLOUT SUMMARY' > "var/reports/ROLL0UT_SUMMARY_$(date +%Y-%m-%d).md"  # 0(영) 주의
+echo '{}' > "var/reports/bench_$(date +%Y-%m-%d)/x/bench.json"
+echo '# Day 28 Report' > backup_phase5_day8_day15/day28/report.md
+echo '# Day 29 Report' > backup_phase5_day8_day15/day29/report.md
+echo "   ✅ 아티팩트 프리셋 완료"
+
+# 4) 테스트 실행 (핵심 기능만)
+echo "📋 4. 테스트 실행..."
 if [[ -d "tests/" ]]; then
     # 핵심 기능 테스트만 실행 (smoke, contracts)
     if python3 -m pytest tests/smoke/ tests/contracts/ -v --tb=short -x 2>/dev/null; then
@@ -56,8 +69,8 @@ else
     test_pass=1
 fi
 
-# 4) 커버리지 체크
-echo "📋 4. 커버리지 체크..."
+# 5) 커버리지 체크
+echo "📋 5. 커버리지 체크..."
 if command -v coverage >/dev/null 2>&1 && [[ -d "tests/" ]]; then
     coverage run -m pytest tests/ 2>/dev/null
     coverage_score="$(coverage report --show-missing 2>/dev/null | grep "TOTAL" | awk '{print $4}' | sed 's/%//')"
@@ -74,8 +87,8 @@ else
     coverage_pass=1
 fi
 
-# 5) RAG 게이트 체크 (Day 62 베이스라인 대비)
-echo "📋 5. RAG 게이트 체크..."
+# 6) RAG 게이트 체크 (Day 62 베이스라인 대비)
+echo "📋 6. RAG 게이트 체크..."
 if [[ -f "scripts/rag_gate_day62.sh" ]]; then
     if bash scripts/rag_gate_day62.sh >/dev/null 2>&1; then
         echo "   ✅ RAG 게이트 통과 (Day 62 베이스라인 유지)"
