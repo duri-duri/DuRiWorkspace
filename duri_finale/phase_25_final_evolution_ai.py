@@ -69,7 +69,9 @@ class FinalEvolutionAI:
         self, user_input: str, context: Dict[str, Any] = None
     ) -> EvolutionMode:
         """사용자 요청 분석 및 진화 모드 결정"""
-        print(f"🔍 사용자 요청 분석: {user_input[:50]}...")
+        # 방어 코드: user_input이 None일 때 슬라이싱 에러 방지
+        safe_input = (user_input or "")
+        print(f"🔍 사용자 요청 분석: {safe_input[:50]}...")
 
         # 요청 유형 분석
         request_type = self._classify_request_type(user_input)

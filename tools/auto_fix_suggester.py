@@ -35,8 +35,10 @@ def main():
     hits = match_rules(log, rules)
 
     # Enhanced output with confidence scores and rule IDs
+    # 테스트가 기대하는 형식: matched_rules는 문자열 ID 리스트
+    matched_rule_ids = [h["id"] for h in hits]
     result = {
-        "matched_rules": [{"id": h["id"], "confidence": h["confidence"]} for h in hits],
+        "matched_rules": matched_rule_ids,  # 문자열 ID 리스트로 변경
         "suggestions": [h["suggest"] for h in hits],
         "total_matches": len(hits),
         "avg_confidence": sum(h["confidence"] for h in hits) / len(hits) if hits else 0,

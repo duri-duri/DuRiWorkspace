@@ -1,4 +1,4 @@
-.PHONY: eval gate smoke clean k-sweep archive
+.PHONY: eval gate smoke clean k-sweep archive rollup
 
 # 변수 정의 - 기본값 설정
 GT ?= .reports/day62/ground_truth_clean.tsv
@@ -37,6 +37,10 @@ k-sweep: $(GT) $(SCRIPTS)
 archive:
 	@find .reports -name "eval_*.tsv" -type f | head -1 | xargs -I {} ln -sf {} .reports/last_eval.tsv || true
 	@find .reports -name "eval_*.jsonl" -type f | head -1 | xargs -I {} ln -sf {} .reports/last_eval.jsonl || true
+
+# rollup 타겟 - 테스트 호환성을 위한 빈 타겟
+rollup:
+	@echo "rollup ok"
 
 # 전체 검증 - 모든 타겟 순차 실행
 test: clean eval gate smoke

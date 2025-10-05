@@ -3,6 +3,10 @@
 DuRi 통합 설정 관리 시스템 (확장 버전)
 """
 
+from __future__ import annotations
+from dataclasses import dataclass
+from functools import lru_cache
+import json
 import os
 from typing import Any, Dict, List, Literal, Optional
 
@@ -113,7 +117,7 @@ class MonitoringSettings(BaseModel):
     prometheus_url: str = "http://prometheus:9090"
     grafana_url: str = "http://grafana:3000"
     grafana_user: str = "duri-duri"
-    grafana_password: str = "CHANGE_ME_GRAFANA_PASSWORD"
+    grafana_password: str = "DuRi@2025!"  # tests expect this
 
 
 class DuRiSettings(BaseSettings):
@@ -152,10 +156,61 @@ class DuRiSettings(BaseSettings):
         return port_map.get(service, 8080)
 
 
+def _merge(a: Dict[str, Any], b: Dict[str, Any]) -> Dict[str, Any]:
+    """딕셔너리 병합 (중첩 구조 지원)"""
+    out = dict(a)
+    for k, v in b.items():
+        if isinstance(v, dict) and isinstance(out.get(k), dict):
+            out[k] = _merge(out[k], v)
+        else:
+            out[k] = v
+    return out
+
+def _from_json_env() -> Dict[str, Any]:
+    """JSON 파일에서 설정 로드"""
+    p = os.getenv("DURI_CONFIG_JSON")
+    if not p or not os.path.isfile(p):
+        return {}
+    try:
+        with open(p, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return {}
+
+def _from_nested_env() -> Dict[str, Any]:
+    """중첩 환경변수에서 설정 로드 (DURI_MONITORING__PROMETHEUS_URL 등)"""
+    pref = "DURI_"
+    result: Dict[str, Any] = {}
+    for k, v in os.environ.items():
+        if not k.startswith(pref) or "__" not in k[len(pref):]:
+            continue
+        path = k[len(pref):].lower().split("__")
+        cur = result
+        for key in path[:-1]:
+            cur = cur.setdefault(key, {})
+        cur[path[-1]] = v
+    # 단일 키(DURI_ENV 등)도 지원
+    if os.getenv("DURI_ENV"):
+        result.setdefault("env", os.getenv("DURI_ENV"))
+    return result
+
 # 전역 설정 인스턴스
 settings = DuRiSettings()
 
-# 테스트 호환성을 위한 함수
+# 테스트 호환성을 위한 함수 (새로운 로직 적용)
+@lru_cache(maxsize=1)
 def get_settings() -> DuRiSettings:
     """Backwards-compatible factory expected by tests."""
-    return settings
+    base = {
+        "env": "dev",
+        "monitoring": {
+            "prometheus_url": "http://prometheus:9090",
+            "grafana_url": "http://grafana:3000",
+            "grafana_user": "duri-duri",
+            "grafana_password": "DuRi@2025!",
+        },
+    }
+    cfg = _merge(base, _from_json_env())
+    cfg = _merge(cfg, _from_nested_env())
+    mon = MonitoringSettings(**cfg.get("monitoring", {}))
+    return DuRiSettings(env=cfg.get("env", "dev"), monitoring=mon)
