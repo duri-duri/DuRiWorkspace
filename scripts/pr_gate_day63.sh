@@ -5,6 +5,12 @@ set -euo pipefail
 # python 명령 해결
 export PATH="$HOME/.local/bin:$PATH"
 
+# Day64 승격: 기본값 상향 적용
+THRESH_P="${THRESH_P:-0.45}"
+K="${K:-3}"
+SEARCH="${SEARCH:-scripts/rag_search_enhanced.sh}"
+HYBRID_ALPHA="${HYBRID_ALPHA:-0.5}"
+
 echo "🚪 PR 게이트 체크 (Day 63)"
 echo "================================"
 
