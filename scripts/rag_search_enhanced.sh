@@ -15,6 +15,24 @@ trap 'rm -f "$result_tmp"' EXIT
 : "${SYN_:="${SYN_OVERRIDE:-data/ko_synonyms.tsv}"}"
 : "${RULES:="${RULES_OVERRIDE:-data/boost_rules.tsv}"}"
 : "${BLOCK:="${BLOCK_OVERRIDE:-data/blocklist.regex}"}"
+SYNONYMS_TSV="${SYNONYMS_TSV:-.reports/day64/synonyms.tsv}"  # Day64: 동의어 사전
+
+# 쿼리 확장 함수 (동의어 기반)
+expand_query() {
+  local q="$1"
+  if [[ -f "$SYNONYMS_TSV" ]]; then
+    local exts
+    exts=$(awk -F'\t' -v key="$q" '$1==key {print $2}' "$SYNONYMS_TSV" | tr '\n' '|' | sed 's/|$//')
+    if [[ -n "$exts" ]]; then
+      echo "(${q}|${exts})"   # 간단히 OR 확장
+      return
+    fi
+  fi
+  echo "$q"
+}
+
+# 쿼리 확장 적용
+QUERY=$(expand_query "$QUERY")
 
 # 필수 백필 문서들을 높은 우선순위로 추가
 case "$QUERY" in
