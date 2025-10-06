@@ -3,9 +3,9 @@ set -euo pipefail
 
 GT="${GT:-.reports/day62/ground_truth.tsv}"
 K="${K:-3}"
-THRESHOLD_P="${THRESHOLD_P:-0.45}"  # Day64 승격: 기본값 상향
+THRESHOLD_P="${THRESHOLD_P:-0.30}"  # Day64: 안전한 기본값 (enhanced 스크립트 검증 후 상향)
 THRESHOLD_R="${THRESHOLD_R:-}"
-SEARCH="${SEARCH:-scripts/rag_search_enhanced.sh}"  # Day64 승격: 기본 검색 스크립트
+SEARCH="${SEARCH:-scripts/rag_search_day62_final.sh}"  # Day64: 안전한 기본값 (enhanced 검증 후 변경)
 HYBRID_ALPHA="${HYBRID_ALPHA:-0.5}"  # Day64 승격: 최적 α 값
 
 echo "🚪 RAG 검색 품질 게이트 체크"
@@ -17,7 +17,7 @@ echo
 
 # 평가 실행
 TMP_OUT="$(mktemp)"
-bash scripts/rag_eval_day62.sh > "$TMP_OUT"
+SEARCH_SCRIPT="$SEARCH" bash scripts/rag_eval_day62.sh > "$TMP_OUT"
 trap 'rm -f "$TMP_OUT"' EXIT
 
 # 수치 추출

@@ -28,3 +28,34 @@
 
 ## 🎉 결론
 Day 64 목표를 크게 초과 달성하여 운영 환경에 반영합니다.
+
+## 🔄 Rollback Steps (운영 안전장치)
+
+문제 발생 시 아래 명령으로 즉시 베이스라인으로 복귀:
+
+```bash
+# 긴급 롤백 (게이트/로컬 전부)
+export SEARCH=scripts/rag_search_day62_final.sh
+export HYBRID_ALPHA=0.3
+export THRESH_P=0.30
+
+# 또는 환경변수로 스크립트 실행
+SEARCH=scripts/rag_search_day62_final.sh \
+HYBRID_ALPHA=0.3 \
+THRESH_P=0.30 \
+bash scripts/rag_gate_day62.sh
+```
+
+### 롤백 확인
+```bash
+# 베이스라인 성능 확인 (micro_p@3 ≈ 0.3333)
+bash scripts/rag_gate_day62.sh
+```
+
+### 루프 중지 (필요시)
+```bash
+kill $(cat var/pids/loop_rag_eval.pid) 2>/dev/null
+kill $(cat var/pids/loop_metrics.pid) 2>/dev/null
+kill $(cat var/pids/loop_pr_gate.pid) 2>/dev/null
+kill $(cat var/pids/loop_rag_eval_tuned.pid) 2>/dev/null
+```
