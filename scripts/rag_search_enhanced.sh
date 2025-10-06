@@ -5,6 +5,7 @@ set -euo pipefail
 
 QUERY="${1:-}"
 K="${K:-3}"
+HYBRID_ALPHA="${HYBRID_ALPHA:-0.5}"  # Day64 승격: 최적 α 값 기본값
 
 # 안전한 임시파일 생성 + 자동 정리
 result_tmp="$(mktemp)"
