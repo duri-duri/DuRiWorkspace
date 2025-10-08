@@ -2,6 +2,13 @@
 # 루프 공통 함수 라이브러리
 set -euo pipefail
 
+# 라벨 정규화 함수 (Exporter/Guard 공용)
+normalize_label() {
+  local label="$1"
+  # - → ALL, 비문자 → _
+  echo "$label" | sed 's/^-$/ALL/; s/[^[:alnum:]_]/_/g' | tr '[:lower:]' '[:upper:]'
+}
+
 lock_and_stamp() {
   local name="$1" log="var/logs/loop_${name}.log" lock="var/locks/${name}.lock"
   mkdir -p var/locks var/logs

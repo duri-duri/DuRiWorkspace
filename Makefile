@@ -74,6 +74,20 @@ cleanup-docker:
 	@echo "🧹 도커 네트워크 잔류 방지"
 	@bash scripts/cleanup_docker.sh
 
+# CI 게이트 단계화
+ci-metrics-report:
+	@echo "📊 CI: 메트릭 리포트 생성 (비엄격)"
+	@bash scripts/ci_metrics_report.sh
+
+ci-pr-gate:
+	@echo "🚪 CI: PR 게이트 (엄격)"
+	@bash scripts/ci_pr_gate.sh
+
+# 스모크 확장
+smoke-edge-assertions:
+	@echo "🧪 스모크 확장: 엣지 5종 자동단언"
+	@bash tests/smoke_edge_assertions.sh
+
 # Day66 메트릭 시스템
 metrics:
 	@echo "[metrics] hygiene..."

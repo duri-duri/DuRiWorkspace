@@ -2,10 +2,18 @@
 groups:
 - name: rag-metrics-guard
   rules:
+  # Recording rule: 이동평균 (플랩 억제)
+  - record: duri_ndcg_at_k:avg_1h
+    expr: avg_over_time(duri_ndcg_at_k{k="3",scope="all"}[1h])
+
+  - record: duri_ndcg_at_k:avg_6h
+    expr: avg_over_time(duri_ndcg_at_k{k="3",scope="all"}[6h])
+
+  # Alert: nDCG 하락 (이동평균 기반, 노이즈 방지)
   - alert: RAG_NDCG_Drop
-    expr: (max_over_time(duri_ndcg_at_k{k="3",scope="all"}[6h]) - duri_ndcg_at_k{k="3",scope="all"}) > 0.05
+    expr: (duri_ndcg_at_k:avg_6h - duri_ndcg_at_k:avg_1h) > 0.05
     for: 15m
     labels: { severity: warning }
     annotations:
-      summary: "nDCG drop over last 6h"
-      description: "nDCG@{{ $labels.k }} fell by >0.05. current={{ $value }}"
+      summary: "nDCG drop over last 6h (moving average)"
+      description: "nDCG@{{ $labels.k }} fell by >0.05. 6h_avg={{ $value }}, 1h_avg={{ $labels.avg_1h }}"
