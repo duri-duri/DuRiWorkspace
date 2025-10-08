@@ -70,6 +70,10 @@ stop-shadow:
 status-shadow:
 	@$(SUDO) systemctl --no-pager --full status duri-rag-eval duri-pr-gate duri-rag-eval-tuned | sed -n '1,40p'
 
+cleanup-docker:
+	@echo "🧹 도커 네트워크 잔류 방지"
+	@bash scripts/cleanup_docker.sh
+
 # Day66 메트릭 시스템
 metrics:
 	@echo "[metrics] hygiene..."

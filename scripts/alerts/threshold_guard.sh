@@ -79,9 +79,11 @@ fi
 
 if (( pass==1 )); then
   log "[guard] OK ndcg@${K}=${ndcg} mrr=${mrr} oracle@${K}=${oracle}"
+  echo "GUARD_RESULT=ok K=${K} ndcg=${ndcg} mrr=${mrr} oracle=${oracle}"
   exit 0
 else
-  log "[guard] REGRESSION ndcg@${K}=${ndcg}, mrr=${mrr}, oracle@${K}=${oracle} (th: ${TH_NDCG}/${TH_MRR}/${TH_ORACLE})"
+  >&2 echo "[guard] REGRESSION ndcg@${K}=${ndcg} mrr=${mrr} oracle@${K}=${oracle} (th ${TH_NDCG}/${TH_MRR}/${TH_ORACLE})"
+  echo "GUARD_RESULT=regression K=${K} ndcg=${ndcg} mrr=${mrr} oracle=${oracle}"
   if [[ "${GUARD_STRICT:-0}" == "1" ]]; then
     exit 2
   else
