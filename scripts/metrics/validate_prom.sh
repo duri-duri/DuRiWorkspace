@@ -31,5 +31,17 @@ if grep -q 'domain="-"' "$OUT"; then
   exit 1
 fi
 
+# guard 도메인은 반드시 ALL (긍정 매치로 강제)
+if ! grep -q 'duri_guard_last_exit_code{[^}]*domain="ALL"' "$OUT"; then
+  echo "❌ guard domain must be ALL"
+  exit 1
+fi
+
+# guard 라인 중복 방지(있다면 정확히 1줄이어야 함)
+if [ "$(grep -c '^duri_guard_last_exit_code{' "$OUT")" -ne 1 ]; then
+  echo "❌ guard metric should appear exactly once"
+  exit 1
+fi
+
 echo "✅ exporter labels look good"
 echo "✅ 모든 검증 통과"

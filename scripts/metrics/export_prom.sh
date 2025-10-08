@@ -58,8 +58,6 @@ if [[ -f ".reports/metrics/day66_metrics.tsv" ]]; then
   bash scripts/alerts/threshold_guard.sh .reports/metrics/day66_metrics.tsv "$k" >/dev/null 2>&1 || guard_exit_code=$?
 fi
 
-# guard 메트릭도 동일한 라벨 셋/순서로 출력
-dom=$(sanitize_label "all")
-sc=$(sanitize_label "all")
-kk=$(sanitize_k "$k")
-printf "duri_guard_last_exit_code{k=\"%s\",scope=\"%s\",domain=\"%s\"} %d\n" "$kk" "$sc" "$dom" "$guard_exit_code"
+# guard 메트릭: 라벨 순서(k, scope, domain)를 다른 메트릭과 맞춰 가독성 ↑
+# guard는 "전체 집계"를 대표 → domain은 항상 "ALL"이 명확
+printf "duri_guard_last_exit_code{k=\"%s\",scope=\"all\",domain=\"ALL\"} %d\n" "$k" "$guard_exit_code"
