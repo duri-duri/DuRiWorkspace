@@ -131,3 +131,7 @@ prom-data/
 
 data/prometheus/
 
+# Day 66: 메트릭 시스템 (지표 스키마/thresholds만 소스 관리, 실측치는 CI 아티팩트로 보관)
+.reports/**/*
+!/.reports/metrics/*.env
+!/.reports/metrics/*_schema*.tsv

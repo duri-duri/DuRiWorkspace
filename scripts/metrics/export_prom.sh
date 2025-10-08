@@ -10,6 +10,7 @@ k="3"  # 기본값
 if echo "$hdr" | grep -q "ndcg@"; then
   k="$(echo "$hdr" | grep -o "ndcg@[0-9]\+" | sed 's/ndcg@//')"
 fi
+: "${k:=3}"   # set -u에서도 안전
 
 cat <<EOF
 # HELP duri_ndcg_at_k NDCG@k

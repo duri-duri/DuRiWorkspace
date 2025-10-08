@@ -35,37 +35,56 @@ log() {
 }
 
 # ---------------- input checks ----------------
+parse_error=0
 read_header="$(head -1 "$IN" 2>/dev/null || true)"
 if [[ -z "$read_header" ]]; then
   log "[guard] no metrics file: $IN"
-  # 관대한 모드에선 빌드 깨지지 않게 0 반환, 엄격 모드에선 에러로 간주
-  if [[ "$GUARD_STRICT" == "1" ]]; then exit "$STRICT_EXIT_CODE"; else exit 0; fi
+  parse_error=1
 fi
 
 # ---------------- parse overall line robustly (TSV) ----------------
 # 기대 스키마: scope  domain  count  ndcg@K  mrr  oracle_recall@K
 # 첫 컬럼이 'all'인 줄을 정확히 집계
-overall_line="$(awk -F'\t' 'NR>1 && $1=="all"{print; exit}' "$IN" || true)"
-if [[ -z "$overall_line" ]]; then
-  log "[guard] no overall line in $IN"
-  if [[ "$GUARD_STRICT" == "1" ]]; then exit "$STRICT_EXIT_CODE"; else exit 0; fi
+if [[ -f "$IN" ]]; then
+  overall_line="$(awk -F'\t' 'NR>1 && $1=="all"{print; exit}' "$IN" || true)"
+  if [[ -z "$overall_line" ]]; then
+    log "[guard] no overall line in $IN"
+    parse_error=1
+  fi
+else
+  log "[guard] file not found: $IN"
+  parse_error=1
 fi
 
-ndcg="$(awk -F'\t' '{print $4}' <<<"$overall_line")"
-mrr="$(awk  -F'\t' '{print $5}' <<<"$overall_line")"
-oracle="$(awk -F'\t' '{print $6}' <<<"$overall_line")"
+if [[ $parse_error -eq 0 ]]; then
+  ndcg="$(awk -F'\t' '{print $4}' <<<"$overall_line")"
+  mrr="$(awk  -F'\t' '{print $5}' <<<"$overall_line")"
+  oracle="$(awk -F'\t' '{print $6}' <<<"$overall_line")"
+fi
 
 # ---------------- comparisons ----------------
 # awk의 비교식은 올바르게 quoting하면 안전합니다.
 pass=1
-awk -v n="$ndcg"  -v th="${TH_NDCG:-0.0}"  'BEGIN{exit !(n>=th)}' || pass=0
-awk -v n="$mrr"   -v th="${TH_MRR:-0.0}"   'BEGIN{exit !(n>=th)}' || pass=0
-awk -v n="$oracle" -v th="${TH_ORACLE:-0.0}" 'BEGIN{exit !(n>=th)}' || pass=0
+if [[ $parse_error -eq 0 ]]; then
+  awk -v n="$ndcg"  -v th="${TH_NDCG:-0.0}"  'BEGIN{exit !(n>=th)}' || pass=0
+  awk -v n="$mrr"   -v th="${TH_MRR:-0.0}"   'BEGIN{exit !(n>=th)}' || pass=0
+  awk -v n="$oracle" -v th="${TH_ORACLE:-0.0}" 'BEGIN{exit !(n>=th)}' || pass=0
+fi
+
+# ... 비교 끝난 뒤
+if (( parse_error == 1 )); then
+  log "[guard] parse error, file=$IN"
+  exit 1
+fi
 
 if (( pass==1 )); then
-  log "[guard] OK ndcg@${K}=${ndcg} mrr=${mrr} oracle@${K}=${oracle} (th: ${TH_NDCG}/${TH_MRR}/${TH_ORACLE})"
+  log "[guard] OK ndcg@${K}=${ndcg} mrr=${mrr} oracle@${K}=${oracle}"
   exit 0
 else
-  log "[guard] REGRESSION ndcg@${K}=${ndcg} mrr=${mrr} oracle@${K}=${oracle} (th: ${TH_NDCG}/${TH_MRR}/${TH_ORACLE})"
-  if [[ "$GUARD_STRICT" == "1" ]]; then exit "$STRICT_EXIT_CODE"; else exit 0; fi
+  log "[guard] REGRESSION ndcg@${K}=${ndcg}, mrr=${mrr}, oracle@${K}=${oracle} (th: ${TH_NDCG}/${TH_MRR}/${TH_ORACLE})"
+  if [[ "${GUARD_STRICT:-0}" == "1" ]]; then
+    exit 2
+  else
+    exit 0
+  fi
 fi

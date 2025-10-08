@@ -1,0 +1,11 @@
+# alerting/rules/metrics_guard.yml
+groups:
+- name: rag-metrics-guard
+  rules:
+  - alert: RAG_NDCG_Drop
+    expr: (max_over_time(duri_ndcg_at_k{k="3",scope="all"}[6h]) - duri_ndcg_at_k{k="3",scope="all"}) > 0.05
+    for: 15m
+    labels: { severity: warning }
+    annotations:
+      summary: "nDCG drop over last 6h"
+      description: "nDCG@{{ $labels.k }} fell by >0.05. current={{ $value }}"

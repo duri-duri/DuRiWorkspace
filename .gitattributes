@@ -1,18 +1,4 @@
-* text=auto eol=lf
-
-# 포맷터 대상에서 제외(혹시 로컬 단독 실행 시 영향 줄이기)
-duri_snapshots/** linguist-generated
-restored_day8_10/** linguist-generated
-unified_conversations/** linguist-generated
-logs/** linguist-generated
-DuRiCore_backup_*/** linguist-generated
-backup*/** linguist-generated
-duri_archive/** linguist-generated
-# 텍스트는 전부 UTF-8, CRLF 금지
-* text eol=lf
-
-# 셸 스크립트 강제 LF
+# .gitattributes
 *.sh text eol=lf
-
-# JSONL은 바이너리 취급(자동 개행 변환 금지)
-*.jsonl -text
+*.py text eol=lf
+*.tsv text eol=lf

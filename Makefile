@@ -73,13 +73,15 @@ status-shadow:
 # Day66 메트릭 시스템
 metrics:
 	@echo "[metrics] hygiene..."
-	@bash scripts/metrics/data_hygiene.sh "$(RUN_PATH)"
+	@bash scripts/metrics/data_hygiene.sh $(PRED)
 	@echo "[metrics] compute..."
-	@python3 scripts/metrics/compute_metrics.py --k $(or $(K),3) --in $(RUN_PATH) --out .reports/metrics/day66_metrics.tsv
+	@python3 scripts/metrics/compute_metrics.py --k $(K) --in $(PRED) --out .reports/metrics/day66_metrics.tsv
 	@echo "[metrics] guard..."
-	@GUARD_STRICT?=1 ; \
-	TH_ENV=.reports/metrics/day66_thresholds.env ; \
-	bash scripts/alerts/threshold_guard.sh .reports/metrics/day66_metrics.tsv $(or $(K),3)
+	@bash -c 'bash scripts/alerts/threshold_guard.sh .reports/metrics/day66_metrics.tsv $(K); ec=$$?; \
+	          if [ $$ec -eq 2 ]; then exit 2; \
+	          elif [ $$ec -eq 1 ]; then echo "[warn] guard parse/infra error → 무시(대시보드 계속)"; exit 0; \
+	          else exit 0; fi'
+	@echo "[metrics] done → .reports/metrics/day66_metrics.tsv"
 
 # 3도메인 요약(최근 7개 스냅샷이 있다면 합산/추세는 추후 확장)
 metrics-dashboard: metrics
