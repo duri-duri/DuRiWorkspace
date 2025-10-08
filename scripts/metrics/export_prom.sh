@@ -19,6 +19,8 @@ cat <<EOF
 # TYPE duri_mrr gauge
 # HELP duri_oracle_recall_at_k Oracle recall@k
 # TYPE duri_oracle_recall_at_k gauge
+# HELP duri_guard_last_exit_code Guard script last exit code (0 ok, 1 infra, 2 regression)
+# TYPE duri_guard_last_exit_code gauge
 EOF
 
 # columns: scope  domain  count  ndcg@k  mrr  oracle_recall@k
@@ -29,3 +31,11 @@ awk -F'\t' -v k="$k" 'NR>1{
   printf "duri_mrr{scope=\"%s\",domain=\"%s\"} %s\n", scope, domain, mrr;
   printf "duri_oracle_recall_at_k{k=\"%s\",scope=\"%s\",domain=\"%s\"} %s\n", k, scope, domain, oracle;
 }' "$IN"
+
+# 마지막 가드 exit 코드 (회귀 발생 시 2로 갱신)
+guard_exit_code=0
+if [[ -f ".reports/metrics/day66_metrics.tsv" ]]; then
+  # 가드 실행하여 exit 코드 확인
+  bash scripts/alerts/threshold_guard.sh .reports/metrics/day66_metrics.tsv "$k" >/dev/null 2>&1 || guard_exit_code=$?
+fi
+printf "duri_guard_last_exit_code{scope=\"all\",k=\"%s\"} %d\n", "$k", "$guard_exit_code"

@@ -67,6 +67,10 @@ start-shadow:
 stop-shadow:
 	@$(SUDO) systemctl disable --now duri-rag-eval duri-pr-gate duri-rag-eval-tuned || true
 
+stop-shadow-user:
+	@echo "🛑 sudo 없이 Shadow 루프 종료 (사용자 단위 systemd)"
+	@bash scripts/stop_shadow_user.sh
+
 status-shadow:
 	@$(SUDO) systemctl --no-pager --full status duri-rag-eval duri-pr-gate duri-rag-eval-tuned | sed -n '1,40p'
 
@@ -86,7 +90,17 @@ ci-pr-gate:
 # 스모크 확장
 smoke-edge-assertions:
 	@echo "🧪 스모크 확장: 엣지 5종 자동단언"
-	@bash tests/smoke_edge_assertions.sh
+	# 1) 헤더만 있음 → exit 1 기대
+	@bash -c 'printf "scope\tdomain\tcount\tndcg@3\tmrr\toracle_recall@3\n" > /tmp/m.tsv; \
+	  bash scripts/alerts/threshold_guard.sh /tmp/m.tsv 3 >/dev/null 2>&1; ec=$$?; \
+	  if [ $$ec -ne 1 ]; then echo "[FAIL] expected 1 got $$ec"; exit 1; else echo "[OK] header-only -> 1"; fi'
+	# 2) 정상 파일 → exit 0 기대
+	@bash -c 'bash scripts/alerts/threshold_guard.sh .reports/metrics/day66_metrics.tsv 3 >/dev/null 2>&1; ec=$$?; \
+	  if [ $$ec -ne 0 ]; then echo "[FAIL] expected 0 got $$ec"; exit 1; else echo "[OK] normal -> 0"; fi'
+	# 3) 회귀+엄격 → exit 2 기대
+	@bash -c 'TH_NDCG=0.99 TH_MRR=0.99 TH_ORACLE=1.1 GUARD_STRICT=1 \
+	  bash scripts/alerts/threshold_guard.sh .reports/metrics/day66_metrics.tsv 3 >/dev/null 2>&1; ec=$$?; \
+	  if [ $$ec -ne 2 ]; then echo "[FAIL] expected 2 got $$ec"; exit 1; else echo "[OK] strict regression -> 2"; fi'
 
 # Day66 메트릭 시스템
 metrics:

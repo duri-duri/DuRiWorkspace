@@ -9,6 +9,12 @@ normalize_label() {
   echo "$label" | sed 's/^-$/ALL/; s/[^[:alnum:]_]/_/g' | tr '[:lower:]' '[:upper:]'
 }
 
+# 숫자 비교 함수 (NaN/소수점/공백 이슈 방지)
+compare_ge() {
+  local n="$1" th="$2"
+  LC_ALL=C awk -v n="$n" -v th="$th" 'BEGIN{exit !(n+0 >= th+0)}'
+}
+
 lock_and_stamp() {
   local name="$1" log="var/logs/loop_${name}.log" lock="var/locks/${name}.lock"
   mkdir -p var/locks var/logs

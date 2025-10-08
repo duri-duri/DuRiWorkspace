@@ -16,8 +16,16 @@ docker ps -aq | xargs -r docker stop || true
 echo "3. 모든 컨테이너 제거..."
 docker ps -aq | xargs -r docker rm -f || true
 
-# 네트워크 정리
+# 네트워크 정리 (강제 해제 포함)
 echo "4. 네트워크 정리..."
+# 네트워크에 남은 컨테이너 강제 분리 후 제거
+NET=duriworkspace_default
+if docker network ls | grep -q "$NET"; then
+  echo "   네트워크 $NET 강제 해제..."
+  docker network inspect "$NET" --format '{{range $id, $c := .Containers}}{{$id}}{{"\n"}}{{end}}' 2>/dev/null | \
+    xargs -r -I{} docker network disconnect -f "$NET" {} 2>/dev/null || true
+  docker network rm "$NET" 2>/dev/null || true
+fi
 docker network prune -f || true
 
 # 볼륨 정리 (선택사항)
