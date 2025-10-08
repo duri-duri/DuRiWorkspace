@@ -2,6 +2,19 @@
 set -Eeuo pipefail
 IN="${1:-.reports/metrics/day66_metrics.tsv}"
 
+# 라벨 정규화 함수들
+sanitize_label() {
+  local s="$1"
+  # '-' → ALL, 그 외 비문자는 '_' 로
+  [ "$s" = "-" ] && echo "ALL" && return 0
+  printf '%s' "$s" | sed 's/[^A-Za-z0-9_]/_/g'
+}
+
+sanitize_k() {
+  # 숫자만 통과
+  printf '%s' "$1" | tr -cd '0-9'
+}
+
 hdr="$(head -1 "$IN" 2>/dev/null || true)"
 [[ -z "$hdr" ]] && exit 0
 
@@ -27,9 +40,15 @@ EOF
 awk -F'\t' -v k="$k" 'NR>1{
   gsub(/\r$/,""); # CRLF 보호
   scope=$1; domain=$2; ndcg=$4; mrr=$5; oracle=$6;
-  printf "duri_ndcg_at_k{k=\"%s\",scope=\"%s\",domain=\"%s\"} %s\n", k, scope, domain, ndcg;
-  printf "duri_mrr{scope=\"%s\",domain=\"%s\"} %s\n", scope, domain, mrr;
-  printf "duri_oracle_recall_at_k{k=\"%s\",scope=\"%s\",domain=\"%s\"} %s\n", k, scope, domain, oracle;
+
+  # 라벨 정규화
+  if(domain == "-") dom = "ALL"; else dom = domain; gsub(/[^A-Za-z0-9_]/, "_", dom);
+  if(scope == "-") sc = "ALL"; else sc = scope; gsub(/[^A-Za-z0-9_]/, "_", sc);
+  kk = k; gsub(/[^0-9]/, "", kk);
+
+  printf "duri_ndcg_at_k{k=\"%s\",scope=\"%s\",domain=\"%s\"} %s\n", kk, sc, dom, ndcg;
+  printf "duri_mrr{scope=\"%s\",domain=\"%s\"} %s\n", sc, dom, mrr;
+  printf "duri_oracle_recall_at_k{k=\"%s\",scope=\"%s\",domain=\"%s\"} %s\n", kk, sc, dom, oracle;
 }' "$IN"
 
 # 마지막 가드 exit 코드 (회귀 발생 시 2로 갱신)
@@ -38,4 +57,9 @@ if [[ -f ".reports/metrics/day66_metrics.tsv" ]]; then
   # 가드 실행하여 exit 코드 확인
   bash scripts/alerts/threshold_guard.sh .reports/metrics/day66_metrics.tsv "$k" >/dev/null 2>&1 || guard_exit_code=$?
 fi
-printf "duri_guard_last_exit_code{scope=\"all\",k=\"%s\"} %d\n", "$k", "$guard_exit_code"
+
+# guard 메트릭도 동일한 라벨 셋/순서로 출력
+dom=$(sanitize_label "all")
+sc=$(sanitize_label "all")
+kk=$(sanitize_k "$k")
+printf "duri_guard_last_exit_code{k=\"%s\",scope=\"%s\",domain=\"%s\"} %d\n" "$kk" "$sc" "$dom" "$guard_exit_code"

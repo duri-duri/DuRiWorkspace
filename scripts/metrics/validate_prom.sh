@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# promtool로 Textfile 포맷 정적 검증
+set -euo pipefail
+
+IN="${1:-.reports/metrics/day66_metrics.tsv}"
+OUT="/tmp/duri.prom"
+
+echo "🔍 promtool로 Textfile 포맷 정적 검증"
+
+# 메트릭 생성
+bash scripts/metrics/export_prom.sh "$IN" > "$OUT"
+
+# 포맷 검사
+if command -v promtool >/dev/null 2>&1; then
+  echo "1. promtool 포맷 검사..."
+  promtool check metrics "$OUT"
+  echo "✅ promtool 포맷 검사 통과"
+else
+  echo "⚠️ promtool 없음 - 포맷 검사 건너뜀"
+fi
+
+# 추가 스모크: k 라벨에 콤마가 끼었는지, domain이 '-' 그대로인지
+echo "2. 라벨 정규화 검사..."
+if grep -q 'k="[^"]*,' "$OUT"; then
+  echo "❌ k label ends with comma"
+  exit 1
+fi
+
+if grep -q 'domain="-"' "$OUT"; then
+  echo "❌ domain is raw '-'"
+  exit 1
+fi
+
+echo "✅ exporter labels look good"
+echo "✅ 모든 검증 통과"

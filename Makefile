@@ -82,6 +82,8 @@ cleanup-docker:
 ci-metrics-report:
 	@echo "📊 CI: 메트릭 리포트 생성 (비엄격)"
 	@bash scripts/ci_metrics_report.sh
+	@echo "🔍 promtool 검증..."
+	@bash scripts/metrics/validate_prom.sh .reports/metrics/day66_metrics.tsv
 
 ci-pr-gate:
 	@echo "🚪 CI: PR 게이트 (엄격)"
