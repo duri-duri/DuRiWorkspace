@@ -1,0 +1,13 @@
+query	k	hits	p@k	r@k
+요통	3	0	0.0000	0.0000
+경부	3	0	0.0000	0.0000
+어깨	3	0	0.0000	0.0000
+X-ray	3	0	0.0000	0.0000
+레드플래그	3	0	0.0000	0.0000
+---
+queries	5
+micro_p@3	0.0000
+micro_r@3	0.0000
+gt_md5	b70d1105e04716aec01c7c5278d71c48
+commit	f0ceb0ec7
+locale	C.UTF-8

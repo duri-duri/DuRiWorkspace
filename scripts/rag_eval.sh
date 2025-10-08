@@ -14,6 +14,9 @@ OUT="${OUT:-.reports/day62/eval_$(date +%F_%H%M).tsv}"
 TIMEOUT_SECS="${TIMEOUT_SECS:-8}"
 DEBUG_EVAL="${DEBUG_EVAL:-0}"
 
+# 헤더/주석 라인 제거(주석 헤더 허용)
+sed -E "1{/^#?[[:space:]]*query(\s+cat)?(\s+pf)?\s+expected_ids_csv[[:space:]]*$/d}" "$GT" > "$GT.tmp" && GT="$GT.tmp"
+
 # 입력·매개변수 검증(친절 에러)
 [[ -r "$GT" ]] || { echo "[eval] not readable: $GT" >&2; exit 2; }
 [[ "$K" =~ ^[0-9]+$ && "$K" -gt 0 ]] || { echo "[eval] invalid K=$K" >&2; exit 2; }

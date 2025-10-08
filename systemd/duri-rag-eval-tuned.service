@@ -1,0 +1,45 @@
+[Unit]
+StartLimitIntervalSec=60s
+StartLimitBurst=3
+Description=DuRi RAG Eval Tuned Loop (Shadow)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+BindPaths=/home/duri/DuRiWorkspace/var
+BindPaths=/home/duri/DuRiWorkspace/.reports
+ExecReload=/bin/kill -HUP $MAINPID
+EnvironmentFile=-/etc/default/duri-workspace
+SyslogIdentifier=duri-rag-eval-tuned
+Type=simple
+User=duri
+WorkingDirectory=/home/duri/DuRiWorkspace
+ExecStart=/usr/bin/env bash -lc 'scripts/loop_rag_eval_tuned.sh'
+Restart=on-failure
+RestartSec=5
+Environment=LC_ALL=C
+Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ExecStartPre=/usr/bin/env bash -lc 'bash scripts/check_deps.sh'
+ExecStartPre=/usr/bin/env bash -lc 'mkdir -p var/logs var/locks .reports/train/day64 .reports/train/day64_tuned'
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=read-only
+ReadWritePaths=/home/duri/DuRiWorkspace/var /home/duri/DuRiWorkspace/.reports
+RestrictSUIDSGID=true
+LockPersonality=true
+RestrictRealtime=true
+UMask=027
+KillSignal=SIGTERM
+TimeoutStopSec=20s
+SuccessExitStatus=143
+CapabilityBoundingSet=
+AmbientCapabilities=
+MemoryMax=1G
+TasksMax=512
+LimitNOFILE=4096
+CPUWeight=100
+IOWeight=100
+
+[Install]
+WantedBy=multi-user.target

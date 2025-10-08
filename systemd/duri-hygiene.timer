@@ -1,0 +1,10 @@
+[Unit]
+Description=Run data hygiene daily
+
+[Timer]
+OnCalendar=daily
+RandomizedDelaySec=300
+Persistent=true
+
+[Install]
+WantedBy=timers.target

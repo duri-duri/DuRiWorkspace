@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+trap 'echo "[FAIL] $0 rc=$? at $BASH_SOURCE:$LINENO (pwd=$PWD)" >&2' ERR
+# 필수 바이너리 사전 점검
+bash scripts/check_deps.sh
+# 환경 변수 누수 탐지
+set -u
 # Day 63: 코딩 PR 모드 고도화 - PR 게이트 시스템
 set -euo pipefail
 
@@ -117,9 +122,47 @@ echo "   테스트: $([ "$test_pass" = "1" ] && echo "✅ 통과" || echo "❌ �
 echo "   커버리지: $([ "$coverage_pass" = "1" ] && echo "✅ 통과" || echo "❌ 실패")"
 echo "   RAG 게이트: $([ "$rag_pass" = "1" ] && echo "✅ 통과" || echo "❌ 실패")"
 
+# 8) 스모크 테스트
+echo "📋 8. 스모크 테스트..."
+echo "📋 Extract IDs negative smoke..."
+if bash tests/smoke_extract_ids_negative.sh; then
+  echo "Extract IDs negative smoke: PASS"
+else
+  echo "Extract IDs negative smoke: FAIL"
+  exit 1
+fi
+echo "📋 Locale-safe smoke..."
+if bash tests/smoke_locale_safe.sh; then
+  echo "Locale-safe smoke: PASS"
+else
+  echo "Locale-safe smoke: FAIL"
+  exit 1
+fi
+echo "📋 Deterministic smoke..."
+if bash tests/smoke_deterministic.sh; then
+  echo "Deterministic smoke: PASS"
+else
+  echo "Deterministic smoke: FAIL"
+  exit 1
+fi
+echo "📋 CWD-safe smoke..."
+if bash tests/smoke_cwd_safe.sh; then
+  echo "CWD smoke: PASS"
+else
+  echo "CWD smoke: FAIL"
+  exit 1
+fi
+
 echo
 if [[ "$lint_pass" == "1" && "$format_pass" == "1" && "$test_pass" == "1" && "$coverage_pass" == "1" && "$rag_pass" == "1" ]]; then
+
+# 선택적 shellcheck 표시
+echo "📋 shellcheck (optional)..."
+./scripts/shellcheck_hook.sh || true
     echo "🎉 PR 게이트 통과! 머지 가능"
+
+# 아티팩트 보존 (디버깅 편의)
+mkdir -p artifacts && cp -f /tmp/cwd.{out,err} artifacts/ 2>/dev/null || true
     exit 0
 else
     echo "💢 PR 게이트 실패! 머지 차단"

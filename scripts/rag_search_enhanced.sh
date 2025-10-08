@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -Eeuo pipefail
+export LC_ALL=C
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)";
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)";
+cd "$REPO_ROOT"
 
 # 강화된 백필 검색기 - FN/FP 최적화
 

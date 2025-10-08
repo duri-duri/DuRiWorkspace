@@ -29,6 +29,7 @@ fi
 # final fallbacks
 : "${K:=3}"
 : "${THRESH_P:=0.30}"
+: "${THRESH_P:=${THRESHOLD_P:-0.30}}"
 : "${SEARCH:=scripts/rag_search_enhanced.sh}"
 
 # 숫자 검증(오타 방지)
