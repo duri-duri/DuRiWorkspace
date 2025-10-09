@@ -1,6 +1,10 @@
 SUDO ?= sudo -n
 SHELL := /usr/bin/env bash
 .SHELLFLAGS := -eu -o pipefail -c
+
+# 리포지토리 루트 고정
+REPO_ROOT := $(shell git rev-parse --show-toplevel 2>/dev/null || pwd)
+export REPO_ROOT
 .PHONY: eval gate smoke clean k-sweep archive rollup smoke-preview help shellcheck metrics metrics-dashboard metrics-watch
 
 # 변수 정의 - 기본값 설정

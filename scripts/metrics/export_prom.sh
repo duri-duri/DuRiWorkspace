@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
-IN="${1:-.reports/metrics/day66_metrics.tsv}"
+source "$(dirname "$(readlink -f "$0")")/../lib/loop_common.sh"
+
+REPO_ROOT="$(repo_root)"
+cd "$REPO_ROOT"   # ✅ 항상 루트부터 시작
+
+IN="${1:-$REPO_ROOT/.reports/metrics/day66_metrics.tsv}"
 
 # 라벨 정규화 함수들
 sanitize_label() {
@@ -53,9 +58,9 @@ awk -F'\t' -v k="$k" 'NR>1{
 
 # 마지막 가드 exit 코드 (회귀 발생 시 2로 갱신)
 guard_exit_code=0
-if [[ -f ".reports/metrics/day66_metrics.tsv" ]]; then
+if [[ -f "$REPO_ROOT/.reports/metrics/day66_metrics.tsv" ]]; then
   # 가드 실행하여 exit 코드 확인
-  bash scripts/alerts/threshold_guard.sh .reports/metrics/day66_metrics.tsv "$k" >/dev/null 2>&1 || guard_exit_code=$?
+  bash "$REPO_ROOT/scripts/alerts/threshold_guard.sh" "$REPO_ROOT/.reports/metrics/day66_metrics.tsv" "$k" >/dev/null 2>&1 || guard_exit_code=$?
 fi
 
 # guard 메트릭: 라벨 순서(k, scope, domain)를 다른 메트릭과 맞춰 가독성 ↑

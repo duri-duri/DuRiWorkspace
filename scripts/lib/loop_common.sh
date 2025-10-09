@@ -1,6 +1,24 @@
 #!/usr/bin/env bash
 # 루프 공통 함수 라이브러리
 set -euo pipefail
+export LC_ALL=C
+
+repo_root() {
+  # 1) git 저장소면 show-toplevel, 아니면 2) 현재 파일 기준 역추적
+  local here
+  here="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
+  (git -C "$here" rev-parse --show-toplevel 2>/dev/null) || \
+  (cd "$here/../.." && pwd -P)
+}
+
+# 절대경로 빌더
+abspath() { python3 - <<'PY' "$1"
+import os,sys; print(os.path.realpath(sys.argv[1]))
+PY
+}
+
+# 안전 chdir
+cd_safe() { mkdir -p "$1" && cd "$1"; }
 
 # 라벨 정규화 함수 (Exporter/Guard 공용)
 normalize_label() {

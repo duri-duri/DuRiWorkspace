@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
+source "$(dirname "$(readlink -f "$0")")/../lib/loop_common.sh"
+
+REPO_ROOT="$(repo_root)"
+cd "$REPO_ROOT"   # ✅ 항상 루트부터 시작
 
 # ---------------- args & defaults ----------------
-IN="${1:-.reports/metrics/day66_metrics.tsv}"
+IN="${1:-$REPO_ROOT/.reports/metrics/day66_metrics.tsv}"
 K="${2:-${METRIC_K:-3}}"
 
 # ---------------- preserve CLI overrides (highest priority) ----------------
@@ -13,7 +17,7 @@ CLI_GUARD_STRICT="${GUARD_STRICT-}"
 CLI_STRICT_EXIT_CODE="${STRICT_EXIT_CODE-}"
 
 # ---------------- load envs (as defaults) ----------------
-[[ -r ".reports/metrics/day66_thresholds.env" ]] && source ".reports/metrics/day66_thresholds.env"
+[[ -r "$REPO_ROOT/.reports/metrics/day66_thresholds.env" ]] && source "$REPO_ROOT/.reports/metrics/day66_thresholds.env"
 [[ -r "/etc/default/duri-workspace" ]] && source "/etc/default/duri-workspace" 2>/dev/null || true
 
 # ---------------- re-apply CLI overrides ----------------
