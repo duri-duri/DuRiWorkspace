@@ -30,6 +30,7 @@ if echo "$hdr" | grep -q "ndcg@"; then
 fi
 : "${k:=3}"   # set -u에서도 안전
 
+# HELP/TYPE 헤더 출력 (한 번만)
 cat <<EOF
 # HELP duri_ndcg_at_k NDCG@k
 # TYPE duri_ndcg_at_k gauge
@@ -39,6 +40,12 @@ cat <<EOF
 # TYPE duri_oracle_recall_at_k gauge
 # HELP duri_guard_last_exit_code Guard script last exit code (0 ok, 1 infra, 2 regression)
 # TYPE duri_guard_last_exit_code gauge
+# HELP duri_metrics_generated_seconds Unix epoch when metrics file was generated
+# TYPE duri_metrics_generated_seconds gauge
+# HELP duri_exporter_up Exporter availability (1=up, 0=down)
+# TYPE duri_exporter_up gauge
+# HELP duri_build_info Build and deploy info
+# TYPE duri_build_info gauge
 EOF
 
 # columns: scope  domain  count  ndcg@k  mrr  oracle_recall@k
@@ -67,21 +74,14 @@ fi
 # guard는 "전체 집계"를 대표 → domain은 항상 "ALL"이 명확
 printf "duri_guard_last_exit_code{k=\"%s\",scope=\"all\",domain=\"ALL\"} %d\n" "$k" "$guard_exit_code"
 
-# 빌드/스냅샷 메타 메트릭 추가 (HELP/TYPE 일관화)
-printf '# HELP duri_metrics_generated_seconds Unix epoch when metrics file was generated\n'
-printf '# TYPE duri_metrics_generated_seconds gauge\n'
+# 빌드/스냅샷 메타 메트릭 추가 (HELP/TYPE는 이미 위에서 출력됨)
 printf 'duri_metrics_generated_seconds %s\n' "$(date +%s)"
-
-printf '# HELP duri_exporter_up Exporter availability (1=up, 0=down)\n'
-printf '# TYPE duri_exporter_up gauge\n'
 printf 'duri_exporter_up 1\n'
-
-printf '# HELP duri_build_info Build and deploy info\n'
-printf '# TYPE duri_build_info gauge\n'
 printf 'duri_build_info{git_sha="%s",tag="%s"} 1\n' "$(git rev-parse --short HEAD 2>/dev/null || echo unknown)" "${DURI_TAG:-day66-metrics-ga}"
 
 # 원자적 쓰기 지원 (CI에서 사용)
 if [[ -n "${TEXTFILE_OUTPUT:-}" ]]; then
-  tmp="$TEXTFILE_OUTPUT.$$"
-  cat > "$tmp" && mv -f "$tmp" "$TEXTFILE_OUTPUT"
+  tmp="${TEXTFILE_OUTPUT}.$$"
+  cat > "$tmp"    # 메트릭 생성
+  mv -f "$tmp" "$TEXTFILE_OUTPUT"
 fi

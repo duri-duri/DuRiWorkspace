@@ -50,5 +50,12 @@ if grep -Eq '^duri_mrr\{[^}]*k=' "$OUT"; then
   exit 1
 fi
 
+# HELP/TYPE 중복 금지
+awk '/^# (HELP|TYPE) /{k=$3;c[k]++} END{bad=0; for (k in c) if (c[k]>1){print "❌ dup HELP/TYPE:",k > "/dev/stderr"; bad=1} exit bad}' "$OUT" || exit 1
+
+# 메트릭명 정규식
+grep -E '^[^# ]' "$OUT" | cut -d'{' -f1 | grep -qvE '^[a-zA-Z_:][a-zA-Z0-9_:]*$$' \
+  && { echo "❌ invalid metric name"; exit 1; }
+
 echo "✅ exporter labels look good"
 echo "✅ 모든 검증 통과"
