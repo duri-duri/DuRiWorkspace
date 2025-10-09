@@ -26,3 +26,12 @@ groups:
     annotations:
       summary: "RAG 성능 회귀 감지"
       description: "Guard exit code가 2로 지속됨 (회귀 모드)"
+
+  # Alert: 텍스트파일 정체 (15분 이상)
+  - alert: DuriTextfileStale
+    expr: time() - duri_metrics_generated_seconds > 15*60
+    for: 10m
+    labels: { severity: page }
+    annotations:
+      summary: "Duri metrics textfile stale (>15m)"
+      description: "메트릭 텍스트파일이 15분 이상 갱신되지 않음"

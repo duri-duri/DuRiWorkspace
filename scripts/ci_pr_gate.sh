@@ -4,6 +4,9 @@ set -euo pipefail
 
 echo "🚪 CI: PR 게이트 (엄격 - 회귀 시 실패)"
 
+# CI 도구 부트스트랩 (노이즈 제로)
+make ci-bootstrap-tools
+
 # PR 게이트 실행 (회귀 시 실패)
 GUARD_STRICT=1 bash scripts/pr_gate_day63.sh
 

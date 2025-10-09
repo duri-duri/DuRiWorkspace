@@ -5,6 +5,13 @@ SHELL := /usr/bin/env bash
 # 리포지토리 루트 고정
 REPO_ROOT := $(shell git rev-parse --show-toplevel 2>/dev/null || pwd)
 export REPO_ROOT
+
+# CI 도구 고정 (노이즈 제로)
+ci-bootstrap-tools:
+	@command -v shellcheck >/dev/null || echo "⚠️ shellcheck 없음 - 건너뜀" || true
+	@command -v promtool   >/dev/null || echo "⚠️ promtool 없음 - 건너뜀" || true
+	@command -v black      >/dev/null || pip3 install --user black || true
+	@command -v pylint     >/dev/null || pip3 install --user pylint || true
 .PHONY: eval gate smoke clean k-sweep archive rollup smoke-preview help shellcheck metrics metrics-dashboard metrics-watch
 
 # 변수 정의 - 기본값 설정
