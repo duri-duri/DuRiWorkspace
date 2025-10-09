@@ -38,8 +38,9 @@ if ! grep -q 'duri_guard_last_exit_code{[^}]*domain="ALL"' "$OUT"; then
 fi
 
 # guard 라인 중복 방지(있다면 정확히 1줄이어야 함)
-if [ "$(grep -c '^duri_guard_last_exit_code{' "$OUT")" -ne 1 ]; then
-  echo "❌ guard metric should appear exactly once"
+guard_count=$(grep -c '^duri_guard_last_exit_code{' "$OUT")
+if [ "$guard_count" -ne 1 ]; then
+  echo "❌ guard metric should appear exactly once, found $guard_count"
   exit 1
 fi
 

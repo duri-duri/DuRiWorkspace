@@ -17,3 +17,12 @@ groups:
     annotations:
       summary: "nDCG drop over last 6h (moving average)"
       description: "nDCG@{{ $labels.k }} fell by >0.05. 6h_avg={{ $value }}, 1h_avg={{ $labels.avg_1h }}"
+
+  # Alert: 회귀 탐지 (5분 지속)
+  - alert: RAG_Regression_Detected
+    expr: duri_guard_last_exit_code{k="3",scope="all",domain="ALL"} == 2
+    for: 5m
+    labels: { severity: critical }
+    annotations:
+      summary: "RAG 성능 회귀 감지"
+      description: "Guard exit code가 2로 지속됨 (회귀 모드)"

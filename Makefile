@@ -104,6 +104,11 @@ smoke-edge-assertions:
 	  bash scripts/alerts/threshold_guard.sh .reports/metrics/day66_metrics.tsv 3 >/dev/null 2>&1; ec=$$?; \
 	  if [ $$ec -ne 2 ]; then echo "[FAIL] expected 2 got $$ec"; exit 1; else echo "[OK] strict regression -> 2"; fi'
 
+# 유닛 테스트: 단일 guard 라인 보증
+unit-test-exporter:
+	@echo "🧪 유닛 테스트: 단일 guard 라인 보증"
+	@bash -c 'bash scripts/metrics/export_prom.sh .reports/metrics/day66_metrics.tsv | grep -c "^duri_guard_last_exit_code{" | awk "{exit !(\$$1==1)}" && echo "[OK] guard metric appears exactly once" || { echo "[FAIL] guard metric count mismatch"; exit 1; }'
+
 # Day66 메트릭 시스템
 metrics:
 	@echo "[metrics] hygiene..."
