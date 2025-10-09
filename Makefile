@@ -26,6 +26,9 @@ TH_ENV ?= .reports/metrics/day66_thresholds.env
 METRIC_K ?= 3
 RUN_PATH ?=
 
+# Day67 시계열 분석 기본값
+WEEK ?= 7
+
 # 의존성 정의
 SCRIPTS = scripts/rag_eval.sh scripts/rag_gate.sh
 TESTS = tests/eval_smoke.sh
@@ -143,6 +146,13 @@ metrics-dashboard: metrics
 	@column -t -s$$'\t' .reports/metrics/day66_metrics.tsv
 	@echo "---- hygiene ----"
 	@column -t -s$$'\t' .reports/metrics/day66_hygiene.tsv
+
+# Day67 시계열 분석
+metrics-timeseries:  ## Day67 시계열 분석 실행
+	@python3 scripts/metrics/metrics_timeseries.py --input .reports/metrics --outdir .reports/timeseries --period $(WEEK)
+
+weekly-report: metrics-timeseries  ## 주간 리포트 생성
+	@echo "📄 Weekly report -> .reports/timeseries/"
 
 # 가드만 실행 (알림 테스트용)
 metrics-guard-only:

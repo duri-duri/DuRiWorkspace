@@ -10,10 +10,12 @@ readonly SCRIPT_DIR REPO_ROOT LIB_EXTRACT
 
 # 디버그 가독성 강화
 if [[ -n "${DEBUG_RAG:-}" ]]; then
+  # shellcheck source=scripts/lib/debug_trace.sh
   source scripts/lib/debug_trace.sh
   set -x
 fi
-  source scripts/lib/debug_trace.sh
+# shellcheck source=scripts/lib/debug_trace.sh
+source scripts/lib/debug_trace.sh
 
 # v1 CLI: bash $SEARCH "<query>" ---rank --k N --format ids [--cat C] [--pf P]
 QUERY=""; K=3; FORMAT="ids"; CAT=""; PF=""
