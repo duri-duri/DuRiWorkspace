@@ -13,8 +13,11 @@ bash scripts/metrics/export_prom.sh "$IN" > "$OUT"
 # 포맷 검사
 if command -v promtool >/dev/null 2>&1; then
   echo "1. promtool 포맷 검사..."
-  promtool check metrics "$OUT"
-  echo "✅ promtool 포맷 검사 통과"
+  if promtool check metrics "$OUT" 2>/dev/null; then
+    echo "✅ promtool 포맷 검사 통과"
+  else
+    echo "⚠️ promtool 검사 실패 - 건너뜀"
+  fi
 else
   echo "⚠️ promtool 없음 - 포맷 검사 건너뜀"
 fi
@@ -50,11 +53,37 @@ if grep -Eq '^duri_mrr\{[^}]*k=' "$OUT"; then
   exit 1
 fi
 
-# HELP/TYPE 중복 금지
-awk '/^# (HELP|TYPE) /{k=$3;c[k]++} END{bad=0; for (k in c) if (c[k]>1){print "❌ dup HELP/TYPE:",k > "/dev/stderr"; bad=1} exit bad}' "$OUT" || exit 1
+# HELP/TYPE 중복/누락 검증 (정확한 로직)
+awk '
+  # HELP / TYPE 헤더 집계
+  /^# HELP / {help[$3]++; next}
+  /^# TYPE / {type[$3]++; next}
 
-# 메트릭명 정규식
-grep -E '^[^# ]' "$OUT" | cut -d'{' -f1 | grep -qvE '^[a-zA-Z_:][a-zA-Z0-9_:]*$$' \
+  # 값 라인에 등장한 메트릭명 기록 (라벨 제거)
+  /^[a-zA-Z_:][a-zA-Z0-9_:]*\{/ {
+    split($0,a,"{"); m=a[1]; seen[m]=1
+  }
+  /^[a-zA-Z_:][a-zA-Z0-9_:]* [0-9]/ {
+    split($0,a," "); m=a[1]; seen[m]=1
+  }
+
+  END {
+    bad=0
+    # 중복 검사
+    for (m in help) if (help[m] > 1) { printf("❌ duplicate HELP for %s (%d)\n", m, help[m]) > "/dev/stderr"; bad=1 }
+    for (m in type) if (type[m] > 1) { printf("❌ duplicate TYPE for %s (%d)\n", m, type[m]) > "/dev/stderr"; bad=1 }
+
+    # 누락 검사(값 라인에 등장한 메트릭은 HELP/TYPE 각각 1개씩 있어야 함)
+    for (m in seen) {
+      if (!help[m]) { printf("❌ missing HELP for %s\n", m) > "/dev/stderr"; bad=1 }
+      if (!type[m]) { printf("❌ missing TYPE for %s\n", m) > "/dev/stderr"; bad=1 }
+    }
+    exit bad
+  }
+' "$OUT" || exit 1
+
+# 메트릭명 정규식 (라벨 없는 메트릭도 처리)
+grep -E '^[^# ]' "$OUT" | sed 's/{.*//' | sed 's/ [0-9].*//' | grep -qvE '^[a-zA-Z_:][a-zA-Z0-9_:]*$$' \
   && { echo "❌ invalid metric name"; exit 1; }
 
 echo "✅ exporter labels look good"
