@@ -102,6 +102,7 @@ GA_ENFORCE := $(shell git describe --tags --exact-match >/dev/null 2>&1 && echo 
 ci-pr-gate:
 	@echo "🚪 CI: PR 게이트 (엄격)"
 	@GA_ENFORCE=$(GA_ENFORCE) CI_STRICT_TOOLS=$(GA_ENFORCE) NO_SUDO=1 bash scripts/pr_gate_day63.sh
+	@bash tests/smoke/test_prom_help_type.sh
 
 # 스모크 확장
 smoke-edge-assertions:

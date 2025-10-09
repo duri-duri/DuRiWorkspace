@@ -11,6 +11,20 @@ echo "🔍 promtool로 Textfile 포맷 정적 검증"
 # 메트릭 생성
 bash scripts/metrics/export_prom.sh "$IN" > "$OUT"
 
+# CRLF(윈도 줄끝) 감지
+if grep -q $'\r' "$OUT"; then
+  echo "❌ CRLF detected (\\r present). Convert to LF only." >&2
+  exit 1
+fi
+
+# 텍스트파일 폭주 방지
+MAX_BYTES="${MAX_PROM_SIZE:-1048576}"  # 1 MiB 기본
+sz=$(wc -c < "$OUT")
+if [ "$sz" -gt "$MAX_BYTES" ]; then
+  echo "❌ metrics text too large: ${sz} bytes (limit=${MAX_BYTES})" >&2
+  exit 1
+fi
+
 # 포맷 검사
 if command -v promtool >/dev/null 2>&1; then
   echo "1. promtool 포맷 검사..."
@@ -22,8 +36,10 @@ if command -v promtool >/dev/null 2>&1; then
   else
     # promtool 능력 탐지(진짜 동작 프로브)
     if printf 'x 1\n' | promtool check metrics >/dev/null 2>&1; then
+      # promtool stdin 개행 보증
+      tail -c1 "$OUT" | read -r _ || printf '\n' >> "$OUT"
       # 파이프 실패 전파
-      cat "$OUT" | promtool check metrics || { echo "❌ promtool check failed"; exit 1; }
+      promtool check metrics < "$OUT" || { echo "❌ promtool check failed"; exit 1; }
       echo "✅ promtool 포맷 검사 통과"
     else
       echo "⚠️ promtool check metrics 미지원 - 스킵"
@@ -68,18 +84,21 @@ fi
 echo "3. HELP/TYPE 중복/누락 검증..."
 awk '
   BEGIN{
-    # 숫자 파싱 끝장 정규식(선택) — NaN/Inf까지
-    num="(?:[+-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?|[+-]?(?:Inf|NaN))"
+    # PCRE → POSIX ERE
+    NUM = "([+-]?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))([eE][+-]?[0-9]+)?|[+-]?(Inf|NaN))"
   }
+  # 모든 레코드 공통 전처리: BOM/CR 제거
+  { sub(/^\xEF\xBB\xBF/,"",$0); sub(/\r$/,"",$0) }
+
   /^# HELP /{help[$3]++}
   /^# TYPE /{type[$3]++}
 
   # 값 라인(라벨 有): name{...} <num>
-  $0 ~ "^[A-Za-z_:][A-Za-z0-9_:]*\\{[^}]*\\}[[:space:]]+" num "$" {
+  $0 ~ "^[A-Za-z_:][A-Za-z0-9_:]*\\{[^}]*\\}[[:space:]]+" NUM "$" {
     split($0,a,"{"); seen[a[1]]=1; next
   }
   # 값 라인(라벨 無): name <num>
-  $0 ~ "^[A-Za-z_:][A-Za-z0-9_:]*[[:space:]]+" num "$" {
+  $0 ~ "^[A-Za-z_:][A-Za-z0-9_:]*[[:space:]]+" NUM "$" {
     split($0,a," ");  seen[a[1]]=1; next
   }
 
@@ -95,8 +114,64 @@ awk '
   }
 ' "$OUT" || exit 1
 
-# 메트릭명 정규식 검증: HELP/TYPE/샘플에 등장한 모든 name 대상
+# HELP/TYPE 순서 보장 (샘플보다 앞)
+echo "4. HELP/TYPE 순서 보장 검증..."
 awk '
+  # 모든 레코드 공통 전처리: BOM/CR 제거
+  { sub(/^\xEF\xBB\xBF/,"",$0); sub(/\r$/,"",$0) }
+
+  /^# HELP /{h[$3]=NR}
+  /^# TYPE /{t[$3]=NR}
+  /^[A-Za-z_:][A-Za-z0-9_:]*([[:space:]]|{)/{
+    m=$1; sub(/\{.*/,"",m)   # 라벨 있으면 제거
+    if (m in seen_first == 0) seen_first[m]=NR
+  }
+  END{
+    bad=0
+    for (m in seen_first){
+      if (!(m in h)){ printf("❌ missing HELP before samples for %s\n", m) > "/dev/stderr"; bad=1 }
+      if (!(m in t)){ printf("❌ missing TYPE before samples for %s\n", m) > "/dev/stderr"; bad=1 }
+      if ((m in h) && seen_first[m] < h[m]){ printf("❌ HELP after samples for %s\n", m) > "/dev/stderr"; bad=1 }
+      if ((m in t) && seen_first[m] < t[m]){ printf("❌ TYPE after samples for %s\n", m) > "/dev/stderr"; bad=1 }
+    }
+    exit bad
+  }
+' "$OUT" || exit 1
+
+# 라벨 이름 규칙 + 동일 키 중복 금지
+echo "5. 라벨 이름 규칙 + 중복키 검증..."
+awk '
+function check_labels(lbls,   i,k,seen){
+  n=split(lbls, a, /,/)
+  for(i=1;i<=n;i++){
+    # key="value" 또는 key="" 형태
+    split(a[i], kv, /=/)
+    k=kv[1]
+    gsub(/^[[:space:]]+|[[:space:]]+$/, "", k)
+    if (k in seen){ printf("❌ duplicate label key: %s\n", k) > "/dev/stderr"; return 1 }
+    if (k !~ /^[A-Za-z_][A-Za-z0-9_]*$/){ printf("❌ invalid label name: %s\n", k) > "/dev/stderr"; return 1 }
+    seen[k]=1
+  }
+  return 0
+}
+# 모든 레코드 공통 전처리: BOM/CR 제거
+{ sub(/^\xEF\xBB\xBF/,"",$0); sub(/\r$/,"",$0) }
+
+# 라벨이 있는 샘플만 검사
+/^[A-Za-z_:][A-Za-z0-9_:]*\{/{
+  s=$0
+  sub(/^[^{]*\{/, "", s); sub(/\}[[:space:]].*$/, "", s)  # {...}만 추출
+  if (check_labels(s)) { bad=1 }
+}
+END{ exit bad }
+' "$OUT" || exit 1
+
+# 메트릭명 정규식 검증: HELP/TYPE/샘플에 등장한 모든 name 대상
+echo "6. 메트릭명 정규식 검증..."
+awk '
+  # 모든 레코드 공통 전처리: BOM/CR 제거
+  { sub(/^\xEF\xBB\xBF/,"",$0); sub(/\r$/,"",$0) }
+
   /^# (HELP|TYPE) /{n=$3; name[n]=1}
   /^[A-Za-z_:][A-Za-z0-9_:]*/{
     split($0,a,/[ {]/); name[a[1]]=1
