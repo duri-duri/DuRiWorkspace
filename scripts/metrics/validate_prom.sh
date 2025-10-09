@@ -14,12 +14,20 @@ bash scripts/metrics/export_prom.sh "$IN" > "$OUT"
 # 포맷 검사
 if command -v promtool >/dev/null 2>&1; then
   echo "1. promtool 포맷 검사..."
-  if ! cat "$OUT" | promtool check metrics; then
-    echo "⚠️ promtool 검사 실패 - 파일: $OUT (버전: $(promtool --version 2>/dev/null || echo 'unknown'))" >&2
-    # 로컬/비엄격은 통과시키려면: exit 0
-    # CI 엄격 모드에서만 실패시키려면: [ "${GA_ENFORCE:-0}" = "1" ] && exit 1
+
+  # GA에서만 강제, 로컬/비엄격은 스킵
+  : "${GA_ENFORCE:=0}"
+  if [ "$GA_ENFORCE" != "1" ]; then
+    echo "ℹ️ non-GA: promtool 스킵"
   else
-    echo "✅ promtool 포맷 검사 통과"
+    # promtool 능력 탐지(진짜 동작 프로브)
+    if printf 'x 1\n' | promtool check metrics >/dev/null 2>&1; then
+      # 파이프 실패 전파
+      cat "$OUT" | promtool check metrics || { echo "❌ promtool check failed"; exit 1; }
+      echo "✅ promtool 포맷 검사 통과"
+    else
+      echo "⚠️ promtool check metrics 미지원 - 스킵"
+    fi
   fi
 else
   echo "⚠️ promtool 없음 - 포맷 검사 건너뜀"
@@ -56,11 +64,12 @@ if grep -Eq '^duri_mrr\{[^}]*k=' "$OUT"; then
   exit 1
 fi
 
-# HELP/TYPE 중복/누락 검증 (과학표기·라벨 유무 모두 인식)
+# HELP/TYPE 중복/누락 검증 (과학표기·라벨 유무 모두 인식) - 항상 실행
+echo "3. HELP/TYPE 중복/누락 검증..."
 awk '
   BEGIN{
-    # 숫자(정수/소수/과학표기)
-    num="[-+]?[0-9]+(\\.[0-9]*)?([eE][-+]?[0-9]+)?"
+    # 숫자 파싱 끝장 정규식(선택) — NaN/Inf까지
+    num="(?:[+-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?|[+-]?(?:Inf|NaN))"
   }
   /^# HELP /{help[$3]++}
   /^# TYPE /{type[$3]++}
