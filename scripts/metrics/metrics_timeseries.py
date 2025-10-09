@@ -204,6 +204,25 @@ def main():
     if len(rows) > args.period:
         rows[-1]["ndcg_wow"] = delta(rows[-1]["ndcg_k"], rows[-1 - args.period]["ndcg_k"])
         rows[-1]["mrr_wow"] = delta(rows[-1]["mrr"], rows[-1 - args.period]["mrr"])
+        # WoW % 변화율 (분모 0/None 방지)
+        base_n = rows[-1 - args.period]["ndcg_k"]
+        base_m = rows[-1 - args.period]["mrr"]
+        if base_n not in (None, 0) and rows[-1].get("ndcg_wow") is not None:
+            rows[-1]["ndcg_wow_pct"] = rows[-1]["ndcg_wow"] / base_n * 100.0
+        if base_m not in (None, 0) and rows[-1].get("mrr_wow") is not None:
+            rows[-1]["mrr_wow_pct"] = rows[-1]["mrr_wow"] / base_m * 100.0
+
+    # z-score (최근값이 MA/STD 대비 얼마나 벗어났는지)
+    for key, ma_key, sd_key, z_key in [
+        ("ndcg_k", "ndcg_ma", "ndcg_std", "ndcg_z"),
+        ("mrr", "mrr_ma", "mrr_std", "mrr_z"),
+    ]:
+        if (
+            rows[-1].get(ma_key) is not None
+            and rows[-1].get(sd_key) not in (None, 0)
+            and rows[-1].get(key) is not None
+        ):
+            rows[-1][z_key] = (rows[-1][key] - rows[-1][ma_key]) / rows[-1][sd_key]
 
     # write CSV
     csv_path = os.path.join(args.outdir, "metrics_all_scope.csv")
@@ -216,11 +235,15 @@ def main():
         "ndcg_std",
         "ndcg_dod",
         "ndcg_wow",
+        "ndcg_wow_pct",
+        "ndcg_z",
         "mrr",
         "mrr_ma",
         "mrr_std",
         "mrr_dod",
         "mrr_wow",
+        "mrr_wow_pct",
+        "mrr_z",
         "recall_k",
         "guard_exit",
         "exporter_up",
@@ -239,11 +262,15 @@ def main():
                     "ndcg_std": r.get("ndcg_std"),
                     "ndcg_dod": r.get("ndcg_dod"),
                     "ndcg_wow": r.get("ndcg_wow"),
+                    "ndcg_wow_pct": r.get("ndcg_wow_pct"),
+                    "ndcg_z": r.get("ndcg_z"),
                     "mrr": r["mrr"],
                     "mrr_ma": r.get("mrr_ma"),
                     "mrr_std": r.get("mrr_std"),
                     "mrr_dod": r.get("mrr_dod"),
                     "mrr_wow": r.get("mrr_wow"),
+                    "mrr_wow_pct": r.get("mrr_wow_pct"),
+                    "mrr_z": r.get("mrr_z"),
                     "recall_k": r["recall_k"],
                     "guard_exit": r.get("guard_exit"),
                     "exporter_up": r.get("exporter_up"),

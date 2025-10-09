@@ -82,11 +82,11 @@ fi
 
 # 3) 테스트 전 아티팩트 프리셋 (재발 방지)
 echo "📋 3. 테스트 아티팩트 프리셋 생성..."
-mkdir -p var/reports/final_verify_$(date +%Y-%m-%d) \
-         var/reports/bench_$(date +%Y-%m-%d)/x \
+mkdir -p "var/reports/final_verify_$(date +%Y-%m-%d)" \
+         "var/reports/bench_$(date +%Y-%m-%d)/x" \
          backup_phase5_day8_day15/day28 \
          backup_phase5_day8_day15/day29
-echo ok > var/reports/final_verify_$(date +%Y-%m-%d)/run.log
+echo ok > "var/reports/final_verify_$(date +%Y-%m-%d)/run.log"
 echo '# ROLLOUT SUMMARY' > "var/reports/ROLL0UT_SUMMARY_$(date +%Y-%m-%d).md"  # 0(영) 주의
 echo '{}' > "var/reports/bench_$(date +%Y-%m-%d)/x/bench.json"
 echo '# Day 28 Report' > backup_phase5_day8_day15/day28/report.md
@@ -191,7 +191,8 @@ echo "📋 shellcheck (optional)..."
     echo "🎉 PR 게이트 통과! 머지 가능"
 
 # 아티팩트 보존 (디버깅 편의)
-mkdir -p artifacts && cp -f /tmp/cwd.{out,err} artifacts/ 2>/dev/null || true
+mkdir -p artifacts
+cp -f /tmp/cwd.out /tmp/cwd.err artifacts/ 2>/dev/null || :
     exit 0
 else
     echo "💢 PR 게이트 실패! 머지 차단"
