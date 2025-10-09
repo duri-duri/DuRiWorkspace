@@ -25,6 +25,10 @@ while [[ $# -gt 0 ]]; do
     *) [[ -z "$QUERY" ]] && QUERY="$1"; shift;;
   esac
 done
+
+# 예약 옵션을 한 번 참조해 ShellCheck SC2034 경고 제거 + 기본값 세팅
+: "${FORMAT:=ids}" "${CAT:=}" "${PF:=}"
+
 [[ -n "$QUERY" ]] || exit 0
 
 PRE_K="${PRE_K:-20}"

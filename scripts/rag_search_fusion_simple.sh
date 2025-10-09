@@ -17,6 +17,9 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
+# 예약 옵션을 한 번 참조해 ShellCheck SC2034 경고 제거 + 기본값 세팅
+: "${FORMAT:=ids}" "${RANK:=0}" "${CAT:=}" "${PF:=}"
+
 # tuned 스크립트에서 ID만 추출 (stderr 출력 없이)
 K="$K" scripts/rag_search_tuned.sh "$QUERY" 2>/dev/null | \
 sed -n 's/^📄[[:space:]]*\([^:]*\):.*/\1/p' | \
