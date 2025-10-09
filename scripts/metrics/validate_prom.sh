@@ -35,7 +35,8 @@ if command -v promtool >/dev/null 2>&1; then
     echo "ℹ️ non-GA: promtool 스킵"
   else
     # promtool 능력 탐지(진짜 동작 프로브)
-    if printf 'x 1\n' | promtool check metrics >/dev/null 2>&1; then
+    if printf '# HELP _probe dummy\n# TYPE _probe gauge\n_probe 1\n' \
+       | promtool check metrics >/dev/null 2>&1; then
       # promtool stdin 개행 보증
       tail -c1 "$OUT" | read -r _ || printf '\n' >> "$OUT"
       # 파이프 실패 전파

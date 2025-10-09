@@ -72,7 +72,8 @@ esac > "$result_tmp"
 awk '!seen[$0]++' "$result_tmp" > "${result_tmp}.dedup" && mv "${result_tmp}.dedup" "$result_tmp"
 
 # 블록리스트 필터 적용
-cat "$result_tmp" | { [[ -f "$BLOCK" ]] && grep -Ev -f "$BLOCK" || cat; } > "${result_tmp}.filtered" && mv "${result_tmp}.filtered" "$result_tmp"
+{ [[ -f "$BLOCK" ]] && grep -Ev -f "$BLOCK" "$result_tmp" || cat "$result_tmp"; } \
+  > "${result_tmp}.filtered" && mv "${result_tmp}.filtered" "$result_tmp"
 
 # 라인 수 체크 후 상위 K 출력
 line_cnt=$(wc -l < "$result_tmp" | tr -d ' ')
