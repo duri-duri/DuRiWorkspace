@@ -3,11 +3,34 @@
 set -euo pipefail
 trap 'echo "[FAIL] $0 rc=$? at $BASH_SOURCE:$LINENO (pwd=$PWD)" >&2' ERR
 
+# 정책 스위치 완비 (개발-로컬은 느슨, GA/CI는 엄격)
+: "${NO_SUDO:=1}"              # 기본: sudo 금지
+: "${CI_STRICT_TOOLS:=0}"      # 1이면 도구 미존재 시 실패
+: "${GA_ENFORCE:=0}"           # GA 태그/브랜치에서 1로
+
+export PATH="$HOME/.local/bin:$PATH"
+
 # 필수 바이너리 사전 점검
 bash scripts/check_deps.sh
 
-# python 명령 해결
-export PATH="$HOME/.local/bin:$PATH"
+# 도구 설치 함수 (sudo-free + user space)
+need() { command -v "$1" >/dev/null 2>&1; }
+
+ensure_tool() {
+  local name="$1" install_cmd="$2"
+  if need "$name"; then
+    echo "[ok] $name found: $(command -v "$name")"
+    return 0
+  fi
+  if [ "${CI_STRICT_TOOLS}" = "1" ] || [ "${GA_ENFORCE}" = "1" ]; then
+    echo "[info] installing $name (user space)"
+    # 절대 sudo 쓰지 않음
+    bash -lc "$install_cmd" || { echo "[fail] $name install"; exit 30; }
+    need "$name" || { echo "[fail] $name still missing"; exit 30; }
+  else
+    echo "⚠️  $name 없음 - 건너뜀(비엄격)"
+  fi
+}
 
 # Day64 승격: 기본값 상향 적용
 THRESH_P="${THRESH_P:-0.45}"
@@ -18,15 +41,64 @@ HYBRID_ALPHA="${HYBRID_ALPHA:-0.5}"
 echo "🚪 PR 게이트 체크 (Day 63)"
 echo "================================"
 
+# 도구 설치 (선택적)
+ensure_tool black   "python3 -m pip install --user 'black==25.9.0'"
+ensure_tool pylint  "python3 -m pip install --user 'pylint==3.3.9'"
+
+# promtool, shellcheck는 옵션: CI에서만 강제하고 로컬은 스킵
+ensure_tool promtool "
+  ver='2.55.0'; tmp=\$(mktemp -d);
+  curl -fsSL https://github.com/prometheus/prometheus/releases/download/v\${ver}/prometheus-\${ver}.linux-amd64.tar.gz \
+  | tar xz -C \"\$tmp\" && install -m755 \"\$tmp\"/prometheus-*/promtool \"\$HOME\"/.local/bin/promtool
+"
+
+ensure_tool shellcheck "
+  ver='0.10.0'; tmp=\$(mktemp -d);
+  curl -fsSL https://github.com/koalaman/shellcheck/releases/download/v\${ver}/shellcheck-v\${ver}.linux.x86_64.tar.xz \
+  | tar xJ -C \"\$tmp\" && install -m755 \"\$tmp\"/shellcheck*/shellcheck \"\$HOME\"/.local/bin/shellcheck
+"
+
 # 1) 린트 체크
 echo "📋 1. 린트 체크..."
-echo "   ⚠️ pylint 건너뜀 - Day 66 GA 완료"
-lint_pass=1
+if need pylint; then
+    if [ "${CI_STRICT_TOOLS}" = "1" ] || [ "${GA_ENFORCE}" = "1" ]; then
+        pylint_score="$(pylint --score=y --disable=C0114,C0116,C0301,W1510,W0612,W0702,W0611,C0415,R0914,W1309,W1514 scripts/ tests/ 2>/dev/null | grep "Your code has been rated" | sed 's/.*rated at \([0-9.]*\).*/\1/')"
+        echo "   pylint 점수: ${pylint_score:-N/A}"
+        if (( $(echo "${pylint_score:-0} >= 8.0" | bc -l) )); then
+            echo "   ✅ pylint 통과 (>= 8.0)"
+            lint_pass=1
+        else
+            echo "   ❌ pylint 실패 (< 8.0)"
+            lint_pass=0
+        fi
+    else
+        echo "   ⚠️ pylint 건너뜀 (비엄격 모드)"
+        lint_pass=1
+    fi
+else
+    echo "   ⚠️ pylint 없음 - 건너뜀"
+    lint_pass=1
+fi
 
 # 2) 포맷 체크
 echo "📋 2. 포맷 체크..."
-echo "   ⚠️ black 건너뜀 - Day 66 GA 완료"
-format_pass=1
+if need black; then
+    if [ "${CI_STRICT_TOOLS}" = "1" ] || [ "${GA_ENFORCE}" = "1" ]; then
+        if black --check scripts/ tests/ 2>/dev/null; then
+            echo "   ✅ black 포맷 통과"
+            format_pass=1
+        else
+            echo "   ❌ black 포맷 실패"
+            format_pass=0
+        fi
+    else
+        echo "   ⚠️ black 건너뜀 (비엄격 모드)"
+        format_pass=1
+    fi
+else
+    echo "   ⚠️ black 없음 - 건너뜀"
+    format_pass=1
+fi
 
 # 3) 테스트 전 아티팩트 프리셋 (재발 방지)
 echo "📋 3. 테스트 아티팩트 프리셋 생성..."

@@ -96,9 +96,12 @@ ci-metrics-report:
 	@echo "🔍 promtool 검증..."
 	@bash scripts/metrics/validate_prom.sh .reports/metrics/day66_metrics.tsv
 
+# GA 태그 감지로 강제화
+GA_ENFORCE := $(shell git describe --tags --exact-match >/dev/null 2>&1 && echo 1 || echo 0)
+
 ci-pr-gate:
 	@echo "🚪 CI: PR 게이트 (엄격)"
-	@bash scripts/ci_pr_gate.sh
+	@GA_ENFORCE=$(GA_ENFORCE) CI_STRICT_TOOLS=$(GA_ENFORCE) NO_SUDO=1 bash scripts/pr_gate_day63.sh
 
 # 스모크 확장
 smoke-edge-assertions:

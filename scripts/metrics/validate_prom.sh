@@ -44,5 +44,11 @@ if [ "$guard_count" -ne 1 ]; then
   exit 1
 fi
 
+# MRR 라벨 정책 검증 (k 라벨 없어야 함)
+if grep -Eq '^duri_mrr\{[^}]*k=' "$OUT"; then
+  echo "❌ duri_mrr must not have k label" >&2
+  exit 1
+fi
+
 echo "✅ exporter labels look good"
 echo "✅ 모든 검증 통과"

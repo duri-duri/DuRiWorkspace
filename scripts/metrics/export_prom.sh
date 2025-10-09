@@ -67,15 +67,21 @@ fi
 # guard는 "전체 집계"를 대표 → domain은 항상 "ALL"이 명확
 printf "duri_guard_last_exit_code{k=\"%s\",scope=\"all\",domain=\"ALL\"} %d\n" "$k" "$guard_exit_code"
 
-# 빌드/스냅샷 메타 메트릭 추가
-printf '# HELP duri_build_info Build metadata (labels only)\n'
-printf '# TYPE duri_build_info gauge\n'
-printf 'duri_build_info{git_sha="%s",tag="%s"} 1\n' "$(git rev-parse --short HEAD 2>/dev/null || echo unknown)" "${DURI_TAG:-day66-metrics-ga}"
-
-printf '# HELP duri_metrics_generated_seconds Unix epoch of metrics snapshot\n'
+# 빌드/스냅샷 메타 메트릭 추가 (HELP/TYPE 일관화)
+printf '# HELP duri_metrics_generated_seconds Unix epoch when metrics file was generated\n'
 printf '# TYPE duri_metrics_generated_seconds gauge\n'
 printf 'duri_metrics_generated_seconds %s\n' "$(date +%s)"
 
 printf '# HELP duri_exporter_up Exporter availability (1=up, 0=down)\n'
 printf '# TYPE duri_exporter_up gauge\n'
 printf 'duri_exporter_up 1\n'
+
+printf '# HELP duri_build_info Build and deploy info\n'
+printf '# TYPE duri_build_info gauge\n'
+printf 'duri_build_info{git_sha="%s",tag="%s"} 1\n' "$(git rev-parse --short HEAD 2>/dev/null || echo unknown)" "${DURI_TAG:-day66-metrics-ga}"
+
+# 원자적 쓰기 지원 (CI에서 사용)
+if [[ -n "${TEXTFILE_OUTPUT:-}" ]]; then
+  tmp="$TEXTFILE_OUTPUT.$$"
+  cat > "$tmp" && mv -f "$tmp" "$TEXTFILE_OUTPUT"
+fi

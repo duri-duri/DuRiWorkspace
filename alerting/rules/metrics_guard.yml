@@ -35,3 +35,21 @@ groups:
     annotations:
       summary: "Duri metrics textfile stale (>15m)"
       description: "메트릭 텍스트파일이 15분 이상 갱신되지 않음"
+
+  # Alert: 메트릭 파일 부재
+  - alert: DuriTextfileMissing
+    expr: absent(duri_exporter_up) or absent(duri_metrics_generated_seconds)
+    for: 5m
+    labels: { severity: page }
+    annotations:
+      summary: "Duri metrics textfile missing"
+      description: "메트릭 텍스트파일이 존재하지 않음"
+
+  # Alert: 익스포터 다운
+  - alert: DuriExporterDown
+    expr: duri_exporter_up == 0
+    for: 5m
+    labels: { severity: page }
+    annotations:
+      summary: "Duri exporter down"
+      description: "DuRi 익스포터가 다운됨"
