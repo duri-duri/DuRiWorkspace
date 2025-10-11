@@ -209,5 +209,19 @@ awk '
   }
 ' "$OUT" || exit 1
 
+# 배치 간 TYPE 상충 검증 (옵션)
+if [[ "${CROSS_TYPE_ENFORCE:-0}" = "1" ]]; then
+  echo "7. 배치 간 TYPE 상충 검증..."
+  # 모든 대상 파일에서 TYPE 라인만 모아 이름:타입 매핑
+  mapfile -t types < <(awk '/^# TYPE /{print $3 ":" $4}' "$OUT")
+  # 충돌 탐지
+  conflicts=$(printf '%s\n' "${types[@]}" | awk -F: '{print $1,$2}' | sort | uniq | awk '{print $1}' | uniq -d)
+  if [[ -n "$conflicts" ]]; then
+    echo "❌ Cross-file TYPE conflict detected for: $conflicts" >&2
+    exit 1
+  fi
+  echo "✅ 배치 간 TYPE 상충 검증 통과"
+fi
+
 echo "✅ exporter labels look good"
 echo "✅ 모든 검증 통과"
