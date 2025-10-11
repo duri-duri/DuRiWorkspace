@@ -1,0 +1,16 @@
+# HELP foo_sum Foo summary sum
+# TYPE foo_sum summary
+foo_sum{quantile="0.5"} 1.0
+foo_sum{quantile="0.9"} 2.0
+foo_sum{quantile="0.99"} 3.0
+foo_sum_sum 6.0
+foo_sum_count 100
+
+# HELP bar_bucket Bar histogram bucket
+# TYPE bar_bucket histogram
+bar_bucket{le="0.1"} 10
+bar_bucket{le="0.5"} 50
+bar_bucket{le="1.0"} 100
+bar_bucket{le="+Inf"} 100
+bar_sum 75.0
+bar_count 100
