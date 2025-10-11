@@ -135,3 +135,4 @@ data/prometheus/
 .reports/**/*
 !/.reports/metrics/*.env
 !/.reports/metrics/*_schema*.tsv
+KIMSHIN_COGNITIVE_EQUATIONS_DESIGN_CHARTER.md

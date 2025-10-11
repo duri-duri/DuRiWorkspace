@@ -20,15 +20,11 @@ import sys
 
 def ndcg_at_k(labels, k):
     gains = [
-        (1.0 / math.log2(i + 2)) if labels[i] == 1 else 0.0
-        for i in range(min(k, len(labels)))
+        (1.0 / math.log2(i + 2)) if labels[i] == 1 else 0.0 for i in range(min(k, len(labels)))
     ]
     dcg = sum(gains)
     ideal = sorted(labels, reverse=True)
-    igains = [
-        (1.0 / math.log2(i + 2)) if ideal[i] == 1 else 0.0
-        for i in range(min(k, len(ideal)))
-    ]
+    igains = [(1.0 / math.log2(i + 2)) if ideal[i] == 1 else 0.0 for i in range(min(k, len(ideal)))]
     idcg = sum(igains) or 1.0
     return dcg / idcg
 

@@ -1,0 +1,5 @@
+# HELP foo Foo counter metric
+# TYPE foo counter
+foo 1
+# TYPE foo gauge
+foo 2

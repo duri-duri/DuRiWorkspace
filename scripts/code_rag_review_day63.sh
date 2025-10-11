@@ -29,9 +29,9 @@ echo "🔍 RAG 기반 코드 리뷰 분석..."
 # 각 변경 파일에 대해 RAG 검색 수행
 echo "$CHANGED_FILES" | while read -r file; do
     if [[ -z "$file" ]]; then continue; fi
-    
+
     echo "📄 파일: $file"
-    
+
     # 파일 확장자에 따른 검색 전략
     case "$file" in
         *.py)
@@ -56,11 +56,11 @@ echo "$CHANGED_FILES" | while read -r file; do
             search_terms=("code review" "best practices" "quality")
             ;;
     esac
-    
+
     # 각 검색어로 RAG 검색 수행
     for term in "${search_terms[@]}"; do
         echo "   🔍 검색어: '$term'"
-        
+
         # RAG 검색 실행 (머신 출력 모드)
         if [[ -f "scripts/rag_search_day62_final.sh" ]]; then
             results="$(FORMAT=ids scripts/rag_search_day62_final.sh "$term" "" "" "3" "1" 2>/dev/null | head -3)"
@@ -76,7 +76,7 @@ echo "$CHANGED_FILES" | while read -r file; do
             echo "     ⚠️ RAG 검색 스크립트 없음"
         fi
     done
-    
+
     echo
 done
 

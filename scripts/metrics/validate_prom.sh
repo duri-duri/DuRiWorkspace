@@ -115,6 +115,28 @@ awk '
   }
 ' "$OUT" || exit 1
 
+# TYPE 상충 검증 - 동일 메트릭명에 서로 다른 TYPE 선언 시 FAIL
+echo "3.5. TYPE 상충 검증..."
+awk '
+  # 모든 레코드 공통 전처리: BOM/CR 제거
+  { sub(/^\xEF\xBB\xBF/,"",$0); sub(/\r$/,"",$0) }
+
+  /^# TYPE /{
+    metric=$3
+    type_value=$4
+    if (metric in type_declared) {
+      if (type_declared[metric] != type_value) {
+        printf("❌ TYPE conflict for %s: %s vs %s\n", metric, type_declared[metric], type_value) > "/dev/stderr"
+        bad=1
+      }
+    } else {
+      type_declared[metric]=type_value
+    }
+  }
+
+  END{ exit bad }
+' "$OUT" || exit 1
+
 # HELP/TYPE 순서 보장 (샘플보다 앞)
 echo "4. HELP/TYPE 순서 보장 검증..."
 awk '

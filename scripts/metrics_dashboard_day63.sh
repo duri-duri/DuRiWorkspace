@@ -8,7 +8,7 @@ echo "================================"
 # 메트릭 수집 함수들
 collect_pr_metrics() {
     echo "📈 PR 메트릭 수집 중..."
-    
+
     # 1) PR 리드타임 (마지막 10개 PR 기준)
     echo "⏱️ PR 리드타임 분석..."
     if command -v gh >/dev/null 2>&1; then
@@ -22,7 +22,7 @@ collect_pr_metrics() {
     else
         echo "   ⚠️ GitHub CLI 없음"
     fi
-    
+
     # 2) 리뷰 회전수
     echo "🔄 리뷰 회전수 분석..."
     if command -v gh >/dev/null 2>&1; then
@@ -36,7 +36,7 @@ collect_pr_metrics() {
     else
         echo "   ⚠️ GitHub CLI 없음"
     fi
-    
+
     # 3) 커버리지 델타
     echo "📊 커버리지 델타 분석..."
     if [[ -f ".reports/day62/baseline_day62.tsv" ]]; then
@@ -49,7 +49,7 @@ collect_pr_metrics() {
     else
         echo "   ⚠️ 베이스라인 데이터 없음"
     fi
-    
+
     # 4) 변경 라인당 결함률 (사후 분석)
     echo "🐛 변경 라인당 결함률..."
     if command -v git >/dev/null 2>&1; then
