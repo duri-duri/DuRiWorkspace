@@ -6,7 +6,7 @@ rule_files:
   - /etc/prometheus/rules/*.rules.yml
   - /etc/prometheus/rules/prometheus_rules.yml
   - /etc/prometheus/rules/prometheus_rules_enhanced.yml
-  - /etc/prometheus/rules/prometheus_alerts_enhanced.yml
+  # - /etc/prometheus/rules/prometheus_alerts_enhanced.yml  # 중복 메모리 알람으로 비활성화
 
 alerting:
   alertmanagers:
