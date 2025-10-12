@@ -1,34 +1,36 @@
+global: {}
+
 route:
   group_by: ['alertname','team']
   group_wait: 30s
   group_interval: 5m
   repeat_interval: 12h
-  receiver: slack-default
+  receiver: dev-null
 
   routes:
     # 근무시간(월~금 09:00-18:00 KST) 페이지
     - matchers: ['severity="page"']
-      receiver: slack-page-day
+      receiver: dev-null
       continue: true
       active_time_intervals: ["biz-hours"]
 
     # 야간/주말 페이지
     - matchers: ['severity="page"']
-      receiver: slack-page-night
+      receiver: dev-null
 
     # Critical 알림
     - matchers: ['severity="critical"']
-      receiver: slack-page-day
+      receiver: dev-null
       continue: true
       active_time_intervals: ["biz-hours"]
     - matchers: ['severity="critical"']
-      receiver: slack-page-night
+      receiver: dev-null
 
     # 경고/티켓
     - matchers: ['severity="warning"']
-      receiver: slack-warning
+      receiver: dev-null
     - matchers: ['severity="ticket"']
-      receiver: slack-ticket
+      receiver: dev-null
 
 time_intervals:
   - name: biz-hours
@@ -40,13 +42,8 @@ time_intervals:
         location: "Asia/Seoul"
 
 receivers:
-  - name: slack-default
-    slack_configs: [{send_resolved: true, channel: '#ops'}]
-  - name: slack-page-day
-    slack_configs: [{send_resolved: true, channel: '#oncall-day'}]
-  - name: slack-page-night
-    slack_configs: [{send_resolved: true, channel: '#oncall-night'}]
-  - name: slack-warning
-    slack_configs: [{send_resolved: true, channel: '#quality'}]
-  - name: slack-ticket
-    slack_configs: [{send_resolved: true, channel: '#quality'}]
+  - name: dev-null
+    # 실제 전송은 생략하고 라우팅 파이프만 검증할 때 사용.
+    # 원한다면 로컬 웹훅 에코로 바꿔서 수신 확인 가능:
+    # webhook_configs:
+    #   - url: http://127.0.0.1:19090/alerts

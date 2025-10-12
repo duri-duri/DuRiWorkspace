@@ -3,6 +3,7 @@ global:
   evaluation_interval: 15s
 
 rule_files:
+  - /etc/prometheus/rules/*.rules.yml
   - /etc/prometheus/rules/prometheus_rules.yml
   - /etc/prometheus/rules/prometheus_rules_enhanced.yml
   - /etc/prometheus/rules/prometheus_alerts_enhanced.yml
