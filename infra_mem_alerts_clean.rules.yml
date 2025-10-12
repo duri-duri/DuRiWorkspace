@@ -30,19 +30,18 @@ groups:
       description: "name={{ $labels.name }} image={{ $labels.image }} id={{ $labels.id }} value={{ humanize1024 $value }}"
 
   # 제한 있는 컨테이너(분모>0): 비율 기준
-  - alert: HighMemoryUsageRelative
+  - alert: ContainerMemoryHighRatio
     expr: |
       (
         container_memory_working_set_bytes{id=~"/docker/.+"}
-        / on(id) clamp_min(container_spec_memory_limit_bytes{id=~"/docker/.+"}, 1)
-      )
+        / on(id) container_spec_memory_limit_bytes{id=~"/docker/.+"}
+      ) > 0.90
       and on(id) (container_spec_memory_limit_bytes{id=~"/docker/.+"} > bool 0)
-      > 0.9
-    for: 5m
-    labels: {severity: critical, team: infrastructure}
+    for: 10m
+    labels: {severity: warning, team: infrastructure}
     annotations:
-      summary: "Container memory >90% of limit"
-      description: "name={{ $labels.name }} image={{ $labels.image }} id={{ $labels.id }} ratio={{ printf \"%.2f\" $value }}"
+      summary: "High memory ratio (>90%)"
+      description: "{{ $labels.name }} at {{ $value | humanizePercentage }} (image={{ $labels.image }}, id={{ $labels.id }})"
 
   # OOM 징후 알람
   - alert: ContainerOOMEvents

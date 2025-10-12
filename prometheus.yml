@@ -21,6 +21,19 @@ scrape_configs:
 
   - job_name: 'cadvisor'
     static_configs: [{ targets: ['cadvisor:8080'] }]
+    metric_relabel_configs:
+      # 필요 없는 compose 라벨 대량 정리
+      - source_labels: [__name__]
+        regex: 'container_.*'
+        action: keep
+      - regex: 'container_label_.*'
+        action: labeldrop
+      # name이 비어있을 때만 id 일부로 보조 label 세팅(가독성)
+      - source_labels: [name, id]
+        regex: ';/docker/([a-f0-9]{12}).*'
+        target_label: name
+        replacement: 'ctr-\1'
+        action: replace
 
   - job_name: 'redis'
     static_configs: [{ targets: ['redis_exporter:9121'] }]
@@ -45,6 +58,8 @@ scrape_configs:
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: target       # 원 타깃 보존
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
