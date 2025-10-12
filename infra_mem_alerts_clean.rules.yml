@@ -43,3 +43,12 @@ groups:
     annotations:
       summary: "Container memory >90% (limit-based)"
       description: "id={{ $labels.id }} using >90% of its memory limit for 10m."
+
+  - alert: HighMemoryUsageAbsolute
+    expr: |
+      topk(5, container_memory_working_set_bytes{job="cadvisor", id=~"/docker/.*"}) > 2 * 1024 * 1024 * 1024
+    for: 10m
+    labels: {severity: warning, team: infrastructure, service: performance}
+    annotations:
+      summary: "Container memory >2GB (absolute)"
+      description: "id={{ $labels.id }} using >2GB memory (no limit set)."
