@@ -1,5 +1,6 @@
 groups:
-- name: infra-info
+# 레코딩 룰: 안정적인 숫자 반환
+- name: duri-recording
   interval: 1m
   rules:
   - record: duri:containers:limit0
@@ -11,56 +12,75 @@ groups:
   - record: duri:containers:top5_rss_by_name
     expr: topk(5, sum by (name) (container_memory_rss{id=~"/docker/.+", name!=""}))
 
-- name: infra-mem-alerts-clean
+# 메모리 알람: 무제한/제한 분리
+- name: duri-memory
   interval: 1m
   rules:
-  - alert: HighMemoryUsage
-    expr: |
-      (
-        container_memory_working_set_bytes{id=~"/docker/.+"}
-        /
-        on(id) clamp_min(container_spec_memory_limit_bytes{id=~"/docker/.+"}, 1)
-      )
-      and
-      on(id) (container_spec_memory_limit_bytes{id=~"/docker/.+"} > bool 0)
-      and
-      container_memory_working_set_bytes{id=~"/docker/.+"} > 100 * 1024 * 1024
-      > 0.80
-    for: 10m
-    labels: {severity: warning, team: infrastructure, service: performance}
-    annotations:
-      summary: "Container memory >80% (limit-based)"
-      description: "id={{ $labels.id }} using >80% of its memory limit for 10m."
-
-  - alert: CriticalMemoryUsage
-    expr: |
-      (
-        container_memory_working_set_bytes{id=~"/docker/.+"}
-        /
-        on(id) clamp_min(container_spec_memory_limit_bytes{id=~"/docker/.+"}, 1)
-      )
-      and
-      on(id) (container_spec_memory_limit_bytes{id=~"/docker/.+"} > bool 0)
-      and
-      container_memory_working_set_bytes{id=~"/docker/.+"} > 100 * 1024 * 1024
-      > 0.90
-    for: 10m
-    labels: {severity: critical, team: infrastructure, service: performance}
-    annotations:
-      summary: "Container memory >90% (limit-based)"
-      description: "id={{ $labels.id }} using >90% of its memory limit for 10m."
-
+  # 무제한 컨테이너(limit==0): 절대치 기준
   - alert: HighMemoryUsageAbsolute
     expr: |
-      topk(
-        5,
-        (container_memory_working_set_bytes{id=~"/docker/.+"}
-         and on(id) container_spec_memory_limit_bytes{id=~"/docker/.+"} == bool 0)
-        and
-        container_memory_working_set_bytes > 200 * 1024 * 1024
-      ) > 2 * 1024 * 1024 * 1024
+      topk(5,
+        container_memory_working_set_bytes{id=~"/docker/.+"}
+        and on(id) (container_spec_memory_limit_bytes{id=~"/docker/.+"} == bool 0)
+      ) > 2e9
     for: 10m
-    labels: {severity: warning, team: infrastructure, service: performance}
+    labels: {severity: warning, team: infrastructure}
     annotations:
-      summary: "Container memory >2GB (absolute)"
-      description: "id={{ $labels.id }} using >2GB with no memory limit."
+      summary: "Container memory >2GB (no limit)"
+      description: "name={{ $labels.name }} image={{ $labels.image }} id={{ $labels.id }} value={{ humanize1024 $value }}"
+
+  # 제한 있는 컨테이너(분모>0): 비율 기준
+  - alert: HighMemoryUsageRelative
+    expr: |
+      (
+        container_memory_working_set_bytes{id=~"/docker/.+"}
+        / on(id) clamp_min(container_spec_memory_limit_bytes{id=~"/docker/.+"}, 1)
+      )
+      and on(id) (container_spec_memory_limit_bytes{id=~"/docker/.+"} > bool 0)
+      > 0.9
+    for: 5m
+    labels: {severity: critical, team: infrastructure}
+    annotations:
+      summary: "Container memory >90% of limit"
+      description: "name={{ $labels.name }} image={{ $labels.image }} id={{ $labels.id }} ratio={{ printf \"%.2f\" $value }}"
+
+  # OOM 징후 알람
+  - alert: ContainerOOMEvents
+    expr: increase(container_oom_events_total[5m]) > 0
+    for: 0m
+    labels: {severity: critical, team: infrastructure}
+    annotations:
+      summary: "Container OOM events detected"
+      description: "name={{ $labels.name }} image={{ $labels.image }} id={{ $labels.id }}"
+
+# Blackbox 품질 알람
+- name: duri-blackbox
+  interval: 1m
+  rules:
+  - alert: BlackboxProbeLatencyHigh
+    expr: histogram_quantile(0.95, sum by (instance, le) (rate(probe_duration_seconds_bucket{job="blackbox_probe"}[5m]))) > 1
+    for: 10m
+    labels: {severity: warning, team: platform}
+    annotations:
+      summary: "Blackbox p95 latency >1s"
+      description: "instance={{ $labels.instance }} p95={{ printf \"%.2fs\" $value }}"
+
+# 사일런트 실패 가드
+- name: duri-sanity
+  interval: 1m
+  rules:
+  - alert: CadvisorMetricsMissing
+    expr: absent(container_memory_working_set_bytes)
+    for: 5m
+    labels: {severity: critical}
+    annotations:
+      summary: "cAdvisor metrics absent"
+      description: "cAdvisor down or scrape issue"
+
+  - alert: RecordingRulesMissing
+    expr: absent(duri:containers:limit0) or absent(duri:containers:limitgt0)
+    for: 5m
+    labels: {severity: warning}
+    annotations:
+      summary: "Recording rules not evaluating"
+      description: "Check Prometheus rule evaluation / file mounts"
