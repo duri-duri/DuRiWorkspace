@@ -41,5 +41,8 @@ jobs:
     - name: Validate Grafana provisioning YAML
       run: python3 -c "import yaml; yaml.safe_load(open('grafana/dashboards.yaml'))"
 
-    - name: Validate Alertmanager config (skip for now)
-      run: echo "Alertmanager validation skipped due to promtool version compatibility"
+    - name: Validate Alertmanager config
+      run: |
+        docker run --rm -v "$PWD/alertmanager:/etc/alertmanager" \
+          prom/alertmanager:latest \
+          --config.file=/etc/alertmanager/alertmanager.yml --version
