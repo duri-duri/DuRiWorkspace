@@ -1,4 +1,12 @@
 groups:
+- name: infra-info
+  interval: 1m
+  rules:
+  - record: duri:containers:limit0
+    expr: sum((container_spec_memory_limit_bytes{id=~"/docker/.+"} == bool 0))
+  - record: duri:containers:limitgt0
+    expr: sum((container_spec_memory_limit_bytes{id=~"/docker/.+"} > bool 0))
+
 - name: infra-mem-alerts-clean
   interval: 1m
   rules:
@@ -47,11 +55,13 @@ groups:
   - alert: HighMemoryUsageAbsolute
     expr: |
       topk(5,
-        container_memory_working_set_bytes{job="cadvisor", id=~"/docker/.*"}
+        container_memory_working_set_bytes{id=~"/docker/.+"}
           and container_memory_working_set_bytes > 200 * 1024 * 1024
-      ) > 2 * 1024 * 1024 * 1024
+      )
+      and on(id) container_spec_memory_limit_bytes{id=~"/docker/.+"} == 0
+      > 2 * 1024 * 1024 * 1024
     for: 10m
     labels: {severity: warning, team: infrastructure, service: performance}
     annotations:
       summary: "Container memory >2GB (absolute)"
-      description: "id={{ $labels.id }} using >2GB memory (no limit set)."
+      description: "id={{ $labels.id }} using >2GB with no memory limit."
