@@ -1,47 +1,13 @@
 global: {}
 
-inhibit_rules:
-  - source_matchers: [ 'severity="critical"' ]
-    target_matchers: [ 'severity="warning"' ]
-    equal: ['alertname','id']
-
 route:
-  receiver: 'default'
-  routes:
-    # Critical 알림 (즉시 페이지)
-    - matchers: ['severity="critical"']
-      receiver: 'pager'
-      group_by: ['alertname','service']
-      group_wait: 0s
-      group_interval: 1m
-      repeat_interval: 2h
-    # 성능 관련 알림 (그룹화)
-    - matchers: ['service="performance"']
-      receiver: 'perf'
-      group_wait: 30s
-      group_interval: 5m
-      repeat_interval: 12h
-    # 기본 알림
-    - receiver: 'dev-null'
-
-time_intervals:
-  - name: biz-hours
-    time_intervals:
-      - weekdays: ['monday:friday']
-        times:
-          - start_time: "09:00"
-            end_time: "18:00"
-        location: "Asia/Seoul"
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1h
+  receiver: 'web.hook'
 
 receivers:
-  - name: default
-    # 기본 알림 수신자
-  - name: pager
-    # Critical 알림 수신자 (즉시 페이지)
-  - name: perf
-    # 성능 관련 알림 수신자
-  - name: dev-null
-    # 실제 전송은 생략하고 라우팅 파이프만 검증할 때 사용.
-    # 원한다면 로컬 웹훅 에코로 바꿔서 수신 확인 가능:
-    # webhook_configs:
-    #   - url: http://127.0.0.1:19090/alerts
+- name: 'web.hook'
+  webhook_configs:
+  - url: 'http://127.0.0.1:5001/'
