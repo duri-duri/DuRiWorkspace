@@ -1,9 +1,6 @@
 services:
   duri_core:
-    deploy:
-      resources:
-        limits:
-          memory: 2g
+    mem_limit: 2g
     healthcheck:
       test: ["CMD-SHELL","python -c \"import socket; s=socket.socket(); s.settimeout(2); s.connect(('127.0.0.1',8080)); s.close()\""]
       interval: 10s
@@ -15,10 +12,7 @@ services:
       duri-redis:    {condition: service_healthy}
 
   duri_brain:
-    deploy:
-      resources:
-        limits:
-          memory: 2g
+    mem_limit: 2g
     healthcheck:
       test: ["CMD-SHELL","python -c \"import socket; s=socket.socket(); s.settimeout(2); s.connect(('127.0.0.1',8081)); s.close()\""]
       interval: 10s
@@ -30,10 +24,7 @@ services:
       duri-redis:    {condition: service_healthy}
 
   duri_evolution:
-    deploy:
-      resources:
-        limits:
-          memory: 1g
+    mem_limit: 1g
     healthcheck:
       test: ["CMD-SHELL","python -c \"import socket; s=socket.socket(); s.settimeout(2); s.connect(('127.0.0.1',8082)); s.close()\""]
       interval: 10s
@@ -45,10 +36,7 @@ services:
       duri-redis:    {condition: service_healthy}
 
   duri-postgres:
-    deploy:
-      resources:
-        limits:
-          memory: 1g
+    mem_limit: 1g
     healthcheck:
       test: ["CMD-SHELL","pg_isready -U ${POSTGRES_USER:-postgres} -h 127.0.0.1 -p 5432"]
       interval: 10s
@@ -57,10 +45,7 @@ services:
       start_period: 25s
 
   duri-redis:
-    deploy:
-      resources:
-        limits:
-          memory: 512m
+    mem_limit: 512m
     healthcheck:
       test: ["CMD","redis-cli","-h","127.0.0.1","-p","6379","ping"]
       interval: 10s

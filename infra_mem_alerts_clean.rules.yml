@@ -11,6 +11,8 @@ groups:
     expr: topk(5, sum by (name) (container_memory_working_set_bytes{id=~"/docker/.+", name!=""}))
   - record: duri:containers:top5_rss_by_name
     expr: topk(5, sum by (name) (container_memory_rss{id=~"/docker/.+", name!=""}))
+  - record: duri:blackbox:p95
+    expr: histogram_quantile(0.95, sum by (target, le) (rate(probe_duration_seconds_bucket{job="blackbox_probe"}[5m])))
 
 # 메모리 알람: 무제한/제한 분리
 - name: duri-memory
@@ -66,12 +68,20 @@ groups:
   interval: 1m
   rules:
   - alert: BlackboxProbeLatencyHigh
-    expr: histogram_quantile(0.95, sum by (instance, le) (rate(probe_duration_seconds_bucket{job="blackbox_probe"}[5m]))) > 1
+    expr: duri:blackbox:p95 > 1
     for: 10m
     labels: {severity: warning, team: platform}
     annotations:
-      summary: "Blackbox p95 latency >1s"
-      description: "instance={{ $labels.instance }} p95={{ printf \"%.2fs\" $value }}"
+      summary: "p95 latency high: {{ $labels.target }}"
+      description: "p95={{ printf \"%.3fs\" $value }}"
+
+  - alert: BlackboxMetricsMissing
+    expr: absent(probe_success{job="blackbox_probe"})
+    for: 2m
+    labels: {severity: warning, team: infrastructure}
+    annotations:
+      summary: "Blackbox series missing"
+      description: "No probe_success for 2m. Check blackbox_exporter or relabel."
 
 # 사일런트 실패 가드
 - name: duri-sanity

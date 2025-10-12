@@ -18,6 +18,7 @@ services:
       - duri-postgres
       - duri-redis
     restart: unless-stopped
+    mem_limit: 2g
 
   duri_brain:
     build:
@@ -37,6 +38,7 @@ services:
       - duri-postgres
       - duri-redis
     restart: unless-stopped
+    mem_limit: 2g
 
   duri_evolution:
     build:
@@ -56,6 +58,7 @@ services:
       - duri-postgres
       - duri-redis
     restart: unless-stopped
+    mem_limit: 1g
 
   duri_control:
     build:
@@ -93,6 +96,7 @@ services:
       - "5432:5432"
     volumes:
       - duri_postgres_data:/var/lib/postgresql/data
+    mem_limit: 1g
 
   duri-redis:
     image: redis:7-alpine
@@ -102,6 +106,7 @@ services:
       - "6379:6379"
     volumes:
       - duri_redis_data:/data
+    mem_limit: 512m
 
 volumes:
   duri_postgres_data:

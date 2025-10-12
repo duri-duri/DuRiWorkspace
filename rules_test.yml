@@ -1,0 +1,24 @@
+rule_files:
+  - infra_mem_alerts_clean.rules.yml
+
+evaluation_interval: 1m
+
+tests:
+  # 메모리 limit 분포 테스트
+  - interval: 1m
+    input_series:
+      - series: 'container_spec_memory_limit_bytes{id="/docker/abc"}'
+        values: '0+0x10'
+      - series: 'container_spec_memory_limit_bytes{id="/docker/def"}'
+        values: '2147483648+0x10'  # 2GB
+    promql_expr_test:
+      - expr: 'sum(container_spec_memory_limit_bytes == bool 0) or on() vector(0)'
+        eval_time: 10m
+        exp_samples:
+          - labels: '{}'
+            value: 1
+      - expr: 'sum(container_spec_memory_limit_bytes > bool 0) or on() vector(0)'
+        eval_time: 10m
+        exp_samples:
+          - labels: '{}'
+            value: 1
