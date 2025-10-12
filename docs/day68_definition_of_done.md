@@ -6,18 +6,18 @@
 ## ✅ 체크리스트
 
 ### **Prometheus Rules 검증**
-- [ ] promtool check rules (prod) PASS
-- [ ] promtool test rules (test profiles) PASS
-- [ ] CI PR 게이트에 prom-rules-ci/validate-prom-all 편입
+- [x] promtool check rules (prod) PASS
+- [x] promtool test rules (test profiles) PASS
+- [x] CI PR 게이트에 prom-rules-ci/validate-prom-all 편입
 
 ### **통계적 이상감지**
-- [ ] z-score·WoW% NaN/±Inf 미발생 (clamp_min 반영)
-- [ ] 즉시 급락 알림 (nDCG < 0.80)
-- [ ] WoW 회귀 알림 (주간 대비 >5% 하락)
-- [ ] z-score 이상 알림 (z <= -2)
+- [x] z-score·WoW% NaN/±Inf 미발생 (clamp_min 반영) NaN/±Inf 미발생 (clamp_min 반영)
+- [x] 즉시 급락 알림 (nDCG < 0.80) (nDCG < 0.80)
+- [x] WoW 회귀 알림 (주간 대비 >5% 하락) (주간 대비 >5% 하락)
+- [x] z-score 이상 알림 (z <= -2) (z <= -2)
 
 ### **SLO/에러버짓**
-- [ ] nDCG@3 SLO breach 알림 (MA7 < 0.90)
+- [x] nDCG@3 SLO breach 알림 (MA7 < 0.90) (MA7 < 0.90)
 - [ ] MRR SLO breach 알림 (MA7 < 0.88)
 - [ ] DoD 급락 알림 (전일 대비 >3% 하락)
 
