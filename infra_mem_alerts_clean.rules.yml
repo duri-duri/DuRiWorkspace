@@ -13,12 +13,23 @@ groups:
     expr: topk(5, sum by (name) (container_memory_rss{id=~"/docker/.+", name!=""}))
   - record: duri:blackbox:p95
     expr: |
-      quantile(0.95, probe_duration_seconds{job="blackbox_probe"})
-  - record: duri:container:mem_ratio
+      quantile_over_time(
+        0.95,
+        probe_duration_seconds{job="blackbox_probe"}[5m]
+      )
+  # A: limit>0만 대상으로 비율 산출
+  - record: duri:container:mem_ratio_raw
     expr: |
       (container_memory_working_set_bytes{id=~"/docker/.+"}
         / on(id) container_spec_memory_limit_bytes{id=~"/docker/.+"})
       and on(id) (container_spec_memory_limit_bytes{id=~"/docker/.+"} > 0)
+
+  # B: 라벨을 numerator(A)의 name,image로 복원 (값은 동일)
+  - record: duri:container:mem_ratio
+    expr: |
+      duri:container:mem_ratio_raw
+      * on(id) group_left(name,image)
+        (0*container_memory_working_set_bytes{id=~"/docker/.+"} + 1)
 
 # 메모리 알람: 무제한/제한 분리
 - name: duri-memory
