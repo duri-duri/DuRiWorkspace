@@ -52,6 +52,15 @@ groups:
       summary: "Container OOM events detected"
       description: "name={{ $labels.name }} image={{ $labels.image }} id={{ $labels.id }}"
 
+  # 컨테이너 재시작 감지 알람
+  - alert: ContainerRestarted
+    expr: changes(container_start_time_seconds{id=~"/docker/.+"}[5m]) > 0
+    for: 0m
+    labels: {severity: warning, team: infrastructure}
+    annotations:
+      summary: "Container restarted: {{ $labels.name }}"
+      description: "id={{ $labels.id }}, image={{ $labels.image }}"
+
 # Blackbox 품질 알람
 - name: duri-blackbox
   interval: 1m

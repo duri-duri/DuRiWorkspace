@@ -56,11 +56,14 @@ scrape_configs:
           - http://duri_control_container:8083/health
           - http://prometheus:9090/-/ready
     relabel_configs:
+      # 1) 원 타깃을 __param_target에 심는다
       - source_labels: [__address__]
         target_label: __param_target
+      # 2) 보기 좋은 라벨(instance 또는 custom target)에 보존
       - source_labels: [__param_target]
-        target_label: target       # 원 타깃 보존
+        target_label: target
       - source_labels: [__param_target]
         target_label: instance
+      # 3) 실제 스크랩 주소는 blackbox_exporter로 변경
       - target_label: __address__
         replacement: blackbox_exporter:9115
