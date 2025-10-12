@@ -42,7 +42,6 @@ scrape_configs:
           - http://duri_evolution_container:8082/health
           - http://duri_control_container:8083/health
           - http://prometheus:9090/-/ready
-          - http://grafana:3000/api/health
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target

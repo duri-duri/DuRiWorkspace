@@ -46,7 +46,10 @@ groups:
 
   - alert: HighMemoryUsageAbsolute
     expr: |
-      topk(5, container_memory_working_set_bytes{job="cadvisor", id=~"/docker/.*"}) > 2 * 1024 * 1024 * 1024
+      topk(5,
+        container_memory_working_set_bytes{job="cadvisor", id=~"/docker/.*"}
+          and container_memory_working_set_bytes > 200 * 1024 * 1024
+      ) > 2 * 1024 * 1024 * 1024
     for: 10m
     labels: {severity: warning, team: infrastructure, service: performance}
     annotations:
