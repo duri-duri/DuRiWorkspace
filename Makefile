@@ -12,7 +12,7 @@ ci-bootstrap-tools:
 	@command -v promtool   >/dev/null || echo "⚠️ promtool 없음 - 건너뜀" || true
 	@command -v black      >/dev/null || pip3 install --user black || true
 	@command -v pylint     >/dev/null || pip3 install --user pylint || true
-.PHONY: eval gate smoke clean k-sweep archive rollup smoke-preview help shellcheck metrics metrics-dashboard metrics-watch prom-rules-verify prom-rules-test prom-rules-ci validate-prom-all
+.PHONY: eval gate smoke clean k-sweep archive rollup smoke-preview help shellcheck metrics metrics-dashboard metrics-watch prom-rules-verify prom-rules-test prom-rules-ci validate-prom-all check-prom
 
 # 변수 정의 - 기본값 설정
 GT ?= .reports/day62/ground_truth_clean.tsv
@@ -203,3 +203,12 @@ validate-prom-all:
 
 postmortem:
 	@bash scripts/alert_postmortem.sh alert_samples/sample_alert.json
+
+# 운영 체크 - Prometheus HTTP API로 상태 확인
+check-prom:
+	@echo "=== 모니터링 시스템 상태 확인 ==="
+	@echo "mem_ratio count:" && curl -s 'http://localhost:9090/api/v1/query' --data-urlencode 'query=count(duri:container:mem_ratio)' | jq -r '.data.result[0].value[1]'
+	@echo "limit>0:" && curl -s 'http://localhost:9090/api/v1/query' --data-urlencode 'query=duri:containers:limitgt0' | jq -r '.data.result[0].value[1]'
+	@echo "limit=0:" && curl -s 'http://localhost:9090/api/v1/query' --data-urlencode 'query=duri:containers:limit0' | jq -r '.data.result[0].value[1]'
+	@echo "p95:" && curl -s 'http://localhost:9090/api/v1/query' --data-urlencode 'query=duri:blackbox:p95' | jq -r '.data.result[] | "\(.metric.target): \(.value[1])s"' | head -3
+	@echo "firing alerts:" && curl -s localhost:9090/api/v1/alerts | jq -r '.data.alerts[].labels.alertname' | sort | uniq -c | sort -nr

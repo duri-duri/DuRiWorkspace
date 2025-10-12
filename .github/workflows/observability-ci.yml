@@ -45,5 +45,5 @@ jobs:
       run: |
         docker run --rm \
           -v "$PWD/alertmanager:/etc/alertmanager" \
-          --entrypoint /bin/amtool prom/alertmanager:latest \
+          --entrypoint /bin/amtool prom/alertmanager:0.28.1 \
           check-config /etc/alertmanager/alertmanager.yml
