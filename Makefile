@@ -200,3 +200,6 @@ validate-prom-all:
 	if [ -n "$$files" ]; then \
 	  for f in $$files; do echo ">> validate $$f"; bash scripts/metrics/validate_prom.sh "$$f"; done; \
 	else echo "no prom textfiles under .reports/metrics/ (skip)"; fi
+
+postmortem:
+	@bash scripts/alert_postmortem.sh alert_samples/sample_alert.json

@@ -1,0 +1,20 @@
+groups:
+- name: quality-burn-alerts
+  interval: 1m
+  rules:
+  # 빠른 창에서 버닝↑ && 느린 창도 유의미 → 과소탐지/과대탐지 균형
+  - alert: NDCGErrorBudgetBurning
+    expr: (duri_ndcg3_bad_rate_2h > 0.25) and (duri_ndcg3_bad_rate_24h > 0.10)
+    for: 20m
+    labels: {severity: page, team: search}
+    annotations:
+      summary: "nDCG Error budget burning (2h/24h)"
+      description: "2h>25% and 24h>10% bad"
+
+  - alert: MRRErrorBudgetBurning
+    expr: (duri_mrr3_bad_rate_2h > 0.25) and (duri_mrr3_bad_rate_24h > 0.10)
+    for: 20m
+    labels: {severity: page, team: search}
+    annotations:
+      summary: "MRR Error budget burning (2h/24h)"
+      description: "2h>25% and 24h>10% bad"

@@ -4,24 +4,49 @@ route:
   group_interval: 5m
   repeat_interval: 12h
   receiver: slack-default
+
   routes:
-    - matchers: ['severity="critical"']
-      receiver: slack-page
-      repeat_interval: 2h
+    # 근무시간(월~금 09:00-18:00 KST) 페이지
     - matchers: ['severity="page"']
-      receiver: slack-page
-      repeat_interval: 2h
-    - matchers: ['severity="ticket"']
-      receiver: slack-ticket
+      receiver: slack-page-day
+      continue: true
+      active_time_intervals: ["biz-hours"]
+
+    # 야간/주말 페이지
+    - matchers: ['severity="page"']
+      receiver: slack-page-night
+
+    # Critical 알림
+    - matchers: ['severity="critical"']
+      receiver: slack-page-day
+      continue: true
+      active_time_intervals: ["biz-hours"]
+    - matchers: ['severity="critical"']
+      receiver: slack-page-night
+
+    # 경고/티켓
     - matchers: ['severity="warning"']
       receiver: slack-warning
+    - matchers: ['severity="ticket"']
+      receiver: slack-ticket
+
+time_intervals:
+  - name: biz-hours
+    time_intervals:
+      - weekdays: ['monday:friday']
+        times:
+          - start_time: "09:00"
+            end_time: "18:00"
+        location: "Asia/Seoul"
 
 receivers:
   - name: slack-default
     slack_configs: [{send_resolved: true, channel: '#ops'}]
-  - name: slack-page
-    slack_configs: [{send_resolved: true, channel: '#oncall'}]
-  - name: slack-ticket
-    slack_configs: [{send_resolved: true, channel: '#quality'}]
+  - name: slack-page-day
+    slack_configs: [{send_resolved: true, channel: '#oncall-day'}]
+  - name: slack-page-night
+    slack_configs: [{send_resolved: true, channel: '#oncall-night'}]
   - name: slack-warning
+    slack_configs: [{send_resolved: true, channel: '#quality'}]
+  - name: slack-ticket
     slack_configs: [{send_resolved: true, channel: '#quality'}]

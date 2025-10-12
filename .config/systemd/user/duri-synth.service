@@ -1,0 +1,6 @@
+[Unit]
+Description=Synthetic probe push (textfile exporter)
+[Service]
+Type=oneshot
+WorkingDirectory=%h/DuRiWorkspace
+ExecStart=/usr/bin/bash -lc 'scripts/synth_probe.sh data/synth_scenarios.txt'
