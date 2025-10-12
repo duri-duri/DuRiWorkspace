@@ -17,18 +17,15 @@ groups:
   - alert: HighMemoryUsage
     expr: |
       (
-        container_memory_working_set_bytes{job="cadvisor", id=~"/docker/.*"}
+        container_memory_working_set_bytes{id=~"/docker/.+"}
+        /
+        on(id) clamp_min(container_spec_memory_limit_bytes{id=~"/docker/.+"}, 1)
       )
-      /
-      on(id)
-      (
-        container_spec_memory_limit_bytes{job="cadvisor", id=~"/docker/.*"}
-      )
+      and
+      on(id) (container_spec_memory_limit_bytes{id=~"/docker/.+"} > bool 0)
+      and
+      container_memory_working_set_bytes{id=~"/docker/.+"} > 100 * 1024 * 1024
       > 0.80
-      and on(id)
-        container_spec_memory_limit_bytes{job="cadvisor", id=~"/docker/.*"} > 0
-      and on(id)
-        container_memory_working_set_bytes{job="cadvisor", id=~"/docker/.*"} > 100*1024*1024
     for: 10m
     labels: {severity: warning, team: infrastructure, service: performance}
     annotations:
@@ -38,18 +35,15 @@ groups:
   - alert: CriticalMemoryUsage
     expr: |
       (
-        container_memory_working_set_bytes{job="cadvisor", id=~"/docker/.*"}
+        container_memory_working_set_bytes{id=~"/docker/.+"}
+        /
+        on(id) clamp_min(container_spec_memory_limit_bytes{id=~"/docker/.+"}, 1)
       )
-      /
-      on(id)
-      (
-        container_spec_memory_limit_bytes{job="cadvisor", id=~"/docker/.*"}
-      )
+      and
+      on(id) (container_spec_memory_limit_bytes{id=~"/docker/.+"} > bool 0)
+      and
+      container_memory_working_set_bytes{id=~"/docker/.+"} > 100 * 1024 * 1024
       > 0.90
-      and on(id)
-        container_spec_memory_limit_bytes{job="cadvisor", id=~"/docker/.*"} > 0
-      and on(id)
-        container_memory_working_set_bytes{job="cadvisor", id=~"/docker/.*"} > 100*1024*1024
     for: 10m
     labels: {severity: critical, team: infrastructure, service: performance}
     annotations:
@@ -58,13 +52,15 @@ groups:
 
   - alert: HighMemoryUsageAbsolute
     expr: |
-      topk(5,
-        container_memory_working_set_bytes{id=~"/docker/.+", name!=""}
-          and on(id) (container_spec_memory_limit_bytes{id=~"/docker/.+"} == 0)
-          and          container_memory_working_set_bytes > 200 * 1024 * 1024
+      topk(
+        5,
+        (container_memory_working_set_bytes{id=~"/docker/.+"}
+         and on(id) container_spec_memory_limit_bytes{id=~"/docker/.+"} == bool 0)
+        and
+        container_memory_working_set_bytes > 200 * 1024 * 1024
       ) > 2 * 1024 * 1024 * 1024
     for: 10m
     labels: {severity: warning, team: infrastructure, service: performance}
     annotations:
-      summary: "{{ $labels.name }} using {{ humanize1024 $value }}"
-      description: "image={{ $labels.image }}, id={{ $labels.id }} using >2GB with no memory limit."
+      summary: "Container memory >2GB (absolute)"
+      description: "id={{ $labels.id }} using >2GB with no memory limit."
