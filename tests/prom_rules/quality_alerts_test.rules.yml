@@ -1,0 +1,18 @@
+groups:
+- name: quality-alerts-test
+  interval: 1m
+  rules:
+  - alert: QualityDropImmediateTest
+    expr: duri_ndcg_at_k{k="3",scope="all",domain="ALL"} < 0.80
+    for: 2m
+    labels: {severity: critical, team: search}
+
+  - alert: QualityZScoreAnomalyTest
+    expr: ndcg_z5m <= -2
+    for: 1m
+    labels: {severity: warning, team: search}
+
+  - alert: RerankerNDCGSLOBreachedTest
+    expr: ndcg_err5m > 0
+    for: 2m
+    labels: {severity: page, team: search}

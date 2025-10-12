@@ -1,0 +1,8 @@
+[Unit]
+Description=Run DR restore rehearsal monthly
+[Timer]
+OnCalendar=monthly
+RandomizedDelaySec=15m
+Persistent=true
+[Install]
+WantedBy=default.target

@@ -1,0 +1,38 @@
+rule_files:
+  - quality_recording_test.rules.yml
+  - quality_alerts_test.rules.yml
+
+evaluation_interval: 1m
+
+tests:
+# 즉시 급락: 2m 지속 후 4m 시점엔 올라야 함
+- interval: 1m
+  input_series:
+  - series: 'duri_ndcg_at_k{k="3",scope="all",domain="ALL"}'
+    values: '0.90 0.88 0.79 0.78 0.77 0.77'
+  alert_rule_test:
+  - eval_time: 4m
+    alertname: QualityDropImmediateTest
+    exp_alerts:
+      - exp_labels: {severity: "critical", team: "search", domain: "ALL", k: "3", scope: "all"}
+
+# z-score: 평균보다 충분히 하락시키며 변동성 확보 (조건 미충족으로 알림 없음)
+- interval: 1m
+  input_series:
+  - series: 'duri_ndcg_at_k{k="3",scope="all",domain="ALL"}'
+    values: '0.90 0.90 0.89 0.88 0.87 0.82 0.81 0.80'
+  alert_rule_test:
+  - eval_time: 7m
+    alertname: QualityZScoreAnomalyTest
+    exp_alerts: []
+
+# SLO breach(축소 윈도우 기반): MA5m < 0.90 상태가 2m 지속
+- interval: 1m
+  input_series:
+  - series: 'duri_ndcg_at_k{k="3",scope="all",domain="ALL"}'
+    values: '0.90 0.89 0.88 0.87 0.86 0.86 0.86'
+  alert_rule_test:
+  - eval_time: 6m
+    alertname: RerankerNDCGSLOBreachedTest
+    exp_alerts:
+      - exp_labels: {severity: "page", team: "search", domain: "ALL", k: "3", scope: "all"}

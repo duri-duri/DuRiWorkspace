@@ -12,7 +12,7 @@ ci-bootstrap-tools:
 	@command -v promtool   >/dev/null || echo "⚠️ promtool 없음 - 건너뜀" || true
 	@command -v black      >/dev/null || pip3 install --user black || true
 	@command -v pylint     >/dev/null || pip3 install --user pylint || true
-.PHONY: eval gate smoke clean k-sweep archive rollup smoke-preview help shellcheck metrics metrics-dashboard metrics-watch
+.PHONY: eval gate smoke clean k-sweep archive rollup smoke-preview help shellcheck metrics metrics-dashboard metrics-watch prom-rules-verify prom-rules-test prom-rules-ci validate-prom-all
 
 # 변수 정의 - 기본값 설정
 GT ?= .reports/day62/ground_truth_clean.tsv
@@ -28,6 +28,10 @@ RUN_PATH ?=
 
 # Day67 시계열 분석 기본값
 WEEK ?= 7
+
+# Day68 관찰 가능성 기본값
+export GA_ENFORCE ?= 1
+export CROSS_TYPE_ENFORCE ?= 1
 
 # 의존성 정의
 SCRIPTS = scripts/rag_eval.sh scripts/rag_gate.sh
@@ -106,6 +110,8 @@ ci-pr-gate:
 	@echo "🚪 CI: PR 게이트 (엄격)"
 	@GA_ENFORCE=$(GA_ENFORCE) CI_STRICT_TOOLS=$(GA_ENFORCE) NO_SUDO=1 bash scripts/pr_gate_day63.sh
 	@bash tests/smoke/test_prom_help_type.sh
+	@$(MAKE) prom-rules-ci
+	@$(MAKE) validate-prom-all
 
 # 스모크 확장
 smoke-edge-assertions:
@@ -178,3 +184,19 @@ metrics-watch:
 install-thresholds:
 	@echo "Installing thresholds to /etc/default/duri-workspace"
 	@$(SUDO) install -m 0644 .reports/metrics/day66_thresholds.env /etc/default/duri-workspace
+
+# Day68 Prometheus rules 검증
+prom-rules-verify:
+	@promtool check rules prometheus/rules/*.rules.yml
+
+prom-rules-test:
+	@promtool test rules tests/prom_rules/quality_alerts.test.yml
+
+prom-rules-ci: prom-rules-verify prom-rules-test
+
+validate-prom-all:
+	@set -euo pipefail; \
+	files=$$(ls .reports/metrics/*.tsv 2>/dev/null || true); \
+	if [ -n "$$files" ]; then \
+	  for f in $$files; do echo ">> validate $$f"; bash scripts/metrics/validate_prom.sh "$$f"; done; \
+	else echo "no prom textfiles under .reports/metrics/ (skip)"; fi
