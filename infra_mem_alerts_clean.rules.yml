@@ -6,6 +6,10 @@ groups:
     expr: sum(container_spec_memory_limit_bytes{id=~"/docker/.+"} == bool 0) or on() vector(0)
   - record: duri:containers:limitgt0
     expr: sum(container_spec_memory_limit_bytes{id=~"/docker/.+"} > bool 0) or on() vector(0)
+  - record: duri:containers:top5_memory_by_name
+    expr: topk(5, sum by (name) (container_memory_working_set_bytes{id=~"/docker/.+", name!=""}))
+  - record: duri:containers:top5_rss_by_name
+    expr: topk(5, sum by (name) (container_memory_rss{id=~"/docker/.+", name!=""}))
 
 - name: infra-mem-alerts-clean
   interval: 1m
@@ -55,13 +59,12 @@ groups:
   - alert: HighMemoryUsageAbsolute
     expr: |
       topk(5,
-        container_memory_working_set_bytes{id=~"/docker/.+"}
-          and container_memory_working_set_bytes > 200 * 1024 * 1024
-      )
-      and on(id) container_spec_memory_limit_bytes{id=~"/docker/.+"} == 0
-      > 2 * 1024 * 1024 * 1024
+        container_memory_working_set_bytes{id=~"/docker/.+", name!=""}
+          and on(id) (container_spec_memory_limit_bytes{id=~"/docker/.+"} == 0)
+          and          container_memory_working_set_bytes > 200 * 1024 * 1024
+      ) > 2 * 1024 * 1024 * 1024
     for: 10m
     labels: {severity: warning, team: infrastructure, service: performance}
     annotations:
-      summary: "Container memory >2GB (absolute)"
-      description: "id={{ $labels.id }} using >2GB with no memory limit."
+      summary: "{{ $labels.name }} using {{ humanize1024 $value }}"
+      description: "image={{ $labels.image }}, id={{ $labels.id }} using >2GB with no memory limit."
