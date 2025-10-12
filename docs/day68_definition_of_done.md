@@ -11,9 +11,9 @@
 - [x] CI PR 게이트에 prom-rules-ci/validate-prom-all 편입
 
 ### **통계적 이상감지**
-- [x] z-score·WoW% NaN/±Inf 미발생 (clamp_min 반영) NaN/±Inf 미발생 (clamp_min 반영)
-- [x] 즉시 급락 알림 (nDCG < 0.80) (nDCG < 0.80)
-- [x] WoW 회귀 알림 (주간 대비 >5% 하락) (주간 대비 >5% 하락)
+- [x] z-score·WoW% NaN/±Inf 미발생 (clamp_min 반영)
+- [x] 즉시 급락 알림 (nDCG < 0.80)
+- [x] WoW 회귀 알림 (주간 대비 >5% 하락)
 - [x] z-score 이상 알림 (z <= -2) (z <= -2)
 
 ### **SLO/에러버짓**
@@ -22,7 +22,7 @@
 - [ ] DoD 급락 알림 (전일 대비 >3% 하락)
 
 ### **운영 안정성**
-- [ ] Grafana: nDCG/MRR MA7·z-score·SLO(에러버짓) 보드 배포
+- [x] Grafana: nDCG/MRR MA7·z-score·SLO(에러버짓) 보드 배포 nDCG/MRR MA7·z-score·SLO(에러버짓) 보드 배포
 - [ ] DR 리허설 타이머 활성 (systemd --user)
 - [ ] rules/ 디렉터리 tar+sha256 백업 복구 확인
 
