@@ -3,9 +3,9 @@ groups:
   interval: 1m
   rules:
   - record: duri:containers:limit0
-    expr: sum((container_spec_memory_limit_bytes{id=~"/docker/.+"} == bool 0))
+    expr: sum(container_spec_memory_limit_bytes{id=~"/docker/.+"} == bool 0) or on() vector(0)
   - record: duri:containers:limitgt0
-    expr: sum((container_spec_memory_limit_bytes{id=~"/docker/.+"} > bool 0))
+    expr: sum(container_spec_memory_limit_bytes{id=~"/docker/.+"} > bool 0) or on() vector(0)
 
 - name: infra-mem-alerts-clean
   interval: 1m
