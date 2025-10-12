@@ -1,0 +1,23 @@
+groups:
+- name: infra-mem-alerts-clean
+  interval: 1m
+  rules:
+  # docker 컨테이너만 대상으로 (cadvisor)
+  - alert: HighMemoryUsage
+    expr: |
+      (container_memory_working_set_bytes{job="cadvisor", id=~"/docker/.*"}
+       / clamp_min(container_spec_memory_limit_bytes{job="cadvisor", id=~"/docker/.*"}, 1))
+       > 0.80
+    for: 10m
+    labels: {severity: warning, team: infrastructure, service: performance}
+    annotations:
+      summary: "Container memory >80%"
+  - alert: CriticalMemoryUsage
+    expr: |
+      (container_memory_working_set_bytes{job="cadvisor", id=~"/docker/.*"}
+       / clamp_min(container_spec_memory_limit_bytes{job="cadvisor", id=~"/docker/.*"}, 1))
+       > 0.90
+    for: 10m
+    labels: {severity: critical, team: infrastructure, service: performance}
+    annotations:
+      summary: "Container memory >90%"
