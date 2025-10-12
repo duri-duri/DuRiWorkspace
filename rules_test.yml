@@ -22,3 +22,31 @@ tests:
         exp_samples:
           - labels: '{}'
             value: 1
+
+  # mem_ratio 개수 = limitgt0
+  - interval: 1m
+    input_series:
+    - series: 'container_spec_memory_limit_bytes{id="/docker/a"}'
+      values: '1000x5'
+    - series: 'container_spec_memory_limit_bytes{id="/docker/b"}'
+      values: '2000x5'
+    - series: 'container_memory_working_set_bytes{id="/docker/a"}'
+      values: '100x5'
+    - series: 'container_memory_working_set_bytes{id="/docker/b"}'
+      values: '200x5'
+    promql_expr_test:
+    - expr: count(duri:container:mem_ratio)
+      eval_time: 5m
+      exp_samples:
+      - value: 2
+
+  # blackbox p95 존재성
+  - interval: 30s
+    input_series:
+    - series: 'probe_duration_seconds{job="blackbox_probe",target="http://test"}'
+      values: '0.002 0.003 0.002 0.003 0.002 0.003 0.002 0.003 0.002 0.003'
+    promql_expr_test:
+    - expr: count(duri:blackbox:p95)
+      eval_time: 5m
+      exp_samples:
+      - value: 1
