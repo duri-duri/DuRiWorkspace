@@ -56,7 +56,7 @@
       "type": "stat",
       "title": "Mem High Alerts (firing)",
       "gridPos": { "x": 8, "y": 0, "w": 4, "h": 4 },
-      "targets": [{ "datasource": "${DS_PROMETHEUS}", "expr": "count(ALERTS{alertname=\"ContainerMemoryHighRatio\",alertstate=\"firing\"})" }],
+      "targets": [{ "datasource": "${DS_PROMETHEUS}", "expr": "count(ALERTS{alertname=\"ContainerMemoryHighRatio\",alertstate=\"firing\"}) or on() vector(0)" }],
       "options": { "reduceOptions": { "calcs": ["lastNotNull"] } },
       "fieldConfig": { "defaults": { "unit": "none", "decimals": 0 } }
     },
@@ -64,7 +64,7 @@
       "type": "stat",
       "title": "Blackbox High p95 (firing)",
       "gridPos": { "x": 12, "y": 0, "w": 4, "h": 4 },
-      "targets": [{ "datasource": "${DS_PROMETHEUS}", "expr": "count(ALERTS{alertname=\"BlackboxProbeLatencyHigh\",alertstate=\"firing\"})" }],
+      "targets": [{ "datasource": "${DS_PROMETHEUS}", "expr": "count(ALERTS{alertname=\"BlackboxProbeLatencyHigh\",alertstate=\"firing\"}) or on() vector(0)" }],
       "options": { "reduceOptions": { "calcs": ["lastNotNull"] } },
       "fieldConfig": { "defaults": { "unit": "none", "decimals": 0 } }
     },
@@ -104,7 +104,7 @@
           }
         }
       },
-      "options": { "legend": { "showLegend": true, "displayMode": "table", "placement": "bottom" }, "tooltip": { "mode": "multi" } }
+      "options": { "legend": { "showLegend": true, "displayMode": "table", "placement": "bottom" }, "tooltip": { "mode": "all" } }
     },
     {
       "type": "timeseries",
@@ -115,8 +115,11 @@
         "expr": "duri:blackbox:p95{target=~\"$target\"}",
         "legendFormat": "{{target}}"
       }],
-      "fieldConfig": { "defaults": { "unit": "s", "decimals": 3 } },
-      "options": { "legend": { "showLegend": true, "displayMode": "table", "placement": "bottom" }, "tooltip": { "mode": "multi" } }
+      "fieldConfig": {
+        "defaults": { "unit": "s", "decimals": 3, "min": 0 },
+        "overrides": []
+      },
+      "options": { "legend": { "showLegend": true, "displayMode": "table", "placement": "bottom" }, "tooltip": { "mode": "all" } }
     }
   ]
 }

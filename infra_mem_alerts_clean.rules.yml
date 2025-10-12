@@ -114,3 +114,11 @@ groups:
     annotations:
       summary: "Recording rules not evaluating"
       description: "Check Prometheus rule evaluation / file mounts"
+
+  - alert: RecordingDriftMemRatio
+    expr: absent(duri:container:mem_ratio) or (count(duri:container:mem_ratio) < duri:containers:limitgt0)
+    for: 5m
+    labels: {severity: warning, team: infrastructure}
+    annotations:
+      summary: "mem_ratio recording mismatch"
+      description: "count(mem_ratio) < limit>0; check relabel/recording rules."
