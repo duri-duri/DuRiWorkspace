@@ -373,4 +373,4 @@ git pull origin main
 - Phase 2: 100% (30/30)
 - Phase 3: 30% (9/30)
 - Overall: 77% (69/90)
-![Quality](https://github.com/username/repo/workflows/quality/badge.svg)
+![Quality](https://github.com/duri/DuRiWorkspace/workflows/quality/badge.svg)
