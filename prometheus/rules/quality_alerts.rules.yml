@@ -60,7 +60,6 @@ groups:
     for: 15m
     labels: {severity: warning, team: search}
     annotations:
-      summary: "MRR MA7 SLO breach (<0.88)"
       description: "MRR@3 MA7={{ $value | printf \"%.3f\" }}"
 
   # Day-over-Day drop alert
