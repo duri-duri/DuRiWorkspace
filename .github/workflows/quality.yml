@@ -10,12 +10,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install promtool & jq
+      - name: Install promtool & jq (with optional integrity)
         run: |
+          set -euo pipefail
+          VER="${PROM_VERSION:-2.55.0}"
+          TARBALL="prometheus-${VER}.linux-amd64.tar.gz"
+          BASE="https://github.com/prometheus/prometheus/releases/download/v${VER}"
+
           sudo apt-get update && sudo apt-get install -y jq
-          curl -fsSL -o prom.tgz https://github.com/prometheus/prometheus/releases/download/v${PROM_VER}/prometheus-${PROM_VER}.linux-amd64.tar.gz
-          tar -xzf prom.tgz
-          sudo mv prometheus-${PROM_VER}.linux-amd64/promtool /usr/local/bin/promtool
+          curl -fsSL -o "$TARBALL" "${BASE}/${TARBALL}"
+          # 체크섬 파일이 제공되면 검증, 없으면 스킵
+          if curl -fsSL "${BASE}/sha256sums.txt" -o sha256sums.txt ; then
+            grep " ${TARBALL}\$" sha256sums.txt | sha256sum -c -
+          else
+            echo "No checksums provided upstream for v${VER}; skipping integrity check"
+          fi
+
+          tar -xzf "$TARBALL"
+          sudo mv "prometheus-${VER}.linux-amd64/promtool" /usr/local/bin/promtool
           promtool --version; docker run --rm prom/alertmanager:${AM_VER} --version
       - name: Alertmanager config check (rendered)
         if: ${{ github.event.pull_request.head.repo.fork == false }}
