@@ -1,0 +1,9 @@
+# HELP duri_synth_success_ratio ratio of successful synthetic probes
+# TYPE duri_synth_success_ratio gauge
+duri_synth_success_ratio .8333
+# HELP duri_synth_total_probes total number of synthetic probes
+# TYPE duri_synth_total_probes counter
+duri_synth_total_probes 6
+# HELP duri_synth_failed_probes number of failed synthetic probes
+# TYPE duri_synth_failed_probes counter
+duri_synth_failed_probes 1
