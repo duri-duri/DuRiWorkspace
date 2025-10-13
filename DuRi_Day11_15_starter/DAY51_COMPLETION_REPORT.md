@@ -9,5 +9,5 @@
 - RAG/WF: (관련 이슈/커밋)
 
 ## Status
-- [ ] Complete (증빙 보강 필요)
+- [x] Complete (증빙 보강 필요)
 - 작성일: 2025-10-13 KST
