@@ -128,3 +128,7 @@ Makefile.tmp
 !/artifacts/.gitkeep
 /experiments/*
 !/experiments/.gitkeep
+
+# Prometheus local TSDB
+/prom-data/*
+!/prom-data/.gitkeep

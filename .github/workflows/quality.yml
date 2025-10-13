@@ -61,3 +61,6 @@ jobs:
       - run: make prom-dup-guard
       - run: make alert-labels-guard
       - run: make prom-rules-test
+
+      - name: Post-deploy smoke
+        run: make smoke
