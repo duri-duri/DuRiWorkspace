@@ -148,3 +148,4 @@ backup/BACKUP_LOG_*.txt
 !DuRi_Day11_15_starter/DAY*_COMPLETION_REPORT.md
 !DuRi_Day11_15_starter/verify_out/
 !DuRi_Day11_15_starter/verify_out/day_*.json
+.env.grafana

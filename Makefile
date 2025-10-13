@@ -219,3 +219,6 @@ ci-phase1-guard:
 prom-dup-guard:
 	@awk '/^- record: /{print $$3}' prometheus/rules/*.yml \
 	| sort | uniq -d | awk '{print "DUP record:", $$0}' | test $$(wc -l < /dev/stdin) -eq 0
+
+prom-rules-test:
+	promtool test rules tests/quality_rules_test.yml

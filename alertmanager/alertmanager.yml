@@ -1,40 +1,13 @@
-global:
-  resolve_timeout: 5m
-
 route:
-  group_by: ['alertname']
-  group_wait: 10s
-  group_interval: 5m
-  repeat_interval: 1h
-  receiver: 'sink'   # 기본 싱크(미사용)
-
+  receiver: default
   routes:
-    - matchers:
-        - 'severity="page"'
-      receiver: oncall-pager
-
-    - matchers:
-        - 'severity="warning"'
-      receiver: slack-warnings
-
+  - matchers: ['team="search"', 'severity="warning"']
+    receiver: search-slack
 receivers:
-  - name: oncall-pager
-    webhook_configs:
-      - url: 'http://pager-relay.local/hooks/oncall'
-
-  - name: slack-warnings
-    webhook_configs:
-      - url: 'http://slack-relay.local/hooks/warnings'
-
-  - name: sink
-    webhook_configs:
-      - url: 'http://127.0.0.1:5001/'
-
-# 선택: 점검창/야간 무음 등 시간 인터벌
-time_intervals:
-  - name: business-hours
-    time_intervals:
-      - weekdays: ['monday:friday']
-        times:
-          - start_time: '09:00'
-            end_time:   '18:00'
+- name: default
+  webhook_configs:
+  - url: 'http://localhost:9093/webhook'
+- name: search-slack
+  slack_configs:
+  - channel: '#search-alerts'
+    webhook_url: 'https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK'
