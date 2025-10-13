@@ -1,6 +1,6 @@
 ---
 rule_files:
-  - ${REPO_ROOT}/prometheus/rules/metric_collection_alerts.rules.yml
+  - ${REPO_ROOT}/../../prometheus/rules/metric_collection_alerts.rules.yml
 evaluation_interval: 1m
 
 tests:
