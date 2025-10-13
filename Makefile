@@ -66,18 +66,6 @@ ci-local:
 pr-autofix:
 	@gh pr edit $$PR --add-label "auto-fix:suggest" || echo "Set PR environment variable first"
 
-prom-rules-ci:
-	@echo "promtool check rules (placeholder)"; promtool --version >/dev/null
-
-grafana-lint:
-	@echo "grafana lint (placeholder)"
-
-runbook-quality-guard:
-	@echo "runbook guard (placeholder)"
-
-ci-all: prom-rules-ci grafana-lint runbook-quality-guard
-	@echo "ci-all done"
-
 smoke:
 	@echo "Running post-deploy smoke tests..."
 	./scripts/post-deploy-smoke.sh

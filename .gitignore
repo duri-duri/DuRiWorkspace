@@ -139,6 +139,5 @@ Makefile.tmp
 # allow curated ones:
 !.reports/timeseries/metrics_all_scope.csv
 !.reports/timeseries/weekly_day66_metrics.md
-
 # curated reports directory
 !.reports/curated/**
