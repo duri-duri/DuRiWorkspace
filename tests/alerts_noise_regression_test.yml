@@ -1,3 +1,4 @@
+# CI는 tests/에서 실행 가정 → ../prometheus/rules/... 사용
 rule_files:
   - ../prometheus/rules/quality_slo.rules.yml
   - ../prometheus/rules/slo_constants.rules.yml

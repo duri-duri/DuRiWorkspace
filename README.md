@@ -2,6 +2,7 @@
 
 [![Regression](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/duri-duri/DuRiWorkspace/badges/regression.json)](https://github.com/duri-duri/DuRiWorkspace/actions/workflows/insight-league.yml)
 [![Tests](https://img.shields.io/github/actions/workflow/status/duri-duri/DuRiWorkspace/ci.yml?branch=main&label=tests)](https://github.com/duri-duri/DuRiWorkspace/actions/workflows/ci.yml)
+[![CI All](https://img.shields.io/github/actions/workflow/status/duri-duri/DuRiWorkspace/change-safety.yml?branch=main&label=ci-all)](https://github.com/duri-duri/DuRiWorkspace/actions/workflows/change-safety.yml)
 [![Guards](https://img.shields.io/github/actions/workflow/status/duri-duri/DuRiWorkspace/repo-guards.yml?branch=main&label=guards)](https://github.com/duri-duri/DuRiWorkspace/actions/workflows/repo-guards.yml)
 [![Proof Gates](https://img.shields.io/github/actions/workflow/status/duri-duri/DuRiWorkspace/proof-gates.yml?branch=main&label=gates)](https://github.com/duri-duri/DuRiWorkspace/actions/workflows/proof-gates.yml)
 

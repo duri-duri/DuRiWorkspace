@@ -1,3 +1,4 @@
+# CI는 tests/에서 실행 가정 → ../prometheus/rules/... 사용
 ---
 rule_files:
   - ${REPO_ROOT}/../../prometheus/rules/metric_collection_alerts.rules.yml
