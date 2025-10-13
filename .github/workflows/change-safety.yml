@@ -44,16 +44,21 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/cache@v4
         with:
-          path: promtool-cache
-          key: prom-${{ env.PROM_VERSION }}-linux-amd64
+          path: .cache/promtool/${{ env.PROM_VERSION }}/linux-amd64
+          key: prom-${{ runner.os }}-${{ env.PROM_VERSION }}-linux-amd64
       - name: Install promtool & jq
         run: |
+          set -e
           sudo apt-get update && sudo apt-get install -y jq
-          if [ ! -x "${PROMTOOL}" ]; then
-            curl -fsSL -o prom.tgz https://github.com/prometheus/prometheus/releases/download/v${PROM_VERSION}/prometheus-${PROM_VERSION}.linux-amd64.tar.gz
+          CACHED_DIR=".cache/promtool/${PROM_VERSION}/linux-amd64"
+          BIN="${CACHED_DIR}/promtool"
+          if [ ! -x "$BIN" ]; then
+            mkdir -p "$CACHED_DIR"
+            curl -fsSL -o prom.tgz "https://github.com/prometheus/prometheus/releases/download/v${PROM_VERSION}/prometheus-${PROM_VERSION}.linux-amd64.tar.gz"
             tar -xzf prom.tgz
-            sudo mv prometheus-${PROM_VERSION}.linux-amd64/promtool ${PROMTOOL}
+            mv "prometheus-${PROM_VERSION}.linux-amd64/promtool" "$BIN"
           fi
+          sudo ln -sf "$PWD/$BIN" "${PROMTOOL}"
           ${PROMTOOL} --version
           jq --version
       - name: Enhanced validation for risky changes
@@ -70,16 +75,21 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/cache@v4
         with:
-          path: promtool-cache
-          key: prom-${{ env.PROM_VERSION }}-linux-amd64
+          path: .cache/promtool/${{ env.PROM_VERSION }}/linux-amd64
+          key: prom-${{ runner.os }}-${{ env.PROM_VERSION }}-linux-amd64
       - name: Install promtool & jq
         run: |
+          set -e
           sudo apt-get update && sudo apt-get install -y jq
-          if [ ! -x "${PROMTOOL}" ]; then
-            curl -fsSL -o prom.tgz https://github.com/prometheus/prometheus/releases/download/v${PROM_VERSION}/prometheus-${PROM_VERSION}.linux-amd64.tar.gz
+          CACHED_DIR=".cache/promtool/${PROM_VERSION}/linux-amd64"
+          BIN="${CACHED_DIR}/promtool"
+          if [ ! -x "$BIN" ]; then
+            mkdir -p "$CACHED_DIR"
+            curl -fsSL -o prom.tgz "https://github.com/prometheus/prometheus/releases/download/v${PROM_VERSION}/prometheus-${PROM_VERSION}.linux-amd64.tar.gz"
             tar -xzf prom.tgz
-            sudo mv prometheus-${PROM_VERSION}.linux-amd64/promtool ${PROMTOOL}
+            mv "prometheus-${PROM_VERSION}.linux-amd64/promtool" "$BIN"
           fi
+          sudo ln -sf "$PWD/$BIN" "${PROMTOOL}"
           ${PROMTOOL} --version
           jq --version
       - name: Standard validation for safe changes
@@ -96,16 +106,21 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/cache@v4
         with:
-          path: promtool-cache
-          key: prom-${{ env.PROM_VERSION }}-linux-amd64
+          path: .cache/promtool/${{ env.PROM_VERSION }}/linux-amd64
+          key: prom-${{ runner.os }}-${{ env.PROM_VERSION }}-linux-amd64
       - name: Install promtool & jq
         run: |
+          set -e
           sudo apt-get update && sudo apt-get install -y jq
-          if [ ! -x "${PROMTOOL}" ]; then
-            curl -fsSL -o prom.tgz https://github.com/prometheus/prometheus/releases/download/v${PROM_VERSION}/prometheus-${PROM_VERSION}.linux-amd64.tar.gz
+          CACHED_DIR=".cache/promtool/${PROM_VERSION}/linux-amd64"
+          BIN="${CACHED_DIR}/promtool"
+          if [ ! -x "$BIN" ]; then
+            mkdir -p "$CACHED_DIR"
+            curl -fsSL -o prom.tgz "https://github.com/prometheus/prometheus/releases/download/v${PROM_VERSION}/prometheus-${PROM_VERSION}.linux-amd64.tar.gz"
             tar -xzf prom.tgz
-            sudo mv prometheus-${PROM_VERSION}.linux-amd64/promtool ${PROMTOOL}
+            mv "prometheus-${PROM_VERSION}.linux-amd64/promtool" "$BIN"
           fi
+          sudo ln -sf "$PWD/$BIN" "${PROMTOOL}"
           ${PROMTOOL} --version
           jq --version
       - name: Default validation (no labels)

@@ -14,7 +14,7 @@ ci-bootstrap-tools:
 	@command -v promtool   >/dev/null || echo "⚠️ promtool 없음 - 건너뜀" || true
 	@command -v black      >/dev/null || pip3 install --user black || true
 	@command -v pylint     >/dev/null || pip3 install --user pylint || true
-.PHONY: eval gate smoke clean k-sweep archive rollup smoke-preview help shellcheck metrics metrics-dashboard metrics-watch prom-rules-verify prom-rules-test prom-rules-ci validate-prom-all check-prom
+.PHONY: eval gate smoke clean k-sweep archive rollup smoke-preview help shellcheck metrics metrics-dashboard metrics-watch prom-rules-verify prom-rules-test prom-rules-ci validate-prom-all check-prom prom-rules-ci prom-dup-guard alert-labels-guard prom-rules-test ci-all runbook-url-guard runbook-url-guard-dummy
 
 # 변수 정의 - 기본값 설정
 GT ?= .reports/day62/ground_truth_clean.tsv

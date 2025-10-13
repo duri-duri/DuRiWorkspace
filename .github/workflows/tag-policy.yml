@@ -3,6 +3,10 @@ on:
   push:
     tags: ['v*']  # 릴리즈 태그 푸시에만 동작
 permissions: { contents: read }
+
+env:
+  ENFORCE_SIGNED_TAGS: 'false'  # 필요 시 'true'로 변경
+
 jobs:
   verify-tag:
     runs-on: ubuntu-latest
@@ -23,3 +27,13 @@ jobs:
             exit 1
           fi
           echo "Tag policy OK"
+      - name: (옵션) GPG-signed annotated tag 확인
+        if: ${{ env.ENFORCE_SIGNED_TAGS == 'true' }}
+        run: |
+          TAG="${GITHUB_REF##*/}"
+          # 서명 검증 (해당 키가 Runner에 신뢰 키로 있어야 함)
+          git tag -v "$TAG" >/dev/null 2>&1 || {
+            echo "Tag is not GPG-signed or unverifiable"
+            exit 1
+          }
+          echo "GPG signature verification OK"
