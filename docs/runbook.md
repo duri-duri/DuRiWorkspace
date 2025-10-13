@@ -25,3 +25,17 @@ exp_samples:
 ### Grafana Dashboard Provisioning
 - 대시보드 JSON: `/var/lib/grafana/dashboards`
 - 프로비저닝 YAML: `/etc/grafana/provisioning/dashboards/*.yml`
+
+## Template Quoting Rules
+템플릿 문자열은 가급적 작따옴표 사용:
+```yaml
+description: 'MRR@3 MA7={{ $value | printf "%.3f" }}'
+```
+
+## Operational Commands
+```bash
+amtool --alertmanager.url=$ALERTMANAGER_URL alert
+promtool test rules tests/quality_rules_test.yml
+make prom-dup-guard
+make alert-labels-guard
+```

@@ -56,7 +56,7 @@ groups:
 
   # MRR SLO breach alert
   - alert: MRR_SLO_Breach
-    expr: duri_mrr_ma7 < 0.88
+    expr: duri_mrr_ma7 < slo_mrr_target
     for: 15m
     labels:
       severity: warning
@@ -74,3 +74,14 @@ groups:
     annotations:
       summary: "nDCG day-over-day drop >3%"
       description: "Δ1d={{ $value | printf \"%.3f\" }}"
+
+  # MRR 빠른 감지 보조 경보 (15분 지속)
+  - alert: MRR_Quick_Drop
+    expr: avg_over_time(duri_mrr_at_k{k="3",scope="all",domain="ALL"}[15m]) < 0.85
+    for: 15m
+    labels:
+      severity: warning
+      team: search
+    annotations:
+      summary: "MRR 빠른 감지 (<0.85)"
+      description: "MRR@3 빠른 감지: {{ $value | printf \"%.3f\" }}"

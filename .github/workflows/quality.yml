@@ -1,5 +1,7 @@
 name: quality
 on: [pull_request]
+env:
+  AM_VER: "0.28.0"
 jobs:
   gate:
     runs-on: ubuntu-latest
@@ -7,16 +9,25 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install promtool & jq
         run: |
-          sudo apt-get update
-          sudo apt-get install -y jq
+          sudo apt-get update && sudo apt-get install -y jq
           VER=2.55.0
-          curl -L -o prom.tgz https://github.com/prometheus/prometheus/releases/download/v${VER}/prometheus-${VER}.linux-amd64.tar.gz
+          curl -fsSL -o prom.tgz https://github.com/prometheus/prometheus/releases/download/v${VER}/prometheus-${VER}.linux-amd64.tar.gz
+          curl -fsSL -o sha256.txt https://github.com/prometheus/prometheus/releases/download/v${VER}/sha256sums.txt
+          grep "prometheus-${VER}.linux-amd64.tar.gz" sha256.txt | sha256sum -c -
           tar -xzf prom.tgz
+          test -x prometheus-${VER}.linux-amd64/promtool
           sudo mv prometheus-${VER}.linux-amd64/promtool /usr/local/bin/promtool
-      - name: Alertmanager config check
-        run: docker run --rm -v "$PWD/alertmanager:/etc/alertmanager" \
-             --entrypoint /bin/amtool prom/alertmanager:0.28.1 \
-             check-config /etc/alertmanager/alertmanager.yml
+      - name: Alertmanager config check (rendered)
+        run: |
+          echo '${{ secrets.SLACK_WEBHOOK_URL }}' >/tmp/slack_url
+          export SLACK_WEBHOOK_URL="$(cat /tmp/slack_url)"
+          docker run --rm -e SLACK_WEBHOOK_URL \
+            -v "$PWD/alertmanager:/etc/alertmanager" \
+            --entrypoint sh prom/alertmanager:${AM_VER} -lc '
+              apk add --no-cache gettext >/dev/null 2>&1 || true
+              envsubst < /etc/alertmanager/alertmanager.yml > /tmp/am.yml &&
+              /bin/amtool check-config /tmp/am.yml
+            '
       - run: make prom-rules-ci
       - run: make ci-phase1-guard
       - run: make prom-dup-guard

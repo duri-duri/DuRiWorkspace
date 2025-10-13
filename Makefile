@@ -217,8 +217,10 @@ ci-phase1-guard:
 
 
 prom-dup-guard:
-	@dups=$$(awk '/^- record: /{print $$3}' prometheus/rules/*.yml | sort | uniq -d); \
-	if [ -n "$$dups" ]; then echo "$$dups" | awk '{print "DUP record:", $$0}'; exit 1; fi
+	@python3 scripts/prom_dup_guard.py
 
 prom-rules-test:
 	promtool test rules tests/quality_rules_test.yml
+
+alert-labels-guard:
+	./scripts/alert_labels_guard.sh
