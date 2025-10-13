@@ -10,4 +10,4 @@ receivers:
 - name: search-slack
   slack_configs:
   - channel: '#search-alerts'
-    webhook_url: 'https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK'
+    webhook_url: '${SLACK_WEBHOOK_URL}'

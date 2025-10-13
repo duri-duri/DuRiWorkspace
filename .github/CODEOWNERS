@@ -1,3 +1,11 @@
-# 팀에 맞게 수정하세요
+# Global owners
 * @duri-duri
-.github/ @duri-duri
+
+# Prometheus rules
+prometheus/rules/ @duri-duri
+
+# Grafana dashboards
+grafana/ @duri-duri
+
+# CI workflows
+.github/workflows/ @duri-duri
