@@ -18,8 +18,8 @@
 
 ### **SLO/에러버짓**
 - [x] nDCG@3 SLO breach 알림 (MA7 < 0.90) (MA7 < 0.90)
-- [ ] MRR SLO breach 알림 (MA7 < 0.88)
-- [ ] DoD 급락 알림 (전일 대비 >3% 하락)
+- [x] MRR SLO breach 알림 (MA7 < 0.88) (MA7 < 0.88)
+- [x] DoD 급락 알림 (전일 대비 >3% 하락) (전일 대비 >3% 하락)
 
 ### **운영 안정성**
 - [x] Grafana: nDCG/MRR MA7·z-score·SLO(에러버짓) 보드 배포 nDCG/MRR MA7·z-score·SLO(에러버짓) 보드 배포
