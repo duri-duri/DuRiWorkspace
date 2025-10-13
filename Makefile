@@ -5,7 +5,7 @@ SHELL := /usr/bin/env bash
 .SHELLFLAGS := -eu -o pipefail -c
 
 # 리포지토리 루트 고정
-REPO_ROOT := $(shell git rev-parse --show-toplevel 2>/dev/null || pwd)
+REPO_ROOT := $(shell git rev-parse --show-toplevel 2>/dev/null || pwd | sed 's:/*$$::')
 export REPO_ROOT
 
 # CI 도구 고정 (노이즈 제로)

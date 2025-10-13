@@ -1,7 +1,7 @@
 # CI는 tests/에서 실행 가정 → ${REPO_ROOT}/prometheus/rules/... 사용
 ---
 rule_files:
-  - ${REPO_ROOT}/../${REPO_ROOT}/prometheus/rules/metric_collection_alerts.rules.yml
+  - ${REPO_ROOT}/prometheus/rules/metric_collection_alerts.rules.yml
 evaluation_interval: 1m
 
 tests:
