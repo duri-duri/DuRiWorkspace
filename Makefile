@@ -228,6 +228,12 @@ prom-rules-test:
 	@REPO_ROOT=$$(git rev-parse --show-toplevel) \
 	  envsubst < tests/alerts_mrr_slo_breach_test.yml > /tmp/alerts_mrr_slo_breach_test.rendered.yml && \
 	  promtool test rules /tmp/alerts_mrr_slo_breach_test.rendered.yml
+	@REPO_ROOT=$$(git rev-parse --show-toplevel) \
+	  envsubst < tests/alerts_noise_regression_test.yml > /tmp/alerts_noise_regression_test.rendered.yml && \
+	  promtool test rules /tmp/alerts_noise_regression_test.rendered.yml
+	@REPO_ROOT=$$(git rev-parse --show-toplevel) \
+	  envsubst < tests/metric_collection_test.yml > /tmp/metric_collection_test.rendered.yml && \
+	  promtool test rules /tmp/metric_collection_test.rendered.yml
 alert-labels-guard:
 	./scripts/alert_labels_guard.sh
 # PHONY targets
@@ -242,3 +248,14 @@ ci-all:
 	make alert-labels-guard
 	make runbook-url-guard
 	make prom-rules-test
+
+grafana-lint:
+	@python3 scripts/grafana_lint.py
+
+runbook-quality-guard:
+	@python3 scripts/runbook_quality_guard.py
+
+compatibility-test:
+	@echo "Running compatibility matrix test"
+	@make prom-rules-ci
+	@make prom-rules-test

@@ -1,0 +1,40 @@
+---
+groups:
+- name: metric-collection-alerts
+  interval: 1m
+  rules:
+  # 메트릭 수집 지연 알람
+  - alert: MetricCollectionDelay
+    expr: time() - duri_mrr_at_k{k="3",scope="all",domain="ALL"} > 300
+    for: 5m
+    labels:
+      severity: warning
+      team: search
+      runbook_url: "https://docs.example.com/runbooks/metric-delay"
+    annotations:
+      summary: "Metric collection delay >5min"
+      description: "duri_mrr_at_k last update: {{ $value }}s ago"
+
+  # 메트릭 유실 알람
+  - alert: MetricCollectionAbsent
+    expr: absent(duri_mrr_at_k{k="3",scope="all",domain="ALL"})
+    for: 2m
+    labels:
+      severity: critical
+      team: search
+      runbook_url: "https://docs.example.com/runbooks/metric-absent"
+    annotations:
+      summary: "Metric collection absent"
+      description: "duri_mrr_at_k not collected for >2min"
+
+  # MA7 왜곡 방지 (0값 구간 포함)
+  - alert: MA7DistortionRisk
+    expr: count_over_time(duri_mrr_at_k{k="3",scope="all",domain="ALL"}[7d]) < 10080 * 0.95
+    for: 15m
+    labels:
+      severity: warning
+      team: search
+      runbook_url: "https://docs.example.com/runbooks/ma7-distortion"
+    annotations:
+      summary: "MA7 distortion risk (insufficient data)"
+      description: "Only {{ $value }} samples in 7d window"

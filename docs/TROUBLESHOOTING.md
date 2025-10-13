@@ -130,3 +130,49 @@ inhibit_rules:
   target_matchers: ['severity="warning"']
   equal: ['service']
 ```
+
+## 억제(inhibit) E2E 리허설 가이드
+
+### 관측된 라우팅/억제 스크린샷 첨부 체크리스트
+
+**PR 생성 시 필수 확인 사항:**
+
+1. **Alertmanager UI 스크린샷**
+   - [ ] 활성 알람 목록에서 `MRR_Quick_Drop` 알람 발생
+   - [ ] `MRR_SLO_Breach` 알람 발생 시 `MRR_Quick_Drop` 자동 억제 확인
+   - [ ] 억제된 알람이 "Inhibited" 상태로 표시되는지 확인
+
+2. **라우팅 규칙 동작 스크린샷**
+   - [ ] `team="search"` 알람이 `search-slack` 리시버로 라우팅
+   - [ ] `severity="critical"` 알람이 적절한 리시버로 라우팅
+   - [ ] `group_by: ['alertname','team']` 그룹핑이 올바르게 작동
+
+3. **Slack/이메일 알림 수신 스크린샷**
+   - [ ] 실제 알림 수신 확인
+   - [ ] 알림 내용에 `runbook_url` 링크 포함 확인
+   - [ ] 알림 그룹핑이 올바르게 작동하는지 확인
+
+### 리허설 시나리오
+
+**시나리오 1: Quick_Drop → SLO_Breach 억제**
+1. `duri_mrr_at_k` 값을 0.85 이하로 설정
+2. 15분 후 `MRR_Quick_Drop` 알람 발생 확인
+3. `duri_mrr_at_k` 값을 0.86으로 설정하여 MA7이 0.88 이하로 내려가도록 함
+4. `MRR_SLO_Breach` 알람 발생 시 `MRR_Quick_Drop` 억제 확인
+
+**시나리오 2: 라우팅 규칙 검증**
+1. `severity="critical"` 알람 생성
+2. `team="search"` 알람 생성
+3. 각각 올바른 리시버로 라우팅되는지 확인
+
+### 문제 해결
+
+**억제가 작동하지 않는 경우:**
+- `equal: ['team']` 조건 확인
+- 알람 라벨이 정확히 매칭되는지 확인
+- Alertmanager 로그에서 억제 규칙 적용 여부 확인
+
+**라우팅이 작동하지 않는 경우:**
+- `matchers` 조건 확인
+- 리시버 설정 확인
+- Alertmanager 설정 리로드 확인
