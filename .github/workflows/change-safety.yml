@@ -61,6 +61,17 @@ jobs:
           sudo ln -sf "$PWD/$BIN" "${PROMTOOL}"
           ${PROMTOOL} --version
           jq --version
+      - name: Path guard for test rule_files
+        run: |
+          if grep -R '\${REPO_ROOT}/\.\./\${REPO_ROOT}/' tests/ ; then
+            echo "Found invalid path: \${REPO_ROOT}/../\${REPO_ROOT}/"
+            exit 1
+          fi
+          if grep -R '\.\./\${REPO_ROOT}/' tests/ ; then
+            echo "Found invalid path: ../\${REPO_ROOT}/"
+            exit 1
+          fi
+          echo "Path guard PASS"
       - name: Enhanced validation for risky changes
         run: |
           make ci-all
@@ -92,6 +103,17 @@ jobs:
           sudo ln -sf "$PWD/$BIN" "${PROMTOOL}"
           ${PROMTOOL} --version
           jq --version
+      - name: Path guard for test rule_files
+        run: |
+          if grep -R '\${REPO_ROOT}/\.\./\${REPO_ROOT}/' tests/ ; then
+            echo "Found invalid path: \${REPO_ROOT}/../\${REPO_ROOT}/"
+            exit 1
+          fi
+          if grep -R '\.\./\${REPO_ROOT}/' tests/ ; then
+            echo "Found invalid path: ../\${REPO_ROOT}/"
+            exit 1
+          fi
+          echo "Path guard PASS"
       - name: Standard validation for safe changes
         run: |
           make prom-rules-ci
@@ -123,6 +145,17 @@ jobs:
           sudo ln -sf "$PWD/$BIN" "${PROMTOOL}"
           ${PROMTOOL} --version
           jq --version
+      - name: Path guard for test rule_files
+        run: |
+          if grep -R '\${REPO_ROOT}/\.\./\${REPO_ROOT}/' tests/ ; then
+            echo "Found invalid path: \${REPO_ROOT}/../\${REPO_ROOT}/"
+            exit 1
+          fi
+          if grep -R '\.\./\${REPO_ROOT}/' tests/ ; then
+            echo "Found invalid path: ../\${REPO_ROOT}/"
+            exit 1
+          fi
+          echo "Path guard PASS"
       - name: Default validation (no labels)
         run: |
           make prom-rules-ci
