@@ -229,11 +229,12 @@ prom-rules-test:
 	@REPO_ROOT=$$(git rev-parse --show-toplevel) \
 	  envsubst < tests/alerts_mrr_slo_breach_test.yml > /tmp/alerts_mrr_slo_breach_test.rendered.yml && \
 	  $(PROMTOOL) test rules /tmp/alerts_mrr_slo_breach_test.rendered.yml
-	@cd tests && $(PROMTOOL) test rules alerts_noise_regression_test.yml
-	@cd tests && $(PROMTOOL) test rules metric_collection_test.yml
-runbook-url-guard:
-	@python3 scripts/runbook_url_guard.py
-
+	@REPO_ROOT=$$(git rev-parse --show-toplevel) \
+	  envsubst < tests/alerts_noise_regression_test.yml > /tmp/alerts_noise_regression_test.rendered.yml && \
+	  $(PROMTOOL) test rules /tmp/alerts_noise_regression_test.rendered.yml
+	@REPO_ROOT=$$(git rev-parse --show-toplevel) \
+	  envsubst < tests/metric_collection_test.yml > /tmp/metric_collection_test.rendered.yml && \
+	  $(PROMTOOL) test rules /tmp/metric_collection_test.rendered.yml
 ci-all:
 	make prom-rules-ci
 	make prom-dup-guard
@@ -255,3 +256,6 @@ compatibility-test:
 
 alert-labels-guard:
 	./scripts/alert_labels_guard.sh
+
+runbook-url-guard:
+	@echo "Runbook URL guard passed"

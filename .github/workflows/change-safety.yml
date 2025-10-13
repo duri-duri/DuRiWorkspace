@@ -10,6 +10,14 @@ on:
       - 'docs/**'
       - '.github/workflows/change-safety.yml'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: read
+
 env:
   PROMTOOL: /usr/local/bin/promtool
   PROM_VERSION: '2.55.0'
@@ -34,12 +42,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: promtool-cache
+          key: prom-${{ env.PROM_VERSION }}-linux-amd64
       - name: Install promtool & jq
         run: |
           sudo apt-get update && sudo apt-get install -y jq
-          curl -fsSL -o prom.tgz https://github.com/prometheus/prometheus/releases/download/v${PROM_VERSION}/prometheus-${PROM_VERSION}.linux-amd64.tar.gz
-          tar -xzf prom.tgz
-          sudo mv prometheus-${PROM_VERSION}.linux-amd64/promtool ${PROMTOOL}
+          if [ ! -x "${PROMTOOL}" ]; then
+            curl -fsSL -o prom.tgz https://github.com/prometheus/prometheus/releases/download/v${PROM_VERSION}/prometheus-${PROM_VERSION}.linux-amd64.tar.gz
+            tar -xzf prom.tgz
+            sudo mv prometheus-${PROM_VERSION}.linux-amd64/promtool ${PROMTOOL}
+          fi
+          ${PROMTOOL} --version
+          jq --version
       - name: Enhanced validation for risky changes
         run: |
           make ci-all
@@ -52,12 +68,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: promtool-cache
+          key: prom-${{ env.PROM_VERSION }}-linux-amd64
       - name: Install promtool & jq
         run: |
           sudo apt-get update && sudo apt-get install -y jq
-          curl -fsSL -o prom.tgz https://github.com/prometheus/prometheus/releases/download/v${PROM_VERSION}/prometheus-${PROM_VERSION}.linux-amd64.tar.gz
-          tar -xzf prom.tgz
-          sudo mv prometheus-${PROM_VERSION}.linux-amd64/promtool ${PROMTOOL}
+          if [ ! -x "${PROMTOOL}" ]; then
+            curl -fsSL -o prom.tgz https://github.com/prometheus/prometheus/releases/download/v${PROM_VERSION}/prometheus-${PROM_VERSION}.linux-amd64.tar.gz
+            tar -xzf prom.tgz
+            sudo mv prometheus-${PROM_VERSION}.linux-amd64/promtool ${PROMTOOL}
+          fi
+          ${PROMTOOL} --version
+          jq --version
       - name: Standard validation for safe changes
         run: |
           make prom-rules-ci
@@ -70,12 +94,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: promtool-cache
+          key: prom-${{ env.PROM_VERSION }}-linux-amd64
       - name: Install promtool & jq
         run: |
           sudo apt-get update && sudo apt-get install -y jq
-          curl -fsSL -o prom.tgz https://github.com/prometheus/prometheus/releases/download/v${PROM_VERSION}/prometheus-${PROM_VERSION}.linux-amd64.tar.gz
-          tar -xzf prom.tgz
-          sudo mv prometheus-${PROM_VERSION}.linux-amd64/promtool ${PROMTOOL}
+          if [ ! -x "${PROMTOOL}" ]; then
+            curl -fsSL -o prom.tgz https://github.com/prometheus/prometheus/releases/download/v${PROM_VERSION}/prometheus-${PROM_VERSION}.linux-amd64.tar.gz
+            tar -xzf prom.tgz
+            sudo mv prometheus-${PROM_VERSION}.linux-amd64/promtool ${PROMTOOL}
+          fi
+          ${PROMTOOL} --version
+          jq --version
       - name: Default validation (no labels)
         run: |
           make prom-rules-ci
