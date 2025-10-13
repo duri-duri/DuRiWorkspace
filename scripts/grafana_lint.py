@@ -50,6 +50,16 @@ def validate_dashboard_json(file_path):
             dashboard_data = data
 
         validate(instance=dashboard_data, schema=DASHBOARD_SCHEMA)
+
+        # 빈 expr 금지 검증
+        panels = dashboard_data.get("panels", [])
+        for panel in panels:
+            if "targets" in panel:
+                for target in panel["targets"]:
+                    expr = target.get("expr", "")
+                    if not str(expr).strip():
+                        return False, "Empty PromQL expr in a panel target"
+
         return True, None
     except ValidationError as e:
         return False, f"Schema validation error: {e.message}"

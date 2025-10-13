@@ -189,9 +189,10 @@ install-thresholds:
 
 # Day68 Prometheus rules 검증
 prom-rules-verify:
-	@promtool check rules prometheus/rules/*.rules.yml
+	@$(PROMTOOL) check rules prometheus/rules/*.rules.yml
 
 
+PROMTOOL ?= promtool
 prom-rules-ci: prom-rules-verify prom-rules-test
 
 validate-prom-all:
@@ -221,19 +222,19 @@ prom-dup-guard:
 prom-rules-test:
 	@REPO_ROOT=$$(git rev-parse --show-toplevel) \
 	  envsubst < tests/quality_rules_test.yml > /tmp/quality_rules_test.rendered.yml && \
-	  promtool test rules /tmp/quality_rules_test.rendered.yml
+	  $(PROMTOOL) test rules /tmp/quality_rules_test.rendered.yml
 	@REPO_ROOT=$$(git rev-parse --show-toplevel) \
 	  envsubst < tests/alerts_mrr_breach_test.yml > /tmp/alerts_mrr_breach_test.rendered.yml && \
-	  promtool test rules /tmp/alerts_mrr_breach_test.rendered.yml
+	  $(PROMTOOL) test rules /tmp/alerts_mrr_breach_test.rendered.yml
 	@REPO_ROOT=$$(git rev-parse --show-toplevel) \
 	  envsubst < tests/alerts_mrr_slo_breach_test.yml > /tmp/alerts_mrr_slo_breach_test.rendered.yml && \
-	  promtool test rules /tmp/alerts_mrr_slo_breach_test.rendered.yml
+	  $(PROMTOOL) test rules /tmp/alerts_mrr_slo_breach_test.rendered.yml
 	@REPO_ROOT=$$(git rev-parse --show-toplevel) \
 	  envsubst < tests/alerts_noise_regression_test.yml > /tmp/alerts_noise_regression_test.rendered.yml && \
-	  promtool test rules /tmp/alerts_noise_regression_test.rendered.yml
+	  $(PROMTOOL) test rules /tmp/alerts_noise_regression_test.rendered.yml
 	@REPO_ROOT=$$(git rev-parse --show-toplevel) \
 	  envsubst < tests/metric_collection_test.yml > /tmp/metric_collection_test.rendered.yml && \
-	  promtool test rules /tmp/metric_collection_test.rendered.yml
+	  $(PROMTOOL) test rules /tmp/metric_collection_test.rendered.yml
 alert-labels-guard:
 	./scripts/alert_labels_guard.sh
 # PHONY targets
