@@ -17,3 +17,7 @@ groups:
     expr: (0.98 - duri_recall3_ma7)
 
   # MRR SLO recording rule
+
+  # MRR SLO gap (새 레코드로 분리)
+  - record: duri_mrr_slo_gap_ma7
+    expr: (0.88 - duri_mrr_ma7)
