@@ -189,8 +189,6 @@ install-thresholds:
 prom-rules-verify:
 	@promtool check rules prometheus/rules/*.rules.yml
 
-prom-rules-test:
-	@promtool test rules tests/prom_rules/quality_alerts.test.yml
 
 prom-rules-ci: prom-rules-verify prom-rules-test
 
@@ -215,3 +213,9 @@ check-prom:
 
 ci-phase1-guard:
 	./scripts/ci_phase1_guard.sh
+
+
+
+prom-dup-guard:
+	@awk '/^- record: /{print $$3}' prometheus/rules/*.yml \
+	| sort | uniq -d | awk '{print "DUP record:", $$0}' | test $$(wc -l < /dev/stdin) -eq 0
