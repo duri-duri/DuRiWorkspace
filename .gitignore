@@ -132,3 +132,10 @@ Makefile.tmp
 # Prometheus local TSDB
 /prom-data/*
 !/prom-data/.gitkeep
+
+# noisy artifacts
+.reports/**/*.tsv
+.reports/**/*.csv
+# allow curated ones:
+!.reports/timeseries/metrics_all_scope.csv
+!.reports/timeseries/weekly_day66_metrics.md
