@@ -141,3 +141,6 @@ Makefile.tmp
 !.reports/timeseries/weekly_day66_metrics.md
 # curated reports directory
 !.reports/curated/**
+
+# Local runtime data (docker volumes, TSDB, etc.)
+/data/**
