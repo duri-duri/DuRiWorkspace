@@ -5,5 +5,5 @@ providers:
     folder: "DuRi"
     type: file
     options:
-      path: /etc/grafana/provisioning/dashboards
+      path: /var/lib/grafana/dashboards
     updateIntervalSeconds: 30

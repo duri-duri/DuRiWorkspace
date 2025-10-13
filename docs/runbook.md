@@ -1,55 +1,27 @@
-# DuRi Monitoring Runbook
+# DuRi Runbook
 
-## Quick Commands
+## Prometheus Rules Testing
 
-### Top5 메모리 비율
-```promql
-topk(5, duri:container:mem_ratio)
+### Label Matching Requirements
+promtool 테스트는 라벨까지 정확히 일치해야 합니다. 테스트 작성 시 주의사항:
+
+- 기대값에 `__name__` 라벨 포함 필요
+- 모든 메트릭 라벨(`k`, `scope`, `domain` 등) 정확히 매칭
+- 값 정밀도도 정확히 일치해야 함
+
+### Example
+```yaml
+exp_samples:
+  - labels: '{__name__="duri_mrr_ma7", domain="ALL", k="3", scope="all"}'
+    value: 0.8742857142857143
 ```
 
-### 제한 컨테이너 수/무제한 수
-```promql
-duri:containers:limitgt0
-duri:containers:limit0
-```
+## Alert Management
 
-### Blackbox 타깃별 p95
-```promql
-duri:blackbox:p95
-```
+### Alertmanager Configuration
+- Slack webhook은 `${SLACK_WEBHOOK_URL}` 환경변수 사용
+- 팀별 라우팅은 `labels` 기반으로 설정
 
-### 레코딩 드리프트 가드
-```promql
-absent(duri:container:mem_ratio) or (count(duri:container:mem_ratio) < duri:containers:limitgt0)
-```
-
-### 현재 firing 알람
-```bash
-curl -s localhost:9090/api/v1/alerts \
-| jq -r '.data.alerts[] | "\(.labels.severity)\t\(.labels.alertname)\t\(.labels.name // .labels.instance // "-")"'
-```
-
-### 현재 비율 TOP5
-```bash
-promq 'topk(5, duri:container:mem_ratio)' \
-| jq -r '.data.result[] | "\(.metric.name): \(.value[1])"'
-```
-
-## Grafana Dashboard
-
-- **Import**: Grafana → Dashboards → Import → `grafana/duri-obsv-overview.json`
-- **Data Source**: Prometheus
-- **Refresh**: 10s
-- **Variables**: container, target (multi-select)
-
-## Alert Thresholds
-
-- **Memory Ratio**: 90% (warning), 95% (critical)
-- **Blackbox p95**: 1s (warning)
-- **Recording Drift**: 5m (warning)
-
-## Troubleshooting
-
-1. **High Memory Ratio**: Check container memory usage and limits
-2. **Blackbox p95 High**: Check network latency and target health
-3. **Recording Drift**: Check Prometheus rule evaluation and relabel configs
+### Grafana Dashboard Provisioning
+- 대시보드 JSON: `/var/lib/grafana/dashboards`
+- 프로비저닝 YAML: `/etc/grafana/provisioning/dashboards/*.yml`

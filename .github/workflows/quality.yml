@@ -9,10 +9,14 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y jq
-          VER=2.53.0
+          VER=2.55.0
           curl -L -o prom.tgz https://github.com/prometheus/prometheus/releases/download/v${VER}/prometheus-${VER}.linux-amd64.tar.gz
           tar -xzf prom.tgz
           sudo mv prometheus-${VER}.linux-amd64/promtool /usr/local/bin/promtool
+      - name: Alertmanager config check
+        run: docker run --rm -v "$PWD/alertmanager:/etc/alertmanager" \
+             --entrypoint /bin/amtool prom/alertmanager:0.28.1 \
+             check-config /etc/alertmanager/alertmanager.yml
       - run: make prom-rules-ci
       - run: make ci-phase1-guard
       - run: make prom-dup-guard
