@@ -1,7 +1,7 @@
 name: change-safety
 on:
   pull_request:
-    types: [opened, labeled, unlabeled]
+    types: [opened, labeled, unlabeled, synchronize]
     paths:
       - 'prometheus/**'
       - 'tests/**'
@@ -10,69 +10,74 @@ on:
       - 'docs/**'
       - '.github/workflows/change-safety.yml'
 
+env:
+  PROMTOOL: /usr/local/bin/promtool
+  PROM_VERSION: '2.55.0'
+
 jobs:
-  risky-change-check:
-    if: "${{ contains(github.event.pull_request.labels.*.name, 'change-type: risky') }}"
+  _setup:
     runs-on: ubuntu-latest
-    env:
-      PROMTOOL: /usr/local/bin/promtool
+    outputs:
+      risky: ${{ steps.eval.outputs.risky }}
+      safe:  ${{ steps.eval.outputs.safe }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: eval
+        run: |
+          labels="${{ toJson(github.event.pull_request.labels) }}"
+          if echo "$labels" | jq -e '.[] | select(.name=="change-type: risky")' >/dev/null; then echo "risky=true" >> "$GITHUB_OUTPUT"; else echo "risky=false" >> "$GITHUB_OUTPUT"; fi
+          if echo "$labels" | jq -e '.[] | select(.name=="change-type: safe")'  >/dev/null; then echo "safe=true"  >> "$GITHUB_OUTPUT"; else echo "safe=false"  >> "$GITHUB_OUTPUT"; fi
+
+  risky-change-check:
+    needs: _setup
+    if: "${{ needs._setup.outputs.risky == 'true' }}"
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Install promtool & jq
         run: |
           sudo apt-get update && sudo apt-get install -y jq
-          VER=2.55.0
-          curl -fsSL -o prom.tgz https://github.com/prometheus/prometheus/releases/download/v${VER}/prometheus-${VER}.linux-amd64.tar.gz
+          curl -fsSL -o prom.tgz https://github.com/prometheus/prometheus/releases/download/v${PROM_VERSION}/prometheus-${PROM_VERSION}.linux-amd64.tar.gz
           tar -xzf prom.tgz
-          sudo mv prometheus-${VER}.linux-amd64/promtool /usr/local/bin/promtool
+          sudo mv prometheus-${PROM_VERSION}.linux-amd64/promtool ${PROMTOOL}
       - name: Enhanced validation for risky changes
         run: |
-          echo "RISKY CHANGE DETECTED - Running enhanced validation"
           make ci-all
           make grafana-lint
           make runbook-quality-guard
-          echo "Enhanced validation passed"
 
   safe-change-check:
-    if: "${{ contains(github.event.pull_request.labels.*.name, 'change-type: safe') }}"
+    needs: _setup
+    if: "${{ needs._setup.outputs.safe == 'true' }}"
     runs-on: ubuntu-latest
-    env:
-      PROMTOOL: /usr/local/bin/promtool
     steps:
       - uses: actions/checkout@v4
       - name: Install promtool & jq
         run: |
           sudo apt-get update && sudo apt-get install -y jq
-          VER=2.55.0
-          curl -fsSL -o prom.tgz https://github.com/prometheus/prometheus/releases/download/v${VER}/prometheus-${VER}.linux-amd64.tar.gz
+          curl -fsSL -o prom.tgz https://github.com/prometheus/prometheus/releases/download/v${PROM_VERSION}/prometheus-${PROM_VERSION}.linux-amd64.tar.gz
           tar -xzf prom.tgz
-          sudo mv prometheus-${VER}.linux-amd64/promtool /usr/local/bin/promtool
+          sudo mv prometheus-${PROM_VERSION}.linux-amd64/promtool ${PROMTOOL}
       - name: Standard validation for safe changes
         run: |
-          echo "SAFE CHANGE - Running standard validation"
           make prom-rules-ci
           make prom-dup-guard
           make alert-labels-guard
-          echo "Standard validation passed"
 
   default-check:
-    if: "${{ !contains(github.event.pull_request.labels.*.name, 'change-type: risky') && !contains(github.event.pull_request.labels.*.name, 'change-type: safe') }}"
+    needs: _setup
+    if: "${{ needs._setup.outputs.risky != 'true' && needs._setup.outputs.safe != 'true' }}"
     runs-on: ubuntu-latest
-    env:
-      PROMTOOL: /usr/local/bin/promtool
     steps:
       - uses: actions/checkout@v4
       - name: Install promtool & jq
         run: |
           sudo apt-get update && sudo apt-get install -y jq
-          VER=2.55.0
-          curl -fsSL -o prom.tgz https://github.com/prometheus/prometheus/releases/download/v${VER}/prometheus-${VER}.linux-amd64.tar.gz
+          curl -fsSL -o prom.tgz https://github.com/prometheus/prometheus/releases/download/v${PROM_VERSION}/prometheus-${PROM_VERSION}.linux-amd64.tar.gz
           tar -xzf prom.tgz
-          sudo mv prometheus-${VER}.linux-amd64/promtool /usr/local/bin/promtool
+          sudo mv prometheus-${PROM_VERSION}.linux-amd64/promtool ${PROMTOOL}
       - name: Default validation (no labels)
         run: |
-          echo "NO LABELS - Running standard validation"
           make prom-rules-ci
           make prom-dup-guard
           make alert-labels-guard
-          echo "Default validation passed"
