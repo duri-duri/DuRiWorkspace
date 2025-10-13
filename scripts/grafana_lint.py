@@ -6,12 +6,15 @@ import sys
 
 from jsonschema import ValidationError, validate
 
-# Grafana 대시보드 스키마 (간단한 버전)
+# Grafana 대시보드 스키마 (보강된 버전)
 DASHBOARD_SCHEMA = {
     "type": "object",
     "required": ["title", "panels"],
     "properties": {
         "title": {"type": "string"},
+        "schemaVersion": {"type": "number"},
+        "uid": {"type": ["string", "null"]},
+        "id": {"type": ["number", "null"]},
         "panels": {
             "type": "array",
             "items": {

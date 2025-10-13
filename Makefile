@@ -248,7 +248,8 @@ ci-all:
 	make alert-labels-guard
 	make runbook-url-guard
 	make prom-rules-test
-
+	make grafana-lint
+	make runbook-quality-guard
 grafana-lint:
 	@python3 scripts/grafana_lint.py
 
