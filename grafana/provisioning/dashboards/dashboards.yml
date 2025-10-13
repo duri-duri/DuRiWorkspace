@@ -1,0 +1,9 @@
+apiVersion: 1
+providers:
+  - name: "duri-dashboards"
+    orgId: 1
+    folder: "DuRi"
+    type: file
+    options:
+      path: /etc/grafana/provisioning/dashboards
+    updateIntervalSeconds: 30
