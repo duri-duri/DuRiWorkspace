@@ -212,3 +212,6 @@ check-prom:
 	@echo "limit=0:" && curl -s 'http://localhost:9090/api/v1/query' --data-urlencode 'query=duri:containers:limit0' | jq -r '.data.result[0].value[1]'
 	@echo "p95:" && curl -s 'http://localhost:9090/api/v1/query' --data-urlencode 'query=duri:blackbox:p95' | jq -r '.data.result[] | "\(.metric.target): \(.value[1])s"' | head -3
 	@echo "firing alerts:" && curl -s localhost:9090/api/v1/alerts | jq -r '.data.alerts[].labels.alertname' | sort | uniq -c | sort -nr
+
+ci-phase1-guard:
+	./scripts/ci_phase1_guard.sh
