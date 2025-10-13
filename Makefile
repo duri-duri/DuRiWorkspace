@@ -223,5 +223,8 @@ prom-rules-test:
 	@REPO_ROOT=$$(git rev-parse --show-toplevel) \
 	  envsubst < tests/alerts_mrr_breach_test.yml > /tmp/alerts_mrr_breach_test.rendered.yml && \
 	  promtool test rules /tmp/alerts_mrr_breach_test.rendered.yml
+	@REPO_ROOT=$$(git rev-parse --show-toplevel) \
+	  envsubst < tests/alerts_mrr_slo_breach_test.yml > /tmp/alerts_mrr_slo_breach_test.rendered.yml && \
+	  promtool test rules /tmp/alerts_mrr_slo_breach_test.rendered.yml
 alert-labels-guard:
 	./scripts/alert_labels_guard.sh

@@ -1,0 +1,19 @@
+---
+rule_files:
+  - ${REPO_ROOT}/prometheus/rules/quality_slo.rules.yml
+  - ${REPO_ROOT}/prometheus/rules/slo_constants.rules.yml
+evaluation_interval: 1m
+
+tests:
+- interval: 1m
+  input_series:
+    - series: 'duri_mrr_at_k{k="3",scope="all",domain="ALL"}'
+      # 정상(0.90) 30분 → 위반(0.86) 20분 → eval_time 50m
+      # MA7 계산: (0.90*30 + 0.86*20) / 50 = 0.8843137254901962
+      values: '0.90x30 0.86x20'
+  promql_expr_test:
+    - expr: duri_mrr_ma7
+      eval_time: 50m
+      exp_samples:
+        - labels: '{__name__="duri_mrr_ma7", domain="ALL", k="3", scope="all"}'
+          value: 0.8843137254901962
