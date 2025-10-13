@@ -1,3 +1,5 @@
+SHELL := /usr/bin/env bash
+.SHELLFLAGS := -euo pipefail -c
 SUDO ?= sudo -n
 SHELL := /usr/bin/env bash
 .SHELLFLAGS := -eu -o pipefail -c
@@ -228,3 +230,15 @@ prom-rules-test:
 	  promtool test rules /tmp/alerts_mrr_slo_breach_test.rendered.yml
 alert-labels-guard:
 	./scripts/alert_labels_guard.sh
+# PHONY targets
+.PHONY: prom-rules-ci prom-dup-guard alert-labels-guard prom-rules-test ci-all runbook-url-guard
+
+runbook-url-guard:
+	@python3 scripts/runbook_url_guard.py
+
+ci-all:
+	make prom-rules-ci
+	make prom-dup-guard
+	make alert-labels-guard
+	make runbook-url-guard
+	make prom-rules-test

@@ -77,3 +77,56 @@ alert_rule_test:
 - ✅ 운영/재현성/가독성 삼박자 완성
 - ✅ Phase 3 진입 준비 100% 완료
 - 🧊 조용히 잘 도는 레포 모드
+
+## 중복 억제(inhibit) 규칙 가이드
+
+### 현재 설정: Quick_Drop ↔ SLO_Breach 억제
+
+```yaml
+# alertmanager/alertmanager.yml
+inhibit_rules:
+- source_matchers: ['alertname="MRR_SLO_Breach"','team="search"']
+  target_matchers: ['alertname="MRR_Quick_Drop"','team="search"']
+  equal: ['team']
+```
+
+### 의도 및 시나리오
+
+**목적:** SLO 위반 알람이 발생하면 더 세밀한 Quick Drop 알람을 억제하여 알람 소음을 줄임
+
+**시나리오:**
+1. MRR이 0.85 이하로 급락 → `MRR_Quick_Drop` 알람 발생
+2. 15분 후 MA7이 0.88 이하로 내려감 → `MRR_SLO_Breach` 알람 발생
+3. `MRR_SLO_Breach` 발생 시 `MRR_Quick_Drop` 자동 억제
+
+**레이블 매칭 예시:**
+```yaml
+# 억제되는 Quick_Drop 알람
+alertname: MRR_Quick_Drop
+team: search
+severity: warning
+
+# 억제를 트리거하는 SLO_Breach 알람
+alertname: MRR_SLO_Breach
+team: search
+severity: warning
+```
+
+### 주의사항
+
+- `equal: ['team']`로 인해 동일한 팀의 알람만 억제됨
+- 다른 팀의 Quick_Drop 알람은 영향받지 않음
+- `severity`나 `service` 라벨은 매칭 조건에 포함되지 않음
+
+### 확장 예제
+
+```yaml
+# 여러 알람 간 억제
+inhibit_rules:
+- source_matchers: ['alertname="CriticalServiceDown"']
+  target_matchers: ['alertname="HighErrorRate"']
+  equal: ['service', 'team']
+- source_matchers: ['severity="critical"']
+  target_matchers: ['severity="warning"']
+  equal: ['service']
+```

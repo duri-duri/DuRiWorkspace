@@ -1,0 +1,23 @@
+name: compatibility
+on: [pull_request]
+env:
+  PROM_VERSIONS: "2.53.0,2.55.0"
+jobs:
+  compatibility:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        prom_version: [2.53.0, 2.55.0]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install promtool ${{ matrix.prom_version }}
+        run: |
+          sudo apt-get update && sudo apt-get install -y jq
+          curl -fsSL -o prom.tgz https://github.com/prometheus/prometheus/releases/download/v${{ matrix.prom_version }}/prometheus-${{ matrix.prom_version }}.linux-amd64.tar.gz
+          tar -xzf prom.tgz
+          sudo mv prometheus-${{ matrix.prom_version }}.linux-amd64/promtool /usr/local/bin/promtool
+          promtool --version
+      - name: Test rules compatibility
+        run: |
+          make prom-rules-ci
+          make prom-rules-test

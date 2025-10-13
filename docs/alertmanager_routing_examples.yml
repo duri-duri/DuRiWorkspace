@@ -1,0 +1,51 @@
+---
+# Alertmanager 라우팅 예제 및 회귀 방지 가이드
+
+# 현재 설정 (group_by: ['alertname','team'])
+route:
+  receiver: default
+  group_by: ['alertname', 'team']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1h
+  routes:
+    - matchers: ['team="search"', 'severity="warning"']
+      receiver: search-slack
+    - matchers: ['team="infrastructure"', 'severity="critical"']
+      receiver: infra-pagerduty
+
+# severity 기반 라우팅 예제
+severity_routing:
+  routes:
+    - matchers: ['severity="critical"']
+      receiver: critical-alerts
+      group_by: ['alertname', 'team', 'service']
+    - matchers: ['severity="warning"']
+      receiver: warning-alerts
+      group_by: ['alertname', 'team']
+    - matchers: ['severity="page"']
+      receiver: page-alerts
+      group_by: ['alertname']
+
+# 팀별 라우팅 예제
+team_routing:
+  routes:
+    - matchers: ['team="search"']
+      receiver: search-team
+      group_by: ['alertname', 'severity']
+    - matchers: ['team="infrastructure"']
+      receiver: infra-team
+      group_by: ['alertname', 'severity']
+    - matchers: ['team="platform"']
+      receiver: platform-team
+      group_by: ['alertname', 'severity']
+
+# 서비스별 라우팅 예제
+service_routing:
+  routes:
+    - matchers: ['service="prometheus"']
+      receiver: prometheus-alerts
+    - matchers: ['service="grafana"']
+      receiver: grafana-alerts
+    - matchers: ['service="alertmanager"']
+      receiver: alertmanager-alerts
