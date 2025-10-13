@@ -204,23 +204,21 @@ postmortem:
 
 # 운영 체크 - Prometheus HTTP API로 상태 확인
 check-prom:
-	@echo "=== 모니터링 시스템 상태 확인 ==="
-	@echo "mem_ratio count:" && curl -s 'http://localhost:9090/api/v1/query' --data-urlencode 'query=count(duri:container:mem_ratio)' | jq -r '.data.result[0].value[1]'
-	@echo "limit>0:" && curl -s 'http://localhost:9090/api/v1/query' --data-urlencode 'query=duri:containers:limitgt0' | jq -r '.data.result[0].value[1]'
-	@echo "limit=0:" && curl -s 'http://localhost:9090/api/v1/query' --data-urlencode 'query=duri:containers:limit0' | jq -r '.data.result[0].value[1]'
-	@echo "p95:" && curl -s 'http://localhost:9090/api/v1/query' --data-urlencode 'query=duri:blackbox:p95' | jq -r '.data.result[] | "\(.metric.target): \(.value[1])s"' | head -3
-	@echo "firing alerts:" && curl -s localhost:9090/api/v1/alerts | jq -r '.data.alerts[].labels.alertname' | sort | uniq -c | sort -nr
-
-ci-phase1-guard:
-	./scripts/ci_phase1_guard.sh
-
+	@if curl -fsS http://localhost:9090/-/ready >/dev/null; then
+		echo "Prometheus runtime checks:";
+		curl -s "localhost:9090/api/v1/query?query=up" | jq -r ".data.result[] | "\(.metric.job): \(.value[1])"";
+		curl -s "localhost:9090/api/v1/alerts" | jq -r ".data.alerts[] | "\(.labels.alertname): \(.state)"";
+	else
+		echo "Prometheus not available (skipping runtime checks)";
+	fi
 
 
 prom-dup-guard:
 	@python3 scripts/prom_dup_guard.py
 
 prom-rules-test:
-	promtool test rules tests/quality_rules_test.yml
+	REPO_ROOT=$$(git rev-parse --show-toplevel) envsubst < tests/quality_rules_test.yml > /tmp/quality_rules_test.rendered.yml
+	promtool test rules /tmp/quality_rules_test.rendered.yml
 
 alert-labels-guard:
 	./scripts/alert_labels_guard.sh

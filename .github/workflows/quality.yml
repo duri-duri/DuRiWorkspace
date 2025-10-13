@@ -2,25 +2,36 @@ name: quality
 on: [pull_request]
 env:
   AM_VER: "0.28.0"
+  PROM_VER: "2.55.0"
 jobs:
   gate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install promtool & jq
+      - name: Install promtool & jq (with integrity check)
         run: |
           sudo apt-get update && sudo apt-get install -y jq
-          VER=2.55.0
-          curl -fsSL -o prom.tgz https://github.com/prometheus/prometheus/releases/download/v${VER}/prometheus-${VER}.linux-amd64.tar.gz
-          curl -fsSL -o sha256.txt https://github.com/prometheus/prometheus/releases/download/v${VER}/sha256sums.txt
-          grep "prometheus-${VER}.linux-amd64.tar.gz" sha256.txt | sha256sum -c -
+          curl -fsSL -o prom.tgz https://github.com/prometheus/prometheus/releases/download/v${PROM_VER}/prometheus-${PROM_VER}.linux-amd64.tar.gz
+          curl -fsSL -o sha256.txt https://github.com/prometheus/prometheus/releases/download/v${PROM_VER}/sha256sums.txt
+          grep "prometheus-${PROM_VER}.linux-amd64.tar.gz" sha256.txt | sha256sum -c -
           tar -xzf prom.tgz
-          test -x prometheus-${VER}.linux-amd64/promtool
-          sudo mv prometheus-${VER}.linux-amd64/promtool /usr/local/bin/promtool
+          sudo mv prometheus-${PROM_VER}.linux-amd64/promtool /usr/local/bin/promtool
+          promtool --version; docker run --rm prom/alertmanager:${AM_VER} --version
       - name: Alertmanager config check (rendered)
+        if: ${{ github.event.pull_request.head.repo.fork == false }}
         run: |
-          echo '${{ secrets.SLACK_WEBHOOK_URL }}' >/tmp/slack_url
-          export SLACK_WEBHOOK_URL="$(cat /tmp/slack_url)"
+          export SLACK_WEBHOOK_URL='${{ secrets.SLACK_WEBHOOK_URL }}'
+          docker run --rm -e SLACK_WEBHOOK_URL \
+            -v "$PWD/alertmanager:/etc/alertmanager" \
+            --entrypoint sh prom/alertmanager:${AM_VER} -lc '
+              apk add --no-cache gettext >/dev/null 2>&1 || true
+              envsubst < /etc/alertmanager/alertmanager.yml > /tmp/am.yml &&
+              /bin/amtool check-config /tmp/am.yml
+            '
+      - name: Alertmanager config check (fork-safe)
+        if: ${{ github.event.pull_request.head.repo.fork == true }}
+        run: |
+          export SLACK_WEBHOOK_URL='https://example.invalid'
           docker run --rm -e SLACK_WEBHOOK_URL \
             -v "$PWD/alertmanager:/etc/alertmanager" \
             --entrypoint sh prom/alertmanager:${AM_VER} -lc '
@@ -29,6 +40,6 @@ jobs:
               /bin/amtool check-config /tmp/am.yml
             '
       - run: make prom-rules-ci
-      - run: make ci-phase1-guard
       - run: make prom-dup-guard
+      - run: make alert-labels-guard
       - run: make prom-rules-test

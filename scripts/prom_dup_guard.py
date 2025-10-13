@@ -5,7 +5,7 @@ import sys
 
 names = []
 pat = re.compile(r"^\s*-\s*record:\s*([^\s#]+)")
-for p in glob.glob("prometheus/rules/*.y*ml"):
+for p in glob.glob("prometheus/rules/**/*.y*ml", recursive=True):
     with open(p, encoding="utf-8") as f:
         for line in f:
             m = pat.match(line)

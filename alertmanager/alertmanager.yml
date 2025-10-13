@@ -1,8 +1,16 @@
 route:
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1h
   receiver: default
   routes:
   - matchers: ['team="search"', 'severity="warning"']
     receiver: search-slack
+inhibit_rules:
+- source_matchers: ['alertname="MRR_SLO_Breach"','team="search"']
+  target_matchers: ['alertname="MRR_Quick_Drop"','team="search"']
+  equal: ['team']
 receivers:
 - name: default
   webhook_configs:
