@@ -1,7 +1,9 @@
+---
 name: quality
 on: [pull_request]
 env:
   AM_VER: "0.28.0"
+  AM_IMG: "prom/alertmanager@sha256:abc123def456"
   PROM_VER: "2.55.0"
 jobs:
   gate:

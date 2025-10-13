@@ -1,4 +1,6 @@
+---
 rule_files:
+  - ${REPO_ROOT}/prometheus/rules/slo_constants.rules.yml
   - ${REPO_ROOT}/prometheus/rules/quality_slo.rules.yml
 evaluation_interval: 1m
 
