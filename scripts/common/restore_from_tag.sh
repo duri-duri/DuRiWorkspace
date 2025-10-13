@@ -1,4 +1,5 @@
 #!/bin/bash
+set -Eeuo pipefail
 
 TAG=$1
 if [ -z "$TAG" ]; then

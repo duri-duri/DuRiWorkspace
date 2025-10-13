@@ -1,0 +1,125 @@
+{
+  "uid": "duri-obsv-overview",
+  "title": "DuRi • Containers & Blackbox (Ops)",
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "editable": true,
+  "refresh": "10s",
+  "time": { "from": "now-6h", "to": "now" },
+  "templating": {
+    "list": [
+      {
+        "name": "DS_PROMETHEUS",
+        "type": "datasource",
+        "query": "prometheus",
+        "current": { "selected": true, "text": "Prometheus", "value": "Prometheus" }
+      },
+      {
+        "name": "container",
+        "type": "query",
+        "datasource": "${DS_PROMETHEUS}",
+        "query": "label_values(duri:container:mem_ratio, name)",
+        "refresh": 2,
+        "includeAll": true,
+        "multi": true
+      },
+      {
+        "name": "target",
+        "type": "query",
+        "datasource": "${DS_PROMETHEUS}",
+        "query": "label_values(duri:blackbox:p95, target)",
+        "refresh": 2,
+        "includeAll": true,
+        "multi": true
+      }
+    ]
+  },
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Limited (mem>0)",
+      "gridPos": { "x": 0, "y": 0, "w": 4, "h": 4 },
+      "targets": [{ "datasource": "${DS_PROMETHEUS}", "expr": "duri:containers:limitgt0" }],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "value", "graphMode": "none", "justifyMode": "center" },
+      "fieldConfig": { "defaults": { "unit": "none", "decimals": 0 } }
+    },
+    {
+      "type": "stat",
+      "title": "Unlimited (mem=0)",
+      "gridPos": { "x": 4, "y": 0, "w": 4, "h": 4 },
+      "targets": [{ "datasource": "${DS_PROMETHEUS}", "expr": "duri:containers:limit0" }],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "value", "graphMode": "none", "justifyMode": "center" },
+      "fieldConfig": { "defaults": { "unit": "none", "decimals": 0 } }
+    },
+    {
+      "type": "stat",
+      "title": "Mem High Alerts (firing)",
+      "gridPos": { "x": 8, "y": 0, "w": 4, "h": 4 },
+      "targets": [{ "datasource": "${DS_PROMETHEUS}", "expr": "count(ALERTS{alertname=\"ContainerMemoryHighRatio\",alertstate=\"firing\"}) or on() vector(0)" }],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] } },
+      "fieldConfig": { "defaults": { "unit": "none", "decimals": 0 } }
+    },
+    {
+      "type": "stat",
+      "title": "Blackbox High p95 (firing)",
+      "gridPos": { "x": 12, "y": 0, "w": 4, "h": 4 },
+      "targets": [{ "datasource": "${DS_PROMETHEUS}", "expr": "count(ALERTS{alertname=\"BlackboxProbeLatencyHigh\",alertstate=\"firing\"}) or on() vector(0)" }],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] } },
+      "fieldConfig": { "defaults": { "unit": "none", "decimals": 0 } }
+    },
+    {
+      "type": "table",
+      "title": "Top5 Working Set (bytes)",
+      "gridPos": { "x": 16, "y": 0, "w": 8, "h": 8 },
+      "targets": [{
+        "datasource": "${DS_PROMETHEUS}",
+        "expr": "topk(5, container_memory_working_set_bytes{name!=\"\"})",
+        "format": "table",
+        "instant": true
+      }],
+      "options": { "showHeader": true, "sortBy": [{ "displayName": "Value", "desc": true }] },
+      "fieldConfig": { "defaults": { "unit": "bytes", "decimals": 1 } }
+    },
+    {
+      "type": "timeseries",
+      "title": "Memory Ratio (limited only)",
+      "gridPos": { "x": 0, "y": 4, "w": 16, "h": 10 },
+      "targets": [{
+        "datasource": "${DS_PROMETHEUS}",
+        "expr": "duri:container:mem_ratio{name=~\"$container\"}",
+        "legendFormat": "{{name}}"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "decimals": 2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 0.9 },
+              { "color": "red", "value": 0.95 }
+            ]
+          }
+        }
+      },
+      "options": { "legend": { "showLegend": true, "displayMode": "table", "placement": "bottom" }, "tooltip": { "mode": "all" } }
+    },
+    {
+      "type": "timeseries",
+      "title": "Blackbox p95 per target (s)",
+      "gridPos": { "x": 16, "y": 8, "w": 8, "h": 10 },
+      "targets": [{
+        "datasource": "${DS_PROMETHEUS}",
+        "expr": "duri:blackbox:p95{target=~\"$target\"}",
+        "legendFormat": "{{target}}"
+      }],
+      "fieldConfig": {
+        "defaults": { "unit": "s", "decimals": 3, "min": 0 },
+        "overrides": []
+      },
+      "options": { "legend": { "showLegend": true, "displayMode": "table", "placement": "bottom" }, "tooltip": { "mode": "all" } }
+    }
+  ]
+}

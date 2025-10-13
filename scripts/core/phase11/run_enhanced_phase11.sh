@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -Eeuo pipefail
 """
 Phase 11 Enhanced Orchestrator 실행 스크립트
 

@@ -1,4 +1,5 @@
 #!/bin/bash
+set -Eeuo pipefail
 
 MESSAGE="📸 2025-07-15 DuRi 전체 상태 스냅샷"
 BRANCH="dev-2025-07-15-full_snapshot"

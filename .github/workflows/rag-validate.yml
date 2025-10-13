@@ -1,0 +1,28 @@
+name: RAG Validate
+on:
+  pull_request:
+    paths:
+      - "rag/**/*.jsonl"
+      - "scripts/rag_verify.sh"
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y jq
+      - run: bash scripts/rag_verify.sh
+      - name: JSONL single-line check (multiline prevention)
+        run: |
+          set -euo pipefail
+          find rag/ -name "*.jsonl" -print0 | xargs -0 -I{} bash -c '
+            L=$(wc -l < "{}"); V=$(jq -c . "{}" | wc -l);
+            if [[ "$L" -ne "$V" ]]; then
+              echo "❌ multiline or invalid: {} (lines=$L, valid=$V)"
+              exit 1
+            fi
+          '
+      - name: RAG search smoke (요통)
+        run: |
+          set -euo pipefail
+          out="$(bash scripts/rag_search.sh '요통')"
+          echo "$out" | grep -q '📄 '  # 최소 1개 결과 보장

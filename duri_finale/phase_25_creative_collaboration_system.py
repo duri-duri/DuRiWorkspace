@@ -65,17 +65,19 @@ class CreativeCollaborationSystem:
         self, user_input: str, context: Dict[str, Any]
     ) -> HumanIntent:
         """인간의 의도 분석"""
-        print(f"🔍 인간 의도 분석 시작: {user_input[:50]}...")
+        # 방어 코드: user_input이 None일 때 처리
+        safe_input = (user_input or "")
+        print(f"🔍 인간 의도 분석 시작: {safe_input[:50]}...")
 
         # 의도 분석 로직
         intent_analysis = {
-            "primary_goal": self._extract_primary_goal(user_input),
-            "secondary_goals": self._extract_secondary_goals(user_input),
-            "constraints": self._extract_constraints(user_input, context),
-            "preferences": self._extract_preferences(user_input),
-            "communication_style": self._analyze_communication_style(user_input),
+            "primary_goal": self._extract_primary_goal(safe_input),
+            "secondary_goals": self._extract_secondary_goals(safe_input),
+            "constraints": self._extract_constraints(safe_input, context),
+            "preferences": self._extract_preferences(safe_input),
+            "communication_style": self._analyze_communication_style(safe_input),
             "expertise_level": self._assess_expertise_level(context),
-            "collaboration_style": self._determine_collaboration_style(user_input),
+            "collaboration_style": self._determine_collaboration_style(safe_input),
         }
 
         human_intent = HumanIntent(**intent_analysis)

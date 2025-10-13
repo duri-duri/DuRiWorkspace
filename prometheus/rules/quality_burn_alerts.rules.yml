@@ -1,0 +1,25 @@
+groups:
+- name: quality-burn-alerts
+  interval: 1m
+  rules:
+  - alert: QualityBurnRateHigh
+    expr: duri_ndcg_errbudget / 7d < -0.1
+    for: 5m
+    labels:
+      severity: warning
+      team: search
+      runbook_url: "https://docs.example.com/runbooks/burn-alerts"
+    annotations:
+      summary: "Quality error budget burn rate high"
+      description: "Burn rate: {{ $value | printf \"%.3f\" }}"
+
+  - alert: QualityBurnRateCritical
+    expr: duri_ndcg_errbudget / 7d < -0.2
+    for: 2m
+    labels:
+      severity: critical
+      team: search
+      runbook_url: "https://docs.example.com/runbooks/burn-alerts"
+    annotations:
+      summary: "Quality error budget burn rate critical"
+      description: "Burn rate: {{ $value | printf \"%.3f\" }}"

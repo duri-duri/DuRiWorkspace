@@ -87,7 +87,7 @@ if mountpoint -q /mnt/usb; then
   log "USB 라이브 미러 시작" | tee -a "$RUNLOG"
   # 링크는 내용 복사, 깨진 링크/볼라틸 제외
   RSYNC_OPTS=(-aHL --copy-unsafe-links --safe-links
-              --delete --delete-delay --mkpath --modify-window=2
+              --delete --delete-delay --delete-excluded --mkpath --modify-window=2
               --no-perms --no-owner --no-group
               --exclude-from="$EXC")
   ionice -c2 -n7 nice -n19 rsync "${RSYNC_OPTS[@]}" "$SRC_DIR/" "$USB_ROOT/" \

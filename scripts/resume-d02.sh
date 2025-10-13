@@ -1,4 +1,5 @@
 #!/bin/bash
+set -Eeuo pipefail
 # D02 마무리 "재개(RESUME)" 스크립트
 # 이틀 후 D03 시작용
 

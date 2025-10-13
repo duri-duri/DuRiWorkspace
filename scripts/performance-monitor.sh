@@ -1,4 +1,5 @@
 #!/bin/bash
+set -Eeuo pipefail
 # DuRi Performance Monitoring Script - Phase 4
 # 성능 모니터링 및 튜닝 도구
 

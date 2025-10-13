@@ -1,0 +1,14 @@
+extends: default
+rules:
+  line-length:
+    max: 200
+    level: warning
+  truthy:
+    allowed-values: ['false', 'true', 'on', 'off', 'yes', 'no']  # GHA 호환
+  indentation:
+    indent-sequences: whatever  # 들쑥날쑥 들여쓰기 임시 허용
+ignore: |
+  .venv/
+  **/node_modules/
+  # 길이가 길 수밖에 없는 CI 스크립트는 제외
+  .github/workflows/*.yml

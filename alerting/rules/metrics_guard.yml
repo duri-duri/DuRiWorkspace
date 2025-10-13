@@ -1,0 +1,55 @@
+# alerting/rules/metrics_guard.yml
+groups:
+- name: rag-metrics-guard
+  rules:
+  # Recording rule: 이동평균 (플랩 억제)
+  - record: duri_ndcg_at_k:avg_1h
+    expr: avg_over_time(duri_ndcg_at_k{k="3",scope="all"}[1h])
+
+  - record: duri_ndcg_at_k:avg_6h
+    expr: avg_over_time(duri_ndcg_at_k{k="3",scope="all"}[6h])
+
+  # Alert: nDCG 하락 (이동평균 기반, 노이즈 방지)
+  - alert: RAG_NDCG_Drop
+    expr: (duri_ndcg_at_k:avg_6h - duri_ndcg_at_k:avg_1h) > 0.05
+    for: 15m
+    labels: { severity: warning }
+    annotations:
+      summary: "nDCG drop over last 6h (moving average)"
+      description: "nDCG@{{ $labels.k }} fell by >0.05. 6h_avg={{ $value }}, 1h_avg={{ $labels.avg_1h }}"
+
+  # Alert: 회귀 탐지 (5분 지속)
+  - alert: RAG_Regression_Detected
+    expr: duri_guard_last_exit_code{k="3",scope="all",domain="ALL"} == 2
+    for: 5m
+    labels: { severity: critical }
+    annotations:
+      summary: "RAG 성능 회귀 감지"
+      description: "Guard exit code가 2로 지속됨 (회귀 모드)"
+
+  # Alert: 텍스트파일 정체 (15분 이상)
+  - alert: DuriTextfileStale
+    expr: time() - duri_metrics_generated_seconds > 15*60
+    for: 10m
+    labels: { severity: page }
+    annotations:
+      summary: "Duri metrics textfile stale (>15m)"
+      description: "메트릭 텍스트파일이 15분 이상 갱신되지 않음"
+
+  # Alert: 메트릭 파일 부재
+  - alert: DuriTextfileMissing
+    expr: absent(duri_exporter_up) or absent(duri_metrics_generated_seconds)
+    for: 5m
+    labels: { severity: page }
+    annotations:
+      summary: "Duri metrics textfile missing"
+      description: "메트릭 텍스트파일이 존재하지 않음"
+
+  # Alert: 익스포터 다운
+  - alert: DuriExporterDown
+    expr: duri_exporter_up == 0
+    for: 5m
+    labels: { severity: page }
+    annotations:
+      summary: "Duri exporter down"
+      description: "DuRi 익스포터가 다운됨"

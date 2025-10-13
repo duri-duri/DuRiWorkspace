@@ -1,0 +1,27 @@
+---
+# 알람 테스트 템플릿 (for: 15m 발화 확정 패턴)
+# 사용법: interval, values, alertname, exp_alerts만 교체
+rule_files:
+  - ${REPO_ROOT}/prometheus/rules/quality_slo.rules.yml
+  - ${REPO_ROOT}/prometheus/rules/slo_constants.rules.yml
+evaluation_interval: 1m
+
+tests:
+- interval: 1m
+  input_series:
+    - series: 'duri_mrr_at_k{k="3",scope="all",domain="ALL"}'
+      # 워밍업(정상) 30분 → 위반 구간(≥for+1m) 20분 → eval_time 46m (위반시작+for+1m)
+      values: '0.90x30 0.86x20'
+  promql_expr_test:
+    - expr: duri_mrr_ma7
+      eval_time: 50m
+      exp_samples:
+        - labels: '{__name__="duri_mrr_ma7", domain="ALL", k="3", scope="all"}'
+          value: 0.8843137254901962
+  alert_rule_test:
+    - eval_time: 46m  # 15m 충족 + 1m
+      alertname: YOUR_ALERT_NAME
+      exp_alerts:
+        - exp_labels:
+            severity: "warning"
+            team: "search"

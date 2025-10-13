@@ -1,0 +1,18 @@
+[Unit]
+Description=DuRi Day66 metrics summarize & guard
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=duri
+WorkingDirectory=/home/duri/DuRiWorkspace
+EnvironmentFile=-/etc/default/duri-workspace
+ExecStart=/usr/bin/env bash -lc 'bash scripts/metrics/summarize_day66.sh ${METRIC_K:-3} .reports/train/day64/LATEST.tsv'
+SyslogIdentifier=duri-metrics
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=read-only
+ReadWritePaths=/home/duri/DuRiWorkspace/.reports /home/duri/DuRiWorkspace/var
+UMask=027

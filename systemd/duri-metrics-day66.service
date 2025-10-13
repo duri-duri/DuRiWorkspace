@@ -1,0 +1,18 @@
+[Unit]
+Description=DuRi Day66 Metrics (compute + guard)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=duri
+WorkingDirectory=/home/duri/DuRiWorkspace
+Environment=LC_ALL=C
+Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ExecStart=/usr/bin/env bash -lc 'make metrics-dashboard'
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=read-only
+ReadWritePaths=/home/duri/DuRiWorkspace/.reports /home/duri/DuRiWorkspace/var
+UMask=027

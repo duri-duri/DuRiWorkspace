@@ -1,0 +1,16 @@
+{
+  "alerts": [
+    {
+      "labels": {
+        "alertname": "QualityDropImmediate",
+        "severity": "critical",
+        "team": "search"
+      },
+      "annotations": {
+        "summary": "nDCG 급락 (즉시)",
+        "description": "k=3, domain=ALL"
+      },
+      "startsAt": "2025-10-12T09:00:00Z"
+    }
+  ]
+}

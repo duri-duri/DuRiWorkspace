@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+source "$(dirname "$(readlink -f "$0")")/../lib/loop_common.sh"
+
+REPO_ROOT="$(repo_root)"
+cd "$REPO_ROOT"   # ✅ 항상 루트부터 시작
+
+IN="${1:-$REPO_ROOT/.reports/metrics/day66_metrics.tsv}"
+
+# 라벨 정규화 함수들
+sanitize_label() {
+  local s="$1"
+  # '-' → ALL, 그 외 비문자는 '_' 로
+  [ "$s" = "-" ] && echo "ALL" && return 0
+  printf '%s' "$s" | sed 's/[^A-Za-z0-9_]/_/g'
+}
+
+sanitize_k() {
+  # 숫자만 통과
+  printf '%s' "$1" | tr -cd '0-9'
+}
+
+hdr="$(head -1 "$IN" 2>/dev/null || true)"
+[[ -z "$hdr" ]] && exit 0
+
+# k 추출 (ndcg@3 같은 헤더에서 k를 읽음)
+k="3"  # 기본값
+if echo "$hdr" | grep -q "ndcg@"; then
+  k="$(echo "$hdr" | grep -o "ndcg@[0-9]\+" | sed 's/ndcg@//')"
+fi
+: "${k:=3}"   # set -u에서도 안전
+
+# HELP/TYPE 헤더 출력 (한 번만)
+cat <<EOF
+# HELP duri_ndcg_at_k NDCG@k
+# TYPE duri_ndcg_at_k gauge
+# HELP duri_mrr Mean Reciprocal Rank
+# TYPE duri_mrr gauge
+# HELP duri_oracle_recall_at_k Oracle recall@k
+# TYPE duri_oracle_recall_at_k gauge
+# HELP duri_guard_last_exit_code Guard script last exit code (0 ok, 1 infra, 2 regression)
+# TYPE duri_guard_last_exit_code gauge
+# HELP duri_metrics_generated_seconds Unix epoch when metrics file was generated
+# TYPE duri_metrics_generated_seconds gauge
+# HELP duri_exporter_up Exporter availability (1=up, 0=down)
+# TYPE duri_exporter_up gauge
+# HELP duri_build_info Build and deploy info
+# TYPE duri_build_info gauge
+EOF
+
+# columns: scope  domain  count  ndcg@k  mrr  oracle_recall@k
+awk -F'\t' -v k="$k" 'NR>1{
+  gsub(/\r$/,""); # CRLF 보호
+  scope=$1; domain=$2; ndcg=$4; mrr=$5; oracle=$6;
+
+  # 라벨 정규화
+  if(domain == "-") dom = "ALL"; else dom = domain; gsub(/[^A-Za-z0-9_]/, "_", dom);
+  if(scope == "-") sc = "ALL"; else sc = scope; gsub(/[^A-Za-z0-9_]/, "_", sc);
+  kk = k; gsub(/[^0-9]/, "", kk);
+
+  printf "duri_ndcg_at_k{k=\"%s\",scope=\"%s\",domain=\"%s\"} %s\n", kk, sc, dom, ndcg;
+  printf "duri_mrr{scope=\"%s\",domain=\"%s\"} %s\n", sc, dom, mrr;
+  printf "duri_oracle_recall_at_k{k=\"%s\",scope=\"%s\",domain=\"%s\"} %s\n", kk, sc, dom, oracle;
+}' "$IN"
+
+# 마지막 가드 exit 코드 (회귀 발생 시 2로 갱신)
+guard_exit_code=0
+if [[ -f "$REPO_ROOT/.reports/metrics/day66_metrics.tsv" ]]; then
+  # 가드 실행하여 exit 코드 확인
+  bash "$REPO_ROOT/scripts/alerts/threshold_guard.sh" "$REPO_ROOT/.reports/metrics/day66_metrics.tsv" "$k" >/dev/null 2>&1 || guard_exit_code=$?
+fi
+
+# guard 메트릭: 라벨 순서(k, scope, domain)를 다른 메트릭과 맞춰 가독성 ↑
+# guard는 "전체 집계"를 대표 → domain은 항상 "ALL"이 명확
+printf "duri_guard_last_exit_code{k=\"%s\",scope=\"all\",domain=\"ALL\"} %d\n" "$k" "$guard_exit_code"
+
+# 빌드/스냅샷 메타 메트릭 추가 (HELP/TYPE는 이미 위에서 출력됨)
+printf 'duri_metrics_generated_seconds %s\n' "$(date +%s)"
+printf 'duri_exporter_up 1\n'
+printf 'duri_build_info{git_sha="%s",tag="%s"} 1\n' "$(git rev-parse --short HEAD 2>/dev/null || echo unknown)" "${DURI_TAG:-day66-metrics-ga}"
+
+# 원자적 쓰기 지원 (CI에서 사용)
+if [[ -n "${TEXTFILE_OUTPUT:-}" ]]; then
+  tmp="${TEXTFILE_OUTPUT}.$$"
+  cat > "$tmp"    # 메트릭 생성
+  mv -f "$tmp" "$TEXTFILE_OUTPUT"
+fi

@@ -1,0 +1,10 @@
+groups:
+- name: slo-constants
+  interval: 1h
+  rules:
+  - record: slo_ndcg_target
+    expr: 0.90
+  - record: slo_mrr_target
+    expr: 0.88
+  - record: slo_recall3_target
+    expr: 0.98

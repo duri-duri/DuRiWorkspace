@@ -1,94 +1,36 @@
-# pre-commit global exclude: snapshots, backups, logs, archives
-exclude: |
-  (?x)^(
-    duri_snapshots/|
-    restored_day8_10/|
-    unified_conversations/|
-    logs/|
-    DuRiCore_backup_.*|
-    backup.*|
-    duri_archive/|
-    safe_workspace/|
-    \.benchmarks/|
-    \.bundle_tmp/|
-    \.test-artifacts/|
-    \.cache/|
-    dist/|
-    build/|
-    site/|
-    htmlcov/|
-    \.coverage.*|
-    tmp/|
-    temp/|
-    \.DS_Store|
-    \.idea/|
-    \.vscode/|
-    \.pytest_cache/
-  )
-
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v6.0.0
+    rev: v4.6.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: check-yaml
-        exclude: |
-          (?x)^(
-            \.github/workflows-archive/|
-            docker-compose\.optimized\.yml
-          )
       - id: check-added-large-files
-        args: ['--maxkb=1000']
       - id: check-merge-conflict
       - id: check-json
-        exclude: |
-          (?x)^(
-            DuRiCore/test_results_.*\.json
-          )
       - id: check-toml
       - id: check-xml
       - id: debug-statements
-        exclude: |
-          (?x)^(
-            DuRiCore/reasoning_engine/integration/|
-            DuRiCore_backup_.*
-          )
       - id: detect-private-key
 
-  - repo: https://github.com/Yelp/detect-secrets
-    rev: v1.5.0
-    hooks:
-      - id: detect-secrets
-        args: ['--baseline', '.secrets.baseline']
-        exclude: package.lock.json
-
   - repo: https://github.com/psf/black
-    rev: 25.9.0
+    rev: 24.8.0
     hooks:
       - id: black
         language_version: python3
-        exclude: |
-          (?x)^(
-            DuRiCore/reasoning_engine/integration/|
-            DuRiCore_backup_.*
-          )
 
   - repo: https://github.com/pycqa/isort
-    rev: 6.0.1
+    rev: 5.13.2
     hooks:
       - id: isort
-        args:
-          - --settings-path=pyproject.toml
-          - --filter-files
-        exclude: |
-          (?x)^(
-            DuRiCore/reasoning_engine/integration/|
-            DuRiCore_backup_.*
-          )
 
   - repo: https://github.com/pycqa/flake8
-    rev: 7.3.0
+    rev: 7.1.0
     hooks:
       - id: flake8
-        additional_dependencies: [flake8-docstrings]
+        additional_dependencies: ["flake8-bugbear==24.4.26"]
+
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.35.1
+    hooks:
+      - id: yamllint

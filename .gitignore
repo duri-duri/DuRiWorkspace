@@ -15,6 +15,7 @@ logs/
 **/*.log
 **/*.log.*
 **/*.jsonl
+!rag/**/*.jsonl
 reports/
 tests/**/.pytest_cache/
 .pytest_cache/
@@ -122,3 +123,29 @@ logs/
 
 # local tmp
 Makefile.tmp
+
+# allow tracked RAG jsonl (explicit)
+!rag/
+!rag/**/*.jsonl
+prom-data/
+
+data/prometheus/
+
+# Day 66: 메트릭 시스템 (지표 스키마/thresholds만 소스 관리, 실측치는 CI 아티팩트로 보관)
+.reports/**/*
+!/.reports/metrics/*.env
+!/.reports/metrics/*_schema*.tsv
+# Cognitive charter
+KIMSHIN_COGNITIVE_EQUATIONS_DESIGN_CHARTER.md
+duri_core/core/KIMSHIN_COGNITIVE_EQUATIONS_DESIGN_CHARTER.md
+backup/KIMSHIN_COGNITIVE_EQUATIONS_DESIGN_CHARTER_*.tar.gz
+backup/*.sha256
+backup/*.age
+backup/BACKUP_LOG_*.txt
+
+# === keep day completion reports / verify_out tracked ===
+!DuRi_Day11_15_starter/
+!DuRi_Day11_15_starter/DAY*_COMPLETION_REPORT.md
+!DuRi_Day11_15_starter/verify_out/
+!DuRi_Day11_15_starter/verify_out/day_*.json
+.env.grafana

@@ -1,65 +1,57 @@
 name: freeze-guard
-
 on:
   pull_request:
-    types: [opened, synchronize, reopened, labeled, unlabeled]
+    branches: [ main ]
+    types: [opened, synchronize, labeled, unlabeled]
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  guard:
+  enforce-freeze:
     runs-on: ubuntu-latest
+    if: ${{ github.base_ref == 'main' }} # main 병합 대상만 검사
     steps:
-      - name: Check override label
-        id: check_label
-        shell: bash
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+      - name: Check last commit trailer (Override-Freeze)
         run: |
-          if [[ "${{ contains(join(github.event.pull_request.labels.*.name, ' '), 'override:freeze') }}" == "true" ]]; then
-            echo "✅ override:freeze label present, bypassing freeze-guard"
-            echo "bypass=true" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-          echo "bypass=false" >> $GITHUB_OUTPUT
+          # 기본: Freeze ON → 항상 막음
+          FREEZE_ON=1
 
-      - name: Checkout
-        if: steps.check_label.outputs.bypass != 'true'
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Compute changed files
-        if: steps.check_label.outputs.bypass != 'true'
-        shell: bash
-        run: |
-          set -euo pipefail
-          base="${{ github.base_ref }}"
-          git fetch --no-tags --depth=1 origin "$base"
-          git diff --name-only "origin/$base"...HEAD | tee changed.txt
-          # 빈 변경이면 바로 통과
-          if [[ ! -s changed.txt ]]; then
-            echo "No changes."
-            exit 0
+          # PR 라벨로 '긴급' 허용 토글 (원하면 제거 가능)
+          if echo '${{ toJson(github.event.pull_request.labels) }}' \
+            | jq -e '.[]|select(.name=="override-freeze")' >/dev/null; then
+            FREEZE_ON=0
           fi
 
-      - name: Enforce allowlist
-        if: steps.check_label.outputs.bypass != 'true'
-        shell: bash
-        run: |
-          set -euo pipefail
-          if [[ ! -f .github/freeze-allow.txt ]]; then
-            echo "❌ Missing allowlist: .github/freeze-allow.txt"
+          if [ "$FREEZE_ON" = "1" ]; then
+            echo "🛑 Freeze ON: PR은 기본적으로 차단됩니다."
+            echo "    - 긴급 시: 마지막 커밋 메시지에 'Override-Freeze: true' 트레일러 필요"
+            echo "    - (필요 시) 서명 커밋"
+          fi
+
+          LAST_MSG="$(git log -1 --pretty=%B)"
+          HAS_TRAILER=$(printf "%s" "$LAST_MSG" | grep -cE '^Override-Freeze:\s*true$' || true)
+
+          if [ "$FREEZE_ON" = "1" ] && [ "$HAS_TRAILER" -eq 0 ]; then
+            echo "Missing required trailer: Override-Freeze: true"
             exit 1
           fi
-          # 주석/빈줄 제거 → 단일 정규식으로 결합
-          awk 'NF && $0 !~ /^#/' .github/freeze-allow.txt | paste -sd'|' - > allow.re
-          echo "Allow regex:"
-          cat allow.re
-          # 허용되지 않은 변경 추출
-          grep -Evf allow.re changed.txt > blocked.txt || true
-          if [[ -s blocked.txt ]]; then
-            echo "❌ Blocked by freeze-guard:"
-            sed 's/^/ - /' blocked.txt
-            echo
-            echo "➡ 허용하려면 .github/freeze-allow.txt 에 패턴을 추가하거나,"
-            echo "   PR에 'override:freeze' 라벨을 붙이세요(관리자 승인)."
-            exit 1
+
+      - name: (선택) GPG 서명 검증
+        if: ${{ always() }}
+        run: |
+          # 필요 시 필수화: 실패하면 exit 1
+          if git verify-commit -v HEAD; then
+            echo "GPG signature OK"
+          else
+            echo "WARN: commit not signed or unverifiable"
+            # exit 1  # <- 서명 필수로 바꿀 때 주석 해제
           fi
-          echo "✅ All changes are allowlisted."

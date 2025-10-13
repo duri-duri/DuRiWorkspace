@@ -1,4 +1,5 @@
 #!/bin/bash
+set -Eeuo pipefail
 
 # 📌 사용법: ./restore_brain.sh <commit_hash>
 # 예시: ./restore_brain.sh 8436469

@@ -1,0 +1,14 @@
+rule_files:
+  - ${REPO_ROOT}/prometheus/rules/quality_slo.rules.yml
+evaluation_interval: 1d
+tests:
+- interval: 1d
+  input_series:
+    - series: 'duri_mrr_at_k{k="3",scope="all",domain="ALL"}'
+      values: '0.90 0.89 0.87 0.86 0.86 0.87 0.87'
+  promql_expr_test:
+    - expr: duri_mrr_ma7
+      eval_time: 7d
+      exp_samples:
+        - labels: '{__name__="duri_mrr_ma7", domain="ALL", k="3", scope="all"}'
+          value: 0.8742857142857143

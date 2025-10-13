@@ -1,0 +1,163 @@
+name: change-safety
+on:
+  pull_request:
+    types: [opened, labeled, unlabeled, synchronize]
+    paths:
+      - 'prometheus/**'
+      - 'tests/**'
+      - 'scripts/**'
+      - 'grafana/**'
+      - 'docs/**'
+      - '.github/workflows/change-safety.yml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: read
+
+env:
+  PROMTOOL: /usr/local/bin/promtool
+  PROM_VERSION: '2.55.0'
+
+jobs:
+  _setup:
+    runs-on: ubuntu-latest
+    outputs:
+      risky: ${{ steps.eval.outputs.risky }}
+      safe:  ${{ steps.eval.outputs.safe }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: eval
+        run: |
+          labels="${{ toJson(github.event.pull_request.labels) }}"
+          if echo "$labels" | jq -e '.[] | select(.name=="change-type: risky")' >/dev/null; then echo "risky=true" >> "$GITHUB_OUTPUT"; else echo "risky=false" >> "$GITHUB_OUTPUT"; fi
+          if echo "$labels" | jq -e '.[] | select(.name=="change-type: safe")'  >/dev/null; then echo "safe=true"  >> "$GITHUB_OUTPUT"; else echo "safe=false"  >> "$GITHUB_OUTPUT"; fi
+
+  risky-change-check:
+    needs: _setup
+    if: "${{ needs._setup.outputs.risky == 'true' }}"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: .cache/promtool/${{ env.PROM_VERSION }}/linux-amd64
+          key: prom-${{ runner.os }}-${{ env.PROM_VERSION }}-linux-amd64
+      - name: Install promtool & jq
+        run: |
+          set -e
+          sudo apt-get update && sudo apt-get install -y jq
+          CACHED_DIR=".cache/promtool/${PROM_VERSION}/linux-amd64"
+          BIN="${CACHED_DIR}/promtool"
+          if [ ! -x "$BIN" ]; then
+            mkdir -p "$CACHED_DIR"
+            curl -fsSL -o prom.tgz "https://github.com/prometheus/prometheus/releases/download/v${PROM_VERSION}/prometheus-${PROM_VERSION}.linux-amd64.tar.gz"
+            tar -xzf prom.tgz
+            mv "prometheus-${PROM_VERSION}.linux-amd64/promtool" "$BIN"
+          fi
+          sudo ln -sf "$PWD/$BIN" "${PROMTOOL}"
+          ${PROMTOOL} --version
+          jq --version
+      - name: Path guard for test rule_files
+        run: |
+          if grep -R '\${REPO_ROOT}/\.\./\${REPO_ROOT}/' tests/ ; then
+            echo "Found invalid path: \${REPO_ROOT}/../\${REPO_ROOT}/"
+            exit 1
+          fi
+          if grep -R '\.\./\${REPO_ROOT}/' tests/ ; then
+            echo "Found invalid path: ../\${REPO_ROOT}/"
+            exit 1
+          fi
+          echo "Path guard PASS"
+      - name: Enhanced validation for risky changes
+        run: |
+          make ci-all
+          make grafana-lint
+          make runbook-quality-guard
+
+  safe-change-check:
+    needs: _setup
+    if: "${{ needs._setup.outputs.safe == 'true' }}"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: .cache/promtool/${{ env.PROM_VERSION }}/linux-amd64
+          key: prom-${{ runner.os }}-${{ env.PROM_VERSION }}-linux-amd64
+      - name: Install promtool & jq
+        run: |
+          set -e
+          sudo apt-get update && sudo apt-get install -y jq
+          CACHED_DIR=".cache/promtool/${PROM_VERSION}/linux-amd64"
+          BIN="${CACHED_DIR}/promtool"
+          if [ ! -x "$BIN" ]; then
+            mkdir -p "$CACHED_DIR"
+            curl -fsSL -o prom.tgz "https://github.com/prometheus/prometheus/releases/download/v${PROM_VERSION}/prometheus-${PROM_VERSION}.linux-amd64.tar.gz"
+            tar -xzf prom.tgz
+            mv "prometheus-${PROM_VERSION}.linux-amd64/promtool" "$BIN"
+          fi
+          sudo ln -sf "$PWD/$BIN" "${PROMTOOL}"
+          ${PROMTOOL} --version
+          jq --version
+      - name: Path guard for test rule_files
+        run: |
+          if grep -R '\${REPO_ROOT}/\.\./\${REPO_ROOT}/' tests/ ; then
+            echo "Found invalid path: \${REPO_ROOT}/../\${REPO_ROOT}/"
+            exit 1
+          fi
+          if grep -R '\.\./\${REPO_ROOT}/' tests/ ; then
+            echo "Found invalid path: ../\${REPO_ROOT}/"
+            exit 1
+          fi
+          echo "Path guard PASS"
+      - name: Standard validation for safe changes
+        run: |
+          make prom-rules-ci
+          make prom-dup-guard
+          make alert-labels-guard
+
+  default-check:
+    needs: _setup
+    if: "${{ needs._setup.outputs.risky != 'true' && needs._setup.outputs.safe != 'true' }}"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: .cache/promtool/${{ env.PROM_VERSION }}/linux-amd64
+          key: prom-${{ runner.os }}-${{ env.PROM_VERSION }}-linux-amd64
+      - name: Install promtool & jq
+        run: |
+          set -e
+          sudo apt-get update && sudo apt-get install -y jq
+          CACHED_DIR=".cache/promtool/${PROM_VERSION}/linux-amd64"
+          BIN="${CACHED_DIR}/promtool"
+          if [ ! -x "$BIN" ]; then
+            mkdir -p "$CACHED_DIR"
+            curl -fsSL -o prom.tgz "https://github.com/prometheus/prometheus/releases/download/v${PROM_VERSION}/prometheus-${PROM_VERSION}.linux-amd64.tar.gz"
+            tar -xzf prom.tgz
+            mv "prometheus-${PROM_VERSION}.linux-amd64/promtool" "$BIN"
+          fi
+          sudo ln -sf "$PWD/$BIN" "${PROMTOOL}"
+          ${PROMTOOL} --version
+          jq --version
+      - name: Path guard for test rule_files
+        run: |
+          if grep -R '\${REPO_ROOT}/\.\./\${REPO_ROOT}/' tests/ ; then
+            echo "Found invalid path: \${REPO_ROOT}/../\${REPO_ROOT}/"
+            exit 1
+          fi
+          if grep -R '\.\./\${REPO_ROOT}/' tests/ ; then
+            echo "Found invalid path: ../\${REPO_ROOT}/"
+            exit 1
+          fi
+          echo "Path guard PASS"
+      - name: Default validation (no labels)
+        run: |
+          make prom-rules-ci
+          make prom-dup-guard
+          make alert-labels-guard

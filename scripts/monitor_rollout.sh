@@ -1,4 +1,5 @@
 #!/bin/bash
+set -Eeuo pipefail
 # 리팩토링 25% 전환 모니터링 스크립트
 # 사용법: bash scripts/monitor_rollout.sh [간격초수]
 

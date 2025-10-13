@@ -1,4 +1,5 @@
 #!/bin/bash
+set -Eeuo pipefail
 # DuRi 백업 상태 확인 스크립트
 # HDD 백업 시스템 상태 점검
 

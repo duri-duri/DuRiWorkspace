@@ -1,0 +1,26 @@
+groups:
+  - name: basic
+    rules:
+      - alert: TargetDown
+        expr: up == 0
+        for: 2m
+        labels: { severity: warning }
+        annotations: { summary: "Target down: {{ $labels.job }} ({{ $labels.instance }})" }
+
+      - alert: HighScrapeLatency
+        expr: avg_over_time(scrape_duration_seconds[5m]) > 0.1
+        for: 3m
+        labels: { severity: warning }
+        annotations: { summary: "High scrape latency: {{ $labels.job }} ({{ $labels.instance }}) - {{ $value }}s" }
+
+      - alert: CriticalScrapeLatency
+        expr: avg_over_time(scrape_duration_seconds[5m]) > 0.5
+        for: 1m
+        labels: { severity: critical }
+        annotations: { summary: "Critical scrape latency: {{ $labels.job }} ({{ $labels.instance }}) - {{ $value }}s" }
+
+      - alert: PrometheusTSDBHigh
+        expr: prometheus_tsdb_head_series > 100000
+        for: 5m
+        labels: { severity: warning }
+        annotations: { summary: "Prometheus TSDB high series count: {{ $value }}" }

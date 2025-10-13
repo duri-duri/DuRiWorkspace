@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -Eeuo pipefail
 # scripts/rollback_backup_system.sh
 # 백업 시스템 수정 중 문제 발생 시 즉시 롤백
 # 롤백 안전성 100% 보장 - 한번에 원래 상태 복구

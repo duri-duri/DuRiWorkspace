@@ -1,4 +1,5 @@
 #!/bin/bash
+set -Eeuo pipefail
 
 # 📍 사용법: ./save_snapshot.sh "감정시스템_완성"
 LABEL=$1

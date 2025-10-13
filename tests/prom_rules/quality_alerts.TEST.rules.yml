@@ -1,0 +1,30 @@
+groups:
+- name: quality-alerts-test
+  interval: 1m
+  rules:
+  # A의 즉시 급락
+  - alert: QualityDropImmediate
+    expr: duri_ndcg_at_k{k="3",scope="all",domain="ALL"} < 0.80
+    for: 5m
+    labels: {severity: critical, team: search}
+    annotations:
+      summary: "nDCG 급락 (즉시)"
+      description: "k=3, domain=ALL"
+
+  # A의 z-score 이상
+  - alert: QualityZScoreAnomaly
+    expr: duri_ndcg_z <= -2 or duri_mrr_z <= -2
+    for: 15m
+    labels: {severity: warning, team: search}
+    annotations:
+      summary: "품질 이상 징후(z<=-2)"
+      description: "MA7/STD7 기준 z-score 이상"
+
+  # B의 SLO breach
+  - alert: RerankerNDCGSLOBreached
+    expr: (0.90 - duri_ndcg_ma7) > 0
+    for: 30m
+    labels: {severity: page, team: search}
+    annotations:
+      summary: "nDCG@3 SLO breach"
+      description: "MA7 nDCG@3 < 0.90"

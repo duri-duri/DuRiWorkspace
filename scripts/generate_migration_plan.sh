@@ -1,4 +1,5 @@
 #!/bin/bash
+set -Eeuo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 META_DIR="/mnt/usb/CORE_PROTECTED/META"
 

@@ -1,4 +1,5 @@
 #!/bin/bash
+set -Eeuo pipefail
 cd ~/duri-all-scripts || exit 1
 
 # 최신 내용 반영

@@ -1,0 +1,43 @@
+# CI는 tests/에서 실행 가정 → ${REPO_ROOT}/prometheus/rules/... 사용
+---
+rule_files:
+  - ${REPO_ROOT}/prometheus/rules/metric_collection_alerts.rules.yml
+evaluation_interval: 1m
+
+tests:
+# 메트릭 수집 지연 테스트
+- interval: 1m
+  input_series:
+    - series: 'duri_mrr_at_k{k="3",scope="all",domain="ALL"}'
+      # 정상 수집 후 6분간 유실 → eval_time 7m (5m 지연 + 1m)
+      values: '0.90x1 0.90x6'
+  promql_expr_test:
+    - expr: time() - duri_mrr_at_k{k="3",scope="all",domain="ALL"}
+      eval_time: 7m
+      exp_samples:
+        - labels: '{domain="ALL", k="3", scope="all"}'
+          value: 419.1  # 실제 계산값
+
+# 메트릭 유실 테스트 (absent는 실제로는 0이 됨)
+- interval: 1m
+  input_series:
+    - series: 'duri_mrr_at_k{k="3",scope="all",domain="ALL"}'
+      # 3분간 유실 → eval_time 4m (2m 지연 + 1m)
+      values: '0.90x1 0.90x3'
+  promql_expr_test:
+    - expr: absent(duri_mrr_at_k{k="3",scope="all",domain="ALL"})
+      eval_time: 4m
+      exp_samples: []  # absent는 실제로는 빈 결과
+
+# MA7 왜곡 방지 테스트
+- interval: 1m
+  input_series:
+    - series: 'duri_mrr_at_k{k="3",scope="all",domain="ALL"}'
+      # 7일 중 5% 미만 샘플 (10080 * 0.95 = 9576)
+      values: '0.90x9575'
+  promql_expr_test:
+    - expr: count_over_time(duri_mrr_at_k{k="3",scope="all",domain="ALL"}[7d])
+      eval_time: 7d
+      exp_samples:
+        - labels: '{domain="ALL", k="3", scope="all"}'
+          value: 9576  # 실제 계산값

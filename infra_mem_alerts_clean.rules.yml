@@ -1,0 +1,124 @@
+groups:
+# 레코딩 룰: 안정적인 숫자 반환
+- name: duri-recording
+  interval: 1m
+  rules:
+  - record: duri:containers:limit0
+    expr: sum(container_spec_memory_limit_bytes{id=~"/docker/.+"} == bool 0) or on() vector(0)
+  - record: duri:containers:limitgt0
+    expr: sum(container_spec_memory_limit_bytes{id=~"/docker/.+"} > bool 0) or on() vector(0)
+  - record: duri:containers:top5_memory_by_name
+    expr: topk(5, sum by (name) (container_memory_working_set_bytes{id=~"/docker/.+", name!=""}))
+  - record: duri:containers:top5_rss_by_name
+    expr: topk(5, sum by (name) (container_memory_rss{id=~"/docker/.+", name!=""}))
+  - record: duri:blackbox:p95
+    expr: |
+      quantile_over_time(
+        0.95,
+        probe_duration_seconds{job="blackbox_probe"}[5m]
+      )
+  # A: limit>0만 대상으로 비율 산출
+  - record: duri:container:mem_ratio_raw
+    expr: |
+      (container_memory_working_set_bytes{id=~"/docker/.+"}
+        / on(id) container_spec_memory_limit_bytes{id=~"/docker/.+"})
+      and on(id) (container_spec_memory_limit_bytes{id=~"/docker/.+"} > 0)
+
+  # B: 라벨을 numerator(A)의 name,image로 복원 (값은 동일)
+  - record: duri:container:mem_ratio
+    expr: |
+      duri:container:mem_ratio_raw
+      * on(id) group_left(name,image)
+        (0*container_memory_working_set_bytes{id=~"/docker/.+"} + 1)
+
+# 메모리 알람: 무제한/제한 분리
+- name: duri-memory
+  interval: 1m
+  rules:
+  # 무제한 컨테이너(limit==0): 절대치 기준
+  - alert: HighMemoryUsageAbsolute
+    expr: |
+      topk(5,
+        container_memory_working_set_bytes{id=~"/docker/.+"}
+        and on(id) (container_spec_memory_limit_bytes{id=~"/docker/.+"} == bool 0)
+      ) > 2e9
+    for: 10m
+    labels: {severity: warning, team: infrastructure}
+    annotations:
+      summary: "Container memory >2GB (no limit)"
+      description: "name={{ $labels.name }} image={{ $labels.image }} id={{ $labels.id }} value={{ humanize1024 $value }}"
+
+  # 제한 있는 컨테이너(분모>0): 비율 기준
+  - alert: ContainerMemoryHighRatio
+    expr: duri:container:mem_ratio > 0.90
+    for: 10m
+    labels: {severity: warning, team: infrastructure}
+    annotations:
+      summary: "High memory ratio: {{ $labels.name }}"
+      description: "{{ $labels.name }} using {{ humanizePercentage $value }} (id={{ $labels.id }}, image={{ $labels.image }})"
+
+  # OOM 징후 알람
+  - alert: ContainerOOMEvents
+    expr: increase(container_oom_events_total[5m]) > 0
+    for: 0m
+    labels: {severity: critical, team: infrastructure}
+    annotations:
+      summary: "Container OOM events detected"
+      description: "name={{ $labels.name }} image={{ $labels.image }} id={{ $labels.id }}"
+
+  # 컨테이너 재시작 감지 알람
+  - alert: ContainerRestarted
+    expr: changes(container_start_time_seconds{id=~"/docker/.+"}[5m]) > 0
+    for: 0m
+    labels: {severity: warning, team: infrastructure}
+    annotations:
+      summary: "Container restarted: {{ $labels.name }}"
+      description: "id={{ $labels.id }}, image={{ $labels.image }}"
+
+# Blackbox 품질 알람
+- name: duri-blackbox
+  interval: 1m
+  rules:
+  - alert: BlackboxProbeLatencyHigh
+    expr: duri:blackbox:p95 > 1
+    for: 10m
+    labels: {severity: warning, team: platform}
+    annotations:
+      summary: "p95 high: {{ $labels.target }}"
+      description: "p95={{ printf \"%.3fs\" $value }}"
+
+  - alert: BlackboxMetricsMissing
+    expr: absent(probe_success{job="blackbox_probe"})
+    for: 2m
+    labels: {severity: warning, team: infrastructure}
+    annotations:
+      summary: "Blackbox series missing"
+      description: "No probe_success for 2m. Check blackbox_exporter or relabel."
+
+# 사일런트 실패 가드
+- name: duri-sanity
+  interval: 1m
+  rules:
+  - alert: CadvisorMetricsMissing
+    expr: absent(container_memory_working_set_bytes)
+    for: 5m
+    labels: {severity: critical}
+    annotations:
+      summary: "cAdvisor metrics absent"
+      description: "cAdvisor down or scrape issue"
+
+  - alert: RecordingRulesMissing
+    expr: absent(duri:containers:limit0) or absent(duri:containers:limitgt0)
+    for: 5m
+    labels: {severity: warning}
+    annotations:
+      summary: "Recording rules not evaluating"
+      description: "Check Prometheus rule evaluation / file mounts"
+
+  - alert: RecordingDriftMemRatio
+    expr: absent(duri:container:mem_ratio) or (count(duri:container:mem_ratio) < duri:containers:limitgt0)
+    for: 5m
+    labels: {severity: warning, team: infrastructure}
+    annotations:
+      summary: "mem_ratio recording mismatch"
+      description: "count(mem_ratio) < limit>0; check relabel/recording rules."
