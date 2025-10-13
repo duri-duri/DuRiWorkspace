@@ -1,8 +1,0 @@
-[Unit]
-Description=Secure backup for KIMSHIN charter
-
-[Service]
-Type=oneshot
-WorkingDirectory=%h/DuRiWorkspace
-Environment=AGE_PASSPHRASE=***
-ExecStart=%h/DuRiWorkspace/backup/secure_backup.sh

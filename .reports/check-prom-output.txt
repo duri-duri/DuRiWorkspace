@@ -1,0 +1,10 @@
+=== 모니터링 시스템 상태 확인 ===
+mem_ratio count:
+null
+limit>0:
+null
+limit=0:
+null
+p95:
+firing alerts:
+      1 SyntheticAlwaysOn

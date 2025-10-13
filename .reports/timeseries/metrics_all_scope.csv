@@ -1,0 +1,2 @@
+date,epoch,file,ndcg_k,ndcg_ma,ndcg_std,ndcg_dod,ndcg_wow,ndcg_wow_pct,ndcg_z,mrr,mrr_ma,mrr_std,mrr_dod,mrr_wow,mrr_wow_pct,mrr_z,recall_k,guard_exit,exporter_up
+2025-10-09,1759992027,day66_metrics.tsv,0.922629,0.922629,,,,,,0.9,0.9,,,,,,1.0,0.0,1.0

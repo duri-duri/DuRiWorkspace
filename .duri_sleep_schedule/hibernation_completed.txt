@@ -1,6 +1,0 @@
-DuRi 진화 시스템 휴면 완료: Thu Oct  2 18:37:17 KST 2025
-Day 62 RAG 검색 시스템 완성 상태에서 진화 시스템 휴면
-
-다음 스케줄:
-- 내일 오전: docker-compose up 으로 진화 시스템 재개
-- 진화 노드들: brain(8081), evolution(8082), core(8080), control(8083)

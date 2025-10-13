@@ -1,6 +1,0 @@
-[Unit]
-Description=Hourly synthetic probe
-[Timer]
-OnCalendar=hourly
-[Install]
-WantedBy=default.target

@@ -1,6 +1,0 @@
-# query	cat	pf	expected_ids_csv
-요통				intake.lbp.v1.001,ex.lbp.core.v1.001,edu.xray.expectation.v1.001,sdm.xray.lbp.v1.001,work.lbp.return.v1.001
-경부				intake.neck.v1.001,ex.neck.stretch.v1.001,order.neck.redflags.v1.001,triage.neck.redflag.v1.001
-어깨				intake.shoulder.v1.001,ex.shoulder.rom.v1.001,order.shoulder.redflags.v1.001
-X-ray	intake	false		sdm.xray.lbp.v1.001,edu.xray.expectation.v1.001
-레드플래그			order.ms.redflags.v1.001,triage.lbp.redflag.v1.001,policy.redflags.standard.v1.001

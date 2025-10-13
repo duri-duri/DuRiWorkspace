@@ -1,4 +1,0 @@
-<testsuite name="rag-gate" tests="1" failures="0" time="0">
-  <testcase name="micro_p@3 >= 0.30">
-  </testcase>
-</testsuite>

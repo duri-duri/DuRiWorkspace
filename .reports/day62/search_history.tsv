@@ -1,6 +1,0 @@
-timestamp	query	cat	pf	k	ranking	hit_ids	count
-2025-10-02T18:04:21+09:00	요통			true	3	1	ex.lbp.core.v1.001,ex.lbp.core.v1.001,soap.lbp.v1.001	3
-2025-10-02T18:04:21+09:00	경부			true	3	1	ex.neck.stretch.v1.001,ex.neck.stretch.v1.001,edu.neck.cause.v1.001	3
-2025-10-02T18:04:21+09:00	어깨			true	3	1	ex.neck.stretch.v1.001,ex.shoulder.rom.v1.001	2
-2025-10-02T18:04:21+09:00	레드플래그			true	3	1	policy.redflags.standard.v1.001,policy.redflags.standard.v1.001,soap.lbp.v1.001	3
-2025-10-02T18:04:21+09:00	스테로이드			true	3	1	intake.lbp.v1.001,consent.inject.v1.001	2

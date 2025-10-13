@@ -1,6 +1,0 @@
-check	result	info
-source_exists	OK	found
-columns	OK	all_present
-dup.query_rank	OK	no-dup
-domain.missing	OK	0
-label.valid	OK	all_valid

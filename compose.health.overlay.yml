@@ -1,6 +1,5 @@
 services:
   duri_core:
-    mem_limit: 2g
     healthcheck:
       test: ["CMD-SHELL","python -c \"import socket; s=socket.socket(); s.settimeout(2); s.connect(('127.0.0.1',8080)); s.close()\""]
       interval: 10s
@@ -12,7 +11,6 @@ services:
       duri-redis:    {condition: service_healthy}
 
   duri_brain:
-    mem_limit: 2g
     healthcheck:
       test: ["CMD-SHELL","python -c \"import socket; s=socket.socket(); s.settimeout(2); s.connect(('127.0.0.1',8081)); s.close()\""]
       interval: 10s
@@ -24,7 +22,6 @@ services:
       duri-redis:    {condition: service_healthy}
 
   duri_evolution:
-    mem_limit: 1g
     healthcheck:
       test: ["CMD-SHELL","python -c \"import socket; s=socket.socket(); s.settimeout(2); s.connect(('127.0.0.1',8082)); s.close()\""]
       interval: 10s
@@ -36,7 +33,6 @@ services:
       duri-redis:    {condition: service_healthy}
 
   duri-postgres:
-    mem_limit: 1g
     healthcheck:
       test: ["CMD-SHELL","pg_isready -U ${POSTGRES_USER:-postgres} -h 127.0.0.1 -p 5432"]
       interval: 10s
@@ -45,7 +41,6 @@ services:
       start_period: 25s
 
   duri-redis:
-    mem_limit: 512m
     healthcheck:
       test: ["CMD","redis-cli","-h","127.0.0.1","-p","6379","ping"]
       interval: 10s
@@ -109,14 +104,11 @@ services:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /:/rootfs:ro
-      - ./.reports/synth:/textfile:ro
     command:
       - --path.rootfs=/rootfs
       - --path.procfs=/host/proc
       - --path.sysfs=/host/sys
       - --collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($|/)
-      - --collector.textfile
-      - --collector.textfile.directory=/textfile
     healthcheck:
       test: ["CMD-SHELL","wget -qO- http://localhost:9100/metrics >/dev/null 2>&1 || exit 1"]
       interval: 15s

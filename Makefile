@@ -77,3 +77,7 @@ runbook-quality-guard:
 
 ci-all: prom-rules-ci grafana-lint runbook-quality-guard
 	@echo "ci-all done"
+
+smoke:
+	@echo "Running post-deploy smoke tests..."
+	./scripts/post-deploy-smoke.sh

@@ -1,22 +1,22 @@
+global:
+  resolve_timeout: 5m
+
 route:
-  group_by: ['alertname','team']
+  group_by: ['alertname','service']
   group_wait: 10s
-  group_interval: 10s
-  repeat_interval: 1h
+  group_interval: 1m
+  repeat_interval: 2h
   receiver: default
   routes:
-  - matchers: ['team="search"', 'severity="warning"']
-    receiver: search-slack
-inhibit_rules:
-- source_matchers: ['alertname="MRR_SLO_Breach"','team="search"']
-  target_matchers: ['alertname="MRR_Quick_Drop"','team="search"']
-  equal: ['team']
+    - matchers: [ severity="page" ]
+      receiver: oncall
+
 receivers:
-- name: default
-  # Default receiver: blackhole for unmatched alerts
-  webhook_configs:
-  - url: 'http://localhost:9093/webhook'
-- name: search-slack
-  slack_configs:
-  - channel: '#search-alerts'
-    api_url: '${SLACK_WEBHOOK_URL}'
+  - name: default
+    webhook_configs:
+      - url: "http://duri_control_container:8083/ops/alerts"
+        send_resolved: true
+  - name: oncall
+    webhook_configs:
+      - url: "http://duri_control_container:8083/ops/alerts"
+        send_resolved: true

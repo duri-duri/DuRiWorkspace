@@ -1,8 +1,8 @@
 name: change-safety
 on:
   pull_request:
-    types: [opened, labeled, unlabeled, synchronize]
     branches: [ main ]
+    types: [opened, synchronize, labeled, unlabeled, reopened, ready_for_review]
     paths:
       - 'prometheus/**'
       - 'tests/**'
@@ -10,7 +10,7 @@ on:
       - 'grafana/**'
       - 'docs/**'
       - '.github/workflows/change-safety.yml'
-  workflow_dispatch: {}
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -30,40 +30,50 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Collect PR labels
-        id: labels
+      - name: Ensure jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Evaluate labels
+        id: eval
+        shell: bash
         run: |
-          labels="$(gh api repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels)"
-          if echo "$labels" | jq -e '.[] | select(.name=="change-type: risky")' >/dev/null; then
-            echo "risky=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "risky=false" >> "$GITHUB_OUTPUT"
-          fi
-          if echo "$labels" | jq -e '.[] | select(.name=="change-type: safe")' >/dev/null; then
-            echo "safe=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "safe=false" >> "$GITHUB_OUTPUT"
-          fi
+          set -euo pipefail
+          labels='${{ toJson(github.event.pull_request.labels) }}'
+          echo "labels=$labels"
+          risky=false
+          safe=false
+          if echo "$labels" | jq -e '.[] | select(.name=="change-type: risky")' >/dev/null; then risky=true; fi
+          if echo "$labels" | jq -e '.[] | select(.name=="change-type: safe")'  >/dev/null; then safe=true;  fi
+          echo "risky=$risky" >> "$GITHUB_OUTPUT"
+          echo "safe=$safe"   >> "$GITHUB_OUTPUT"
 
       - name: Enhanced validation for risky changes
-        if: ${{ steps.labels.outputs.risky == 'true' }}
+        if: steps.eval.outputs.risky == 'true'
+        shell: bash
         run: |
+          set -euo pipefail
+          CHANGED_CNT='${{ github.event.pull_request.changed_files }}'
+          echo "changed files: $CHANGED_CNT"
           echo "Running RISKY checks..."
           make ci-all
           make grafana-lint
           make runbook-quality-guard
 
       - name: Standard validation for safe changes
-        if: ${{ steps.labels.outputs.safe == 'true' }}
+        if: steps.eval.outputs.safe == 'true'
+        shell: bash
         run: |
+          set -euo pipefail
           echo "Running SAFE checks..."
           make prom-rules-ci
           make prom-dup-guard
           make alert-labels-guard
 
       - name: Default validation (no labels)
-        if: ${{ steps.labels.outputs.risky != 'true' && steps.labels.outputs.safe != 'true' }}
+        if: steps.eval.outputs.risky != 'true' && steps.eval.outputs.safe != 'true'
+        shell: bash
         run: |
+          set -euo pipefail
           echo "Running DEFAULT checks..."
           make prom-rules-ci
           make prom-dup-guard

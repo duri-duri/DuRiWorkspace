@@ -1,9 +1,0 @@
-/home/duri/DuRiWorkspace/var/logs/*.log {
-  size 10M
-  rotate 7
-  compress
-  delaycompress
-  missingok
-  copytruncate
-create 0640 duri duri
-}
