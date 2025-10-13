@@ -1,0 +1,11 @@
+name: nightly-smoke
+on:
+  schedule:
+    - cron: "20 2 * * *"  # UTC 새벽
+  workflow_dispatch:
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: make smoke

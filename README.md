@@ -375,3 +375,20 @@ git pull origin main
 - Phase 3: 30% (9/30)
 - Overall: 77% (69/90)
 ![Quality](https://github.com/duri/DuRiWorkspace/workflows/quality/badge.svg)
+
+## Troubleshooting
+
+### Permission Issues
+If you encounter permission denied errors with git operations:
+```bash
+./scripts/fix_dev_perms.sh
+```
+
+### Health Check
+Run basic smoke tests:
+```bash
+make smoke
+```
+
+### Runtime Data
+Local runtime data (TSDB, containers) is ignored via `/data/**` in .gitignore.
