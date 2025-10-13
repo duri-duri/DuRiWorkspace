@@ -217,8 +217,11 @@ prom-dup-guard:
 	@python3 scripts/prom_dup_guard.py
 
 prom-rules-test:
-	REPO_ROOT=$$(git rev-parse --show-toplevel) envsubst < tests/quality_rules_test.yml > /tmp/quality_rules_test.rendered.yml
-	promtool test rules /tmp/quality_rules_test.rendered.yml
-
+	@REPO_ROOT=$$(git rev-parse --show-toplevel) \
+	  envsubst < tests/quality_rules_test.yml > /tmp/quality_rules_test.rendered.yml && \
+	  promtool test rules /tmp/quality_rules_test.rendered.yml
+	@REPO_ROOT=$$(git rev-parse --show-toplevel) \
+	  envsubst < tests/alerts_mrr_breach_test.yml > /tmp/alerts_mrr_breach_test.rendered.yml && \
+	  promtool test rules /tmp/alerts_mrr_breach_test.rendered.yml
 alert-labels-guard:
 	./scripts/alert_labels_guard.sh

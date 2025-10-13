@@ -1,5 +1,5 @@
 route:
-  group_by: ['alertname']
+  group_by: ['alertname','team']
   group_wait: 10s
   group_interval: 10s
   repeat_interval: 1h
@@ -13,6 +13,7 @@ inhibit_rules:
   equal: ['team']
 receivers:
 - name: default
+  # Default receiver: blackhole for unmatched alerts
   webhook_configs:
   - url: 'http://localhost:9093/webhook'
 - name: search-slack
