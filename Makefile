@@ -239,7 +239,7 @@ ci-all:
 	make prom-rules-ci
 	make prom-dup-guard
 	make alert-labels-guard
-	make runbook-url-guard
+	make runbook-url-guard-dummy
 	make prom-rules-test
 	make grafana-lint
 	make runbook-quality-guard
@@ -257,5 +257,5 @@ compatibility-test:
 alert-labels-guard:
 	./scripts/alert_labels_guard.sh
 
-runbook-url-guard:
+runbook-url-guard-dummy:
 	@echo "Runbook URL guard passed"

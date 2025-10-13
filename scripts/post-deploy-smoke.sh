@@ -10,12 +10,15 @@ promtool --version && jq --version
 # 런북 URL 샘플 3~5개 200 OK 확인
 echo ""
 echo "2. 런북 URL 가용성 확인:"
-xargs -n1 -I{} bash -lc 'echo -n "{} -> "; curl -s -o /dev/null -w "%{http_code}\n" "{}"' <<EOF
+codes=$(xargs -n1 -I{} bash -lc 'curl -s -o /dev/null -w "%{http_code}" "{}"; echo' <<EOF
 https://docs.example.com/runbooks/mrr-slo
 https://docs.example.com/runbooks/metric-delay
 https://docs.example.com/runbooks/metric-absent
 https://docs.example.com/runbooks/ma7-distortion
 EOF
+)
+echo "$codes" | grep -vq '^200$' && { echo "Runbook URL check FAIL"; exit 1; }
+echo "Runbook URL check OK"
 
 # 알람 총량 확인
 echo ""
