@@ -1,1 +1,0 @@
-GUARD_RESULT=ok K=3 ndcg=0.922629 mrr=0.9 oracle=1.0
