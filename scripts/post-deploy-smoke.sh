@@ -10,7 +10,7 @@ promtool --version && jq --version
 # 런북 URL 샘플 3~5개 200 OK 확인
 echo ""
 echo "2. 런북 URL 가용성 확인:"
-codes=$(xargs -n1 -I{} bash -lc 'curl -s -o /dev/null -w "%{http_code}" "{}"; echo' <<EOF
+codes=$(xargs -n1 -I{} bash -lc 'curl -sS --max-time 5 --retry 2 --retry-delay 1 -o /dev/null -w "%{http_code}" "{}"; echo' <<EOF
 https://docs.example.com/runbooks/mrr-slo
 https://docs.example.com/runbooks/metric-delay
 https://docs.example.com/runbooks/metric-absent
@@ -23,7 +23,7 @@ echo "Runbook URL check OK"
 # 알람 총량 확인
 echo ""
 echo "3. 알람 총량 확인:"
-curl -s 'localhost:9090/api/v1/alerts' | jq '.data.alerts | length' || echo "Prometheus not available"
+curl -sS --max-time 5 'localhost:9090/api/v1/alerts' | jq '.data.alerts | length' || { echo "Prometheus not available"; exit 1; }
 
 # 핵심 패널 확인
 echo ""
