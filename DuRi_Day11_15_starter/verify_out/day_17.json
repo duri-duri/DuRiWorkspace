@@ -1,1 +1,1 @@
-{"day": 17, "status": "PASS", "message": "OK", "metrics": {"pou_success_rate":0.9,"safety_score_avg":0.99,"error_rate_avg":0.003,"latency_ms_avg":650}, "ts": "2025-09-12T10:19:22+09:00"}
+{"status":"stub","note":"to be backfilled","generated_at":"2025-10-13T09:08:08+09:00"}
