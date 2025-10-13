@@ -53,3 +53,21 @@ groups:
     annotations:
       summary: "Quality sudden drop (DoD >3%)"
       description: "전일 대비 3% 이하락"
+
+  # MRR SLO breach alert
+  - alert: MRR_SLO_Breach
+    expr: duri_mrr_ma7 < 0.88
+    for: 15m
+    labels: {severity: warning, team: search}
+    annotations:
+      summary: "MRR MA7 SLO breach (<0.88)"
+      description: "MRR@3 MA7={{ $value | printf \"%.3f\" }}"
+
+  # Day-over-Day drop alert
+  - alert: Quality_DayOverDay_Drop
+    expr: (duri_ndcg_at_k{k="3",scope="all",domain="ALL"} - duri_ndcg_at_k{k="3",scope="all",domain="ALL"} offset 1d) < -0.03
+    for: 10m
+    labels: {severity: warning, team: search}
+    annotations:
+      summary: "nDCG day-over-day drop >3%"
+      description: "Δ1d={{ $value | printf \"%.3f\" }}"
