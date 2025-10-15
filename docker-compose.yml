@@ -1,117 +1,197 @@
+# 완성형 docker-compose.yml (경고 0, service_healthy 포함, duri_control:opt 적용)
 
 services:
   duri_core:
     build:
       context: .
-      dockerfile: docker/Dockerfile.core
-    container_name: duri_core_container
+      dockerfile: Dockerfile.core
     ports:
       - "8080:8080"
-    volumes:
-      - ./logs:/app/logs
-      - ./config:/app/config
-      - ./.env:/app/.env
     environment:
-      - PORT=8080
-      - PYTHONPATH=/app:/app/duri_common
+      - PYTHONPATH=/app:/app/DuRiCore:/app/DuRiCore/DuRiCore:/app/duri_modules
+    working_dir: /app
+    volumes:
+      - ./:/app
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/health | grep -q '\"status\":\"ok\"'"]
+      interval: 5s
+      timeout: 2s
+      retries: 10
+      start_period: 10s
     depends_on:
-      - duri-postgres
-      - duri-redis
-    restart: unless-stopped
-    mem_limit: 2g
+      duri-postgres:
+        condition: service_healthy
+      duri-redis:
+        condition: service_started
+    networks:
+      - duri-network
 
   duri_brain:
     build:
       context: .
-      dockerfile: docker/Dockerfile.brain
-    container_name: duri_brain_container
+      dockerfile: Dockerfile.brain
     ports:
       - "8081:8081"
-    volumes:
-      - ./logs:/app/logs
-      - ./config:/app/config
-      - ./.env:/app/.env
     environment:
-      - PORT=8081
-      - PYTHONPATH=/app:/app/duri_common
+      - PYTHONPATH=/app:/app/DuRiCore:/app/DuRiCore/DuRiCore:/app/duri_modules
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: >
+      sh -c "pip install -q prometheus-client &&
+             python duri_brain/run.py"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS -X GET http://localhost:8081/health | grep -q '\"status\":\"ok\"'"]
+      interval: 10s
+      timeout: 3s
+      retries: 30
+      start_period: 30s
     depends_on:
-      - duri-postgres
-      - duri-redis
-    restart: unless-stopped
-    mem_limit: 2g
+      duri-postgres:
+        condition: service_healthy
+      duri-redis:
+        condition: service_started
+    networks:
+      - duri-network
 
   duri_evolution:
     build:
       context: .
-      dockerfile: docker/Dockerfile.evolution
-    container_name: duri_evolution_container
+      dockerfile: Dockerfile.evolution
     ports:
       - "8082:8082"
-    volumes:
-      - ./logs:/app/logs
-      - ./config:/app/config
-      - ./.env:/app/.env
     environment:
-      - PORT=8082
-      - PYTHONPATH=/app:/app/duri_core
+      - PYTHONPATH=/app:/app/DuRiCore:/app/DuRiCore/DuRiCore:/app/duri_modules
+    working_dir: /app
+    volumes:
+      - ./:/app
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8082/health | grep -q '\"status\":\"ok\"'"]
+      interval: 5s
+      timeout: 2s
+      retries: 10
+      start_period: 10s
     depends_on:
-      - duri-postgres
-      - duri-redis
-    restart: unless-stopped
-    mem_limit: 1g
+      duri-postgres:
+        condition: service_healthy
+      duri-redis:
+        condition: service_started
+    networks:
+      - duri-network
 
   duri_control:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.control
-    container_name: duri_control_container
+    image: duriworkspace-duri_control:opt
     ports:
       - "8083:8083"
-    volumes:
-      - ./logs:/app/logs
-      - ./config:/app/config
-      - ./.env:/app/.env
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./duri_control/wait-for-postgres.sh:/app/wait-for-postgres.sh:ro
     environment:
-      - PORT=8083
-      - PYTHONPATH=/app:/app/duri_common
-    env_file:
-      - .env
+      - PYTHONPATH=/app:/app/DuRiCore:/app/DuRiCore/DuRiCore:/app/duri_modules
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: >
+      sh -c "pip install -q prometheus-fastapi-instrumentator &&
+             uvicorn duri_control.duri_control.main:app --host 0.0.0.0 --port 8083"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS -X GET http://localhost:8083/health | grep -q '\"status\":\"ok\"'"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 30s
     depends_on:
-      - duri-postgres
-      - duri-redis
-    command: ["bash", "/app/wait-for-postgres.sh"]
-    restart: unless-stopped
+      duri-postgres:
+        condition: service_healthy
+      duri-redis:
+        condition: service_started
+    networks:
+      - duri-network
 
   duri-postgres:
     image: postgres:14
-    container_name: duri-postgres
-    restart: always
-    environment:
-      POSTGRES_USER: duri
-      POSTGRES_PASSWORD: duri
-      POSTGRES_DB: duri
     ports:
       - "5432:5432"
+    environment:
+      - POSTGRES_DB=duri
+      - POSTGRES_USER=duri
+      - POSTGRES_PASSWORD=duri123
     volumes:
-      - duri_postgres_data:/var/lib/postgresql/data
-    mem_limit: 1g
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U duri -d duri -h localhost"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
+    networks:
+      - duri-network
 
   duri-redis:
     image: redis:7-alpine
-    container_name: duri-redis
-    restart: always
     ports:
       - "6379:6379"
+    networks:
+      - duri-network
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
     volumes:
-      - duri_redis_data:/data
-    mem_limit: 512m
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./config/prometheus_recording_rules.yml:/etc/prometheus/prometheus_recording_rules.yml
+      - ./config/prometheus_rules_final.yml:/etc/prometheus/prometheus_rules_final.yml
+      - ./config/prometheus_slo_recording_rules.yml:/etc/prometheus/prometheus_slo_recording_rules.yml
+      - prometheus_data:/prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=15d
+      - --storage.tsdb.retention.size=2GB
+    networks:
+      - duri-network
+
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:v1.8.1
+    ports:
+      - "9100:9100"
+    networks:
+      - duri-network
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    ports:
+      - "8089:8080"
+    networks:
+      - duri-network
+
+  blackbox_exporter:
+    image: quay.io/prometheus/blackbox-exporter:v0.24.0
+    ports:
+      - "9115:9115"
+    networks:
+      - duri-network
+
+  postgres_exporter:
+    image: quay.io/prometheuscommunity/postgres-exporter:latest
+    ports:
+      - "9187:9187"
+    environment:
+      - DATA_SOURCE_NAME=postgresql://duri:duri123@duri-postgres:5432/duri?sslmode=disable
+    networks:
+      - duri-network
+
+  redis_exporter:
+    image: oliver006/redis_exporter:latest
+    ports:
+      - "9121:9121"
+    environment:
+      - REDIS_ADDR=redis://duri-redis:6379
+    networks:
+      - duri-network
 
 volumes:
-  duri_postgres_data:
-  duri_redis_data:
+  postgres_data:
+  prometheus_data:
 
 networks:
-  default:
+  duri-network:
     driver: bridge

@@ -1,0 +1,49 @@
+# Prometheus 레코딩 룰 - 대시보드 일치
+
+groups:
+  - name: duri-integrity-recording
+    interval: 30s
+    rules:
+      # 무결성 상태 레코딩 룰
+      - record: duri:integrity:status:verified
+        expr: duri_integrity_status_verified
+      
+      - record: duri:integrity:status:tampered
+        expr: duri_integrity_status_tampered
+      
+      - record: duri:integrity:status:policy_changed
+        expr: duri_integrity_status_policy_changed
+      
+      - record: duri:integrity:status:corrupted
+        expr: duri_integrity_status_corrupted
+      
+      # 성능 메트릭 레코딩 룰
+      - record: duri:integrity:scan:duration_ms
+        expr: duri_integrity_scan_duration_ms
+      
+      - record: duri:integrity:scan:bytes_hashed
+        expr: duri_integrity_scan_bytes_hashed
+      
+      # 파일 변동 레코딩 룰
+      - record: duri:integrity:files:total
+        expr: duri_integrity_files_total
+      
+      - record: duri:integrity:files:verified
+        expr: duri_integrity_files_verified
+      
+      - record: duri:integrity:files:modified
+        expr: duri_integrity_files_modified
+      
+      - record: duri:integrity:files:missing
+        expr: duri_integrity_files_missing
+      
+      - record: duri:integrity:files:new
+        expr: duri_integrity_files_new
+      
+      # HMAC 상태 레코딩 룰
+      - record: duri:integrity:hmac:status
+        expr: duri_integrity_hmac_status
+      
+      # 실패율 계산 레코딩 룰
+      - record: duri:integrity:failure_rate
+        expr: (changes(duri:integrity:status:corrupted[5m]) + changes(duri:integrity:status:tampered[5m]) + changes(duri:integrity:status:policy_changed[5m])) / 5

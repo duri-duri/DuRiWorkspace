@@ -1,0 +1,81 @@
+# Prometheus 룰 개선안 - 바로 알람 떨굼
+
+groups:
+  - name: duri-integrity
+    rules:
+      - alert: DuRiIntegrityTampered
+        expr: increase(duri_integrity_status_tampered[5m]) > 0
+        for: 0m
+        labels:
+          severity: critical
+          service: duri-integrity
+        annotations:
+          summary: 'Integrity tampered detected'
+          description: 'HMAC or manifest tamper detected in last 5m.'
+          runbook_url: 'https://your.runbook/url#tampered'
+
+      - alert: DuRiIntegrityCorrupted
+        expr: increase(duri_integrity_status_corrupted[5m]) > 0
+        for: 0m
+        labels:
+          severity: critical
+          service: duri-integrity
+        annotations:
+          summary: 'Integrity corrupted'
+          description: 'Modified/missing files were detected.'
+          runbook_url: 'https://your.runbook/url#corrupted'
+
+      - alert: DuRiIntegrityPolicyChanged
+        expr: increase(duri_integrity_status_policy_changed[5m]) > 0
+        for: 0m
+        labels:
+          severity: warning
+          service: duri-integrity
+        annotations:
+          summary: 'Integrity policy changed'
+          description: 'Ignore or schema policy changed. Review and approve.'
+          runbook_url: 'https://your.runbook/url#policy_changed'
+
+      - alert: DuRiIntegrityScanSlow
+        expr: avg_over_time(duri_integrity_scan_duration_ms[15m]) > 2000
+        for: 10m
+        labels:
+          severity: warning
+          service: duri-integrity
+        annotations:
+          summary: 'Integrity scan slow'
+          description: 'Average scan duration > 2s for 10m.'
+          runbook_url: 'https://your.runbook/url#scan_slow'
+
+      - alert: DuRiIntegrityHmacFailure
+        expr: increase(duri_integrity_hmac_status{checksums_ok="false"}[5m]) > 0 or increase(duri_integrity_hmac_status{metadata_ok="false"}[5m]) > 0
+        for: 0m
+        labels:
+          severity: critical
+          service: duri-integrity
+        annotations:
+          summary: 'HMAC signature verification failed'
+          description: 'Checksums or metadata HMAC signature verification failed.'
+          runbook_url: 'https://your.runbook/url#hmac_failure'
+
+      - alert: DuRiIntegrityFilesSpike
+        expr: (duri_integrity_files_missing / duri_integrity_files_total) > 0.3
+        for: 0m
+        labels:
+          severity: warning
+          service: duri-integrity
+        annotations:
+          summary: 'Integrity files spike detected'
+          description: 'Missing files exceed 30% of total files.'
+          runbook_url: 'https://your.runbook/url#files_spike'
+
+      - alert: DuRiIntegrityHmacDisabled
+        expr: duri_integrity_hmac_status{enabled="false"} == 1
+        for: 5m
+        labels:
+          severity: warning
+          service: duri-integrity
+        annotations:
+          summary: 'HMAC signature disabled'
+          description: 'HMAC signature verification is disabled.'
+          runbook_url: 'https://your.runbook/url#hmac_disabled'

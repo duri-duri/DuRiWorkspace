@@ -1,0 +1,20 @@
+{
+  "version": "1.0",
+  "description": "DuRi 무결성 검증 제외 패턴",
+  "patterns": [
+    ".reports/",
+    "data/prometheus/",
+    "DuRi_Day11_15_starter/",
+    "*.log",
+    "*.tmp",
+    "*.temp",
+    ".env*",
+    "__pycache__/",
+    "*.pyc",
+    "*.pyo",
+    ".pytest_cache/",
+    "node_modules/",
+    ".DS_Store",
+    "Thumbs.db"
+  ]
+}

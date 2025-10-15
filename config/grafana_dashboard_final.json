@@ -1,0 +1,256 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "DuRi 무결성 검증 대시보드 (최종본)",
+    "tags": ["duri", "integrity", "security"],
+    "timezone": "browser",
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "refresh": "30s",
+    "templating": {
+      "list": [
+        {
+          "name": "interval",
+          "type": "interval",
+          "query": "1m,5m,10m,30m,1h,3h,6h,12h,1d",
+          "current": {
+            "value": "5m",
+            "text": "5m"
+          }
+        }
+      ]
+    },
+    "panels": [
+      {
+        "id": 1,
+        "title": "무결성 상태 스파크라인",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "max_over_time(duri:integrity:status:verified[$interval])",
+            "legendFormat": "Verified"
+          },
+          {
+            "expr": "max_over_time(duri:integrity:status:tampered[$interval])",
+            "legendFormat": "Tampered"
+          },
+          {
+            "expr": "max_over_time(duri:integrity:status:policy_changed[$interval])",
+            "legendFormat": "Policy Changed"
+          },
+          {
+            "expr": "max_over_time(duri:integrity:status:corrupted[$interval])",
+            "legendFormat": "Corrupted"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "steps": [
+                {"color": "green", "value": 0},
+                {"color": "red", "value": 1}
+              ]
+            },
+            "nullValueMode": "as-zero"
+          }
+        },
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}
+      },
+      {
+        "id": 2,
+        "title": "스캔 시간 추이",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "duri_integrity_scan_duration_ms",
+            "legendFormat": "Scan Duration (ms)"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ms",
+            "color": {
+              "mode": "palette-classic"
+            },
+            "nullValueMode": "as-zero"
+          }
+        },
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}
+      },
+      {
+        "id": 3,
+        "title": "해시된 바이트 수 추이",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "duri_integrity_scan_bytes_hashed",
+            "legendFormat": "Bytes Hashed"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "bytes(SI)",
+            "color": {
+              "mode": "palette-classic"
+            },
+            "nullValueMode": "as-zero"
+          }
+        },
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}
+      },
+      {
+        "id": 4,
+        "title": "파일 변동 추이",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "duri_integrity_files_modified",
+            "legendFormat": "Modified Files"
+          },
+          {
+            "expr": "duri_integrity_files_missing",
+            "legendFormat": "Missing Files"
+          },
+          {
+            "expr": "duri_integrity_files_new",
+            "legendFormat": "New Files"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "color": {
+              "mode": "palette-classic"
+            },
+            "nullValueMode": "as-zero"
+          }
+        },
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8}
+      },
+      {
+        "id": 5,
+        "title": "HMAC 서명 상태",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "duri_integrity_hmac_status{enabled=\"true\"}",
+            "legendFormat": "HMAC Enabled"
+          },
+          {
+            "expr": "duri_integrity_hmac_status{checksums_ok=\"true\"}",
+            "legendFormat": "Checksums OK"
+          },
+          {
+            "expr": "duri_integrity_hmac_status{metadata_ok=\"true\"}",
+            "legendFormat": "Metadata OK"
+          },
+          {
+            "expr": "duri_integrity_hmac_status{enabled=\"false\"}",
+            "legendFormat": "HMAC Disabled"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "steps": [
+                {"color": "red", "value": 0},
+                {"color": "green", "value": 1}
+              ]
+            },
+            "nullValueMode": "as-zero"
+          }
+        },
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16}
+      },
+      {
+        "id": 6,
+        "title": "무결성 검증 실패율",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "(changes(duri:integrity:status:corrupted[5m]) + changes(duri:integrity:status:tampered[5m]) + changes(duri:integrity:status:policy_changed[5m])) / 5",
+            "legendFormat": "Failure Rate"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "events/s",
+            "color": {
+              "mode": "palette-classic"
+            },
+            "nullValueMode": "as-zero"
+          }
+        },
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16}
+      },
+      {
+        "id": 7,
+        "title": "최근 검증 결과 요약",
+        "type": "table",
+        "targets": [
+          {
+            "expr": "max by (deployment_id) (last_over_time(duri_integrity_files_total[1h]))",
+            "format": "table",
+            "instant": true,
+            "refId": "A"
+          },
+          {
+            "expr": "max by (deployment_id) (last_over_time(duri_integrity_files_verified[1h]))",
+            "format": "table",
+            "instant": true,
+            "refId": "B"
+          },
+          {
+            "expr": "max by (deployment_id) (last_over_time(duri_integrity_files_modified[1h]))",
+            "format": "table",
+            "instant": true,
+            "refId": "C"
+          },
+          {
+            "expr": "max by (deployment_id) (last_over_time(duri_integrity_files_missing[1h]))",
+            "format": "table",
+            "instant": true,
+            "refId": "D"
+          },
+          {
+            "expr": "max by (deployment_id) (last_over_time(duri_integrity_files_new[1h]))",
+            "format": "table",
+            "instant": true,
+            "refId": "E"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "displayMode": "list"
+            }
+          }
+        },
+        "transformations": [
+          {
+            "id": "merge",
+            "options": {}
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 24}
+      },
+      {
+        "id": 8,
+        "title": "런북 링크",
+        "type": "text",
+        "options": {
+          "content": "## 🔗 빠른 링크\n\n- [📖 무결성 사고 대응 런북](https://your.runbook/url)\n- [🚨 PagerDuty 인시던트](https://your-pagerduty.pagerduty.com/)\n- [📊 Alertmanager UI](http://alertmanager:9093/)\n- [🔍 Prometheus UI](http://prometheus:9090/)\n\n## 📞 연락처\n\n- **온콜**: +1-555-ONCALL\n- **플랫폼**: platform-team@duri.com\n- **보안**: security-team@duri.com"
+        },
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 24}
+      }
+    ]
+  }
+}

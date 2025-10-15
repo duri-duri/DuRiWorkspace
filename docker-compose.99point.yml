@@ -1,0 +1,138 @@
+# 운영 내성 99점 완성 패치 (마지막 1% 하드닝)
+# 기존 docker-compose.yml에 추가 적용
+
+services:
+  # 2️⃣ 리소스 제한 키 교체 (로컬 Compose용)
+  duri_core:
+    mem_limit: 512m
+    cpus: "0.50"
+    mem_reservation: 128m
+    cpu_shares: 512
+
+  duri_brain:
+    mem_limit: 512m
+    cpus: "0.50"
+    mem_reservation: 128m
+    cpu_shares: 512
+
+  duri_evolution:
+    mem_limit: 512m
+    cpus: "0.50"
+    mem_reservation: 128m
+    cpu_shares: 512
+
+  duri_control:
+    mem_limit: 512m
+    cpus: "0.50"
+    mem_reservation: 128m
+    cpu_shares: 512
+
+  # 3️⃣ Prometheus 데이터 영속화
+  prometheus:
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./config/prometheus_recording_rules.yml:/etc/prometheus/prometheus_recording_rules.yml
+      - ./config/prometheus_rules_final.yml:/etc/prometheus/prometheus_rules_final.yml
+      - ./config/prometheus_slo_recording_rules.yml:/etc/prometheus/prometheus_slo_recording_rules.yml
+      - prometheus_data:/prometheus  # ⬅️ 데이터 영속화 추가
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.retention.time=15d
+      - --storage.tsdb.retention.size=2GB
+      - --web.console.libraries=/etc/prometheus/console_libraries
+      - --web.console.templates=/etc/prometheus/consoles
+      - --storage.tsdb.path=/prometheus
+      - --web.enable-lifecycle
+
+  # 5️⃣ 시크릿 다이어트 (환경변수 외부화)
+  duri-postgres:
+    env_file:
+      - ./.env
+    secrets:
+      - pg_password
+    environment:
+      - POSTGRES_PASSWORD_FILE=/run/secrets/pg_password
+
+  postgres_exporter:
+    env_file:
+      - ./.env
+
+  redis_exporter:
+    env_file:
+      - ./.env
+
+  # 6️⃣ read_only 부작용 가드 (추가 tmpfs)
+  duri_core:
+    tmpfs:
+      - /tmp
+      - /run
+      - /var/tmp
+      - /app/logs
+
+  duri_brain:
+    tmpfs:
+      - /tmp
+      - /run
+      - /var/tmp
+      - /app/logs
+
+  duri_evolution:
+    tmpfs:
+      - /tmp
+      - /run
+      - /var/tmp
+      - /app/logs
+
+  duri_control:
+    tmpfs:
+      - /tmp
+      - /run
+      - /var/tmp
+      - /app/logs
+
+  # 7️⃣ 컨테이너 재시작 정책 검증
+  duri_core:
+    restart: unless-stopped
+
+  duri_brain:
+    restart: unless-stopped
+
+  duri_evolution:
+    restart: unless-stopped
+
+  duri_control:
+    restart: unless-stopped
+
+  duri-postgres:
+    restart: unless-stopped
+
+  duri-redis:
+    restart: unless-stopped
+
+  prometheus:
+    restart: unless-stopped
+
+  node_exporter:
+    restart: unless-stopped
+
+  cadvisor:
+    restart: unless-stopped
+
+  blackbox_exporter:
+    restart: unless-stopped
+
+  postgres_exporter:
+    restart: unless-stopped
+
+  redis_exporter:
+    restart: unless-stopped
+
+# 3️⃣ Prometheus 데이터 영속화 볼륨 추가
+volumes:
+  postgres_data:
+  prometheus_data:  # ⬅️ Prometheus 데이터 영속화
+
+# 5️⃣ 시크릿 다이어트
+secrets:
+  pg_password:
+    file: ./secrets/pg_password.txt

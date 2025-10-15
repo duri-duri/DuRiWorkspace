@@ -1,0 +1,181 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "DuRi 무결성 검증 대시보드",
+    "tags": ["duri", "integrity", "security"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "id": 1,
+        "title": "무결성 상태 스파크라인",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "max_over_time(duri_integrity_status_verified[24h])",
+            "legendFormat": "Verified"
+          },
+          {
+            "expr": "max_over_time(duri_integrity_status_tampered[24h])",
+            "legendFormat": "Tampered"
+          },
+          {
+            "expr": "max_over_time(duri_integrity_status_policy_changed[24h])",
+            "legendFormat": "Policy Changed"
+          },
+          {
+            "expr": "max_over_time(duri_integrity_status_corrupted[24h])",
+            "legendFormat": "Corrupted"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "steps": [
+                {"color": "green", "value": 0},
+                {"color": "red", "value": 1}
+              ]
+            }
+          }
+        },
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}
+      },
+      {
+        "id": 2,
+        "title": "스캔 시간 추이",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "duri_integrity_scan_duration_ms",
+            "legendFormat": "Scan Duration (ms)"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ms",
+            "color": {
+              "mode": "palette-classic"
+            }
+          }
+        },
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}
+      },
+      {
+        "id": 3,
+        "title": "해시된 바이트 수 추이",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "duri_integrity_scan_bytes_hashed",
+            "legendFormat": "Bytes Hashed"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "bytes",
+            "color": {
+              "mode": "palette-classic"
+            }
+          }
+        },
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}
+      },
+      {
+        "id": 4,
+        "title": "파일 변동 추이",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "duri_integrity_files_modified",
+            "legendFormat": "Modified Files"
+          },
+          {
+            "expr": "duri_integrity_files_missing",
+            "legendFormat": "Missing Files"
+          },
+          {
+            "expr": "duri_integrity_files_new",
+            "legendFormat": "New Files"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "color": {
+              "mode": "palette-classic"
+            }
+          }
+        },
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8}
+      },
+      {
+        "id": 5,
+        "title": "HMAC 서명 상태",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "duri_integrity_hmac_status{enabled=\"true\"}",
+            "legendFormat": "HMAC Enabled"
+          },
+          {
+            "expr": "duri_integrity_hmac_status{checksums_ok=\"true\"}",
+            "legendFormat": "Checksums OK"
+          },
+          {
+            "expr": "duri_integrity_hmac_status{metadata_ok=\"true\"}",
+            "legendFormat": "Metadata OK"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "steps": [
+                {"color": "red", "value": 0},
+                {"color": "green", "value": 1}
+              ]
+            }
+          }
+        },
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16}
+      },
+      {
+        "id": 6,
+        "title": "무결성 검증 실패율",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "rate(duri_integrity_status_corrupted[5m])",
+            "legendFormat": "Corrupted Rate"
+          },
+          {
+            "expr": "rate(duri_integrity_status_tampered[5m])",
+            "legendFormat": "Tampered Rate"
+          },
+          {
+            "expr": "rate(duri_integrity_status_policy_changed[5m])",
+            "legendFormat": "Policy Changed Rate"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "reqps",
+            "color": {
+              "mode": "palette-classic"
+            }
+          }
+        },
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16}
+      }
+    ],
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "refresh": "30s"
+  }
+}

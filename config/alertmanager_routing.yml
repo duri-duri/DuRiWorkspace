@@ -1,0 +1,151 @@
+# DuRi Alertmanager 라우팅 규칙
+
+global:
+  smtp_smarthost: 'localhost:587'
+  smtp_from: 'alerts@duri.com'
+
+route:
+  group_by: ['alertname', 'cluster', 'service']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1h
+  receiver: 'default'
+  routes:
+  # DuRi 무결성 알람 라우팅
+  - match:
+      service: duri-integrity
+    routes:
+    # Critical 알람 - 즉시 paging
+    - match:
+        severity: critical
+      receiver: oncall-pager
+      group_wait: 0s
+      group_interval: 1m
+      repeat_interval: 5m
+      routes:
+      # tampered - 최고 우선순위
+      - match:
+          alertname: DuRiIntegrityTampered
+        receiver: security-pager
+        group_wait: 0s
+        group_interval: 30s
+        repeat_interval: 2m
+      # corrupted - 높은 우선순위
+      - match:
+          alertname: DuRiIntegrityFailure
+        receiver: oncall-pager
+        group_wait: 0s
+        group_interval: 1m
+        repeat_interval: 5m
+      # HMAC 실패 - 보안 관련
+      - match:
+          alertname: DuRiIntegrityHmacFailure
+        receiver: security-pager
+        group_wait: 0s
+        group_interval: 1m
+        repeat_interval: 5m
+    
+    # Warning 알람 - 10분 내 3회 연속 실패 시 paging
+    - match:
+        severity: warning
+      receiver: oncall-slack
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 15m
+      routes:
+      # policy_changed - 경고 수준
+      - match:
+          alertname: DuRiIntegrityPolicyChanged
+        receiver: oncall-slack
+        group_wait: 1m
+        group_interval: 5m
+        repeat_interval: 15m
+        # 10분 내 3회 연속 실패 시 paging
+        repeat_interval: 10m
+        routes:
+        - match:
+            alertname: DuRiIntegrityPolicyChanged
+          receiver: oncall-pager
+          group_wait: 0s
+          group_interval: 1m
+          repeat_interval: 5m
+          # 3회 연속 실패 조건
+          match_re:
+            repeat_count: "3"
+      
+      # 스캔 지연 - 모니터링
+      - match:
+          alertname: DuRiIntegrityScanSlow
+        receiver: oncall-slack
+        group_wait: 2m
+        group_interval: 10m
+        repeat_interval: 30m
+      
+      # 파일 폭증 - 주의
+      - match:
+          alertname: DuRiIntegrityFilesSpike
+        receiver: oncall-slack
+        group_wait: 1m
+        group_interval: 5m
+        repeat_interval: 15m
+      
+      # HMAC 비활성화 - 정보
+      - match:
+          alertname: DuRiIntegrityHmacDisabled
+        receiver: oncall-slack
+        group_wait: 5m
+        group_interval: 15m
+        repeat_interval: 1h
+
+receivers:
+- name: 'default'
+  webhook_configs:
+  - url: 'http://localhost:5001/webhook'
+
+- name: 'oncall-pager'
+  pagerduty_configs:
+  - service_key: 'your-pagerduty-key'
+    description: '{{ .GroupLabels.alertname }}: {{ .CommonAnnotations.summary }}'
+    details:
+      cluster: '{{ .GroupLabels.cluster }}'
+      service: '{{ .GroupLabels.service }}'
+      runbook_url: '{{ .CommonAnnotations.runbook_url }}'
+  
+  slack_configs:
+  - api_url: 'https://hooks.slack.com/services/your/slack/webhook'
+    channel: '#oncall-alerts'
+    title: '🚨 CRITICAL: {{ .GroupLabels.alertname }}'
+    text: '{{ .CommonAnnotations.description }}'
+    color: 'danger'
+
+- name: 'security-pager'
+  pagerduty_configs:
+  - service_key: 'your-security-pagerduty-key'
+    description: '🔒 SECURITY: {{ .GroupLabels.alertname }}: {{ .CommonAnnotations.summary }}'
+    details:
+      cluster: '{{ .GroupLabels.cluster }}'
+      service: '{{ .GroupLabels.service }}'
+      runbook_url: '{{ .CommonAnnotations.runbook_url }}'
+      severity: 'security'
+  
+  slack_configs:
+  - api_url: 'https://hooks.slack.com/services/your/slack/webhook'
+    channel: '#security-alerts'
+    title: '🔒 SECURITY: {{ .GroupLabels.alertname }}'
+    text: '{{ .CommonAnnotations.description }}'
+    color: 'danger'
+
+- name: 'oncall-slack'
+  slack_configs:
+  - api_url: 'https://hooks.slack.com/services/your/slack/webhook'
+    channel: '#oncall-alerts'
+    title: '⚠️ WARNING: {{ .GroupLabels.alertname }}'
+    text: '{{ .CommonAnnotations.description }}'
+    color: 'warning'
+
+inhibit_rules:
+- source_match:
+    severity: 'critical'
+  target_match:
+    severity: 'warning'
+  equal: ['alertname', 'cluster', 'service']

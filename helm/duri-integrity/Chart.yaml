@@ -1,0 +1,30 @@
+apiVersion: v2
+name: duri-integrity
+description: DuRi 무결성 검증 시스템
+type: application
+version: 1.1.1
+appVersion: "1.1.1"
+keywords:
+  - duri
+  - integrity
+  - security
+  - monitoring
+home: https://github.com/your-org/duri
+sources:
+  - https://github.com/your-org/duri
+maintainers:
+  - name: DuRi Team
+    email: duri-team@your-org.com
+dependencies:
+  - name: prometheus
+    version: "15.18.0"
+    repository: "https://prometheus-community.github.io/helm-charts"
+    condition: prometheus.enabled
+  - name: grafana
+    version: "6.50.7"
+    repository: "https://grafana.github.io/helm-charts"
+    condition: grafana.enabled
+  - name: argo-rollouts
+    version: "2.35.0"
+    repository: "https://argoproj.github.io/argo-helm"
+    condition: argoRollouts.enabled

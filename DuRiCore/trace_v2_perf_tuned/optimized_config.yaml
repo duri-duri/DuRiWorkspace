@@ -1,0 +1,22 @@
+trace_v2_optimized:
+  caching:
+    enabled: true
+    eviction_policy: lru
+    max_size: 1000
+    ttl_seconds: 300
+  performance:
+    max_cpu_percent: 80
+    max_memory_mb: 1024
+    target_latency_ms: 50
+    target_throughput_rps: 2000
+  processing:
+    batch_size: 100
+    parallel_workers: 2
+    queue_size: 200
+  sampling:
+    rate: 0.5
+    strategy: adaptive
+  serialization:
+    compression: gzip
+    compression_level: 6
+    format: json

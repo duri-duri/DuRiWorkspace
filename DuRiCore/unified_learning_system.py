@@ -39,7 +39,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 import numpy as np
 
 # 로깅 설정
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
@@ -167,7 +167,7 @@ class UnifiedLearningSystem:
     def _initialize_existence_ai(self):
         """존재형 AI 시스템 초기화"""
         try:
-            from utils.existence_ai_system import ExistenceAISystem
+            from DuRiCore.utils.existence_ai_system import ExistenceAISystem
 
             return ExistenceAISystem()
         except ImportError:
@@ -177,7 +177,7 @@ class UnifiedLearningSystem:
     def _initialize_final_execution_verifier(self):
         """최종 실행 준비 완료 시스템 초기화"""
         try:
-            from utils.final_execution_verifier import FinalExecutionVerifier
+            from DuRiCore.final_integration_system import FinalIntegrationSystem as FinalExecutionVerifier
 
             return FinalExecutionVerifier()
         except ImportError:

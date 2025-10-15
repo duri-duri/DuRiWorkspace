@@ -1,0 +1,208 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "duri-integrity.fullname" . }}
+  labels:
+    {{- include "duri-integrity.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.argoRollouts.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "duri-integrity.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "duri-integrity.selectorLabels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "duri-integrity.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      
+      # 부팅 게이트 (필수) - 무결성 통과 후 앱 시작
+      initContainers:
+      - name: integrity-gate
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+        - name: DURI_ENV
+          value: "prod"
+        - name: DURI_INTEGRITY_MODE
+          value: {{ .Values.integrity.mode | quote }}
+        - name: DURI_INTEGRITY_SPIKE_THRESHOLD
+          value: {{ .Values.integrity.spikeThreshold | quote }}
+        {{- if .Values.secrets.hmacKey.enabled }}
+        - name: DURI_HMAC_KEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secrets.hmacKey.name }}
+              key: {{ .Values.secrets.hmacKey.key }}
+        {{- end }}
+        {{- if .Values.integrity.hmacDualVerify }}
+        - name: DURI_HMAC_KEY_DUAL_VERIFY
+          value: "true"
+        {{- end }}
+        {{- with .Values.env }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        volumeMounts:
+        {{- if .Values.secrets.hmacKey.enabled }}
+        - name: hmac-key
+          mountPath: /etc/secrets
+          readOnly: true
+        {{- end }}
+        command: ["bash","-lc","scripts/ci_integrity_check.sh"]
+        resources:
+          {{- toYaml .Values.sidecarResources | nindent 10 }}
+      
+      containers:
+      # 메인 애플리케이션
+      - name: duri-app
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: {{ .Values.service.targetPort }}
+          protocol: TCP
+        env:
+        - name: DURI_ENV
+          value: "prod"
+        - name: DURI_INTEGRITY_MODE
+          value: {{ .Values.integrity.mode | quote }}
+        - name: DURI_INTEGRITY_SPIKE_THRESHOLD
+          value: {{ .Values.integrity.spikeThreshold | quote }}
+        {{- if .Values.secrets.hmacKey.enabled }}
+        - name: DURI_HMAC_KEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secrets.hmacKey.name }}
+              key: {{ .Values.secrets.hmacKey.key }}
+        {{- end }}
+        {{- if .Values.integrity.hmacDualVerify }}
+        - name: DURI_HMAC_KEY_DUAL_VERIFY
+          value: "true"
+        {{- end }}
+        {{- with .Values.env }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        volumeMounts:
+        {{- if .Values.secrets.hmacKey.enabled }}
+        - name: hmac-key
+          mountPath: /etc/secrets
+          readOnly: true
+        {{- end }}
+        livenessProbe:
+          {{- toYaml .Values.livenessProbe | nindent 10 }}
+        readinessProbe:
+          {{- toYaml .Values.readinessProbe | nindent 10 }}
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 10 }}
+      
+      # 사이드카 재검증 - 5분 간격 재검증 & 메트릭 노출
+      {{- if .Values.sidecars.integrity.enabled }}
+      - name: duri-integrity-sidecar
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - name: metrics
+          containerPort: {{ .Values.sidecars.integrity.port }}
+          protocol: TCP
+        env:
+        - name: DURI_ENV
+          value: "prod"
+        - name: DURI_INTEGRITY_MODE
+          value: {{ .Values.integrity.mode | quote }}
+        - name: DURI_INTEGRITY_SPIKE_THRESHOLD
+          value: {{ .Values.integrity.spikeThreshold | quote }}
+        {{- if .Values.secrets.hmacKey.enabled }}
+        - name: DURI_HMAC_KEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secrets.hmacKey.name }}
+              key: {{ .Values.secrets.hmacKey.key }}
+        {{- end }}
+        {{- with .Values.env }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        volumeMounts:
+        {{- if .Values.secrets.hmacKey.enabled }}
+        - name: hmac-key
+          mountPath: /etc/secrets
+          readOnly: true
+        {{- end }}
+        - name: metrics
+          mountPath: /metrics
+        command: ["bash","-lc","while true; do python -c 'from DuRiCore.deployment.deployment_integrity import deployment_integrity as d; from DuRiCore.deployment.integrity_metrics import integrity_metrics as m; r=d.verify_integrity(); m.record_integrity_scan(r); m.export_to_file(\"/metrics/integrity.prom\"); import time; time.sleep({{ .Values.sidecars.integrity.interval }})' ; done"]
+        resources:
+          {{- toYaml .Values.sidecarResources | nindent 10 }}
+        livenessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - "ps aux | grep python | grep -v grep"
+          initialDelaySeconds: 30
+          periodSeconds: 30
+      {{- end }}
+      
+      # Maintenance 사이드카
+      {{- if .Values.sidecars.maintenance.enabled }}
+      - name: maintenance-exporter
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        command: ["python", "DuRiCore/maintenance/maintenance_exporter.py"]
+        ports:
+        - name: maintenance-metrics
+          containerPort: {{ .Values.sidecars.maintenance.port }}
+          protocol: TCP
+        env:
+        - name: PORT
+          value: {{ .Values.sidecars.maintenance.port | quote }}
+        - name: MAINTENANCE
+          valueFrom:
+            configMapKeyRef:
+              name: {{ .Values.configMaps.maintenance.name }}
+              key: enabled
+        resources:
+          {{- toYaml .Values.sidecarResources | nindent 10 }}
+      {{- end }}
+      
+      volumes:
+      {{- if .Values.secrets.hmacKey.enabled }}
+      - name: hmac-key
+        secret:
+          secretName: {{ .Values.secrets.hmacKey.name }}
+          defaultMode: 0400
+      {{- end }}
+      - name: metrics
+        emptyDir: {}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}

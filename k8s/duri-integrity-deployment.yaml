@@ -1,0 +1,154 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: duri-app
+  labels:
+    app: duri-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: duri-app
+  template:
+    metadata:
+      labels:
+        app: duri-app
+    spec:
+      # 비밀키 운영화 - KMS/Secrets Manager 연동
+      volumes:
+      - name: hmac-key
+        secret:
+          secretName: duri-hmac-key
+          defaultMode: 0400
+      - name: metrics
+        emptyDir: {}
+      
+      # 부팅 게이트 (필수) - 무결성 통과 후 앱 시작
+      initContainers:
+      - name: integrity-gate
+        image: yourimage:with-duri
+        env:
+        - name: DURI_ENV
+          value: "prod"
+        - name: DURI_INTEGRITY_MODE
+          value: "strict"
+        - name: DURI_HMAC_KEY_FILE
+          value: "/etc/secrets/hmac-key"
+        - name: DURI_INTEGRITY_SPIKE_THRESHOLD
+          value: "0.3"
+        volumeMounts:
+        - name: hmac-key
+          mountPath: /etc/secrets
+          readOnly: true
+        command: ["bash","-lc","scripts/ci_integrity_check.sh"]
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+      
+      containers:
+      # 메인 애플리케이션
+      - name: duri-app
+        image: yourimage:with-duri
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: DURI_ENV
+          value: "prod"
+        - name: DURI_INTEGRITY_MODE
+          value: "strict"
+        - name: DURI_HMAC_KEY_FILE
+          value: "/etc/secrets/hmac-key"
+        volumeMounts:
+        - name: hmac-key
+          mountPath: /etc/secrets
+          readOnly: true
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+      
+      # 사이드카 재검증 - 5분 간격 재검증 & 메트릭 노출
+      - name: duri-integrity-sidecar
+        image: yourimage:with-duri
+        ports:
+        - containerPort: 9101
+          name: metrics
+        env:
+        - name: DURI_ENV
+          value: "prod"
+        - name: DURI_INTEGRITY_MODE
+          value: "strict"
+        - name: DURI_HMAC_KEY_FILE
+          value: "/etc/secrets/hmac-key"
+        - name: DURI_INTEGRITY_SPIKE_THRESHOLD
+          value: "0.3"
+        volumeMounts:
+        - name: hmac-key
+          mountPath: /etc/secrets
+          readOnly: true
+        - name: metrics
+          mountPath: /metrics
+        command: ["bash","-lc","while true; do python -c 'from DuRiCore.deployment.deployment_integrity import deployment_integrity as d; from DuRiCore.deployment.integrity_metrics import integrity_metrics as m; r=d.verify_integrity(); m.record_integrity_scan(r); m.export_to_file(\"/metrics/integrity.prom\"); import time; time.sleep(300)' ; done"]
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        livenessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - "ps aux | grep python | grep -v grep"
+          initialDelaySeconds: 30
+          periodSeconds: 30
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: duri-app-service
+  labels:
+    app: duri-app
+spec:
+  selector:
+    app: duri-app
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+  - name: metrics
+    port: 9101
+    targetPort: 9101
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: duri-hmac-key
+type: Opaque
+data:
+  # base64 encoded HMAC key (실제 운영에서는 KMS/Secrets Manager에서 주입)
+  hmac-key: <BASE64_ENCODED_HMAC_KEY>

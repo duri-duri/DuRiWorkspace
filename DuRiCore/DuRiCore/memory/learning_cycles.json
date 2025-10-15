@@ -1,26 +1,443 @@
 {
+  "schema_version": "2.0",
+  "created_at": "2025-10-14T13:42:00.000000",
   "cycles": [
     {
-      "cycle_id": "cycle_20250807_133543",
-      "timestamp": "2025-08-07T13:35:43.414952",
-      "trigger_type": "user_request",
-      "judgment_traces_count": 0,
-      "reflection_insights_count": 0,
-      "evolution_steps_count": 0,
-      "cycle_duration": 0.0003578662872314453,
-      "status": "failed"
+      "cycle_id": "CYCLE_20251014_042633_539250_282a8e",
+      "start_time": "2025-10-14T13:26:33.539250",
+      "end_time": "2025-10-14T13:26:34.039618",
+      "total_time": 0.5003674030303955,
+      "steps": {
+        "데이터 수집": {
+          "status": "완료",
+          "processing_time": 0.19418567024190903,
+          "success": true
+        },
+        "패턴 분석": {
+          "status": "완료",
+          "processing_time": 0.10623439717326155,
+          "success": true
+        },
+        "모델 업데이트": {
+          "status": "완료",
+          "processing_time": 0.19707894772003348,
+          "success": true
+        },
+        "성능 평가": {
+          "status": "완료",
+          "processing_time": 0.16167095924710773,
+          "success": true
+        },
+        "결과 저장": {
+          "status": "완료",
+          "processing_time": 0.12091291428023751,
+          "success": true
+        }
+      },
+      "success": true,
+      "insights": [
+        "학습 사이클 CYCLE_20251014_042633_539250_282a8e 완료",
+        "총 처리 시간: 0.50초",
+        "패턴 인식 성능 향상 감지"
+      ]
     },
     {
-      "cycle_id": "cycle_20250807_133710",
-      "timestamp": "2025-08-07T13:37:10.081572",
-      "trigger_type": "user_request",
-      "judgment_traces_count": 7,
-      "reflection_insights_count": 7,
-      "evolution_steps_count": 0,
-      "cycle_duration": 0.0006127357482910156,
-      "status": "completed"
+      "cycle_id": "CYCLE_20251014_042634_040392_c43d3d",
+      "start_time": "2025-10-14T13:26:34.040391",
+      "end_time": "2025-10-14T13:26:34.540768",
+      "total_time": 0.5003764629364014,
+      "steps": {
+        "데이터 수집": {
+          "status": "완료",
+          "processing_time": 0.1651983097251289,
+          "success": true
+        },
+        "패턴 분석": {
+          "status": "완료",
+          "processing_time": 0.08785353367632004,
+          "success": true
+        },
+        "모델 업데이트": {
+          "status": "완료",
+          "processing_time": 0.0969392180228268,
+          "success": true
+        },
+        "성능 평가": {
+          "status": "완료",
+          "processing_time": 0.19937397082611774,
+          "success": true
+        },
+        "결과 저장": {
+          "status": "완료",
+          "processing_time": 0.05017460174499436,
+          "success": true
+        }
+      },
+      "success": true,
+      "insights": [
+        "학습 사이클 CYCLE_20251014_042634_040392_c43d3d 완료",
+        "총 처리 시간: 0.50초",
+        "패턴 인식 성능 향상 감지"
+      ]
+    },
+    {
+      "cycle_id": "CYCLE_20251014_042651_797153_652c7c",
+      "start_time": "2025-10-14T13:26:51.797153",
+      "end_time": "2025-10-14T13:26:52.297779",
+      "total_time": 0.5006263256072998,
+      "steps": {
+        "데이터 수집": {
+          "status": "완료",
+          "processing_time": 0.12912787347959848,
+          "success": true
+        },
+        "패턴 분석": {
+          "status": "완료",
+          "processing_time": 0.1272036567030323,
+          "success": true
+        },
+        "모델 업데이트": {
+          "status": "완료",
+          "processing_time": 0.06697016994711363,
+          "success": true
+        },
+        "성능 평가": {
+          "status": "완료",
+          "processing_time": 0.16499600447233417,
+          "success": true
+        },
+        "결과 저장": {
+          "status": "완료",
+          "processing_time": 0.17147478380536785,
+          "success": true
+        }
+      },
+      "success": true,
+      "insights": [
+        "학습 사이클 CYCLE_20251014_042651_797153_652c7c 완료",
+        "총 처리 시간: 0.50초",
+        "패턴 인식 성능 향상 감지"
+      ]
+    },
+    {
+      "cycle_id": "CYCLE_20251014_042652_303521_6233d7",
+      "start_time": "2025-10-14T13:26:52.303520",
+      "end_time": "2025-10-14T13:26:52.804053",
+      "total_time": 0.5005335807800293,
+      "steps": {
+        "데이터 수집": {
+          "status": "완료",
+          "processing_time": 0.11453579097569146,
+          "success": true
+        },
+        "패턴 분석": {
+          "status": "완료",
+          "processing_time": 0.17324354362817274,
+          "success": true
+        },
+        "모델 업데이트": {
+          "status": "완료",
+          "processing_time": 0.13391009746333735,
+          "success": true
+        },
+        "성능 평가": {
+          "status": "완료",
+          "processing_time": 0.13643223628366416,
+          "success": true
+        },
+        "결과 저장": {
+          "status": "완료",
+          "processing_time": 0.08586732132418703,
+          "success": true
+        }
+      },
+      "success": true,
+      "insights": [
+        "학습 사이클 CYCLE_20251014_042652_303521_6233d7 완료",
+        "총 처리 시간: 0.50초",
+        "패턴 인식 성능 향상 감지"
+      ]
+    },
+    {
+      "cycle_id": "CYCLE_20251014_134200",
+      "start_time": "2025-10-14T13:42:00.000000",
+      "end_time": "2025-10-14T13:42:00.500000",
+      "total_time": 0.5,
+      "success": true
+    },
+    {
+      "cycle_id": "CYCLE_20251014_044248_367060_59f67c",
+      "start_time": "2025-10-14T13:42:48.367058",
+      "end_time": "2025-10-14T13:42:48.867529",
+      "total_time": 0.5004713535308838,
+      "steps": {
+        "데이터 수집": {
+          "status": "완료",
+          "processing_time": 0.09205167417666535,
+          "success": true
+        },
+        "패턴 분석": {
+          "status": "완료",
+          "processing_time": 0.16603275822034477,
+          "success": true
+        },
+        "모델 업데이트": {
+          "status": "완료",
+          "processing_time": 0.10252993198338897,
+          "success": true
+        },
+        "성능 평가": {
+          "status": "완료",
+          "processing_time": 0.10222565039493063,
+          "success": true
+        },
+        "결과 저장": {
+          "status": "완료",
+          "processing_time": 0.12474351080573491,
+          "success": true
+        }
+      },
+      "success": true,
+      "insights": [
+        "학습 사이클 CYCLE_20251014_044248_367060_59f67c 완료",
+        "총 처리 시간: 0.50초",
+        "패턴 인식 성능 향상 감지"
+      ]
+    },
+    {
+      "cycle_id": "CYCLE_20251014_044248_868191_035353",
+      "start_time": "2025-10-14T13:42:48.868191",
+      "end_time": "2025-10-14T13:42:49.368607",
+      "total_time": 0.5004162788391113,
+      "steps": {
+        "데이터 수집": {
+          "status": "완료",
+          "processing_time": 0.18207238806868536,
+          "success": true
+        },
+        "패턴 분석": {
+          "status": "완료",
+          "processing_time": 0.16717208822005375,
+          "success": true
+        },
+        "모델 업데이트": {
+          "status": "완료",
+          "processing_time": 0.06953346054151252,
+          "success": true
+        },
+        "성능 평가": {
+          "status": "완료",
+          "processing_time": 0.13085723058676801,
+          "success": true
+        },
+        "결과 저장": {
+          "status": "완료",
+          "processing_time": 0.17159632876678593,
+          "success": true
+        }
+      },
+      "success": true,
+      "insights": [
+        "학습 사이클 CYCLE_20251014_044248_868191_035353 완료",
+        "총 처리 시간: 0.50초",
+        "패턴 인식 성능 향상 감지"
+      ]
+    },
+    {
+      "cycle_id": "CYCLE_20251014_044432_778564_0f6191",
+      "start_time": "2025-10-14T13:44:32.778564",
+      "end_time": "2025-10-14T13:44:33.279240",
+      "total_time": 0.5006752014160156,
+      "steps": {
+        "데이터 수집": {
+          "status": "완료",
+          "processing_time": 0.07636416817184005,
+          "success": true
+        },
+        "패턴 분석": {
+          "status": "완료",
+          "processing_time": 0.19811427588366176,
+          "success": true
+        },
+        "모델 업데이트": {
+          "status": "완료",
+          "processing_time": 0.16135341169929257,
+          "success": true
+        },
+        "성능 평가": {
+          "status": "완료",
+          "processing_time": 0.11172411584117374,
+          "success": true
+        },
+        "결과 저장": {
+          "status": "완료",
+          "processing_time": 0.09571119296721194,
+          "success": true
+        }
+      },
+      "success": true,
+      "insights": [
+        "학습 사이클 CYCLE_20251014_044432_778564_0f6191 완료",
+        "총 처리 시간: 0.50초",
+        "패턴 인식 성능 향상 감지"
+      ]
+    },
+    {
+      "cycle_id": "CYCLE_20251014_044433_287240_ac0665",
+      "start_time": "2025-10-14T13:44:33.287239",
+      "end_time": "2025-10-14T13:44:33.787860",
+      "total_time": 0.5006213188171387,
+      "steps": {
+        "데이터 수집": {
+          "status": "완료",
+          "processing_time": 0.06159451326131815,
+          "success": true
+        },
+        "패턴 분석": {
+          "status": "완료",
+          "processing_time": 0.19370233002992282,
+          "success": true
+        },
+        "모델 업데이트": {
+          "status": "완료",
+          "processing_time": 0.11426863994623854,
+          "success": true
+        },
+        "성능 평가": {
+          "status": "완료",
+          "processing_time": 0.09582455503025727,
+          "success": true
+        },
+        "결과 저장": {
+          "status": "완료",
+          "processing_time": 0.13934694231141725,
+          "success": true
+        }
+      },
+      "success": true,
+      "insights": [
+        "학습 사이클 CYCLE_20251014_044433_287240_ac0665 완료",
+        "총 처리 시간: 0.50초",
+        "패턴 인식 성능 향상 감지"
+      ]
+    },
+    {
+      "cycle_id": "CYCLE_20251014_045107_270294_60464c",
+      "start_time": "2025-10-14T13:51:07.270293",
+      "end_time": "2025-10-14T13:51:07.770911",
+      "total_time": 0.5006177425384521,
+      "steps": {
+        "데이터 수집": {
+          "status": "완료",
+          "processing_time": 0.0843537543051775,
+          "success": true
+        },
+        "패턴 분석": {
+          "status": "완료",
+          "processing_time": 0.06324744857529728,
+          "success": true
+        },
+        "모델 업데이트": {
+          "status": "완료",
+          "processing_time": 0.07181023766818434,
+          "success": true
+        },
+        "성능 평가": {
+          "status": "완료",
+          "processing_time": 0.13151332205527608,
+          "success": true
+        },
+        "결과 저장": {
+          "status": "완료",
+          "processing_time": 0.10208884259931902,
+          "success": true
+        }
+      },
+      "success": true,
+      "insights": [
+        "학습 사이클 CYCLE_20251014_045107_270294_60464c 완료",
+        "총 처리 시간: 0.50초",
+        "패턴 인식 성능 향상 감지"
+      ]
+    },
+    {
+      "cycle_id": "CYCLE_20251014_045107_778334_0f5a6f",
+      "start_time": "2025-10-14T13:51:07.778334",
+      "end_time": "2025-10-14T13:51:08.278987",
+      "total_time": 0.5006535053253174,
+      "steps": {
+        "데이터 수집": {
+          "status": "완료",
+          "processing_time": 0.17977239652804444,
+          "success": true
+        },
+        "패턴 분석": {
+          "status": "완료",
+          "processing_time": 0.1515590239391523,
+          "success": true
+        },
+        "모델 업데이트": {
+          "status": "완료",
+          "processing_time": 0.08757770866580963,
+          "success": true
+        },
+        "성능 평가": {
+          "status": "완료",
+          "processing_time": 0.12434691724264635,
+          "success": true
+        },
+        "결과 저장": {
+          "status": "완료",
+          "processing_time": 0.11312825279409056,
+          "success": true
+        }
+      },
+      "success": true,
+      "insights": [
+        "학습 사이클 CYCLE_20251014_045107_778334_0f5a6f 완료",
+        "총 처리 시간: 0.50초",
+        "패턴 인식 성능 향상 감지"
+      ]
+    },
+    {
+      "cycle_id": "CYCLE_20251014_045126_603150_bbd1d4",
+      "start_time": "2025-10-14T13:51:26.603131",
+      "end_time": "2025-10-14T13:51:27.103730",
+      "total_time": 0.500598669052124,
+      "steps": {
+        "데이터 수집": {
+          "status": "완료",
+          "processing_time": 0.1453647796437435,
+          "success": true
+        },
+        "패턴 분석": {
+          "status": "완료",
+          "processing_time": 0.1132712963594254,
+          "success": true
+        },
+        "모델 업데이트": {
+          "status": "완료",
+          "processing_time": 0.18176324050462972,
+          "success": true
+        },
+        "성능 평가": {
+          "status": "완료",
+          "processing_time": 0.08715391330550852,
+          "success": true
+        },
+        "결과 저장": {
+          "status": "완료",
+          "processing_time": 0.148884738000967,
+          "success": true
+        }
+      },
+      "success": true,
+      "insights": [
+        "학습 사이클 CYCLE_20251014_045126_603150_bbd1d4 완료",
+        "총 처리 시간: 0.50초",
+        "패턴 인식 성능 향상 감지"
+      ]
     }
   ],
-  "total_cycles": 2,
-  "last_updated": "2025-08-07T13:37:10.081596"
+  "last_updated": "2025-10-14T13:42:00.000000"
 }

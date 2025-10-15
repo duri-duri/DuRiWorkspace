@@ -1,0 +1,50 @@
+# 생성/변동되는 것들 무시
+DuRiCore/deployment/deployment_metadata.json
+DuRiCore/deployment/checksums.json
+**/*.log
+**/*.log.*
+**/__pycache__/**
+**/*.pyc
+sbom.json
+provenance.json
+*.sig
+deployment.sig
+
+# Prometheus 관련 파일들 (런타임 생성)
+data/prometheus/**
+**/prometheus/**
+**/*.wal
+**/*.wal.*
+
+# 기타 런타임 생성 파일들
+coverage.xml
+htmlcov/**
+.pytest_cache/**
+**/.coverage
+**/node_modules/**
+**/dist/**
+**/build/**
+
+# OS/에디터 생성 파일들
+**/.DS_Store
+**/Thumbs.db
+**/*.swp
+**/*.tmp
+**/*.bak
+**/*.orig
+
+# 임시/캐시 파일들
+**/.tmp/**
+**/tmp/**
+**/cache/**
+**/.cache/**
+
+# 백업 파일들
+**/*.bak
+**/*.backup
+**/*.old
+
+# 임시 파일들
+**/*.tmp
+**/*.temp
+**/*.temporary

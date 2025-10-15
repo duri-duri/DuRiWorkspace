@@ -1,0 +1,83 @@
+# DuRi 무결성 검증 알람 룰 (Prometheus Alertmanager)
+
+groups:
+- name: duri.integrity
+  rules:
+  - alert: DuRiIntegrityFailure
+    expr: duri_integrity_status_corrupted == 1
+    for: 0m
+    labels: 
+      severity: critical
+      service: duri-integrity
+    annotations:
+      summary: "DuRi 무결성 검증 실패 - 파일 변조/누락 감지"
+      description: "배포 ID {{ $labels.deployment_id }}에서 무결성 검증이 실패했습니다. 파일이 변조되었거나 누락되었을 수 있습니다."
+      runbook_url: "https://runbook.duri.com/integrity-failure"
+
+  - alert: DuRiIntegrityPolicyChanged
+    expr: duri_integrity_status_policy_changed == 1
+    for: 0m
+    labels: 
+      severity: warning
+      service: duri-integrity
+    annotations:
+      summary: "DuRi 무결성 정책 변경 감지"
+      description: "배포 ID {{ $labels.deployment_id }}에서 ignore 정책이나 스키마 버전이 변경되었습니다."
+      runbook_url: "https://runbook.duri.com/policy-changed"
+
+  - alert: DuRiIntegrityTampered
+    expr: duri_integrity_status_tampered == 1
+    for: 0m
+    labels: 
+      severity: critical
+      service: duri-integrity
+    annotations:
+      summary: "DuRi 무결성 서명 위조 감지"
+      description: "배포 ID {{ $labels.deployment_id }}에서 HMAC 서명이 위조되었습니다. 보안 사고 가능성이 있습니다."
+      runbook_url: "https://runbook.duri.com/tampered"
+
+  - alert: DuRiIntegrityScanSlow
+    expr: duri_integrity_scan_duration_ms > 5000
+    for: 1m
+    labels: 
+      severity: warning
+      service: duri-integrity
+    annotations:
+      summary: "DuRi 무결성 검증 스캔 지연"
+      description: "배포 ID {{ $labels.deployment_id }}에서 무결성 검증이 5초 이상 소요되고 있습니다."
+      runbook_url: "https://runbook.duri.com/scan-slow"
+
+  - alert: DuRiIntegrityFilesSpike
+    expr: (duri_integrity_files_missing / duri_integrity_files_total) > 0.3
+    for: 0m
+    labels: 
+      severity: warning
+      service: duri-integrity
+    annotations:
+      summary: "DuRi 무결성 파일 폭증 감지"
+      description: "배포 ID {{ $labels.deployment_id }}에서 누락된 파일이 전체의 30%를 초과했습니다."
+      runbook_url: "https://runbook.duri.com/files-spike"
+
+- name: duri.integrity.hmac
+  rules:
+  - alert: DuRiIntegrityHmacDisabled
+    expr: duri_integrity_hmac_status{enabled="false"} == 1
+    for: 5m
+    labels: 
+      severity: warning
+      service: duri-integrity
+    annotations:
+      summary: "DuRi 무결성 HMAC 서명 비활성화"
+      description: "배포 ID {{ $labels.deployment_id }}에서 HMAC 서명이 비활성화되어 있습니다."
+      runbook_url: "https://runbook.duri.com/hmac-disabled"
+
+  - alert: DuRiIntegrityHmacFailure
+    expr: duri_integrity_hmac_status{checksums_ok="false"} == 1 or duri_integrity_hmac_status{metadata_ok="false"} == 1
+    for: 0m
+    labels: 
+      severity: critical
+      service: duri-integrity
+    annotations:
+      summary: "DuRi 무결성 HMAC 서명 검증 실패"
+      description: "배포 ID {{ $labels.deployment_id }}에서 HMAC 서명 검증이 실패했습니다."
+      runbook_url: "https://runbook.duri.com/hmac-failure"

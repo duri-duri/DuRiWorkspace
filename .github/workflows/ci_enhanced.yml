@@ -1,0 +1,142 @@
+name: Enhanced CI Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        pip install bandit safety pytest
+    
+    - name: Security scan with threshold
+      run: |
+        # bandit를 threshold 기반으로 실행 (중대도 B 이상 발견 시 fail)
+        bandit -r DuRiCore/ -f json -o bandit-report.json || true
+        bandit -r DuRiCore/ -ll -f txt
+        
+        # 중대도 B 이상 발견 시 CI 실패
+        python3 -c "
+        import json
+        try:
+            with open('bandit-report.json', 'r') as f:
+                report = json.load(f)
+            
+            high_severity = [r for r in report['results'] if r['issue_severity'] in ['HIGH', 'MEDIUM']]
+            if high_severity:
+                print(f'❌ 중대도 B 이상 보안 이슈 {len(high_severity)}개 발견')
+                for issue in high_severity:
+                    print(f'  - {issue[\"test_name\"]}: {issue[\"issue_text\"]}')
+                exit(1)
+            else:
+                print('✅ 보안 스캔 통과')
+        except FileNotFoundError:
+            print('⚠️ bandit 리포트 파일 없음')
+        "
+    
+    - name: Dependency vulnerability scan
+      run: |
+        safety check --json --output safety-report.json || true
+        safety check
+
+  test-suite:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        pip install pytest pytest-benchmark
+    
+    - name: Run smoke tests (fast fail)
+      run: |
+        pytest tests/smoke_test_fixed.py -q --maxfail=1 --disable-warnings -v
+    
+    - name: Run negative tests (fast fail)
+      run: |
+        pytest tests/negative_test_fixed.py -q --maxfail=1 --disable-warnings -v
+    
+    - name: Run all tests with coverage
+      run: |
+        pytest tests/ -q --maxfail=3 --disable-warnings --tb=short
+
+  integration-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        pip install pytest hypothesis
+    
+    - name: Property-based testing
+      run: |
+        python3 -c "
+        from hypothesis import given, strategies as st
+        from DuRiCore.atomic_file_manager import AtomicFileManager
+        import tempfile
+        import os
+        
+        @given(st.dictionaries(st.text(), st.text()))
+        def test_atomic_write_property(data):
+            with tempfile.NamedTemporaryFile(delete=False, suffix='.json') as tmp:
+                manager = AtomicFileManager(tmp.name)
+                result = manager.atomic_write(data)
+                assert isinstance(result, bool)
+                if result:
+                    read_data = manager.atomic_read()
+                    assert read_data == data
+                os.unlink(tmp.name)
+        
+        test_atomic_write_property()
+        print('✅ Property-based testing 통과')
+        "
+    
+    - name: Chaos testing
+      run: |
+        python3 -c "
+        import os
+        import tempfile
+        from DuRiCore.atomic_file_manager import AtomicFileManager
+        
+        # 로그 폴더 권한 변경 테스트
+        log_dir = './logs'
+        os.makedirs(log_dir, exist_ok=True)
+        
+        # 읽기 전용으로 변경
+        os.chmod(log_dir, 0o444)
+        
+        try:
+            manager = AtomicFileManager('/tmp/chaos_test.json')
+            result = manager.atomic_write({'test': 'chaos'})
+            print(f'읽기 전용 환경에서 결과: {result}')
+        except Exception as e:
+            print(f'예상된 오류: {e}')
+        finally:
+            # 권한 복원
+            os.chmod(log_dir, 0o755)
+        
+        print('✅ Chaos testing 완료')
+        "

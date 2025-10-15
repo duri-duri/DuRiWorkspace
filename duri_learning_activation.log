@@ -1396,3 +1396,135 @@
 2025-08-08 09:03:08,721 - duri_brain.learning.strategy_survival_judge - INFO - 전략 learning_cycle_20250808_090221 생존 판단 완료: continue
 2025-08-08 09:03:08,721 - duri_brain.learning.learning_loop_manager - INFO - 학습 사이클 완료: 성과 0.84, 개선점수 0.13
 2025-08-08 09:03:08,821 - duri_brain.learning.learning_loop_manager - INFO - 사이클 42 성공: 개선점수 0.13
+2025-10-14 09:57:49,506 - DuRiCore.unified_learning_system - WARNING - 존재형 AI 시스템을 찾을 수 없습니다.
+2025-10-14 09:57:49,506 - DuRiCore.unified_learning_system - WARNING - 최종 실행 준비 완료 시스템을 찾을 수 없습니다.
+2025-10-14 09:57:49,506 - DuRiCore.unified_learning_system - INFO - 통합 학습 시스템 초기화 완료
+2025-10-14 09:57:49,506 - DuRiCore.unified_learning_system - WARNING - 존재형 AI 시스템을 찾을 수 없습니다.
+2025-10-14 09:57:49,506 - DuRiCore.unified_learning_system - WARNING - 최종 실행 준비 완료 시스템을 찾을 수 없습니다.
+2025-10-14 09:57:49,506 - DuRiCore.unified_learning_system - INFO - 통합 학습 시스템 초기화 완료
+2025-10-14 09:57:49,506 - DuRiCore.unified_learning_system - INFO - 학습 세션 시작: learning_session_1_20251014_095749 - continuous
+2025-10-14 09:57:49,506 - __main__ - INFO - ✅ 통합 학습 시스템 활성화 완료: learning_session_1_20251014_095749
+2025-10-14 09:57:49,524 - duri_modules.autonomous.autonomous_question_generator - INFO - 🧠 자율 질문 생성 시스템 초기화 완료
+2025-10-14 09:57:49,527 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-10-14 09:57:49,527 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-10-14 09:57:49,527 - duri_modules.autonomous.strategy_loop_runner - INFO - 🔄 DuRi 전략 루프 러너 초기화 완료
+2025-10-14 09:57:49,527 - duri_modules.autonomous.unified_improvement_system - INFO - ✅ 기존 시스템들과 통합 완료
+2025-10-14 09:57:49,527 - duri_modules.autonomous.unified_improvement_system - INFO - 🚀 통합 개선 시스템 초기화 완료
+2025-10-14 09:57:49,527 - duri_modules.autonomous.autonomous_question_generator - INFO - 🧠 자율 질문 생성 시스템 초기화 완료
+2025-10-14 09:57:49,527 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-10-14 09:57:49,527 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-10-14 09:57:49,527 - duri_modules.autonomous.strategy_loop_runner - INFO - 🔄 DuRi 전략 루프 러너 초기화 완료
+2025-10-14 09:57:49,527 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-10-14 09:57:49,527 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-10-14 09:57:49,527 - duri_modules.autonomous.strategy_loop_runner - INFO - 🔄 DuRi 전략 루프 러너 초기화 완료
+2025-10-14 09:57:49,527 - duri_modules.autonomous.unified_improvement_system - INFO - ✅ 기존 시스템들과 통합 완료
+2025-10-14 09:57:49,527 - duri_modules.autonomous.unified_improvement_system - INFO - 🚀 통합 개선 시스템 초기화 완료
+2025-10-14 09:57:49,527 - duri_modules.autonomous.duri_autonomous_core - INFO - 🧠 DuRi 자율 학습 통합 핵심 시스템 초기화 완료
+2025-10-14 09:57:49,527 - duri_modules.autonomous.autonomous_question_generator - INFO - 🧠 자율 질문 생성 시스템 초기화 완료
+2025-10-14 09:57:49,527 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-10-14 09:57:49,527 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-10-14 09:57:49,527 - duri_modules.autonomous.strategy_loop_runner - INFO - 🔄 DuRi 전략 루프 러너 초기화 완료
+2025-10-14 09:57:49,527 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-10-14 09:57:49,527 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-10-14 09:57:49,527 - duri_modules.autonomous.strategy_loop_runner - INFO - 🔄 DuRi 전략 루프 러너 초기화 완료
+2025-10-14 09:57:49,527 - duri_modules.autonomous.unified_improvement_system - INFO - ✅ 기존 시스템들과 통합 완료
+2025-10-14 09:57:49,527 - duri_modules.autonomous.unified_improvement_system - INFO - 🚀 통합 개선 시스템 초기화 완료
+2025-10-14 09:57:49,527 - duri_modules.autonomous.duri_autonomous_core - INFO - 🧠 DuRi 자율 학습 통합 핵심 시스템 초기화 완료
+2025-10-14 09:57:49,528 - duri_modules.autonomous.continuous_learner - INFO - 🚀 DuRi 24/7 자동 학습 시스템 시작
+2025-10-14 09:57:49,528 - duri_modules.autonomous.realtime_learner - INFO - 🚀 DuRi 실시간 학습 시스템 시작
+2025-10-14 09:57:49,528 - duri_modules.autonomous.duri_autonomous_core - INFO - 🚀 DuRi 자율 학습 시스템 시작
+2025-10-14 09:57:49,528 - __main__ - INFO - ✅ 자율 학습 시스템 활성화 완료
+2025-10-14 09:57:49,528 - __main__ - ERROR - ❌ 학습 루프 매니저 활성화 실패: cannot import name 'get_learning_loop_manager' from 'duri_brain.learning.learning_loop_manager' (/home/duri/DuRiWorkspace/duri_brain/learning/learning_loop_manager.py)
+2025-10-14 09:57:49,528 - duri_modules.autonomous.realtime_learner - INFO - 🚀 DuRi 실시간 학습 시스템 시작
+2025-10-14 09:57:49,528 - __main__ - INFO - ✅ 실시간 학습 시스템 활성화 완료
+2025-10-14 09:57:49,542 - duri_modules.autonomous.continuous_learner - WARNING - 문제 감지: 학습 진전이 없음 (심각도: 0.50)
+2025-10-14 09:57:49,542 - duri_modules.autonomous.continuous_learner - INFO - 자동 결정 실행: 학습률 조정 - 학습 진전이 0.00%로 낮음
+2025-10-14 09:57:49,543 - duri_modules.autonomous.continuous_learner - INFO - ⚙️ 학습률 조정 액션 실행
+2025-10-14 09:58:11,898 - DuRiCore.unified_learning_system - WARNING - 존재형 AI 시스템을 찾을 수 없습니다.
+2025-10-14 09:58:11,905 - DuRiCore.unified_learning_system - WARNING - 최종 실행 준비 완료 시스템을 찾을 수 없습니다.
+2025-10-14 09:58:11,905 - DuRiCore.unified_learning_system - INFO - 통합 학습 시스템 초기화 완료
+2025-10-14 09:58:11,906 - DuRiCore.unified_learning_system - WARNING - 존재형 AI 시스템을 찾을 수 없습니다.
+2025-10-14 09:58:11,906 - DuRiCore.unified_learning_system - WARNING - 최종 실행 준비 완료 시스템을 찾을 수 없습니다.
+2025-10-14 09:58:11,906 - DuRiCore.unified_learning_system - INFO - 통합 학습 시스템 초기화 완료
+2025-10-14 09:58:11,906 - DuRiCore.unified_learning_system - INFO - 학습 세션 시작: learning_session_1_20251014_095811 - continuous
+2025-10-14 09:58:11,906 - __main__ - INFO - ✅ 통합 학습 시스템 활성화 완료: learning_session_1_20251014_095811
+2025-10-14 09:58:11,925 - duri_modules.autonomous.autonomous_question_generator - INFO - 🧠 자율 질문 생성 시스템 초기화 완료
+2025-10-14 09:58:11,928 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-10-14 09:58:11,928 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-10-14 09:58:11,928 - duri_modules.autonomous.strategy_loop_runner - INFO - 🔄 DuRi 전략 루프 러너 초기화 완료
+2025-10-14 09:58:11,928 - duri_modules.autonomous.unified_improvement_system - INFO - ✅ 기존 시스템들과 통합 완료
+2025-10-14 09:58:11,928 - duri_modules.autonomous.unified_improvement_system - INFO - 🚀 통합 개선 시스템 초기화 완료
+2025-10-14 09:58:11,929 - duri_modules.autonomous.autonomous_question_generator - INFO - 🧠 자율 질문 생성 시스템 초기화 완료
+2025-10-14 09:58:11,929 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-10-14 09:58:11,929 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-10-14 09:58:11,929 - duri_modules.autonomous.strategy_loop_runner - INFO - 🔄 DuRi 전략 루프 러너 초기화 완료
+2025-10-14 09:58:11,929 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-10-14 09:58:11,929 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-10-14 09:58:11,930 - duri_modules.autonomous.strategy_loop_runner - INFO - 🔄 DuRi 전략 루프 러너 초기화 완료
+2025-10-14 09:58:11,930 - duri_modules.autonomous.unified_improvement_system - INFO - ✅ 기존 시스템들과 통합 완료
+2025-10-14 09:58:11,930 - duri_modules.autonomous.unified_improvement_system - INFO - 🚀 통합 개선 시스템 초기화 완료
+2025-10-14 09:58:11,930 - duri_modules.autonomous.duri_autonomous_core - INFO - 🧠 DuRi 자율 학습 통합 핵심 시스템 초기화 완료
+2025-10-14 09:58:11,930 - duri_modules.autonomous.autonomous_question_generator - INFO - 🧠 자율 질문 생성 시스템 초기화 완료
+2025-10-14 09:58:11,930 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-10-14 09:58:11,930 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-10-14 09:58:11,930 - duri_modules.autonomous.strategy_loop_runner - INFO - 🔄 DuRi 전략 루프 러너 초기화 완료
+2025-10-14 09:58:11,931 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-10-14 09:58:11,931 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-10-14 09:58:11,931 - duri_modules.autonomous.strategy_loop_runner - INFO - 🔄 DuRi 전략 루프 러너 초기화 완료
+2025-10-14 09:58:11,931 - duri_modules.autonomous.unified_improvement_system - INFO - ✅ 기존 시스템들과 통합 완료
+2025-10-14 09:58:11,931 - duri_modules.autonomous.unified_improvement_system - INFO - 🚀 통합 개선 시스템 초기화 완료
+2025-10-14 09:58:11,931 - duri_modules.autonomous.duri_autonomous_core - INFO - 🧠 DuRi 자율 학습 통합 핵심 시스템 초기화 완료
+2025-10-14 09:58:11,936 - duri_modules.autonomous.continuous_learner - INFO - 🚀 DuRi 24/7 자동 학습 시스템 시작
+2025-10-14 09:58:11,942 - duri_modules.autonomous.continuous_learner - WARNING - 문제 감지: 학습 진전이 없음 (심각도: 0.50)
+2025-10-14 09:58:11,943 - duri_modules.autonomous.continuous_learner - INFO - 자동 결정 실행: 학습률 조정 - 학습 진전이 0.00%로 낮음
+2025-10-14 09:58:11,943 - duri_modules.autonomous.continuous_learner - INFO - ⚙️ 학습률 조정 액션 실행
+2025-10-14 09:58:11,943 - duri_modules.autonomous.realtime_learner - INFO - 🚀 DuRi 실시간 학습 시스템 시작
+2025-10-14 09:58:11,943 - duri_modules.autonomous.duri_autonomous_core - INFO - 🚀 DuRi 자율 학습 시스템 시작
+2025-10-14 09:58:11,943 - __main__ - INFO - ✅ 자율 학습 시스템 활성화 완료
+2025-10-14 09:58:11,943 - __main__ - ERROR - ❌ 학습 루프 매니저 활성화 실패: 'LearningLoopManager' object has no attribute 'start_learning_loop'
+2025-10-14 09:58:11,943 - duri_modules.autonomous.realtime_learner - INFO - 🚀 DuRi 실시간 학습 시스템 시작
+2025-10-14 09:58:11,943 - __main__ - INFO - ✅ 실시간 학습 시스템 활성화 완료
+2025-10-14 09:58:41,503 - DuRiCore.unified_learning_system - WARNING - 존재형 AI 시스템을 찾을 수 없습니다.
+2025-10-14 09:58:41,504 - DuRiCore.unified_learning_system - WARNING - 최종 실행 준비 완료 시스템을 찾을 수 없습니다.
+2025-10-14 09:58:41,504 - DuRiCore.unified_learning_system - INFO - 통합 학습 시스템 초기화 완료
+2025-10-14 09:58:41,504 - DuRiCore.unified_learning_system - WARNING - 존재형 AI 시스템을 찾을 수 없습니다.
+2025-10-14 09:58:41,504 - DuRiCore.unified_learning_system - WARNING - 최종 실행 준비 완료 시스템을 찾을 수 없습니다.
+2025-10-14 09:58:41,504 - DuRiCore.unified_learning_system - INFO - 통합 학습 시스템 초기화 완료
+2025-10-14 09:58:41,504 - DuRiCore.unified_learning_system - INFO - 학습 세션 시작: learning_session_1_20251014_095841 - continuous
+2025-10-14 09:58:41,504 - __main__ - INFO - ✅ 통합 학습 시스템 활성화 완료: learning_session_1_20251014_095841
+2025-10-14 09:58:41,516 - duri_modules.autonomous.autonomous_question_generator - INFO - 🧠 자율 질문 생성 시스템 초기화 완료
+2025-10-14 09:58:41,519 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-10-14 09:58:41,519 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-10-14 09:58:41,519 - duri_modules.autonomous.strategy_loop_runner - INFO - 🔄 DuRi 전략 루프 러너 초기화 완료
+2025-10-14 09:58:41,519 - duri_modules.autonomous.unified_improvement_system - INFO - ✅ 기존 시스템들과 통합 완료
+2025-10-14 09:58:41,519 - duri_modules.autonomous.unified_improvement_system - INFO - 🚀 통합 개선 시스템 초기화 완료
+2025-10-14 09:58:41,520 - duri_modules.autonomous.autonomous_question_generator - INFO - 🧠 자율 질문 생성 시스템 초기화 완료
+2025-10-14 09:58:41,520 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-10-14 09:58:41,520 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-10-14 09:58:41,520 - duri_modules.autonomous.strategy_loop_runner - INFO - 🔄 DuRi 전략 루프 러너 초기화 완료
+2025-10-14 09:58:41,520 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-10-14 09:58:41,520 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-10-14 09:58:41,520 - duri_modules.autonomous.strategy_loop_runner - INFO - 🔄 DuRi 전략 루프 러너 초기화 완료
+2025-10-14 09:58:41,520 - duri_modules.autonomous.unified_improvement_system - INFO - ✅ 기존 시스템들과 통합 완료
+2025-10-14 09:58:41,521 - duri_modules.autonomous.unified_improvement_system - INFO - 🚀 통합 개선 시스템 초기화 완료
+2025-10-14 09:58:41,521 - duri_modules.autonomous.duri_autonomous_core - INFO - 🧠 DuRi 자율 학습 통합 핵심 시스템 초기화 완료
+2025-10-14 09:58:41,521 - duri_modules.autonomous.autonomous_question_generator - INFO - 🧠 자율 질문 생성 시스템 초기화 완료
+2025-10-14 09:58:41,521 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-10-14 09:58:41,521 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-10-14 09:58:41,521 - duri_modules.autonomous.strategy_loop_runner - INFO - 🔄 DuRi 전략 루프 러너 초기화 완료
+2025-10-14 09:58:41,521 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-10-14 09:58:41,522 - duri_modules.autonomous.result_improver - INFO - 🔧 DuRi 결과 개선 시스템 초기화 완료
+2025-10-14 09:58:41,522 - duri_modules.autonomous.strategy_loop_runner - INFO - 🔄 DuRi 전략 루프 러너 초기화 완료
+2025-10-14 09:58:41,522 - duri_modules.autonomous.unified_improvement_system - INFO - ✅ 기존 시스템들과 통합 완료
+2025-10-14 09:58:41,523 - duri_modules.autonomous.unified_improvement_system - INFO - 🚀 통합 개선 시스템 초기화 완료
+2025-10-14 09:58:41,523 - duri_modules.autonomous.duri_autonomous_core - INFO - 🧠 DuRi 자율 학습 통합 핵심 시스템 초기화 완료
+2025-10-14 09:58:41,544 - duri_modules.autonomous.continuous_learner - WARNING - 문제 감지: 학습 진전이 없음 (심각도: 0.50)
+2025-10-14 09:58:41,545 - duri_modules.autonomous.continuous_learner - INFO - 🚀 DuRi 24/7 자동 학습 시스템 시작
+2025-10-14 09:58:41,545 - duri_modules.autonomous.continuous_learner - INFO - 자동 결정 실행: 학습률 조정 - 학습 진전이 0.00%로 낮음
+2025-10-14 09:58:41,545 - duri_modules.autonomous.continuous_learner - INFO - ⚙️ 학습률 조정 액션 실행
+2025-10-14 09:58:41,545 - duri_modules.autonomous.realtime_learner - INFO - 🚀 DuRi 실시간 학습 시스템 시작
+2025-10-14 09:58:41,545 - duri_modules.autonomous.duri_autonomous_core - INFO - 🚀 DuRi 자율 학습 시스템 시작
+2025-10-14 09:58:41,545 - __main__ - INFO - ✅ 자율 학습 시스템 활성화 완료
+2025-10-14 09:58:41,546 - __main__ - ERROR - ❌ 학습 루프 매니저 활성화 실패: 'LearningLoopManager' object has no attribute 'start_learning_loop'
+2025-10-14 09:58:41,546 - duri_modules.autonomous.realtime_learner - INFO - 🚀 DuRi 실시간 학습 시스템 시작
+2025-10-14 09:58:41,546 - __main__ - INFO - ✅ 실시간 학습 시스템 활성화 완료

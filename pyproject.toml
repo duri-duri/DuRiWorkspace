@@ -1,4 +1,26 @@
-[tool.black]
-line-length = 100
-target-version = ["py310"]
-extend-exclude = "\\.reports|artifacts|vendor"
+[project]
+name = "duri"
+version = "1.0.0"
+requires-python = ">=3.10"
+description = "DuRi - 자가 진화 가능한 자가 코딩 프로그램"
+authors = [{name = "DuRi Team"}]
+
+[tool.setuptools]
+packages = [
+    "DuRiCore", 
+    "DuRiCore.DuRiCore", 
+    "DuRiCore.DuRiCore.modules",
+    "DuRiCore.modules",
+    "DuRiCore.modules.evolution",
+    "duri_modules",
+    "duri_modules.self_awareness"
+]
+
+[tool.setuptools.package-dir]
+"" = "."
+"DuRiCore" = "DuRiCore"
+"duri_modules" = "duri_modules"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"

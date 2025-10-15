@@ -1,0 +1,193 @@
+# DuRi v1.0 하드닝 패치 (99점 감성 달성)
+# 기존 docker-compose.yml에 추가 적용
+
+services:
+  duri_core:
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits: { cpus: "0.50", memory: "512M" }
+        reservations: { cpus: "0.10", memory: "128M" }
+    read_only: true
+    tmpfs: ["/tmp", "/run"]
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: ["ALL"]
+    user: "1000:1000"
+
+  duri_brain:
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits: { cpus: "0.50", memory: "512M" }
+        reservations: { cpus: "0.10", memory: "128M" }
+    read_only: true
+    tmpfs: ["/tmp", "/run"]
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: ["ALL"]
+    user: "1000:1000"
+
+  duri_evolution:
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits: { cpus: "0.50", memory: "512M" }
+        reservations: { cpus: "0.10", memory: "128M" }
+    read_only: true
+    tmpfs: ["/tmp", "/run"]
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: ["ALL"]
+    user: "1000:1000"
+
+  duri_control:
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits: { cpus: "0.50", memory: "512M" }
+        reservations: { cpus: "0.10", memory: "128M" }
+    read_only: true
+    tmpfs: ["/tmp", "/run"]
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: ["ALL"]
+    user: "1000:1000"
+
+  duri-postgres:
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits: { cpus: "0.50", memory: "512M" }
+        reservations: { cpus: "0.10", memory: "128M" }
+    image: postgres:14.8
+    security_opt:
+      - no-new-privileges:true
+
+  duri-redis:
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits: { cpus: "0.50", memory: "512M" }
+        reservations: { cpus: "0.10", memory: "128M" }
+    image: redis:7.2-alpine
+    security_opt:
+      - no-new-privileges:true
+
+  prometheus:
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits: { cpus: "0.50", memory: "512M" }
+        reservations: { cpus: "0.10", memory: "128M" }
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.retention.time=15d
+      - --storage.tsdb.retention.size=2GB
+    security_opt:
+      - no-new-privileges:true
+
+  node_exporter:
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits: { cpus: "0.50", memory: "512M" }
+        reservations: { cpus: "0.10", memory: "128M" }
+    security_opt:
+      - no-new-privileges:true
+
+  cadvisor:
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits: { cpus: "0.50", memory: "512M" }
+        reservations: { cpus: "0.10", memory: "128M" }
+    security_opt:
+      - no-new-privileges:true
+
+  blackbox_exporter:
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits: { cpus: "0.50", memory: "512M" }
+        reservations: { cpus: "0.10", memory: "128M" }
+    security_opt:
+      - no-new-privileges:true
+
+  postgres_exporter:
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits: { cpus: "0.50", memory: "512M" }
+        reservations: { cpus: "0.10", memory: "128M" }
+    security_opt:
+      - no-new-privileges:true
+
+  redis_exporter:
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits: { cpus: "0.50", memory: "512M" }
+        reservations: { cpus: "0.10", memory: "128M" }
+    security_opt:
+      - no-new-privileges:true

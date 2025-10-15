@@ -1,0 +1,84 @@
+# Alertmanager 개선안 - 안전/정합/유지보수 포맷
+
+global:
+  resolve_timeout: 5m
+
+templates:
+  - '/etc/alertmanager/templates/*.tmpl'
+
+route:
+  receiver: 'oncall-slack'        # 디폴트 리시버
+  group_by: ['alertname', 'cluster', 'service']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 2h
+
+  routes:
+    # 보안 이벤트는 우선 보안 페이저로
+    - matchers:
+        - severity="security"
+      receiver: 'security-pager'
+      continue: true
+
+    # 크리티컬은 페이저 + 온콜 슬랙 동시
+    - matchers:
+        - severity="critical"
+      receiver: 'oncall-pager'
+      continue: true
+
+    # 경고는 온콜 슬랙으로만
+    - matchers:
+        - severity="warning"
+      receiver: 'oncall-slack'
+
+receivers:
+  - name: 'webhook'
+    webhook_configs:
+      - url_file: /etc/alertmanager/secrets/webhook.url
+        send_resolved: true
+
+  - name: 'oncall-pager'
+    pagerduty_configs:
+      - routing_key_file: /etc/alertmanager/secrets/pagerduty.routing_key   # v2
+        severity: '{{ .CommonLabels.severity | default "critical" }}'
+        dedup_key: '{{ .GroupLabels.alertname }}:{{ .GroupLabels.cluster }}:{{ .GroupLabels.service }}'
+        description: '{{ .GroupLabels.alertname }}: {{ .CommonAnnotations.summary }}'
+        details:
+          cluster: '{{ .GroupLabels.cluster }}'
+          service: '{{ .GroupLabels.service }}'
+          runbook_url: '{{ .CommonAnnotations.runbook_url }}'
+        send_resolved: true
+
+  - name: 'security-pager'
+    pagerduty_configs:
+      - routing_key_file: /etc/alertmanager/secrets/security_pd.routing_key
+        severity: 'critical'
+        dedup_key: 'security:{{ .GroupLabels.alertname }}:{{ .GroupLabels.cluster }}'
+        description: '🔒 SECURITY: {{ .GroupLabels.alertname }} — {{ .CommonAnnotations.summary }}'
+        details:
+          cluster: '{{ .GroupLabels.cluster }}'
+          service: '{{ .GroupLabels.service }}'
+          runbook_url: '{{ .CommonAnnotations.runbook_url }}'
+        send_resolved: true
+    slack_configs:
+      - api_url_file: /etc/alertmanager/secrets/slack.webhook
+        channel: '#security-alerts'
+        title: '🔒 SECURITY: {{ .GroupLabels.alertname }}'
+        text:  '{{ .CommonAnnotations.description }}'
+        color: 'danger'
+        send_resolved: true
+
+  - name: 'oncall-slack'
+    slack_configs:
+      - api_url_file: /etc/alertmanager/secrets/slack.webhook
+        channel: '#oncall-alerts'
+        title: '{{ if eq .CommonLabels.severity "critical" }}🚨 CRITICAL{{ else }}⚠️ WARNING{{ end }}: {{ .GroupLabels.alertname }}'
+        text:  '{{ .CommonAnnotations.description }}'
+        color: '{{ if eq .CommonLabels.severity "critical" }}danger{{ else }}warning{{ end }}'
+        send_resolved: true
+
+inhibit_rules:
+  # critical이 같은 alertname/cluster/service에서 발생하면 warning 억제
+  - source_matchers: ['severity="critical"']
+    target_matchers: ['severity="warning"']
+    equal: ['alertname', 'cluster', 'service']

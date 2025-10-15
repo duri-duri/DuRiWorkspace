@@ -1,0 +1,195 @@
+alert_rules:
+  canary_alerts:
+  - alert: CanaryLatencyHigh
+    annotations:
+      description: P95 지연시간이 {{  | printf "%.0f" }}ms로 임계값 350ms를 초과했습니다.
+      summary: 카나리 지연시간 높음
+    expr: histogram_quantile(0.95, rate(duri_http_request_duration_seconds_bucket[5m]))
+      * 1000 > 350
+    for: 5m
+    labels:
+      component: canary
+      severity: critical
+      team: duri
+  - alert: CanaryErrorRateHigh
+    annotations:
+      description: 오류율이 {{  | printf "%.3f" }}%로 임계값 1%를 초과했습니다.
+      summary: 카나리 오류율 높음
+    expr: rate(duri_http_requests_total{status=~"5.."}[5m]) / rate(duri_http_requests_total[5m])
+      > 0.01
+    for: 3m
+    labels:
+      component: canary
+      severity: critical
+      team: duri
+  - alert: CanaryThroughputLow
+    annotations:
+      description: 처리량이 {{  | printf "%.0f" }}rps로 임계값 100rps 미만입니다.
+      summary: 카나리 처리량 낮음
+    expr: rate(duri_http_requests_total[5m]) < 100
+    for: 10m
+    labels:
+      component: canary
+      severity: warning
+      team: duri
+canary_metrics:
+  business_metrics:
+    availability:
+      alert_condition: < 0.999
+      description: Service availability percentage
+      query: up{job="duri-service"}
+      severity: critical
+      threshold: 0.999
+      type: performance
+      unit: percent
+    success_rate:
+      alert_condition: < 0.99
+      description: Success rate percentage
+      query: rate(duri_http_requests_total{status=~"2.."}[5m]) / rate(duri_http_requests_total[5m])
+      severity: critical
+      threshold: 0.99
+      type: performance
+      unit: percent
+    user_satisfaction:
+      alert_condition: < 0.95
+      description: User satisfaction score
+      query: rate(duri_user_satisfaction_total{rating=~"4|5"}[5m]) / rate(duri_user_satisfaction_total[5m])
+      severity: warning
+      threshold: 0.95
+      type: performance
+      unit: percent
+  error_metrics:
+    error_count:
+      alert_condition: '> 10'
+      description: Error count per minute
+      query: rate(duri_http_requests_total{status=~"5.."}[1m]) * 60
+      severity: warning
+      threshold: 10
+      type: error
+      unit: errors/min
+    error_rate:
+      alert_condition: '> 0.01'
+      description: Error rate percentage
+      query: rate(duri_http_requests_total{status=~"5.."}[5m]) / rate(duri_http_requests_total[5m])
+      severity: critical
+      threshold: 0.01
+      type: error
+      unit: percent
+    timeout_rate:
+      alert_condition: '> 0.005'
+      description: Timeout rate percentage
+      query: rate(duri_http_requests_total{status="504"}[5m]) / rate(duri_http_requests_total[5m])
+      severity: critical
+      threshold: 0.005
+      type: error
+      unit: percent
+  performance_metrics:
+    response_time_p95:
+      alert_condition: '> 350'
+      description: 95th percentile response time
+      query: histogram_quantile(0.95, rate(duri_http_request_duration_seconds_bucket[5m]))
+        * 1000
+      severity: critical
+      threshold: 350
+      type: latency
+      unit: ms
+    response_time_p99:
+      alert_condition: '> 500'
+      description: 99th percentile response time
+      query: histogram_quantile(0.99, rate(duri_http_request_duration_seconds_bucket[5m]))
+        * 1000
+      severity: critical
+      threshold: 500
+      type: latency
+      unit: ms
+    throughput_rps:
+      alert_condition: < 100
+      description: Requests per second
+      query: rate(duri_http_requests_total[5m])
+      severity: warning
+      threshold: 100
+      type: throughput
+      unit: rps
+  resource_metrics:
+    cpu_usage:
+      alert_condition: '> 80'
+      description: CPU usage percentage
+      query: 100 - (avg(rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)
+      severity: warning
+      threshold: 80
+      type: resource
+      unit: percent
+    disk_usage:
+      alert_condition: '> 90'
+      description: Disk usage percentage
+      query: (1 - (node_filesystem_avail_bytes / node_filesystem_size_bytes)) * 100
+      severity: critical
+      threshold: 90
+      type: resource
+      unit: percent
+    memory_usage:
+      alert_condition: '> 85'
+      description: Memory usage percentage
+      query: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) *
+        100
+      severity: warning
+      threshold: 85
+      type: resource
+      unit: percent
+dashboard_config:
+  dashboard:
+    panels:
+    - fieldConfig:
+        defaults:
+          thresholds:
+            steps:
+            - color: green
+              value: 0
+            - color: yellow
+              value: 300
+            - color: red
+              value: 350
+          unit: ms
+      targets:
+      - expr: histogram_quantile(0.95, rate(duri_http_request_duration_seconds_bucket[5m]))
+          * 1000
+        legendFormat: P95 Latency
+      title: Response Time P95
+      type: stat
+    - fieldConfig:
+        defaults:
+          thresholds:
+            steps:
+            - color: green
+              value: 0
+            - color: yellow
+              value: 0.5
+            - color: red
+              value: 1.0
+          unit: percent
+      targets:
+      - expr: rate(duri_http_requests_total{status=~"5.."}[5m]) / rate(duri_http_requests_total[5m])
+          * 100
+        legendFormat: Error Rate %
+      title: Error Rate
+      type: stat
+    - targets:
+      - expr: rate(duri_http_requests_total[5m])
+        legendFormat: Requests/sec
+      title: Throughput
+      type: graph
+      yAxes:
+      - min: 0
+        unit: reqps
+    tags:
+    - canary
+    - duri
+    - monitoring
+    timezone: UTC
+    title: DuRi Canary Monitoring
+metadata:
+  created_at: '2025-10-15T08:19:31.659145'
+  description: DuRi 카나리 모니터링 지표 설정
+  total_alerts: 3
+  total_metrics: 12
+  version: '1.0'

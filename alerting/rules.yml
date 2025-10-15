@@ -1,0 +1,16 @@
+groups:
+- name: duri-minimal
+  rules:
+  - alert: DuriServiceDown
+    expr: up{job=~"duri_.*"} == 0
+    for: 2m
+    labels: { severity: page }
+    annotations:
+      summary: "{{ $labels.job }} 스크레이프 실패"
+
+  - alert: FiveXXSurge
+    expr: rate(flask_http_request_total{status=~"5.."}[5m]) > 0
+    for: 2m
+    labels: { severity: page }
+    annotations:
+      summary: "5xx 증가 ({{ $labels.job }})"

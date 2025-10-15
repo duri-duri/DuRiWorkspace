@@ -1,0 +1,68 @@
+name: Deploy DuRi Integrity with Digests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  GRAFANA_URL: ${{ secrets.GRAFANA_URL }}
+  GRAFANA_TOKEN: ${{ secrets.GRAFANA_TOKEN }}
+  DASHBOARD_ID: ${{ secrets.DASHBOARD_ID }}
+  NAMESPACE: duri-prod
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'v1.28.0'
+    
+    - name: Configure kubectl
+      run: |
+        echo "${{ secrets.KUBECONFIG }}" | base64 -d > ~/.kube/config
+    
+    - name: Install crane for digest resolution
+      run: |
+        curl -L https://github.com/google/go-containerregistry/releases/latest/download/go-containerregistry_Linux_x86_64.tar.gz | tar xz
+        sudo mv crane /usr/local/bin/
+        crane version
+    
+    - name: Install skopeo (alternative)
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y skopeo
+        skopeo --version
+    
+    - name: Resolve image digests
+      run: |
+        export SYNTH_DIGEST=$(crane digest python:3.11-alpine)
+        export AWSCLI_DIGEST=$(crane digest amazon/aws-cli:latest)
+        echo "SYNTH_DIGEST=$SYNTH_DIGEST" >> $GITHUB_ENV
+        echo "AWSCLI_DIGEST=$AWSCLI_DIGEST" >> $GITHUB_ENV
+    
+    - name: Deploy start
+      run: ./scripts/deploy_start.sh
+      env:
+        GIT_TAG: ${{ github.sha }}
+    
+    - name: Deploy application
+      run: |
+        kubectl set image deployment/duri-app duri-app=your-registry/duri-app:${{ github.sha }} -n $NAMESPACE
+        kubectl rollout status deployment/duri-app -n $NAMESPACE --timeout=300s
+    
+    - name: Deploy success
+      run: ./scripts/deploy_success.sh
+      env:
+        GIT_TAG: ${{ github.sha }}
+    
+    - name: Deploy rollback (on failure)
+      if: failure()
+      run: ./scripts/deploy_rollback.sh
+      env:
+        GIT_TAG: ${{ github.sha }}

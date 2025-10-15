@@ -1,0 +1,194 @@
+# DuRi Integrity Helm Values - 최종 번들
+
+# 기본 설정
+nameOverride: "duri-integrity"
+fullnameOverride: "duri-integrity"
+
+# 이미지 설정
+image:
+  repository: "your-registry/duri-app"
+  tag: "latest"
+  pullPolicy: "IfNotPresent"
+
+# 복제본 수
+replicaCount: 3
+
+# 서비스 설정
+service:
+  type: ClusterIP
+  port: 8080
+  targetPort: 8080
+  annotations: {}
+
+# 무결성 검증 설정
+integrity:
+  mode: "strict"  # strict | lenient
+  spikeThreshold: 0.3
+  hmacEnabled: false
+  hmacDualVerify: false
+
+# Maintenance 설정
+maintenance:
+  enabled: false
+  port: 9108
+
+# 사이드카 설정
+sidecars:
+  integrity:
+    enabled: true
+    interval: 300  # 5분
+    port: 9101
+  maintenance:
+    enabled: true
+    port: 9108
+
+# CronJob 설정
+cronJobs:
+  synthetic:
+    enabled: true
+    schedule: "*/5 * * * *"
+    image: "python:3.11-alpine"
+  backupRecovery:
+    enabled: true
+    schedule: "0 2 * * 0"  # 매주 일요일 2시
+    s3Bucket: "duri-artifacts"
+    s3Path: "releases/latest/"
+
+# Argo Rollouts 설정
+argoRollouts:
+  enabled: true
+  canary:
+    steps:
+      - setWeight: 10
+      - pause: {duration: 5m}
+      - setWeight: 50
+      - pause: {duration: 5m}
+      - setWeight: 100
+    analysis:
+      templates:
+        - name: "duri-integrity-gate-improved"
+      startingStep: 2
+      successCondition: "all"
+      failureCondition: "any"
+
+# 리소스 설정
+resources:
+  requests:
+    memory: "256Mi"
+    cpu: "100m"
+  limits:
+    memory: "512Mi"
+    cpu: "500m"
+
+sidecarResources:
+  requests:
+    memory: "64Mi"
+    cpu: "50m"
+  limits:
+    memory: "128Mi"
+    cpu: "100m"
+
+# 환경변수
+env:
+  - name: DURI_ENV
+    value: "prod"
+  - name: DURI_INTEGRITY_MODE
+    value: "strict"
+  - name: DURI_INTEGRITY_SPIKE_THRESHOLD
+    value: "0.3"
+
+# Secret 설정
+secrets:
+  hmacKey:
+    enabled: false
+    name: "duri-hmac-key"
+    key: "hmac-key"
+  awsCredentials:
+    enabled: true
+    name: "aws-credentials"
+    keys:
+      - "access-key-id"
+      - "secret-access-key"
+
+# ConfigMap 설정
+configMaps:
+  maintenance:
+    enabled: true
+    name: "maintenance-config"
+    data:
+      enabled: "false"
+  appCode:
+    enabled: true
+    name: "duri-app-code"
+
+# ServiceAccount 설정
+serviceAccount:
+  create: true
+  name: "duri-integrity"
+  annotations: {}
+
+# RBAC 설정
+rbac:
+  create: true
+  rules:
+    - apiGroups: ["apps"]
+      resources: ["deployments", "replicasets"]
+      verbs: ["get", "list", "patch", "update", "delete"]
+    - apiGroups: [""]
+      resources: ["pods", "services", "secrets", "configmaps"]
+      verbs: ["get", "list", "patch", "update", "delete"]
+    - apiGroups: [""]
+      resources: ["pods/log"]
+      verbs: ["get", "list"]
+
+# 네트워크 정책
+networkPolicy:
+  enabled: false
+
+# Pod 보안 컨텍스트
+podSecurityContext:
+  fsGroup: 2000
+
+securityContext:
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1000
+
+# 헬스체크
+livenessProbe:
+  httpGet:
+    path: /health
+    port: http
+  initialDelaySeconds: 30
+  periodSeconds: 10
+
+readinessProbe:
+  httpGet:
+    path: /ready
+    port: http
+  initialDelaySeconds: 5
+  periodSeconds: 5
+
+# 노드 선택자
+nodeSelector: {}
+
+# 톨러레이션
+tolerations: []
+
+# 어피니티
+affinity: {}
+
+# 어노테이션
+podAnnotations: {}
+
+# 라벨
+podLabels: {}
+
+# 우선순위 클래스
+priorityClassName: ""
+
+# 종료 그레이스 기간
+terminationGracePeriodSeconds: 30

@@ -1,0 +1,37 @@
+FROM python:3.11-slim
+
+# 시스템 패키지 설치
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends curl ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
+# 작업 디렉터리 설정
+WORKDIR /app
+
+# 프로젝트 메타 + 패키지 소스 복사
+COPY pyproject.toml /app/
+COPY DuRiCore /app/DuRiCore
+COPY duri_modules /app/duri_modules
+
+# 의존성 설치 (있다면)
+COPY requirements.txt /app/ 2>/dev/null || echo "# No requirements.txt" > /app/requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 개발설치로 패키지 설치
+RUN pip install --no-cache-dir -e .
+
+# 나머지 앱 소스
+COPY . /app
+
+# 환경변수 설정
+ENV PYTHONPATH=/app:/app/DuRiCore:/app/DuRiCore/DuRiCore:/app/duri_modules
+
+# 포트 노출
+EXPOSE 8080
+
+# 헬스체크
+HEALTHCHECK --interval=5s --timeout=2s --start-period=10s --retries=10 \
+    CMD curl -fsS http://localhost:8080/health | grep -q '"status":"ok"'
+
+# 실행 명령
+CMD ["python", "duri_core/run.py"]

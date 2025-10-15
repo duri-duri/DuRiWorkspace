@@ -1,0 +1,123 @@
+{
+  "optimization_summary": {
+    "target_delay_reduction": 5.0,
+    "achieved_delay_reduction": 25.0,
+    "target_met": true,
+    "optimization_level": "advanced"
+  },
+  "performance_metrics": {
+    "latency": {
+      "baseline": 100.0,
+      "optimized": 75.0,
+      "improvement_percent": 25.0
+    },
+    "throughput": {
+      "baseline": 1000.0,
+      "optimized": 1325.0,
+      "improvement_percent": 32.5
+    },
+    "resource_usage": {
+      "memory_mb": 563.2,
+      "cpu_percent": 72.0,
+      "cache_hit_rate_percent": 85.0
+    }
+  },
+  "optimal_config": {
+    "sampling_rate": 0.5,
+    "serialization": "json",
+    "compression": "gzip",
+    "batch_size": 100,
+    "parallel_workers": 2,
+    "cache_enabled": true,
+    "cache_ttl": 300,
+    "compression_level": 6
+  },
+  "optimization_history": [
+    {
+      "level": "basic",
+      "config": {
+        "sampling_rate": 0.5,
+        "serialization": "json",
+        "compression": "gzip",
+        "batch_size": 100,
+        "parallel_workers": 2,
+        "cache_enabled": true,
+        "cache_ttl": 300,
+        "compression_level": 6
+      },
+      "metrics": {
+        "baseline_latency": 100.0,
+        "optimized_latency": 75.0,
+        "latency_improvement": 0.25,
+        "baseline_throughput": 1000.0,
+        "optimized_throughput": 1325.0,
+        "throughput_improvement": 0.325,
+        "memory_usage": 563.2,
+        "cpu_usage": 72.0,
+        "cache_hit_rate": 85.0,
+        "additional_delay_percent": -25.0
+      },
+      "score": 20.0
+    },
+    {
+      "level": "advanced",
+      "config": {
+        "sampling_rate": 0.75,
+        "serialization": "msgpack",
+        "compression": "zstd",
+        "batch_size": 200,
+        "parallel_workers": 4,
+        "cache_enabled": true,
+        "cache_ttl": 600,
+        "compression_level": 3
+      },
+      "metrics": {
+        "baseline_latency": 100.0,
+        "optimized_latency": 38.99999999999999,
+        "latency_improvement": 0.6100000000000001,
+        "baseline_throughput": 1000.0,
+        "optimized_throughput": 1835.0,
+        "throughput_improvement": 0.835,
+        "memory_usage": 563.2,
+        "cpu_usage": 72.0,
+        "cache_hit_rate": 85.0,
+        "additional_delay_percent": -61.00000000000001
+      },
+      "score": 56.00000000000001
+    },
+    {
+      "level": "aggressive",
+      "config": {
+        "sampling_rate": 1.0,
+        "serialization": "protobuf",
+        "compression": "zstd",
+        "batch_size": 500,
+        "parallel_workers": 8,
+        "cache_enabled": true,
+        "cache_ttl": 1200,
+        "compression_level": 1
+      },
+      "metrics": {
+        "baseline_latency": 100.0,
+        "optimized_latency": 11.00000000000001,
+        "latency_improvement": 0.8899999999999999,
+        "baseline_throughput": 1000.0,
+        "optimized_throughput": 2190.0,
+        "throughput_improvement": 1.19,
+        "memory_usage": 563.2,
+        "cpu_usage": 72.0,
+        "cache_hit_rate": 85.0,
+        "additional_delay_percent": -88.99999999999999
+      },
+      "score": 83.99999999999999
+    }
+  ],
+  "recommendations": [
+    "병렬 처리 워커 수를 4개로 설정하여 처리량 향상",
+    "Zstandard 압축을 사용하여 네트워크 대역폭 절약",
+    "MessagePack 직렬화로 JSON 대비 성능 향상",
+    "캐시 TTL을 600초로 설정하여 히트율 최적화",
+    "배치 크기를 200으로 설정하여 처리 효율성 향상"
+  ],
+  "generated_at": "2025-10-15T08:25:21.440819"
+}

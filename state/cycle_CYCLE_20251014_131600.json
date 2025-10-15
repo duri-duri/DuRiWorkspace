@@ -1,0 +1,28 @@
+{
+  "cycle_id": "CYCLE_20251014_131600",
+  "start_time": "2025-10-14T13:16:39.521091",
+  "end_time": "2025-10-14T13:16:39.521270",
+  "total_time": 0.5,
+  "steps": {
+    "데이터 수집": {
+      "status": "완료",
+      "processing_time": 0.1,
+      "success": true
+    },
+    "패턴 분석": {
+      "status": "완료",
+      "processing_time": 0.2,
+      "success": true
+    },
+    "모델 업데이트": {
+      "status": "완료",
+      "processing_time": 0.2,
+      "success": true
+    }
+  },
+  "success": true,
+  "insights": [
+    "학습 사이클 완료",
+    "패턴 인식 성능 향상"
+  ]
+}
