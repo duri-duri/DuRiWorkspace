@@ -12,32 +12,22 @@ bash scripts/smoke_health_metrics.sh
 
 # 1) 커밋(있으면) — 없으면 스킵
 git add -A
-git diff --cached --quiet || git commit -m "chore(ops): ${NAME} bundle"
-
-# 2) 변경 범위 산출
-if [[ -n "${BASE_REF}" ]]; then
-  RANGE="${BASE_REF}..HEAD"
-else
-  # 태그가 전혀 없다면 최근 1커밋 범위
-  RANGE="HEAD~1..HEAD"
-fi
-
-# 변경이 없으면 종료
-if git diff --quiet ${RANGE}; then
-  echo "ℹ️ 변경 사항 없음: ${RANGE}"
-  exit 0
-fi
-
+git commit -m "chore(ops): ${NAME} bundle" || echo "ℹ️ no changes to commit"
 mkdir -p dist
 
-# 3) 산출물 생성
-# 3-1) mbox (권장)
-git format-patch ${RANGE} --stdout > "dist/${NAME}.mbox"
+# 2) 패치/mbox 생성
+# mbox (정상)
+git format-patch -1 HEAD --stdout > "dist/${NAME}.mbox"
 
-# 3-2) 직패치 (이진 안전)
-git diff --binary ${RANGE} > "dist/${NAME}.patch"
+# patch (HEAD 커밋 기준으로 안전 생성)
+if git rev-parse HEAD^ >/dev/null 2>&1; then
+  git diff --binary HEAD^..HEAD > "dist/${NAME}.patch"
+else
+  # 첫 커밋인 경우
+  git show --binary HEAD > "dist/${NAME}.patch"
+fi
 
-# 3-3) tar.gz 번들
+# 3) tar.gz 번들
 tar -czf "dist/${NAME}.tar.gz" \
   .pre-commit-config.yaml Makefile .github/workflows/ci.yml \
   alerting/rules.yml RUNBOOK.md \
