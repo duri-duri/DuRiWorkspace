@@ -1,0 +1,16 @@
+groups:
+- name: ai-quality
+  rules:
+  - alert: AgentTaskSuccessLow
+    expr: (task_success_total) / max(task_success_total + hallucinations_total, 1) < 0.85
+    for: 10m
+    labels: { severity: page }
+    annotations:
+      summary: "Agent task success rate below 85%"
+
+  - alert: AgentHallucinationHigh
+    expr: (hallucinations_total) / max(task_success_total + hallucinations_total, 1) > 0.03
+    for: 10m
+    labels: { severity: page }
+    annotations:
+      summary: "Agent hallucination rate above 3%"
