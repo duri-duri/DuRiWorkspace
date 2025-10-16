@@ -337,16 +337,22 @@ FROM cand c CROSS JOIN prod p;
                         float(best["cost_rel"])   <= policy_limits["cost_rel_max"]
                     )
                     decision = "promote" if ok else "hold"
-                    # 결정 사유 메시지 가독성(±표기)
-                    h_dir = "better" if float(best['halluc_pp']) < 0 else "worse"
-                    p95_dir = "better" if float(best['p95_rel']) < 1.0 else "worse"
-                    cost_dir = "better" if float(best['cost_rel']) < 1.0 else "worse"
+                    # 결정 사유 메시지 가독성(±표기) - 정확한 분기
+                    def _dir_hallu(v):   
+                        return "better" if float(v) < 0 else ("neutral" if float(v)==0 else "worse")
+                    def _dir_rel(v):     
+                        v=float(v); return "better" if v < 1.0 else ("neutral" if v==1.0 else "worse")
+                    
+                    h_dir   = _dir_hallu(best['halluc_pp'])
+                    p95_dir = _dir_rel(best['p95_rel'])
+                    cost_dir= _dir_rel(best['cost_rel'])
                     reason = (
                         f"auto_{decision}: "
                         f"halluc={abs(float(best['halluc_pp'])):.2f}pp {h_dir} (≤ {policy_limits['halluc_pp_max']:+.2f}pp), "
                         f"p95_rel={best['p95_rel']:.3f} {p95_dir} (≤ {policy_limits['p95_rel_max']:.3f}), "
                         f"cost_rel={best['cost_rel']:.3f} {cost_dir} (≤ {policy_limits['cost_rel_max']:.3f}), "
-                        f"samples={best['cand_samples']}/{best['prod_samples']} (min {MIN_CAND}/{MIN_PROD})"
+                        f"samples(model)={best['cand_samples']}/{best['prod_samples']} (min {MIN_CAND}/{MIN_PROD}), "
+                        f"samples(window)={cand_n}/{prod_n}"
                     )
                     cur.execute("""
                         INSERT INTO promotion_decisions (model_id, decision, reason, policy, actor)

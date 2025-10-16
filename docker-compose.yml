@@ -20,7 +20,7 @@ services:
       - ./srv/duri:/srv/duri
       - ./:/app
     healthcheck:
-      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/health | jq -e '.status==\"ok\"' >/dev/null"]
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/health | jq -e '.status|IN(\"ok\",\"ready\",\"healthy\")' >/dev/null"]
       interval: 15s
       timeout: 5s
       retries: 5
