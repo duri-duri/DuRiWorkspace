@@ -14,3 +14,5 @@ ProtectSystem=full
 ProtectHome=read-only
 ReadWritePaths=/home/duri/DuRiWorkspace/.reports /home/duri/DuRiWorkspace/var
 UMask=027
+
+

@@ -14,3 +14,5 @@ bar_bucket{le="1.0"} 100
 bar_bucket{le="+Inf"} 100
 bar_sum 75.0
 bar_count 100
+
+

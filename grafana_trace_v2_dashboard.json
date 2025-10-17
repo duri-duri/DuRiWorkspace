@@ -1,0 +1,77 @@
+{
+  "title": "Trace v2 – Service/Deploy/Eval",
+  "timezone": "browser",
+  "schemaVersion": 38,
+  "version": 1,
+  "refresh": "30s",
+  "templating": {
+    "list": [
+      {
+        "name": "service",
+        "label": "Service",
+        "type": "query",
+        "datasource": "${DS_POSTGRES}",
+        "refresh": 1,
+        "query": "SELECT DISTINCT service FROM mv_span_err_rate_1d ORDER BY 1",
+        "includeAll": true,
+        "multi": true
+      },
+      {
+        "name": "env",
+        "label": "Env",
+        "type": "query",
+        "datasource": "${DS_POSTGRES}",
+        "refresh": 1,
+        "query": "SELECT DISTINCT env FROM eval_snapshot ORDER BY 1",
+        "includeAll": true,
+        "multi": true
+      }
+    ]
+  },
+  "panels": [
+    {
+      "type": "table",
+      "title": "Service Error Rate (last 1d)",
+      "gridPos": {"x":0,"y":0,"w":12,"h":8},
+      "datasource": "${DS_POSTGRES}",
+      "targets": [
+        {
+          "format": "table",
+          "rawSql": "SELECT service, total, errors, round(err_rate::numeric, 4) AS err_rate\nFROM mv_span_err_rate_1d\nWHERE (${service:csv} IS NULL OR service = ANY(string_to_array('${service:csv}',',')))\nORDER BY err_rate DESC NULLS LAST\nLIMIT 50;",
+          "refId": "A"
+        }
+      ],
+      "options": {
+        "showHeader": true
+      }
+    },
+    {
+      "type": "table",
+      "title": "Shadow vs Prod KPI (prev day)",
+      "gridPos": {"x":12,"y":0,"w":12,"h":8},
+      "datasource": "${DS_POSTGRES}",
+      "targets": [
+        {
+          "format": "table",
+          "rawSql": "SELECT sample_source, kpi_name, round(avg(kpi_value)::numeric, 6) AS avg_value, sum(n_samples) AS n\nFROM eval_snapshot\nWHERE window_start >= date_trunc('day', now()) - interval '1 day'\n  AND window_start <  date_trunc('day', now())\n  AND (${env:csv} IS NULL OR env = ANY(string_to_array('${env:csv}',',')))\nGROUP BY 1,2\nORDER BY 1,2;",
+          "refId": "B"
+        }
+      ],
+      "options": { "showHeader": true }
+    },
+    {
+      "type": "table",
+      "title": "Deploy Impact (Δ error rate)",
+      "gridPos": {"x":0,"y":8,"w":24,"h":8},
+      "datasource": "${DS_POSTGRES}",
+      "targets": [
+        {
+          "format": "table",
+          "rawSql": "SELECT deploy_id, env, service,\n       round(err_rate_pre::numeric,4) AS err_pre,\n       round(err_rate_post::numeric,4) AS err_post,\n       round((err_rate_post - err_rate_pre)::numeric,4) AS err_delta\nFROM mv_deploy_impact\nWHERE (${service:csv} IS NULL OR service = ANY(string_to_array('${service:csv}',',')))\n  AND (${env:csv} IS NULL OR env = ANY(string_to_array('${env:csv}',',')))\nORDER BY err_delta DESC NULLS LAST\nLIMIT 50;",
+          "refId": "C"
+        }
+      ],
+      "options": { "showHeader": true }
+    }
+  ]
+}

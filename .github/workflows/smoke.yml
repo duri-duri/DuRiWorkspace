@@ -1,0 +1,19 @@
+name: smoke
+on:
+  schedule: [{cron: "*/15 * * * *"}]
+  workflow_dispatch:
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose -p duriworkspace up -d --build duri-postgres duri-redis
+      - run: docker compose -p duriworkspace up -d --build duri_control
+      - name: Wait for health
+        run: |
+          for i in {1..60}; do
+            curl -fsS http://localhost:8083/health && exit 0
+            sleep 2
+          done
+          echo "duri_control healthcheck timed out"; exit 1
+      - run: ./bin/coach_smoke.sh

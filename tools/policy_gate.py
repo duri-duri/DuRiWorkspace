@@ -35,3 +35,4 @@ def opa_allow(payload: dict, rego_path="tools/opa_policies/guard.rego"):
         if v is not None and k in output and output[k] != v:
             return False
     return True
+

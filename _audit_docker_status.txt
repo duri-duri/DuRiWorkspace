@@ -1,0 +1,13 @@
+NAME                                 IMAGE                                                  COMMAND                  SERVICE              CREATED        STATUS                  PORTS
+blackbox_exporter                    quay.io/prometheus/blackbox-exporter:v0.24.0           "/bin/blackbox_expor…"   blackbox_exporter    24 hours ago   Up 24 hours (healthy)   0.0.0.0:9115->9115/tcp, :::9115->9115/tcp
+cadvisor                             gcr.io/cadvisor/cadvisor:latest                        "/usr/bin/cadvisor -…"   cadvisor             24 hours ago   Up 24 hours (healthy)   0.0.0.0:8089->8080/tcp, [::]:8089->8080/tcp
+duriworkspace-aggregation_worker-1   duriworkspace-aggregation_worker                       "python3 -u /app/agg…"   aggregation_worker   19 hours ago   Up 14 hours             
+duriworkspace-duri-postgres-1        postgres:14                                            "docker-entrypoint.s…"   duri-postgres        24 hours ago   Up 24 hours (healthy)   0.0.0.0:5432->5432/tcp, :::5432->5432/tcp
+duriworkspace-duri-redis-1           redis:7-alpine                                         "docker-entrypoint.s…"   duri-redis           24 hours ago   Up 24 hours (healthy)   0.0.0.0:6379->6379/tcp, :::6379->6379/tcp
+duriworkspace-duri_brain-1           duriworkspace-duri_brain                               "sh -c 'pip install …"   duri_brain           16 hours ago   Up 16 hours (healthy)   8081/tcp
+duriworkspace-duri_control-1         duriworkspace-duri_control                             "uvicorn duri_contro…"   duri_control         15 hours ago   Up 14 hours (healthy)   0.0.0.0:8083->8083/tcp, :::8083->8083/tcp
+duriworkspace-duri_evolution-1       duriworkspace-duri_evolution                           "uvicorn duri_evolut…"   duri_evolution       16 hours ago   Up 16 hours (healthy)   0.0.0.0:8082->8082/tcp, :::8082->8082/tcp
+node_exporter                        quay.io/prometheus/node-exporter:v1.8.1                "/bin/node_exporter …"   node_exporter        24 hours ago   Up 24 hours (healthy)   0.0.0.0:9100->9100/tcp, :::9100->9100/tcp
+postgres_exporter                    quay.io/prometheuscommunity/postgres-exporter:latest   "/bin/postgres_expor…"   postgres_exporter    24 hours ago   Up 24 hours (healthy)   0.0.0.0:9187->9187/tcp, :::9187->9187/tcp
+prometheus                           prom/prometheus:latest                                 "/bin/prometheus --c…"   prometheus           24 hours ago   Up 24 hours (healthy)   0.0.0.0:9090->9090/tcp, :::9090->9090/tcp
+redis_exporter                       oliver006/redis_exporter:latest                        "/redis_exporter"        redis_exporter       24 hours ago   Up 24 hours             0.0.0.0:9121->9121/tcp, :::9121->9121/tcp

@@ -34,3 +34,5 @@ case "$QUERY" in
     exit 0
     ;;
 esac | head -n "$K"
+
+

@@ -1,0 +1,26 @@
+echo ""
+
+# 1. Shadow 훈련 서비스 시작 (profiles: ["train"])
+echo "🚀 Shadow 훈련 서비스 시작 중..."
+$DC --profile train up -d
+
+# 2. Shadow 활성화
+echo "🔄 Shadow 활성화 중..."
+$REDIS_CLI SET shadow:enabled 1 || true
+
+# 3. 카나리 비율 설정 (10%부터 시작)
+echo "📊 카나리 비율 10% 설정 중..."
+$REDIS_CLI SET canary:ratio 0.1 || true
+
+# 4. 상태 확인
+echo "📋 서비스 상태 확인..."
+docker compose ps | grep -E "(duri_core|duri_brain|duri_evolution|duri_control|duri-postgres|duri-redis)"
+
+echo ""
+echo "✅ Shadow 훈련장 시작 완료"
+echo "🎯 다음 단계:"
+echo "   - 10분 후: ./check_srm_and_guard.sh"
+echo "   - 30분 후: ./run_promote_canary.sh 0.50"
+echo "   - 저녁 퇴근 시: ./ops/shadow_off.sh"
+
+echo "⏰ 실행 시간: $(date)"

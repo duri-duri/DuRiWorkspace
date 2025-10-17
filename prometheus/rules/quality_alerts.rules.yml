@@ -86,3 +86,5 @@ groups:
     annotations:
       summary: "nDCG day-over-day drop >3%"
       description: "Δ1d={{ $value | printf \"%.3f\" }}"
+
+

@@ -14,3 +14,5 @@ bar_histogram_bucket{le="1.0"} 100
 bar_histogram_bucket{le="+Inf"} 100
 bar_histogram_sum 75.0
 bar_histogram_count 100
+
+

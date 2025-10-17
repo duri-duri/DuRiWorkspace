@@ -8,3 +8,4 @@ def test_guard_error_rate_and_latency():
     stats = fe.self_check(n=200)
     assert stats["error_rate"] <= LIMITS["error_rate_max"]
     assert stats["p95_ms"] <= LIMITS["p95_ms_max"]
+

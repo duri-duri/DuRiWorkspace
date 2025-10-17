@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd /home/duri/DuRiWorkspace
+
+# docker compose 호환(구버전 대비)
+DC="docker compose"
+$DC version >/dev/null 2>&1 || DC="docker-compose"
+# 크론/비TTY 환경 대응을 위해 -T 필수
+REDIS_CLI="$DC exec -T duri-redis redis-cli"
+
+echo "=== 🌙 Shadow 훈련장 중지 ==="
+echo "실행 시간: $(date)"
+echo ""
+
+# 1. 카나리 비율 0으로 설정
+echo "🛑 카나리 비율 0으로 설정 중..."
+$REDIS_CLI SET canary:ratio 0 || true
+
+# 2. Shadow 비활성화
+echo "🔒 Shadow 비활성화 중..."
+$REDIS_CLI SET shadow:enabled 0 || true
+
+# 3. Shadow 훈련 서비스만 중지 (profiles: ["train"])
+echo "⏹️ Shadow 훈련 서비스만 중지 중..."
+$DC stop duri_core duri_brain duri_evolution || true
+
+# 4. 상태 확인
+echo "📋 서비스 상태 확인..."
+docker compose ps | grep -E "(duri_core|duri_brain|duri_evolution|duri_control|duri-postgres|duri-redis)"
+
+echo ""
+echo "✅ Shadow 훈련장 중지 완료"
+echo "🎯 다음 단계:"
+echo "   - 내일 아침: ./ops/shadow_on.sh"
+echo "   - duri_head는 계속 실행 중 (DB/Redis/control/monitoring)"
+
+echo "⏰ 실행 시간: $(date)"

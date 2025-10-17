@@ -25,3 +25,4 @@ def prom_counter(name, desc, labels=()):
 
 def prom_gauge(name, desc, labels=()):
     return Gauge(name, desc, labels)
+

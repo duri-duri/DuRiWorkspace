@@ -23,3 +23,5 @@ groups:
     annotations:
       summary: "Quality error budget burn rate critical"
       description: "Burn rate: {{ $value | printf \"%.3f\" }}"
+
+

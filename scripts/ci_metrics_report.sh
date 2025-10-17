@@ -15,3 +15,5 @@ mkdir -p artifacts
 echo "GUARD_RESULT=ok K=3 ndcg=0.922629 mrr=0.9 oracle=1.0" > artifacts/guard.out 2>/dev/null || true
 
 echo "✅ 메트릭 리포트 생성 완료"
+
+

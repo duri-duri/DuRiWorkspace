@@ -1,13 +1,16 @@
 FROM duri-base:latest
-
 WORKDIR /app
 
-# Brain 서비스 파일 복사
+# 의존성
+COPY duri_brain/requirements.txt ./requirements.txt
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends curl ca-certificates \
+ && rm -rf /var/lib/apt/lists/* \
+ && pip install --no-cache-dir -r requirements.txt
+
+# 앱 복사
 COPY duri_brain/ /app/duri_brain/
 
-# Brain 서비스 의존성 설치
-COPY duri_brain/requirements.txt ./requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Brain 서비스 실행
-CMD ["python", "duri_brain/run.py"]
+# 내부 헬스체크: curl /health
+HEALTHCHECK --interval=10s --timeout=3s --retries=3 --start-period=20s \
+  CMD curl -fsS http://localhost:8081/health || exit 1

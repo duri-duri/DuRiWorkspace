@@ -17,3 +17,5 @@ else
 fi
 
 echo "✅ Summary/Histogram 제약 테스트 완료"
+
+

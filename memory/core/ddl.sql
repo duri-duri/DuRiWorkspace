@@ -30,3 +30,4 @@ create table if not exists audit_ledger (
   created_at timestamptz not null default now()
 );
 create index if not exists audit_kind_time on audit_ledger(kind, created_at desc);
+

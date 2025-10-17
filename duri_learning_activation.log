@@ -1528,3 +1528,17 @@
 2025-10-14 09:58:41,546 - __main__ - ERROR - ❌ 학습 루프 매니저 활성화 실패: 'LearningLoopManager' object has no attribute 'start_learning_loop'
 2025-10-14 09:58:41,546 - duri_modules.autonomous.realtime_learner - INFO - 🚀 DuRi 실시간 학습 시스템 시작
 2025-10-14 09:58:41,546 - __main__ - INFO - ✅ 실시간 학습 시스템 활성화 완료
+2025-10-16 15:08:57,024 - DuRiCore.unified_learning_system - INFO - 통합 학습 시스템 초기화 완료
+2025-10-16 15:08:57,024 - DuRiCore.unified_learning_system - INFO - 통합 학습 시스템 초기화 완료
+2025-10-16 15:08:57,025 - DuRiCore.utils.existence_ai_system - INFO - 진화 완료: evolution_20251016_150857
+2025-10-16 15:08:57,025 - DuRiCore.unified_learning_system - ERROR - 학습 세션 시작 실패: 'FinalIntegrationSystem' object has no attribute 'verify_readiness'
+2025-10-16 15:08:57,025 - __main__ - ERROR - ❌ 통합 학습 시스템 활성화 실패: 'FinalIntegrationSystem' object has no attribute 'verify_readiness'
+2025-10-16 15:08:57,043 - duri_modules.autonomous.continuous_learner - INFO - 🚀 DuRi 24/7 자동 학습 시스템 시작
+2025-10-16 15:08:57,043 - __main__ - ERROR - ❌ 자율 학습 시스템 활성화 실패: 'DuRiAutonomousCore' object has no attribute 'start_autonomous_learning'
+2025-10-16 15:08:57,045 - __main__ - ERROR - ❌ 학습 루프 매니저 활성화 실패: 'LearningLoopManager' object has no attribute 'start_learning_loop'
+2025-10-16 15:08:57,045 - duri_modules.autonomous.realtime_learner - INFO - 🚀 DuRi 실시간 학습 시스템 시작
+2025-10-16 15:08:57,045 - __main__ - INFO - ✅ 실시간 학습 시스템 활성화 완료
+2025-10-16 15:08:57,061 - duri_modules.autonomous.continuous_learner - WARNING - 문제 감지: 학습 진전이 없음 (심각도: 0.50)
+2025-10-16 15:08:57,062 - duri_modules.autonomous.continuous_learner - WARNING - 문제 감지: CPU 사용량이 높음 (심각도: 0.50)
+2025-10-16 15:08:57,062 - duri_modules.autonomous.continuous_learner - INFO - 자동 결정 실행: 학습률 조정 - 학습 진전이 0.00%로 낮음
+2025-10-16 15:08:57,062 - duri_modules.autonomous.continuous_learner - INFO - ⚙️ 학습률 조정 액션 실행

@@ -3,67 +3,28 @@ global:
   evaluation_interval: 15s
 
 rule_files:
-  - /etc/prometheus/rules/*.rules.yml
-  - /etc/prometheus/rules/prometheus_rules.yml
-  - /etc/prometheus/rules/prometheus_rules_enhanced.yml
-  # - /etc/prometheus/rules/prometheus_alerts_enhanced.yml  # 중복 메모리 알람으로 비활성화
-
-alerting:
-  alertmanagers:
-    - static_configs: [{ targets: ["alertmanager:9093"] }]
+  - rules.d/*.yml
 
 scrape_configs:
-  - job_name: 'self'
-    static_configs: [{ targets: ['localhost:9090'] }]
-
-  - job_name: 'node'
-    static_configs: [{ targets: ['node_exporter:9100'] }]
-
-  - job_name: 'cadvisor'
-    static_configs: [{ targets: ['cadvisor:8080'] }]
-    metric_relabel_configs:
-      # 필요 없는 compose 라벨 대량 정리
-      - source_labels: [__name__]
-        regex: 'container_.*'
-        action: keep
-      - regex: 'container_label_.*'
-        action: labeldrop
-      # name이 비어있을 때만 id 일부로 보조 label 세팅(가독성)
-      - source_labels: [name, id]
-        regex: ';/docker/([a-f0-9]{12}).*'
-        target_label: name
-        replacement: 'ctr-\1'
-        action: replace
-
-  - job_name: 'redis'
-    static_configs: [{ targets: ['redis_exporter:9121'] }]
-
-  - job_name: 'postgres'
-    static_configs: [{ targets: ['postgres_exporter:9187'] }]
-
-  - job_name: 'blackbox'
+  - job_name: 'dori-dora-exporter'
     metrics_path: /metrics
-    static_configs: [{ targets: ['blackbox_exporter:9115'] }]
-
-  - job_name: 'blackbox_probe'
-    metrics_path: /probe
-    params: { module: [http_2xx] }
     static_configs:
-      - targets:
-          - http://duri_core_container:8080/health
-          - http://duri_brain_container:8081/health
-          - http://duri_evolution_container:8082/health
-          - http://duri_control_container:8083/health
-          - http://prometheus:9090/-/ready
-    relabel_configs:
-      # 1) 원 타깃을 __param_target에 심는다
-      - source_labels: [__address__]
-        target_label: __param_target
-      # 2) 보기 좋은 라벨(instance 또는 custom target)에 보존
-      - source_labels: [__param_target]
-        target_label: target
-      - source_labels: [__param_target]
-        target_label: instance
-      # 3) 실제 스크랩 주소는 blackbox_exporter로 변경
-      - target_label: __address__
-        replacement: blackbox_exporter:9115
+      - targets: ['dori-dora-exporter:8000']  # 내부 DNS
+    # 라벨 카디널리티 제어
+    metric_relabel_configs:
+      - source_labels: [commit]
+        regex: "([0-9a-f]{7}).*"
+        replacement: "$1"
+        target_label: commit
+      - source_labels: [env]
+        regex: "(staging|prod|dev)"
+        replacement: "$1"
+        target_label: env
+      - source_labels: [service]
+        regex: "(duri_control|duri_brain|duri_evolution|duri_core)"
+        replacement: "$1"
+        target_label: service
+      - source_labels: [source]
+        regex: "(ci|manual|auto)"
+        replacement: "$1"
+        target_label: source

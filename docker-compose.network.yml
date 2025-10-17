@@ -120,3 +120,4 @@ volumes:
     labels:
       - "duri.service=monitoring"
       - "duri.type=dashboard"
+

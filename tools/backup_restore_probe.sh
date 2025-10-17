@@ -5,3 +5,4 @@ docker compose down
 docker compose up -d
 bash tools/smoke.sh
 echo "BACKUP/RESTORE OK"
+

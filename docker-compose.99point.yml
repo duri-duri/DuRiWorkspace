@@ -136,3 +136,5 @@ volumes:
 secrets:
   pg_password:
     file: ./secrets/pg_password.txt
+
+

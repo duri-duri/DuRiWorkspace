@@ -14,3 +14,5 @@ tests:
     alertname: QualityDropImmediate
     exp_alerts:
       - exp_labels: {severity: "critical", team: "search"}
+
+

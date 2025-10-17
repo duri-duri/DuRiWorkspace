@@ -1,0 +1,63 @@
+groups:
+- name: duri_control.rules
+  rules:
+  # Instrumentator 기본 지표로 살아있음 감지(5xx 비율)
+  - alert: DuriControlHigh5xx
+    expr: sum(rate(http_request_duration_seconds_count{status=~"5.."}[5m])) / sum(rate(http_request_duration_seconds_count[5m])) > 0.05
+    for: 10m
+    labels: { severity: page }
+    annotations:
+      summary: "duri_control 5xx > 5% (10m)"
+      description: "에러 비율이 5분 윈도우에서 5% 초과"
+
+  # recent_good 커스텀 게이지 기준 (알람 피로 방지)
+  - alert: DuriE2EStalled
+    expr: duri_recent_good < 1
+    for: 5m
+    labels: { severity: warning }
+    annotations:
+      summary: "E2E 최근 10분 성공 0건"
+      description: "스모크/실운영 체인 둘 다 경로 점검 필요"
+
+  # 사용자 영향 조건만 페이지 알람
+  - alert: DuriE2ECritical
+    expr: duri_recent_good < 1
+    for: 15m
+    labels: { severity: page }
+    annotations:
+      summary: "E2E 15분 이상 중단 (사용자 영향)"
+      description: "스모크/실운영 체인이 15분 이상 중단됨"
+
+  # 배포 중 경보 억제 (health check 실패)
+  - alert: DuriControlHealthCheck
+    expr: up{job="duri_control"} == 0
+    for: 2m
+    labels: { severity: warning }
+    annotations:
+      summary: "duri_control health check 실패"
+      description: "서비스가 2분 이상 응답하지 않음"
+
+  # SLO Burn-rate 알람 (5m/1h 이중 윈도우)
+  - alert: DuriSLOBurnRateHigh
+    expr: |
+      (
+        sum(rate(http_request_duration_seconds_count{status=~"5.."}[5m])) / 
+        sum(rate(http_request_duration_seconds_count[5m]))
+      ) > 0.05
+    for: 5m
+    labels: { severity: warning }
+    annotations:
+      summary: "SLO Burn Rate 높음 (5분 윈도우)"
+      description: "5xx 비율이 5분 윈도우에서 5% 초과"
+
+  - alert: DuriSLOCritical
+    expr: |
+      (
+        sum(rate(http_request_duration_seconds_count{status=~"5.."}[1h])) / 
+        sum(rate(http_request_duration_seconds_count[1h]))
+      ) > 0.01
+    for: 1h
+    labels: { severity: page }
+    annotations:
+      summary: "SLO Critical (1시간 윈도우)"
+      description: "5xx 비율이 1시간 윈도우에서 1% 초과 - 사용자 영향"

@@ -1,0 +1,44 @@
+groups:
+- name: duri_control_burn_rate
+  rules:
+  # SLO Burn-rate 알람 (5m/1h 이중 윈도우)
+  - alert: DuriSLOBurnRateHigh
+    expr: |
+      (
+        sum(rate(http_request_duration_seconds_count{status=~"5.."}[5m])) / 
+        sum(rate(http_request_duration_seconds_count[5m]))
+      ) / 0.005 > 14
+    for: 5m
+    labels: { severity: warning }
+    annotations:
+      summary: "SLO Burn Rate 높음 (5분 윈도우)"
+      description: "5xx 비율이 5분 윈도우에서 SLO 임계치의 14배 초과"
+
+  - alert: DuriSLOCritical
+    expr: |
+      (
+        sum(rate(http_request_duration_seconds_count{status=~"5.."}[1h])) / 
+        sum(rate(http_request_duration_seconds_count[1h]))
+      ) / 0.005 > 2
+    for: 1h
+    labels: { severity: page }
+    annotations:
+      summary: "SLO Critical (1시간 윈도우)"
+      description: "5xx 비율이 1시간 윈도우에서 SLO 임계치의 2배 초과 - 사용자 영향"
+
+  # 다중 윈도우 조건 (두 조건 동시 충족 시 페이지)
+  - alert: DuriSLOPage
+    expr: |
+      (
+        (sum(rate(http_request_duration_seconds_count{status=~"5.."}[5m])) / 
+         sum(rate(http_request_duration_seconds_count[5m]))) / 0.005 > 14
+      ) AND
+      (
+        (sum(rate(http_request_duration_seconds_count{status=~"5.."}[1h])) / 
+         sum(rate(http_request_duration_seconds_count[1h]))) / 0.005 > 2
+      )
+    for: 1m
+    labels: { severity: page }
+    annotations:
+      summary: "SLO Page (다중 윈도우)"
+      description: "5분/1시간 윈도우 모두에서 SLO 임계치 초과 - 즉시 대응 필요"

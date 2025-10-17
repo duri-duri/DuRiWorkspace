@@ -3,3 +3,5 @@
 foo 1
 # TYPE foo gauge
 foo 2
+
+

@@ -17,3 +17,4 @@ class SPRT:
         if self.llr <= self.B:
             return "reject"
         return "continue"
+

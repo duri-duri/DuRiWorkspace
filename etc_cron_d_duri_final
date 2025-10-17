@@ -1,0 +1,18 @@
+# DuRi Shadow 훈련장 크론 스케줄 (최종)
+# 토요일 제외, 9–16 자동화
+
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+TZ=Asia/Seoul
+
+# Shadow 훈련장 시작: 일~금 09:00
+0 9 * * 0-5 duri cd /home/duri/DuRiWorkspace && flock -n /tmp/shadow.lock ./ops/shadow_on.sh >>/var/log/duri/cron.log 2>&1
+
+# Shadow 훈련장 중지: 일~금 16:00
+0 16 * * 0-5 duri cd /home/duri/DuRiWorkspace && flock -n /tmp/shadow.lock ./ops/shadow_off.sh >>/var/log/duri/cron.log 2>&1
+
+# 게이트 스냅샷: 매일 02:00
+0 2 * * * duri cd /home/duri/DuRiWorkspace && flock -n /tmp/gate_snapshot.lock ./ops/create_gate_snapshot.sh >>/var/log/duri/cron.log 2>&1
+
+# 게이트 로테이션: 매일 03:00
+0 3 * * * duri cd /home/duri/DuRiWorkspace && flock -n /tmp/rotate_gates.lock ./ops/rotate_gates.sh >>/var/log/duri/cron.log 2>&1

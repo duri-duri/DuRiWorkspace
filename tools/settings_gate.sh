@@ -8,3 +8,4 @@ s=DuRiSettings()
 assert s.env=="prod", s.env
 print("SETTINGS OK")
 PY
+

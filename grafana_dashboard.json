@@ -1,0 +1,54 @@
+{
+  "dashboard": {
+    "title": "DuRi Control E2E Monitoring",
+    "panels": [
+      {
+        "title": "Recent Good (10m)",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "duri_recent_good",
+            "legendFormat": "Recent Good"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "steps": [
+                {"color": "red", "value": 0},
+                {"color": "green", "value": 1}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "title": "Request Latency (p50/p90)",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.5, sum by (le)(rate(http_request_duration_seconds_bucket[5m])))",
+            "legendFormat": "p50"
+          },
+          {
+            "expr": "histogram_quantile(0.9, sum by (le)(rate(http_request_duration_seconds_bucket[5m])))",
+            "legendFormat": "p90"
+          }
+        ]
+      },
+      {
+        "title": "Requests Per Second",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "sum by (method) (rate(http_request_duration_seconds_count[1m]))",
+            "legendFormat": "{{method}}"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,173 +1,5 @@
+
 services:
-  duri_core:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.core
-    ports:
-      - "8080:8080"
-    env_file:
-      - .env
-    environment:
-      - PYTHONPATH=/app:/app/DuRiCore:/app/DuRiCore/DuRiCore:/app/duri_modules
-      - DURI_ROOT=/srv/duri
-      - POSTGRES_HOST=duri-postgres
-      - POSTGRES_USER=duri
-      - POSTGRES_PASSWORD=duri
-      - POSTGRES_DB=duri
-      - POSTGRES_PORT=5432
-    working_dir: /app
-    volumes:
-      - ./srv/duri:/srv/duri
-      - ./:/app
-    healthcheck:
-      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/health | jq -e '.status|IN(\"ok\",\"ready\",\"healthy\")' >/dev/null"]
-      interval: 15s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
-    depends_on:
-      duri-postgres:
-        condition: service_healthy
-      duri-redis:
-        condition: service_started
-    networks:
-      - duri-network
-
-  duri_brain:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.brain
-    expose:
-      - "8081"
-    env_file:
-      - .env
-    environment:
-      - PYTHONPATH=/app:/app/DuRiCore:/app/DuRiCore/DuRiCore:/app/duri_modules
-      - DURI_ROOT=/srv/duri
-      - POSTGRES_HOST=duri-postgres
-      - POSTGRES_USER=duri
-      - POSTGRES_PASSWORD=duri
-      - POSTGRES_DB=duri
-      - POSTGRES_PORT=5432
-    working_dir: /app
-    volumes:
-      - ./srv/duri:/srv/duri
-      - ./:/app
-    command: >
-      sh -c "pip install -q uvicorn prometheus-client &&
-             uvicorn duri_brain.app.main:app --host 0.0.0.0 --port 8081"
-    healthcheck:
-      test: ["CMD-SHELL", "curl -fsS -X GET http://localhost:8081/health | grep -q '\"status\":\"ok\"'"]
-      interval: 10s
-      timeout: 3s
-      retries: 30
-      start_period: 30s
-    depends_on:
-      duri-postgres:
-        condition: service_healthy
-      duri-redis:
-        condition: service_started
-    networks:
-      - duri-network
-
-  duri_evolution:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.evolution
-    ports:
-      - "8082:8082"
-    env_file:
-      - .env
-    environment:
-      - PYTHONPATH=/app:/app/DuRiCore:/app/DuRiCore/DuRiCore:/app/duri_modules
-      - DURI_ROOT=/srv/duri
-      - POSTGRES_HOST=duri-postgres
-      - POSTGRES_USER=duri
-      - POSTGRES_PASSWORD=duri
-      - POSTGRES_DB=duri
-      - POSTGRES_PORT=5432
-    working_dir: /app
-    volumes:
-      - ./srv/duri:/srv/duri
-      - ./:/app
-    healthcheck:
-      test: ["CMD-SHELL", "curl -fsS http://localhost:8082/health | grep -q '\"status\":\"ok\"'"]
-      interval: 5s
-      timeout: 2s
-      retries: 10
-      start_period: 10s
-    depends_on:
-      duri-postgres:
-        condition: service_healthy
-      duri-redis:
-        condition: service_started
-    networks:
-      - duri-network
-
-  duri_control:
-    # Dockerfile.control.optimized의 CMD 사용(커맨드 땜질 제거)
-    build:
-      context: .
-      dockerfile: Dockerfile.control.optimized
-    ports:
-      - "8083:8083"
-    env_file:
-      - .env
-    environment:
-      - PYTHONPATH=/app:/app/DuRiCore:/app/DuRiCore/DuRiCore:/app/duri_modules
-      - DURI_ROOT=/srv/duri
-      - POSTGRES_HOST=duri-postgres
-      - POSTGRES_USER=duri
-      - POSTGRES_PASSWORD=duri
-      - POSTGRES_DB=duri
-      - POSTGRES_PORT=5432
-      - SHADOW_ENABLED=true
-      - DURI_BRAIN_URL=http://duri_brain:8081
-      - POSTGRES_DSN=postgresql://duri:duri@duri-postgres:5432/duri
-    working_dir: /app
-    volumes:
-      - ./srv/duri:/srv/duri
-      - ./:/app
-    healthcheck:
-      test: ["CMD", "curl", "-fsS", "http://localhost:8083/health"]
-      interval: 15s
-      timeout: 3s
-      retries: 5
-      start_period: 10s
-    depends_on:
-      duri-postgres:
-        condition: service_healthy
-      duri-redis:
-        condition: service_started
-    networks:
-      - duri-network
-
-  aggregation_worker:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.base
-    command: python3 -u /app/aggregation_worker.py
-    working_dir: /app
-    env_file:
-      - .env
-    environment:
-      - POSTGRES_HOST=duri-postgres
-      - POSTGRES_PORT=5432
-      - POSTGRES_DB=duri
-      - POSTGRES_USER=duri
-      - POSTGRES_PASSWORD=duri
-      - AGG_INTERVAL_SEC=30
-      - MIN_REQUIRED_SAMPLES=50
-      - AGG_SRC_VIEW=v_feedback_events_clean
-    volumes:
-      - ./:/app
-    depends_on:
-      duri-postgres:
-        condition: service_healthy
-    restart: unless-stopped
-    networks:
-      - duri-network
-
   duri-postgres:
     image: postgres:14
     environment:
@@ -180,29 +12,178 @@ services:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U duri"]
-      interval: 5s
-      timeout: 2s
-      retries: 10
-      start_period: 10s
-    networks:
-      - duri-network
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   duri-redis:
     image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
     ports:
       - "6379:6379"
+    volumes:
+      - redis_data:/data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 2s
-      retries: 10
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  duri_control:
+    image: duriworkspace-duri_control:${IMAGE_TAG:-latest}
+    ports:
+      - "8083:8083"
+    environment:
+      - POSTGRES_DSN=postgresql://duri:duri@duri-postgres:5432/duri
+      - DURI_BRAIN_URL=http://duri_brain:8081
+      - SHADOW_ENABLED=1
+    depends_on:
+      - duri-postgres
+      - duri-redis
+      - duri_brain
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://localhost:8083/health').read()"]
+      interval: 15s
+      timeout: 3s
       start_period: 10s
-    networks:
-      - duri-network
+      retries: 3
+
+  # DORA 메트릭 익스포터 (내부 전용 - 포트 노출 제거)
+  dori-dora-exporter:
+    image: python:3.10-slim
+    command: ["sh", "-c", "pip install prometheus_client redis && python /app/dora_prometheus_metrics.py"]
+    # ports 제거 - 내부 네트워크 전용
+    environment:
+      - DORA_PUSH_TOKEN=${DORA_PUSH_TOKEN:-duri-secret-token-2024}
+      - REDIS_URL=redis://duri-redis:6379/0
+      - ALLOW_LOCAL_BYPASS=${ALLOW_LOCAL_BYPASS:-0}
+      - ALLOW_PUSH_CIDR=${ALLOW_PUSH_CIDR:-}
+      - PUSH_RL_CAPACITY=${PUSH_RL_CAPACITY:-10}
+      - PUSH_RL_REFILL=${PUSH_RL_REFILL:-10}
+      - PUSH_DEDUP_TTL_SEC=${PUSH_DEDUP_TTL_SEC:-300}
+    volumes:
+      - ./dora_prometheus_metrics.py:/app/dora_prometheus_metrics.py:ro
+    restart: always
+    depends_on:
+      - duri-redis
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/ready').read()"]
+      interval: 10s
+      timeout: 3s
+      retries: 6
+      start_period: 30s
+
+  # Trace ETL (Redis → Postgres)
+  trace-etl:
+    image: python:3.10-slim
+    container_name: duriworkspace-trace-etl
+    working_dir: /app
+    command: >
+      sh -c "pip install --no-cache-dir psycopg2-binary redis &&
+             python -u etl/trace_etl.py"
+    environment:
+      PG_DSN: postgresql://duri:duri@duri-postgres:5432/duri
+      REDIS_URL: redis://duri-redis:6379/0
+      POLL_MS: "200"           # 0.2s 폴링 (필요시 50~500 사이로 튜닝)
+      BATCH_SIZE: "100"        # 한번에 처리할 최대 이벤트
+      LOG_LEVEL: INFO
+    depends_on:
+      - duri-postgres
+      - duri-redis
+    volumes:
+      - ./etl:/app/etl:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c",
+             "import os,psycopg2,redis; \
+              psycopg2.connect(os.getenv('PG_DSN')).close(); \
+              redis.from_url(os.getenv('REDIS_URL')).ping()"]
+      interval: 15s
+      timeout: 5s
+      retries: 6
+      start_period: 30s
+
+  # DuRi Brain 서비스
+  duri_brain:
+    image: duriworkspace-duri_brain:${IMAGE_TAG:-latest}
+    ports:
+      - "8081:8081"
+    environment:
+      - POSTGRES_DSN=postgresql://duri:duri@duri-postgres:5432/duri
+      - REDIS_URL=redis://duri-redis:6379/0
+      - PORT=8081
+      - FLASK_APP=run.py
+      - FLASK_ENV=production
+    depends_on:
+      - duri-postgres
+      - duri-redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/health"]
+      interval: 30s
+      timeout: 10s
+      start_period: 5s
+      retries: 3
+
+  # DuRi Core 서비스
+  duri_core:
+    image: duriworkspace-duri_core:previous
+    ports:
+      - "8080:8080"
+    environment:
+      - POSTGRES_DSN=postgresql://duri:duri@duri-postgres:5432/duri
+      - REDIS_URL=redis://duri-redis:6379/0
+      - DURI_BRAIN_URL=http://duri_brain:8081
+    depends_on:
+      - duri-postgres
+      - duri-redis
+      - duri_brain
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8080/health').read()"]
+      interval: 15s
+      timeout: 3s
+      start_period: 10s
+      retries: 3
+
+  # DuRi Evolution 서비스
+  duri_evolution:
+    image: duriworkspace-duri_evolution:previous
+    ports:
+      - "8082:8082"
+    environment:
+      - POSTGRES_DSN=postgresql://duri:duri@duri-postgres:5432/duri
+      - REDIS_URL=redis://duri-redis:6379/0
+      - DURI_BRAIN_URL=http://duri_brain:8081
+    depends_on:
+      - duri-postgres
+      - duri-redis
+      - duri_brain
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8082/health').read()"]
+      interval: 15s
+      timeout: 3s
+      start_period: 10s
+      retries: 3
+
+  # Prometheus 서버
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./rules.d:/etc/prometheus/rules.d
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    depends_on:
+      - dori-dora-exporter
 
 volumes:
   postgres_data:
-
-networks:
-  duri-network:
-    driver: bridge
+  redis_data:

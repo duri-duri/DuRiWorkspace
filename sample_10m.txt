@@ -1,0 +1,6 @@
+    model     | track | n  
+--------------+-------+----
+ prod_default | prod  | 60
+ shadow_proxy | cand  | 20
+(2 rows)
+

@@ -9,3 +9,5 @@ groups:
     annotations:
       summary: "nDCG 급락 (즉시)"
       description: "k=3, domain=ALL"
+
+

@@ -27,3 +27,4 @@ test_allow_pub_ok {
   }
   guard.allow with input as input
 }
+

@@ -1,0 +1,66 @@
+# DORA Exporter 대시보드 - 지금 상태 vs 추세 분리
+# Prometheus 대시보드 설정
+
+groups:
+  - name: dora_exporter
+    rules:
+      # 즉시값 (Stat) - 현재 상태
+      - record: duri_push_dedup_current
+        expr: duri_push_dedup_total{reason="redis_ttl"}
+        labels:
+          type: "current"
+          
+      - record: duri_push_rate_limited_current  
+        expr: duri_push_rate_limited_total
+        labels:
+          type: "current"
+          
+      - record: duri_push_tokens_current
+        expr: duri_push_tokens
+        labels:
+          type: "current"
+
+      # 추세 (Time series) - 5분간 변화율
+      - record: duri_push_dedup_rate_5m
+        expr: rate(duri_push_dedup_total{reason="redis_ttl"}[5m])
+        labels:
+          type: "trend"
+          
+      - record: duri_push_rate_limited_rate_5m
+        expr: rate(duri_push_rate_limited_total[5m])
+        labels:
+          type: "trend"
+
+# 알림 규칙
+alerting_rules:
+  - name: dora_exporter_alerts
+    rules:
+      # DORA Exporter 다운 알림
+      - alert: DoriExporterDown
+        expr: up{job="dori-dora-exporter"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "DORA exporter down"
+          description: "DORA exporter has been down for more than 2 minutes"
+          
+      # Rate limit 과다 발생 알림
+      - alert: DoriExporterRateLimitHigh
+        expr: rate(duri_push_rate_limited_total[5m]) > 0.1
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "DORA exporter rate limit high"
+          description: "Rate limit triggered more than 0.1 times per second over 5 minutes"
+          
+      # Dedup 과다 발생 알림
+      - alert: DoriExporterDedupHigh
+        expr: rate(duri_push_dedup_total{reason="redis_ttl"}[5m]) > 1.0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "DORA exporter dedup high"
+          description: "Dedup triggered more than 1.0 times per second over 5 minutes"

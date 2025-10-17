@@ -121,3 +121,5 @@ curl -s "http://localhost:9090/api/v1/alerts" | jq '.data.alerts | length'
 - [ ] nDCG/MRR **MA7** 수렴 추이 정상
 - [ ] DR 타이머 확인
 - [ ] 월간 알람 수 ≤ 0.8회 달성
+
+

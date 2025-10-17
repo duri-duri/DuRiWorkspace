@@ -1,0 +1,24 @@
+# /etc/cron.d/duri  (Coach→Bench→Learn 시스템 포함)
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+TZ=Asia/Seoul
+
+# 로그 디렉토리: /var/log/duri (미리 생성)
+
+# 게이트 스냅샷 (매일 02:00)
+0 2 * * *  duri  flock -n /tmp/gate_snapshot.lock  /home/duri/DuRiWorkspace/ops/create_gate_snapshot.sh  >> /var/log/duri/cron.log 2>&1
+
+# 게이트 로테이션 (매일 03:00)
+0 3 * * *  duri  flock -n /tmp/rotate_gates.lock   /home/duri/DuRiWorkspace/ops/rotate_gates.sh        >> /var/log/duri/cron.log 2>&1
+
+# Shadow 훈련장 시작 (토요일=6 제외, 일~금 09:00)
+0 9  * * 0-5 duri  cd /home/duri/DuRiWorkspace && flock -n /tmp/shadow.lock ./ops/shadow_on.sh         >> /var/log/duri/cron.log 2>&1
+
+# Coach 미니배치 (15분 간격, 9:10~15:55, 토요일 제외)
+10-55/15 9-15 * * 0-5 duri  cd /home/duri/DuRiWorkspace && flock -n /tmp/coach.lock ./ops/coach_batch_run.sh 30 >> /var/log/duri/cron.log 2>&1
+
+# 일일 게이트 리포트 (15:55, 토요일 제외)
+55 15 * * 0-5 duri  cd /home/duri/DuRiWorkspace && ./ops/gate_daily_report.sh >> /var/log/duri/cron.log 2>&1
+
+# Shadow 훈련장 중지 (토요일=6 제외, 일~금 16:00)
+0 16 * * 0-5 duri  cd /home/duri/DuRiWorkspace && flock -n /tmp/shadow.lock ./ops/shadow_off.sh        >> /var/log/duri/cron.log 2>&1

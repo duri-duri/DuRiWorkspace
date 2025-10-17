@@ -28,3 +28,5 @@ groups:
     annotations:
       summary: "nDCG@3 SLO breach"
       description: "MA7 nDCG@3 < 0.90"
+
+

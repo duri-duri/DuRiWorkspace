@@ -68,3 +68,4 @@ class ThinkVerifyDecide:
             "source": mmeta.get("source", "core" if core_hit else "rag"),
             "rag_candidates": rag_candidates,
         }
+

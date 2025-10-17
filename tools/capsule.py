@@ -48,3 +48,4 @@ def make_capsule(
         },
         "query_hash": sha256s(query),
     }
+

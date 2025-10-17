@@ -108,7 +108,9 @@ class TestPropertyBased:
     def test_file_path_property(self, path_suffix):
         """파일 경로 속성 테스트"""
         # 안전한 경로 생성
-        safe_path = f"/tmp/test_{path_suffix.replace('/', '_').replace('\\', '_')}.json"
+        # f-string에서 백슬래시 사용 불가, 변수로 분리
+        clean_suffix = path_suffix.replace('/', '_').replace('\\', '_')
+        safe_path = f"/tmp/test_{clean_suffix}.json"
         
         manager = AtomicFileManager(safe_path)
         result = manager.atomic_write({"test": "data"})

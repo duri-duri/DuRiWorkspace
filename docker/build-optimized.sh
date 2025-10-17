@@ -127,3 +127,4 @@ echo ""
 echo "Examples:"
 echo "  ./docker/build-optimized.sh production all"
 echo "  ./docker/build-optimized.sh development core"
+

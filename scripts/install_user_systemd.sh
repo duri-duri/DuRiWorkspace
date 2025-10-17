@@ -29,3 +29,5 @@ echo "  systemctl --user status duri-metrics-day66.timer"
 echo ""
 echo "로그인 세션 밖에서도 실행하려면:"
 echo "  loginctl enable-linger $USER"
+
+

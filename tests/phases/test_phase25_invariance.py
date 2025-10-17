@@ -23,3 +23,4 @@ def test_invariance_order_independence():
     assert len(a) == len(b)
     if a and b:
         assert a[0].category == b[0].category
+

@@ -336,3 +336,4 @@ improvement_roadmap:
   - phase3: "마이크로서비스 아키텍처"
   - phase4: "AI 기반 성능 최적화"
 ```
+

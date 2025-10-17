@@ -1,0 +1,35 @@
+global:
+  slack_api_url: 'https://hooks.slack.com/services/XXX/YYY/ZZZ'
+
+route:
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1h
+  receiver: 'slack-notifications'
+  routes:
+  - match:
+      severity: page
+    receiver: 'slack-pages'
+  - match:
+      severity: warning
+    receiver: 'slack-warnings'
+
+receivers:
+- name: 'slack-notifications'
+  slack_configs:
+  - channel: '#duri-alerts'
+    title: '{{ .GroupLabels.alertname }}'
+    text: '{{ range .Alerts }}{{ .Annotations.summary }}{{ end }}'
+
+- name: 'slack-pages'
+  slack_configs:
+  - channel: '#duri-pages'
+    title: '🚨 PAGE: {{ .GroupLabels.alertname }}'
+    text: '{{ range .Alerts }}{{ .Annotations.summary }}{{ end }}'
+
+- name: 'slack-warnings'
+  slack_configs:
+  - channel: '#duri-warnings'
+    title: '⚠️ WARNING: {{ .GroupLabels.alertname }}'
+    text: '{{ range .Alerts }}{{ .Annotations.summary }}{{ end }}'

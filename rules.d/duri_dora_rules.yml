@@ -1,0 +1,46 @@
+groups:
+- name: duri_dora
+  rules:
+  # 레코딩 룰
+  - record: duri_deploys_per_hour
+    expr: increase(duri_deployment_events_total[1h])
+  
+  - record: duri_deploys_per_day
+    expr: increase(duri_deployment_events_total[24h])
+  
+  - record: duri_auto_eval_recent_avg
+    expr: avg_over_time(duri_auto_eval_score[1h])
+  
+  # 무활동 알람
+  - alert: DuriNoDeploys24h
+    expr: sum_over_time(duri_deploys_per_hour[24h]) == 0
+    for: 10m
+    labels: {severity: warning}
+    annotations:
+      summary: "No deployments in last 24h"
+      description: "DuRi has not deployed anything in the last 24 hours"
+  
+  - alert: DuriNoDeploys15m
+    expr: sum_over_time(duri_deploys_per_hour[15m]) == 0
+    for: 5m
+    labels: {severity: info}
+    annotations:
+      summary: "No deployments in last 15m (test)"
+      description: "Test alert for deployment activity monitoring"
+  
+  # dedup/ratelimit 알람
+  - alert: DuriPushDedupSpike
+    expr: rate(duri_push_dedup_total[5m]) > 5
+    for: 10m
+    labels: {severity: warning}
+    annotations:
+      summary: "Push dedup spike"
+      description: "High rate of duplicate push requests detected"
+  
+  - alert: DuriPushRateLimitedSpike
+    expr: rate(duri_push_rate_limited_total[5m]) > 10
+    for: 5m
+    labels: {severity: warning}
+    annotations:
+      summary: "Push rate limit spike"
+      description: "High rate of rate-limited push requests detected"

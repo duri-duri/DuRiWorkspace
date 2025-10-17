@@ -207,7 +207,10 @@ def run_once():
                       f"p95_rel={p95_rel:.3f} cost_rel={cost_rel:.3f} -> guard={passed}", flush=True)
                 
                 # === 후보군 메트릭 집계 (cand 모델별) ===
-                sql = """
+                # 현재 프로덕션 모델 ID (환경변수 또는 기본값)
+                PROMO_BASELINE_MODEL_ID = os.getenv("PROMO_BASELINE_MODEL_ID", "prod_default")
+                
+                sql = f"""
 WITH w AS (
   SELECT * FROM v_feedback_events_clean
   WHERE ts >= NOW() - INTERVAL '1 hour' AND track IN ('prod','cand')
@@ -219,7 +222,7 @@ prod AS (
     AVG(CASE WHEN hallucination THEN 1.0 ELSE 0.0 END)     AS hallu_rate,
     PERCENTILE_CONT(0.95) WITHIN GROUP (ORDER BY latency_s) AS p95,
     AVG(cost_usd) AS cost
-  FROM w WHERE track='prod'
+  FROM w WHERE track='prod' AND meta_model_id = '{PROMO_BASELINE_MODEL_ID}'
 ),
 cand AS (
   SELECT
@@ -346,19 +349,29 @@ FROM cand c CROSS JOIN prod p;
                     h_dir   = _dir_hallu(best['halluc_pp'])
                     p95_dir = _dir_rel(best['p95_rel'])
                     cost_dir= _dir_rel(best['cost_rel'])
-                    reason = (
-                        f"auto_{decision}: "
-                        f"halluc={abs(float(best['halluc_pp'])):.2f}pp {h_dir} (≤ {policy_limits['halluc_pp_max']:+.2f}pp), "
-                        f"p95_rel={best['p95_rel']:.3f} {p95_dir} (≤ {policy_limits['p95_rel_max']:.3f}), "
-                        f"cost_rel={best['cost_rel']:.3f} {cost_dir} (≤ {policy_limits['cost_rel_max']:.3f}), "
-                        f"samples(model)={best['cand_samples']}/{best['prod_samples']} (min {MIN_CAND}/{MIN_PROD}), "
-                        f"samples(window)={cand_n}/{prod_n}"
-                    )
-                    cur.execute("""
-                        INSERT INTO promotion_decisions (model_id, decision, reason, policy, actor)
-                        VALUES (%s, %s, %s, %s::jsonb, 'guard@worker')
-                    """, (best["model_id"], decision, reason, json.dumps(policy_limits)))
+                    reason = (f"samples(model)={best['cand_samples']}/{best['prod_samples']} (min {MIN_CAND}/{MIN_PROD}); "
+                              f"limits(hallu≤{LIMITS['halluc_pp_max']}pp, p95≤{LIMITS['p95_rel_max']}, cost≤{LIMITS['cost_rel_max']}); "
+                              f"hallu={h_dir}({best['halluc_pp']:+.2f}pp); "
+                              f"p95={_dir_rel(best['p95_rel'])}({float(best['p95_rel']):.3f}); "
+                              f"cost={_dir_rel(best['cost_rel'])}({float(best['cost_rel']):.3f})")
+                    # 태스크 1: 승격 기록 무소음화(idempotent) - insert_promotion_once() 사용
+                    cur.execute("SELECT insert_promotion_once(%s, %s, %s)", (best["model_id"], decision, reason))
                     print(f"[agg:decision] {best['model_id']} -> {decision} ({reason})", flush=True)
+                    
+                    # 태스크 2: N/3 연속 통과 게이트 - 3연속 promote 시에만 final 발행
+                    if decision == 'promote':
+                        cur.execute("""
+                            WITH snaps AS (
+                              SELECT decision_ts, decision='promote' AS pass
+                              FROM promotion_decisions
+                              WHERE model_id=%s AND decision_ts >= NOW()-INTERVAL '15 minutes'
+                              ORDER BY decision_ts DESC LIMIT 3
+                            ) SELECT COUNT(*) FILTER (WHERE pass)=3 AS ok FROM snaps
+                        """, (best["model_id"],))
+                        result = cur.fetchone()
+                        if result and result[0]:  # 3연속 통과
+                            cur.execute("SELECT insert_promotion_once(%s, %s, %s)", (best["model_id"], "promote_final", f"3연속 통과: {reason}"))
+                            print(f"[agg:decision-final] {best['model_id']} -> promote_final (3연속 통과)", flush=True)
                     
     except Exception as e:
         print(f"❌ 집계 실행 실패: {e}", flush=True)

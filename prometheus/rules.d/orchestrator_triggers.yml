@@ -1,0 +1,59 @@
+# DuRi 오케스트레이터 전환 트리거 알림 규칙
+# "해야 할 때"를 놓치지 않기 위한 최소 알림 세트
+
+groups:
+- name: orchestrator-triggers
+  rules:
+  # 1) 가용성/복구
+  - alert: OrchestrationTrigger_Availability
+    expr: up{job=~"duri-.*"} == 0
+    for: 5m
+    labels: {severity: warning, trigger: availability}
+    annotations:
+      summary: "서비스 다운 5분 지속"
+      description: "DuRi 서비스가 5분 이상 다운 상태. 가용성/복구 트리거 활성화."
+
+  # 2) 부하/자원
+  - alert: OrchestrationTrigger_HighCPU
+    expr: avg by (instance) (rate(node_cpu_seconds_total{mode!="idle"}[5m])) > 0.70
+    for: 15m
+    labels: {severity: warning, trigger: load}
+    annotations:
+      summary: "CPU 70%+ 지속 (5m 이동평균)"
+      description: "CPU 사용률이 70% 이상 15분 지속. 부하/자원 트리거 활성화."
+
+  # 3) 실험 속도/백로그 (있으면)
+  - alert: OrchestrationTrigger_ExperimentBacklog
+    expr: duri_experiment_queue_length > 0
+    for: 30m
+    labels: {severity: info, trigger: experiment}
+    annotations:
+      summary: "실험 대기 큐 발생 (30분 이상)"
+      description: "실험 대기 큐가 30분 이상 지속. 실험 속도 트리거 활성화."
+
+  # 4) 변경량/서비스 수
+  - alert: OrchestrationTrigger_ServiceCount
+    expr: count(up{job=~"duri-.*"}==1) > 8
+    for: 0m
+    labels: {severity: info, trigger: footprint}
+    annotations:
+      summary: "운영 서비스 8개 초과"
+      description: "운영 중인 DuRi 서비스가 8개 초과. 변경량/서비스 수 트리거 활성화."
+
+  # 5) SLO
+  - alert: OrchestrationTrigger_SLO
+    expr: (1 - avg_over_time(up{job=~"duri-.*"}[30d])) > 0.001   # 99.9% 미만
+    for: 0m
+    labels: {severity: warning, trigger: slo}
+    annotations:
+      summary: "30일 가용성 99.9% 미만"
+      description: "30일 평균 가용성이 99.9% 미만. SLO/규제 트리거 활성화."
+
+  # 6) 실험 활성 수 (추가)
+  - alert: OrchestrationTrigger_ExperimentActive
+    expr: duri_experiment_active > 3
+    for: 10m
+    labels: {severity: info, trigger: experiment}
+    annotations:
+      summary: "동시 실험 3개 초과"
+      description: "동시 실행 중인 실험이 3개 초과 10분 지속. 실험 속도 트리거 활성화."

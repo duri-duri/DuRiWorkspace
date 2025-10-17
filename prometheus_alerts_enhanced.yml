@@ -302,3 +302,4 @@ groups:
         summary: "의심스러운 활동 감지: {{ $labels.instance }}"
         description: "{{ $labels.instance }}에서 의심스러운 활동이 감지되었습니다."
         runbook_url: "https://runbook.example/suspicious-activity"
+

@@ -1,0 +1,170 @@
+# Trace v2 최종 알림 룰 (Prometheus AlertManager)
+# 마무리 팁 적용: TraceETLStall, DLQBacklog, ErrDelta 민감도 향상
+
+groups:
+  - name: trace_v2_final_alerts
+    rules:
+      # 1. ExporterDown: dori-dora-exporter 다운
+      - alert: ExporterDown
+        expr: up{job="dori-dora-exporter"} == 0
+        for: 2m
+        labels:
+          severity: critical
+          service: dori-dora-exporter
+        annotations:
+          summary: "dori-dora-exporter is down"
+          description: "dori-dora-exporter has been down for more than 2 minutes"
+
+      # 2. High429Rate: 429 비율이 높음
+      - alert: High429Rate
+        expr: |
+          (
+            rate(duri_push_rate_limited_total[5m]) 
+            / clamp_min(rate(duri_push_requests_total[5m]), 1)
+          ) > 0.2
+        for: 5m
+        labels:
+          severity: warning
+          service: dori-dora-exporter
+        annotations:
+          summary: "High 429 rate detected"
+          description: "429 rate is {{ $value | humanizePercentage }} for source {{ $labels.source }}"
+
+      # 3. TraceETLStall: ETL이 멈춤 (민감도 향상)
+      - alert: TraceETLStall
+        expr: |
+          (
+            increase(trace_span_ingest_total[10m]) == 0 
+            and redis_queue_length{topic="trace:events"} > 0
+          )
+        for: 2m
+        labels:
+          severity: warning
+          service: trace-etl
+        annotations:
+          summary: "Trace ETL is stalled"
+          description: "ETL has not processed events for 10 minutes but queue has {{ $labels.length }} items"
+
+      # 4. DLQBacklog: 사망 편지함 백로그 (민감도 향상)
+      - alert: DLQBacklog
+        expr: redis_queue_length{topic="trace:dead"} > 0
+        for: 2m
+        labels:
+          severity: warning
+          service: trace-etl
+        annotations:
+          summary: "DLQ backlog detected"
+          description: "Dead letter queue has {{ $value }} failed events"
+
+      # 5. ErrDelta: 오류율 증가 (배포 윈도우 ±30m 내 변화 감지)
+      - alert: ErrDelta
+        expr: |
+          (
+            (err_rate_today - err_rate_yesterday) > 0.02
+            and err_rate_today > 0.05
+          )
+        for: 1m
+        labels:
+          severity: warning
+          service: trace_span
+        annotations:
+          summary: "Error rate increased significantly"
+          description: "Error rate increased by {{ $value | humanizePercentage }} for service {{ $labels.service }}"
+
+      # 6. RedisDown: Redis 연결 실패
+      - alert: RedisDown
+        expr: up{job="redis"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: redis
+        annotations:
+          summary: "Redis is down"
+          description: "Redis has been down for more than 1 minute"
+
+      # 7. PostgresDown: Postgres 연결 실패
+      - alert: PostgresDown
+        expr: up{job="postgres"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: postgres
+        annotations:
+          summary: "Postgres is down"
+          description: "Postgres has been down for more than 1 minute"
+
+      # 8. HighMemoryUsage: 메모리 사용량 높음
+      - alert: HighMemoryUsage
+        expr: |
+          (
+            container_memory_usage_bytes{name=~"duriworkspace-.*"} 
+            / container_spec_memory_limit_bytes{name=~"duriworkspace-.*"}
+          ) > 0.8
+        for: 5m
+        labels:
+          severity: warning
+          service: container
+        annotations:
+          summary: "High memory usage"
+          description: "Container {{ $labels.name }} is using {{ $value | humanizePercentage }} of memory"
+
+      # 9. HighCPUUsage: CPU 사용량 높음
+      - alert: HighCPUUsage
+        expr: |
+          (
+            rate(container_cpu_usage_seconds_total{name=~"duriworkspace-.*"}[5m]) 
+            / container_spec_cpu_quota{name=~"duriworkspace-.*"} * 100
+          ) > 80
+        for: 5m
+        labels:
+          severity: warning
+          service: container
+        annotations:
+          summary: "High CPU usage"
+          description: "Container {{ $labels.name }} is using {{ $value | humanizePercentage }} of CPU"
+
+      # 10. DiskSpaceLow: 디스크 공간 부족
+      - alert: DiskSpaceLow
+        expr: |
+          (
+            (node_filesystem_avail_bytes{mountpoint="/"} 
+             / node_filesystem_size_bytes{mountpoint="/"}) * 100
+          ) < 10
+        for: 5m
+        labels:
+          severity: critical
+          service: system
+        annotations:
+          summary: "Disk space is low"
+          description: "Disk space is {{ $value | humanizePercentage }} available"
+
+      # 11. TraceDataQuality: 데이터 품질 문제
+      - alert: TraceDataQuality
+        expr: |
+          (
+            increase(trace_invalid_uuid_total[5m]) > 0
+            or increase(trace_missing_fields_total[5m]) > 0
+            or increase(trace_duplicate_span_total[5m]) > 0
+          )
+        for: 1m
+        labels:
+          severity: warning
+          service: trace-etl
+        annotations:
+          summary: "Trace data quality issues detected"
+          description: "Data quality problems: invalid UUIDs, missing fields, or duplicate spans"
+
+      # 12. SlowETLProcessing: ETL 처리 속도 저하
+      - alert: SlowETLProcessing
+        expr: |
+          (
+            rate(trace_etl_processing_duration_seconds[5m]) > 5
+            and rate(trace_span_ingest_total[5m]) > 0
+          )
+        for: 5m
+        labels:
+          severity: warning
+          service: trace-etl
+        annotations:
+          summary: "ETL processing is slow"
+          description: "ETL processing duration is {{ $value }}s per event"

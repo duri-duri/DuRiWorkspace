@@ -33,3 +33,5 @@ echo "6. 회귀 + 엄격 → 2"
 TH_NDCG=0.99 TH_MRR=0.99 TH_ORACLE=1.1 GUARD_STRICT=1 bash scripts/alerts/threshold_guard.sh .reports/metrics/day66_metrics.tsv 3; echo "exit:$?"
 
 echo "🎉 엣지 케이스 테스트 완료!"
+
+

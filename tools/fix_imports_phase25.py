@@ -27,3 +27,4 @@ for py in tgt.glob("*.py"):
         py.write_text(s2, encoding="utf-8")
         changed += 1
 print(f"fixed files: {changed}")
+

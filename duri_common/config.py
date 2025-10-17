@@ -7,3 +7,4 @@ def load_env(key, default=None, cast=str):
         return cast(v) if v is not None else None
     except Exception:
         return v
+

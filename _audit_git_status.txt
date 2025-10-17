@@ -1,0 +1,294 @@
+=== ./DuRi_Day11_15_starter ===
+mirror	git@gitlab.com:duri-duri/DuRiWorkspace.git (fetch)
+feature/emotion-proxy-stabilize
+ M ../.config/systemd/user/duri-synth.service
+ M ../.config/systemd/user/duri-synth.timer
+ M ../.config/systemd/user/kimshin-backup.service
+ M ../.config/systemd/user/kimshin-backup.timer
+ M ../.config/systemd/user/kimshin-dr-restore.service
+ M ../.config/systemd/user/kimshin-dr-restore.timer
+ M ../.github/workflows/proof-gates.yml
+ M ../.pylintrc
+ M ../CODEMAP.md
+ M ../DAY38_AUTO_CODE_LOOP_IMPROVEMENT_PLAN.md
+ M ../DURI_PROGRESS_ANALYSIS_FRAMEWORK.md
+ M ../Dockerfile.control.optimized
+ M ../Makefile
+ M ../RUNBOOK.md
+ M ../agentops/ai_metrics_exporter.py
+ M ../aggregation_worker.py
+ M ../alert_samples/sample_alert.json
+ M ../alerting/ai_rules.yml
+ M ../blackbox.yml
+ M ../docker-compose.99point.yml
+ M ../docker-compose.network.yml
+ M ../docker-compose.optimized.yml
+ M ../docker-compose.yml
+ M ../docker-compose.yml.backup
+ M ../docker/Dockerfile.base
+ M ../docker/Dockerfile.base.optimized
+ M ../docker/Dockerfile.brain
+ M ../docker/Dockerfile.core
+ M ../docker/Dockerfile.core.optimized
+ M ../docker/Dockerfile.evolution
+ M ../docker/build-optimized.sh
+ M ../docker/performance-monitor.sh
+ M ../docker_archive_allinone.sh
+ M ../docker_diag.sh
+ M ../docs/24h_verification_checklist.md
+ M ../docs/25PHASE_STATUS.md
+ M ../docs/GRAFANA_PANELS.md
+ M ../docs/RUNBOOK_REGRESSION.md
+ M ../docs/complete_family_info_2025-09-22.md
+ M ../docs/day63_definition_of_done.md
+ M ../docs/day68_definition_of_done.md
+ M ../docs/metrics/retention_def.md
+ M ../docs/noise_tuning_guide.md
+ M ../docs/performance-tuning-guide.md
+ M ../docs/runbook.md
+ M ../duri_common/__init__.py
+ M ../duri_common/config.py
+ D ../duri_common/logging.py
+ M ../duri_common/metrics.py
+ m ../duri_control
+ m ../duri_evolution
+ M ../duri_learning_activation.log
+ M ../grafana/dashboards.yaml
+ M ../grafana/dashboards/duri-enhanced-monitoring.json
+ M ../grafana/dashboards/duri-slo-dashboard.json
+ M ../grafana/dashboards/pzta-core.json
+ M ../grafana/day68_quality_overview.json
+ M ../grafana/provisioning/dashboards/provider.yml
+ M ../memory/core/ddl.sql
+ M ../memory/core/manifest.yml
+ M ../memory/core/ops.yml
+ M ../ops/scripts/one_shot_start.sh
+ M ../prometheus/prometheus.yml
+ M ../prometheus/rules/quality_alerts.rules.yml
+ M ../prometheus/rules/quality_burn.rules.yml
+ M ../prometheus/rules/quality_burn_alerts.rules.yml
+ M ../prometheus/rules/quality_recording.rules.yml
+ M ../prometheus/rules/quality_slo.rules.yml
+ M ../prometheus_alerts_enhanced.yml
+ M ../prometheus_rules_enhanced.yml
+ M ../scripts/alert_postmortem.sh
+ M ../scripts/backup_cascade_worker.sh
+ M ../scripts/ci_metrics_report.sh
+ M ../scripts/code_rag_review_day63.sh
+ M ../scripts/duri_git_ship.sh
+ M ../scripts/install_user_systemd.sh
+ M ../scripts/metrics/README.md
+ M ../scripts/metrics/compute_metrics.py
+ M ../scripts/metrics_dashboard_day63.sh
+ M ../scripts/performance-monitor.sh
+ M ../scripts/promotion_gate.py
+ M ../scripts/rag_search_optimized.sh
+ M ../scripts/resume-d02.sh
+ M ../scripts/rules_backup_restore.sh
+ M ../scripts/stop_shadow_user.sh
+ M ../systemd/duri-hygiene.service
+ M ../systemd/duri-hygiene.timer
+ M ../systemd/duri-metrics-day66.service
+ M ../systemd/duri-metrics-day66.timer
+ M ../systemd/duri-metrics.service
+ M ../systemd/duri-metrics.timer
+ M ../tests/phases/test_phase25_guard.py
+ M ../tests/phases/test_phase25_invariance.py
+ M ../tests/phases/test_phase25_smoke.py
+ M ../tests/prom_rules/quality_alerts.TEST.rules.yml
+ M ../tests/prom_rules/quality_alerts_test.rules.yml
+ M ../tests/prom_rules/quality_recording.TEST.rules.yml
+ M ../tests/prom_rules/quality_recording_test.rules.yml
+ M ../tests/prom_rules/simple_alerts.rules.yml
+ M ../tests/prom_rules/simple_alerts.test.yml
+ M ../tests/samples/summary_histogram_constraints.prom
+ M ../tests/samples/summary_histogram_rules.prom
+ M ../tests/samples/type_conflict.prom
+ M ../tests/smoke/test_numbers_dirty.sh
+ M ../tests/smoke/test_summary_histogram_constraints.sh
+ M ../tests/smoke/test_summary_histogram_rules.sh
+ M ../tests/smoke_edge_cases.sh
+ M ../tests/test_ab_srm_aa.py
+ M ../tools/ab_report.py
+ M ../tools/alert_boundary_test.py
+ M ../tools/alert_drill.sh
+ M ../tools/backup_restore_probe.sh
+ M ../tools/build_bundle.py
+ M ../tools/capsule.py
+ M ../tools/check_core.py
+ M ../tools/e2e_capsule_test.py
+ M ../tools/fix_imports_phase25.py
+ M ../tools/hashchain_auto_verify.py
+ M ../tools/incident_runbook.md
+ M ../tools/opa_policies/guard.rego
+ M ../tools/opa_policies/guard_test.rego
+ M ../tools/policy_gate.py
+ M ../tools/pou_day7_extract.py
+ M ../tools/production_hardening.sh
+ M ../tools/replay_capsule.py
+ M ../tools/rollback_guard.sh
+ M ../tools/settings_gate.sh
+ M ../tools/sprt.py
+ M ../tools/thinking.py
+ M ../tools/tuning_experiments.py
+?? ../_audit_git_status.txt
+?? ../_audit_schema.sha256
+?? ../check_srm_and_guard.sh
+?? ../collect_proof.sh
+?? ../docker-compose.ssd.yml
+?? ../night_shadow_minimal.sh
+?? ../ops/audit_all.sh
+?? ../ops/check_evolution.sh
+?? ../run_promote_canary.sh
+?? ../run_rollback.sh
+?? ../sample_10m.txt
+?? ../scripts/check_view_checksum.sh
+?? ../v_feedback_events_clean_ddl.sql
+2025-10-16 19:20:40 +0900 a14014d22 feat: Phase Shift explosion readiness (90%+ probability)
+=== . ===
+mirror	git@gitlab.com:duri-duri/DuRiWorkspace.git (fetch)
+feature/emotion-proxy-stabilize
+ M .config/systemd/user/duri-synth.service
+ M .config/systemd/user/duri-synth.timer
+ M .config/systemd/user/kimshin-backup.service
+ M .config/systemd/user/kimshin-backup.timer
+ M .config/systemd/user/kimshin-dr-restore.service
+ M .config/systemd/user/kimshin-dr-restore.timer
+ M .github/workflows/proof-gates.yml
+ M .pylintrc
+ M CODEMAP.md
+ M DAY38_AUTO_CODE_LOOP_IMPROVEMENT_PLAN.md
+ M DURI_PROGRESS_ANALYSIS_FRAMEWORK.md
+ M Dockerfile.control.optimized
+ M Makefile
+ M RUNBOOK.md
+ M agentops/ai_metrics_exporter.py
+ M aggregation_worker.py
+ M alert_samples/sample_alert.json
+ M alerting/ai_rules.yml
+ M blackbox.yml
+ M docker-compose.99point.yml
+ M docker-compose.network.yml
+ M docker-compose.optimized.yml
+ M docker-compose.yml
+ M docker-compose.yml.backup
+ M docker/Dockerfile.base
+ M docker/Dockerfile.base.optimized
+ M docker/Dockerfile.brain
+ M docker/Dockerfile.core
+ M docker/Dockerfile.core.optimized
+ M docker/Dockerfile.evolution
+ M docker/build-optimized.sh
+ M docker/performance-monitor.sh
+ M docker_archive_allinone.sh
+ M docker_diag.sh
+ M docs/24h_verification_checklist.md
+ M docs/25PHASE_STATUS.md
+ M docs/GRAFANA_PANELS.md
+ M docs/RUNBOOK_REGRESSION.md
+ M docs/complete_family_info_2025-09-22.md
+ M docs/day63_definition_of_done.md
+ M docs/day68_definition_of_done.md
+ M docs/metrics/retention_def.md
+ M docs/noise_tuning_guide.md
+ M docs/performance-tuning-guide.md
+ M docs/runbook.md
+ M duri_common/__init__.py
+ M duri_common/config.py
+ D duri_common/logging.py
+ M duri_common/metrics.py
+ m duri_control
+ m duri_evolution
+ M duri_learning_activation.log
+ M grafana/dashboards.yaml
+ M grafana/dashboards/duri-enhanced-monitoring.json
+ M grafana/dashboards/duri-slo-dashboard.json
+ M grafana/dashboards/pzta-core.json
+ M grafana/day68_quality_overview.json
+ M grafana/provisioning/dashboards/provider.yml
+ M memory/core/ddl.sql
+ M memory/core/manifest.yml
+ M memory/core/ops.yml
+ M ops/scripts/one_shot_start.sh
+ M prometheus/prometheus.yml
+ M prometheus/rules/quality_alerts.rules.yml
+ M prometheus/rules/quality_burn.rules.yml
+ M prometheus/rules/quality_burn_alerts.rules.yml
+ M prometheus/rules/quality_recording.rules.yml
+ M prometheus/rules/quality_slo.rules.yml
+ M prometheus_alerts_enhanced.yml
+ M prometheus_rules_enhanced.yml
+ M scripts/alert_postmortem.sh
+ M scripts/backup_cascade_worker.sh
+ M scripts/ci_metrics_report.sh
+ M scripts/code_rag_review_day63.sh
+ M scripts/duri_git_ship.sh
+ M scripts/install_user_systemd.sh
+ M scripts/metrics/README.md
+ M scripts/metrics/compute_metrics.py
+ M scripts/metrics_dashboard_day63.sh
+ M scripts/performance-monitor.sh
+ M scripts/promotion_gate.py
+ M scripts/rag_search_optimized.sh
+ M scripts/resume-d02.sh
+ M scripts/rules_backup_restore.sh
+ M scripts/stop_shadow_user.sh
+ M systemd/duri-hygiene.service
+ M systemd/duri-hygiene.timer
+ M systemd/duri-metrics-day66.service
+ M systemd/duri-metrics-day66.timer
+ M systemd/duri-metrics.service
+ M systemd/duri-metrics.timer
+ M tests/phases/test_phase25_guard.py
+ M tests/phases/test_phase25_invariance.py
+ M tests/phases/test_phase25_smoke.py
+ M tests/prom_rules/quality_alerts.TEST.rules.yml
+ M tests/prom_rules/quality_alerts_test.rules.yml
+ M tests/prom_rules/quality_recording.TEST.rules.yml
+ M tests/prom_rules/quality_recording_test.rules.yml
+ M tests/prom_rules/simple_alerts.rules.yml
+ M tests/prom_rules/simple_alerts.test.yml
+ M tests/samples/summary_histogram_constraints.prom
+ M tests/samples/summary_histogram_rules.prom
+ M tests/samples/type_conflict.prom
+ M tests/smoke/test_numbers_dirty.sh
+ M tests/smoke/test_summary_histogram_constraints.sh
+ M tests/smoke/test_summary_histogram_rules.sh
+ M tests/smoke_edge_cases.sh
+ M tests/test_ab_srm_aa.py
+ M tools/ab_report.py
+ M tools/alert_boundary_test.py
+ M tools/alert_drill.sh
+ M tools/backup_restore_probe.sh
+ M tools/build_bundle.py
+ M tools/capsule.py
+ M tools/check_core.py
+ M tools/e2e_capsule_test.py
+ M tools/fix_imports_phase25.py
+ M tools/hashchain_auto_verify.py
+ M tools/incident_runbook.md
+ M tools/opa_policies/guard.rego
+ M tools/opa_policies/guard_test.rego
+ M tools/policy_gate.py
+ M tools/pou_day7_extract.py
+ M tools/production_hardening.sh
+ M tools/replay_capsule.py
+ M tools/rollback_guard.sh
+ M tools/settings_gate.sh
+ M tools/sprt.py
+ M tools/thinking.py
+ M tools/tuning_experiments.py
+?? _audit_git_status.txt
+?? _audit_schema.sha256
+?? check_srm_and_guard.sh
+?? collect_proof.sh
+?? docker-compose.ssd.yml
+?? night_shadow_minimal.sh
+?? ops/audit_all.sh
+?? ops/check_evolution.sh
+?? run_promote_canary.sh
+?? run_rollback.sh
+?? sample_10m.txt
+?? scripts/check_view_checksum.sh
+?? v_feedback_events_clean_ddl.sql
+2025-10-16 19:20:40 +0900 a14014d22 feat: Phase Shift explosion readiness (90%+ probability)

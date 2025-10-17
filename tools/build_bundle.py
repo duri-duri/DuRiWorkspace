@@ -62,3 +62,4 @@ open(args.hash, "w").write(root)
 with tarfile.open(args.out, "w:xz") as tf:
     for f in temp_dir.iterdir():
         tf.add(f, arcname=f.name)
+

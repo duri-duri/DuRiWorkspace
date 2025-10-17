@@ -134,3 +134,4 @@ if command -v docker >/dev/null 2>&1; then
 else
   err "[메시지] 'Docker CLI 자체가 없어 보입니다(설치 문제).' OS/패키지 매니저로 설치 요망."
 fi
+

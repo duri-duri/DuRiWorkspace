@@ -43,3 +43,4 @@ RUN pip install --no-cache-dir --no-deps \
 
 # 기본 명령어
 CMD ["bash", "/wait-for-postgres.sh"]
+

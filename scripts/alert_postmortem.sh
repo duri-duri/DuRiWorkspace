@@ -22,3 +22,5 @@ jq -r '
   ] | join("\n")
 ' "$ALERT_JSON" > "docs/$OUT"
 echo "Wrote docs/$OUT"
+
+

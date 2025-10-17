@@ -54,3 +54,4 @@ if __name__ == "__main__":
 
     result = replay_capsule(sys.argv[1])
     print(f"Hash match: {result['hash_match']}")
+

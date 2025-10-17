@@ -5,3 +5,5 @@ Type=oneshot
 WorkingDirectory=%h/DuRiWorkspace
 Environment=UMASK=077
 ExecStart=/usr/bin/bash -lc 'backup/verify_and_restore.sh && echo "[DR] restore OK"'
+
+

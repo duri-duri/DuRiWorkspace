@@ -17,3 +17,5 @@ echo "3. 재부팅 후 자동 시작 설정..."
 loginctl enable-linger "$USER" 2>/dev/null || true
 
 echo "✅ Shadow 루프 종료 완료 (sudo 없이)"
+
+

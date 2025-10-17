@@ -1,16 +1,34 @@
 groups:
-- name: ai-quality
-  rules:
-  - alert: AgentTaskSuccessLow
-    expr: (task_success_total) / max(task_success_total + hallucinations_total, 1) < 0.85
-    for: 10m
-    labels: { severity: page }
-    annotations:
-      summary: "Agent task success rate below 85%"
+  - name: ai-quality
+    rules:
+      - alert: AgentTaskSuccessLow
+        expr: |
+          increase(task_success_total[5m])
+          / clamp_min(increase(task_success_total[5m]) + increase(hallucinations_total[5m]), 1) < 0.85
+        for: 10m
+        labels: { severity: page }
+        annotations: { summary: "Agent task success < 85% (5m)" }
 
-  - alert: AgentHallucinationHigh
-    expr: (hallucinations_total) / max(task_success_total + hallucinations_total, 1) > 0.03
-    for: 10m
-    labels: { severity: page }
-    annotations:
-      summary: "Agent hallucination rate above 3%"
+      - alert: AgentHallucinationHigh
+        expr: |
+          increase(hallucinations_total[5m])
+          / clamp_min(increase(task_success_total[5m]) + increase(hallucinations_total[5m]), 1) > 0.03
+        for: 10m
+        labels: { severity: page }
+        annotations: { summary: "Agent hallucination > 3% (5m)" }
+
+      # p95 지연 알람(히스토그램 필요)
+      - alert: AgentLatencyP95High
+        expr: |
+          histogram_quantile(
+            0.95,
+            sum(rate(agent_request_latency_seconds_bucket[5m])) by (le)
+          ) > 2
+        for: 10m
+        labels: { severity: page }
+        annotations: { summary: "Agent p95 latency > 2s (5m)" }
+
+  - name: ai-recording
+    rules:
+      - record: agent:latency:p95:5m
+        expr: histogram_quantile(0.95, sum(rate(agent_request_latency_seconds_bucket[5m])) by (le))

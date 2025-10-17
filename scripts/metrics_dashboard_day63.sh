@@ -90,3 +90,5 @@ generate_summary
 
 echo
 echo "✅ PR 메트릭 대시보드 완료"
+
+

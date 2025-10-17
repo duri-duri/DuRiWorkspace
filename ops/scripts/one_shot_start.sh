@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
+trap 'echo "[ERROR] line:$LINENO"; exit 1' ERR
 
 ENV_FILE="${ENV_FILE:-$HOME/DuRiWorkspace/ops/.ops.env}"
 [ -f "$ENV_FILE" ] && . "$ENV_FILE"
@@ -9,7 +10,7 @@ COMPOSE_BASE="${COMPOSE_BASE:-docker-compose.yml}"
 COMPOSE_HEALTH="${COMPOSE_HEALTH:-compose.health.overlay.yml}"
 DOCKER_SOCK="${DOCKER_SOCK:-/var/run/docker.sock}"
 WAIT_DOCKER_SECS="${WAIT_DOCKER_SECS:-180}"
-HEALTH_TIMEOUT_SECS="${HEALTH_TIMEOUT_SECS:-150}"
+HEALTH_TIMEOUT_SECS="${HEALTH_TIMEOUT_SECS:-180}"
 
 DOCKER_DAEMON_MODE="${DOCKER_DAEMON_MODE:-auto}"
 PROM_MODE="${PROM_MODE:-standalone}"
@@ -87,7 +88,18 @@ ensure_daemon(){
   have_sock || { echo "⛔ docker still not ready"; exit 2; }
 }
 
-# 0) 데몬 보증
+# 0) Preflight 체크
+log "preflight checks..."
+command -v docker >/dev/null || { echo "❌ docker not found"; exit 3; }
+command -v docker compose >/dev/null || { echo "❌ docker compose not found"; exit 3; }
+
+# 0.1) 베이스 이미지 사전 빌드 (logging 충돌 방지)
+if ! docker image inspect duri-base:latest >/dev/null 2>&1; then
+  log "building base image (logging conflict prevention)..."
+  docker build -f docker/Dockerfile.base -t duri-base:latest .
+fi
+
+# 0.2) 데몬 보증
 ensure_daemon
 
 # 1) 모드 충돌 가드(PROM_MODE=compose면 standalone 잔존 제거)
@@ -107,8 +119,25 @@ if [[ -d "$PROM_DATA_DIR" ]]; then
   }
 fi
 
-# 3) Compose up (+ health overlay)
-log "compose up -d (+health overlay)"
+# 3) 인프라 먼저 기동 (의존성 순서 보장)
+log "starting infrastructure first..."
+docker compose -f "$COMPOSE_BASE" -f "$COMPOSE_HEALTH" up -d duri-postgres duri-redis
+
+# 3.1) 인프라 헬스 대기
+log "waiting for infrastructure health..."
+timeout 90s bash -c '
+  until docker compose ps | grep -E "(duri-postgres|duri-redis).*healthy" -q; do 
+    echo "  waiting for postgres/redis..."; sleep 2; 
+  done
+' || { echo "❌ infrastructure health timeout"; exit 4; }
+
+# 3.2) 서비스 빌드 & 기동 (logging 충돌 방지)
+log "building services (dependency-first)..."
+docker compose -f "$COMPOSE_BASE" -f "$COMPOSE_HEALTH" build duri_core duri_evolution
+docker compose -f "$COMPOSE_BASE" -f "$COMPOSE_HEALTH" up -d duri_core duri_evolution
+
+# 3.3) 나머지 서비스들
+log "starting remaining services..."
 docker compose -f "$COMPOSE_BASE" -f "$COMPOSE_HEALTH" up -d
 
 # 4) Prometheus (standalone 모드면 별도 보증)
@@ -137,11 +166,14 @@ while :; do
   bad=0
   for id in "${CIDS[@]}"; do
     [[ -z "$id" ]] && continue
+    name=$(docker inspect "$id" --format '{{.Name}}' | sed 's/^\/\(.*\)$/\1/')
     st=$(docker inspect "$id" --format '{{.State.Status}}')
     hs=$(docker inspect "$id" --format '{{if .State.Health}}{{.State.Health.Status}}{{else}}no-health{{end}}')
-    [[ "$st" != "running" ]] && { bad=1; break; }
-    [[ "$hs" == "unhealthy" ]] && { bad=1; break; }
-    [[ "$hs" != "no-health" && "$hs" != "healthy" ]] && { bad=1; break; }
+    
+    if [[ "$st" != "running" ]] || [[ "$hs" == "unhealthy" ]] || [[ "$hs" != "no-health" && "$hs" != "healthy" ]]; then
+      echo "  ⚠️  $name: status=$st, health=$hs"
+      bad=1
+    fi
   done
 
   (( bad==0 )) && break
@@ -163,3 +195,4 @@ if [[ "$PROM_MODE" == "standalone" ]] && docker ps -a --format '{{.Names}}' | gr
 fi
 (( rc!=0 )) && echo "⛔ some containers not healthy/running"
 exit "$rc"
+

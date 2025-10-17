@@ -1,0 +1,7 @@
+duri_evolution/DEV_NOTES.md:12:## 🧩 TODO 목록
+duri_evolution/app/main.py:47:        # TODO: DB 저장, 로그 기록, 성능 분석 등 구현
+duri_evolution/app/main.py:70:        # TODO: 정책 업데이트, 모델 개선 등 구현
+duri_core/app/main.py:47:        # TODO: 판단 로직 구현
+duri_core/app/main.py:69:        # TODO: 학습 로직 구현
+duri_brain/DEV_NOTES.md:12:## 🧩 TODO 목록
+duri_core/DEV_NOTES.md:12:## 🧩 TODO 목록

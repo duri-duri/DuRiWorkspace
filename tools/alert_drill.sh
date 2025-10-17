@@ -9,3 +9,4 @@ sleep 10
 curl -sf 'http://localhost:9093/api/v2/alerts?active=true' | jq -e '.[].labels.alertname=="TEST_BURN"' >/dev/null && echo "ALERT-DRILL OK"
 # 정리
 curl -XPOST -H 'Content-Type: application/json' -d '[]' http://localhost:9093/api/v2/alerts
+

@@ -90,3 +90,5 @@ time() - duri_metrics_generated_seconds > 15*60
 - `scope`: `all` (기본값)
 - `k`: `3` (기본값)
 - `git_sha`: `.*` (모든 SHA)
+
+

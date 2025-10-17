@@ -11,6 +11,7 @@ from datetime import datetime, timedelta
 import json
 import logging
 import os
+import psycopg2
 from pathlib import Path
 import sys
 from typing import Any, Dict, List, Optional, Tuple

@@ -1,0 +1,21 @@
+# Prometheus relabel 설정
+metric_relabel_configs:
+  - source_labels: [commit]
+    regex: "([0-9a-f]{7}).*"
+    replacement: "$1"
+    target_label: commit
+  - source_labels: [commit]
+    regex: ".{8,}"
+    action: drop  # 과도한 값이면 드랍(선택)
+  - source_labels: [env]
+    regex: "(staging|prod|dev)"
+    replacement: "$1"
+    target_label: env
+  - source_labels: [service]
+    regex: "(duri_control|duri_brain|duri_evolution|duri_core)"
+    replacement: "$1"
+    target_label: service
+  - source_labels: [source]
+    regex: "(ci|manual|auto)"
+    replacement: "$1"
+    target_label: source

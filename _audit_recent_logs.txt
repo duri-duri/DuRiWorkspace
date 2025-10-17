@@ -1,0 +1,50 @@
+aggregation_worker-1  | ✅ snapshot#1794 prod=187 cand=1828 guard=True:pass: success_pp=0.00, halluc_pp=-1.01, p95_rel=0.539, cost_rel=0.827
+aggregation_worker-1  | [agg:snap] prod=187 cand=1828 succ_pp=0.00 hallu_pp=-1.01 p95_rel=0.539 cost_rel=0.827 -> guard=True
+aggregation_worker-1  | [agg:top5] 1:shadow_proxy@0.000
+aggregation_worker-1  | [agg:top5:detail] shadow_proxy(succ=0.00,hallu=0.00,p95=1.000,cost=1.000)
+aggregation_worker-1  | [agg:decision] shadow_proxy -> promote (samples(model)=117/60 (min 50/50); limits(hallu≤1.0pp, p95≤1.1, cost≤1.1); hallu=neutral(+0.00pp); p95=neutral(1.000); cost=neutral(1.000))
+aggregation_worker-1  | ✅ snapshot#1795 prod=187 cand=1830 guard=True:pass: success_pp=0.00, halluc_pp=-1.01, p95_rel=0.539, cost_rel=0.827
+aggregation_worker-1  | [agg:snap] prod=187 cand=1830 succ_pp=0.00 hallu_pp=-1.01 p95_rel=0.539 cost_rel=0.827 -> guard=True
+aggregation_worker-1  | [agg:top5] 1:shadow_proxy@0.000
+aggregation_worker-1  | [agg:top5:detail] shadow_proxy(succ=0.00,hallu=0.00,p95=1.000,cost=1.000)
+aggregation_worker-1  | [agg:decision] shadow_proxy -> promote (samples(model)=117/60 (min 50/50); limits(hallu≤1.0pp, p95≤1.1, cost≤1.1); hallu=neutral(+0.00pp); p95=neutral(1.000); cost=neutral(1.000))
+aggregation_worker-1  | ✅ snapshot#1796 prod=187 cand=1832 guard=True:pass: success_pp=0.00, halluc_pp=-1.01, p95_rel=0.539, cost_rel=0.827
+aggregation_worker-1  | [agg:snap] prod=187 cand=1832 succ_pp=0.00 hallu_pp=-1.01 p95_rel=0.539 cost_rel=0.827 -> guard=True
+aggregation_worker-1  | [agg:top5] 1:shadow_proxy@0.000
+aggregation_worker-1  | [agg:top5:detail] shadow_proxy(succ=0.00,hallu=0.00,p95=1.000,cost=1.000)
+aggregation_worker-1  | [agg:decision] shadow_proxy -> promote (samples(model)=117/60 (min 50/50); limits(hallu≤1.0pp, p95≤1.1, cost≤1.1); hallu=neutral(+0.00pp); p95=neutral(1.000); cost=neutral(1.000))
+aggregation_worker-1  | ✅ snapshot#1797 prod=187 cand=1834 guard=True:pass: success_pp=0.00, halluc_pp=-1.01, p95_rel=0.539, cost_rel=0.827
+aggregation_worker-1  | [agg:snap] prod=187 cand=1834 succ_pp=0.00 hallu_pp=-1.01 p95_rel=0.539 cost_rel=0.827 -> guard=True
+aggregation_worker-1  | [agg:top5] 1:shadow_proxy@0.000
+aggregation_worker-1  | [agg:top5:detail] shadow_proxy(succ=0.00,hallu=0.00,p95=1.000,cost=1.000)
+aggregation_worker-1  | [agg:decision] shadow_proxy -> promote (samples(model)=117/60 (min 50/50); limits(hallu≤1.0pp, p95≤1.1, cost≤1.1); hallu=neutral(+0.00pp); p95=neutral(1.000); cost=neutral(1.000))
+aggregation_worker-1  | ✅ snapshot#1798 prod=187 cand=1836 guard=True:pass: success_pp=0.00, halluc_pp=-1.02, p95_rel=0.539, cost_rel=0.827
+aggregation_worker-1  | [agg:snap] prod=187 cand=1836 succ_pp=0.00 hallu_pp=-1.02 p95_rel=0.539 cost_rel=0.827 -> guard=True
+aggregation_worker-1  | [agg:top5] 1:shadow_proxy@0.000
+aggregation_worker-1  | [agg:top5:detail] shadow_proxy(succ=0.00,hallu=0.00,p95=1.000,cost=1.000)
+aggregation_worker-1  | [agg:decision] shadow_proxy -> promote (samples(model)=117/60 (min 50/50); limits(hallu≤1.0pp, p95≤1.1, cost≤1.1); hallu=neutral(+0.00pp); p95=neutral(1.000); cost=neutral(1.000))
+aggregation_worker-1  | ✅ snapshot#1799 prod=187 cand=1838 guard=True:pass: success_pp=0.00, halluc_pp=-1.02, p95_rel=0.539, cost_rel=0.827
+aggregation_worker-1  | [agg:snap] prod=187 cand=1838 succ_pp=0.00 hallu_pp=-1.02 p95_rel=0.539 cost_rel=0.827 -> guard=True
+aggregation_worker-1  | [agg:top5] 1:shadow_proxy@0.000
+aggregation_worker-1  | [agg:top5:detail] shadow_proxy(succ=0.00,hallu=0.00,p95=1.000,cost=1.000)
+aggregation_worker-1  | [agg:decision] shadow_proxy -> promote (samples(model)=117/60 (min 50/50); limits(hallu≤1.0pp, p95≤1.1, cost≤1.1); hallu=neutral(+0.00pp); p95=neutral(1.000); cost=neutral(1.000))
+aggregation_worker-1  | ✅ snapshot#1800 prod=187 cand=1840 guard=True:pass: success_pp=0.00, halluc_pp=-1.02, p95_rel=0.539, cost_rel=0.827
+aggregation_worker-1  | [agg:snap] prod=187 cand=1840 succ_pp=0.00 hallu_pp=-1.02 p95_rel=0.539 cost_rel=0.827 -> guard=True
+aggregation_worker-1  | [agg:top5] 1:shadow_proxy@0.000
+aggregation_worker-1  | [agg:top5:detail] shadow_proxy(succ=0.00,hallu=0.00,p95=1.000,cost=1.000)
+aggregation_worker-1  | [agg:decision] shadow_proxy -> promote (samples(model)=117/60 (min 50/50); limits(hallu≤1.0pp, p95≤1.1, cost≤1.1); hallu=neutral(+0.00pp); p95=neutral(1.000); cost=neutral(1.000))
+aggregation_worker-1  | ✅ snapshot#1801 prod=187 cand=1842 guard=True:pass: success_pp=0.00, halluc_pp=-1.02, p95_rel=0.539, cost_rel=0.827
+aggregation_worker-1  | [agg:snap] prod=187 cand=1842 succ_pp=0.00 hallu_pp=-1.02 p95_rel=0.539 cost_rel=0.827 -> guard=True
+aggregation_worker-1  | [agg:top5] 1:shadow_proxy@0.000
+aggregation_worker-1  | [agg:top5:detail] shadow_proxy(succ=0.00,hallu=0.00,p95=1.000,cost=1.000)
+aggregation_worker-1  | [agg:decision] shadow_proxy -> promote (samples(model)=117/60 (min 50/50); limits(hallu≤1.0pp, p95≤1.1, cost≤1.1); hallu=neutral(+0.00pp); p95=neutral(1.000); cost=neutral(1.000))
+aggregation_worker-1  | ✅ snapshot#1802 prod=187 cand=1844 guard=True:pass: success_pp=0.00, halluc_pp=-1.02, p95_rel=0.539, cost_rel=0.827
+aggregation_worker-1  | [agg:snap] prod=187 cand=1844 succ_pp=0.00 hallu_pp=-1.02 p95_rel=0.539 cost_rel=0.827 -> guard=True
+aggregation_worker-1  | [agg:top5] 1:shadow_proxy@0.000
+aggregation_worker-1  | [agg:top5:detail] shadow_proxy(succ=0.00,hallu=0.00,p95=1.000,cost=1.000)
+aggregation_worker-1  | [agg:decision] shadow_proxy -> promote (samples(model)=117/60 (min 50/50); limits(hallu≤1.0pp, p95≤1.1, cost≤1.1); hallu=neutral(+0.00pp); p95=neutral(1.000); cost=neutral(1.000))
+aggregation_worker-1  | ✅ snapshot#1803 prod=187 cand=1846 guard=True:pass: success_pp=0.00, halluc_pp=-1.02, p95_rel=0.539, cost_rel=0.827
+aggregation_worker-1  | [agg:snap] prod=187 cand=1846 succ_pp=0.00 hallu_pp=-1.02 p95_rel=0.539 cost_rel=0.827 -> guard=True
+aggregation_worker-1  | [agg:top5] 1:shadow_proxy@0.000
+aggregation_worker-1  | [agg:top5:detail] shadow_proxy(succ=0.00,hallu=0.00,p95=1.000,cost=1.000)
+aggregation_worker-1  | [agg:decision] shadow_proxy -> promote (samples(model)=117/60 (min 50/50); limits(hallu≤1.0pp, p95≤1.1, cost≤1.1); hallu=neutral(+0.00pp); p95=neutral(1.000); cost=neutral(1.000))

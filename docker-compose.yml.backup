@@ -1,126 +1,214 @@
-
 services:
   duri_core:
+    profiles: ["train"]
     build:
       context: .
       dockerfile: docker/Dockerfile.core
-    container_name: duri_core_container
     ports:
       - "8080:8080"
-    volumes:
-      - ./logs:/app/logs
-      - ./config:/app/config
-      - ./.env:/app/.env
+    env_file:
+      - .env
     environment:
-      - PORT=8080
-      - PYTHONPATH=/app:/app/duri_common
+      - PYTHONPATH=/app:/app/DuRiCore:/app/DuRiCore/DuRiCore:/app/duri_modules
+      - DURI_ROOT=/srv/duri
+      - POSTGRES_HOST=duri-postgres
+      - POSTGRES_USER=duri
+      - POSTGRES_PASSWORD=duri
+      - POSTGRES_DB=duri
+      - POSTGRES_PORT=5432
+    working_dir: /app
+    volumes:
+      - ./srv/duri:/srv/duri
+      - ./:/app
+    healthcheck:
+      test: ["CMD-SHELL", "python - <<'PY'\nimport json,sys,urllib.request as u\ntry:\n  r=u.urlopen('http://localhost:8080/health',timeout=2)\n  j=json.loads(r.read().decode())\n  sys.exit(0 if j.get('status') in {'ok','ready','healthy','neutral'} else 1)\nexcept Exception:\n  sys.exit(1)\nPY"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
     depends_on:
-      - duri-postgres
-      - duri-redis
-    restart: unless-stopped
-    mem_limit: 2g
+      duri-postgres:
+        condition: service_healthy
+      duri-redis:
+        condition: service_started
+    networks:
+      - duri-network
 
   duri_brain:
+    profiles: ["train"]
     build:
       context: .
       dockerfile: docker/Dockerfile.brain
-    container_name: duri_brain_container
-    ports:
-      - "8081:8081"
-    volumes:
-      - ./logs:/app/logs
-      - ./config:/app/config
-      - ./.env:/app/.env
+    expose:
+      - "8081"
+    env_file:
+      - .env
     environment:
-      - PORT=8081
-      - PYTHONPATH=/app:/app/duri_common
+      - PYTHONPATH=/app:/app/DuRiCore:/app/DuRiCore/DuRiCore:/app/duri_modules
+      - DURI_ROOT=/srv/duri
+      - POSTGRES_HOST=duri-postgres
+      - POSTGRES_USER=duri
+      - POSTGRES_PASSWORD=duri
+      - POSTGRES_DB=duri
+      - POSTGRES_PORT=5432
+    working_dir: /app
+    volumes:
+      - ./srv/duri:/srv/duri
+      - ./:/app
+    command: >
+      sh -c "pip install -q uvicorn prometheus-client &&
+             uvicorn duri_brain.app.main:app --host 0.0.0.0 --port 8081"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS -X GET http://localhost:8081/health | grep -q '\"status\":\"ok\"'"]
+      interval: 10s
+      timeout: 3s
+      retries: 30
+      start_period: 30s
     depends_on:
-      - duri-postgres
-      - duri-redis
-    restart: unless-stopped
-    mem_limit: 2g
+      duri-postgres:
+        condition: service_healthy
+      duri-redis:
+        condition: service_started
+    networks:
+      - duri-network
 
   duri_evolution:
+    profiles: ["train"]
     build:
       context: .
       dockerfile: docker/Dockerfile.evolution
-    container_name: duri_evolution_container
     ports:
       - "8082:8082"
-    volumes:
-      - ./logs:/app/logs
-      - ./config:/app/config
-      - ./.env:/app/.env
-    environment:
-      - PORT=8082
-      - PYTHONPATH=/app:/app/duri_core
-    depends_on:
-      - duri-postgres
-      - duri-redis
-    restart: unless-stopped
-    mem_limit: 1g
-
-  duri_control:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.control
-    container_name: duri_control_container
-    ports:
-      - "8083:8083"
-    volumes:
-      - ./logs:/app/logs
-      - ./config:/app/config
-      - ./.env:/app/.env
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./duri_control/wait-for-postgres.sh:/app/wait-for-postgres.sh:ro
-    environment:
-      - PORT=8083
-      - PYTHONPATH=/app:/app/duri_common
     env_file:
       - .env
+    environment:
+      - PYTHONPATH=/app:/app/DuRiCore:/app/DuRiCore/DuRiCore:/app/duri_modules
+      - DURI_ROOT=/srv/duri
+      - POSTGRES_HOST=duri-postgres
+      - POSTGRES_USER=duri
+      - POSTGRES_PASSWORD=duri
+      - POSTGRES_DB=duri
+      - POSTGRES_PORT=5432
+    working_dir: /app
+    volumes:
+      - ./srv/duri:/srv/duri
+      - ./:/app
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8082/health | grep -q '\"status\":\"ok\"'"]
+      interval: 5s
+      timeout: 2s
+      retries: 10
+      start_period: 10s
     depends_on:
-      - duri-postgres
-      - duri-redis
-    command: ["bash", "/app/wait-for-postgres.sh"]
+      duri-postgres:
+        condition: service_healthy
+      duri-redis:
+        condition: service_started
+    networks:
+      - duri-network
+
+  duri_control:
+    # Dockerfile.control.optimized의 CMD 사용(커맨드 땜질 제거)
+    build:
+      context: .
+      dockerfile: Dockerfile.control.optimized
+    ports:
+      - "8083:8083"
+    env_file:
+      - .env
+    environment:
+      - PYTHONPATH=/app:/app/DuRiCore:/app/DuRiCore/DuRiCore:/app/duri_modules
+      - CANARY_MODEL=shadow_proxy
+      - CANARY_BASELINE=prod_default
+      - CANARY_RATIO=0.10
+      - DURI_ROOT=/srv/duri
+      - POSTGRES_HOST=duri-postgres
+      - POSTGRES_USER=duri
+      - POSTGRES_PASSWORD=duri
+      - POSTGRES_DB=duri
+      - POSTGRES_PORT=5432
+      - SHADOW_ENABLED=true
+      - DURI_BRAIN_URL=http://duri_brain:8081
+      - POSTGRES_DSN=postgresql://duri:duri@duri-postgres:5432/duri
+    working_dir: /app
+    volumes:
+      - ./srv/duri:/srv/duri
+      - ./:/app
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8083/health"]
+      interval: 15s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    depends_on:
+      duri-postgres:
+        condition: service_healthy
+      duri-redis:
+        condition: service_started
+    networks:
+      - duri-network
+
+  aggregation_worker:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.base
+    command: python3 -u /app/aggregation_worker.py
+    working_dir: /app
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_HOST=duri-postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=duri
+      - POSTGRES_USER=duri
+      - POSTGRES_PASSWORD=duri
+      - AGG_INTERVAL_SEC=30
+      - MIN_REQUIRED_SAMPLES=50
+      - AGG_SRC_VIEW=v_feedback_events_clean
+    volumes:
+      - ./:/app
+    depends_on:
+      duri-postgres:
+        condition: service_healthy
     restart: unless-stopped
+    networks:
+      - duri-network
 
   duri-postgres:
     image: postgres:14
-    container_name: duri-postgres
-    restart: always
     environment:
+      POSTGRES_DB: duri
       POSTGRES_USER: duri
       POSTGRES_PASSWORD: duri
-      POSTGRES_DB: duri
     ports:
       - "5432:5432"
     volumes:
-      - duri_postgres_data:/var/lib/postgresql/data
-    mem_limit: 1g
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U duri"]
+      interval: 5s
+      timeout: 2s
+      retries: 10
+      start_period: 10s
+    networks:
+      - duri-network
 
   duri-redis:
     image: redis:7-alpine
-    container_name: duri-redis
-    restart: always
     ports:
       - "6379:6379"
-    volumes:
-      - duri_redis_data:/data
-    mem_limit: 512m
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 2s
+      retries: 10
+      start_period: 10s
+    networks:
+      - duri-network
 
 volumes:
-  duri_postgres_data:
-  duri_redis_data:
+  postgres_data:
 
 networks:
-  default:
+  duri-network:
     driver: bridge
-
-# 프로덕션-그레이드 헬스체크 설정
-x-healthcheck: &healthcheck
-  test: ["CMD-SHELL", "curl -fsS http://localhost:$${PORT}/health | grep -q '\"status\":\"ok\"'"]
-  interval: 5s
-  timeout: 2s
-  retries: 10
-  start_period: 10s
-

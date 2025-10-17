@@ -39,3 +39,5 @@ promtool test rules tests/quality_rules_test.yml
 make prom-dup-guard
 make alert-labels-guard
 ```
+
+

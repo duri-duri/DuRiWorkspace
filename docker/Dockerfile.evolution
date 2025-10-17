@@ -1,13 +1,22 @@
 FROM duri-base:latest
-
 WORKDIR /app
 
-# Evolution 서비스 파일 복사
+# 의존성
+COPY duri_evolution/requirements.txt ./requirements.txt
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends curl ca-certificates \
+ && rm -rf /var/lib/apt/lists/* \
+ && pip install --no-cache-dir -r requirements.txt
+
+# 앱 복사
 COPY duri_evolution/ /app/duri_evolution/
 
-# Evolution 서비스 의존성 설치
-COPY duri_evolution/requirements.txt ./requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+# 포트 노출
+EXPOSE 8082
 
-# Evolution 서비스 실행
-CMD ["python", "duri_evolution/run.py"]
+# 내부 헬스체크: curl /health
+HEALTHCHECK --interval=10s --timeout=3s --retries=3 --start-period=10s \
+  CMD curl -fsS http://localhost:8082/health || exit 1
+
+# 🔧 ASGI 진입점 경로를 패키지 기준으로 명시
+CMD ["uvicorn", "duri_evolution.api:app", "--host", "0.0.0.0", "--port", "8082"]

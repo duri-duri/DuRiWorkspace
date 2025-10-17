@@ -1,0 +1,17 @@
+FROM python:3.10-slim
+
+# 의존성 설치
+RUN pip install --no-cache-dir prometheus_client redis
+
+# 애플리케이션 복사
+COPY dora_prometheus_metrics.py /app/dora_prometheus_metrics.py
+COPY tools/ /app/tools/
+
+WORKDIR /app
+
+# 헬스체크
+HEALTHCHECK --interval=15s --timeout=3s --retries=3 \
+  CMD curl -fsS http://localhost:8000/health || exit 1
+
+# 서버 시작
+CMD ["python", "dora_prometheus_metrics.py"]
