@@ -3,12 +3,7 @@ global:
   evaluation_interval: 15s
 
 rule_files:
-  - /etc/prometheus/rules/prometheus_rules.yml
-  - /etc/prometheus/rules/prometheus_rules_enhanced.yml
-  - /etc/prometheus/rules/prometheus_alerts_enhanced.yml
-  - /etc/prometheus/rules/quality_recording.rules.yml
-  - /etc/prometheus/rules/quality_slo.rules.yml
-  - /etc/prometheus/rules/quality_alerts.rules.yml
+  - /etc/prometheus/rules.d/*.yml
 
 alerting:
   alertmanagers:
@@ -52,5 +47,8 @@ scrape_configs:
         target_label: instance
       - target_label: __address__
         replacement: blackbox_exporter:9115
+
+
+
 
 

@@ -17,7 +17,7 @@ PROM_MODE="${PROM_MODE:-standalone}"
 PROM_NAME="${PROM_NAME:-prometheus}"
 PROM_PORT="${PROM_PORT:-9090}"
 PROM_CONFIG="${PROM_CONFIG:-$PROJECT_DIR/prometheus.yml}"
-PROM_RULES="${PROM_RULES:-$PROJECT_DIR/prometheus_rules.yml}"
+PROM_RULES="${PROM_RULES:-$PROJECT_DIR/rules.d}"
 
 LOG_DIR="$PROJECT_DIR/var/logs"; mkdir -p "$LOG_DIR"
 log(){ echo "[$(date '+%F %T')] $*"; }
@@ -162,7 +162,7 @@ if [[ "$PROM_MODE" == "standalone" ]]; then
       --health-cmd="wget -qO- http://localhost:$PROM_PORT/-/ready >/dev/null 2>&1 || exit 1" \
       --health-interval=15s --health-timeout=5s --health-retries=5 --health-start-period=45s \
       -v "$PROM_CONFIG":/etc/prometheus/prometheus.yml:ro \
-      -v "$PROM_RULES":/etc/prometheus/rules/prometheus_rules.yml:ro \
+      -v "$PROM_RULES":/etc/prometheus/rules.d:ro \
       prom/prometheus >/dev/null
   else
     docker start "$PROM_NAME" >/dev/null || true
