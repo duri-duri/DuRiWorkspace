@@ -93,6 +93,9 @@ log "preflight checks..."
 command -v docker >/dev/null || { echo "❌ docker not found"; exit 3; }
 command -v docker compose >/dev/null || { echo "❌ docker compose not found"; exit 3; }
 
+# 0.0) 로그 소음 줄이기 (마무리 하드닝)
+export COMPOSE_PROGRESS=quiet
+
 # 0.1) 베이스 이미지 사전 빌드 (logging 충돌 방지)
 if ! docker image inspect duri-base:latest >/dev/null 2>&1; then
   log "building base image (logging conflict prevention)..."
@@ -119,6 +122,17 @@ if [[ -d "$PROM_DATA_DIR" ]]; then
   }
 fi
 
+# 2.1) Grafana 권한 설정 (권한 문제 방지)
+GRAFANA_DATA_DIR="$PROJECT_DIR/grafana/data"
+if [[ -d "$GRAFANA_DATA_DIR" ]]; then
+  log "fix grafana data directory permissions"
+  # 컨테이너 기반 권한 수정 (sudo 불필요)
+  docker run --rm -v "$GRAFANA_DATA_DIR:/var/lib/grafana" alpine \
+    sh -c 'chown -R 472:472 /var/lib/grafana && find /var/lib/grafana -type d -exec chmod 755 {} \; && find /var/lib/grafana -type f -exec chmod 644 {} \;' 2>/dev/null || {
+    log "warning: failed to fix grafana permissions"
+  }
+fi
+
 # 3) 인프라 먼저 기동 (의존성 순서 보장)
 log "starting infrastructure first..."
 docker compose -f "$COMPOSE_BASE" -f "$COMPOSE_HEALTH" up -d duri-postgres duri-redis
@@ -138,7 +152,7 @@ docker compose -f "$COMPOSE_BASE" -f "$COMPOSE_HEALTH" up -d duri_core duri_evol
 
 # 3.3) 나머지 서비스들
 log "starting remaining services..."
-docker compose -f "$COMPOSE_BASE" -f "$COMPOSE_HEALTH" up -d
+docker compose -f "$COMPOSE_BASE" -f "$COMPOSE_HEALTH" up -d --remove-orphans
 
 # 4) Prometheus (standalone 모드면 별도 보증)
 if [[ "$PROM_MODE" == "standalone" ]]; then
@@ -185,6 +199,18 @@ done
 echo "=== Container Summary ==="
 docker compose -f "$COMPOSE_BASE" -f "$COMPOSE_HEALTH" ps --format "table {{.Name}}\t{{.State}}\t{{.Publishers}}"
 [[ "$PROM_MODE" == "standalone" ]] && docker ps --filter "name=^${PROM_NAME}$" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" || true
+
+# 6.1) 빠른 검증 실행 (ChatGPT 제안사항)
+log "running quick verification..."
+if [[ -f "$PROJECT_DIR/ops/scripts/quick_verify.sh" ]]; then
+  bash "$PROJECT_DIR/ops/scripts/quick_verify.sh" && {
+    log "✅ 모든 시스템 검증 통과"
+  } || {
+    log "⚠️ 일부 검증 실패 (시스템은 정상 작동 중일 수 있음)"
+  }
+else
+  log "⚠️ quick_verify.sh 없음 - 기본 헬스체크만 실행"
+fi
 
 rc=0
 while read -r name state; do [[ "$state" =~ unhealthy|Exited|dead|paused ]] && rc=4; done \

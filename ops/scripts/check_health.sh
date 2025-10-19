@@ -51,16 +51,38 @@ if docker ps --format '{{.Names}}' | grep -qx "$PROM_NAME"; then
   echo "* Prometheus READY: $ready"
 fi
 
-# --- Prometheus targets gate ----------------------------------------------
+# --- Prometheus targets gate (타이밍 보정) ----------------------------------------------
 PROM_URL="${PROM_URL:-http://localhost:9090}"
-# 기대 타깃 (원래 배열 유지)
-EXPECTED_TARGETS=(redis postgres node cadvisor blackbox self)
+# 기대 타깃 (현재 설정에 맞게 업데이트)
+EXPECTED_TARGETS=(prometheus node redis postgres cadvisor blackbox dori-dora-exporter)
 
 # --- 유니크 처리
 mapfile -t _uniq_targets < <(printf "%s\n" "${EXPECTED_TARGETS[@]}" | awk '!(a[$0]++)')
 
 echo "--- Prometheus targets ---"
 down=0; missing=0
+
+# Prometheus 타겟 준비 대기 (최대 2분)
+echo "• Waiting for Prometheus targets to be ready..."
+for i in {1..30}; do
+  if command -v jq >/dev/null 2>&1; then
+    up_count=$(curl -fsS "$PROM_URL/api/v1/targets?state=any" 2>/dev/null | jq '[.data.activeTargets[] | select(.health=="up")] | length' 2>/dev/null || echo "0")
+  else
+    up_count=$(curl -fsS "$PROM_URL/api/v1/targets?state=any" 2>/dev/null | grep -o '"health":"up"' | wc -l || echo "0")
+  fi
+  
+  if [ "$up_count" -ge "${#_uniq_targets[@]}" ]; then
+    echo "✓ Prometheus targets ready: $up_count/${#_uniq_targets[@]}"
+    break
+  fi
+  
+  if [ "$i" -eq 30 ]; then
+    echo "⚠️ Prometheus targets not fully ready after 2 minutes ($up_count/${#_uniq_targets[@]})"
+  else
+    echo "• Waiting... ($up_count/${#_uniq_targets[@]} ready)"
+    sleep 4
+  fi
+done
 
 if command -v jq >/dev/null 2>&1; then
   json="$(curl -fsS "$PROM_URL/api/v1/targets?state=active" || true)"

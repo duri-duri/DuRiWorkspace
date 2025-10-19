@@ -1,0 +1,6 @@
+groups:
+- name: ops_basics
+  interval: 30s
+  rules:
+  - record: job:up:count
+    expr: count(up) by (job)
