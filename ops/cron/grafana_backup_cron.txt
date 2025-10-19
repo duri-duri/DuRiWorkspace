@@ -1,0 +1,15 @@
+# Grafana 백업 크론 설정
+# 매일 새벽 2시에 Grafana DB 백업 실행
+
+# 크론 등록 명령어:
+# crontab -e
+# 0 2 * * * /home/duri/DuRiWorkspace/ops/scripts/backup_grafana.sh >> /home/duri/DuRiWorkspace/var/logs/grafana_backup.log 2>&1
+
+# 또는 systemd 타이머 사용:
+# sudo cp grafana_backup.service /etc/systemd/system/
+# sudo cp grafana_backup.timer /etc/systemd/system/
+# sudo systemctl enable grafana_backup.timer
+# sudo systemctl start grafana_backup.timer
+
+# 백업 파일 위치: /home/duri/DuRiWorkspace/backups/grafana/
+# 자동 정리: 7일 이상 파일 삭제

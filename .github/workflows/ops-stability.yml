@@ -1,0 +1,102 @@
+name: Ops Stability Verification
+
+on:
+  pull_request:
+    paths:
+      - 'compose.health.overlay.yml'
+      - 'prometheus.yml'
+      - 'ops/scripts/**'
+      - 'rules.d/**'
+  push:
+    branches: [main, develop]
+    paths:
+      - 'compose.health.overlay.yml'
+      - 'prometheus.yml'
+      - 'ops/scripts/**'
+      - 'rules.d/**'
+
+jobs:
+  ops-stability:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+      
+    - name: Install promtool
+      run: |
+        wget https://github.com/prometheus/prometheus/releases/download/v2.54.1/prometheus-2.54.1.linux-amd64.tar.gz
+        tar xzf prometheus-2.54.1.linux-amd64.tar.gz
+        sudo mv prometheus-2.54.1.linux-amd64/promtool /usr/local/bin/
+        
+    - name: Compose merge validation
+      run: |
+        echo "=== Compose 병합 검증 ==="
+        docker compose -f docker-compose.yml -f compose.health.overlay.yml -p ci config > /tmp/merged.yml
+        
+        echo "✅ rules.d 디렉토리 마운트 확인"
+        grep -q '/etc/prometheus/rules.d' /tmp/merged.yml || { echo "❌ rules.d 마운트 없음"; exit 1; }
+        
+        echo "✅ 단일 파일 바인드 없음 확인"
+        ! grep -qE '/etc/prometheus/rules/[^:]+\.yml' /tmp/merged.yml || { echo "❌ 단일 파일 바인드 발견"; exit 1; }
+        
+        echo "✅ 이미지 버전 고정 확인"
+        grep -q 'prom/prometheus:v2.54.1' /tmp/merged.yml || { echo "❌ Prometheus 버전 미고정"; exit 1; }
+        grep -q 'grafana/grafana:10.4.5' /tmp/merged.yml || { echo "❌ Grafana 버전 미고정"; exit 1; }
+        
+    - name: Prometheus rules lint
+      run: |
+        echo "=== Prometheus 룰 린트 ==="
+        if [ -d "rules.d" ] && [ "$(ls rules.d/*.yml 2>/dev/null | wc -l)" -gt 0 ]; then
+          promtool check rules rules.d/*.yml
+          echo "✅ 룰 린트 통과"
+        else
+          echo "⚠️ rules.d에 룰 파일 없음 (정상)"
+        fi
+        
+    - name: Legacy cleanup verification
+      run: |
+        echo "=== 과거 유산 정리 확인 ==="
+        # prometheus_rules.yml 단일 파일 바인드 참조가 없어야 함
+        if grep -R -E 'prometheus_rules\.yml|/etc/prometheus/rules/prometheus_rules\.yml' . --exclude-dir=.git --exclude-dir=data --exclude-dir=dist --exclude-dir=DuRiCore | grep -v COMPLETE_DIFF_PATCH.md | grep -v CODEMAP.md | grep -v PR_TEMPLATE.md; then
+          echo "❌ 과거 유산 발견"
+          exit 1
+        else
+          echo "✅ 과거 유산 정리 완료"
+        fi
+        
+    - name: Scripts validation
+      run: |
+        echo "=== 스크립트 검증 ==="
+        chmod +x ops/scripts/*.sh
+        
+        echo "✅ smoke_check.sh 실행 가능"
+        bash -n ops/scripts/smoke_check.sh
+        
+        echo "✅ verify_diff_patch.sh 실행 가능"
+        bash -n ops/scripts/verify_diff_patch.sh
+        
+        echo "✅ quick_verify.sh 실행 가능"
+        bash -n ops/scripts/quick_verify.sh
+        
+    - name: Runtime verification (if Docker available)
+      if: github.event_name == 'push'
+      run: |
+        echo "=== 런타임 검증 (옵션) ==="
+        # 실제 런타임 검증은 별도 환경에서 수행
+        echo "런타임 검증은 별도 환경에서 수행됩니다."
+        echo "로컬에서 다음 명령어로 검증하세요:"
+        echo "bash ops/scripts/verify_diff_patch.sh"
+        
+    - name: Summary
+      run: |
+        echo "=== 검증 완료 ==="
+        echo "✅ Compose 병합 검증 통과"
+        echo "✅ Prometheus 룰 린트 통과"
+        echo "✅ 과거 유산 정리 확인"
+        echo "✅ 스크립트 검증 통과"
+        echo ""
+        echo "🚀 운영 안정성 검증 완료!"

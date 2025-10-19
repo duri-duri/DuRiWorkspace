@@ -1,0 +1,14 @@
+[Unit]
+Description=Grafana Database Backup
+Wants=grafana_backup.timer
+
+[Service]
+Type=oneshot
+User=duri
+WorkingDirectory=/home/duri/DuRiWorkspace
+ExecStart=/home/duri/DuRiWorkspace/ops/scripts/backup_grafana.sh
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

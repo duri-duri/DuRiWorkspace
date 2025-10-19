@@ -1,0 +1,25 @@
+# Prometheus Rules Directory
+# 
+# 이 디렉토리는 Prometheus 규칙 파일들을 저장합니다.
+# 모든 .yml 파일이 자동으로 로드됩니다.
+#
+# 파일 명명 규칙:
+# - 00_README.yml.example (이 파일)
+# - 01_recording_rules.yml (레코딩 룰)
+# - 02_alerting_rules.yml (알림 룰)
+# - 99_custom_rules.yml (사용자 정의 룰)
+#
+# 새 룰 추가 후 무중단 리로드:
+# curl -sf -XPOST http://localhost:9090/-/reload
+#
+# 룰 검증:
+# promtool check rules rules.d/*.yml
+
+groups:
+- name: example_recording_rules
+  interval: 30s
+  rules:
+  - record: example:metric:rate
+    expr: rate(example_metric_total[5m])
+    labels:
+      service: "example"

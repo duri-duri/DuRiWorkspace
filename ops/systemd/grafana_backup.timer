@@ -1,0 +1,10 @@
+[Unit]
+Description=Run Grafana backup daily
+Requires=grafana_backup.service
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+
+[Install]
+WantedBy=timers.target
