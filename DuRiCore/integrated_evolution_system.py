@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from pathlib import Path
 # -*- coding: utf-8 -*-
 """
 DuRi Integrated Evolution System - Enhanced Version with Performance Optimization
@@ -2421,6 +2422,15 @@ def optimize_performance():
             return {"error": str(e)}
 
     async def cleanup(self):
+        pass
+    async def _get_optimal_node(self) -> str:
+        """벤치마크에서 참조하는 임시 스텁."""
+        try:
+            import socket
+            return socket.gethostname()
+        except Exception:
+            return "local"
+
         """리소스 정리"""
         try:
             self.executor.shutdown(wait=True)
