@@ -1,0 +1,18 @@
+{
+  "success": true,
+  "session_id": "evo_1760953729",
+  "tracks_executed": [
+    "self_rewrite",
+    "genetic",
+    "meta"
+  ],
+  "results": {
+    "self_rewrite": {
+      "improvements_made": [
+        "./.venv/lib/python3.10/site-packages/numpy/_core/tests/test_multiarray.py: 구조 재구성을 통한 유지보수성 향상",
+        "./.venv/lib/python3.10/site-packages/numpy/ma/core.py: 구조 재구성을 통한 유지보수성 향상",
+        "./.venv/lib/python3.10/site-packages/redis/commands/core.py: 구조 재구성을 통한 유지보수성 향상"
+      ],
+      "modules_processed": 3
+    },
+    "genetic": 
