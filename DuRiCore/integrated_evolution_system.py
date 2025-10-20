@@ -1,3 +1,6 @@
+from typing import Tuple
+from typing import List
+from typing import Dict
 #!/usr/bin/env python3
 from pathlib import Path
 # -*- coding: utf-8 -*-
@@ -2423,7 +2426,47 @@ def optimize_performance():
 
     async def cleanup(self):
         pass
-    async def _get_optimal_node(self) -> str:
+
+    async def run_once(self, tracks: tuple[str, ...] = ("self_rewrite", "genetic", "meta")) -> Dict[str, Any]:
+        """통합 진화 시스템을 한 번 실행"""
+        results: Dict[str, Any] = {}
+        try:
+            logger.info(f"🚀 통합 진화 시스템 실행 시작: tracks={tracks}")
+
+            session = EvolutionSession(
+                session_id=f"evo_{int(time.time())}",
+                stimulus_event="manual_run_once",
+                start_time=time.time()
+            )
+
+            for track in tracks:
+                if track == "self_rewrite":
+                    result = await self._execute_self_rewriting(session)
+                    results["self_rewrite"] = result
+                elif track == "genetic":
+                    result = await self._execute_genetic_evolution(session)
+                    results["genetic"] = result
+                elif track == "meta":
+                    result = await self._execute_meta_coding(session)
+                    results["meta"] = result
+
+            summary = {
+                "success": True,
+                "session_id": session.session_id,
+                "tracks_executed": tracks,
+                "results": results,
+                "runtime_ms": (time.time() - session.start_time) * 1000,
+                "timestamp": time.time(),
+            }
+            await self._save_evolution_log(summary)
+            logger.info(f"✅ 통합 진화 시스템 실행 완료: {summary['runtime_ms']:.2f}ms")
+            return summary
+
+        except Exception as e:
+            logger.error(f"❌ 통합 진화 시스템 실행 실패: {e}")
+            return {"success": False, "error": str(e), "timestamp": time.time()}
+        pass
+    async def _get_optimal_node(self, *args, node: str | None = None, **kwargs) -> str:
         """벤치마크에서 참조하는 임시 스텁."""
         try:
             import socket
