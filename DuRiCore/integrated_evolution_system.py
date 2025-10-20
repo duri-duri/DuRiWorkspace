@@ -2460,6 +2460,23 @@ def optimize_performance():
     # ---------------------------
     # Evolution log saver
     # ---------------------------
+    
+def _json_default(o):
+    try:
+        import dataclasses, enum, datetime
+        if dataclasses.is_dataclass(o):
+            return dataclasses.asdict(o)
+        if isinstance(o, enum.Enum):
+            return o.value
+        if isinstance(o, (set, frozenset)):
+            return list(o)
+        if isinstance(o, (datetime.datetime, datetime.date, datetime.time)):
+            return o.isoformat()
+        # 마지막 보루: 문자열화
+        return str(o)
+    except Exception:
+        return str(o)
+
     async def _save_evolution_log(self, summary: Dict[str, Any]) -> None:
         """DuRiCore/artifacts/evolution_log.json에 요약 저장."""
         try:
@@ -2467,7 +2484,7 @@ def optimize_performance():
             artifacts.mkdir(parents=True, exist_ok=True)
             log_path = artifacts / "evolution_log.json"
             with log_path.open("w", encoding="utf-8") as f:
-                json.dump(summary, f, indent=2, ensure_ascii=False)
+                json.dump(summary, f, indent=2, ensure_ascii=False, default=_json_default)
             logger.info(f"📝 진화 로그 저장: {log_path}")
         except Exception as e:
             logger.warning(f"⚠️ 로그 저장 실패: {e}")
@@ -2536,7 +2553,7 @@ def optimize_performance():
             return node or socket.gethostname()
         except Exception:
             return node or "local"
-    async def _get_optimal_node(self) -> str:
+    async def _get_optimal_node(self, *args, node: str | None = None, **kwargs) -> str:
         """벤치마크에서 참조하는 임시 스텁."""
         try:
             import socket
