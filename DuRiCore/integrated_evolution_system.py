@@ -2423,6 +2423,119 @@ def optimize_performance():
 
     async def cleanup(self):
         pass
+
+
+    # ---------------------------
+    # Lazy component initializer
+    # ---------------------------
+    async def _ensure_components(self) -> None:
+        """테스트/단독 실행 시 누락될 수 있는 핵심 컴포넌트를 느긋하게 초기화."""
+        try:
+            if not hasattr(self, "self_rewriter") or self.self_rewriter is None:
+                try:
+                    from self_rewriting_module import SelfRewritingModule
+                    self.self_rewriter = SelfRewritingModule()
+                except Exception as e:
+                    logger.error(f"SelfRewritingModule 초기화 실패: {e}")
+                    self.self_rewriter = None
+
+            if not hasattr(self, "genetic_engine") or self.genetic_engine is None:
+                try:
+                    from genetic_evolution_engine import GeneticEvolutionEngine
+                    self.genetic_engine = GeneticEvolutionEngine()
+                except Exception as e:
+                    logger.error(f"GeneticEvolutionEngine 초기화 실패: {e}")
+                    self.genetic_engine = None
+
+            if not hasattr(self, "meta_coder") or self.meta_coder is None:
+                try:
+                    from meta_coder import MetaCoder
+                    self.meta_coder = MetaCoder()
+                except Exception as e:
+                    logger.error(f"MetaCoder 초기화 실패: {e}")
+                    self.meta_coder = None
+        except Exception as e:
+            logger.error(f"컴포넌트 lazy init 실패: {e}")
+
+    # ---------------------------
+    # Evolution log saver
+    # ---------------------------
+    async def _save_evolution_log(self, summary: Dict[str, Any]) -> None:
+        """DuRiCore/artifacts/evolution_log.json에 요약 저장."""
+        try:
+            artifacts = Path(__file__).parent / "artifacts"
+            artifacts.mkdir(parents=True, exist_ok=True)
+            log_path = artifacts / "evolution_log.json"
+            with log_path.open("w", encoding="utf-8") as f:
+                json.dump(summary, f, indent=2, ensure_ascii=False)
+            logger.info(f"📝 진화 로그 저장: {log_path}")
+        except Exception as e:
+            logger.warning(f"⚠️ 로그 저장 실패: {e}")
+
+    # ---------------------------
+    # Public one-shot API
+    # ---------------------------
+    async def run_once(self, tracks: Tuple[str, ...] = ("self_rewrite", "genetic", "meta")) -> Dict[str, Any]:
+        """통합 진화 시스템을 한 번 실행."""
+        import time
+        results: Dict[str, Any] = {}
+        try:
+            logger.info(f"🚀 통합 진화 시스템 실행 시작: tracks={tracks}")
+            await self._ensure_components()
+
+            # EvolutionSession 생성 (현재 시그니처에 맞춰 stimulus_event 제공)
+            session = EvolutionSession(
+                session_id=f"evo_{int(time.time())}",
+                stimulus_event="manual_run_once",
+                start_time=time.time(),
+            )
+
+            # 각 트랙 실행 (존재 가드)
+            for track in tracks:
+                if track == "self_rewrite":
+                    if getattr(self, "self_rewriter", None) is None:
+                        logger.error("Self-Rewriting 컴포넌트 없음: 스킵")
+                        results["self_rewrite"] = {"skipped": True, "reason": "self_rewriter_missing"}
+                    else:
+                        results["self_rewrite"] = await self._execute_self_rewriting(session)
+                elif track == "genetic":
+                    if getattr(self, "genetic_engine", None) is None:
+                        logger.error("Genetic Engine 없음: 스킵")
+                        results["genetic"] = {"skipped": True, "reason": "genetic_engine_missing"}
+                    else:
+                        results["genetic"] = await self._execute_genetic_evolution(session)
+                elif track == "meta":
+                    if getattr(self, "meta_coder", None) is None:
+                        logger.error("Meta Coder 없음: 스킵")
+                        results["meta"] = {"skipped": True, "reason": "meta_coder_missing"}
+                    else:
+                        results["meta"] = await self._execute_meta_coding(session)
+
+            summary = {
+                "success": True,
+                "session_id": session.session_id,
+                "tracks_executed": tracks,
+                "results": results,
+                "runtime_ms": (time.time() - session.start_time) * 1000 if hasattr(session, "start_time") else None,
+                "timestamp": time.time(),
+            }
+            await self._save_evolution_log(summary)
+            logger.info(f"✅ 통합 진화 시스템 실행 완료: {summary.get('runtime_ms')}")
+            return summary
+        except Exception as e:
+            logger.error(f"❌ 통합 진화 시스템 실행 실패: {e}")
+            return {"success": False, "error": str(e)}
+
+    # ---------------------------
+    # Bench helper: tolerate extra args
+    # ---------------------------
+    async def _get_optimal_node(self, *args, node: str | None = None, **kwargs) -> str:
+        """벤치마크 호출부 호환을 위한 시그니처 완화."""
+        try:
+            import socket
+            return node or socket.gethostname()
+        except Exception:
+            return node or "local"
     async def _get_optimal_node(self) -> str:
         """벤치마크에서 참조하는 임시 스텁."""
         try:
