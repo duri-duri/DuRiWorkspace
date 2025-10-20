@@ -225,13 +225,6 @@ class AdaptiveTrigger:
 
 
 class DuRiIntegratedEvolutionSystem:
-    async def _get_optimal_node(self, *args, node: str | None = None, **kwargs) -> str:
-        """벤치마크/호출부 호환을 위한 시그니처 완화."""
-        try:
-            import socket
-            return node or socket.gethostname()
-        except Exception:
-            return node or "local"
     """DuRi 통합 진화 시스템 (성능 최적화 통합 버전)"""
 
     def __init__(self):
