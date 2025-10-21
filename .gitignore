@@ -157,3 +157,4 @@ ops/observability/slack_webhook_url
 data/
 backups/
 *.tar.gz
+grafana/provisioning/_backup/
