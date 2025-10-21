@@ -260,21 +260,5 @@ alertmanager-reload:
 	@curl -s -X POST http://localhost:9093/-/reload && echo "Alertmanager reloaded"
 .PHONY: alertmanager-reload
 
-# ----- Monitoring helper targets (non-invasive) -----
-.PHONY: alertmanager-reload-monitoring clean-submodules-monitoring status-monitoring
 
-# ----- Monitoring helper targets (non-invasive) -----
-.PHONY: alertmanager-reload-monitoring clean-submodules-monitoring status-monitoring
-
-# ----- Monitoring helper targets (non-invasive) -----
-.PHONY: alertmanager-reload-monitoring clean-submodules-monitoring status-monitoring
-
-# ----- Monitoring helper targets (non-invasive) -----
-.PHONY: alertmanager-reload-monitoring clean-submodules-monitoring status-monitoring
-
-
-
-
-# BEGIN MONITORING INCLUDE
 include ops/observability/monitoring.mk
-# END MONITORING INCLUDE
