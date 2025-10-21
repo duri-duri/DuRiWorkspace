@@ -3,7 +3,7 @@ WEBHOOK_FILE ?= ops/observability/slack_webhook_url
 
 # ops/observability/monitoring.mk
 ifndef MONITORING_HELPERS_INCLUDED
-ALERTMANAGER_CONTAINER ?= $(shell docker ps --format '{{.Names}}' | grep -E '^alertmanager$$|^am$$' | head -n1 || echo alertmanager)
+ALERTMANAGER_CONTAINER ?= alertmanager
 SKIP_WEBHOOK_GUARD ?= 0
 MONITORING_HELPERS_INCLUDED := 1
 
@@ -155,3 +155,4 @@ canary-alert:
 	     alertname=CHATGPT_CANARY severity=info summary=CanaryTest description=AutomatedCanary' \
 	&& echo "✅ Canary alert sent" || { echo "❌ Failed to send canary alert"; exit 1; }
 	@echo "ℹ️ If you see 404 no_team in Alertmanager logs, replace Slack webhook with a valid one."
+-include ops/observability/diag.mk
