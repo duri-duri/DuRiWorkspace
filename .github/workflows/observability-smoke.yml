@@ -18,15 +18,15 @@ jobs:
 
       - name: Prepare webhook file
         run: |
-          mkdir -p ops/observability
+          mkdir -p "$RUNNER_TEMP"
           if [ -n "${{ secrets.SLACK_WEBHOOK_URL }}" ]; then
-            echo "${{ secrets.SLACK_WEBHOOK_URL }}" > ops/observability/slack_webhook_url
+            echo "${{ secrets.SLACK_WEBHOOK_URL }}" > "$RUNNER_TEMP/slack_webhook_url"
           else
-            echo 'https://hooks.slack.com/services/PLACE/HOLDER/XXXX' > ops/observability/slack_webhook_url
+            echo 'https://hooks.slack.com/services/PLACE/HOLDER/XXXX' > "$RUNNER_TEMP/slack_webhook_url"
           fi
-          chmod 644 ops/observability/slack_webhook_url
+          chmod 644 "$RUNNER_TEMP/slack_webhook_url"
 
       - name: Observability checks (harmless)
         run: |
-          make SKIP_WEBHOOK_GUARD=1 monitoring-check || echo "::notice::monitoring-check skipped"
-          make alertmanager-validate || echo "::notice::alertmanager-validate skipped"
+          make SKIP_WEBHOOK_GUARD=1 WEBHOOK_FILE="$RUNNER_TEMP/slack_webhook_url" monitoring-check || echo "::notice::monitoring-check skipped"
+          make WEBHOOK_FILE="$RUNNER_TEMP/slack_webhook_url" alertmanager-validate || echo "::notice::alertmanager-validate skipped"
