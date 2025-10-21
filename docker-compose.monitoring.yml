@@ -24,10 +24,10 @@ services:
       retries: 3
       start_period: 40s
     depends_on:
-      - duri_core_container
-      - duri_brain_container
-      - duri_evolution_container
-      - duri_control_container
+      - duri_core
+      - duri_brain
+      - duri_evolution
+      - duri_control
       - duri-postgres
       - duri-redis
     profiles: ["monitoring"]
