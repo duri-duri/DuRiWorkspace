@@ -88,7 +88,6 @@ monitoring-help:
 	@echo "  monitoring-check                 - Check webhook format & permissions"
 	@echo "  alertmanager-apply              - Check + reload Alertmanager"
 	@echo "  alertmanager-apply-secure        - Secure perms + check + reload"
-	@echo "  canary-alert                    - Send test alert to verify system"
 	@echo "  secret-perms-secure             - Set secure mode (600, owner 65534)"
 	@echo "  secret-perms-relaxed            - Set relaxed mode (644, owner current user)"
 	@echo ""
@@ -103,9 +102,3 @@ endif
 
 # 캔어리 알림 타겟
 .PHONY: canary-alert
-canary-alert:
-	@echo "Sending canary alert..."
-	@curl -fsS -XPOST http://localhost:9093/api/v2/alerts \
-	  -H "Content-Type: application/json" \
-	  -d '[{"labels":{"alertname":"CHATGPT_CANARY","severity":"info"},"annotations":{"summary":"Canary test","description":"Automated canary alert from monitoring system"},"startsAt":"'$$(date -Iseconds)'","endsAt":"'$$(date -Iseconds -d \"+2 minutes\")\"}]' \
-	  && echo "✅ Canary alert sent" || echo "❌ Failed to send canary alert"
