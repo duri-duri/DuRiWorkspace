@@ -1,5 +1,6 @@
 # Variables
 WEBHOOK_FILE ?= ops/observability/slack_webhook_url
+CI ?= $(CI)
 
 # ops/observability/monitoring.mk
 ifndef MONITORING_HELPERS_INCLUDED
@@ -65,15 +66,21 @@ monitoring-check:
 	  echo "ℹ️ host can't read (secure mode) — skipping placeholder check"; \
 	fi; \
 	# 2) 컨테이너 안 읽기 가능 여부(권위 체크) \
-	if command -v docker >/dev/null 2>&1 && docker ps --format "{{.Names}}" | grep -q "^alertmanager$$"; then \
-	  docker exec "alertmanager" sh -lc "test -r /etc/alertmanager/secrets/slack_webhook_url" \
-	    && echo "✅ readable in container" \
-	    || { echo "❌ not readable in container"; exit 1; }; \
+	if [ -n "$(CI)" ] || ! command -v docker >/dev/null; then \
+		echo "ℹ️ CI or no docker — skip container checks"; \
+	elif docker ps --format "{{.Names}}" | grep -q "^alertmanager$$"; then \
+		docker exec "alertmanager" sh -lc "test -r /etc/alertmanager/secrets/slack_webhook_url" \
+			&& echo "✅ readable in container" \
+			|| { echo "❌ not readable in container"; exit 1; }; \
 	else \
-	  echo "ℹ️ docker AM not found → skipping in-container read test"; \
+		echo "ℹ️ docker AM not found → skipping in-container read test"; \
 	fi; \
 	# 3) AM 헬스 \
-	curl -fsS --max-time 3 http://localhost:9093/-/healthy >/dev/null && echo "✅ Alertmanager healthy"
+	if [ -n "$(CI)" ]; then \
+		echo "ℹ️ CI environment — skip health check"; \
+	else \
+		curl -fsS --max-time 3 http://localhost:9093/-/healthy >/dev/null && echo "✅ Alertmanager healthy"; \
+	fi
 
 alertmanager-apply: monitoring-check
 	@chmod 600 ops/observability/slack_webhook_url 2>/dev/null || true
@@ -107,10 +114,12 @@ secret-perms-relaxed:
 
 # Alertmanager 설정 문법 검증
 alertmanager-validate:
-	@if docker exec "alertmanager" sh -lc 'command -v amtool >/dev/null'; then \
-	  docker exec "alertmanager" amtool check-config /etc/alertmanager/alertmanager.yml || exit 1; \
+	@if [ -n "$(CI)" ]; then \
+		echo "ℹ️ CI environment — skipping amtool validation"; \
+	elif docker exec "alertmanager" sh -lc 'command -v amtool >/dev/null'; then \
+		docker exec "alertmanager" amtool check-config /etc/alertmanager/alertmanager.yml || exit 1; \
 	else \
-	  echo "ℹ️ amtool not found; skipping syntax check"; \
+		echo "ℹ️ amtool not found; skipping syntax check"; \
 	fi
 
 # 운영용 "안전 적용" 번들 타겟
