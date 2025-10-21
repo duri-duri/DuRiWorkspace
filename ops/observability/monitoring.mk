@@ -69,6 +69,7 @@ monitoring-help:
 	@echo "  clean-submodules-monitoring     - Clean submodules (safe)"
 	@echo "  monitoring-check                 - Check webhook format & permissions"
 	@echo "  alertmanager-apply              - Check + reload Alertmanager"
+	@echo "  alertmanager-apply-secure        - Secure perms + check + reload"
 	@echo "  secret-perms-secure             - Set secure mode (600, owner 65534)"
 	@echo "  secret-perms-relaxed            - Set relaxed mode (644, owner current user)"
 	@echo ""
@@ -80,3 +81,10 @@ monitoring-help:
 	@echo "  make secret-perms-relaxed                # Switch to relaxed mode"
 
 endif
+
+# 운영용 "안전 적용" 번들 타겟
+.PHONY: alertmanager-apply-secure
+alertmanager-apply-secure: secret-perms-secure
+	@$(MAKE) --no-print-directory monitoring-check
+	@$(MAKE) --no-print-directory alertmanager-reload-monitoring
+	@echo "✅ secure apply done"
