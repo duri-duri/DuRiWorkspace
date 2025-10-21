@@ -102,3 +102,6 @@ endif
 
 # 캔어리 알림 타겟
 .PHONY: canary-alert
+
+# 캔어리 알림 타겟 (개선 버전)
+.PHONY: canary-alert
