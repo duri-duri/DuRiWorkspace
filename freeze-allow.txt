@@ -1,3 +1,6 @@
 ops/observability/**
 .github/workflows/observability-smoke.yml
 Makefile
+/ops/observability/**
+/.github/workflows/observability-smoke.yml
+/Makefile
