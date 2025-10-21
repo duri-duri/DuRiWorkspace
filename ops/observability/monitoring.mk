@@ -28,7 +28,7 @@ monitoring-check:
 	@f=ops/observability/slack_webhook_url; \
 	test -f $$f || { echo "❌ $$f not found"; exit 1; }; \
 	perm=$$(stat -c '%a' $$f 2>/dev/null || echo 000); \
-	[ "$$perm" = "600" ] || { echo "❌ $$f perm $$perm (need 600)"; exit 1; }; \
+	[ "$$perm" = "644" ] || { echo "❌ $$f perm $$perm (need 644)"; exit 1; }; \
 	url=$$(cat $$f); \
 	case "$$url" in \
 	  https://hooks.slack.com/services/*) echo "✅ webhook format OK";; \
