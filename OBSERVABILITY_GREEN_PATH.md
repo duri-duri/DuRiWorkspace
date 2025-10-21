@@ -94,3 +94,12 @@ Webhook file: 600 ops/observability/slack_webhook_url
 ## 🚀 캔어리 테스트
 Sending canary alert…
 ❌ Failed to send canary alert
+
+## 🔍 캔어리 테스트 이해
+
+**캔어리 성공 = AM ↔ Slack 전달 시도 OK, 은 웹훅 문제**
+
+- Sending canary alert via amtool…
+❌  container not running 성공 시: Alertmanager가 정상적으로 알림을 처리하고 있음
+- 로그에  표시: Slack 웹훅이 비활성화되었거나 다른 워크스페이스에 속함
+- 해결: 실제 워크스페이스의 살아있는 Incoming Webhook URL로 교체

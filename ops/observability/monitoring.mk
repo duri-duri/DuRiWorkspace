@@ -65,8 +65,8 @@ monitoring-check:
 	  echo "ℹ️ host can't read (secure mode) — skipping placeholder check"; \
 	fi; \
 	# 2) 컨테이너 안 읽기 가능 여부(권위 체크) \
-	if command -v docker >/dev/null 2>&1 && docker ps --format "{{.Names}}" | grep -q "^${ALERTMANAGER_CONTAINER}$$"; then \
-	  docker exec "$(ALERTMANAGER_CONTAINER)" sh -lc "test -r /etc/alertmanager/secrets/slack_webhook_url" \
+	if command -v docker >/dev/null 2>&1 && docker ps --format "{{.Names}}" | grep -q "^alertmanager$$"; then \
+	  docker exec "alertmanager" sh -lc "test -r /etc/alertmanager/secrets/slack_webhook_url" \
 	    && echo "✅ readable in container" \
 	    || { echo "❌ not readable in container"; exit 1; }; \
 	else \
@@ -107,8 +107,8 @@ secret-perms-relaxed:
 
 # Alertmanager 설정 문법 검증
 alertmanager-validate:
-	@if docker exec "$(ALERTMANAGER_CONTAINER)" sh -lc 'command -v amtool >/dev/null'; then \
-	  docker exec "$(ALERTMANAGER_CONTAINER)" amtool check-config /etc/alertmanager/alertmanager.yml || exit 1; \
+	@if docker exec "alertmanager" sh -lc 'command -v amtool >/dev/null'; then \
+	  docker exec "alertmanager" amtool check-config /etc/alertmanager/alertmanager.yml || exit 1; \
 	else \
 	  echo "ℹ️ amtool not found; skipping syntax check"; \
 	fi
@@ -130,7 +130,7 @@ monitoring-help:
 	@echo "  alertmanager-validate            - Validate Alertmanager config syntax"
 	@echo ""
 	@echo "Variables:"
-	@echo "  ALERTMANAGER_CONTAINER=$(ALERTMANAGER_CONTAINER), SKIP_WEBHOOK_GUARD=$(SKIP_WEBHOOK_GUARD)"
+	@echo "  ALERTMANAGER_CONTAINER=alertmanager, SKIP_WEBHOOK_GUARD=$(SKIP_WEBHOOK_GUARD)"
 
 # pre-commit 안전가드 타겟
 precommit-safe: secret-perms-relaxed
@@ -146,8 +146,12 @@ endif
 .PHONY: canary-alert
 canary-alert:
 	@echo "Sending canary alert via amtool…"
-	@docker exec "${ALERTMANAGER_CONTAINER}" sh -lc \
-	 'amtool --alertmanager.url=http://localhost:9093 alert add \
-	    alertname=CHATGPT_CANARY severity=info \
-	    summary=CanaryTest description=AutomatedCanary' \
+	@if ! docker ps --format '{{.Names}}' | grep -q "^alertmanager$$"; then \
+	  echo "❌ alertmanager container not running"; exit 1; fi
+	@docker exec "alertmanager" sh -lc 'command -v amtool >/dev/null' \
+	  || { echo "❌ amtool not found in container"; exit 1; }
+	@docker exec "alertmanager" sh -lc \
+	  'amtool --alertmanager.url=http://localhost:9093 alert add \
+	     alertname=CHATGPT_CANARY severity=info summary=CanaryTest description=AutomatedCanary' \
 	&& echo "✅ Canary alert sent" || { echo "❌ Failed to send canary alert"; exit 1; }
+	@echo "ℹ️ If you see 404 no_team in Alertmanager logs, replace Slack webhook with a valid one."
