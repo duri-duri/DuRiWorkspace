@@ -52,7 +52,7 @@ alertmanager-apply: monitoring-check
 secret-perms-secure:
 	@f=ops/observability/slack_webhook_url; \
 	test -f $$f || { echo "❌ $$f not found"; exit 1; }; \
-	sudo chown 65534:65534 $$f && chmod 600 $$f && \
+	sudo chown 65534:65534 $$f && sudo chmod 600 $$f && \
 	echo "🔒 set $$f -> owner 65534:65534, mode 600"
 
 # 편의 모드: 호스트 사용자 읽기 가능(644)
