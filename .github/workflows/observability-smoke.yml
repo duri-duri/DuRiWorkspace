@@ -1,0 +1,32 @@
+name: Observability Smoke Tests
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'ops/observability/**'
+      - 'docker-compose.monitoring.yml'
+      - 'prometheus.yml'
+      - 'Makefile'
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Prepare webhook file
+        run: |
+          mkdir -p ops/observability
+          if [ -n "${{ secrets.SLACK_WEBHOOK_URL }}" ]; then
+            echo "${{ secrets.SLACK_WEBHOOK_URL }}" > ops/observability/slack_webhook_url
+          else
+            echo 'https://hooks.slack.com/services/PLACE/HOLDER/XXXX' > ops/observability/slack_webhook_url
+          fi
+          chmod 644 ops/observability/slack_webhook_url
+
+      - name: Observability checks (harmless)
+        run: |
+          make SKIP_WEBHOOK_GUARD=1 monitoring-check
+          make alertmanager-validate
