@@ -1,0 +1,119 @@
+groups:
+- name: synthetic
+  rules:
+  - alert: SyntheticAlwaysOn
+    expr: vector(1)
+    for: 1m
+    labels: {severity: "page", service: "pzta-cra"}
+    annotations:
+      summary: "Synthetic Always-On"
+      description: "Pipeline end-to-end test"
+
+- name: pzta-cra.platform
+  interval: 30s
+  rules:
+  - alert: ExporterAbsent
+    expr: sum by (job,instance) (up == 0) > 0
+    for: 3m
+    labels: {severity: page}
+    annotations: {summary: "Exporter down ({{$labels.job}} @ {{$labels.instance}})"}
+
+  - alert: BlackboxProbeFailed
+    expr: probe_success == 0
+    for: 2m
+    labels: {severity: page}
+    annotations: {summary: "Blackbox probe failed ({{$labels.instance}})"}
+
+  - alert: HighContainerCPU
+    expr: rate(container_cpu_usage_seconds_total[5m]) * 100 > 80
+    for: 10m
+    labels: {severity: warn}
+    annotations: {summary: "High container CPU (>80% 10m)"}
+
+- name: pzta-cra.core
+  interval: 30s
+  rules:
+  - alert: BundleVerifyFail
+    expr: increase(bundle_verify_fail_total[5m]) > 0
+    for: 1m
+    labels: {severity: page}
+    annotations: {summary: "Bundle verify failed in last 5m"}
+
+  - alert: CoreRagConflictSpike
+    expr: rate(core_rag_conflict_total[5m]) > 0.01
+    for: 10m
+    labels: {severity: page}
+    annotations: {summary: "Core↔RAG conflict spike >1%/5m"}
+
+  - alert: EvidenceAttachLow
+    expr: (sum(rate(rag_evidence_attach_total{status="miss"}[15m]))
+          / sum(rate(rag_evidence_attach_total[15m]))) > 0.05
+    for: 15m
+    labels: {severity: ticket}
+    annotations: {summary: "Evidence attach <95% over 15m"}
+
+  - alert: ReproCapsuleDrop
+    expr: (1 - reproducible_capsule_rate) > 0.001
+    for: 10m
+    labels: {severity: page}
+    annotations: {summary: "Reproducible capsule <99.9%"}
+
+  - alert: CoreStaleness
+    expr: staleness_days_core_max > 180
+    for: 5m
+    labels: {severity: ticket}
+    annotations: {summary: "Core staleness > 180d"}
+
+- name: pzta-cra.slo
+  interval: 30s
+  rules:
+    # --- Core 서비스 가용성 (blackbox) ---
+    # instance 라벨에 core 헬스 엔드포인트가 들어갑니다 (예: duri_core_container:8080/healthz).
+    - record: slo:core:avail:5m
+      expr: avg_over_time(probe_success{job="blackbox", instance=~".*core.*:8080.*"}[5m])
+    - record: slo:core:avail:1h
+      expr: avg_over_time(probe_success{job="blackbox", instance=~".*core.*:8080.*"}[1h])
+
+    - record: slo:core:error:5m
+      expr: 1 - slo:core:avail:5m
+    - record: slo:core:error:1h
+      expr: 1 - slo:core:avail:1h
+
+    # SLO=99.5% → 에러버짓=0.005
+    - record: slo:core:burnrate:5m
+      expr: slo:core:error:5m / 0.005
+    - record: slo:core:burnrate:1h
+      expr: slo:core:error:1h / 0.005
+
+    # 멀티윈도우/멀티번 레이트 알람(구글 SRE 패턴)
+    - alert: SLOCoreFastBurn
+      expr: (slo:core:burnrate:5m > 14.4) and (slo:core:burnrate:1h > 14.4)
+      for: 2m
+      labels:
+        severity: page
+        service: core
+        team: pzta
+      annotations:
+        summary: "Core 가용성 급격 저하 (5m/1h)"
+        runbook_url: "https://runbook.example/core-slo"
+
+    - alert: SLOCoreSlowBurn
+      expr: (slo:core:burnrate:1h > 6) and (1 - avg_over_time(probe_success{job="blackbox", instance=~".*core.*:8080.*"}[6h]) > 0.005)
+      for: 10m
+      labels:
+        severity: ticket
+        service: core
+        team: pzta
+      annotations:
+        summary: "Core 가용성 저하 지속 (1h/6h)"
+        runbook_url: "https://runbook.example/core-slo"
+
+- name: pzta-cra.canary
+  interval: 30s
+  rules:
+  - alert: CanarySPRTStuck
+    expr: sprt_state{state="continue"} > 0
+    for: 6h
+    labels: {severity: ticket}
+    annotations: {summary: "SPRT stuck > 6h — check golden/cutoff"}
+# touch for reload test 2025-09-23T09:45:56+09:00

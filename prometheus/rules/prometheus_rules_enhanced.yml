@@ -1,0 +1,260 @@
+---
+# DuRi Enhanced SLO Rules - Phase 4
+# 확장된 서비스 수준 목표 및 알람 규칙
+
+groups:
+# === 핵심 서비스 가용성 SLO ===
+- name: duri.core.slo
+  interval: 30s
+  rules:
+    # Core 서비스 가용성 (99.9% 목표)
+    - record: slo:core:availability:5m
+      expr: avg_over_time(probe_success{job="blackbox", instance=~".*core.*:8080.*"}[5m])
+
+    - record: slo:core:availability:1h
+      expr: avg_over_time(probe_success{job="blackbox", instance=~".*core.*:8080.*"}[1h])
+
+    - record: slo:core:availability:1d
+      expr: avg_over_time(probe_success{job="blackbox", instance=~".*core.*:8080.*"}[1d])
+
+    # 에러율 계산
+    - record: slo:core:error_rate:5m
+      expr: 1 - slo:core:availability:5m
+
+    - record: slo:core:error_rate:1h
+      expr: 1 - slo:core:availability:1h
+
+    # Burn Rate 계산 (99.9% SLO 기준)
+    - record: slo:core:burn_rate:5m
+      expr: slo:core:error_rate:5m / 0.001
+
+    - record: slo:core:burn_rate:1h
+      expr: slo:core:error_rate:1h / 0.001
+
+    # 멀티윈도우 멀티번레이트 알람
+    - alert: SLOCoreFastBurn
+      expr: (slo:core:burn_rate:5m > 14.4) and (slo:core:burn_rate:1h > 14.4)
+      for: 2m
+      labels:
+        severity: page
+        service: core
+        team: pzta
+        slo: availability
+      annotations:
+        summary: "Core 서비스 가용성 급격 저하 (5m/1h)"
+        description: "Core 서비스 가용성이 5분과 1시간 윈도우에서 모두 급격히 저하했습니다."
+        runbook_url: "https://runbook.example/core-slo-fast-burn"
+
+    - alert: SLOCoreSlowBurn
+      expr: (slo:core:burn_rate:1h > 6) and (slo:core:burn_rate:1d > 0.001)
+      for: 15m
+      labels:
+        severity: warning
+        service: core
+        team: pzta
+        slo: availability
+      annotations:
+        summary: "Core 서비스 가용성 지속 저하 (1h/1d)"
+        description: "Core 서비스 가용성이 1시간과 1일 윈도우에서 지속적으로 저하하고 있습니다."
+        runbook_url: "https://runbook.example/core-slo-slow-burn"
+
+# === Brain 서비스 SLO ===
+- name: duri.brain.slo
+  interval: 30s
+  rules:
+    # Brain 서비스 가용성 (99.5% 목표)
+    - record: slo:brain:availability:5m
+      expr: avg_over_time(probe_success{job="blackbox", instance=~".*brain.*:8081.*"}[5m])
+
+    - record: slo:brain:availability:1h
+      expr: avg_over_time(probe_success{job="blackbox", instance=~".*brain.*:8081.*"}[1h])
+
+    # 에러율 및 Burn Rate
+    - record: slo:brain:error_rate:5m
+      expr: 1 - slo:brain:availability:5m
+
+    - record: slo:brain:burn_rate:5m
+      expr: slo:brain:error_rate:5m / 0.005  # 99.5% SLO
+
+    - alert: SLOBrainFastBurn
+      expr: slo:brain:burn_rate:5m > 14.4
+      for: 2m
+      labels:
+        severity: page
+        service: brain
+        team: pzta
+        slo: availability
+      annotations:
+        summary: "Brain 서비스 가용성 급격 저하"
+        description: "Brain 서비스 가용성이 5분 윈도우에서 급격히 저하했습니다."
+        runbook_url: "https://runbook.example/brain-slo"
+
+# === Evolution 서비스 SLO ===
+- name: duri.evolution.slo
+  interval: 30s
+  rules:
+    # Evolution 서비스 가용성 (99.0% 목표)
+    - record: slo:evolution:availability:5m
+      expr: avg_over_time(probe_success{job="blackbox", instance=~".*evolution.*:8082.*"}[5m])
+
+    - record: slo:evolution:availability:1h
+      expr: avg_over_time(probe_success{job="blackbox", instance=~".*evolution.*:8082.*"}[1h])
+
+    # 에러율 및 Burn Rate
+    - record: slo:evolution:error_rate:5m
+      expr: 1 - slo:evolution:availability:5m
+
+    - record: slo:evolution:burn_rate:5m
+      expr: slo:evolution:error_rate:5m / 0.01  # 99.0% SLO
+
+    - alert: SLOEvolutionFastBurn
+      expr: slo:evolution:burn_rate:5m > 14.4
+      for: 2m
+      labels:
+        severity: warning
+        service: evolution
+        team: pzta
+        slo: availability
+      annotations:
+        summary: "Evolution 서비스 가용성 급격 저하"
+        description: "Evolution 서비스 가용성이 5분 윈도우에서 급격히 저하했습니다."
+        runbook_url: "https://runbook.example/evolution-slo"
+
+# === Control 서비스 SLO ===
+- name: duri.control.slo
+  interval: 30s
+  rules:
+    # Control 서비스 가용성 (99.9% 목표)
+    - record: slo:control:availability:5m
+      expr: avg_over_time(probe_success{job="blackbox", instance=~".*control.*:8083.*"}[5m])
+
+    - record: slo:control:availability:1h
+      expr: avg_over_time(probe_success{job="blackbox", instance=~".*control.*:8083.*"}[1h])
+
+    # 에러율 및 Burn Rate
+    - record: slo:control:error_rate:5m
+      expr: 1 - slo:control:availability:5m
+
+    - record: slo:control:burn_rate:5m
+      expr: slo:control:error_rate:5m / 0.001  # 99.9% SLO
+
+    - alert: SLOControlFastBurn
+      expr: slo:control:burn_rate:5m > 14.4
+      for: 2m
+      labels:
+        severity: page
+        service: control
+        team: pzta
+        slo: availability
+      annotations:
+        summary: "Control 서비스 가용성 급격 저하"
+        description: "Control 서비스 가용성이 5분 윈도우에서 급격히 저하했습니다."
+        runbook_url: "https://runbook.example/control-slo"
+
+# === 데이터베이스 SLO ===
+- name: duri.database.slo
+  interval: 30s
+  rules:
+    # PostgreSQL 가용성 (99.95% 목표)
+    - record: slo:postgres:availability:5m
+      expr: avg_over_time(up{job="postgres"}[5m])
+
+    - record: slo:postgres:availability:1h
+      expr: avg_over_time(up{job="postgres"}[1h])
+
+    # 연결 풀 상태
+    - record: slo:postgres:connection_pool:5m
+      expr: avg_over_time(pg_stat_activity_count[5m])
+
+    # 쿼리 성능
+    - record: slo:postgres:query_duration:5m
+      expr: histogram_quantile(0.95, rate(pg_stat_database_tup_returned[5m]))
+
+    - alert: SLOPostgresFastBurn
+      expr: (1 - slo:postgres:availability:5m) / 0.0005 > 14.4
+      for: 2m
+      labels:
+        severity: page
+        service: postgres
+        team: pzta
+        slo: availability
+      annotations:
+        summary: "PostgreSQL 가용성 급격 저하"
+        description: "PostgreSQL 가용성이 5분 윈도우에서 급격히 저하했습니다."
+        runbook_url: "https://runbook.example/postgres-slo"
+
+# === Redis SLO ===
+- name: duri.redis.slo
+  interval: 30s
+  rules:
+    # Redis 가용성 (99.9% 목표)
+    - record: slo:redis:availability:5m
+      expr: avg_over_time(up{job="redis"}[5m])
+
+    - record: slo:redis:availability:1h
+      expr: avg_over_time(up{job="redis"}[1h])
+
+    # 메모리 사용률
+    - record: slo:redis:memory_usage:5m
+      expr: avg_over_time(redis_memory_used_bytes[5m]) / avg_over_time(redis_memory_max_bytes[5m])
+
+    # 연결 수
+    - record: slo:redis:connections:5m
+      expr: avg_over_time(redis_connected_clients[5m])
+
+    - alert: SLORedisFastBurn
+      expr: (1 - slo:redis:availability:5m) / 0.001 > 14.4
+      for: 2m
+      labels:
+        severity: page
+        service: redis
+        team: pzta
+        slo: availability
+      annotations:
+        summary: "Redis 가용성 급격 저하"
+        description: "Redis 가용성이 5분 윈도우에서 급격히 저하했습니다."
+        runbook_url: "https://runbook.example/redis-slo"
+
+# === 성능 메트릭 SLO ===
+- name: duri.performance.slo
+  interval: 30s
+  rules:
+    # 응답 시간 SLO (95%ile < 500ms)
+    - record: slo:response_time:5m
+      expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))
+
+    - record: slo:response_time:1h
+      expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[1h]))
+
+    # 처리량 SLO (RPS > 100)
+    - record: slo:throughput:5m
+      expr: rate(http_requests_total[5m])
+
+    - record: slo:throughput:1h
+      expr: rate(http_requests_total[1h])
+
+    - alert: SLOResponseTimeHigh
+      expr: slo:response_time:5m > 0.5
+      for: 5m
+      labels:
+        severity: warning
+        service: performance
+        team: pzta
+        slo: response_time
+      annotations:
+        summary: "응답 시간 SLO 위반"
+        description: "95%ile 응답 시간이 500ms를 초과했습니다."
+        runbook_url: "https://runbook.example/response-time-slo"
+
+    - alert: SLOThroughputLow
+      expr: slo:throughput:5m < 100
+      for: 10m
+      labels:
+        severity: warning
+        service: performance
+        team: pzta
+        slo: throughput
+      annotations:
+        summary: "처리량 SLO 위반"
+        description: "초당 요청 수가 100 미만입니다."
+        runbook_url: "https://runbook.example/throughput-slo"
