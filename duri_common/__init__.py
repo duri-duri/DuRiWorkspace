@@ -1,7 +1,7 @@
 from .config import load_env
-from .logging import get_logger
+from .logger import get_logger
 from .metrics import prom_counter, prom_gauge
-from .settings import DuRiSettings, settings, get_settings
+from .settings import DuRiSettings, get_settings, settings
 
 __all__ = [
     "get_logger",
