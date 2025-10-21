@@ -3,7 +3,7 @@ ifndef MONITORING_HELPERS_INCLUDED
 ALERTMANAGER_CONTAINER ?= alertmanager
 MONITORING_HELPERS_INCLUDED := 1
 
-.PHONY: alertmanager-reload-monitoring clean-submodules-monitoring status-monitoring monitoring-check alertmanager-apply monitoring-help secret-perms-secure secret-perms-relaxed alertmanager-apply-secure
+.PHONY: alertmanager-reload-monitoring clean-submodules-monitoring status-monitoring monitoring-check alertmanager-apply monitoring-help secret-perms-secure secret-perms-relaxed alertmanager-apply-secure precommit-safe
 
 alertmanager-reload-monitoring:
 	@chmod 600 ops/observability/slack_webhook_url 2>/dev/null || true
@@ -43,7 +43,7 @@ monitoring-check:
 	  echo "ℹ️ host can't read (secure mode) — skipping placeholder check"; \
 	fi; \
 	# 2) 컨테이너 안 읽기 가능 여부(권위 체크) \
-	if command -v docker >/dev/null 2>&1 && docker ps --format "{{.Names}}" | grep -q "^$(ALERTMANAGER_CONTAINER)$$"; then \
+	if command -v docker >/dev/null 2>&1 && docker ps --format "{{.Names}}" | grep -q "^${ALERTMANAGER_CONTAINER}$$"; then \
 	  docker exec "$(ALERTMANAGER_CONTAINER)" sh -lc "test -r /etc/alertmanager/secrets/slack_webhook_url" \
 	    && echo "✅ readable in container" \
 	    || { echo "❌ not readable in container"; exit 1; }; \
@@ -94,7 +94,7 @@ monitoring-help:
 	@echo "  status-monitoring               - Check system status"
 	@echo "  alertmanager-reload-monitoring  - Secure webhook file + reload AM"
 	@echo "  clean-submodules-monitoring     - Clean submodules (safe)"
-	@echo "  monitoring-check                 - Check webhook format & permissions"
+	@echo "  monitoring-check                 - Check container readability & AM health (skip format in secure mode)"
 	@echo "  alertmanager-apply              - Check + reload Alertmanager"
 	@echo "  alertmanager-apply-secure        - Secure perms + check + reload"
 	@echo "  secret-perms-secure             - Set secure mode (600, owner 65534)"
@@ -106,5 +106,10 @@ monitoring-help:
 	@echo "  make VERBOSE=1 clean-submodules-monitoring # Verbose submodule clean"
 	@echo "  make secret-perms-secure                 # Switch to secure mode"
 	@echo "  make secret-perms-relaxed                # Switch to relaxed mode"
+	@echo "  make precommit-safe                      # Set relaxed mode for safe commits"
+
+# pre-commit 안전가드 타겟
+precommit-safe: secret-perms-relaxed
+	@echo "✅ secrets set to relaxed (644) for safe commits"
 
 endif
