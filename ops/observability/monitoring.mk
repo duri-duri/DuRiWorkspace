@@ -2,7 +2,7 @@
 ifndef MONITORING_HELPERS_INCLUDED
 MONITORING_HELPERS_INCLUDED := 1
 
-.PHONY: alertmanager-reload-monitoring clean-submodules-monitoring status-monitoring monitoring-check alertmanager-apply monitoring-help secret-perms-secure secret-perms-relaxed
+.PHONY: alertmanager-reload-monitoring clean-submodules-monitoring status-monitoring monitoring-check alertmanager-apply monitoring-help secret-perms-secure secret-perms-relaxed alertmanager-apply-secure
 
 alertmanager-reload-monitoring:
 	@chmod 600 ops/observability/slack_webhook_url 2>/dev/null || true
@@ -52,15 +52,33 @@ alertmanager-apply: monitoring-check
 secret-perms-secure:
 	@f=ops/observability/slack_webhook_url; \
 	test -f $$f || { echo "❌ $$f not found"; exit 1; }; \
-	sudo chown 65534:65534 $$f && sudo chmod 600 $$f && \
+	if sudo -n true 2>/dev/null; then \
+	  sudo chown 65534:65534 $$f && sudo chmod 600 $$f; \
+	else \
+	  docker run --rm -v $$PWD/ops/observability:/secrets alpine \
+	    sh -lc "chown 65534:65534 /secrets/slack_webhook_url && chmod 600 /secrets/slack_webhook_url"; \
+	fi; \
 	echo "🔒 set $$f -> owner 65534:65534, mode 600"
 
 # 편의 모드: 호스트 사용자 읽기 가능(644)
 secret-perms-relaxed:
 	@f=ops/observability/slack_webhook_url; \
 	test -f $$f || { echo "❌ $$f not found"; exit 1; }; \
-	sudo chown `id -u`:`id -g` $$f || chown `id -u`:`id -g` $$f; \
-	chmod 644 $$f && echo "🟢 set $$f -> owner $$(id -un):$$(id -gn), mode 644"
+	if sudo -n true 2>/dev/null; then \
+	  sudo chown $$(id -u):$$(id -g) $$f && sudo chmod 644 $$f; \
+	else \
+	  docker run --rm \
+	    -e HOST_UID=$$(id -u) -e HOST_GID=$$(id -g) \
+	    -v $$PWD/ops/observability:/secrets alpine \
+	    sh -lc "chown \$$HOST_UID:\$$HOST_GID /secrets/slack_webhook_url && chmod 644 /secrets/slack_webhook_url"; \
+	fi; \
+	echo "🟢 set $$f -> owner $$(id -un):$$(id -gn), mode 644"
+
+# 운영용 "안전 적용" 번들 타겟
+alertmanager-apply-secure: secret-perms-secure
+	@$(MAKE) --no-print-directory monitoring-check
+	@$(MAKE) --no-print-directory alertmanager-reload-monitoring
+	@echo "✅ secure apply done"
 
 monitoring-help:
 	@echo "Monitoring targets:"
@@ -81,10 +99,3 @@ monitoring-help:
 	@echo "  make secret-perms-relaxed                # Switch to relaxed mode"
 
 endif
-
-# 운영용 "안전 적용" 번들 타겟
-.PHONY: alertmanager-apply-secure
-alertmanager-apply-secure: secret-perms-secure
-	@$(MAKE) --no-print-directory monitoring-check
-	@$(MAKE) --no-print-directory alertmanager-reload-monitoring
-	@echo "✅ secure apply done"
