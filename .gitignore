@@ -157,3 +157,4 @@ grafana/data/
 loop_data/
 ops/observability/slack_webhook_url
 ops/observability/slack_webhook_url
+ops/observability/slack_webhook_url
