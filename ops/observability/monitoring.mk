@@ -1,11 +1,18 @@
 # ops/observability/monitoring.mk
 ifndef MONITORING_HELPERS_INCLUDED
-SHELL := bash
-.SHELLFLAGS := -eu -o pipefail -c
-.ONESHELL:
 ALERTMANAGER_CONTAINER ?= alertmanager
 SKIP_WEBHOOK_GUARD ?= 0
 MONITORING_HELPERS_INCLUDED := 1
+
+# macOS 호환 stat 명령어
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+  STAT_MODE = stat -f '%Lp'
+  STAT_NAME = stat -f '%N'
+else
+  STAT_MODE = stat -c '%a'
+  STAT_NAME = stat -c '%n'
+endif
 
 .PHONY: alertmanager-reload-monitoring clean-submodules-monitoring status-monitoring monitoring-check alertmanager-apply monitoring-help secret-perms-secure secret-perms-relaxed alertmanager-apply-secure precommit-safe ci-smoke
 
@@ -27,12 +34,12 @@ status-monitoring:
 	@printf "Alertmanager: "; curl -s http://localhost:9093/-/healthy || true; echo
 	@printf "Grafana: "; curl -s http://localhost:3000/api/health 2>/dev/null | jq -r '.database + " - " + .version' 2>/dev/null || echo "Not ready"
 	@printf "Targets: "; curl -s http://localhost:9090/api/v1/targets 2>/dev/null | jq '.data.activeTargets | length' 2>/dev/null || echo "n/a"
-	@printf "Webhook file: "; stat -c '%a %n' ops/observability/slack_webhook_url 2>/dev/null || echo "missing"
+	@printf "Webhook file: "; $(STAT_MODE) ops/observability/slack_webhook_url 2>/dev/null | xargs -I{} echo "{} ops/observability/slack_webhook_url" || echo "missing"
 
 monitoring-check:
 	@f=ops/observability/slack_webhook_url; \
 	test -f $$f || { echo "❌ $$f not found"; exit 1; }; \
-	perm=$$(stat -c "%a" $$f 2>/dev/null || echo 000); \
+	perm=$$($(STAT_MODE) $$f 2>/dev/null || echo 000); \
 	echo "ℹ️ host perm: $$perm"; \
 	# 1) (선택) 형식 체크: 호스트가 읽을 수 있을 때만 수행 \
 	if [ -r "$$f" ]; then \
@@ -95,23 +102,12 @@ alertmanager-apply-secure: secret-perms-secure
 
 monitoring-help:
 	@echo "Monitoring targets:"
-	@echo "  status-monitoring               - Check system status"
-	@echo "  alertmanager-reload-monitoring  - Secure webhook file + reload AM"
-	@echo "  clean-submodules-monitoring     - Clean submodules (safe)"
-	@echo "  monitoring-check                 - Check container readability & AM health (skip format in secure mode)"
-	@echo "  alertmanager-apply              - Check + reload Alertmanager"
-	@echo "  alertmanager-apply-secure        - Secure perms + check + reload"
-	@echo "  secret-perms-secure             - Set secure mode (600, owner 65534)"
-	@echo "  secret-perms-relaxed            - Set relaxed mode (644, owner current user)"
-	@echo ""
-	@echo "Usage examples:"
-	@echo "  make monitoring-check                    # Check webhook & AM health"
-	@echo "  make alertmanager-apply                   # Safe reload with checks"
-	@echo "  make VERBOSE=1 clean-submodules-monitoring # Verbose submodule clean"
-	@echo "  make secret-perms-secure                 # Switch to secure mode"
-	@echo "  make secret-perms-relaxed                # Switch to relaxed mode"
-	@echo "  make precommit-safe                      # Set relaxed mode for safe commits"
-	@echo "  make ci-smoke                            # CI smoke test (1-button regression)"
+	@echo "  monitoring-check                 - Check container readability & AM health (format check skipped in secure/CI)"
+	@echo "  status-monitoring                - Print Prometheus/Alertmanager/Grafana health and targets"
+	@echo "  alertmanager-reload-monitoring   - Reload Alertmanager safely"
+	@echo "  secret-perms-relaxed             - Set webhook perms for local edits (644)"
+	@echo "  alertmanager-apply-secure        - Enforce secure perms (600) and reload AM"
+	@echo "  ci-smoke                         - CI smoke (green path)"
 	@echo ""
 	@echo "Variables:"
 	@echo "  ALERTMANAGER_CONTAINER=$(ALERTMANAGER_CONTAINER), SKIP_WEBHOOK_GUARD=$(SKIP_WEBHOOK_GUARD)"
