@@ -259,3 +259,9 @@ alert-labels-guard:
 
 runbook-url-guard-dummy:
 	@echo "Runbook URL guard passed"
+
+# 모니터링 편의 타겟
+alertmanager-reload:
+	@chmod 600 ops/observability/slack_webhook_url
+	@curl -s -X POST http://localhost:9093/-/reload && echo "Alertmanager reloaded"
+.PHONY: alertmanager-reload
