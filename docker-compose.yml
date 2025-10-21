@@ -1,4 +1,4 @@
-
+---
 services:
   duri_core:
     build:
@@ -106,6 +106,7 @@ services:
       - "6379:6379"
     volumes:
       - duri_redis_data:/data
+    command: ["redis-server", "--appendonly", "yes", "--appendfsync", "everysec"]
     mem_limit: 512m
 
 volumes:

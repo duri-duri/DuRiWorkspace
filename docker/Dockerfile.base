@@ -5,11 +5,11 @@ WORKDIR /app
 # PostgreSQL 클라이언트 설치
 RUN apt-get update && apt-get install -y postgresql-client && rm -rf /var/lib/apt/lists/*
 
-# duri_common 복사 및 설정
-COPY duri_common/ /app/duri_common/
+# Python 환경 정리 및 업그레이드
+RUN pip install --upgrade pip
 
 # 공통 환경변수 설정
-ENV PYTHONPATH=/app:/app/duri_common
+ENV PYTHONPATH=/app
 
 # 공통 스크립트 복사
 COPY docker/wait-for-postgres.sh /wait-for-postgres.sh

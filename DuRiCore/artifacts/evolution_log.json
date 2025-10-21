@@ -1,6 +1,6 @@
 {
   "success": true,
-  "session_id": "evo_1760953729",
+  "session_id": "evo_1760955677",
   "tracks_executed": [
     "self_rewrite",
     "genetic",
@@ -15,4 +15,1100 @@
       ],
       "modules_processed": 3
     },
-    "genetic": 
+    "genetic": {
+      "best_individual": {
+        "individual_id": "seed_1760955678291",
+        "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+        "fitness_score": 0.9225,
+        "generation": 0,
+        "parents": [],
+        "mutation_count": 0,
+        "crossover_count": 0,
+        "created_at": "2025-10-20T19:21:18.291215",
+        "metadata": {
+          "fitness_breakdown": {
+            "FitnessMetric.PERFORMANCE": 1.0,
+            "FitnessMetric.COMPLEXITY": 0.95,
+            "FitnessMetric.MAINTAINABILITY": 1.0,
+            "FitnessMetric.RELIABILITY": 1.0,
+            "FitnessMetric.ADAPTABILITY": 0.55
+          }
+        }
+      },
+      "final_population": [
+        {
+          "individual_id": "seed_1760955678291",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291215",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_0",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291242",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_1",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291248",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_2",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291250",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_3",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291252",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_4",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291253",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_5",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291255",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_6",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291256",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_7",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291257",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_8",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291259",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_9",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291274",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_10",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291286",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_11",
+          "code_structure": "\ndef optimize_performance():\n  \"\"\"성능 최적화 함수\"\"\"\n  # 기본 최적화 로직\n  return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291292",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_12",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291294",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_13",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291295",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_14",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291296",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_15",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291297",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_16",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291299",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_17",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291300",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_18",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291302",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_19",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291303",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_20",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291304",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_21",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291306",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_22",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291307",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_23",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291308",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_24",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291310",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_25",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291311",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_26",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291312",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_27",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291314",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_28",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291315",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_29",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291316",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_30",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291317",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_31",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291319",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_32",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291320",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_33",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291322",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_34",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n\n# 변이된 코드\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291324",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_35",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291325",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_36",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291326",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_37",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291328",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_38",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291329",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_39",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291331",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_40",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291332",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_41",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291334",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_42",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291335",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_43",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291336",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_44",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291337",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_45",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291339",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_46",
+          "code_structure": "\ndef optimize_performance():\n  \"\"\"성능 최적화 함수\"\"\"\n  # 기본 최적화 로직\n  return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291341",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_47",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291342",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        },
+        {
+          "individual_id": "individual_1760955678291_48",
+          "code_structure": "\ndef optimize_performance():\n    \"\"\"성능 최적화 함수\"\"\"\n    # 기본 최적화 로직\n    return \"optimized\"\n",
+          "fitness_score": 0.9225,
+          "generation": 0,
+          "parents": [
+            "seed_1760955678291"
+          ],
+          "mutation_count": 0,
+          "crossover_count": 0,
+          "created_at": "2025-10-20T19:21:18.291343",
+          "metadata": {
+            "fitness_breakdown": {
+              "FitnessMetric.PERFORMANCE": 1.0,
+              "FitnessMetric.COMPLEXITY": 0.95,
+              "FitnessMetric.MAINTAINABILITY": 1.0,
+              "FitnessMetric.RELIABILITY": 1.0,
+              "FitnessMetric.ADAPTABILITY": 0.55
+            }
+          }
+        }
+      ],
+      "generation_history": [
+        {
+          "generation": 1,
+          "best_fitness": 0.9225,
+          "avg_fitness": 0.9224999999999995,
+          "population_size": 50,
+          "best_individual_id": "seed_1760955678291"
+        }
+      ],
+      "total_generations": 1,
+      "convergence_generation": 0,
+      "final_fitness": 0.9225,
+      "evolution_time": 0.0047037601470947266,
+      "success": true,
+      "error_message": null
+    },
+    "meta": {
+      "refactoring_results": [
+        "./.venv/lib/python3.10/site-packages/numpy/_core/tests/test_multiarray.py: 코드 단순화를 통한 이해도 향상",
+        "./.venv/lib/python3.10/site-packages/numpy/ma/core.py: 코드 단순화를 통한 이해도 향상"
+      ],
+      "modules_processed": 2
+    }
+  },
+  "runtime_ms": 1369.187355041504,
+  "timestamp": 1760955678.760043
+}

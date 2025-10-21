@@ -1,0 +1,57 @@
+name: Check for logging module shadowing
+
+on:
+  pull_request:
+    paths:
+      - '**/*.py'
+      - '**/Dockerfile*'
+  push:
+    branches: [main, develop]
+    paths:
+      - '**/*.py'
+      - '**/Dockerfile*'
+
+jobs:
+  check-logging-shadowing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Check for logging.py files
+        run: |
+          if [ -n "$(find . -name 'logging.py' -type f)" ]; then
+            echo "❌ Found logging.py files that could shadow stdlib logging:"
+            find . -name 'logging.py' -type f
+            echo ""
+            echo "Please rename these files to avoid shadowing Python's stdlib logging module."
+            echo "Suggested names: log_utils.py, logger.py, log_helpers.py"
+            exit 1
+          else
+            echo "✅ No logging.py files found - stdlib logging is safe from shadowing"
+          fi
+
+      - name: Check for logging directories
+        run: |
+          if [ -n "$(find . -name 'logging' -type d)" ]; then
+            echo "❌ Found logging directories that could shadow stdlib logging:"
+            find . -name 'logging' -type d
+            echo ""
+            echo "Please rename these directories to avoid shadowing Python's stdlib logging module."
+            echo "Suggested names: log_utils, logger, log_helpers"
+            exit 1
+          else
+            echo "✅ No logging directories found - stdlib logging is safe from shadowing"
+          fi
+
+      - name: Test stdlib logging availability
+        run: |
+          python3 -c "
+          import logging
+          assert hasattr(logging, 'StreamHandler'), 'StreamHandler not available'
+          assert hasattr(logging, 'Formatter'), 'Formatter not available'
+          assert hasattr(logging, 'getLogger'), 'getLogger not available'
+          print('✅ stdlib logging module is properly available')
+          "
