@@ -27,6 +27,7 @@ status-monitoring:
 monitoring-check:
 	@f=ops/observability/slack_webhook_url; \
 	test -f $$f || { echo "❌ $$f not found"; exit 1; }; \
+	[ "$$(grep -c 'YOUR/SLACK/WEBHOOK' $$f)" = "0" ] || { echo "❌ placeholder webhook"; exit 1; }; \
 	perm=$$(stat -c '%a' $$f 2>/dev/null || echo 000); \
 	echo "ℹ️ host perm: $$perm"; \
 	# URL 형식만 가볍게 검사(내용 자체는 출력하지 않음) \
@@ -99,9 +100,3 @@ monitoring-help:
 	@echo "  make secret-perms-relaxed                # Switch to relaxed mode"
 
 endif
-
-# 캔어리 알림 타겟
-.PHONY: canary-alert
-
-# 캔어리 알림 타겟 (개선 버전)
-.PHONY: canary-alert
