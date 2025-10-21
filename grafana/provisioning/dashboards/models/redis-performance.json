@@ -1,0 +1,50 @@
+{
+  "uid": "redis-performance",
+  "id": null,
+  "title": "Redis Performance Dashboard",
+  "tags": ["redis", "performance", "database"],
+  "panels": [
+    {
+      "id": 1,
+      "title": "Redis Memory Usage",
+      "type": "graph",
+      "targets": [
+        {
+          "expr": "redis_memory_used_bytes",
+          "legendFormat": "Memory Used"
+        },
+        {
+          "expr": "redis_memory_max_bytes",
+          "legendFormat": "Memory Max"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}
+    },
+    {
+      "id": 2,
+      "title": "Redis Operations",
+      "type": "graph",
+      "targets": [
+        {
+          "expr": "rate(redis_commands_processed_total[5m])",
+          "legendFormat": "Commands/sec"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}
+    },
+    {
+      "id": 3,
+      "title": "Redis Connections",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "redis_connected_clients",
+          "legendFormat": "Connected Clients"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}
+    }
+  ],
+  "time": {"from": "now-1h", "to": "now"},
+  "refresh": "30s"
+}

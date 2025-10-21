@@ -1,0 +1,42 @@
+name: Check for Prometheus Configuration Validation
+
+on: [push, pull_request]
+
+jobs:
+  prometheus-config-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Validate Prometheus configuration
+        uses: docker://prom/prometheus:latest
+        with:
+          args: |
+            promtool check config /etc/prometheus/prometheus.yml
+        env:
+          PROMETHEUS_CONFIG_PATH: ./prometheus.yml
+
+      - name: Validate Prometheus rules
+        uses: docker://prom/prometheus:latest
+        with:
+          args: |
+            promtool check rules /etc/prometheus/rules/*.yml
+        env:
+          PROMETHEUS_RULES_PATH: ./prometheus/rules
+
+      - name: Test Prometheus configuration
+        run: |
+          # Copy config files to a temporary directory
+          mkdir -p /tmp/prometheus-test
+          cp prometheus.yml /tmp/prometheus-test/
+          cp -r prometheus/rules /tmp/prometheus-test/
+
+          # Run promtool with mounted config
+          docker run --rm \
+            -v /tmp/prometheus-test:/etc/prometheus:ro \
+            prom/prometheus:latest \
+            promtool check config /etc/prometheus/prometheus.yml
+
+          # Clean up
+          rm -rf /tmp/prometheus-test

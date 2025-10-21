@@ -1,0 +1,50 @@
+{
+  "uid": "postgresql-performance",
+  "id": null,
+  "title": "PostgreSQL Performance Dashboard",
+  "tags": ["postgresql", "database", "performance"],
+  "panels": [
+    {
+      "id": 1,
+      "title": "PostgreSQL Connections",
+      "type": "graph",
+      "targets": [
+        {
+          "expr": "pg_stat_database_numbackends",
+          "legendFormat": "Active Connections"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}
+    },
+    {
+      "id": 2,
+      "title": "PostgreSQL Transactions",
+      "type": "graph",
+      "targets": [
+        {
+          "expr": "rate(pg_stat_database_xact_commit[5m])",
+          "legendFormat": "Commits/sec"
+        },
+        {
+          "expr": "rate(pg_stat_database_xact_rollback[5m])",
+          "legendFormat": "Rollbacks/sec"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}
+    },
+    {
+      "id": 3,
+      "title": "PostgreSQL Database Size",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "pg_database_size_bytes",
+          "legendFormat": "Database Size"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}
+    }
+  ],
+  "time": {"from": "now-1h", "to": "now"},
+  "refresh": "30s"
+}

@@ -152,3 +152,8 @@ backup/BACKUP_LOG_*.txt
 
 # Local runtime data (docker volumes, TSDB, etc.)
 /data/**
+ops/observability/slack_webhook_url
+ops/observability/slack_webhook_url
+data/
+backups/
+*.tar.gz

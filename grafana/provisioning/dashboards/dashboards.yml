@@ -1,9 +1,12 @@
+---
 apiVersion: 1
 providers:
-  - name: "duri-dashboards"
+  - name: "default"
     orgId: 1
-    folder: "DuRi"
+    folder: ""
     type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    allowUiUpdates: true
     options:
-      path: /var/lib/grafana/dashboards
-    updateIntervalSeconds: 30
+      path: /etc/grafana/provisioning/dashboards/models
