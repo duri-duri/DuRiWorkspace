@@ -1,9 +1,13 @@
 # ops/observability/monitoring.mk
 ifndef MONITORING_HELPERS_INCLUDED
+SHELL := bash
+.SHELLFLAGS := -eu -o pipefail -c
+.ONESHELL:
 ALERTMANAGER_CONTAINER ?= alertmanager
+SKIP_WEBHOOK_GUARD ?= 0
 MONITORING_HELPERS_INCLUDED := 1
 
-.PHONY: alertmanager-reload-monitoring clean-submodules-monitoring status-monitoring monitoring-check alertmanager-apply monitoring-help secret-perms-secure secret-perms-relaxed alertmanager-apply-secure precommit-safe
+.PHONY: alertmanager-reload-monitoring clean-submodules-monitoring status-monitoring monitoring-check alertmanager-apply monitoring-help secret-perms-secure secret-perms-relaxed alertmanager-apply-secure precommit-safe ci-smoke
 
 alertmanager-reload-monitoring:
 	@chmod 600 ops/observability/slack_webhook_url 2>/dev/null || true
@@ -107,9 +111,18 @@ monitoring-help:
 	@echo "  make secret-perms-secure                 # Switch to secure mode"
 	@echo "  make secret-perms-relaxed                # Switch to relaxed mode"
 	@echo "  make precommit-safe                      # Set relaxed mode for safe commits"
+	@echo "  make ci-smoke                            # CI smoke test (1-button regression)"
+	@echo ""
+	@echo "Variables:"
+	@echo "  ALERTMANAGER_CONTAINER=$(ALERTMANAGER_CONTAINER), SKIP_WEBHOOK_GUARD=$(SKIP_WEBHOOK_GUARD)"
 
 # pre-commit 안전가드 타겟
 precommit-safe: secret-perms-relaxed
 	@echo "✅ secrets set to relaxed (644) for safe commits"
+
+# CI 스모크 번들 타겟(1버튼 회귀)
+ci-smoke:
+	@$(MAKE) --no-print-directory secret-perms-relaxed
+	@SKIP_WEBHOOK_GUARD=1 $(MAKE) --no-print-directory monitoring-check
 
 endif
