@@ -77,7 +77,7 @@ services:
     profiles: ["monitoring"]
 
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor:latest
+    image: gcr.io/cadvisor/cadvisor:v0.47.2
     container_name: cadvisor
     restart: unless-stopped
     ports:
@@ -90,7 +90,7 @@ services:
     profiles: ["monitoring"]
 
   redis_exporter:
-    image: oliver006/redis_exporter:latest
+    image: oliver006/redis_exporter:v1.55.0
     container_name: redis_exporter
     restart: unless-stopped
     environment:
@@ -100,7 +100,7 @@ services:
     profiles: ["monitoring"]
 
   postgres_exporter:
-    image: quay.io/prometheuscommunity/postgres-exporter:latest
+    image: quay.io/prometheuscommunity/postgres-exporter:v0.15.0
     container_name: postgres_exporter
     restart: unless-stopped
     environment:
