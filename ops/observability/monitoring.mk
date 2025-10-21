@@ -145,5 +145,9 @@ endif
 
 .PHONY: canary-alert
 canary-alert:
-	@echo "Sending canary alert…"
-	@printf '%s\n' '[{"labels":{"alertname":"CHATGPT_CANARY","severity":"info"}, "annotations":{"summary":"Canary test"}, "startsAt":"'"191151(date -u +%Y-%m-%dT%H:%M:%SZ)"'"}]' 	| curl -fsS -XPOST http://localhost:9093/api/v2/alerts -H "Content-Type: application/json" -d @- 	&& echo "✅ Canary alert sent" || { echo "❌ Failed to send canary alert"; exit 1; }
+	@echo "Sending canary alert via amtool…"
+	@docker exec "${ALERTMANAGER_CONTAINER}" sh -lc \
+	 'amtool --alertmanager.url=http://localhost:9093 alert add \
+	    alertname=CHATGPT_CANARY severity=info \
+	    summary=CanaryTest description=AutomatedCanary' \
+	&& echo "✅ Canary alert sent" || { echo "❌ Failed to send canary alert"; exit 1; }
