@@ -34,3 +34,10 @@ repos:
     rev: v1.35.1
     hooks:
       - id: yamllint
+
+  - repo: local
+    hooks:
+      - id: block-slack-webhook
+        name: Block committing webhook secret
+        entry: bash -c 'git diff --cached --name-only | grep -q "^ops/observability/slack_webhook_url$" && echo "Do NOT commit the webhook file" && exit 1 || exit 0'
+        language: system

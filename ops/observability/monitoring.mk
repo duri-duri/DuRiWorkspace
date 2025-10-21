@@ -1,6 +1,6 @@
 # ops/observability/monitoring.mk
 ifndef MONITORING_HELPERS_INCLUDED
-ALERTMANAGER_CONTAINER ?= alertmanager
+ALERTMANAGER_CONTAINER ?= $(shell docker ps --format '{{.Names}}' | grep -E '^alertmanager$$|^am$$' | head -n1 || echo alertmanager)
 SKIP_WEBHOOK_GUARD ?= 0
 MONITORING_HELPERS_INCLUDED := 1
 
@@ -14,7 +14,15 @@ else
   STAT_NAME = stat -c '%n'
 endif
 
-.PHONY: alertmanager-reload-monitoring clean-submodules-monitoring status-monitoring monitoring-check alertmanager-apply monitoring-help secret-perms-secure secret-perms-relaxed alertmanager-apply-secure precommit-safe ci-smoke
+# 이식성 stat 함수(더 안전하게)
+STAT_PERM = $(shell \
+  if stat -f "%p" / >/dev/null 2>&1; then \
+    stat -f "%p" ops/observability/slack_webhook_url | tail -c 4; \
+  else \
+    stat -c "%a" ops/observability/slack_webhook_url; \
+  fi 2>/dev/null || echo 000)
+
+.PHONY: alertmanager-reload-monitoring clean-submodules-monitoring status-monitoring monitoring-check alertmanager-apply monitoring-help secret-perms-secure secret-perms-relaxed alertmanager-apply-secure precommit-safe ci-smoke alertmanager-validate
 
 alertmanager-reload-monitoring:
 	@chmod 600 ops/observability/slack_webhook_url 2>/dev/null || true
@@ -94,8 +102,16 @@ secret-perms-relaxed:
 	fi; \
 	echo "🟢 set $$f -> owner $$(id -un):$$(id -gn), mode 644"
 
+# Alertmanager 설정 문법 검증
+alertmanager-validate:
+	@if docker exec "$(ALERTMANAGER_CONTAINER)" sh -lc 'command -v amtool >/dev/null'; then \
+	  docker exec "$(ALERTMANAGER_CONTAINER)" amtool check-config /etc/alertmanager/alertmanager.yml || exit 1; \
+	else \
+	  echo "ℹ️ amtool not found; skipping syntax check"; \
+	fi
+
 # 운영용 "안전 적용" 번들 타겟
-alertmanager-apply-secure: secret-perms-secure
+alertmanager-apply-secure: secret-perms-secure alertmanager-validate
 	@$(MAKE) --no-print-directory monitoring-check
 	@$(MAKE) --no-print-directory alertmanager-reload-monitoring
 	@echo "✅ secure apply done"
@@ -108,6 +124,7 @@ monitoring-help:
 	@echo "  secret-perms-relaxed             - Set webhook perms for local edits (644)"
 	@echo "  alertmanager-apply-secure        - Enforce secure perms (600) and reload AM"
 	@echo "  ci-smoke                         - CI smoke (green path)"
+	@echo "  alertmanager-validate            - Validate Alertmanager config syntax"
 	@echo ""
 	@echo "Variables:"
 	@echo "  ALERTMANAGER_CONTAINER=$(ALERTMANAGER_CONTAINER), SKIP_WEBHOOK_GUARD=$(SKIP_WEBHOOK_GUARD)"
