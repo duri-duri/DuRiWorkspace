@@ -72,6 +72,12 @@ services:
     volumes:
       - ./ops/observability/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
       - ./ops/observability/slack_webhook_url:/etc/alertmanager/secrets/slack_webhook_url:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:9093/-/healthy || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
     profiles: ["monitoring"]
 
   node_exporter:

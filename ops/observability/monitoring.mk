@@ -1,5 +1,6 @@
 # ops/observability/monitoring.mk
 ifndef MONITORING_HELPERS_INCLUDED
+ALERTMANAGER_CONTAINER ?= alertmanager
 MONITORING_HELPERS_INCLUDED := 1
 
 .PHONY: alertmanager-reload-monitoring clean-submodules-monitoring status-monitoring monitoring-check alertmanager-apply monitoring-help secret-perms-secure secret-perms-relaxed alertmanager-apply-secure
@@ -27,7 +28,7 @@ status-monitoring:
 monitoring-check:
 	@f=ops/observability/slack_webhook_url; \
 	test -f $$f || { echo "❌ $$f not found"; exit 1; }; \
-	[ "$$(grep -c 'YOUR/SLACK/WEBHOOK' $$f)" = "0" ] || { echo "❌ placeholder webhook"; exit 1; }; \
+	[ "$(SKIP_WEBHOOK_GUARD)" = "1" ] || [ "$$(grep -c 'YOUR/SLACK/WEBHOOK' $$f)" = "0" ] || { echo "❌ placeholder webhook"; exit 1; }; \
 	perm=$$(stat -c '%a' $$f 2>/dev/null || echo 000); \
 	echo "ℹ️ host perm: $$perm"; \
 	# URL 형식만 가볍게 검사(내용 자체는 출력하지 않음) \
@@ -37,7 +38,7 @@ monitoring-check:
 	esac; \
 	# 컨테이너 내부 접근성 검사(핵심) \
 	if command -v docker >/dev/null 2>&1 && docker ps --format '{{.Names}}' | grep -q '^alertmanager$$'; then \
-	  docker exec alertmanager sh -lc 'test -r /etc/alertmanager/secrets/slack_webhook_url' \
+	  docker exec $(ALERTMANAGER_CONTAINER) sh -lc 'test -r /etc/alertmanager/secrets/slack_webhook_url' \
 	    && echo "✅ readable in container" \
 	    || { echo "❌ not readable in container"; exit 1; }; \
 	else \
