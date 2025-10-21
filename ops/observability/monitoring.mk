@@ -28,22 +28,29 @@ status-monitoring:
 monitoring-check:
 	@f=ops/observability/slack_webhook_url; \
 	test -f $$f || { echo "❌ $$f not found"; exit 1; }; \
-	[ "$(SKIP_WEBHOOK_GUARD)" = "1" ] || [ "$$(grep -c 'YOUR/SLACK/WEBHOOK' $$f)" = "0" ] || { echo "❌ placeholder webhook"; exit 1; }; \
-	perm=$$(stat -c '%a' $$f 2>/dev/null || echo 000); \
+	perm=$$(stat -c "%a" $$f 2>/dev/null || echo 000); \
 	echo "ℹ️ host perm: $$perm"; \
-	# URL 형식만 가볍게 검사(내용 자체는 출력하지 않음) \
-	case "$$(head -c 10 $$f 2>/dev/null || echo 'nope')" in \
-	  https://hoo*) echo "✅ webhook format looks OK";; \
-	  *) echo "⚠️ host can't read or format not checked (ok if secure mode)";; \
-	esac; \
-	# 컨테이너 내부 접근성 검사(핵심) \
-	if command -v docker >/dev/null 2>&1 && docker ps --format '{{.Names}}' | grep -q '^alertmanager$$'; then \
-	  docker exec $(ALERTMANAGER_CONTAINER) sh -lc 'test -r /etc/alertmanager/secrets/slack_webhook_url' \
+	# 1) (선택) 형식 체크: 호스트가 읽을 수 있을 때만 수행 \
+	if [ -r "$$f" ]; then \
+	  if grep -q 'YOUR/SLACK/WEBHOOK' "$$f"; then \
+	    [ "$(SKIP_WEBHOOK_GUARD)" = "1" ] || { echo "❌ placeholder webhook"; exit 1; }; \
+	  fi; \
+	  case "$$(head -c 10 $$f 2>/dev/null)" in \
+	    https://hoo*) echo "✅ webhook format looks OK" ;; \
+	    *) echo "⚠️ format not verified (non-fatal)" ;; \
+	  esac; \
+	else \
+	  echo "ℹ️ host can't read (secure mode) — skipping placeholder check"; \
+	fi; \
+	# 2) 컨테이너 안 읽기 가능 여부(권위 체크) \
+	if command -v docker >/dev/null 2>&1 && docker ps --format "{{.Names}}" | grep -q "^$(ALERTMANAGER_CONTAINER)$$"; then \
+	  docker exec "$(ALERTMANAGER_CONTAINER)" sh -lc "test -r /etc/alertmanager/secrets/slack_webhook_url" \
 	    && echo "✅ readable in container" \
 	    || { echo "❌ not readable in container"; exit 1; }; \
 	else \
 	  echo "ℹ️ docker AM not found → skipping in-container read test"; \
 	fi; \
+	# 3) AM 헬스 \
 	curl -fsS --max-time 3 http://localhost:9093/-/healthy >/dev/null && echo "✅ Alertmanager healthy"
 
 alertmanager-apply: monitoring-check
