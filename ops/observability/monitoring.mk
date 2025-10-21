@@ -11,7 +11,7 @@ alertmanager-reload-monitoring:
 clean-submodules-monitoring:
 	@echo "Cleaning submodules (discard local changes)..."
 	@# recursive OFF + 전체 에러 무시로 nested submodule 문제 회피
-	@git -c submodule.recurse=false submodule foreach 'git restore --staged . || true; git checkout -- . || true; git clean -fdx || true' || true
+	@git -c submodule.recurse=false submodule foreach \n	  'git restore --staged . || true; git checkout -- . || true; git clean -fdx || true' \n	  2>/dev/null || true
 	@echo "Done."
 
 status-monitoring:
@@ -23,3 +23,10 @@ status-monitoring:
 	@printf "Webhook file: "; stat -c '%a %n' ops/observability/slack_webhook_url 2>/dev/null || echo "missing"
 
 endif
+
+.PHONY: monitoring-help
+monitoring-help:
+	@echo "Monitoring targets:"
+	@echo "  status-monitoring               - Check system status"
+	@echo "  alertmanager-reload-monitoring  - Secure webhook file + reload AM"
+	@echo "  clean-submodules-monitoring     - Clean submodules (safe)"

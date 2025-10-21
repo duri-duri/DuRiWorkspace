@@ -261,4 +261,4 @@ alertmanager-reload:
 .PHONY: alertmanager-reload
 
 
-include ops/observability/monitoring.mk
+-include ops/observability/monitoring.mk
