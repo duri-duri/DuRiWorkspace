@@ -1,3 +1,6 @@
+# Variables
+WEBHOOK_FILE ?= ops/observability/slack_webhook_url
+
 # ops/observability/monitoring.mk
 ifndef MONITORING_HELPERS_INCLUDED
 ALERTMANAGER_CONTAINER ?= $(shell docker ps --format '{{.Names}}' | grep -E '^alertmanager$$|^am$$' | head -n1 || echo alertmanager)
@@ -45,7 +48,7 @@ status-monitoring:
 	@printf "Webhook file: "; $(STAT_MODE) ops/observability/slack_webhook_url 2>/dev/null | xargs -I{} echo "{} ops/observability/slack_webhook_url" || echo "missing"
 
 monitoring-check:
-	@f=ops/observability/slack_webhook_url; \
+	@f=$(WEBHOOK_FILE); \
 	test -f $$f || { echo "❌ $$f not found"; exit 1; }; \
 	perm=$$($(STAT_MODE) $$f 2>/dev/null || echo 000); \
 	echo "ℹ️ host perm: $$perm"; \
@@ -78,7 +81,7 @@ alertmanager-apply: monitoring-check
 
 # 보안 모드: 컨테이너(nobody:65534)만 읽기(600)
 secret-perms-secure:
-	@f=ops/observability/slack_webhook_url; \
+	@f=$(WEBHOOK_FILE); \
 	test -f $$f || { echo "❌ $$f not found"; exit 1; }; \
 	if sudo -n true 2>/dev/null; then \
 	  sudo chown 65534:65534 $$f && sudo chmod 600 $$f; \
@@ -90,7 +93,7 @@ secret-perms-secure:
 
 # 편의 모드: 호스트 사용자 읽기 가능(644)
 secret-perms-relaxed:
-	@f=ops/observability/slack_webhook_url; \
+	@f=$(WEBHOOK_FILE); \
 	test -f $$f || { echo "❌ $$f not found"; exit 1; }; \
 	if sudo -n true 2>/dev/null; then \
 	  sudo chown $$(id -u):$$(id -g) $$f && sudo chmod 644 $$f; \
@@ -139,3 +142,8 @@ ci-smoke:
 	@SKIP_WEBHOOK_GUARD=1 $(MAKE) --no-print-directory monitoring-check
 
 endif
+
+.PHONY: canary-alert
+canary-alert:
+	@echo "Sending canary alert…"
+	@printf '%s\n' '[{"labels":{"alertname":"CHATGPT_CANARY","severity":"info"}, "annotations":{"summary":"Canary test"}, "startsAt":"'"191151(date -u +%Y-%m-%dT%H:%M:%SZ)"'"}]' 	| curl -fsS -XPOST http://localhost:9093/api/v2/alerts -H "Content-Type: application/json" -d @- 	&& echo "✅ Canary alert sent" || { echo "❌ Failed to send canary alert"; exit 1; }

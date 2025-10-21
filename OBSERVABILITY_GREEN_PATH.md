@@ -42,3 +42,55 @@ make SKIP_WEBHOOK_GUARD=1 monitoring-check  # CI/새 환경
 - ✅ Pre-commit hook blocking webhook commits
 - ✅ macOS/Linux compatibility
 - ✅ Config syntax validation before reload
+
+## 🎯 운영 핸드북 (2줄)
+
+### 로컬/커밋 전
+🟢 set ops/observability/slack_webhook_url -> owner duri:duri, mode 644
+ℹ️ host perm: 644
+⚠️ format not verified (non-fatal)
+✅ readable in container
+✅ Alertmanager healthy
+
+### 운영 적용
+🔒 set ops/observability/slack_webhook_url -> owner 65534:65534, mode 600
+Checking '/etc/alertmanager/alertmanager.yml'  SUCCESS
+Found:
+ - global config
+ - route
+ - 0 inhibit rules
+ - 3 receivers
+ - 0 templates
+
+ℹ️ host perm: 600
+ℹ️ host can't read (secure mode) — skipping placeholder check
+✅ readable in container
+✅ Alertmanager healthy
+Alertmanager reloaded ✅
+✅ secure apply done
+=== DuRi Workspace Status ===
+Prometheus: Prometheus Server is Ready.
+
+Alertmanager: OK
+Grafana: ok - 12.2.0
+Targets: 12
+Webhook file: 600 ops/observability/slack_webhook_url
+
+## 🔧 고급 설정
+
+### 이미지 다이제스트 고정 (재현성 극대화)
+모든 모니터링 이미지가 다이제스트로 고정되어 있어 새 환경에서도 동일한 버전이 실행됩니다.
+
+### WEBHOOK_FILE 변수화 (유지보수성 향상)
+❌ /custom/path/webhook not found
+
+### CI 환경 변수
+🟢 set ops/observability/slack_webhook_url -> owner duri:duri, mode 644
+ℹ️ host perm: 644
+⚠️ format not verified (non-fatal)
+✅ readable in container
+✅ Alertmanager healthy
+
+## 🚀 캔어리 테스트
+Sending canary alert…
+❌ Failed to send canary alert
