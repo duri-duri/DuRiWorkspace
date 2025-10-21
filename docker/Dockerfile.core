@@ -2,12 +2,30 @@ FROM duri-base:latest
 
 WORKDIR /app
 
-# Core 서비스 파일 복사
-COPY duri_core/ /app/duri_core/
+# 공용 모듈과 코어 코드 복사
+COPY duri_common/ /app/duri_common/
+COPY duri_core/   /app/duri_core/
 
-# Core 서비스 의존성 설치
-COPY duri_core/requirements.txt ./requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+# 의존성 설치
+COPY duri_core/requirements.txt /app/requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt
 
-# Core 서비스 실행
+# 빌드 타임에 import 검사로 빠르게 실패 유도
+RUN python - <<'PY'
+import sys
+sys.path.insert(0, "/app")
+import duri_common  # 실패 시 빌드 중단
+PY
+
+# 표준 logging 모듈 검증 (shadowing 방지)
+RUN python - <<'PY'
+import sys, logging
+print("PYTHONPATH:", sys.path)
+print("logging file:", getattr(logging, "__file__", "<builtin>"))
+assert "site-packages" not in str(logging.__file__), "3rd-party logging found"
+assert "/usr" in logging.__file__, "stdlib logging not found"
+print("OK: stdlib logging")
+PY
+
+ENV PYTHONPATH=/app:$PYTHONPATH
 CMD ["python", "duri_core/run.py"]
