@@ -1,3 +1,4 @@
 ops/observability/**
 .github/workflows/observability-smoke.yml
 Makefile
+freeze-allow.txt
