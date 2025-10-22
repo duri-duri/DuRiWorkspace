@@ -10,6 +10,16 @@ note(){ echo -e "${YEL}➜ $*${NC}"; }
 
 note "CI Guard: Environment Mismatch Prevention"
 
+# 0) Check for attr namespace pollution (prevents flake8-bugbear conflicts)
+note "Checking for attr namespace pollution"
+python - <<'PY' || { echo "[CI GUARD] Found 'attr' shadowing 'attrs'"; exit 1; }
+try:
+    import attr  # 존재하면 실패시킴
+    raise SystemExit(1)
+except Exception:
+    pass
+PY
+
 # 1) Check if we're in the right environment
 if [[ "${CI:-}" == "true" ]]; then
     note "Running in CI environment"
