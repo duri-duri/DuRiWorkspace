@@ -13,9 +13,7 @@ class EmotionLevel(IntEnum):
     """감정 레벨 열거형"""
 
     LEVEL_1 = 1  # Basic emotions (primary emotions)
-    LEVEL_2 = (
-        2  # Secondary emotions (more complex, often combinations of basic emotions)
-    )
+    LEVEL_2 = 2  # Secondary emotions (more complex, often combinations of basic emotions)
     LEVEL_3 = 3  # Tertiary emotions (most complex, often context-dependent)
     UNKNOWN = 0  # Unknown or invalid emotions
 
@@ -48,6 +46,73 @@ for level_emotions in EMOTION_LEVELS.values():
 
 # Create a set for faster lookups (case-insensitive)
 _EMOTION_SET: Set[str] = {emotion.lower() for emotion in ALL_EMOTIONS}
+
+# Emotion aliases for backward compatibility and user-friendly input
+EMOTION_ALIASES: Dict[str, str] = {
+    "joy": "happy",
+    "happiness": "happy",
+    "glad": "happy",
+    "cheerful": "happy",
+    "sadness": "sad",
+    "sorrow": "sad",
+    "grief": "sad",
+    "anger": "angry",
+    "mad": "angry",
+    "furious": "angry",
+    "scared": "fear",
+    "afraid": "fear",
+    "terrified": "fear",
+    "shocked": "surprise",
+    "amazed": "surprise",
+    "disgusted": "disgust",
+    "revolted": "disgust",
+    "embarrassed": "shame",
+    "ashamed": "shame",
+    "curious": "curiosity",
+    "wondering": "curiosity",
+    "frustrated": "frustration",
+    "annoyed": "frustration",
+    "relieved": "relief",
+    "jealous": "envy",
+    "envious": "envy",
+    "bored": "boredom",
+    "proud": "pride",
+    "regretful": "regret",
+    "guilty": "guilt",
+    "empathetic": "empathy",
+    "nostalgic": "nostalgia",
+    "awed": "awe",
+    "amazed": "awe",
+}
+
+
+def normalize_emotion(emotion: str) -> str:
+    """
+    Normalize emotion input to standard emotion label.
+
+    Args:
+        emotion (str): Input emotion string
+
+    Returns:
+        str: Normalized emotion label
+    """
+    if not isinstance(emotion, str):
+        return emotion
+
+    emotion_lower = emotion.strip().lower()
+
+    # Check if it's already a valid emotion
+    if emotion_lower in _EMOTION_SET:
+        return emotion_lower
+
+    # Check aliases
+    normalized = EMOTION_ALIASES.get(emotion_lower)
+    if normalized:
+        return normalized
+
+    # Return original if no alias found
+    return emotion_lower
+
 
 # Create a mapping for emotion to level (case-insensitive)
 _EMOTION_TO_LEVEL: Dict[str, EmotionLevel] = {}

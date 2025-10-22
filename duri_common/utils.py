@@ -5,12 +5,12 @@ DuRi Common Utilities
 공통으로 사용되는 유틸리티 함수들을 모아둔 모듈입니다.
 """
 
-from datetime import datetime
 import json
 import os
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-from .logger import get_logger
+from duri_common.logger import get_logger
 
 logger = get_logger("duri_common.utils")
 

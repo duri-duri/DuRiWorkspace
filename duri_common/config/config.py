@@ -53,9 +53,7 @@ class Config:
     @staticmethod
     def get_update_script_path() -> str:
         """업데이트 스크립트 경로"""
-        return os.getenv(
-            "UPDATE_SCRIPT_PATH", "/tmp/../scripts/update_cur_from_delta.py"
-        )
+        return os.getenv("UPDATE_SCRIPT_PATH", "/tmp/../scripts/update_cur_from_delta.py")
 
     @staticmethod
     def get_evolution_log() -> str:
@@ -243,3 +241,37 @@ class Config:
 
 # 전역 설정 인스턴스
 config = Config()
+
+
+def load_env(key, default=None, type_cast=str):
+    """
+    환경 변수에서 값을 로드합니다.
+
+    Args:
+        key (str): 환경 변수 키
+        default: 기본값
+        type_cast: 타입 변환 함수
+
+    Returns:
+        환경 변수 값 또는 기본값
+    """
+    import os
+
+    value = os.getenv(key, default)
+
+    if type_cast == bool:
+        return (
+            value.lower() in ("true", "1", "yes", "on") if isinstance(value, str) else bool(value)
+        )
+    elif type_cast == int:
+        try:
+            return int(value) if value is not None else default
+        except (ValueError, TypeError):
+            return default
+    elif type_cast == float:
+        try:
+            return float(value) if value is not None else default
+        except (ValueError, TypeError):
+            return default
+    else:
+        return type_cast(value) if value is not None else default

@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  duri-allinone:
+    # ensure app receives env vars from host .env (compose injects env; but we also mount file for scripts expecting an actual file)
+    env_file:
+      - .env
+    volumes:
+      # mount .env into container path expected by start script
+      - ./.env:/app/.env:ro
+      # mount patched start script into container (overrides image entrypoint script)
+      - ./patched_start_allinone.sh:/app/start_allinone.sh:ro
+      - ./supervisor_override/10-env-override.conf:/etc/supervisor/conf.d/10-env-override.conf:ro

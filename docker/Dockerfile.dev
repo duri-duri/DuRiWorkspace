@@ -1,0 +1,24 @@
+# Development/Test image with pytest and testing tools
+FROM duri-base:latest
+
+WORKDIR /app
+
+# Copy source code
+COPY duri_core/ /app/duri_core/
+COPY duri_common/ /app/duri_common/
+COPY tests/ /app/tests/
+
+# Copy requirements files
+COPY duri_core/requirements.txt ./requirements.txt
+COPY requirements-dev.txt ./requirements-dev.txt
+
+# Install runtime + dev dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements-dev.txt
+
+# Set environment for testing
+ENV DURICORE_SKIP_DB=1
+ENV PYTHONPATH=/app
+
+# Default command for testing
+CMD ["pytest", "-v", "tests/"]

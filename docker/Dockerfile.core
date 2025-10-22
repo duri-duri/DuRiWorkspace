@@ -4,6 +4,8 @@ WORKDIR /app
 
 # Core 서비스 파일 복사
 COPY duri_core/ /app/duri_core/
+# 공통 모듈 복사
+COPY duri_common/ /app/duri_common/
 
 # Core 서비스 의존성 설치
 COPY duri_core/requirements.txt ./requirements.txt

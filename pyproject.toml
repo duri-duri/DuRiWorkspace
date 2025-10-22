@@ -2,3 +2,23 @@
 line-length = 100
 target-version = ["py310"]
 extend-exclude = "\\.reports|artifacts|vendor"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["F", "E", "I", "TID252"]  # TID252: ban-relative-imports
+ignore = []
+
+[tool.ruff.lint.per-file-ignores]
+# Tests can use magic values, assertions, but NOT relative imports
+"tests/**/*.py" = ["PLR2004", "S101"]
+# Allow print statements in scripts
+"scripts/**/*.py" = ["T201"]
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.ruff.lint.isort]
+known-first-party = ["duri_core", "duri_common"]

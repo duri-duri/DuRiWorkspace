@@ -1,0 +1,18 @@
+[Unit]
+Description=DuRi Shadow Training Loop
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=duri
+WorkingDirectory=/home/duri/DuRiWorkspace
+ExecStart=/bin/bash -lc './scripts/shadow_duri_integration_final.sh'
+Restart=always
+RestartSec=10
+Environment=PYTHONUNBUFFERED=1
+StandardOutput=append:/home/duri/DuRiWorkspace/var/logs/shadow_duri_integration_final.log
+StandardError=append:/home/duri/DuRiWorkspace/var/logs/shadow_duri_integration_final.log
+
+[Install]
+WantedBy=multi-user.target

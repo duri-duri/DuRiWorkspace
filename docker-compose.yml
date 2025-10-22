@@ -1,117 +1,147 @@
-
 services:
-  duri_core:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.core
-    container_name: duri_core_container
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./logs:/app/logs
-      - ./config:/app/config
-      - ./.env:/app/.env
-    environment:
-      - PORT=8080
-      - PYTHONPATH=/app:/app/duri_common
-    depends_on:
-      - duri-postgres
-      - duri-redis
-    restart: unless-stopped
-    mem_limit: 2g
-
-  duri_brain:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.brain
-    container_name: duri_brain_container
-    ports:
-      - "8081:8081"
-    volumes:
-      - ./logs:/app/logs
-      - ./config:/app/config
-      - ./.env:/app/.env
-    environment:
-      - PORT=8081
-      - PYTHONPATH=/app:/app/duri_common
-    depends_on:
-      - duri-postgres
-      - duri-redis
-    restart: unless-stopped
-    mem_limit: 2g
-
-  duri_evolution:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.evolution
-    container_name: duri_evolution_container
-    ports:
-      - "8082:8082"
-    volumes:
-      - ./logs:/app/logs
-      - ./config:/app/config
-      - ./.env:/app/.env
-    environment:
-      - PORT=8082
-      - PYTHONPATH=/app:/app/duri_core
-    depends_on:
-      - duri-postgres
-      - duri-redis
-    restart: unless-stopped
-    mem_limit: 1g
-
-  duri_control:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.control
-    container_name: duri_control_container
-    ports:
-      - "8083:8083"
-    volumes:
-      - ./logs:/app/logs
-      - ./config:/app/config
-      - ./.env:/app/.env
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./duri_control/wait-for-postgres.sh:/app/wait-for-postgres.sh:ro
-    environment:
-      - PORT=8083
-      - PYTHONPATH=/app:/app/duri_common
-    env_file:
-      - .env
-    depends_on:
-      - duri-postgres
-      - duri-redis
-    command: ["bash", "/app/wait-for-postgres.sh"]
-    restart: unless-stopped
-
+  # PostgreSQL 데이터베이스
   duri-postgres:
     image: postgres:14
     container_name: duri-postgres
-    restart: always
     environment:
-      POSTGRES_USER: duri
-      POSTGRES_PASSWORD: duri
-      POSTGRES_DB: duri
+      POSTGRES_DB: duri_workspace
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-    volumes:
-      - duri_postgres_data:/var/lib/postgresql/data
-    mem_limit: 1g
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
+  # Redis 캐시
   duri-redis:
     image: redis:7-alpine
     container_name: duri-redis
-    restart: always
     ports:
       - "6379:6379"
-    volumes:
-      - duri_redis_data:/data
-    mem_limit: 512m
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # DuRi Core 서비스
+  duri-core:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.core
+    container_name: duri-core
+    environment:
+      - DURI_MODE=core
+      - PYTHONPATH=/app:/app/duri_common
+      - DATABASE_URL=postgresql://postgres:postgres@duri-postgres:5432/duri_workspace
+      - REDIS_URL=redis://duri-redis:6379
+    ports:
+      - "8080:8080"
+    depends_on:
+      duri-postgres:
+        condition: service_healthy
+      duri-redis:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request,sys; u=urllib.request.urlopen('http://localhost:8080/health',timeout=2); sys.exit(0 if u.status==200 else 1)\""]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  # DuRi Brain 서비스
+  duri-brain:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.brain
+    container_name: duri-brain
+    environment:
+      - DURI_MODE=brain
+      - PYTHONPATH=/app:/app/duri_common
+      - DATABASE_URL=postgresql://postgres:postgres@duri-postgres:5432/duri_workspace
+      - REDIS_URL=redis://duri-redis:6379
+    ports:
+      - "8081:8081"
+    depends_on:
+      duri-postgres:
+        condition: service_healthy
+      duri-redis:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request,sys; u=urllib.request.urlopen('http://localhost:8081/health',timeout=2); sys.exit(0 if u.status==200 else 1)\""]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  # DuRi Evolution 서비스
+  duri-evolution:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.evolution
+    container_name: duri-evolution
+    environment:
+      - DURI_MODE=evolution
+      - PYTHONPATH=/app:/app/duri_common
+      - DATABASE_URL=postgresql://postgres:postgres@duri-postgres:5432/duri_workspace
+      - REDIS_URL=redis://duri-redis:6379
+    ports:
+      - "8082:8082"
+    depends_on:
+      duri-postgres:
+        condition: service_healthy
+      duri-redis:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request,sys; u=urllib.request.urlopen('http://localhost:8082/health',timeout=2); sys.exit(0 if u.status==200 else 1)\""]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  # DuRi Control 서비스
+  duri-control:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.control
+    container_name: duri-control
+    environment:
+      - DURI_MODE=control
+      - PYTHONPATH=/app:/app/duri_common
+      - DATABASE_URL=postgresql://postgres:postgres@duri-postgres:5432/duri_workspace
+      - REDIS_URL=redis://duri-redis:6379
+    ports:
+      - "8083:8083"
+    depends_on:
+      duri-postgres:
+        condition: service_healthy
+      duri-redis:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request,sys; u=urllib.request.urlopen('http://localhost:8083/health',timeout=2); sys.exit(0 if u.status==200 else 1)\""]
+      interval: 10s
+      timeout: 3s
+      retries: 3
 
 volumes:
-  duri_postgres_data:
-  duri_redis_data:
-
-networks:
-  default:
-    driver: bridge
+  postgres_data:
+# 의도적 설정 변경 시뮬레이션
