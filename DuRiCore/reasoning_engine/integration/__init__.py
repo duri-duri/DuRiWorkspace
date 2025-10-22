@@ -1,1 +1,1 @@
-# package marker (docs live as .md)
+# package marker; docs are .md files

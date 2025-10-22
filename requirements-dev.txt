@@ -1,7 +1,4 @@
-# Development dependencies for testing
-pytest==8.4.2
-pytest-asyncio==0.24.0
-anyio==4.9.0
-flask-cors==6.0.1
-ruff==0.1.0
-jq==1.6 ; sys_platform == "linux"
+mutmut==2.4.4
+radon==6.0.1
+xenon==0.9.1
+pytest-mutagen==0.1.0

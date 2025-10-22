@@ -1,24 +1,18 @@
-[tool.black]
-line-length = 100
-target-version = ["py310"]
-extend-exclude = "\\.reports|artifacts|vendor"
+[tool.mutmut]
+paths_to_mutate = ["duri_core", "duri_brain", "duri_evolution"]
+tests_dir = "tests"
+runner = "python -m pytest -q"
+backup = False
+dict_synonyms = ["dict", "Dict", "Dict[str, Any]", "Dict[Any, Any]"]
 
-[tool.ruff]
-line-length = 100
-target-version = "py310"
+[tool.radon]
+cc_threshold = "C"  # B 이상이면 경고, C부터 실패
+mi_min = 65         # 유지보수성 지수 최소
+show_complexity = true
+show_closures = true
 
-[tool.ruff.lint]
-select = ["F", "E", "I", "TID252"]  # TID252: ban-relative-imports
-ignore = []
-
-[tool.ruff.lint.per-file-ignores]
-# Tests can use magic values, assertions, but NOT relative imports
-"tests/**/*.py" = ["PLR2004", "S101"]
-# Allow print statements in scripts
-"scripts/**/*.py" = ["T201"]
-
-[tool.ruff.lint.flake8-tidy-imports]
-ban-relative-imports = "all"
-
-[tool.ruff.lint.isort]
-known-first-party = ["duri_core", "duri_common"]
+[tool.xenon]
+max-absolute = "B"
+max-modules = "B"
+max-average = "B"
+exclude = ["tests/", "var/", ".duri/", "DuRiCore/backup_repository/"]

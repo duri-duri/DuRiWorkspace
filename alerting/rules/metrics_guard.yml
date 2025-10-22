@@ -72,3 +72,48 @@ groups:
     annotations:
       summary: "High emotion normalization rate: {{ $labels.from_emotion }} -> {{ $labels.to_emotion }}"
       description: "감정 정규화 빈도가 높음. 클라이언트 입력 패턴 확인 필요."
+
+  # Alert: 자가 리뷰 품질 회귀 감지
+  - alert: DuriSelfReviewRegression
+    expr: increase(duri_selfreview_regression_total[24h]) > 0
+    for: 5m
+    labels: {severity: warning}
+    annotations:
+      summary: "Self-review quality regression detected"
+      description: "자가 리뷰 품질 지표가 회귀됨. 코드 품질 게이트 확인 필요."
+
+  # Alert: 뮤테이션 테스트 실패율 증가
+  - alert: DuriMutationTestRegression
+    expr: (duri_mutation_tests_failed_total / duri_mutation_tests_total_total) > 0.1
+    for: 10m
+    labels: {severity: warning}
+    annotations:
+      summary: "Mutation test failure rate >10%"
+      description: "뮤테이션 테스트 실패율이 10%를 초과함. 코드 커버리지 확인 필요."
+
+  # Alert: 정적 품질 지표 하락
+  - alert: DuriStaticQualityDrop
+    expr: duri_maintainability_index < 65
+    for: 15m
+    labels: {severity: warning}
+    annotations:
+      summary: "Maintainability index below threshold"
+      description: "유지보수성 지수가 임계값(65) 이하로 하락함."
+
+  # Alert: 높은 복잡도 함수 증가
+  - alert: DuriHighComplexitySpike
+    expr: increase(duri_high_complexity_functions_total[1h]) > 5
+    for: 5m
+    labels: {severity: info}
+    annotations:
+      summary: "High complexity functions increased"
+      description: "높은 복잡도 함수가 1시간 내 5개 이상 증가함."
+
+  # Alert: 약점 채굴 시스템 활성화
+  - alert: DuriWeakpointMiningActive
+    expr: increase(duri_error_total[1h]) > 10
+    for: 5m
+    labels: {severity: info}
+    annotations:
+      summary: "Weakpoint mining triggered"
+      description: "1시간 내 에러가 10개 이상 발생하여 약점 채굴 시스템이 활성화됨."
