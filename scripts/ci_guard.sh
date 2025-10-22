@@ -36,14 +36,50 @@ fi
 note "Installing dev dependencies"
 pip install -r requirements-dev.txt >/dev/null 2>&1 || fail "Failed to install dev dependencies"
 
-# 3) Run tests with proper environment
+# 3) Fail-fast module loading check (build-time guard)
+note "Running fail-fast module loading check"
+python3 - <<'PY'
+import importlib
+import sys
+
+# Critical modules that must load at build time
+critical_modules = [
+    "duri_core.app.logic",
+    "duri_core.core.decision",
+    "duri_core.core.decision_processor",
+    "duri_core.core.logging",
+    "duri_core.core.stats",
+    "duri_core.core.database",
+    "duri_core.core.loop_orchestrator",
+    "duri_common.config.emotion_labels",
+]
+
+failed_modules = []
+for module_name in critical_modules:
+    try:
+        importlib.import_module(module_name)
+        print(f"✅ {module_name} loaded successfully")
+    except Exception as e:
+        failed_modules.append(f"{module_name}: {e}")
+        print(f"❌ {module_name} failed to load: {e}")
+
+if failed_modules:
+    print("CRITICAL MODULES FAILED TO LOAD:")
+    for failure in failed_modules:
+        print(f"  - {failure}")
+    sys.exit(1)
+
+print("✅ All critical modules loaded successfully (build-time guard passed)")
+PY
+
+# 4) Run tests with proper environment
 note "Running import tests with DB skip"
 export DURICORE_SKIP_DB=1
 export DURI_DB_SKIP=1
 export DURI_TEST_SKIP_DB=1
 DURI_DB_SKIP=1 DURI_TEST_SKIP_DB=1 PYTHONPATH="tests:$PYTHONPATH" python3 -m pytest tests/test_imports.py -v
 
-# 4) Check for absolute imports (no relative imports in core modules)
+# 5) Check for absolute imports (no relative imports in core modules)
 note "Checking for absolute imports"
 # 운영 중인 핵심 모듈만 체크 (서브모듈 제외, visualize/brain/evolution 등은 서브모듈 내부 구조)
 RELATIVE_COUNT=$(grep -r "from \." duri_core/app/ duri_common/ 2>/dev/null | grep -v "__pycache__" | grep -v "__init__.py" | wc -l)
@@ -55,11 +91,11 @@ else
     pass "No relative imports found in core app modules"
 fi
 
-# 5) Run ruff lint check (should fail CI if violations found)
+# 6) Run ruff lint check (should fail CI if violations found)
 note "Running ruff lint check"
 ruff check . || fail "Ruff lint violations found - fix before proceeding"
 
-# 6) Verify container vs host consistency
+# 7) Verify container vs host consistency
 note "Checking container consistency"
 if docker ps --format '{{.Names}}' | grep -q duri-core; then
     CONTAINER_IMAGE=$(docker inspect duri-core --format '{{.Image}}')
