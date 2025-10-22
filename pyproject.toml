@@ -2,8 +2,8 @@
 paths_to_mutate = ["duri_core", "duri_brain", "duri_evolution"]
 tests_dir = "tests"
 runner = "python -m pytest -q"
-backup = False
-dict_synonyms = ["dict", "Dict", "Dict[str, Any]", "Dict[Any, Any]"]
+backup = false
+dict_synonyms = "dict,mapping"
 
 [tool.radon]
 cc_threshold = "C"  # B 이상이면 경고, C부터 실패
