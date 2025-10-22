@@ -3,10 +3,10 @@
 DuRi 자가 평가 시스템
 자신의 진화 상태를 스스로 평가하는 시스템
 """
-from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
 import json
 import logging
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
@@ -109,12 +109,9 @@ class SelfAssessmentSystem:
             # 전체 점수 계산
             overall_score = (
                 autonomy_score * self.assessment_criteria["autonomy"]["weight"]
-                + learning_score
-                * self.assessment_criteria["learning_efficiency"]["weight"]
-                + problem_solving_score
-                * self.assessment_criteria["problem_solving"]["weight"]
-                + evolution_score
-                * self.assessment_criteria["evolution_capability"]["weight"]
+                + learning_score * self.assessment_criteria["learning_efficiency"]["weight"]
+                + problem_solving_score * self.assessment_criteria["problem_solving"]["weight"]
+                + evolution_score * self.assessment_criteria["evolution_capability"]["weight"]
             )
 
             # 개선 영역과 강점 분석
@@ -327,9 +324,7 @@ class SelfAssessmentSystem:
 
         return strengths
 
-    def _calculate_assessment_confidence(
-        self, performance_data: Dict[str, Any]
-    ) -> float:
+    def _calculate_assessment_confidence(self, performance_data: Dict[str, Any]) -> float:
         """평가 신뢰도 계산"""
         try:
             # 데이터 품질 기반 신뢰도 계산
@@ -341,9 +336,7 @@ class SelfAssessmentSystem:
             ]
 
             available_indicators = sum(
-                1
-                for indicator in data_quality_indicators
-                if indicator in performance_data
+                1 for indicator in data_quality_indicators if indicator in performance_data
             )
 
             confidence = min(1.0, available_indicators / len(data_quality_indicators))
@@ -366,9 +359,7 @@ class SelfAssessmentSystem:
             recent_assessments = self.assessment_history[-5:]  # 최근 5개 평가
 
             # 전체 점수 변화
-            overall_scores = [
-                assessment.overall_score for assessment in recent_assessments
-            ]
+            overall_scores = [assessment.overall_score for assessment in recent_assessments]
             progress_rate = self._calculate_progress_rate(overall_scores)
 
             # 영역별 진행 상황
@@ -442,9 +433,7 @@ class SelfAssessmentSystem:
                     "predicted_next_score": max(0.0, min(1.0, predicted_next)),
                     "prediction_confidence": confidence,
                     "trend_direction": (
-                        "improving"
-                        if trend > 0
-                        else "declining" if trend < 0 else "stable"
+                        "improving" if trend > 0 else "declining" if trend < 0 else "stable"
                     ),
                     "estimated_time_to_next_stage": self._estimate_time_to_next_stage(
                         recent_scores[-1]

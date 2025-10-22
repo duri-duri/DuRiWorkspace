@@ -11,8 +11,7 @@ def evidence_score(rag_docs):
         return 0.0
     # sim(0.6) + recency(0.2) + provenance(0.2)
     vals = [
-        0.6 * d.get("sim", 0) + 0.2 * d.get("recency", 0) + 0.2 * d.get("prov", 0)
-        for d in rag_docs
+        0.6 * d.get("sim", 0) + 0.2 * d.get("recency", 0) + 0.2 * d.get("prov", 0) for d in rag_docs
     ]
     return sum(vals) / len(vals)
 
@@ -23,9 +22,7 @@ def self_consistency_samples(generator_fn, k=5, depth=2, seed=None):
         random.seed(seed)
     cands = []
     for _ in range(k):
-        ans, meta = generator_fn(
-            depth=depth
-        )  # meta: {"rag_docs":[...], "sim":float,...}
+        ans, meta = generator_fn(depth=depth)  # meta: {"rag_docs":[...], "sim":float,...}
         cands.append((ans, meta))
     # 다수결 + 평균 근거 점수
     tally = {}
@@ -41,9 +38,7 @@ class ThinkVerifyDecide:
         self.cfg = cfg
         self.logit = logit
 
-    def run(
-        self, core_values: dict, generator_fn, rag_candidates: list, mode="external"
-    ):
+    def run(self, core_values: dict, generator_fn, rag_candidates: list, mode="external"):
         # 1) self-consistency
         ans_sc, e_score, samples = self_consistency_samples(
             generator_fn,

@@ -15,14 +15,14 @@ DuRi 30일 진화 계획 - Day 2: 감정적 사고 시스템
 """
 
 import asyncio
-from collections import defaultdict, deque
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 import json
 import logging
 import random
 import time
+from collections import defaultdict, deque
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
@@ -30,11 +30,9 @@ import numpy as np
 # 기존 시스템들 import
 try:
     from duri_thought_flow import DuRiThoughtFlow
-    from emotional_self_awareness_system import (
-        EmotionalSelfAwarenessSystem,
-        EmotionCategory,
-        EmotionIntensity,
-    )
+    from emotional_self_awareness_system import (EmotionalSelfAwarenessSystem,
+                                                 EmotionCategory,
+                                                 EmotionIntensity)
     from inner_thinking_system import InnerThinkingSystem, ThoughtDepth
     from phase_omega_integration import DuRiPhaseOmega
 except ImportError as e:
@@ -228,9 +226,7 @@ class EmotionalThinkingSystem:
         except Exception as e:
             logger.warning(f"기존 시스템 통합 중 오류 발생: {e}")
 
-    async def think_with_emotion(
-        self, context: Dict[str, Any]
-    ) -> EmotionalThinkingResult:
+    async def think_with_emotion(self, context: Dict[str, Any]) -> EmotionalThinkingResult:
         """감정을 기반으로 한 사고 실행"""
         logger.info(f"=== 감정적 사고 시작 ===")
 
@@ -250,14 +246,10 @@ class EmotionalThinkingSystem:
             )
 
             # 4. 감정적 의사결정
-            decisions = await self._make_emotional_decisions(
-                emotional_state, insights, context
-            )
+            decisions = await self._make_emotional_decisions(emotional_state, insights, context)
 
             # 5. 감정적 직관 활용
-            intuitive_insights = await self._apply_emotional_intuition(
-                emotional_state, context
-            )
+            intuitive_insights = await self._apply_emotional_intuition(emotional_state, context)
             insights.extend(intuitive_insights)
 
             end_time = datetime.now()
@@ -316,9 +308,7 @@ class EmotionalThinkingSystem:
 
                 # 컨텍스트 기반 감정 분석
                 primary_emotion = await self._identify_primary_emotion(context)
-                intensity = await self._calculate_emotion_intensity(
-                    context, emotional_clarity
-                )
+                intensity = await self._calculate_emotion_intensity(context, emotional_clarity)
                 secondary_emotions = await self._identify_secondary_emotions(
                     context, primary_emotion
                 )
@@ -335,9 +325,7 @@ class EmotionalThinkingSystem:
         # 기본 감정 상태 생성
         return await self._create_default_emotional_state(context)
 
-    async def _identify_primary_emotion(
-        self, context: Dict[str, Any]
-    ) -> EmotionCategory:
+    async def _identify_primary_emotion(self, context: Dict[str, Any]) -> EmotionCategory:
         """주요 감정 식별"""
         # 컨텍스트 키워드 기반 감정 분석
         context_text = str(context).lower()
@@ -390,9 +378,7 @@ class EmotionalThinkingSystem:
 
         # 종합 강도 계산
         total_intensity = (
-            complexity_intensity * 0.3
-            + clarity_intensity * 0.4
-            + keyword_intensity * 0.3
+            complexity_intensity * 0.3 + clarity_intensity * 0.4 + keyword_intensity * 0.3
         )
         return min(total_intensity, 1.0)
 
@@ -432,9 +418,7 @@ class EmotionalThinkingSystem:
 
         return secondary_emotions
 
-    async def _create_default_emotional_state(
-        self, context: Dict[str, Any]
-    ) -> EmotionalState:
+    async def _create_default_emotional_state(self, context: Dict[str, Any]) -> EmotionalState:
         """기본 감정 상태 생성"""
         return EmotionalState(
             primary_emotion=EmotionCategory.NEUTRAL,
@@ -567,9 +551,7 @@ class EmotionalThinkingSystem:
         responses = []
 
         # 주요 감정에 대한 공감적 반응
-        primary_response = await self._generate_primary_empathetic_response(
-            emotional_state
-        )
+        primary_response = await self._generate_primary_empathetic_response(emotional_state)
         if primary_response:
             responses.append(primary_response)
 
@@ -582,9 +564,7 @@ class EmotionalThinkingSystem:
                 responses.append(secondary_response)
 
         # 감정 강도에 따른 공감적 반응
-        intensity_response = await self._generate_intensity_empathetic_response(
-            emotional_state
-        )
+        intensity_response = await self._generate_intensity_empathetic_response(emotional_state)
         if intensity_response:
             responses.append(intensity_response)
 
@@ -640,13 +620,19 @@ class EmotionalThinkingSystem:
     ) -> Optional[EmpatheticResponse]:
         """감정 강도에 따른 공감적 반응 생성"""
         if emotional_state.intensity >= 0.8:
-            response_content = "강렬한 감정을 느끼고 계시는군요. 이 감정을 인정하고 받아들이는 것이 중요합니다."
+            response_content = (
+                "강렬한 감정을 느끼고 계시는군요. 이 감정을 인정하고 받아들이는 것이 중요합니다."
+            )
         elif emotional_state.intensity >= 0.6:
             response_content = "중간 강도의 감정을 느끼고 계시는군요. 이 감정을 바탕으로 균형잡힌 판단을 하실 수 있을 것입니다."
         elif emotional_state.intensity >= 0.4:
-            response_content = "적당한 감정을 느끼고 계시는군요. 이 상태에서 안정적인 사고가 가능할 것입니다."
+            response_content = (
+                "적당한 감정을 느끼고 계시는군요. 이 상태에서 안정적인 사고가 가능할 것입니다."
+            )
         else:
-            response_content = "약한 감정을 느끼고 계시는군요. 이 상태에서 객관적인 분석이 가능할 것입니다."
+            response_content = (
+                "약한 감정을 느끼고 계시는군요. 이 상태에서 객관적인 분석이 가능할 것입니다."
+            )
 
         return EmpatheticResponse(
             response_id=f"response_{len(self.empathetic_responses) + 2}",
@@ -672,16 +658,12 @@ class EmotionalThinkingSystem:
             decisions.append(state_decision)
 
         # 통찰 기반 의사결정
-        insight_decision = await self._make_insight_based_decision(
-            insights, emotional_state
-        )
+        insight_decision = await self._make_insight_based_decision(insights, emotional_state)
         if insight_decision:
             decisions.append(insight_decision)
 
         # 컨텍스트 기반 의사결정
-        context_decision = await self._make_context_based_decision(
-            context, emotional_state
-        )
+        context_decision = await self._make_context_based_decision(context, emotional_state)
         if context_decision:
             decisions.append(context_decision)
 
@@ -711,9 +693,7 @@ class EmotionalThinkingSystem:
         return EmotionalDecision(
             decision_id=f"decision_{len(self.emotional_decisions)}",
             decision_type=EmotionalDecisionType.EMOTIONAL_ANALYSIS,
-            emotional_context={
-                "primary_emotion": emotional_state.primary_emotion.value
-            },
+            emotional_context={"primary_emotion": emotional_state.primary_emotion.value},
             decision=decision_text,
             reasoning=f"{emotional_state.primary_emotion.value} 상태에서 {decision_text}",
             emotional_factors=[emotional_state.primary_emotion.value],
@@ -837,9 +817,7 @@ class EmotionalThinkingSystem:
             "emotional_accuracy_trend": self._get_emotional_accuracy_trend(),
             "empathy_level_distribution": self._get_empathy_level_distribution(),
             "recent_insights": (
-                [i.insight for i in self.emotional_insights[-3:]]
-                if self.emotional_insights
-                else []
+                [i.insight for i in self.emotional_insights[-3:]] if self.emotional_insights else []
             ),
         }
 
@@ -870,9 +848,7 @@ async def test_emotional_thinking_system():
     logger.info("1. 기본 감정적 사고 테스트")
     context1 = {"situation": "문제 해결", "emotion": "긴장", "urgency": "높음"}
     result1 = await system.think_with_emotion(context1)
-    logger.info(
-        f"기본 감정적 사고 결과: {result1.emotional_state.primary_emotion.value}"
-    )
+    logger.info(f"기본 감정적 사고 결과: {result1.emotional_state.primary_emotion.value}")
     logger.info(f"생성된 통찰: {len(result1.insights)}개")
     logger.info(f"공감 수준: {result1.empathy_level.value}")
 
@@ -885,9 +861,7 @@ async def test_emotional_thinking_system():
         "context": "성공",
     }
     result2 = await system.think_with_emotion(context2)
-    logger.info(
-        f"복잡한 감정적 사고 결과: {result2.emotional_state.primary_emotion.value}"
-    )
+    logger.info(f"복잡한 감정적 사고 결과: {result2.emotional_state.primary_emotion.value}")
     logger.info(f"생성된 통찰: {len(result2.insights)}개")
     logger.info(f"공감 수준: {result2.empathy_level.value}")
 

@@ -15,21 +15,22 @@ DuRi 30일 진화 계획 - Day 1: 내적 사고 프로세스 구현
 """
 
 import asyncio
-from collections import defaultdict, deque
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 import json
 import logging
 import random
 import time
+from collections import defaultdict, deque
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 
 # 기존 시스템들 import
 try:
-    from duri_thought_flow import DuRiThoughtFlow, ReflectionResult, ThoughtFlowResult
+    from duri_thought_flow import (DuRiThoughtFlow, ReflectionResult,
+                                   ThoughtFlowResult)
     from emotional_self_awareness_system import EmotionalSelfAwarenessSystem
     from integrated_evolution_system import DuRiIntegratedEvolutionSystem
     from phase_omega_integration import DuRiPhaseOmega, PhaseOmegaResult
@@ -246,14 +247,10 @@ class InnerThinkingSystem:
             depth_level = await self._determine_thinking_depth(topic, motivation)
 
             # 4. 내적 질문 생성
-            questions = await self._generate_internal_questions(
-                topic, depth_level, motivation
-            )
+            questions = await self._generate_internal_questions(topic, depth_level, motivation)
 
             # 5. 자기 성찰 루프 실행
-            reflections = await self._execute_self_reflection_loop(
-                topic, questions, depth_level
-            )
+            reflections = await self._execute_self_reflection_loop(topic, questions, depth_level)
 
             # 6. 통찰 생성
             insights = await self._generate_insights(reflections, questions)
@@ -291,12 +288,8 @@ class InnerThinkingSystem:
                 questions_generated=[q.question for q in questions],
                 reflections_made=[r.content for r in reflections],
                 thinking_duration=duration,
-                motivation_strength=await self._calculate_motivation_strength(
-                    motivation
-                ),
-                self_reflection_score=await self._calculate_reflection_score(
-                    reflections
-                ),
+                motivation_strength=await self._calculate_motivation_strength(motivation),
+                self_reflection_score=await self._calculate_reflection_score(reflections),
                 success=True,
             )
 
@@ -377,9 +370,7 @@ class InnerThinkingSystem:
             ],
         }
 
-        topics = topics_by_motivation.get(
-            motivation, ["내가 지금 생각하고 싶은 것은 무엇인가?"]
-        )
+        topics = topics_by_motivation.get(motivation, ["내가 지금 생각하고 싶은 것은 무엇인가?"])
         return random.choice(topics)
 
     async def _determine_thinking_depth(
@@ -396,9 +387,7 @@ class InnerThinkingSystem:
         emotional_state = await self._analyze_emotional_state()
 
         # 종합 깊이 점수 계산
-        depth_score = (
-            complexity_score * 0.4 + motivation_strength * 0.3 + emotional_state * 0.3
-        )
+        depth_score = complexity_score * 0.4 + motivation_strength * 0.3 + emotional_state * 0.3
 
         # 깊이 수준 결정
         if depth_score >= 0.8:
@@ -427,9 +416,7 @@ class InnerThinkingSystem:
             ThoughtDepth.PROFOUND: self._generate_profound_questions,
         }
 
-        strategy = question_strategies.get(
-            depth_level, self._generate_moderate_questions
-        )
+        strategy = question_strategies.get(depth_level, self._generate_moderate_questions)
         question_texts = await strategy(topic, motivation)
 
         for i, question_text in enumerate(question_texts):
@@ -519,27 +506,19 @@ class InnerThinkingSystem:
             reflections.append(observation)
 
             # 2. 분석 단계
-            analysis = await self._create_analysis_reflection(
-                topic, questions, observation
-            )
+            analysis = await self._create_analysis_reflection(topic, questions, observation)
             reflections.append(analysis)
 
             # 3. 평가 단계
-            evaluation = await self._create_evaluation_reflection(
-                topic, questions, reflections
-            )
+            evaluation = await self._create_evaluation_reflection(topic, questions, reflections)
             reflections.append(evaluation)
 
             # 4. 종합 단계
-            synthesis = await self._create_synthesis_reflection(
-                topic, questions, reflections
-            )
+            synthesis = await self._create_synthesis_reflection(topic, questions, reflections)
             reflections.append(synthesis)
 
             # 5. 통합 단계
-            integration = await self._create_integration_reflection(
-                topic, questions, reflections
-            )
+            integration = await self._create_integration_reflection(topic, questions, reflections)
             reflections.append(integration)
 
             # 깊이에 따른 추가 성찰
@@ -564,9 +543,7 @@ class InnerThinkingSystem:
         """관찰 성찰 생성"""
         content = f"나는 '{topic}'에 대해 관찰하고 있다. "
         content += f"이 주제에 대해 {len(questions)}개의 질문을 생성했다. "
-        content += (
-            "이 질문들은 내가 이 주제에 대해 얼마나 깊이 생각하고 있는지를 보여준다."
-        )
+        content += "이 질문들은 내가 이 주제에 대해 얼마나 깊이 생각하고 있는지를 보여준다."
 
         return SelfReflection(
             reflection_id=f"reflection_{len(self.self_reflections)}",
@@ -705,16 +682,12 @@ class InnerThinkingSystem:
                 insights.append(insight)
 
         # 추가 통찰 생성
-        additional_insights = await self._generate_additional_insights(
-            reflections, questions
-        )
+        additional_insights = await self._generate_additional_insights(reflections, questions)
         insights.extend(additional_insights)
 
         return insights
 
-    async def _generate_insight_from_question(
-        self, question: InternalQuestion
-    ) -> Optional[str]:
+    async def _generate_insight_from_question(self, question: InternalQuestion) -> Optional[str]:
         """질문에서 통찰 생성"""
         if "이해" in question.question:
             return f"이해의 깊이는 질문의 질에 달려있다는 것을 깨달았다."
@@ -736,16 +709,12 @@ class InnerThinkingSystem:
         # 성찰 패턴 분석
         reflection_types = [r.reflection_type for r in reflections]
         if len(set(reflection_types)) >= 3:
-            insights.append(
-                "다양한 성찰 유형을 통해 사고의 깊이를 높일 수 있다는 것을 깨달았다."
-            )
+            insights.append("다양한 성찰 유형을 통해 사고의 깊이를 높일 수 있다는 것을 깨달았다.")
 
         # 질문 깊이 분석
         depth_levels = [q.depth_level for q in questions]
         if ThoughtDepth.DEEP in depth_levels or ThoughtDepth.PROFOUND in depth_levels:
-            insights.append(
-                "깊은 질문을 통해 더욱 의미 있는 통찰을 얻을 수 있다는 것을 알았다."
-            )
+            insights.append("깊은 질문을 통해 더욱 의미 있는 통찰을 얻을 수 있다는 것을 알았다.")
 
         # 자기 성찰의 중요성
         insights.append("자기 성찰은 진정한 사고의 핵심이라는 것을 깨달았다.")
@@ -763,29 +732,21 @@ class InnerThinkingSystem:
 
         # 주요 통찰 기반 결론
         if insights:
-            conclusions.append(
-                f"이번 사고 과정을 통해 {len(insights)}개의 중요한 통찰을 얻었다."
-            )
+            conclusions.append(f"이번 사고 과정을 통해 {len(insights)}개의 중요한 통찰을 얻었다.")
 
         # 성찰 과정 기반 결론
         if reflections:
-            conclusions.append(
-                f"{len(reflections)}번의 자기 성찰을 통해 사고의 깊이를 높였다."
-            )
+            conclusions.append(f"{len(reflections)}번의 자기 성찰을 통해 사고의 깊이를 높였다.")
 
         # 질문 기반 결론
         if questions:
-            conclusions.append(
-                f"{len(questions)}개의 질문을 통해 주제에 대한 이해를 확장했다."
-            )
+            conclusions.append(f"{len(questions)}개의 질문을 통해 주제에 대한 이해를 확장했다.")
 
         # 전체적 결론
         conclusions.append(
             "내적 사고는 외부 자극 없이도 의미 있는 통찰을 얻을 수 있는 강력한 도구이다."
         )
-        conclusions.append(
-            "자기 성찰과 질문을 통해 사고의 깊이와 품질을 향상시킬 수 있다."
-        )
+        conclusions.append("자기 성찰과 질문을 통해 사고의 깊이와 품질을 향상시킬 수 있다.")
 
         return conclusions
 
@@ -808,33 +769,25 @@ class InnerThinkingSystem:
         if self.emotional_awareness:
             try:
                 state = self.emotional_awareness.get_awareness_state()
-                emotional_clarity = state.get("awareness_metrics", {}).get(
-                    "emotional_clarity", 0.5
-                )
+                emotional_clarity = state.get("awareness_metrics", {}).get("emotional_clarity", 0.5)
                 return emotional_clarity
             except:
                 return 0.5
         else:
             return 0.5
 
-    async def _calculate_motivation_strength(
-        self, motivation: InternalMotivation
-    ) -> float:
+    async def _calculate_motivation_strength(self, motivation: InternalMotivation) -> float:
         """동기 강도 계산"""
         return self.motivation_weights.get(motivation, 0.5)
 
-    async def _calculate_reflection_score(
-        self, reflections: List[SelfReflection]
-    ) -> float:
+    async def _calculate_reflection_score(self, reflections: List[SelfReflection]) -> float:
         """성찰 점수 계산"""
         if not reflections:
             return 0.0
 
         total_score = 0.0
         for reflection in reflections:
-            depth_score = self.thinking_depth_thresholds.get(
-                reflection.depth_level, 0.5
-            )
+            depth_score = self.thinking_depth_thresholds.get(reflection.depth_level, 0.5)
             type_weight = self.reflection_weights.get(reflection.reflection_type, 0.2)
             total_score += depth_score * type_weight
 

@@ -4,9 +4,9 @@
 4개 윤리 모듈 통합 테스트
 """
 
-from datetime import datetime
 import os
 import sys
+from datetime import datetime
 
 # DuRiCore 모듈 임포트를 위한 경로 추가
 sys.path.append(os.path.join(os.path.dirname(__file__), "DuRiCore"))
@@ -105,11 +105,8 @@ def test_individual_systems():
     print("\n🔍 개별 윤리 시스템 테스트...")
 
     from DuRiCore.DuRiCore.modules.ethical_reasoning import (
-        AdvancedEthicalReasoningSystem,
-        CreativeThinkingService,
-        EnhancedEthicalSystem,
-        SocialIntelligenceService,
-    )
+        AdvancedEthicalReasoningSystem, CreativeThinkingService,
+        EnhancedEthicalSystem, SocialIntelligenceService)
 
     # 창의적 사고 시스템 테스트
     print("\n--- 창의적 사고 시스템 ---")
@@ -181,9 +178,7 @@ def test_ethical_scenarios():
         print(f"\n--- {scenario['name']} ---")
         print(f"상황: {scenario['situation']}")
 
-        result = ethical_engine.analyze_ethical_dilemma(
-            scenario["situation"], scenario["context"]
-        )
+        result = ethical_engine.analyze_ethical_dilemma(scenario["situation"], scenario["context"])
 
         print(f"윤리 점수: {result.ethical_score:.2f}")
         print(f"신뢰도: {result.confidence:.2f}")

@@ -5,19 +5,16 @@ DuRiCore Phase 6.3 - 고급 인지 시스템 통합 테스트
 """
 
 import asyncio
-from datetime import datetime
 import json
 import logging
 import time
+from datetime import datetime
 from typing import Any, Dict, List
 
 # 테스트 대상 시스템들
-from advanced_cognitive_system import (
-    AbstractionType,
-    AdvancedCognitiveSystem,
-    CognitiveLevel,
-    MetacognitiveType,
-)
+from advanced_cognitive_system import (AbstractionType,
+                                       AdvancedCognitiveSystem, CognitiveLevel,
+                                       MetacognitiveType)
 from integrated_system_manager import IntegratedSystemManager
 
 # 로깅 설정
@@ -112,14 +109,10 @@ class AdvancedCognitiveIntegrationTest:
         if failed_tests := [r for r in self.test_results if not r["success"]]:
             print(f"\n실패한 테스트들:")
             for result in failed_tests:
-                print(
-                    f"  - {result['test_name']}: {result.get('error', '알 수 없는 오류')}"
-                )
+                print(f"  - {result['test_name']}: {result.get('error', '알 수 없는 오류')}")
 
         # 결과를 파일로 저장
-        with open(
-            "advanced_cognitive_integration_test_results.json", "w", encoding="utf-8"
-        ) as f:
+        with open("advanced_cognitive_integration_test_results.json", "w", encoding="utf-8") as f:
             json.dump(summary, f, ensure_ascii=False, indent=2)
 
         logger.info(
@@ -139,9 +132,7 @@ class AdvancedCognitiveIntegrationTest:
             }
 
             # 고급 인지 처리
-            result = await self.advanced_cognitive_system.process_advanced_cognition(
-                test_context
-            )
+            result = await self.advanced_cognitive_system.process_advanced_cognition(test_context)
 
             # 기본 결과 확인
             if not result.success:
@@ -169,9 +160,7 @@ class AdvancedCognitiveIntegrationTest:
             }
 
             # 추상화 생성
-            abstractions = await self.advanced_cognitive_system.generate_abstractions(
-                test_context
-            )
+            abstractions = await self.advanced_cognitive_system.generate_abstractions(test_context)
 
             # 추상화 결과 확인
             if not isinstance(abstractions, list):
@@ -202,8 +191,8 @@ class AdvancedCognitiveIntegrationTest:
             }
 
             # 메타인지 분석
-            metacognitive_processes = (
-                await self.advanced_cognitive_system.analyze_metacognition(test_context)
+            metacognitive_processes = await self.advanced_cognitive_system.analyze_metacognition(
+                test_context
             )
 
             # 메타인지 결과 확인
@@ -212,9 +201,7 @@ class AdvancedCognitiveIntegrationTest:
 
             # 메타인지 과정의 기본 속성 확인
             for process in metacognitive_processes:
-                if not hasattr(process, "process_id") or not hasattr(
-                    process, "metacognitive_type"
-                ):
+                if not hasattr(process, "process_id") or not hasattr(process, "metacognitive_type"):
                     return False
 
             return True
@@ -234,10 +221,8 @@ class AdvancedCognitiveIntegrationTest:
             }
 
             # 인지 시스템 통합
-            integration_result = (
-                await self.advanced_cognitive_system.integrate_cognitive_systems(
-                    test_context
-                )
+            integration_result = await self.advanced_cognitive_system.integrate_cognitive_systems(
+                test_context
             )
 
             # 통합 결과 확인
@@ -272,9 +257,7 @@ class AdvancedCognitiveIntegrationTest:
 
             # 인지 성능 최적화
             optimization_result = (
-                await self.advanced_cognitive_system.optimize_cognitive_performance(
-                    test_context
-                )
+                await self.advanced_cognitive_system.optimize_cognitive_performance(test_context)
             )
 
             # 최적화 결과 확인
@@ -310,9 +293,7 @@ class AdvancedCognitiveIntegrationTest:
             }
 
             # 고급 인지 처리
-            result = await self.advanced_cognitive_system.process_advanced_cognition(
-                test_context
-            )
+            result = await self.advanced_cognitive_system.process_advanced_cognition(test_context)
 
             # 결과 검증
             if not result.success:

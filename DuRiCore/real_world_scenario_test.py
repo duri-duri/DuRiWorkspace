@@ -6,12 +6,12 @@ DuRi 실세계 시나리오 테스트 시스템
 """
 
 import asyncio
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
 import json
 import logging
 import time
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
 from typing import Any, Dict, List, Optional
 
 # 로깅 설정
@@ -266,7 +266,9 @@ class RealWorldScenarioTest:
             if trust_level > 0.7:
                 return f"박철수님, 지금 많이 화가 나시는 것 같습니다. 하지만 당뇨병 합병증은 정말 위험합니다. 다른 방법도 함께 찾아보겠지만, 우선은 기본 치료가 필요합니다."
             else:
-                return f"치료를 거부하시는 이유를 이해합니다. 하지만 의학적으로는 치료가 필요합니다."
+                return (
+                    f"치료를 거부하시는 이유를 이해합니다. 하지만 의학적으로는 치료가 필요합니다."
+                )
 
         else:
             return f"{scenario.patient_name}님, {scenario.current_situation}에 대해 이야기해보겠습니다."
@@ -339,9 +341,7 @@ class RealWorldScenarioTest:
         elif scenario.emotional_state == EmotionType.FEAR:
             # 두려운 환자에게는 안심과 설명이 중요
             return (
-                0.9
-                if "안심" in response.response_text or "설명" in response.response_text
-                else 0.6
+                0.9 if "안심" in response.response_text or "설명" in response.response_text else 0.6
             )
 
         else:
@@ -383,10 +383,7 @@ class RealWorldScenarioTest:
             / total_tests
         )
         avg_processing_time = (
-            sum(
-                r.evaluation_metrics.get("processing_time", 0)
-                for r in self.test_results
-            )
+            sum(r.evaluation_metrics.get("processing_time", 0) for r in self.test_results)
             / total_tests
         )
 
@@ -405,9 +402,7 @@ class RealWorldScenarioTest:
                     "overall_score": r.evaluation_metrics.get("overall_score", 0),
                     "empathy_score": r.evaluation_metrics.get("empathy_score", 0),
                     "trust_score": r.evaluation_metrics.get("trust_score", 0),
-                    "communication_score": r.evaluation_metrics.get(
-                        "communication_score", 0
-                    ),
+                    "communication_score": r.evaluation_metrics.get("communication_score", 0),
                     "processing_time": r.evaluation_metrics.get("processing_time", 0),
                     "feedback": r.feedback,
                 }

@@ -11,13 +11,13 @@ DuRiCore Phase 2-3: 학습 모니터링 시스템 (Learning Monitoring System)
 """
 
 import asyncio
+import json
+import logging
+import time
 from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-import json
-import logging
-import time
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
@@ -130,9 +130,7 @@ class LearningMonitoringSystem:
             logger.warning(f"세션이 이미 존재합니다: {session_id}")
             return session_id
 
-        monitoring_session = MonitoringSession(
-            session_id=session_id, start_time=datetime.now()
-        )
+        monitoring_session = MonitoringSession(session_id=session_id, start_time=datetime.now())
 
         self.monitoring_sessions[session_id] = monitoring_session
         self.performance_metrics["total_sessions"] += 1
@@ -207,9 +205,7 @@ class LearningMonitoringSystem:
         metrics_id = f"metrics_{int(time.time())}_{session_id}"
 
         # 전체 점수 계산
-        overall_score = (
-            progress_score + efficiency_score + quality_score + engagement_score
-        ) / 4.0
+        overall_score = (progress_score + efficiency_score + quality_score + engagement_score) / 4.0
 
         learning_metrics = LearningMetrics(
             metrics_id=metrics_id,
@@ -236,9 +232,7 @@ class LearningMonitoringSystem:
         logger.info(f"학습 메트릭 기록: {metrics_id} (전체 점수: {overall_score:.2f})")
         return metrics_id
 
-    async def analyze_learning_patterns(
-        self, session_id: str = None
-    ) -> List[LearningPattern]:
+    async def analyze_learning_patterns(self, session_id: str = None) -> List[LearningPattern]:
         """학습 패턴 분석"""
         patterns = []
 
@@ -303,9 +297,7 @@ class LearningMonitoringSystem:
 
         return pattern
 
-    async def _calculate_pattern_effectiveness(
-        self, events: List[LearningEvent]
-    ) -> float:
+    async def _calculate_pattern_effectiveness(self, events: List[LearningEvent]) -> float:
         """패턴 효과성 계산"""
         if not events:
             return 0.0
@@ -325,9 +317,7 @@ class LearningMonitoringSystem:
 
         # 간격의 표준편차가 작을수록 효과적
         mean_interval = sum(intervals) / len(intervals)
-        variance = sum((interval - mean_interval) ** 2 for interval in intervals) / len(
-            intervals
-        )
+        variance = sum((interval - mean_interval) ** 2 for interval in intervals) / len(intervals)
         std_dev = variance**0.5
 
         # 효과성 점수 계산 (간격이 일정할수록 높은 점수)
@@ -342,14 +332,14 @@ class LearningMonitoringSystem:
         all_efficiency_scores = [m.efficiency_score for m in self.learning_metrics]
 
         if all_progress_scores:
-            self.performance_metrics["average_progress"] = sum(
+            self.performance_metrics["average_progress"] = sum(all_progress_scores) / len(
                 all_progress_scores
-            ) / len(all_progress_scores)
+            )
 
         if all_efficiency_scores:
-            self.performance_metrics["average_efficiency"] = sum(
+            self.performance_metrics["average_efficiency"] = sum(all_efficiency_scores) / len(
                 all_efficiency_scores
-            ) / len(all_efficiency_scores)
+            )
 
     async def get_monitoring_status(self, session_id: str = None) -> Dict[str, Any]:
         """모니터링 상태 조회"""
@@ -361,9 +351,7 @@ class LearningMonitoringSystem:
                     "session_id": session.session_id,
                     "status": session.status.value,
                     "start_time": session.start_time.isoformat(),
-                    "end_time": (
-                        session.end_time.isoformat() if session.end_time else None
-                    ),
+                    "end_time": (session.end_time.isoformat() if session.end_time else None),
                     "events_count": len(session.events),
                     "metrics_count": len(session.metrics),
                     "patterns_count": len(session.patterns),
@@ -410,9 +398,7 @@ class LearningMonitoringSystem:
             # 전체 리포트
             return await self._generate_overall_report()
 
-    async def _generate_session_report(
-        self, session: MonitoringSession
-    ) -> Dict[str, Any]:
+    async def _generate_session_report(self, session: MonitoringSession) -> Dict[str, Any]:
         """세션 리포트 생성"""
         if not session.metrics:
             return {"error": "메트릭 데이터가 없습니다"}
@@ -468,16 +454,10 @@ class LearningMonitoringSystem:
         # 전체 메트릭 분석
         recent_metrics = self.learning_metrics[-50:]  # 최근 50개 메트릭
 
-        avg_progress = sum(m.progress_score for m in recent_metrics) / len(
-            recent_metrics
-        )
-        avg_efficiency = sum(m.efficiency_score for m in recent_metrics) / len(
-            recent_metrics
-        )
+        avg_progress = sum(m.progress_score for m in recent_metrics) / len(recent_metrics)
+        avg_efficiency = sum(m.efficiency_score for m in recent_metrics) / len(recent_metrics)
         avg_quality = sum(m.quality_score for m in recent_metrics) / len(recent_metrics)
-        avg_engagement = sum(m.engagement_score for m in recent_metrics) / len(
-            recent_metrics
-        )
+        avg_engagement = sum(m.engagement_score for m in recent_metrics) / len(recent_metrics)
         avg_overall = sum(m.overall_score for m in recent_metrics) / len(recent_metrics)
 
         # 이벤트 분석

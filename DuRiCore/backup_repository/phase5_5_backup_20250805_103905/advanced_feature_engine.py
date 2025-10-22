@@ -5,15 +5,15 @@ AI 기반 기능 확장, 고급 분석 기능, 기능 요구사항 분석, 기�
 """
 
 import asyncio
-from dataclasses import dataclass
-from datetime import datetime
-from enum import Enum
 import json
 import logging
 import math
 import random
 import statistics
 import time
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 logger = logging.getLogger(__name__)
@@ -124,9 +124,7 @@ class AdvancedFeatureEngine:
 
         logger.info("AdvancedFeatureEngine 초기화 완료")
 
-    async def implement_ai_features(
-        self, feature_data: Dict[str, Any]
-    ) -> FeatureResult:
+    async def implement_ai_features(self, feature_data: Dict[str, Any]) -> FeatureResult:
         """AI 기능 구현"""
         try:
             self.implementation_status = ImplementationStatus.IMPLEMENTING
@@ -139,14 +137,10 @@ class AdvancedFeatureEngine:
             ai_models = await self._select_ai_models(feature_type, feature_data)
 
             # 기능 구현
-            implementation = await self._implement_feature(
-                feature_type, ai_models, feature_data
-            )
+            implementation = await self._implement_feature(feature_type, ai_models, feature_data)
 
             # 성능 메트릭 측정
-            performance_metrics = await self._measure_performance_metrics(
-                implementation
-            )
+            performance_metrics = await self._measure_performance_metrics(implementation)
 
             # 성공률 계산
             success_rate = await self._calculate_success_rate(performance_metrics)
@@ -190,17 +184,13 @@ class AdvancedFeatureEngine:
             logger.info("기능 요구사항 분석 시작")
 
             # 요구사항 변환
-            feature_requirements = await self._convert_requirements_data(
-                requirements_data
-            )
+            feature_requirements = await self._convert_requirements_data(requirements_data)
 
             # 요구사항 분석
             analysis_result = await self._analyze_requirements(feature_requirements)
 
             # 우선순위 정렬
-            prioritized_requirements = await self._prioritize_requirements(
-                feature_requirements
-            )
+            prioritized_requirements = await self._prioritize_requirements(feature_requirements)
 
             # 복잡도 평가
             complexity_analysis = await self._analyze_complexity(feature_requirements)
@@ -214,9 +204,7 @@ class AdvancedFeatureEngine:
                 "prioritized_requirements": prioritized_requirements,
                 "complexity_analysis": complexity_analysis,
                 "dependency_analysis": dependency_analysis,
-                "implementation_plan": await self._generate_implementation_plan(
-                    analysis_result
-                ),
+                "implementation_plan": await self._generate_implementation_plan(analysis_result),
                 "estimated_timeline": await self._estimate_timeline(analysis_result),
             }
 
@@ -245,16 +233,12 @@ class AdvancedFeatureEngine:
             # 기능 구현 생성
             implementations = []
             for feature_info in implementation_plan.get("features", []):
-                implementation = await self._generate_single_implementation(
-                    feature_info
-                )
+                implementation = await self._generate_single_implementation(feature_info)
                 if implementation:
                     implementations.append(implementation)
 
             # 구현 품질 검증
-            validated_implementations = await self._validate_implementations(
-                implementations
-            )
+            validated_implementations = await self._validate_implementations(implementations)
 
             self.feature_implementations.extend(validated_implementations)
             self.implementation_status = ImplementationStatus.COMPLETED
@@ -267,9 +251,7 @@ class AdvancedFeatureEngine:
             logger.error(f"기능 구현 생성 실패: {str(e)}")
             raise
 
-    async def validate_feature_effects(
-        self, feature_result: FeatureResult
-    ) -> ValidationReport:
+    async def validate_feature_effects(self, feature_result: FeatureResult) -> ValidationReport:
         """기능 구현 효과 검증"""
         try:
             self.implementation_status = ImplementationStatus.VALIDATING
@@ -317,9 +299,7 @@ class AdvancedFeatureEngine:
             logger.error(f"기능 구현 효과 검증 실패: {str(e)}")
             raise
 
-    async def _determine_feature_type(
-        self, feature_data: Dict[str, Any]
-    ) -> FeatureType:
+    async def _determine_feature_type(self, feature_data: Dict[str, Any]) -> FeatureType:
         """기능 타입 결정"""
         feature_types = list(FeatureType)
         await asyncio.sleep(0.1)
@@ -418,9 +398,7 @@ class AdvancedFeatureEngine:
         await asyncio.sleep(0.1)
         return metrics
 
-    async def _calculate_success_rate(
-        self, performance_metrics: Dict[str, float]
-    ) -> float:
+    async def _calculate_success_rate(self, performance_metrics: Dict[str, float]) -> float:
         """성공률 계산"""
         # 성능 메트릭을 기반으로 성공률 계산
         accuracy = performance_metrics.get("accuracy", 0.0)
@@ -438,14 +416,10 @@ class AdvancedFeatureEngine:
         baseline_performance = 0.7
         current_performance = performance_metrics.get("accuracy", 0.0)
 
-        improvement = (
-            (current_performance - baseline_performance) / baseline_performance
-        ) * 100
+        improvement = ((current_performance - baseline_performance) / baseline_performance) * 100
         return max(0.0, improvement)
 
-    async def _measure_user_satisfaction(
-        self, implementation: FeatureImplementation
-    ) -> float:
+    async def _measure_user_satisfaction(self, implementation: FeatureImplementation) -> float:
         """사용자 만족도 측정"""
         # 실제 구현에서는 사용자 피드백을 분석
         satisfaction = random.uniform(0.7, 0.95)
@@ -473,9 +447,7 @@ class AdvancedFeatureEngine:
 
         return feature_requirements
 
-    async def _analyze_requirements(
-        self, requirements: List[FeatureRequirement]
-    ) -> Dict[str, Any]:
+    async def _analyze_requirements(self, requirements: List[FeatureRequirement]) -> Dict[str, Any]:
         """요구사항 분석"""
         analysis = {
             "total_count": len(requirements),
@@ -516,35 +488,25 @@ class AdvancedFeatureEngine:
     ) -> List[FeatureRequirement]:
         """요구사항 우선순위 정렬"""
         # 우선순위와 복잡도를 고려한 정렬
-        prioritized = sorted(
-            requirements, key=lambda x: (x.priority, -x.complexity), reverse=True
-        )
+        prioritized = sorted(requirements, key=lambda x: (x.priority, -x.complexity), reverse=True)
         await asyncio.sleep(0.1)
         return prioritized
 
-    async def _analyze_complexity(
-        self, requirements: List[FeatureRequirement]
-    ) -> Dict[str, Any]:
+    async def _analyze_complexity(self, requirements: List[FeatureRequirement]) -> Dict[str, Any]:
         """복잡도 분석"""
         complexities = [req.complexity for req in requirements]
 
         analysis = {
-            "average_complexity": (
-                statistics.mean(complexities) if complexities else 0.0
-            ),
+            "average_complexity": (statistics.mean(complexities) if complexities else 0.0),
             "max_complexity": max(complexities) if complexities else 0.0,
             "min_complexity": min(complexities) if complexities else 0.0,
-            "complexity_std": (
-                statistics.stdev(complexities) if len(complexities) > 1 else 0.0
-            ),
+            "complexity_std": (statistics.stdev(complexities) if len(complexities) > 1 else 0.0),
         }
 
         await asyncio.sleep(0.1)
         return analysis
 
-    async def _analyze_dependencies(
-        self, requirements: List[FeatureRequirement]
-    ) -> Dict[str, Any]:
+    async def _analyze_dependencies(self, requirements: List[FeatureRequirement]) -> Dict[str, Any]:
         """의존성 분석"""
         all_dependencies = []
         for req in requirements:
@@ -559,9 +521,7 @@ class AdvancedFeatureEngine:
 
         # 의존성 빈도 분석
         for dep in all_dependencies:
-            dependency_analysis["dependency_frequency"][dep] = all_dependencies.count(
-                dep
-            )
+            dependency_analysis["dependency_frequency"][dep] = all_dependencies.count(dep)
 
         await asyncio.sleep(0.1)
         return dependency_analysis
@@ -603,9 +563,7 @@ class AdvancedFeatureEngine:
         await asyncio.sleep(0.1)
         return plan
 
-    async def _estimate_timeline(
-        self, analysis_result: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _estimate_timeline(self, analysis_result: Dict[str, Any]) -> Dict[str, Any]:
         """타임라인 추정"""
         total_effort = analysis_result.get("estimated_total_effort", 0.0)
 
@@ -723,9 +681,7 @@ class AdvancedFeatureEngine:
         recommendations = []
 
         if accuracy_score < self.min_accuracy_score:
-            recommendations.append(
-                "모델 정확도를 향상시키기 위한 추가 훈련이 필요합니다"
-            )
+            recommendations.append("모델 정확도를 향상시키기 위한 추가 훈련이 필요합니다")
 
         if performance_score < self.min_performance_score:
             recommendations.append("성능 최적화를 위한 모델 구조 개선이 필요합니다")
@@ -769,9 +725,7 @@ async def test_advanced_feature_engine():
 
     analysis_result = await engine.analyze_feature_requirements(requirements_data)
     print(f"\n요구사항 분석 완료: {analysis_result['total_requirements']}개 요구사항")
-    print(
-        f"예상 총 노력: {analysis_result['estimated_timeline']['total_effort_weeks']:.1f}주"
-    )
+    print(f"예상 총 노력: {analysis_result['estimated_timeline']['total_effort_weeks']:.1f}주")
 
     # 기능 구현 생성 테스트
     implementations = await engine.generate_feature_implementations(analysis_result)

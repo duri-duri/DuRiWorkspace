@@ -4,10 +4,10 @@ DuRi 고급 통합 시스템
 자가 반성, 성장 루프, 판단 시각화를 통합하는 시스템
 """
 
-from datetime import datetime
 import json
 import os
 import sys
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 # DuRiCore 모듈 경로 추가
@@ -17,7 +17,6 @@ from modules.evolution.self_evolution_manager import SelfEvolutionManager
 from modules.integrated_learning_system import IntegratedLearningSystem
 from modules.judgment_system.judgment_trace_logger import JudgmentTraceLogger
 from modules.thought_flow.du_ri_thought_flow import DuRiThoughtFlow
-
 # 📦 핵심 모듈 임포트 (현재 구현된 시스템에 맞게 수정)
 from modules.thought_flow.self_reflection_loop import SelfReflectionLoop
 
@@ -64,9 +63,7 @@ class SelfReflection:
                 "status": "synchronized",
             }
 
-            instance.thought_flow.register_stream(
-                "self_reflection_sync", reflection_summary
-            )
+            instance.thought_flow.register_stream("self_reflection_sync", reflection_summary)
 
             print(
                 f"✅ 자가 반성 동기화 완료: {reflection_result.get('new_insights', 0)}개 통찰 생성"
@@ -111,9 +108,7 @@ class GrowthLoop:
 
         try:
             # 자기개선 시퀀스 실행
-            evolution_result = (
-                instance.evolution_manager.execute_self_improvement_sequence()
-            )
+            evolution_result = instance.evolution_manager.execute_self_improvement_sequence()
 
             # 사고 흐름에 성장 결과 기록
             growth_summary = {
@@ -192,9 +187,7 @@ class JudgmentTrace:
             }
 
             # 사고 흐름에 시각화 결과 기록
-            instance.thought_flow.register_stream(
-                "judgment_visualization", visualization_data
-            )
+            instance.thought_flow.register_stream("judgment_visualization", visualization_data)
 
             print(f"✅ 판단 시각화 완료: {len(recent_traces)}개 최근 기록 분석")
 
@@ -217,9 +210,7 @@ def execute_advanced_integration():
         print("\n" + "=" * 50)
         print("① 자가 반성 동기화 실행")
         print("=" * 50)
-        reflection_result = SelfReflection.self_reflection_sync(
-            trigger="strategic_judgment"
-        )
+        reflection_result = SelfReflection.self_reflection_sync(trigger="strategic_judgment")
 
         # ② 성장 루프 트리거
         print("\n" + "=" * 50)

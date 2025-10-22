@@ -11,16 +11,16 @@ DuRi Phase 1-3 Week 3 Day 9 - 자연어 처리 시스템
 """
 
 import asyncio
-from collections import Counter, defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime
 import hashlib
 import json
 import logging
 import re
 import time
-from typing import Any, Dict, List, Optional, Tuple
 import unicodedata
+from collections import Counter, defaultdict
+from dataclasses import dataclass, field
+from datetime import datetime
+from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
@@ -91,9 +91,7 @@ class AdvancedTextAnalyzer:
         self.sentiment_analyzer = {}
         self.confidence_threshold = 0.6
 
-    def analyze_text(
-        self, text: str, analysis_type: str = "comprehensive"
-    ) -> TextAnalysis:
+    def analyze_text(self, text: str, analysis_type: str = "comprehensive") -> TextAnalysis:
         """텍스트 분석"""
         text_id = f"text_{int(time.time())}"
 
@@ -172,9 +170,7 @@ class AdvancedTextAnalyzer:
             features["sentence_length_std"] = np.std(sentence_lengths)
 
         # 어휘 복잡도
-        features["avg_word_length"] = (
-            np.mean([len(word) for word in words]) if words else 0
-        )
+        features["avg_word_length"] = np.mean([len(word) for word in words]) if words else 0
 
         # 문체 분석
         features["formal_indicators"] = self.count_formal_indicators(text)
@@ -214,9 +210,7 @@ class AdvancedTextAnalyzer:
 
         features["positive_word_count"] = positive_count
         features["negative_word_count"] = negative_count
-        features["sentiment_ratio"] = (
-            (positive_count - negative_count) / len(words) if words else 0
-        )
+        features["sentiment_ratio"] = (positive_count - negative_count) / len(words) if words else 0
 
         # 감정 강도
         features["emotion_intensity"] = (
@@ -244,9 +238,7 @@ class AdvancedTextAnalyzer:
         features["question_count"] = question_count
         features["exclamation_count"] = exclamation_count
         features["question_ratio"] = (
-            question_count / features["sentence_count"]
-            if features["sentence_count"] > 0
-            else 0
+            question_count / features["sentence_count"] if features["sentence_count"] > 0 else 0
         )
 
         return features
@@ -297,9 +289,7 @@ class AdvancedTextAnalyzer:
         sentiment_score = (positive_count - negative_count) / total_sentiment_words
         return max(-1.0, min(1.0, sentiment_score))
 
-    def calculate_confidence(
-        self, features: Dict[str, Any], sentiment_score: float
-    ) -> float:
+    def calculate_confidence(self, features: Dict[str, Any], sentiment_score: float) -> float:
         """신뢰도 계산"""
         confidence = 0.5  # 기본 신뢰도
 
@@ -358,9 +348,7 @@ class SemanticExtractor:
         semantic_graph = self.build_semantic_graph(entities, concepts, relationships)
 
         # 신뢰도 계산
-        confidence = self.calculate_extraction_confidence(
-            entities, concepts, relationships
-        )
+        confidence = self.calculate_extraction_confidence(entities, concepts, relationships)
 
         # 추출 결과 생성
         extraction_result = SemanticExtraction(
@@ -490,10 +478,7 @@ class SemanticExtractor:
         # 개념과 엔티티 간 관계
         for concept in concepts:
             for entity in entities:
-                if (
-                    concept["text"] in entity["text"]
-                    or entity["text"] in concept["text"]
-                ):
+                if concept["text"] in entity["text"] or entity["text"] in concept["text"]:
                     relationships.append(
                         {
                             "source": concept["text"],
@@ -567,14 +552,10 @@ class SemanticExtractor:
             return 0.0
 
         # 엔티티 신뢰도
-        entity_confidence = (
-            np.mean([e["confidence"] for e in entities]) if entities else 0.0
-        )
+        entity_confidence = np.mean([e["confidence"] for e in entities]) if entities else 0.0
 
         # 개념 신뢰도
-        concept_confidence = (
-            np.mean([c["confidence"] for c in concepts]) if concepts else 0.0
-        )
+        concept_confidence = np.mean([c["confidence"] for c in concepts]) if concepts else 0.0
 
         # 관계 신뢰도
         relationship_confidence = (
@@ -582,9 +563,7 @@ class SemanticExtractor:
         )
 
         # 종합 신뢰도
-        total_confidence = (
-            entity_confidence + concept_confidence + relationship_confidence
-        ) / 3
+        total_confidence = (entity_confidence + concept_confidence + relationship_confidence) / 3
         return min(1.0, total_confidence)
 
 
@@ -597,9 +576,7 @@ class ContextualProcessor:
         self.contextual_rules = {}
         self.context_analyzer = {}
 
-    def analyze_context(
-        self, text: str, context_type: str = "general"
-    ) -> ContextualAnalysis:
+    def analyze_context(self, text: str, context_type: str = "general") -> ContextualAnalysis:
         """문맥 분석"""
         context_id = f"context_{int(time.time())}"
 
@@ -630,9 +607,7 @@ class ContextualProcessor:
         self.context_cache[cache_key] = context_analysis
         return context_analysis
 
-    def extract_contextual_features(
-        self, text: str, context_type: str
-    ) -> Dict[str, Any]:
+    def extract_contextual_features(self, text: str, context_type: str) -> Dict[str, Any]:
         """문맥 특징 추출"""
         features = {}
 
@@ -675,9 +650,7 @@ class ContextualProcessor:
             temporal_features["time_expressions"].extend(matches)
 
         temporal_features["temporal_density"] = (
-            len(temporal_features["time_expressions"]) / len(text.split())
-            if text.split()
-            else 0
+            len(temporal_features["time_expressions"]) / len(text.split()) if text.split() else 0
         )
 
         return temporal_features
@@ -702,9 +675,7 @@ class ContextualProcessor:
             spatial_features["location_expressions"].extend(matches)
 
         spatial_features["spatial_density"] = (
-            len(spatial_features["location_expressions"]) / len(text.split())
-            if text.split()
-            else 0
+            len(spatial_features["location_expressions"]) / len(text.split()) if text.split() else 0
         )
 
         return spatial_features
@@ -722,9 +693,7 @@ class ContextualProcessor:
                 social_features["social_indicators"].append(indicator)
 
         social_features["social_density"] = (
-            len(social_features["social_indicators"]) / len(text.split())
-            if text.split()
-            else 0
+            len(social_features["social_indicators"]) / len(text.split()) if text.split() else 0
         )
 
         return social_features
@@ -776,10 +745,7 @@ class ContextualProcessor:
         score = 0.0
 
         # 각 문맥 유형별 점수 계산
-        if (
-            contextual_features.get("temporal_context", {}).get("temporal_density", 0)
-            > 0
-        ):
+        if contextual_features.get("temporal_context", {}).get("temporal_density", 0) > 0:
             score += 0.2
 
         if contextual_features.get("spatial_context", {}).get("spatial_density", 0) > 0:
@@ -854,9 +820,7 @@ class MultilingualSupport:
         """언어 지원 정보 조회"""
         return self.supported_languages.get(language_code)
 
-    def process_multilingual_text(
-        self, text: str, target_language: str = None
-    ) -> Dict[str, Any]:
+    def process_multilingual_text(self, text: str, target_language: str = None) -> Dict[str, Any]:
         """다국어 텍스트 처리"""
         detected_language = self.detect_language(text)
 
@@ -947,9 +911,7 @@ class NaturalLanguageProcessingSystem:
             semantic_extraction = self.semantic_extractor.extract_semantics(text)
 
             # 문맥 분석
-            contextual_analysis = self.contextual_processor.analyze_context(
-                text, "general"
-            )
+            contextual_analysis = self.contextual_processor.analyze_context(text, "general")
 
             # 다국어 처리
             multilingual_result = self.multilingual_support.process_multilingual_text(
@@ -987,9 +949,7 @@ class NaturalLanguageProcessingSystem:
         return {
             "system_status": self.system_status,
             "performance_metrics": dict(self.performance_metrics),
-            "supported_languages": list(
-                self.multilingual_support.supported_languages.keys()
-            ),
+            "supported_languages": list(self.multilingual_support.supported_languages.keys()),
             "component_status": {
                 "text_analyzer": "active",
                 "semantic_extractor": "active",
@@ -1036,18 +996,14 @@ async def test_natural_language_processing_system():
 
     # 3. 문맥 분석 테스트
     print("\n3. 문맥 분석 테스트")
-    context_text = (
-        "2024년 3월 15일 서울에서 열린 AI 컨퍼런스에서 새로운 기술이 발표되었습니다."
-    )
+    context_text = "2024년 3월 15일 서울에서 열린 AI 컨퍼런스에서 새로운 기술이 발표되었습니다."
 
     context_result = await nlp_system.process_text(context_text, "contextual")
     print(f"문맥 분석 결과: {context_result}")
 
     # 4. 다국어 지원 테스트
     print("\n4. 다국어 지원 테스트")
-    english_text = (
-        "Today is a beautiful day. I enjoyed a picnic with friends in the park."
-    )
+    english_text = "Today is a beautiful day. I enjoyed a picnic with friends in the park."
 
     multilingual_result = await nlp_system.process_text(english_text, "multilingual")
     print(f"다국어 처리 결과: {multilingual_result}")

@@ -42,9 +42,7 @@ def test_run_ab_with_gate_fail():
 def test_run_ab_without_gate():
     """게이트 비활성화 테스트"""
     config = {"metrics": {"primary": "objective_delta"}}
-    results = run_ab_with_gate(
-        day=36, variant="A", seed=42, cfg=config, gate_policy_path=None
-    )
+    results = run_ab_with_gate(day=36, variant="A", seed=42, cfg=config, gate_policy_path=None)
 
     assert results["gate_pass"] is None
     assert results["gate_reasons"] == ["gate_disabled_or_no_policy"]

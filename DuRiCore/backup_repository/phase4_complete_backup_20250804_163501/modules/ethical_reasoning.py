@@ -4,9 +4,9 @@ DuRiCore - 윤리 판단 엔진
 4개 윤리 모듈 통합: LLM 기반 윤리 분석 및 판단
 """
 
+import logging
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-import logging
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
@@ -36,9 +36,7 @@ class LLMInterface:
         self.model_name = "gpt-4"
         self.api_key = None
 
-    def analyze_ethical_situation(
-        self, situation: str, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def analyze_ethical_situation(self, situation: str, context: Dict[str, Any]) -> Dict[str, Any]:
         """LLM 기반 윤리 상황 분석"""
         # TODO: 실제 LLM 호출
         # 임시로 기본 분석 반환
@@ -70,33 +68,23 @@ class EthicalReasoningEngine:
             "complexity_distribution": {"low": 0, "medium": 0, "high": 0},
         }
 
-    def analyze_ethical_dilemma(
-        self, situation: str, context: Dict[str, Any]
-    ) -> EthicalAnalysis:
+    def analyze_ethical_dilemma(self, situation: str, context: Dict[str, Any]) -> EthicalAnalysis:
         """LLM 기반 윤리 딜레마 분석"""
         try:
             # 1. LLM 기반 윤리 분석
-            llm_analysis = self.llm_interface.analyze_ethical_situation(
-                situation, context
-            )
+            llm_analysis = self.llm_interface.analyze_ethical_situation(situation, context)
 
             # 2. 창의적 사고 분석
             creative_analysis = self.creative_thinking.analyze_creative_context(context)
 
             # 3. 윤리적 판단
-            ethical_judgment = self.enhanced_ethical.analyze_ethical_situation(
-                situation
-            )
+            ethical_judgment = self.enhanced_ethical.analyze_ethical_situation(situation)
 
             # 4. 고급 윤리 추론
-            advanced_reasoning = self.advanced_ethical.analyze_ethical_dilemma(
-                situation
-            )
+            advanced_reasoning = self.advanced_ethical.analyze_ethical_dilemma(situation)
 
             # 5. 사회적 지능 분석
-            social_analysis = self.social_intelligence.process_conversation(
-                {"input": situation}
-            )
+            social_analysis = self.social_intelligence.process_conversation({"input": situation})
 
             # 6. 통합 윤리 분석 결과
             integrated_result = self._integrate_ethical_analysis(
@@ -359,9 +347,7 @@ class EthicalReasoningEngine:
         """신뢰도 계산"""
         try:
             llm_confidence = llm_analysis.get("confidence", 0.5)
-            reasoning_confidence = min(
-                1.0, reasoning_steps / 5
-            )  # 추론 단계가 많을수록 신뢰도 높음
+            reasoning_confidence = min(1.0, reasoning_steps / 5)  # 추론 단계가 많을수록 신뢰도 높음
 
             # 종합 신뢰도 계산
             confidence = (llm_confidence + ethical_score + reasoning_confidence) / 3
@@ -387,9 +373,7 @@ class EthicalReasoningEngine:
 
             # 가장 일반적인 원칙 업데이트
             if ethical_analysis.ethical_principles:
-                self.ethical_stats["most_common_principle"] = (
-                    ethical_analysis.ethical_principles[0]
-                )
+                self.ethical_stats["most_common_principle"] = ethical_analysis.ethical_principles[0]
 
             # 복잡도 분포 업데이트
             complexity = "medium"  # 기본값
@@ -446,8 +430,7 @@ class CreativeThinkingService:
             novelty_scores = {"low": 0.2, "medium": 0.5, "high": 0.8}
 
             creativity_score = (
-                complexity_scores.get(complexity, 0.5)
-                + novelty_scores.get(novelty, 0.5)
+                complexity_scores.get(complexity, 0.5) + novelty_scores.get(novelty, 0.5)
             ) / 2
 
             return min(1.0, creativity_score)
@@ -525,9 +508,7 @@ class EnhancedEthicalSystem:
                 "옳음",
                 "그름",
             ]
-            ethical_count = sum(
-                1 for keyword in ethical_keywords if keyword in situation
-            )
+            ethical_count = sum(1 for keyword in ethical_keywords if keyword in situation)
 
             # 이해관계자 수 추정
             stakeholder_indicators = [
@@ -652,9 +633,7 @@ class AdvancedEthicalReasoningSystem:
 
             # 추론 깊이 지표
             depth_indicators = ["왜냐하면", "때문에", "이유로", "결과로", "따라서"]
-            depth_count = sum(
-                1 for indicator in depth_indicators if indicator in situation
-            )
+            depth_count = sum(1 for indicator in depth_indicators if indicator in situation)
 
             # 추론 품질 계산
             reasoning_quality = min(1.0, (complexity_count * 0.2 + depth_count * 0.3))
@@ -748,9 +727,7 @@ class SocialIntelligenceService:
 
             # 사회적 키워드 검색
             social_keywords = ["대화", "소통", "관계", "이해", "공감", "협력"]
-            social_count = sum(
-                1 for keyword in social_keywords if keyword in input_text
-            )
+            social_count = sum(1 for keyword in social_keywords if keyword in input_text)
 
             # 사회적 점수 계산
             social_score = min(1.0, social_count * 0.2)
@@ -761,9 +738,7 @@ class SocialIntelligenceService:
             logger.error(f"사회적 상호작용 평가 실패: {e}")
             return 0.5
 
-    def _analyze_social_dynamics(
-        self, conversation_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _analyze_social_dynamics(self, conversation_data: Dict[str, Any]) -> Dict[str, Any]:
         """사회적 역학 분석"""
         try:
             input_text = conversation_data.get("input", "")

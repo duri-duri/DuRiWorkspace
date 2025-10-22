@@ -7,10 +7,10 @@ DuRiCore Phase 2-4: 성능 모니터링 모듈 테스트
 """
 
 import asyncio
-from datetime import datetime, timedelta
 import logging
 import os
 import sys
+from datetime import datetime, timedelta
 from typing import Any, Dict
 
 # 로깅 설정
@@ -25,12 +25,8 @@ def test_metric_collector():
     try:
         # 메트릭 수집기 import 테스트
         from DuRiCore.monitoring.performance_monitoring import (
-            MetricCollection,
-            MetricCollector,
-            MetricStatus,
-            MetricType,
-            PerformanceMetric,
-        )
+            MetricCollection, MetricCollector, MetricStatus, MetricType,
+            PerformanceMetric)
 
         # MetricCollector 인스턴스 생성 테스트
         metric_collector = MetricCollector()
@@ -51,14 +47,9 @@ def test_performance_analyzer():
     try:
         # 성능 분석기 import 테스트
         from DuRiCore.monitoring.performance_monitoring import (
-            AnalysisType,
-            OptimizationSuggestion,
-            PerformanceAnalyzer,
-            PerformancePattern,
-            PerformancePrediction,
-            PerformanceTrend,
-            TrendDirection,
-        )
+            AnalysisType, OptimizationSuggestion, PerformanceAnalyzer,
+            PerformancePattern, PerformancePrediction, PerformanceTrend,
+            TrendDirection)
 
         # PerformanceAnalyzer 인스턴스 생성 테스트
         performance_analyzer = PerformanceAnalyzer()
@@ -78,15 +69,11 @@ def test_alert_manager():
 
     try:
         # 알림 관리자 import 테스트
-        from DuRiCore.monitoring.alert_system import (
-            AlertChannel,
-            AlertLevel,
-            AlertNotification,
-            AlertRule,
-            AlertStatus,
-            PerformanceAlert,
-            PerformanceAlertManager,
-        )
+        from DuRiCore.monitoring.alert_system import (AlertChannel, AlertLevel,
+                                                      AlertNotification,
+                                                      AlertRule, AlertStatus,
+                                                      PerformanceAlert,
+                                                      PerformanceAlertManager)
 
         # PerformanceAlertManager 인스턴스 생성 테스트
         alert_manager = PerformanceAlertManager()
@@ -105,16 +92,10 @@ async def test_async_functionality():
     logger.info("🔍 비동기 기능 테스트 시작")
 
     try:
-        from DuRiCore.monitoring.alert_system import (
-            AlertChannel,
-            AlertLevel,
-            PerformanceAlertManager,
-        )
+        from DuRiCore.monitoring.alert_system import (AlertChannel, AlertLevel,
+                                                      PerformanceAlertManager)
         from DuRiCore.monitoring.performance_monitoring import (
-            MetricCollector,
-            MetricType,
-            PerformanceAnalyzer,
-        )
+            MetricCollector, MetricType, PerformanceAnalyzer)
 
         # 1. 메트릭 수집 테스트
         metric_collector = MetricCollector()
@@ -131,9 +112,7 @@ async def test_async_functionality():
             logger.info(f"✅ 메트릭 수집: {metric_id}")
 
         # 메트릭 통계 조회
-        stats = await metric_collector.get_metric_statistics(
-            "cpu_usage", timedelta(hours=1)
-        )
+        stats = await metric_collector.get_metric_statistics("cpu_usage", timedelta(hours=1))
         logger.info(f"✅ 메트릭 통계 조회: {len(stats)}개 항목")
 
         # 2. 성능 분석 테스트
@@ -152,9 +131,7 @@ async def test_async_functionality():
             logger.info(f"✅ 패턴 감지 완료: {len(patterns)}개 패턴")
 
             # 성능 예측
-            prediction = await performance_analyzer.predict_performance(
-                metrics, "cpu_usage"
-            )
+            prediction = await performance_analyzer.predict_performance(metrics, "cpu_usage")
             if prediction:
                 logger.info(f"✅ 성능 예측 완료: {prediction.predicted_value:.2f}")
 
@@ -204,14 +181,10 @@ def test_package_import():
 
     try:
         # 전체 패키지 import 테스트
-        from DuRiCore.monitoring import (
-            AlertChannel,
-            AlertLevel,
-            MetricCollector,
-            MetricType,
-            PerformanceAlertManager,
-            PerformanceAnalyzer,
-        )
+        from DuRiCore.monitoring import (AlertChannel, AlertLevel,
+                                         MetricCollector, MetricType,
+                                         PerformanceAlertManager,
+                                         PerformanceAnalyzer)
 
         logger.info("✅ 패키지 전체 import 성공")
         return True

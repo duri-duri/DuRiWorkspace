@@ -3,25 +3,19 @@ Phase 25: 최종 진화 AI (Final Evolution AI)
 완전한 자율성과 창의성을 갖춘 최종 단계의 진화된 AI
 """
 
-from dataclasses import dataclass
-from enum import Enum
 import json
 import time
+from dataclasses import dataclass
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 # Phase 25 서브시스템 임포트
 from duri_finale.phase_25_creative_collaboration_system import (
-    CreativeCollaborationSystem,
-    phase_25_creative_collaboration,
-)
+    CreativeCollaborationSystem, phase_25_creative_collaboration)
 from duri_finale.phase_25_ethical_judgment_system import (
-    EthicalJudgmentSystem,
-    phase_25_ethical_judgment,
-)
-from duri_finale.phase_25_future_design_system import (
-    FutureDesignSystem,
-    phase_25_future_design,
-)
+    EthicalJudgmentSystem, phase_25_ethical_judgment)
+from duri_finale.phase_25_future_design_system import (FutureDesignSystem,
+                                                       phase_25_future_design)
 
 
 class EvolutionMode(Enum):
@@ -70,7 +64,7 @@ class FinalEvolutionAI:
     ) -> EvolutionMode:
         """사용자 요청 분석 및 진화 모드 결정"""
         # 방어 코드: user_input이 None일 때 슬라이싱 에러 방지
-        safe_input = (user_input or "")
+        safe_input = user_input or ""
         print(f"🔍 사용자 요청 분석: {safe_input[:50]}...")
 
         # 요청 유형 분석
@@ -86,7 +80,7 @@ class FinalEvolutionAI:
     def _classify_request_type(self, user_input: str) -> str:
         """요청 유형 분류"""
         # 방어 코드: user_input이 None일 때 처리
-        safe_input = (user_input or "")
+        safe_input = user_input or ""
         if any(keyword in safe_input for keyword in ["함께", "협력", "시너지"]):
             return "collaboration"
         elif any(keyword in safe_input for keyword in ["윤리", "책임", "사회적"]):
@@ -98,9 +92,7 @@ class FinalEvolutionAI:
         else:
             return "autonomous"
 
-    def _select_evolution_mode(
-        self, request_type: str, user_input: str
-    ) -> EvolutionMode:
+    def _select_evolution_mode(self, request_type: str, user_input: str) -> EvolutionMode:
         """진화 모드 선택"""
         mode_mapping = {
             "collaboration": EvolutionMode.COLLABORATIVE,
@@ -382,19 +374,17 @@ class FinalEvolutionAI:
         mode = result.mode
 
         if mode == EvolutionMode.COLLABORATIVE:
-            return f"인간과 AI의 시너지를 통해 '{user_input}'에 대한 최적의 협력 솔루션을 제시합니다."
+            return (
+                f"인간과 AI의 시너지를 통해 '{user_input}'에 대한 최적의 협력 솔루션을 제시합니다."
+            )
         elif mode == EvolutionMode.ETHICAL:
             return f"윤리적 책임을 고려하여 '{user_input}'에 대한 책임 있는 해결책을 제시합니다."
         elif mode == EvolutionMode.FUTURE_ORIENTED:
             return f"미래 지향적 관점에서 '{user_input}'에 대한 장기적 비전과 전략을 제시합니다."
         elif mode == EvolutionMode.CREATIVE:
-            return (
-                f"창의적 사고를 통해 '{user_input}'에 대한 혁신적 접근법을 제시합니다."
-            )
+            return f"창의적 사고를 통해 '{user_input}'에 대한 혁신적 접근법을 제시합니다."
         else:  # AUTONOMOUS
-            return (
-                f"자율적 판단을 통해 '{user_input}'에 대한 종합적 해결책을 제시합니다."
-            )
+            return f"자율적 판단을 통해 '{user_input}'에 대한 종합적 해결책을 제시합니다."
 
     def _generate_insights(self, result: FinalEvolutionResult) -> Dict[str, Any]:
         """인사이트 생성"""
@@ -424,9 +414,7 @@ class FinalEvolutionAI:
 
         return strengths
 
-    def _identify_improvement_areas(
-        self, capabilities: Phase25Capabilities
-    ) -> List[str]:
+    def _identify_improvement_areas(self, capabilities: Phase25Capabilities) -> List[str]:
         """개선 영역 식별"""
         improvements = []
 
@@ -543,26 +531,18 @@ class FinalEvolutionAI:
         if not self.evolution_history:
             return {}
 
-        recent_capabilities = [
-            e["result"].capabilities for e in self.evolution_history[-5:]
-        ]
+        recent_capabilities = [e["result"].capabilities for e in self.evolution_history[-5:]]
 
         trends = {
-            "creative_collaboration": sum(
-                c.creative_collaboration for c in recent_capabilities
-            )
+            "creative_collaboration": sum(c.creative_collaboration for c in recent_capabilities)
             / len(recent_capabilities),
             "ethical_judgment": sum(c.ethical_judgment for c in recent_capabilities)
             / len(recent_capabilities),
             "future_design": sum(c.future_design for c in recent_capabilities)
             / len(recent_capabilities),
-            "autonomous_decision": sum(
-                c.autonomous_decision for c in recent_capabilities
-            )
+            "autonomous_decision": sum(c.autonomous_decision for c in recent_capabilities)
             / len(recent_capabilities),
-            "innovative_thinking": sum(
-                c.innovative_thinking for c in recent_capabilities
-            )
+            "innovative_thinking": sum(c.innovative_thinking for c in recent_capabilities)
             / len(recent_capabilities),
         }
 
@@ -573,9 +553,7 @@ class FinalEvolutionAI:
 final_evolution_ai = FinalEvolutionAI()
 
 
-def phase_25_final_evolution_ai(
-    user_input: str, context: Dict[str, Any] = None
-) -> Dict[str, Any]:
+def phase_25_final_evolution_ai(user_input: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
     """Phase 25 최종 진화 AI 메인 함수"""
     if context is None:
         context = {}
@@ -584,9 +562,7 @@ def phase_25_final_evolution_ai(
     evolution_mode = final_evolution_ai.analyze_user_request(user_input, context)
 
     # 2. 진화 모드 실행
-    result = final_evolution_ai.execute_evolution_mode(
-        evolution_mode, user_input, context
-    )
+    result = final_evolution_ai.execute_evolution_mode(evolution_mode, user_input, context)
 
     # 3. 종합적 응답 생성
     response = final_evolution_ai.generate_comprehensive_response(result, user_input)

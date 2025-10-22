@@ -1,6 +1,6 @@
-from collections import Counter
 import math
 import re
+from collections import Counter
 from typing import Any, Dict, List, Optional
 
 
@@ -122,8 +122,7 @@ def bleu_like(candidate: str, references: List[str], n: int = 4) -> float:
     precision_scores = []
     for i in range(1, n + 1):
         candidate_ngrams = [
-            tuple(candidate_tokens[j : j + i])
-            for j in range(len(candidate_tokens) - i + 1)
+            tuple(candidate_tokens[j : j + i]) for j in range(len(candidate_tokens) - i + 1)
         ]
         if not candidate_ngrams:
             continue
@@ -170,9 +169,7 @@ def bleu_like(candidate: str, references: List[str], n: int = 4) -> float:
     return geometric_mean * brevity_penalty
 
 
-def composite(
-    scores: Dict[str, float], weights: Optional[Dict[str, float]] = None
-) -> float:
+def composite(scores: Dict[str, float], weights: Optional[Dict[str, float]] = None) -> float:
     """
     가중합으로 복합 점수 계산
 

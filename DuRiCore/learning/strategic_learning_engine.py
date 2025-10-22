@@ -13,9 +13,7 @@ class StrategicLearningEngine:
         """
         판단 결과를 입력받아 전략적 학습을 위한 기록을 남깁니다.
         """
-        self.history.append(
-            {"situation": situation, "action": action, "reasoning": reasoning}
-        )
+        self.history.append({"situation": situation, "action": action, "reasoning": reasoning})
 
     def generate_strategic_insight(self):
         """
@@ -26,6 +24,8 @@ class StrategicLearningEngine:
 
         summary = "DuRi가 전략적으로 판단한 흐름 요약:\n"
         for idx, h in enumerate(self.history):
-            summary += f"{idx+1}. 상황: {h['situation']} → 행동: {h['action']} (이유: {h['reasoning']})\n"
+            summary += (
+                f"{idx+1}. 상황: {h['situation']} → 행동: {h['action']} (이유: {h['reasoning']})\n"
+            )
 
         return summary

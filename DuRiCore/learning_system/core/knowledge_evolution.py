@@ -11,13 +11,13 @@ DuRiCore Phase 2-3: 지식 진화 시스템 (Knowledge Evolution System)
 """
 
 import asyncio
+import json
+import logging
+import time
 from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-import json
-import logging
-import time
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
@@ -152,20 +152,14 @@ class KnowledgeEvolutionSystem:
         original_knowledge = self.knowledge_items[knowledge_id]
 
         # 진화된 지식 생성
-        evolved_content = await self._generate_evolved_content(
-            original_knowledge, new_information
-        )
+        evolved_content = await self._generate_evolved_content(original_knowledge, new_information)
         evolved_confidence = await self._calculate_evolved_confidence(
             original_knowledge, new_information
         )
-        evolved_quality = await self._assess_evolved_quality(
-            original_knowledge, evolved_content
-        )
+        evolved_quality = await self._assess_evolved_quality(original_knowledge, evolved_content)
 
         # 새로운 지식 항목 생성
-        evolved_knowledge_id = (
-            f"knowledge_{int(time.time())}_{original_knowledge.domain}_evolved"
-        )
+        evolved_knowledge_id = f"knowledge_{int(time.time())}_{original_knowledge.domain}_evolved"
         evolved_knowledge = KnowledgeItem(
             knowledge_id=evolved_knowledge_id,
             content=evolved_content,
@@ -219,7 +213,9 @@ class KnowledgeEvolutionSystem:
 
         # 메타데이터 업데이트
         if "metadata" in new_information:
-            evolved_content += f"\n\n메타데이터: {json.dumps(new_information['metadata'], ensure_ascii=False)}"
+            evolved_content += (
+                f"\n\n메타데이터: {json.dumps(new_information['metadata'], ensure_ascii=False)}"
+            )
 
         return evolved_content
 
@@ -248,9 +244,7 @@ class KnowledgeEvolutionSystem:
         content_complexity = len(evolved_content.split())
 
         # 품질 점수 계산
-        quality_score = min(
-            (content_length / 1000.0 + content_complexity / 100.0) / 2.0, 1.0
-        )
+        quality_score = min((content_length / 1000.0 + content_complexity / 100.0) / 2.0, 1.0)
 
         if quality_score >= 0.8:
             return KnowledgeQuality.EXCELLENT
@@ -323,22 +317,16 @@ class KnowledgeEvolutionSystem:
         integration_level = 0.5
 
         # 내용 길이 증가
-        content_ratio = len(evolved_knowledge.content) / max(
-            len(original_knowledge.content), 1
-        )
+        content_ratio = len(evolved_knowledge.content) / max(len(original_knowledge.content), 1)
         integration_level = min(integration_level + (content_ratio - 1.0) * 0.3, 1.0)
 
         # 신뢰도 변화
-        confidence_change = abs(
-            evolved_knowledge.confidence - original_knowledge.confidence
-        )
+        confidence_change = abs(evolved_knowledge.confidence - original_knowledge.confidence)
         integration_level = min(integration_level + confidence_change * 0.2, 1.0)
 
         return integration_level
 
-    async def _calculate_content_similarity(
-        self, content1: str, content2: str
-    ) -> float:
+    async def _calculate_content_similarity(self, content1: str, content2: str) -> float:
         """내용 유사도 계산"""
         # 간단한 유사도 계산 (단어 기반)
         words1 = set(content1.lower().split())
@@ -401,9 +389,9 @@ class KnowledgeEvolutionSystem:
     async def _calculate_session_metrics(self, session: EvolutionSession):
         """세션 메트릭 계산"""
         if session.quality_improvements:
-            session.average_quality_improvement = sum(
+            session.average_quality_improvement = sum(session.quality_improvements) / len(
                 session.quality_improvements
-            ) / len(session.quality_improvements)
+            )
 
             # 전체 평균 품질 개선도 업데이트
             all_improvements = []

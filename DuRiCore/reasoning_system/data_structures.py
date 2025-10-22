@@ -7,15 +7,15 @@ DuRi 추론 시스템 - 공통 데이터 구조
 """
 
 import asyncio
-from collections import Counter, defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 import hashlib
 import json
 import logging
 import re
 import time
+from collections import Counter, defaultdict
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np

@@ -5,9 +5,9 @@ DuRi 자율 학습 시스템 상태 확인 스크립트
 """
 
 import asyncio
-from datetime import datetime
 import logging
 import sys
+from datetime import datetime
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -24,8 +24,10 @@ async def check_autonomous_status():
         # 자율 학습 시스템 import 시도
         try:
             sys.path.append(".")
-            from duri_modules.autonomous.continuous_learner import AutonomousLearner
-            from duri_modules.autonomous.duri_autonomous_core import DuRiAutonomousCore
+            from duri_modules.autonomous.continuous_learner import \
+                AutonomousLearner
+            from duri_modules.autonomous.duri_autonomous_core import \
+                DuRiAutonomousCore
 
             # 자율 학습 시스템 초기화
             autonomous_learner = AutonomousLearner()
@@ -47,7 +49,8 @@ async def check_autonomous_status():
 
         # 실시간 학습 시스템 확인
         try:
-            from duri_modules.autonomous.realtime_learner import RealtimeLearner
+            from duri_modules.autonomous.realtime_learner import \
+                RealtimeLearner
 
             # 실시간 학습 시스템 상태 확인 (새로운 인스턴스 생성)
             realtime_learner = RealtimeLearner(None)  # None으로 초기화
@@ -59,7 +62,8 @@ async def check_autonomous_status():
 
         # 학습 루프 매니저 확인
         try:
-            from duri_brain.learning.learning_loop_manager import LearningLoopManager
+            from duri_brain.learning.learning_loop_manager import \
+                LearningLoopManager
 
             # 학습 루프 매니저 상태 확인
             learning_loop_manager = LearningLoopManager()
@@ -84,14 +88,10 @@ async def check_autonomous_status():
 
             # 활성 세션 확인
             active_learning = [
-                s
-                for s in unified_system.learning_sessions
-                if s.status.value == "in_progress"
+                s for s in unified_system.learning_sessions if s.status.value == "in_progress"
             ]
             active_evolution = [
-                s
-                for s in unified_system.evolution_sessions
-                if s.status.value == "in_progress"
+                s for s in unified_system.evolution_sessions if s.status.value == "in_progress"
             ]
 
             print(f"  - 활성 학습 세션: {len(active_learning)}")

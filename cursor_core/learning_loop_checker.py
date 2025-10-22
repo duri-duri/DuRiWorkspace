@@ -5,10 +5,10 @@ DuRi 자가학습 루프 중복 확인 및 상태 점검 시스템
 """
 
 import asyncio
-from dataclasses import dataclass, field
-from datetime import datetime
 import json
 import logging
+from dataclasses import dataclass, field
+from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
@@ -56,9 +56,8 @@ class DuRiLearningLoopChecker:
 
         # 1. 메인 학습 루프 관리자 확인
         try:
-            from duri_brain.learning.learning_loop_manager import (
-                get_learning_loop_manager,
-            )
+            from duri_brain.learning.learning_loop_manager import \
+                get_learning_loop_manager
 
             learning_loop_manager = get_learning_loop_manager()
 
@@ -93,9 +92,8 @@ class DuRiLearningLoopChecker:
 
         # 2. 향상된 준 가족 학습 시스템 확인
         try:
-            from duri_brain.app.services.enhanced_pre_family_learning_system import (
-                EnhancedPreFamilyLearningSystem,
-            )
+            from duri_brain.app.services.enhanced_pre_family_learning_system import \
+                EnhancedPreFamilyLearningSystem
 
             enhanced_system = EnhancedPreFamilyLearningSystem()
 
@@ -124,9 +122,8 @@ class DuRiLearningLoopChecker:
 
         # 3. 자율 학습 컨트롤러 확인
         try:
-            from duri_brain.app.services.autonomous_learning_controller import (
-                AutonomousLearningController,
-            )
+            from duri_brain.app.services.autonomous_learning_controller import \
+                AutonomousLearningController
 
             autonomous_controller = AutonomousLearningController()
 
@@ -152,9 +149,8 @@ class DuRiLearningLoopChecker:
 
         # 4. 외부 학습 트리거 테스트 시스템 확인
         try:
-            from cursor_core.test_external_learning_trigger import (
-                DuRiLearningTestSystem,
-            )
+            from cursor_core.test_external_learning_trigger import \
+                DuRiLearningTestSystem
 
             test_system = DuRiLearningTestSystem()
 
@@ -180,7 +176,8 @@ class DuRiLearningLoopChecker:
 
         # 5. 학습 진단 시스템 확인
         try:
-            from cursor_core.learning_diagnostics import DuRiLearningDiagnostics
+            from cursor_core.learning_diagnostics import \
+                DuRiLearningDiagnostics
 
             diagnostics = DuRiLearningDiagnostics()
 
@@ -241,9 +238,7 @@ class DuRiLearningLoopChecker:
 
         # 1. 기존 루프가 있는 경우
         if self.existing_loops:
-            recommendations.append(
-                "✅ 기존 학습 루프가 존재합니다. 중복 생성을 피하세요."
-            )
+            recommendations.append("✅ 기존 학습 루프가 존재합니다. 중복 생성을 피하세요.")
 
             # 활성 루프 확인
             active_loops = [loop for loop in self.existing_loops if loop.is_active]
@@ -252,9 +247,7 @@ class DuRiLearningLoopChecker:
                     f"🔄 현재 {len(active_loops)}개의 활성 학습 루프가 실행 중입니다."
                 )
             else:
-                recommendations.append(
-                    "⏸️ 모든 학습 루프가 비활성 상태입니다. 필요시 활성화하세요."
-                )
+                recommendations.append("⏸️ 모든 학습 루프가 비활성 상태입니다. 필요시 활성화하세요.")
 
         # 2. 중복 함수가 있는 경우
         if self.duplicate_functions:
@@ -286,9 +279,7 @@ class DuRiLearningLoopChecker:
 
         structure_analysis = {
             "total_loops": len(self.existing_loops),
-            "active_loops": len(
-                [loop for loop in self.existing_loops if loop.is_active]
-            ),
+            "active_loops": len([loop for loop in self.existing_loops if loop.is_active]),
             "loop_types": [loop.type for loop in self.existing_loops],
             "total_functions": sum(len(loop.functions) for loop in self.existing_loops),
             "duplicate_functions": len(self.duplicate_functions),
@@ -384,6 +375,4 @@ if __name__ == "__main__":
     sys.path.append(".")
 
     result = check_duRi_learning_loops()
-    print(
-        f"\n🎯 최종 결과: {'⚠️ 중복 발견' if result.has_duplicates else '✅ 중복 없음'}"
-    )
+    print(f"\n🎯 최종 결과: {'⚠️ 중복 발견' if result.has_duplicates else '✅ 중복 없음'}")

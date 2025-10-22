@@ -7,13 +7,13 @@ DuRiCore Phase 2.3: 감정적 자기 인식 시스템 (Emotional Self-Awareness 
 """
 
 import asyncio
+import logging
+import random
+import time
 from collections import defaultdict
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-import logging
-import random
-import time
 from typing import Any, Dict, List, Optional, Tuple
 
 # 로깅 설정
@@ -119,17 +119,13 @@ class EmotionalSelfAwarenessSystem:
     """감정적 자기 인식 시스템"""
 
     def __init__(self):
-        self.awareness_state = EmotionalSelfAwarenessState(
-            awareness_metrics=SelfAwarenessMetrics()
-        )
+        self.awareness_state = EmotionalSelfAwarenessState(awareness_metrics=SelfAwarenessMetrics())
         self.emotion_patterns = defaultdict(list)
         self.trigger_analysis = {}
         self.response_monitoring = {}
         logger.info("🧠 감정적 자기 인식 시스템 초기화 완료")
 
-    async def analyze_emotional_trigger(
-        self, trigger_data: Dict[str, Any]
-    ) -> EmotionalTrigger:
+    async def analyze_emotional_trigger(self, trigger_data: Dict[str, Any]) -> EmotionalTrigger:
         """감정적 트리거 분석"""
         trigger_id = f"trigger_{int(time.time())}"
 
@@ -153,14 +149,10 @@ class EmotionalSelfAwarenessSystem:
         self.awareness_state.emotional_triggers.append(trigger)
         await self._update_trigger_recognition_metrics(trigger)
 
-        logger.info(
-            f"🔍 감정적 트리거 분석 완료: {trigger_type} -> {emotion_caused.value}"
-        )
+        logger.info(f"🔍 감정적 트리거 분석 완료: {trigger_type} -> {emotion_caused.value}")
         return trigger
 
-    async def monitor_emotional_response(
-        self, response_data: Dict[str, Any]
-    ) -> EmotionalResponse:
+    async def monitor_emotional_response(self, response_data: Dict[str, Any]) -> EmotionalResponse:
         """감정적 반응 모니터링"""
         response_id = f"response_{int(time.time())}"
 
@@ -200,9 +192,7 @@ class EmotionalSelfAwarenessSystem:
 
         # 감정 변화 패턴
         emotion_sequence = [r.emotion for r in self.awareness_state.emotional_responses]
-        intensity_sequence = [
-            r.intensity for r in self.awareness_state.emotional_responses
-        ]
+        intensity_sequence = [r.intensity for r in self.awareness_state.emotional_responses]
 
         # 패턴 분석
         patterns = {
@@ -398,9 +388,7 @@ class EmotionalSelfAwarenessSystem:
 
         return changes
 
-    def _find_dominant_emotion(
-        self, emotions: List[EmotionCategory]
-    ) -> EmotionCategory:
+    def _find_dominant_emotion(self, emotions: List[EmotionCategory]) -> EmotionCategory:
         """주요 감정 찾기"""
         if not emotions:
             return EmotionCategory.NEUTRAL
@@ -424,9 +412,7 @@ class EmotionalSelfAwarenessSystem:
         else:
             return "fluctuating"
 
-    def _identify_emotion_cycles(
-        self, emotions: List[EmotionCategory]
-    ) -> List[Dict[str, Any]]:
+    def _identify_emotion_cycles(self, emotions: List[EmotionCategory]) -> List[Dict[str, Any]]:
         """감정 순환 패턴 식별"""
         cycles = []
         if len(emotions) < 4:
@@ -494,9 +480,7 @@ class EmotionalSelfAwarenessSystem:
 
         # 감정 변화 빈도
         emotions = [r.emotion for r in self.awareness_state.emotional_responses]
-        changes = sum(
-            1 for i in range(1, len(emotions)) if emotions[i] != emotions[i - 1]
-        )
+        changes = sum(1 for i in range(1, len(emotions)) if emotions[i] != emotions[i - 1])
 
         # 강도 변화
         intensities = [r.intensity for r in self.awareness_state.emotional_responses]
@@ -505,9 +489,7 @@ class EmotionalSelfAwarenessSystem:
         )
 
         # 안정성 점수 (높을수록 안정적)
-        stability = (
-            1.0 - (changes / len(emotions)) - (intensity_variance / len(intensities))
-        )
+        stability = 1.0 - (changes / len(emotions)) - (intensity_variance / len(intensities))
         return max(0.0, min(1.0, stability))
 
     def _assess_response_appropriateness(self) -> float:
@@ -563,18 +545,14 @@ class EmotionalSelfAwarenessSystem:
 
         return recommendations
 
-    async def _update_trigger_recognition_metrics(
-        self, trigger: EmotionalTrigger
-    ) -> None:
+    async def _update_trigger_recognition_metrics(self, trigger: EmotionalTrigger) -> None:
         """트리거 인식 메트릭 업데이트"""
         # 실제 구현에서는 더 정교한 업데이트 로직 사용
         self.awareness_state.awareness_metrics.trigger_recognition = min(
             1.0, self.awareness_state.awareness_metrics.trigger_recognition + 0.01
         )
 
-    async def _update_response_monitoring_metrics(
-        self, response: EmotionalResponse
-    ) -> None:
+    async def _update_response_monitoring_metrics(self, response: EmotionalResponse) -> None:
         """반응 모니터링 메트릭 업데이트"""
         # 실제 구현에서는 더 정교한 업데이트 로직 사용
         self.awareness_state.awareness_metrics.response_monitoring = min(

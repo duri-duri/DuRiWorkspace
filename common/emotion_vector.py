@@ -3,9 +3,9 @@ Common emotion vector module for DuRi system.
 This module provides core functionality for emotion vector handling.
 """
 
-from datetime import datetime
 import json
 import os
+from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 
 import yaml
@@ -33,9 +33,7 @@ class EmotionVector:
         if values:
             for dim, val in values.items():
                 if dim in self.DIMENSIONS:
-                    self.values[dim] = max(
-                        0.0, min(1.0, float(val))
-                    )  # 0.0 ~ 1.0 범위 보장
+                    self.values[dim] = max(0.0, min(1.0, float(val)))  # 0.0 ~ 1.0 범위 보장
 
     def to_dict(self) -> Dict[str, float]:
         """벡터를 딕셔너리로 변환"""

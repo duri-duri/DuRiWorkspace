@@ -7,15 +7,15 @@ DuRi 추론 시스템 - 충돌 감지 모듈
 """
 
 import asyncio
-from collections import Counter, defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 import hashlib
 import json
 import logging
 import re
 import time
+from collections import Counter, defaultdict
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
@@ -85,9 +85,7 @@ class ConflictDetectionSystem:
         self, element1: Dict[str, Any], element2: Dict[str, Any]
     ) -> Optional[IntegrationConflict]:
         """통합 충돌 확인"""
-        conflict_id = (
-            f"conflict_{int(time.time())}_{hash(str(element1))}_{hash(str(element2))}"
-        )
+        conflict_id = f"conflict_{int(time.time())}_{hash(str(element1))}_{hash(str(element2))}"
 
         # 값 충돌 확인
         value_conflict = await self._check_value_conflict(element1, element2)

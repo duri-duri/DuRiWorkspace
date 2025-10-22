@@ -8,8 +8,8 @@ DuRi 모듈 레지스트리 통합 테스트
 
 import asyncio
 import logging
-from pathlib import Path
 import sys
+from pathlib import Path
 
 # 현재 디렉토리를 sys.path에 추가
 sys.path.append(str(Path(__file__).parent))
@@ -111,9 +111,7 @@ async def test_system_adapters():
 
         # 어댑터 생성 테스트
         test_judgment = TestJudgmentSystem()
-        judgment_adapter = SystemAdapterFactory.create_adapter(
-            "judgment_system", test_judgment
-        )
+        judgment_adapter = SystemAdapterFactory.create_adapter("judgment_system", test_judgment)
 
         if judgment_adapter:
             # 초기화 테스트

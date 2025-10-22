@@ -4,10 +4,10 @@ DuRi 판단 과정 기록 시스템 (JudgmentTrace)
 판단이 발생한 모든 순간에 대해 구조화된 기록을 저장하는 시스템
 """
 
-from dataclasses import asdict, dataclass
-from datetime import datetime
 import json
 import os
+from dataclasses import asdict, dataclass
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 
@@ -51,9 +51,7 @@ class JudgmentTraceLogger:
             if os.path.exists(self.trace_file):
                 with open(self.trace_file, "r", encoding="utf-8") as f:
                     data = json.load(f)
-                    self.traces = [
-                        JudgmentTrace(**trace) for trace in data.get("traces", [])
-                    ]
+                    self.traces = [JudgmentTrace(**trace) for trace in data.get("traces", [])]
         except Exception as e:
             print(f"판단 기록 로드 실패: {e}")
 

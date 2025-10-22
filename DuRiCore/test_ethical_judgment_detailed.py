@@ -12,11 +12,8 @@ import sys
 # DuRiCore 경로 추가
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from ethical_judgment_system import (
-    EthicalDilemmaType,
-    EthicalJudgmentSystem,
-    EthicalPrinciple,
-)
+from ethical_judgment_system import (EthicalDilemmaType, EthicalJudgmentSystem,
+                                     EthicalPrinciple)
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -139,9 +136,7 @@ async def test_ethical_judgment_system_detailed():
     print("✅ Day 9: 윤리적 판단 시스템 상세 테스트 완료!")
     print(f"📊 최종 결과:")
     print(f"  • 윤리적 성숙도: {maturity['score']:.3f} ({maturity['maturity_level']})")
-    print(
-        f"  • 분석된 상황: {len(judgment_system.judgment_state.ethical_situations)}개"
-    )
+    print(f"  • 분석된 상황: {len(judgment_system.judgment_state.ethical_situations)}개")
     print(f"  • 수행된 판단: {len(judgment_system.judgment_state.ethical_judgments)}개")
     print(f"  • 해결된 갈등: {len(judgment_system.judgment_state.ethical_conflicts)}개")
 

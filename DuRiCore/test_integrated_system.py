@@ -8,10 +8,10 @@ Phase 6: 통합 테스트 및 검증 - 최종 실행 준비 완료 적용
 """
 
 import asyncio
-from datetime import datetime
 import json
 import logging
 import time
+from datetime import datetime
 from typing import Any, Dict
 
 # 로깅 설정
@@ -25,12 +25,8 @@ async def test_integrated_test_system():
         logger.info("=== 통합 테스트 시스템 테스트 시작 ===")
 
         # 통합 테스트 시스템 임포트
-        from integrated_test_system import (
-            TestPriority,
-            TestSuite,
-            TestType,
-            integrated_test_system,
-        )
+        from integrated_test_system import (TestPriority, TestSuite, TestType,
+                                            integrated_test_system)
 
         # 테스트 스위트 등록
         test_suites = [
@@ -135,11 +131,10 @@ async def test_individual_systems():
 
         # 1. 통합 성능 최적화 시스템 테스트
         try:
-            from unified_performance_optimizer import unified_performance_optimizer
+            from unified_performance_optimizer import \
+                unified_performance_optimizer
 
-            performance_summary = (
-                await unified_performance_optimizer.get_performance_summary()
-            )
+            performance_summary = await unified_performance_optimizer.get_performance_summary()
             results["unified_performance"] = {
                 "status": "success",
                 "efficiency_score": performance_summary.get("current_metrics", {}).get(
@@ -191,7 +186,8 @@ async def test_individual_systems():
 
         # 4. 통합 대화 서비스 테스트
         try:
-            from unified_conversation_service import unified_conversation_service
+            from unified_conversation_service import \
+                unified_conversation_service
 
             results["unified_conversation"] = {
                 "status": "success",
@@ -246,7 +242,8 @@ async def test_system_integration():
         # 1. 성능 최적화 시스템과 메모리 최적화 시스템 연동 테스트
         try:
             from memory_optimization_system import memory_optimization_system
-            from unified_performance_optimizer import unified_performance_optimizer
+            from unified_performance_optimizer import \
+                unified_performance_optimizer
 
             # 성능 모니터링 시작
             await unified_performance_optimizer.start_monitoring()
@@ -256,9 +253,7 @@ async def test_system_integration():
             await asyncio.sleep(2)
 
             # 성능 요약 확인
-            performance_summary = (
-                await unified_performance_optimizer.get_performance_summary()
-            )
+            performance_summary = await unified_performance_optimizer.get_performance_summary()
             memory_summary = await memory_optimization_system.get_memory_summary()
 
             integration_results["performance_memory_integration"] = {
@@ -285,16 +280,15 @@ async def test_system_integration():
         # 2. 비동기 최적화 시스템과 통합 시스템 연동 테스트
         try:
             from async_optimization_system import async_optimization_system
-            from unified_conversation_service import unified_conversation_service
+            from unified_conversation_service import \
+                unified_conversation_service
 
             # 비동기 작업 제출 테스트
             async def test_task():
                 await asyncio.sleep(0.1)
                 return "통합 테스트 완료"
 
-            task_id = await async_optimization_system.submit_task(
-                "통합 테스트 작업", test_task()
-            )
+            task_id = await async_optimization_system.submit_task("통합 테스트 작업", test_task())
             results = await async_optimization_system.execute_tasks()
 
             integration_results["async_integration"] = {

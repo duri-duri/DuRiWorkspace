@@ -8,17 +8,16 @@ DuRi Phase Ω: 실제 핵심 기능 검증 테스트
 """
 
 import asyncio
-from datetime import datetime
 import json
 import logging
 import time
+from datetime import datetime
 from typing import Any, Dict
 
 from evolution_system import EvolutionSystem
 from phase_omega_integration import DuRiPhaseOmega
 from self_goal_generator import ImprovementAreaEnum, SelfGoalGenerator
 from survival_assessment_system import SurvivalAssessmentSystem
-
 # Phase Ω 시스템들 import
 from survival_instinct_engine import SurvivalInstinctEngine, SurvivalStatusEnum
 
@@ -100,9 +99,7 @@ class PhaseOmegaRealTest:
                 )
             else:
                 logger.error("❌ 생존 본능 작동 실패: 유효하지 않은 생존 상태")
-                self.test_results.append(
-                    ("생존 본능", False, "유효하지 않은 생존 상태")
-                )
+                self.test_results.append(("생존 본능", False, "유효하지 않은 생존 상태"))
 
         except Exception as e:
             logger.error(f"❌ 생존 본능 테스트 실패: {e}")
@@ -118,21 +115,15 @@ class PhaseOmegaRealTest:
 
             if not current_state:
                 logger.error("❌ 현재 상태 분석 실패")
-                self.test_results.append(
-                    ("자가 목표 생성", False, "현재 상태 분석 실패")
-                )
+                self.test_results.append(("자가 목표 생성", False, "현재 상태 분석 실패"))
                 return
 
             # 개선 영역 식별
-            improvement_areas = await self.goal_generator.identify_improvement_areas(
-                current_state
-            )
+            improvement_areas = await self.goal_generator.identify_improvement_areas(current_state)
 
             if not improvement_areas:
                 logger.error("❌ 개선 영역 식별 실패")
-                self.test_results.append(
-                    ("자가 목표 생성", False, "개선 영역 식별 실패")
-                )
+                self.test_results.append(("자가 목표 생성", False, "개선 영역 식별 실패"))
                 return
 
             # 자가 목표 생성
@@ -156,14 +147,10 @@ class PhaseOmegaRealTest:
                 for goal in self_goals[:3]:  # 처음 3개만 출력
                     logger.info(f"  - {goal.title}: {goal.description[:50]}...")
 
-                self.test_results.append(
-                    ("자가 목표 생성", True, f"{len(self_goals)}개 목표 생성")
-                )
+                self.test_results.append(("자가 목표 생성", True, f"{len(self_goals)}개 목표 생성"))
             else:
                 logger.error("❌ 자가 목표 생성 실패: 유효하지 않은 목표")
-                self.test_results.append(
-                    ("자가 목표 생성", False, "유효하지 않은 목표")
-                )
+                self.test_results.append(("자가 목표 생성", False, "유효하지 않은 목표"))
 
         except Exception as e:
             logger.error(f"❌ 자가 목표 생성 테스트 실패: {e}")
@@ -175,9 +162,7 @@ class PhaseOmegaRealTest:
 
         try:
             # 진화 진행도 평가
-            evolution_progress = (
-                await self.evolution_system.evaluate_evolution_progress()
-            )
+            evolution_progress = await self.evolution_system.evaluate_evolution_progress()
 
             if (
                 evolution_progress
@@ -197,9 +182,7 @@ class PhaseOmegaRealTest:
                 )
             else:
                 logger.error("❌ 진화 시스템 작동 실패: 유효하지 않은 진화 진행도")
-                self.test_results.append(
-                    ("진화 시스템", False, "유효하지 않은 진화 진행도")
-                )
+                self.test_results.append(("진화 시스템", False, "유효하지 않은 진화 진행도"))
 
         except Exception as e:
             logger.error(f"❌ 진화 시스템 테스트 실패: {e}")
@@ -211,14 +194,10 @@ class PhaseOmegaRealTest:
 
         try:
             # 환경적 위험 평가
-            risk_assessments = (
-                await self.survival_assessment.assess_environmental_risks()
-            )
+            risk_assessments = await self.survival_assessment.assess_environmental_risks()
 
             # 자원 가용성 평가
-            resource_assessments = (
-                await self.survival_assessment.evaluate_resource_availability()
-            )
+            resource_assessments = await self.survival_assessment.evaluate_resource_availability()
 
             # 생존 점수 계산
             survival_score = await self.survival_assessment.calculate_survival_score(
@@ -231,9 +210,7 @@ class PhaseOmegaRealTest:
                 and 0 <= survival_score.overall_score <= 1
             ):
 
-                logger.info(
-                    f"✅ 생존 평가 작동 확인: 생존 점수={survival_score.overall_score:.2f}"
-                )
+                logger.info(f"✅ 생존 평가 작동 확인: 생존 점수={survival_score.overall_score:.2f}")
                 self.test_results.append(
                     (
                         "생존 평가",
@@ -243,9 +220,7 @@ class PhaseOmegaRealTest:
                 )
             else:
                 logger.error("❌ 생존 평가 작동 실패: 유효하지 않은 생존 점수")
-                self.test_results.append(
-                    ("생존 평가", False, "유효하지 않은 생존 점수")
-                )
+                self.test_results.append(("생존 평가", False, "유효하지 않은 생존 점수"))
 
         except Exception as e:
             logger.error(f"❌ 생존 평가 테스트 실패: {e}")
@@ -282,9 +257,7 @@ class PhaseOmegaRealTest:
                     f"✅ Phase Ω 통합 작동 확인: {len(result.self_goals)}개 목표, {result.integration_time:.2f}초"
                 )
                 logger.info(f"  - 생존 상태: {result.survival_status.status.value}")
-                logger.info(
-                    f"  - 생존 확률: {result.survival_status.survival_probability:.2f}"
-                )
+                logger.info(f"  - 생존 확률: {result.survival_status.survival_probability:.2f}")
 
                 self.test_results.append(
                     (

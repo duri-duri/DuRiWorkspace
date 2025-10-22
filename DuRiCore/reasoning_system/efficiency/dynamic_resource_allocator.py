@@ -7,15 +7,15 @@ DuRi 추론 시스템 - 동적 리소스 할당 모듈
 """
 
 import asyncio
-from collections import Counter, defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 import hashlib
 import json
 import logging
 import re
 import time
+from collections import Counter, defaultdict
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
@@ -73,9 +73,7 @@ class DynamicResourceAllocator:
 
         for resource_type in ResourceType:
             if resource_type.value in requirements:
-                allocation = await self._allocate_resource(
-                    resource_type, requirements, strategy
-                )
+                allocation = await self._allocate_resource(resource_type, requirements, strategy)
                 if allocation:
                     allocations.append(allocation)
 
@@ -97,9 +95,7 @@ class DynamicResourceAllocator:
         allocated_amount = await self._calculate_allocation(
             required_amount, max_available, strategy
         )
-        utilization_rate = (
-            allocated_amount / max_available if max_available > 0 else 0.0
-        )
+        utilization_rate = allocated_amount / max_available if max_available > 0 else 0.0
         priority = await self._determine_priority(resource_type, strategy)
 
         allocation = ResourceAllocation(

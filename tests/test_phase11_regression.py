@@ -11,9 +11,7 @@ def _load_orch():
 
     # 모든 관련 모듈 캐시 클리어 (강력한 방법)
     modules_to_clear = [
-        name
-        for name in sys.modules.keys()
-        if "phase11" in name or "orchestrator" in name
+        name for name in sys.modules.keys() if "phase11" in name or "orchestrator" in name
     ]
     for module_name in modules_to_clear:
         del sys.modules[module_name]
@@ -32,9 +30,7 @@ def _load_orch():
 def run_turn(user_text: str):
     """오케스트레이터 턴 실행"""
     mod = _load_orch()
-    ctx = mod.TurnContext(
-        conv_id="t", messages=[mod.Message(role="user", content=user_text)]
-    )
+    ctx = mod.TurnContext(conv_id="t", messages=[mod.Message(role="user", content=user_text)])
     oc = mod.Orchestrator()
     ctx = oc.run_turn(ctx)
     return ctx

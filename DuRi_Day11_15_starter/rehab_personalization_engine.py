@@ -4,12 +4,12 @@
 개인화된 재활 운동 루틴 생성 및 최적화
 """
 
-from dataclasses import dataclass
-from datetime import datetime
 import json
 import logging
-from pathlib import Path
 import time
+from dataclasses import dataclass
+from datetime import datetime
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import numpy as np
@@ -136,9 +136,7 @@ class RehabPersonalizationEngine:
         handler = logging.FileHandler(
             f"rehab_personalization_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
         )
-        formatter = logging.Formatter(
-            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-        )
+        formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
         handler.setFormatter(formatter)
         logger.addHandler(handler)
 
@@ -177,13 +175,9 @@ class RehabPersonalizationEngine:
             created_at=datetime.now(),
             exercises=selected_exercises,
             total_duration=sum(ex.duration_minutes for ex in selected_exercises),
-            difficulty_score=self._calculate_difficulty_score(
-                selected_exercises, profile
-            ),
+            difficulty_score=self._calculate_difficulty_score(selected_exercises, profile),
             safety_score=self._calculate_safety_score(selected_exercises, profile),
-            effectiveness_score=self._calculate_effectiveness_score(
-                selected_exercises, profile
-            ),
+            effectiveness_score=self._calculate_effectiveness_score(selected_exercises, profile),
         )
 
         self.routines[routine.routine_id] = routine
@@ -233,9 +227,7 @@ class RehabPersonalizationEngine:
 
         return filtered_exercises
 
-    def _calculate_difficulty_score(
-        self, exercises: List[Exercise], profile: UserProfile
-    ) -> float:
+    def _calculate_difficulty_score(self, exercises: List[Exercise], profile: UserProfile) -> float:
         """난이도 점수 계산"""
         if not exercises:
             return 0.0
@@ -251,9 +243,7 @@ class RehabPersonalizationEngine:
 
         return min(5.0, avg_difficulty * fitness_multiplier)
 
-    def _calculate_safety_score(
-        self, exercises: List[Exercise], profile: UserProfile
-    ) -> float:
+    def _calculate_safety_score(self, exercises: List[Exercise], profile: UserProfile) -> float:
         """안전성 점수 계산"""
         if not exercises:
             return 0.0
@@ -267,9 +257,9 @@ class RehabPersonalizationEngine:
         limitation_penalty = len(profile.current_limitations) * 10.0
 
         # 운동별 안전성 점수
-        exercise_safety = sum(
-            100.0 - (ex.difficulty_level * 10.0) for ex in exercises
-        ) / len(exercises)
+        exercise_safety = sum(100.0 - (ex.difficulty_level * 10.0) for ex in exercises) / len(
+            exercises
+        )
 
         final_safety = max(
             0.0,
@@ -288,15 +278,11 @@ class RehabPersonalizationEngine:
         goal_coverage = 0.0
         for goal in profile.goals:
             for exercise in exercises:
-                if any(
-                    goal.lower() in muscle.lower() for muscle in exercise.target_muscles
-                ):
+                if any(goal.lower() in muscle.lower() for muscle in exercise.target_muscles):
                     goal_coverage += 1.0
                     break
 
-        goal_score = (
-            (goal_coverage / len(profile.goals)) * 100.0 if profile.goals else 50.0
-        )
+        goal_score = (goal_coverage / len(profile.goals)) * 100.0 if profile.goals else 50.0
 
         # 운동 다양성 점수
         categories = set(ex.category for ex in exercises)
@@ -329,19 +315,13 @@ class RehabPersonalizationEngine:
             created_at=datetime.now(),
             exercises=optimized_exercises,
             total_duration=sum(ex.duration_minutes for ex in optimized_exercises),
-            difficulty_score=self._calculate_difficulty_score(
-                optimized_exercises, profile
-            ),
+            difficulty_score=self._calculate_difficulty_score(optimized_exercises, profile),
             safety_score=self._calculate_safety_score(optimized_exercises, profile),
-            effectiveness_score=self._calculate_effectiveness_score(
-                optimized_exercises, profile
-            ),
+            effectiveness_score=self._calculate_effectiveness_score(optimized_exercises, profile),
         )
 
         self.routines[optimized_routine.routine_id] = optimized_routine
-        self.logger.info(
-            f"Optimized routine {routine_id} -> {optimized_routine.routine_id}"
-        )
+        self.logger.info(f"Optimized routine {routine_id} -> {optimized_routine.routine_id}")
         return optimized_routine
 
     def generate_report(self) -> Dict[str, Any]:
@@ -369,9 +349,9 @@ class RehabPersonalizationEngine:
             report["summary"]["avg_difficulty_score"] = sum(
                 r.difficulty_score for r in routines
             ) / len(routines)
-            report["summary"]["avg_safety_score"] = sum(
-                r.safety_score for r in routines
-            ) / len(routines)
+            report["summary"]["avg_safety_score"] = sum(r.safety_score for r in routines) / len(
+                routines
+            )
             report["summary"]["avg_effectiveness_score"] = sum(
                 r.effectiveness_score for r in routines
             ) / len(routines)
@@ -439,9 +419,7 @@ def main():
     report = engine.generate_report()
 
     # 리포트 저장
-    report_path = (
-        f"rehab_personalization_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-    )
+    report_path = f"rehab_personalization_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
     with open(report_path, "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2, ensure_ascii=False, default=str)
 

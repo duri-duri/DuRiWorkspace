@@ -73,14 +73,10 @@ def test_sampling_patch_complete():
             print(f"sampled_function 관련 로그 라인 수: {len(sampled_lines)}")
 
             if 4 <= len(sampled_lines) <= 15:
-                print(
-                    f"✅ PASS: 로그 라인 수 {len(sampled_lines)}가 예상 범위(4~15) 내"
-                )
+                print(f"✅ PASS: 로그 라인 수 {len(sampled_lines)}가 예상 범위(4~15) 내")
                 return True
             else:
-                print(
-                    f"❌ FAIL: 로그 라인 수 {len(sampled_lines)}가 예상 범위(4~15) 밖"
-                )
+                print(f"❌ FAIL: 로그 라인 수 {len(sampled_lines)}가 예상 범위(4~15) 밖")
                 return False
     else:
         print("❌ FAIL: 로그 파일이 생성되지 않음")

@@ -9,12 +9,9 @@ import time
 from typing import Any, Dict
 
 # 고급 메타-학습 시스템 임포트
-from advanced_meta_learning import (
-    AdvancedMetaLearningSystem,
-    LearningTargetType,
-    StrategyType,
-    advanced_meta_learning,
-)
+from advanced_meta_learning import (AdvancedMetaLearningSystem,
+                                    LearningTargetType, StrategyType,
+                                    advanced_meta_learning)
 
 
 def demonstrate_chatgpt_solutions():

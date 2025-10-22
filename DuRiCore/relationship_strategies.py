@@ -7,17 +7,13 @@ DuRi 사회적 지능 시스템 - 관계 유형 전략 패턴
 각 관계 유형별로 독립적인 전략 객체를 통해 일관된 처리를 제공합니다.
 """
 
+import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-import logging
 from typing import Any, Dict, List
 
-from social_intelligence_system import (
-    InteractionType,
-    RelationshipType,
-    SocialContext,
-    SocialContextType,
-)
+from social_intelligence_system import (InteractionType, RelationshipType,
+                                        SocialContext, SocialContextType)
 
 logger = logging.getLogger(__name__)
 

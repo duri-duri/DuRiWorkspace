@@ -11,15 +11,15 @@ DuRi Phase 1-3 Week 3 Day 14 - 일관성 강화 시스템
 """
 
 import asyncio
-from collections import Counter, defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 import hashlib
 import json
 import logging
 import re
 import time
+from collections import Counter, defaultdict
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
@@ -125,9 +125,7 @@ class LogicalConnectivityValidator:
         for i, step in enumerate(reasoning_steps):
             if i > 0:
                 # 이전 단계와의 연결성 검증
-                connection = await self._validate_step_connection(
-                    reasoning_steps[i - 1], step
-                )
+                connection = await self._validate_step_connection(reasoning_steps[i - 1], step)
                 if connection:
                     connections.append(connection)
 
@@ -146,9 +144,7 @@ class LogicalConnectivityValidator:
         strength = await self._calculate_connection_strength(prev_step, current_step)
 
         # 신뢰도 계산
-        confidence = await self._calculate_connection_confidence(
-            prev_step, current_step
-        )
+        confidence = await self._calculate_connection_confidence(prev_step, current_step)
 
         # 증거 수집
         evidence = await self._collect_connection_evidence(prev_step, current_step)
@@ -181,9 +177,7 @@ class LogicalConnectivityValidator:
         similarity_score = await self._calculate_similarity(prev_step, current_step)
         return similarity_score
 
-    async def _calculate_similarity(
-        self, step1: Dict[str, Any], step2: Dict[str, Any]
-    ) -> float:
+    async def _calculate_similarity(self, step1: Dict[str, Any], step2: Dict[str, Any]) -> float:
         """단계 간 유사성 계산"""
         # 간단한 유사성 계산 (실제로는 더 복잡한 알고리즘 사용)
         common_keys = set(step1.keys()) & set(step2.keys())
@@ -296,23 +290,21 @@ class KnowledgeConflictResolver:
         }
 
         if conflict.resolution_strategy == ConflictResolutionStrategy.EVIDENCE_BASED:
-            resolution_result["resolution_details"] = (
-                await self._evidence_based_resolution(conflict)
+            resolution_result["resolution_details"] = await self._evidence_based_resolution(
+                conflict
             )
         elif conflict.resolution_strategy == ConflictResolutionStrategy.PRIORITY_BASED:
-            resolution_result["resolution_details"] = (
-                await self._priority_based_resolution(conflict)
+            resolution_result["resolution_details"] = await self._priority_based_resolution(
+                conflict
             )
         else:
-            resolution_result["resolution_details"] = (
-                await self._consensus_based_resolution(conflict)
+            resolution_result["resolution_details"] = await self._consensus_based_resolution(
+                conflict
             )
 
         return resolution_result
 
-    async def _evidence_based_resolution(
-        self, conflict: KnowledgeConflict
-    ) -> Dict[str, Any]:
+    async def _evidence_based_resolution(self, conflict: KnowledgeConflict) -> Dict[str, Any]:
         """증거 기반 해결"""
         return {
             "method": "evidence_based",
@@ -320,9 +312,7 @@ class KnowledgeConflictResolver:
             "confidence": 0.8,
         }
 
-    async def _priority_based_resolution(
-        self, conflict: KnowledgeConflict
-    ) -> Dict[str, Any]:
+    async def _priority_based_resolution(self, conflict: KnowledgeConflict) -> Dict[str, Any]:
         """우선순위 기반 해결"""
         return {
             "method": "priority_based",
@@ -330,9 +320,7 @@ class KnowledgeConflictResolver:
             "confidence": 0.7,
         }
 
-    async def _consensus_based_resolution(
-        self, conflict: KnowledgeConflict
-    ) -> Dict[str, Any]:
+    async def _consensus_based_resolution(self, conflict: KnowledgeConflict) -> Dict[str, Any]:
         """합의 기반 해결"""
         return {
             "method": "consensus_based",
@@ -368,9 +356,7 @@ class IntegrationEvaluator:
 
         assessment = IntegrationAssessment(
             assessment_id=assessment_id,
-            knowledge_sources=[
-                str(source.get("id", "unknown")) for source in knowledge_sources
-            ],
+            knowledge_sources=[str(source.get("id", "unknown")) for source in knowledge_sources],
             integration_score=integration_score,
             coherence_score=coherence_score,
             completeness_score=completeness_score,
@@ -384,9 +370,7 @@ class IntegrationEvaluator:
         self.evaluation_history.append(assessment)
         return assessment
 
-    async def _calculate_integration_score(
-        self, knowledge_sources: List[Dict[str, Any]]
-    ) -> float:
+    async def _calculate_integration_score(self, knowledge_sources: List[Dict[str, Any]]) -> float:
         """통합 점수 계산"""
         if not knowledge_sources:
             return 0.0
@@ -400,9 +384,7 @@ class IntegrationEvaluator:
 
         return np.mean(connectivity_scores) if connectivity_scores else 0.0
 
-    async def _calculate_coherence_score(
-        self, knowledge_sources: List[Dict[str, Any]]
-    ) -> float:
+    async def _calculate_coherence_score(self, knowledge_sources: List[Dict[str, Any]]) -> float:
         """일관성 점수 계산"""
         if not knowledge_sources:
             return 0.0
@@ -416,9 +398,7 @@ class IntegrationEvaluator:
 
         return np.mean(coherence_scores) if coherence_scores else 0.0
 
-    async def _calculate_completeness_score(
-        self, knowledge_sources: List[Dict[str, Any]]
-    ) -> float:
+    async def _calculate_completeness_score(self, knowledge_sources: List[Dict[str, Any]]) -> float:
         """완전성 점수 계산"""
         if not knowledge_sources:
             return 0.0
@@ -431,9 +411,7 @@ class IntegrationEvaluator:
 
         return np.mean(completeness_scores) if completeness_scores else 0.0
 
-    async def _calculate_consistency_score(
-        self, knowledge_sources: List[Dict[str, Any]]
-    ) -> float:
+    async def _calculate_consistency_score(self, knowledge_sources: List[Dict[str, Any]]) -> float:
         """일관성 점수 계산"""
         if not knowledge_sources:
             return 0.0
@@ -456,14 +434,10 @@ class IntegrationEvaluator:
         if not common_keys:
             return 0.0
 
-        connectivity_score = len(common_keys) / max(
-            len(source1.keys()), len(source2.keys())
-        )
+        connectivity_score = len(common_keys) / max(len(source1.keys()), len(source2.keys()))
         return connectivity_score
 
-    async def _calculate_coherence(
-        self, source1: Dict[str, Any], source2: Dict[str, Any]
-    ) -> float:
+    async def _calculate_coherence(self, source1: Dict[str, Any], source2: Dict[str, Any]) -> float:
         """일관성 계산"""
         # 간단한 일관성 계산
         if "type" in source1 and "type" in source2:
@@ -506,9 +480,7 @@ class ConsistencyEnhancementSystem:
         self.integration_evaluator = IntegrationEvaluator()
         self.enhancement_history = []
 
-    async def enhance_consistency(
-        self, reasoning_data: Dict[str, Any]
-    ) -> ConsistencyEnhancement:
+    async def enhance_consistency(self, reasoning_data: Dict[str, Any]) -> ConsistencyEnhancement:
         """일관성 강화"""
         enhancement_id = f"enhancement_{int(time.time())}"
 
@@ -541,9 +513,7 @@ class ConsistencyEnhancementSystem:
         self.enhancement_history.append(enhancement)
         return enhancement
 
-    async def _evaluate_original_consistency(
-        self, reasoning_data: Dict[str, Any]
-    ) -> float:
+    async def _evaluate_original_consistency(self, reasoning_data: Dict[str, Any]) -> float:
         """원본 일관성 평가"""
         # 기본 일관성 점수 계산
         consistency_factors = []
@@ -576,9 +546,7 @@ class ConsistencyEnhancementSystem:
 
         return np.mean(consistency_factors) if consistency_factors else 0.0
 
-    async def _apply_enhancement_methods(
-        self, reasoning_data: Dict[str, Any]
-    ) -> List[str]:
+    async def _apply_enhancement_methods(self, reasoning_data: Dict[str, Any]) -> List[str]:
         """일관성 강화 방법 적용"""
         enhancement_methods = []
 

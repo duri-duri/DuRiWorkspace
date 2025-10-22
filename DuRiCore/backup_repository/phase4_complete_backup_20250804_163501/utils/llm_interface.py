@@ -5,15 +5,15 @@ Phase 4: 성능 최적화를 위한 aiohttp 기반 LLM 호출 시스템
 """
 
 import asyncio
-from concurrent.futures import ThreadPoolExecutor
-from dataclasses import asdict, dataclass
-from datetime import datetime
-from enum import Enum
 import hashlib
 import json
 import logging
 import os
 import time
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 
 import aiohttp
@@ -169,7 +169,9 @@ class AsyncLLMInterface:
                 return self.response_cache[cache_key]
 
             # 요청 생성
-            request_id = f"req_{int(time.time() * 1000)}_{hashlib.md5(prompt.encode()).hexdigest()[:8]}"
+            request_id = (
+                f"req_{int(time.time() * 1000)}_{hashlib.md5(prompt.encode()).hexdigest()[:8]}"
+            )
 
             llm_request = LLMRequest(
                 id=request_id,
@@ -211,9 +213,7 @@ class AsyncLLMInterface:
                 self.response_history.append(response)
                 self.stats["total_responses"] += 1
 
-                logger.info(
-                    f"LLM 응답 완료: {request_id} (처리시간: {processing_time:.2f}s)"
-                )
+                logger.info(f"LLM 응답 완료: {request_id} (처리시간: {processing_time:.2f}s)")
                 return response
 
         except Exception as e:
@@ -236,9 +236,7 @@ class AsyncLLMInterface:
         else:
             raise ValueError(f"지원하지 않는 LLM 제공자: {request.provider}")
 
-    async def _call_chatgpt(
-        self, request: LLMRequest, config: Dict[str, Any]
-    ) -> LLMResponse:
+    async def _call_chatgpt(self, request: LLMRequest, config: Dict[str, Any]) -> LLMResponse:
         """ChatGPT API 호출"""
         headers = {
             "Authorization": f'Bearer {config["api_key"]}',
@@ -284,9 +282,7 @@ class AsyncLLMInterface:
             else:
                 raise Exception(f"ChatGPT API 오류: {response.status}")
 
-    async def _call_claude(
-        self, request: LLMRequest, config: Dict[str, Any]
-    ) -> LLMResponse:
+    async def _call_claude(self, request: LLMRequest, config: Dict[str, Any]) -> LLMResponse:
         """Claude API 호출"""
         headers = {
             "x-api-key": config["api_key"],
@@ -321,16 +317,12 @@ class AsyncLLMInterface:
                     confidence_score=0.0,
                     quality_score=0.0,
                     timestamp=datetime.now(),
-                    metadata={
-                        "input_tokens": data.get("usage", {}).get("input_tokens", 0)
-                    },
+                    metadata={"input_tokens": data.get("usage", {}).get("input_tokens", 0)},
                 )
             else:
                 raise Exception(f"Claude API 오류: {response.status}")
 
-    async def _call_gemini(
-        self, request: LLMRequest, config: Dict[str, Any]
-    ) -> LLMResponse:
+    async def _call_gemini(self, request: LLMRequest, config: Dict[str, Any]) -> LLMResponse:
         """Gemini API 호출"""
         url = f"{config['api_url']}?key={config['api_key']}"
 
@@ -414,7 +406,9 @@ class AsyncLLMInterface:
         provider: LLMProvider,
     ) -> str:
         """캐시 키 생성"""
-        content = f"{prompt}_{query_type.value}_{provider.value}_{json.dumps(context, sort_keys=True)}"
+        content = (
+            f"{prompt}_{query_type.value}_{provider.value}_{json.dumps(context, sort_keys=True)}"
+        )
         return hashlib.md5(content.encode()).hexdigest()
 
     def _evaluate_response_quality(self, content: str, query_type: QueryType) -> float:
@@ -450,15 +444,11 @@ class AsyncLLMInterface:
         """성능 통계 반환"""
         return {
             **self.stats,
-            "cache_hit_rate": self.stats["cache_hits"]
-            / max(self.stats["total_requests"], 1),
-            "error_rate": self.stats["error_count"]
-            / max(self.stats["total_requests"], 1),
+            "cache_hit_rate": self.stats["cache_hits"] / max(self.stats["total_requests"], 1),
+            "error_rate": self.stats["error_count"] / max(self.stats["total_requests"], 1),
             "active_requests": self.semaphore._value,
             "queue_size": (
-                self.request_queue.qsize()
-                if hasattr(self.request_queue, "qsize")
-                else 0
+                self.request_queue.qsize() if hasattr(self.request_queue, "qsize") else 0
             ),
         }
 
@@ -470,9 +460,7 @@ class AsyncLLMInterface:
     async def batch_request(self, requests: List[LLMRequest]) -> List[LLMResponse]:
         """배치 요청 처리"""
         tasks = [
-            self.ask_llm(
-                req.prompt, req.query_type, req.context, req.provider, req.priority
-            )
+            self.ask_llm(req.prompt, req.query_type, req.context, req.provider, req.priority)
             for req in requests
         ]
 

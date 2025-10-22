@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 import csv
-from datetime import datetime, timezone
 import json
 import math
 import os
-from pathlib import Path
 import subprocess
+from datetime import datetime, timezone
+from pathlib import Path
 
 CFG = "configs/monitoring.yaml"
 
@@ -20,9 +20,7 @@ def load_cfg():
 def eval_J(evaluator, cfg, preset, m):
     import tempfile
 
-    with tempfile.NamedTemporaryFile(
-        "w", delete=False, suffix=".json", encoding="utf-8"
-    ) as tf:
+    with tempfile.NamedTemporaryFile("w", delete=False, suffix=".json", encoding="utf-8") as tf:
         json.dump(m, tf)
         tmp = tf.name
     try:

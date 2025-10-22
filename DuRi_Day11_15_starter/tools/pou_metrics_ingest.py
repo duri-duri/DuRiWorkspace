@@ -8,21 +8,19 @@ Day36 Enhanced: PoU 지표 수집→정규화→저장 자동화 시스템
 
 import argparse
 import csv
-from datetime import datetime
 import glob
 import json
 import logging
 import os
-from pathlib import Path
 import re
 import statistics
 import sys
+from datetime import datetime
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -160,23 +158,15 @@ def parse_any_file(path: str) -> List[Dict[str, Any]]:
         return parse_kv_txt(path)
 
 
-def aggregate_metrics(
-    rows: List[Dict[str, Any]], mapping: Dict[str, Any]
-) -> Dict[str, float]:
+def aggregate_metrics(rows: List[Dict[str, Any]], mapping: Dict[str, Any]) -> Dict[str, float]:
     """지표 집계"""
     # 키 매핑 로드
-    key_latency = mapping["keys"].get(
-        "latency", ["p95_latency_ms", "latency_ms", "latency", "p95"]
-    )
-    key_accuracy = mapping["keys"].get(
-        "accuracy", ["accuracy", "acc", "score_acc", "correct_rate"]
-    )
+    key_latency = mapping["keys"].get("latency", ["p95_latency_ms", "latency_ms", "latency", "p95"])
+    key_accuracy = mapping["keys"].get("accuracy", ["accuracy", "acc", "score_acc", "correct_rate"])
     key_explainability = mapping["keys"].get(
         "explainability", ["explainability", "explain", "exp_score", "rubric"]
     )
-    key_failure = mapping["keys"].get(
-        "failure", ["failure_rate", "fail_rate", "error_rate"]
-    )
+    key_failure = mapping["keys"].get("failure", ["failure_rate", "fail_rate", "error_rate"])
     key_status = mapping["keys"].get("status", ["status", "ok", "success", "passed"])
 
     # 데이터 수집
@@ -242,9 +232,7 @@ def aggregate_metrics(
     accuracy = None
     if accuracies:
         normalized_accs = [
-            normalize_to_01(acc)
-            for acc in accuracies
-            if normalize_to_01(acc) is not None
+            normalize_to_01(acc) for acc in accuracies if normalize_to_01(acc) is not None
         ]
         if normalized_accs:
             accuracy = sum(normalized_accs) / len(normalized_accs)
@@ -253,9 +241,7 @@ def aggregate_metrics(
     explainability = None
     if explainabilities:
         normalized_exps = [
-            normalize_to_01(exp)
-            for exp in explainabilities
-            if normalize_to_01(exp) is not None
+            normalize_to_01(exp) for exp in explainabilities if normalize_to_01(exp) is not None
         ]
         if normalized_exps:
             explainability = sum(normalized_exps) / len(normalized_exps)
@@ -266,9 +252,7 @@ def aggregate_metrics(
         failure_rate = sum(f for f in failures if f is not None) / len(failures)
     elif statuses:
         # 상태에서 실패율 추정
-        success_count = sum(
-            1 for s in statuses if s in ("ok", "success", "true", "passed", "pass")
-        )
+        success_count = sum(1 for s in statuses if s in ("ok", "success", "true", "passed", "pass"))
         failure_rate = 1.0 - (success_count / len(statuses))
 
     # 결과 구성
@@ -309,9 +293,7 @@ def run_objective_evaluation(
 
 def main():
     """메인 함수"""
-    parser = argparse.ArgumentParser(
-        description="PoU 로그 → metrics_*.json (+옵션 J 계산)"
-    )
+    parser = argparse.ArgumentParser(description="PoU 로그 → metrics_*.json (+옵션 J 계산)")
     parser.add_argument("--glob", required=True, help="입력 파일 패턴")
     parser.add_argument("--mapping", required=True, help="매핑 설정 파일")
     parser.add_argument("--outdir", required=True, help="출력 디렉토리")

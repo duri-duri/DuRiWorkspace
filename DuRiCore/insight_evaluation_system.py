@@ -5,12 +5,12 @@ DuRi 통찰 평가 시스템 (Day 7)
 """
 
 import asyncio
-from dataclasses import asdict, dataclass
-from datetime import datetime
-from enum import Enum
 import json
 import logging
 import re
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 logging.basicConfig(level=logging.INFO)
@@ -137,12 +137,8 @@ class JudgmentQualityMetricsEvaluator:
         logical_consistency = self._evaluate_logical_consistency(
             judgment_content, reasoning_process
         )
-        evidence_support = self._evaluate_evidence_support(
-            judgment_content, reasoning_process
-        )
-        reasoning_depth = self._evaluate_reasoning_depth(
-            judgment_content, reasoning_process
-        )
+        evidence_support = self._evaluate_evidence_support(judgment_content, reasoning_process)
+        reasoning_depth = self._evaluate_reasoning_depth(judgment_content, reasoning_process)
         originality = self._evaluate_originality(judgment_content, reasoning_process)
         practical_relevance = self._evaluate_practical_relevance(
             judgment_content, reasoning_process
@@ -188,16 +184,12 @@ class JudgmentQualityMetricsEvaluator:
 
         # 모순 키워드 검사
         contradiction_keywords = ["하지만", "그런데", "반면", "다른 한편"]
-        contradiction_count = sum(
-            1 for keyword in contradiction_keywords if keyword in content
-        )
+        contradiction_count = sum(1 for keyword in contradiction_keywords if keyword in content)
         score -= min(contradiction_count * 0.1, 0.2)
 
         return min(max(score, 0.0), 1.0)
 
-    def _evaluate_evidence_support(
-        self, content: str, reasoning_process: Dict[str, Any]
-    ) -> float:
+    def _evaluate_evidence_support(self, content: str, reasoning_process: Dict[str, Any]) -> float:
         """증거 지원 평가"""
         score = 0.5  # 기본값
 
@@ -222,9 +214,7 @@ class JudgmentQualityMetricsEvaluator:
 
         return min(max(score, 0.0), 1.0)
 
-    def _evaluate_reasoning_depth(
-        self, content: str, reasoning_process: Dict[str, Any]
-    ) -> float:
+    def _evaluate_reasoning_depth(self, content: str, reasoning_process: Dict[str, Any]) -> float:
         """추론 깊이 평가"""
         score = 0.5  # 기본값
 
@@ -245,17 +235,13 @@ class JudgmentQualityMetricsEvaluator:
 
         return min(max(score, 0.0), 1.0)
 
-    def _evaluate_originality(
-        self, content: str, reasoning_process: Dict[str, Any]
-    ) -> float:
+    def _evaluate_originality(self, content: str, reasoning_process: Dict[str, Any]) -> float:
         """독창성 평가"""
         score = 0.5  # 기본값
 
         # 독창성 키워드 검사
         originality_keywords = ["새로운", "독창", "혁신", "창의", "독특", "차별화"]
-        originality_count = sum(
-            1 for keyword in originality_keywords if keyword in content
-        )
+        originality_count = sum(1 for keyword in originality_keywords if keyword in content)
         score += min(originality_count * 0.1, 0.3)
 
         # 일반적 표현 검사 (독창성 감소)
@@ -417,18 +403,10 @@ class InsightAuthenticityChecker:
         logger.info("통찰 진위성 검사 시작")
 
         # 각 진위성 지표 평가
-        evidence_quality = self._evaluate_evidence_quality(
-            insight_content, reasoning_process
-        )
-        reasoning_quality = self._evaluate_reasoning_quality(
-            insight_content, reasoning_process
-        )
-        originality_score = self._evaluate_originality_score(
-            insight_content, reasoning_process
-        )
-        practical_value = self._evaluate_practical_value(
-            insight_content, reasoning_process
-        )
+        evidence_quality = self._evaluate_evidence_quality(insight_content, reasoning_process)
+        reasoning_quality = self._evaluate_reasoning_quality(insight_content, reasoning_process)
+        originality_score = self._evaluate_originality_score(insight_content, reasoning_process)
+        practical_value = self._evaluate_practical_value(insight_content, reasoning_process)
 
         # 경고 신호 및 긍정 신호 검사
         red_flags = self._detect_red_flags(insight_content)
@@ -473,9 +451,7 @@ class InsightAuthenticityChecker:
         logger.info(f"통찰 진위성 검사 완료: {authenticity_level.value}")
         return check
 
-    def _evaluate_evidence_quality(
-        self, content: str, reasoning_process: Dict[str, Any]
-    ) -> float:
+    def _evaluate_evidence_quality(self, content: str, reasoning_process: Dict[str, Any]) -> float:
         """증거 품질 평가"""
         score = 0.5  # 기본값
 
@@ -495,9 +471,7 @@ class InsightAuthenticityChecker:
 
         return min(max(score, 0.0), 1.0)
 
-    def _evaluate_reasoning_quality(
-        self, content: str, reasoning_process: Dict[str, Any]
-    ) -> float:
+    def _evaluate_reasoning_quality(self, content: str, reasoning_process: Dict[str, Any]) -> float:
         """추론 품질 평가"""
         score = 0.5  # 기본값
 
@@ -522,17 +496,13 @@ class InsightAuthenticityChecker:
 
         return min(max(score, 0.0), 1.0)
 
-    def _evaluate_originality_score(
-        self, content: str, reasoning_process: Dict[str, Any]
-    ) -> float:
+    def _evaluate_originality_score(self, content: str, reasoning_process: Dict[str, Any]) -> float:
         """독창성 점수 평가"""
         score = 0.5  # 기본값
 
         # 독창성 키워드 검사
         originality_keywords = ["새로운", "독창", "혁신", "창의", "독특", "차별화"]
-        originality_count = sum(
-            1 for keyword in originality_keywords if keyword in content
-        )
+        originality_count = sum(1 for keyword in originality_keywords if keyword in content)
         score += min(originality_count * 0.1, 0.3)
 
         # 추론 과정의 독창성 검사
@@ -543,9 +513,7 @@ class InsightAuthenticityChecker:
 
         return min(max(score, 0.0), 1.0)
 
-    def _evaluate_practical_value(
-        self, content: str, reasoning_process: Dict[str, Any]
-    ) -> float:
+    def _evaluate_practical_value(self, content: str, reasoning_process: Dict[str, Any]) -> float:
         """실용적 가치 평가"""
         score = 0.5  # 기본값
 
@@ -604,9 +572,7 @@ class InsightAuthenticityChecker:
         practical_value: float,
     ) -> InsightType:
         """통찰 유형 결정"""
-        avg_score = (
-            evidence_quality + reasoning_quality + originality_score + practical_value
-        ) / 4
+        avg_score = (evidence_quality + reasoning_quality + originality_score + practical_value) / 4
 
         if avg_score >= 0.8:
             return InsightType.GENUINE
@@ -735,9 +701,7 @@ class InsightEvaluationSystem:
             "overall_score": overall_score,
             "grade": grade,
             "assessment": assessment,
-            "recommendations": self._generate_recommendations(
-                quality_metrics, authenticity_check
-            ),
+            "recommendations": self._generate_recommendations(quality_metrics, authenticity_check),
         }
 
     def _generate_recommendations(
@@ -766,9 +730,7 @@ class InsightEvaluationSystem:
 
         # 진위성 기반 권고사항
         if authenticity_check.red_flags:
-            recommendations.append(
-                "경고 신호를 줄이기 위해 더 신중한 표현을 사용하세요"
-            )
+            recommendations.append("경고 신호를 줄이기 위해 더 신중한 표현을 사용하세요")
 
         if len(authenticity_check.green_flags) < 2:
             recommendations.append("더 많은 긍정적 신호를 포함하세요")

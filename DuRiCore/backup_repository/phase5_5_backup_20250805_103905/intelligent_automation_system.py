@@ -5,15 +5,15 @@ DuRiCore Phase 5 Day 9 - 지능형 자동화 시스템
 """
 
 import asyncio
-from dataclasses import dataclass
-from datetime import datetime
-from enum import Enum
 import json
 import logging
 import math
 import random
 import statistics
 import time
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 logger = logging.getLogger(__name__)
@@ -135,9 +135,7 @@ class IntelligentAutomationSystem:
 
         logger.info("IntelligentAutomationSystem 초기화 완료")
 
-    async def create_automation_workflows(
-        self, workflow_data: Dict[str, Any]
-    ) -> WorkflowResult:
+    async def create_automation_workflows(self, workflow_data: Dict[str, Any]) -> WorkflowResult:
         """자동화 워크플로우 생성"""
         try:
             self.automation_status = AutomationStatus.RUNNING
@@ -147,17 +145,13 @@ class IntelligentAutomationSystem:
             workflow_type = await self._determine_workflow_type(workflow_data)
 
             # 워크플로우 단계 생성
-            workflow_steps = await self._generate_workflow_steps(
-                workflow_type, workflow_data
-            )
+            workflow_steps = await self._generate_workflow_steps(workflow_type, workflow_data)
 
             # 워크플로우 실행
             execution_result = await self._execute_workflow(workflow_steps)
 
             # 성능 메트릭 측정
-            performance_metrics = await self._measure_workflow_performance(
-                execution_result
-            )
+            performance_metrics = await self._measure_workflow_performance(execution_result)
 
             # 성공률 계산
             success_rate = await self._calculate_workflow_success_rate(execution_result)
@@ -193,9 +187,7 @@ class IntelligentAutomationSystem:
             logger.info("자동화 성능 모니터링 시작")
 
             # 성능 메트릭 수집
-            collected_metrics = await self._collect_automation_metrics(
-                automation_metrics
-            )
+            collected_metrics = await self._collect_automation_metrics(automation_metrics)
 
             # 워크플로우 실행 통계
             workflow_stats = await self._analyze_workflow_statistics(collected_metrics)
@@ -204,14 +196,10 @@ class IntelligentAutomationSystem:
             decision_stats = await self._analyze_decision_statistics(collected_metrics)
 
             # 전체 효율성 계산
-            overall_efficiency = await self._calculate_overall_efficiency(
-                collected_metrics
-            )
+            overall_efficiency = await self._calculate_overall_efficiency(collected_metrics)
 
             # 권장사항 생성
-            recommendations = await self._generate_automation_recommendations(
-                collected_metrics
-            )
+            recommendations = await self._generate_automation_recommendations(collected_metrics)
 
             # 자동화 보고서 생성
             automation_report = AutomationReport(
@@ -235,9 +223,7 @@ class IntelligentAutomationSystem:
             logger.error(f"자동화 성능 모니터링 실패: {str(e)}")
             raise
 
-    async def apply_smart_decisions(
-        self, decision_data: Dict[str, Any]
-    ) -> DecisionResult:
+    async def apply_smart_decisions(self, decision_data: Dict[str, Any]) -> DecisionResult:
         """스마트 의사결정 적용"""
         try:
             self.automation_status = AutomationStatus.RUNNING
@@ -256,14 +242,10 @@ class IntelligentAutomationSystem:
             confidence_score = await self._calculate_confidence_score(decision_result)
 
             # 조치 결정
-            action_taken = await self._determine_action(
-                decision_result, confidence_score
-            )
+            action_taken = await self._determine_action(decision_result, confidence_score)
 
             # 결과 예측
-            outcome_prediction = await self._predict_outcome(
-                decision_result, action_taken
-            )
+            outcome_prediction = await self._predict_outcome(decision_result, action_taken)
 
             # 의사결정 결과 생성
             decision_result_obj = DecisionResult(
@@ -337,9 +319,7 @@ class IntelligentAutomationSystem:
             logger.error(f"자동화 효과 검증 실패: {str(e)}")
             raise
 
-    async def _determine_workflow_type(
-        self, workflow_data: Dict[str, Any]
-    ) -> WorkflowType:
+    async def _determine_workflow_type(self, workflow_data: Dict[str, Any]) -> WorkflowType:
         """워크플로우 타입 결정"""
         workflow_types = list(WorkflowType)
         await asyncio.sleep(0.1)
@@ -410,9 +390,7 @@ class IntelligentAutomationSystem:
         await asyncio.sleep(0.2)
         return steps
 
-    async def _execute_workflow(
-        self, workflow_steps: List[WorkflowStep]
-    ) -> Dict[str, Any]:
+    async def _execute_workflow(self, workflow_steps: List[WorkflowStep]) -> Dict[str, Any]:
         """워크플로우 실행"""
         execution_result = {
             "steps_executed": len(workflow_steps),
@@ -456,18 +434,14 @@ class IntelligentAutomationSystem:
             "throughput": random.uniform(10, 100),  # 단계/분
             "resource_efficiency": random.uniform(0.7, 0.95),
             "error_rate": (
-                (total_steps - successful_steps) / total_steps
-                if total_steps > 0
-                else 0.0
+                (total_steps - successful_steps) / total_steps if total_steps > 0 else 0.0
             ),
         }
 
         await asyncio.sleep(0.1)
         return performance_metrics
 
-    async def _calculate_workflow_success_rate(
-        self, execution_result: Dict[str, Any]
-    ) -> float:
+    async def _calculate_workflow_success_rate(self, execution_result: Dict[str, Any]) -> float:
         """워크플로우 성공률 계산"""
         total_steps = execution_result.get("steps_executed", 0)
         successful_steps = execution_result.get("successful_steps", 0)
@@ -477,17 +451,13 @@ class IntelligentAutomationSystem:
 
         return successful_steps / total_steps
 
-    async def _determine_decision_type(
-        self, decision_data: Dict[str, Any]
-    ) -> DecisionType:
+    async def _determine_decision_type(self, decision_data: Dict[str, Any]) -> DecisionType:
         """의사결정 타입 결정"""
         decision_types = list(DecisionType)
         await asyncio.sleep(0.1)
         return random.choice(decision_types)
 
-    async def _analyze_decision_data(
-        self, decision_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _analyze_decision_data(self, decision_data: Dict[str, Any]) -> Dict[str, Any]:
         """의사결정 데이터 분석"""
         analyzed_data = {
             "input_data": decision_data.get("input", {}),
@@ -510,9 +480,7 @@ class IntelligentAutomationSystem:
             "decision_parameters": {
                 "confidence_threshold": random.uniform(0.7, 0.95),
                 "risk_tolerance": random.uniform(0.1, 0.5),
-                "optimization_target": random.choice(
-                    ["efficiency", "accuracy", "speed"]
-                ),
+                "optimization_target": random.choice(["efficiency", "accuracy", "speed"]),
             },
             "decision_logic": {
                 "rules_applied": random.randint(3, 8),
@@ -520,9 +488,7 @@ class IntelligentAutomationSystem:
                 "heuristics_applied": random.randint(2, 5),
             },
             "decision_output": {
-                "recommended_action": random.choice(
-                    ["proceed", "wait", "abort", "optimize"]
-                ),
+                "recommended_action": random.choice(["proceed", "wait", "abort", "optimize"]),
                 "confidence_level": random.uniform(0.6, 0.95),
                 "expected_outcome": random.choice(["positive", "neutral", "negative"]),
             },
@@ -531,17 +497,11 @@ class IntelligentAutomationSystem:
         await asyncio.sleep(0.2)
         return decision_result
 
-    async def _calculate_confidence_score(
-        self, decision_result: Dict[str, Any]
-    ) -> float:
+    async def _calculate_confidence_score(self, decision_result: Dict[str, Any]) -> float:
         """신뢰도 점수 계산"""
         # 의사결정 결과를 기반으로 신뢰도 계산
-        confidence_level = decision_result.get("decision_output", {}).get(
-            "confidence_level", 0.0
-        )
-        rules_applied = decision_result.get("decision_logic", {}).get(
-            "rules_applied", 0
-        )
+        confidence_level = decision_result.get("decision_output", {}).get("confidence_level", 0.0)
+        rules_applied = decision_result.get("decision_logic", {}).get("rules_applied", 0)
 
         # 규칙 수와 신뢰도 레벨을 고려한 점수 계산
         confidence_score = confidence_level * (1 + rules_applied * 0.1)
@@ -612,9 +572,7 @@ class IntelligentAutomationSystem:
                 collected_metrics.get("workflow_executions", 0)
                 * (1 - collected_metrics.get("success_rate", 0.9))
             ),
-            "average_execution_time": collected_metrics.get(
-                "average_execution_time", 0.0
-            ),
+            "average_execution_time": collected_metrics.get("average_execution_time", 0.0),
             "efficiency_score": collected_metrics.get("success_rate", 0.9),
         }
 
@@ -627,12 +585,8 @@ class IntelligentAutomationSystem:
         """의사결정 통계 분석"""
         decision_stats = {
             "total_decisions": collected_metrics.get("decision_count", 0),
-            "high_confidence_decisions": int(
-                collected_metrics.get("decision_count", 0) * 0.7
-            ),
-            "low_confidence_decisions": int(
-                collected_metrics.get("decision_count", 0) * 0.3
-            ),
+            "high_confidence_decisions": int(collected_metrics.get("decision_count", 0) * 0.7),
+            "low_confidence_decisions": int(collected_metrics.get("decision_count", 0) * 0.3),
             "average_confidence": random.uniform(0.75, 0.95),
             "decision_accuracy": random.uniform(0.8, 0.98),
         }
@@ -640,9 +594,7 @@ class IntelligentAutomationSystem:
         await asyncio.sleep(0.1)
         return decision_stats
 
-    async def _calculate_overall_efficiency(
-        self, collected_metrics: Dict[str, Any]
-    ) -> float:
+    async def _calculate_overall_efficiency(self, collected_metrics: Dict[str, Any]) -> float:
         """전체 효율성 계산"""
         success_rate = collected_metrics.get("success_rate", 0.9)
         resource_utilization = collected_metrics.get("resource_utilization", 0.8)
@@ -686,18 +638,14 @@ class IntelligentAutomationSystem:
         await asyncio.sleep(0.1)
         return efficiency
 
-    async def _measure_reliability_score(
-        self, automation_data: Dict[str, Any]
-    ) -> float:
+    async def _measure_reliability_score(self, automation_data: Dict[str, Any]) -> float:
         """신뢰성 점수 측정"""
         # 실제 구현에서는 신뢰성 측정을 수행
         reliability = random.uniform(0.8, 0.99)
         await asyncio.sleep(0.1)
         return reliability
 
-    async def _measure_performance_impact(
-        self, automation_data: Dict[str, Any]
-    ) -> float:
+    async def _measure_performance_impact(self, automation_data: Dict[str, Any]) -> float:
         """성능 영향 측정"""
         # 실제 구현에서는 성능 영향 측정을 수행
         impact = random.uniform(0.9, 1.2)
@@ -728,9 +676,7 @@ class IntelligentAutomationSystem:
         recommendations = []
 
         if efficiency_score < self.min_efficiency_score:
-            recommendations.append(
-                "효율성을 향상시키기 위한 워크플로우 최적화가 필요합니다"
-            )
+            recommendations.append("효율성을 향상시키기 위한 워크플로우 최적화가 필요합니다")
 
         if reliability_score < self.min_reliability_score:
             recommendations.append("신뢰성을 개선하기 위한 오류 처리 강화가 필요합니다")
@@ -772,9 +718,7 @@ async def test_intelligent_automation_system():
         "components": ["workflows", "decisions", "performance"],
     }
 
-    automation_report = await automation_system.monitor_automation_performance(
-        automation_metrics
-    )
+    automation_report = await automation_system.monitor_automation_performance(automation_metrics)
     print(f"\n자동화 성능 모니터링 완료: {automation_report.report_id}")
     print(f"실행된 워크플로우 수: {automation_report.workflows_executed}")
     print(f"의사결정 수: {automation_report.decisions_made}")
@@ -801,9 +745,7 @@ async def test_intelligent_automation_system():
         "metrics": {"efficiency": 0.85, "reliability": 0.92, "performance": 1.1},
     }
 
-    validation_report = await automation_system.validate_automation_effects(
-        automation_data
-    )
+    validation_report = await automation_system.validate_automation_effects(automation_data)
     print(f"\n자동화 효과 검증 완료: {validation_report.report_id}")
     print(f"검증 상태: {'성공' if validation_report.validation_status else '실패'}")
     print(f"효율성 점수: {validation_report.efficiency_score:.2f}")

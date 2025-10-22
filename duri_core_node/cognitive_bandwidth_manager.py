@@ -5,13 +5,13 @@ DuRi 인지 대역폭 관리 시스템
 """
 
 import asyncio
+import json
+import logging
+import time
 from collections import defaultdict, deque
 from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta
 from enum import Enum
-import json
-import logging
-import time
 from typing import Any, Dict, List, Optional, Tuple
 
 # 로깅 설정
@@ -341,8 +341,7 @@ class CognitiveBandwidthManager:
                 s
                 for s in self.stimulus_history
                 if (
-                    datetime.now()
-                    - datetime.fromisoformat(s.timestamp.replace("Z", "+00:00"))
+                    datetime.now() - datetime.fromisoformat(s.timestamp.replace("Z", "+00:00"))
                 ).seconds
                 < 300
             ]
@@ -350,9 +349,7 @@ class CognitiveBandwidthManager:
 
         # 과부하 위험도 계산
         processing_risk = processing_count / max_processing
-        frequency_risk = min(
-            1.0, recent_stimuli / (self.current_config.max_daily_stimuli * 0.1)
-        )
+        frequency_risk = min(1.0, recent_stimuli / (self.current_config.max_daily_stimuli * 0.1))
 
         return (processing_risk * 0.6) + (frequency_risk * 0.4)
 
@@ -427,9 +424,7 @@ class CognitiveBandwidthManager:
             "should_pause": overload_risk > 0.8,
             "should_reduce_intensity": overload_risk > 0.6,
             "optimal_stimulus_interval": self.current_config.processing_cooldown,
-            "max_concurrent_safe": max(
-                1, self.current_config.max_concurrent_processing - 1
-            ),
+            "max_concurrent_safe": max(1, self.current_config.max_concurrent_processing - 1),
         }
 
         return recommendations

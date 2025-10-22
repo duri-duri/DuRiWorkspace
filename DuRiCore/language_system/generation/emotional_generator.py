@@ -8,8 +8,8 @@ DuRi 언어 생성 시스템 - 감정적 표현 생성기
 - 감정적 표현 분석
 """
 
-from dataclasses import dataclass
 import logging
+from dataclasses import dataclass
 from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)

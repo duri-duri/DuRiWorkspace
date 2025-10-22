@@ -4,36 +4,29 @@ DuRi 통합 대화 처리 시스템
 모든 대화 관련 기능을 하나의 시스템으로 통합
 """
 import asyncio
-from dataclasses import dataclass
-from datetime import datetime
 import json
 import logging
-
 # 기존 모듈들 import
 import sys
 import time
+from dataclasses import dataclass
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 sys.path.append(".")
 
 # 4단계 자율 질문 생성 시스템 import
-from duri_modules.autonomous.autonomous_question_generator import (
-    AutonomousQuestionGenerator,
-)
+from duri_modules.autonomous.autonomous_question_generator import \
+    AutonomousQuestionGenerator
 from duri_modules.autonomous.continuous_learner import AutonomousLearner
 from duri_modules.autonomous.duri_autonomous_core import duri_autonomous_core
 from duri_modules.autonomous.realtime_learner import realtime_learner
-
 # 2단계 자동 개선 시스템 import
 from duri_modules.autonomous.result_improver import ResultImprover
 from duri_modules.autonomous.strategy_loop_runner import StrategyLoopRunner
-
 # 통합 개선 시스템 import
 from duri_modules.autonomous.unified_improvement_system import (
-    ImprovementCategory,
-    UnifiedImprovementSystem,
-)
-
+    ImprovementCategory, UnifiedImprovementSystem)
 # 대화 로그 수집 시스템 import
 from duri_modules.data.conversation_logger import conversation_logger
 from duri_modules.data.conversation_store import conversation_store
@@ -128,14 +121,10 @@ class UnifiedConversationProcessor:
         try:
             # 0단계: 대화 로그 수집 시작
             if not hasattr(self, "_current_conversation_id"):
-                self._current_conversation_id = (
-                    self.conversation_logger.start_conversation()
-                )
+                self._current_conversation_id = self.conversation_logger.start_conversation()
 
             # 1단계: 기본 처리 (기존)
-            conversation_id = self._save_conversation(
-                user_input, duri_response, metadata
-            )
+            conversation_id = self._save_conversation(user_input, duri_response, metadata)
             analysis_results = self._analyze_comprehensive(user_input, duri_response)
             evaluation_results = self._evaluate_comprehensive(
                 user_input, duri_response, analysis_results
@@ -148,18 +137,14 @@ class UnifiedConversationProcessor:
             integrated_score = self._calculate_integrated_score(evaluation_results)
 
             # 개선 제안 수집
-            improvement_suggestions = self._collect_improvement_suggestions(
-                evaluation_results
-            )
+            improvement_suggestions = self._collect_improvement_suggestions(evaluation_results)
 
             # 2단계: 자동 개선 실행 (새로 추가)
             improvement_execution = None
             strategy_summary = None
 
             if improvement_suggestions:
-                logger.info(
-                    f"🔧 자동 개선 실행 시작: {len(improvement_suggestions)}개 제안"
-                )
+                logger.info(f"🔧 자동 개선 실행 시작: {len(improvement_suggestions)}개 제안")
                 improvement_execution = await self._execute_automatic_improvements(
                     evaluation_results, user_input, duri_response
                 )
@@ -177,10 +162,8 @@ class UnifiedConversationProcessor:
             autonomous_learning_session = None
             try:
                 logger.info("🧠 자율 학습 세션 시작")
-                autonomous_learning_session = (
-                    await self._execute_autonomous_learning_session(
-                        evaluation_results, analysis_results
-                    )
+                autonomous_learning_session = await self._execute_autonomous_learning_session(
+                    evaluation_results, analysis_results
                 )
             except Exception as e:
                 logger.error(f"❌ 자율 학습 세션 오류: {e}")
@@ -239,9 +222,7 @@ class UnifiedConversationProcessor:
             evolution_metrics = {
                 "response_quality": integrated_score,
                 "learning_depth": len(learning_patterns) / 10.0,
-                "problem_solving": evaluation_results.get("result", {}).get(
-                    "score", 0.5
-                ),
+                "problem_solving": evaluation_results.get("result", {}).get("score", 0.5),
                 "autonomy_level": evaluation_results.get("self_reflection", {}).get(
                     "autonomy_score", 0.5
                 ),
@@ -258,9 +239,7 @@ class UnifiedConversationProcessor:
                 evolution_metrics=evolution_metrics,
             )
 
-            logger.info(
-                f"✅ 통합 대화 처리 완료: {conversation_id} (점수: {integrated_score:.3f})"
-            )
+            logger.info(f"✅ 통합 대화 처리 완료: {conversation_id} (점수: {integrated_score:.3f})")
 
             return result
 
@@ -282,15 +261,11 @@ class UnifiedConversationProcessor:
             logger.error(f"❌ 대화 저장 오류: {e}")
             return f"error_{int(time.time())}"
 
-    def _analyze_comprehensive(
-        self, user_input: str, duri_response: str
-    ) -> Dict[str, Any]:
+    def _analyze_comprehensive(self, user_input: str, duri_response: str) -> Dict[str, Any]:
         """통합 분석"""
         try:
             # 의미 분석
-            meaning_analysis = meaning_extractor.extract_meaning(
-                user_input, duri_response
-            )
+            meaning_analysis = meaning_extractor.extract_meaning(user_input, duri_response)
 
             # 컨텍스트 분석
             context_analysis = {
@@ -298,9 +273,7 @@ class UnifiedConversationProcessor:
                 "user_input_length": len(user_input),
                 "duri_response_length": len(duri_response),
                 "complexity_level": (
-                    "low"
-                    if len(user_input) < 50
-                    else "medium" if len(user_input) < 200 else "high"
+                    "low" if len(user_input) < 50 else "medium" if len(user_input) < 200 else "high"
                 ),
                 "topic_detected": meaning_analysis.get("topic", "general"),
                 "timestamp": datetime.now().isoformat(),
@@ -320,9 +293,7 @@ class UnifiedConversationProcessor:
                 "emotion": emotion_analysis,
             }
 
-            logger.info(
-                f"📊 의미 분석 완료: {meaning_analysis.get('intent', 'unknown')}"
-            )
+            logger.info(f"📊 의미 분석 완료: {meaning_analysis.get('intent', 'unknown')}")
             return analysis_results
 
         except Exception as e:
@@ -335,14 +306,10 @@ class UnifiedConversationProcessor:
         """통합 평가"""
         try:
             # ChatGPT 평가
-            chatgpt_evaluation = self.chatgpt_evaluator.evaluate_response(
-                user_input, duri_response
-            )
+            chatgpt_evaluation = self.chatgpt_evaluator.evaluate_response(user_input, duri_response)
 
             # 결과 평가
-            result_evaluation = result_evaluator.evaluate_conversation(
-                user_input, duri_response
-            )
+            result_evaluation = result_evaluator.evaluate_conversation(user_input, duri_response)
 
             # 자기성찰
             self_reflection = self.duri_self_reflector.reflect_on_conversation(
@@ -381,9 +348,7 @@ class UnifiedConversationProcessor:
                     "session_id", "none"
                 ),
                 "learning_cycles": autonomous_status.get("total_learning_cycles", 0),
-                "problems_detected": autonomous_status.get(
-                    "total_problems_detected", 0
-                ),
+                "problems_detected": autonomous_status.get("total_problems_detected", 0),
             }
 
             # 2. 실시간 학습
@@ -471,16 +436,12 @@ class UnifiedConversationProcessor:
             )
 
             # 통합 개선 실행
-            unified_result = (
-                self.unified_improvement_system.execute_comprehensive_improvement(
-                    conversation_context, categories
-                )
+            unified_result = self.unified_improvement_system.execute_comprehensive_improvement(
+                conversation_context, categories
             )
 
             if unified_result.overall_score > 0:
-                logger.info(
-                    f"✅ 통합 개선 완료: 전체 점수 {unified_result.overall_score:.3f}"
-                )
+                logger.info(f"✅ 통합 개선 완료: 전체 점수 {unified_result.overall_score:.3f}")
 
                 return {
                     "status": "success",
@@ -515,18 +476,14 @@ class UnifiedConversationProcessor:
             }
 
             # 학습 세션 시작
-            session = self.autonomous_question_generator.start_learning_session(
-                learning_context
-            )
+            session = self.autonomous_question_generator.start_learning_session(learning_context)
 
             if not session:
                 logger.warning("⚠️ 자율 학습 세션 시작 실패")
                 return None
 
             # 첫 번째 질문 가져오기
-            first_question = self.autonomous_question_generator.get_next_question(
-                session
-            )
+            first_question = self.autonomous_question_generator.get_next_question(session)
 
             if not first_question:
                 logger.warning("⚠️ 자율 학습 질문 생성 실패")
@@ -578,9 +535,7 @@ class UnifiedConversationProcessor:
     def _calculate_integrated_score(self, evaluation_results: Dict[str, Any]) -> float:
         """통합 점수 계산"""
         try:
-            chatgpt_score = evaluation_results.get("chatgpt_evaluation", {}).get(
-                "total_score", 0
-            )
+            chatgpt_score = evaluation_results.get("chatgpt_evaluation", {}).get("total_score", 0)
             result_score = evaluation_results.get("result", {}).get("overall_score", 0)
 
             # 가중 평균 계산
@@ -592,9 +547,7 @@ class UnifiedConversationProcessor:
             logger.error(f"❌ 통합 점수 계산 오류: {e}")
             return 0.0
 
-    def _collect_improvement_suggestions(
-        self, evaluation_results: Dict[str, Any]
-    ) -> list:
+    def _collect_improvement_suggestions(self, evaluation_results: Dict[str, Any]) -> list:
         """개선 제안 수집"""
         suggestions = []
 
@@ -608,9 +561,7 @@ class UnifiedConversationProcessor:
             # 자기성찰 제안
             self_reflection = evaluation_results.get("self_reflection", {})
             improvement_proposal = self_reflection.get("improvement_proposal", {})
-            specific_improvements = improvement_proposal.get(
-                "specific_improvements", []
-            )
+            specific_improvements = improvement_proposal.get("specific_improvements", [])
             suggestions.extend(specific_improvements)
 
             return list(set(suggestions))  # 중복 제거
@@ -713,9 +664,7 @@ class UnifiedConversationProcessor:
                 learning_patterns = self.conversation_logger.extract_learning_patterns()
 
                 # 개선 제안
-                improvement_suggestions = (
-                    self.conversation_logger.get_improvement_suggestions()
-                )
+                improvement_suggestions = self.conversation_logger.get_improvement_suggestions()
 
                 # 세션 종료
                 delattr(self, "_current_conversation_id")
@@ -738,9 +687,7 @@ class UnifiedConversationProcessor:
         try:
             statistics = self.conversation_logger.get_conversation_statistics()
             learning_patterns = self.conversation_logger.extract_learning_patterns()
-            improvement_suggestions = (
-                self.conversation_logger.get_improvement_suggestions()
-            )
+            improvement_suggestions = self.conversation_logger.get_improvement_suggestions()
 
             return {
                 "status": "success",
@@ -752,9 +699,7 @@ class UnifiedConversationProcessor:
                     "average_learning_efficiency": statistics.get(
                         "average_learning_efficiency", 0.0
                     ),
-                    "average_problem_solving": statistics.get(
-                        "average_problem_solving", 0.0
-                    ),
+                    "average_problem_solving": statistics.get("average_problem_solving", 0.0),
                     "recent_trends": statistics.get("recent_trends", {}),
                 },
             }

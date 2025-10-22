@@ -19,15 +19,15 @@ Phase 5: 성능 최적화 - 최종 실행 준비 완료 적용
 """
 
 import asyncio
-from collections import defaultdict, deque
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 import hashlib
 import json
 import logging
 import threading
 import time
+from collections import defaultdict, deque
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
@@ -157,9 +157,7 @@ class UnifiedPerformanceOptimizer:
         self.max_parallel_workers = 4
 
         # 성능 트렌드 분석
-        self.performance_trends: Dict[str, deque] = defaultdict(
-            lambda: deque(maxlen=100)
-        )
+        self.performance_trends: Dict[str, deque] = defaultdict(lambda: deque(maxlen=100))
 
         # 존재형 AI 시스템 초기화
         self.existence_ai = self._initialize_existence_ai()
@@ -205,17 +203,11 @@ class UnifiedPerformanceOptimizer:
                 asyncio.create_task(self._auto_optimization_loop())
 
             # 존재형 AI: 진화 가능성 확인
-            if (
-                self.existence_ai
-                and self.existence_ai.evolution_capability.can_evolve()
-            ):
+            if self.existence_ai and self.existence_ai.evolution_capability.can_evolve():
                 self.existence_ai.evolution_capability.evolve()
 
             # 최종 실행 준비 완료: 최종 실행 준비 완료 확인
-            if (
-                self.final_execution_verifier
-                and self.final_execution_verifier.verify_readiness()
-            ):
+            if self.final_execution_verifier and self.final_execution_verifier.verify_readiness():
                 logger.info("최종 실행 준비 완료 확인됨")
 
             return True
@@ -244,10 +236,7 @@ class UnifiedPerformanceOptimizer:
                 await self._cleanup_cache()
 
                 # 존재형 AI: 진화 가능성 확인
-                if (
-                    self.existence_ai
-                    and self.existence_ai.evolution_capability.can_evolve()
-                ):
+                if self.existence_ai and self.existence_ai.evolution_capability.can_evolve():
                     self.existence_ai.evolution_capability.evolve()
 
                 # 최종 실행 준비 완료: 최종 실행 준비 완료 확인
@@ -378,31 +367,19 @@ class UnifiedPerformanceOptimizer:
             alerts = []
 
             # CPU 사용률 체크
-            if (
-                metrics.cpu_usage
-                > self.monitoring_config["alert_thresholds"]["cpu_usage"]
-            ):
+            if metrics.cpu_usage > self.monitoring_config["alert_thresholds"]["cpu_usage"]:
                 alerts.append(f"CPU 사용률 높음: {metrics.cpu_usage:.1f}%")
 
             # 메모리 사용률 체크
-            if (
-                metrics.memory_usage
-                > self.monitoring_config["alert_thresholds"]["memory_usage"]
-            ):
+            if metrics.memory_usage > self.monitoring_config["alert_thresholds"]["memory_usage"]:
                 alerts.append(f"메모리 사용률 높음: {metrics.memory_usage:.1f}%")
 
             # 응답 시간 체크
-            if (
-                metrics.latency
-                > self.monitoring_config["alert_thresholds"]["response_time"]
-            ):
+            if metrics.latency > self.monitoring_config["alert_thresholds"]["response_time"]:
                 alerts.append(f"응답 시간 높음: {metrics.latency:.1f}ms")
 
             # 오류율 체크
-            if (
-                metrics.error_rate
-                > self.monitoring_config["alert_thresholds"]["error_rate"]
-            ):
+            if metrics.error_rate > self.monitoring_config["alert_thresholds"]["error_rate"]:
                 alerts.append(f"오류율 높음: {metrics.error_rate:.1f}%")
 
             # 알림 생성
@@ -463,9 +440,7 @@ class UnifiedPerformanceOptimizer:
                 await asyncio.sleep(self.optimization_interval)
 
                 # 현재 성능 상태 평가
-                current_metrics = (
-                    self.performance_history[-1] if self.performance_history else None
-                )
+                current_metrics = self.performance_history[-1] if self.performance_history else None
                 if not current_metrics:
                     continue
 
@@ -484,15 +459,10 @@ class UnifiedPerformanceOptimizer:
                             f"자동 최적화 완료: 개선 점수 {optimization_result.improvement_score:.2f}"
                         )
                     else:
-                        logger.warning(
-                            f"자동 최적화 실패: {optimization_result.rollback_reason}"
-                        )
+                        logger.warning(f"자동 최적화 실패: {optimization_result.rollback_reason}")
 
                 # 존재형 AI: 진화 가능성 확인
-                if (
-                    self.existence_ai
-                    and self.existence_ai.evolution_capability.can_evolve()
-                ):
+                if self.existence_ai and self.existence_ai.evolution_capability.can_evolve():
                     self.existence_ai.evolution_capability.evolve()
 
                 # 최종 실행 준비 완료: 최종 실행 준비 완료 확인
@@ -563,17 +533,11 @@ class UnifiedPerformanceOptimizer:
             self.optimization_history.append(optimization_result)
 
             # 존재형 AI: 진화 가능성 확인
-            if (
-                self.existence_ai
-                and self.existence_ai.evolution_capability.can_evolve()
-            ):
+            if self.existence_ai and self.existence_ai.evolution_capability.can_evolve():
                 self.existence_ai.evolution_capability.evolve()
 
             # 최종 실행 준비 완료: 최종 실행 준비 완료 확인
-            if (
-                self.final_execution_verifier
-                and self.final_execution_verifier.verify_readiness()
-            ):
+            if self.final_execution_verifier and self.final_execution_verifier.verify_readiness():
                 logger.info("최종 실행 준비 완료 확인됨")
 
             return optimization_result
@@ -589,9 +553,7 @@ class UnifiedPerformanceOptimizer:
             self.optimization_history.append(optimization_result)
             return optimization_result
 
-    async def _optimize_performance(
-        self, metrics: PerformanceMetrics
-    ) -> Dict[str, Any]:
+    async def _optimize_performance(self, metrics: PerformanceMetrics) -> Dict[str, Any]:
         """성능 최적화"""
         try:
             # 성능 최적화 로직 구현
@@ -791,9 +753,7 @@ class UnifiedPerformanceOptimizer:
                 "performance_trends": {
                     "cpu_usage_trend": cpu_trend[-10:] if cpu_trend else [],
                     "memory_usage_trend": memory_trend[-10:] if memory_trend else [],
-                    "efficiency_score_trend": (
-                        efficiency_trend[-10:] if efficiency_trend else []
-                    ),
+                    "efficiency_score_trend": (efficiency_trend[-10:] if efficiency_trend else []),
                 },
                 "optimization_history": {
                     "total_optimizations": len(self.optimization_history),
@@ -827,9 +787,7 @@ class UnifiedPerformanceOptimizer:
                     "cache_size": len(self.cache),
                     "max_cache_size": self.max_cache_size,
                     "cache_utilization": (
-                        len(self.cache) / self.max_cache_size
-                        if self.max_cache_size > 0
-                        else 0
+                        len(self.cache) / self.max_cache_size if self.max_cache_size > 0 else 0
                     ),
                 },
             }

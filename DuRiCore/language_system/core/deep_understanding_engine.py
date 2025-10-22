@@ -11,12 +11,12 @@ DuRi 언어 시스템 - 심층 언어 이해 엔진
 - 다국어 처리
 """
 
-from dataclasses import dataclass
-from datetime import datetime
 import hashlib
 import json
 import logging
 import time
+from dataclasses import dataclass
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 import numpy as np
@@ -26,7 +26,8 @@ from ..understanding.emotion_analyzer import EmotionAnalyzer
 from ..understanding.intent_recognizer import IntentRecognizer
 from ..understanding.multilingual_processor import MultilingualProcessor
 from ..understanding.semantic_analyzer import SemanticAnalyzer
-from .data_structures import LanguageUnderstandingResult, LanguageUnderstandingType
+from .data_structures import (LanguageUnderstandingResult,
+                              LanguageUnderstandingType)
 
 logger = logging.getLogger(__name__)
 
@@ -60,28 +61,20 @@ class DeepLanguageUnderstandingEngine:
                 return self.understanding_cache[cache_key]
 
             # 1. 맥락 분석
-            context_analysis = await self.context_analyzer.analyze_context(
-                text, context
-            )
+            context_analysis = await self.context_analyzer.analyze_context(text, context)
 
             # 2. 감정 분석
-            emotion_analysis = await self.emotion_analyzer.analyze_emotion(
-                text, context
-            )
+            emotion_analysis = await self.emotion_analyzer.analyze_emotion(text, context)
 
             # 3. 의도 인식
-            intent_analysis = await self.intent_recognizer.recognize_intent(
-                text, context
-            )
+            intent_analysis = await self.intent_recognizer.recognize_intent(text, context)
 
             # 4. 의미 분석
-            semantic_analysis = await self.semantic_analyzer.analyze_semantics(
-                text, context
-            )
+            semantic_analysis = await self.semantic_analyzer.analyze_semantics(text, context)
 
             # 5. 다국어 처리
-            multilingual_analysis = (
-                await self.multilingual_processor.process_multilingual(text, context)
+            multilingual_analysis = await self.multilingual_processor.process_multilingual(
+                text, context
             )
 
             # 6. 통합 분석
@@ -131,9 +124,7 @@ class DeepLanguageUnderstandingEngine:
             self.logger.error(f"신뢰도 계산 중 오류: {e}")
             return 0.5
 
-    def _create_fallback_understanding_result(
-        self, text: str
-    ) -> LanguageUnderstandingResult:
+    def _create_fallback_understanding_result(self, text: str) -> LanguageUnderstandingResult:
         """폴백 이해 결과 생성"""
         return LanguageUnderstandingResult(
             understanding_id=f"fallback_{int(time.time())}",

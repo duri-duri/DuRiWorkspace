@@ -15,15 +15,10 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 from DuRiCore.core.main_loop import DuRiCore
 from DuRiCore.memory.vector_store import VectorMemoryStore
-from DuRiCore.modules.emotion.emotion_embedding import (
-    EmotionCategory,
-    NLPEmotionEmbedding,
-)
-from DuRiCore.modules.judgment.self_critique import (
-    BiasType,
-    CritiqueLevel,
-    SelfCritiqueSystem,
-)
+from DuRiCore.modules.emotion.emotion_embedding import (EmotionCategory,
+                                                        NLPEmotionEmbedding)
+from DuRiCore.modules.judgment.self_critique import (BiasType, CritiqueLevel,
+                                                     SelfCritiqueSystem)
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)

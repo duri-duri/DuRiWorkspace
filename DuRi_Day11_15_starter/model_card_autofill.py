@@ -12,10 +12,10 @@ HITL 품질 리포트 → 모델카드 자동 채움
 - 경로 안정화
 """
 import argparse
-from datetime import datetime
 import json
 import pathlib
 import sys
+from datetime import datetime
 
 
 def atomic_write(path: pathlib.Path, text: str):
@@ -76,12 +76,8 @@ def format_metric(value, decimals=2):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--template", default="", help="Template markdown path (optional)")
-    ap.add_argument(
-        "--out", default="model_card_v1.autofilled.md", help="Output markdown path"
-    )
-    ap.add_argument(
-        "--strict", action="store_true", help="Strict mode: fail on missing fields"
-    )
+    ap.add_argument("--out", default="model_card_v1.autofilled.md", help="Output markdown path")
+    ap.add_argument("--strict", action="store_true", help="Strict mode: fail on missing fields")
     args = ap.parse_args()
 
     # 경로 안정화: __file__ 기준 절대경로 사용

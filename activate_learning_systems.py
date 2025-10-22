@@ -6,11 +6,11 @@ DuRi 학습 시스템 활성화 스크립트
 """
 
 import asyncio
-from datetime import datetime
 import logging
 import os
 import sys
 import time
+from datetime import datetime
 from typing import Any, Dict, List
 
 # 프로젝트 루트를 Python 경로에 추가
@@ -70,8 +70,10 @@ class LearningSystemActivator:
     async def activate_autonomous_learning_system(self) -> Dict[str, Any]:
         """자율 학습 시스템 활성화"""
         try:
-            from duri_modules.autonomous.continuous_learner import AutonomousLearner
-            from duri_modules.autonomous.duri_autonomous_core import DuRiAutonomousCore
+            from duri_modules.autonomous.continuous_learner import \
+                AutonomousLearner
+            from duri_modules.autonomous.duri_autonomous_core import \
+                DuRiAutonomousCore
 
             # 자율 학습 시작
             autonomous_learner = AutonomousLearner()
@@ -116,9 +118,8 @@ class LearningSystemActivator:
     async def activate_learning_loop_manager(self) -> Dict[str, Any]:
         """학습 루프 매니저 활성화"""
         try:
-            from duri_brain.learning.learning_loop_manager import (
-                get_learning_loop_manager,
-            )
+            from duri_brain.learning.learning_loop_manager import \
+                get_learning_loop_manager
 
             learning_loop_manager = get_learning_loop_manager()
 
@@ -153,8 +154,10 @@ class LearningSystemActivator:
     async def activate_realtime_learner(self) -> Dict[str, Any]:
         """실시간 학습 시스템 활성화"""
         try:
-            from duri_modules.autonomous.continuous_learner import AutonomousLearner
-            from duri_modules.autonomous.realtime_learner import RealtimeLearner
+            from duri_modules.autonomous.continuous_learner import \
+                AutonomousLearner
+            from duri_modules.autonomous.realtime_learner import \
+                RealtimeLearner
 
             autonomous_learner = AutonomousLearner()
             realtime_learner = RealtimeLearner(autonomous_learner)
@@ -196,9 +199,7 @@ class LearningSystemActivator:
         if result["success"]:
             print("   ✅ 통합 학습 시스템 활성화 완료")
         else:
-            print(
-                f"   ❌ 통합 학습 시스템 활성화 실패: {result.get('error', '알 수 없는 오류')}"
-            )
+            print(f"   ❌ 통합 학습 시스템 활성화 실패: {result.get('error', '알 수 없는 오류')}")
 
         # 2. 자율 학습 시스템 활성화
         print("\n2️⃣ 자율 학습 시스템 활성화 중...")
@@ -207,9 +208,7 @@ class LearningSystemActivator:
         if result["success"]:
             print("   ✅ 자율 학습 시스템 활성화 완료")
         else:
-            print(
-                f"   ❌ 자율 학습 시스템 활성화 실패: {result.get('error', '알 수 없는 오류')}"
-            )
+            print(f"   ❌ 자율 학습 시스템 활성화 실패: {result.get('error', '알 수 없는 오류')}")
 
         # 3. 학습 루프 매니저 활성화
         print("\n3️⃣ 학습 루프 매니저 활성화 중...")
@@ -218,9 +217,7 @@ class LearningSystemActivator:
         if result["success"]:
             print("   ✅ 학습 루프 매니저 활성화 완료")
         else:
-            print(
-                f"   ❌ 학습 루프 매니저 활성화 실패: {result.get('error', '알 수 없는 오류')}"
-            )
+            print(f"   ❌ 학습 루프 매니저 활성화 실패: {result.get('error', '알 수 없는 오류')}")
 
         # 4. 실시간 학습 시스템 활성화
         print("\n4️⃣ 실시간 학습 시스템 활성화 중...")
@@ -229,9 +226,7 @@ class LearningSystemActivator:
         if result["success"]:
             print("   ✅ 실시간 학습 시스템 활성화 완료")
         else:
-            print(
-                f"   ❌ 실시간 학습 시스템 활성화 실패: {result.get('error', '알 수 없는 오류')}"
-            )
+            print(f"   ❌ 실시간 학습 시스템 활성화 실패: {result.get('error', '알 수 없는 오류')}")
 
         # 결과 요약
         print("\n📊 활성화 결과 요약")

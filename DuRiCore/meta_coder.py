@@ -14,15 +14,15 @@ DuRi Phase Ω: MetaCoder Engine
 
 import ast
 import asyncio
-from dataclasses import dataclass, field
-from datetime import datetime
 import difflib
-from enum import Enum
 import json
 import logging
 import os
 import re
 import time
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 # 로깅 설정
@@ -129,9 +129,7 @@ class MetaCoder:
             tree = ast.parse(code_content)
 
             # 코드 분석
-            analysis = await self._analyze_code_structure(
-                tree, module_path, code_content
-            )
+            analysis = await self._analyze_code_structure(tree, module_path, code_content)
 
             # 캐시에 저장
             self.analysis_cache[module_path] = analysis
@@ -158,9 +156,7 @@ class MetaCoder:
             current_code = await self._ast_to_code(ast_tree)
 
             # 리팩토링 적용
-            refactored_code = await self._apply_refactoring(
-                current_code, refactor_type, goal
-            )
+            refactored_code = await self._apply_refactoring(current_code, refactor_type, goal)
 
             # 개선 설명 생성
             improvement_description = await self._generate_improvement_description(
@@ -171,14 +167,10 @@ class MetaCoder:
             expected_impact = await self._calculate_expected_impact(refactor_type, goal)
 
             # 위험 수준 계산
-            risk_level = await self._calculate_risk_level(
-                refactor_type, refactored_code
-            )
+            risk_level = await self._calculate_risk_level(refactor_type, refactored_code)
 
             # 영향받는 라인 식별
-            affected_lines = await self._identify_affected_lines(
-                current_code, refactored_code
-            )
+            affected_lines = await self._identify_affected_lines(current_code, refactored_code)
 
             proposal = RefactorProposal(
                 proposal_id=f"refactor_{int(time.time() * 1000)}",
@@ -202,9 +194,7 @@ class MetaCoder:
             logger.error(f"리팩토링 실패: {e}")
             return await self._create_default_proposal(ast_tree, goal)
 
-    async def validate_and_apply(
-        self, new_code: str, test_suite: List[str]
-    ) -> RefactorResult:
+    async def validate_and_apply(self, new_code: str, test_suite: List[str]) -> RefactorResult:
         """검증 후 적용"""
         try:
             logger.info("🔍 코드 검증 및 적용 시작")
@@ -229,9 +219,7 @@ class MetaCoder:
 
             if test_results.get("success", False):
                 # 품질 개선도 계산
-                quality_improvement = await self._calculate_quality_improvement(
-                    new_code
-                )
+                quality_improvement = await self._calculate_quality_improvement(new_code)
 
                 # 변경사항 기록
                 changes_made = await self._record_changes(new_code)
@@ -245,9 +233,7 @@ class MetaCoder:
                     execution_time=time.time() - start_time,
                 )
 
-                logger.info(
-                    f"✅ 코드 검증 및 적용 완료: 품질 개선도={quality_improvement:.2f}"
-                )
+                logger.info(f"✅ 코드 검증 및 적용 완료: 품질 개선도={quality_improvement:.2f}")
 
             else:
                 result = RefactorResult(
@@ -319,15 +305,11 @@ class MetaCoder:
 
             # 품질 점수 계산
             analysis.complexity_score = await self._calculate_complexity_score(tree)
-            analysis.maintainability_score = (
-                await self._calculate_maintainability_score(tree)
-            )
+            analysis.maintainability_score = await self._calculate_maintainability_score(tree)
             analysis.performance_score = await self._calculate_performance_score(tree)
 
             # 품질 이슈 식별
-            analysis.quality_issues = await self._identify_quality_issues(
-                tree, code_content
-            )
+            analysis.quality_issues = await self._identify_quality_issues(tree, code_content)
 
             return analysis
 
@@ -409,9 +391,7 @@ class MetaCoder:
 
         return descriptions.get(refactor_type, f"목표 '{goal}'에 따른 코드 개선")
 
-    async def _calculate_expected_impact(
-        self, refactor_type: RefactorType, goal: str
-    ) -> float:
+    async def _calculate_expected_impact(self, refactor_type: RefactorType, goal: str) -> float:
         """예상 영향도 계산"""
         base_impact = 0.5
 
@@ -439,9 +419,7 @@ class MetaCoder:
 
         return min(1.0, max(0.0, base_risk))
 
-    async def _identify_affected_lines(
-        self, current_code: str, refactored_code: str
-    ) -> List[int]:
+    async def _identify_affected_lines(self, current_code: str, refactored_code: str) -> List[int]:
         """영향받는 라인 식별"""
         try:
             current_lines = current_code.split("\n")
@@ -450,9 +428,7 @@ class MetaCoder:
             affected_lines = []
 
             # 간단한 라인 비교 (실제 구현에서는 더 정교한 diff 알고리즘 사용)
-            for i, (current, refactored) in enumerate(
-                zip(current_lines, refactored_lines)
-            ):
+            for i, (current, refactored) in enumerate(zip(current_lines, refactored_lines)):
                 if current.strip() != refactored.strip():
                     affected_lines.append(i + 1)
 
@@ -613,9 +589,7 @@ class MetaCoder:
             logger.error(f"성능 점수 계산 실패: {e}")
             return 0.7
 
-    async def _identify_quality_issues(
-        self, tree: ast.AST, code_content: str
-    ) -> List[str]:
+    async def _identify_quality_issues(self, tree: ast.AST, code_content: str) -> List[str]:
         """품질 이슈 식별"""
         issues = []
 
@@ -623,9 +597,7 @@ class MetaCoder:
             # 복잡한 함수 식별
             for node in ast.walk(tree):
                 if isinstance(node, ast.FunctionDef) and len(node.body) > 10:
-                    issues.append(
-                        f"함수 '{node.name}'이 너무 복잡함 (라인 수: {len(node.body)})"
-                    )
+                    issues.append(f"함수 '{node.name}'이 너무 복잡함 (라인 수: {len(node.body)})")
 
             # 중복 코드 식별
             if code_content.count("def ") > 10:
@@ -650,9 +622,7 @@ class MetaCoder:
             quality_issues=[],
         )
 
-    async def _create_default_proposal(
-        self, ast_tree: ast.AST, goal: str
-    ) -> RefactorProposal:
+    async def _create_default_proposal(self, ast_tree: ast.AST, goal: str) -> RefactorProposal:
         """기본 제안 생성"""
         return RefactorProposal(
             proposal_id=f"default_refactor_{int(time.time() * 1000)}",

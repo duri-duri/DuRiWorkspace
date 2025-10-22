@@ -15,25 +15,24 @@ DuRi Phase Z v2.0: DuRiThoughtFlow - 흐름 중심 통합 시스템
 """
 
 import asyncio
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
 import json
 import logging
 import time
 import traceback
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 # 기존 시스템들 import
 try:
     from adaptive_learning_system import AdaptiveLearningSystem
     from decision_support_system import DecisionSupportSystem
-    from dynamic_reasoning_graph import (
-        DynamicReasoningGraphAnalyzer,
-        DynamicReasoningGraphBuilder,
-    )
-    from logical_reasoning_engine import LogicalReasoningEngine
+    from dynamic_reasoning_graph import (DynamicReasoningGraphAnalyzer,
+                                         DynamicReasoningGraphBuilder)
     from semantic_vector_engine import SemanticVectorEngine
+
+    from logical_reasoning_engine import LogicalReasoningEngine
 except ImportError as e:
     logging.warning(f"일부 기존 시스템 import 실패: {e}")
 
@@ -113,9 +112,7 @@ class ThoughtFlowResult:
 class DuRiThoughtFlow:
     """DuRi의 사고 흐름 중심 통합 시스템"""
 
-    def __init__(
-        self, input_data: Dict[str, Any], context: Optional[Dict[str, Any]] = None
-    ):
+    def __init__(self, input_data: Dict[str, Any], context: Optional[Dict[str, Any]] = None):
         self.input_data = input_data
         self.context = context or {}
         self.thought_history = []
@@ -289,9 +286,7 @@ class DuRiThoughtFlow:
         self.thought_state.thought_history.append(counter_state)
         self.thought_history.append(counter_state)
 
-        logger.info(
-            f"✅ Counter-arguer 역할 완료 - {len(counter_arguments)}개 반론 생성"
-        )
+        logger.info(f"✅ Counter-arguer 역할 완료 - {len(counter_arguments)}개 반론 생성")
 
     async def reframe(self) -> None:
         """문제 재정의 역할 (순간적 실행)"""
@@ -390,9 +385,7 @@ class DuRiThoughtFlow:
             "role": "decider",
             "timestamp": datetime.now().isoformat(),
             "decision": decision,
-            "reflection_score": (
-                self.reflection_scores[-1] if self.reflection_scores else 0.0
-            ),
+            "reflection_score": (self.reflection_scores[-1] if self.reflection_scores else 0.0),
             "self_reflect": self_reflect,
         }
 
@@ -572,16 +565,12 @@ class DuRiThoughtFlow:
 
         return max(0.0, min(1.0, reflection_score))
 
-    async def _reprocess_with_reflection(
-        self, original_decision: Dict[str, Any]
-    ) -> None:
+    async def _reprocess_with_reflection(self, original_decision: Dict[str, Any]) -> None:
         """반성을 통한 재처리"""
         logger.info("🔄 반성을 통한 재처리 시작")
 
         # 반성 결과를 기반으로 사고 과정 재조정
-        reflection_insights = await self._generate_reflection_insights(
-            original_decision
-        )
+        reflection_insights = await self._generate_reflection_insights(original_decision)
 
         # 사고 과정에 반성 통찰 추가
         reflection_state = {
@@ -597,9 +586,7 @@ class DuRiThoughtFlow:
         # 재처리 로직 실행
         await self._execute_reprocessing_logic(reflection_insights)
 
-    async def _calculate_reflection_result(
-        self, decision: Dict[str, Any]
-    ) -> ReflectionResult:
+    async def _calculate_reflection_result(self, decision: Dict[str, Any]) -> ReflectionResult:
         """반성 결과 계산"""
         reflection_score = await self._calculate_reflection_score(decision)
 
@@ -617,9 +604,7 @@ class DuRiThoughtFlow:
         conflicts_detected = self.internal_conflicts.copy()
 
         # 권장사항 생성
-        recommendations = await self._generate_recommendations(
-            reflection_score, conflicts_detected
-        )
+        recommendations = await self._generate_recommendations(reflection_score, conflicts_detected)
 
         # 재처리 필요 여부
         needs_reprocessing = reflection_score < self.REFLECTION_THRESHOLD
@@ -693,9 +678,7 @@ class DuRiThoughtFlow:
         """내적 충돌 점수"""
         return len(self.internal_conflicts) * 0.1
 
-    async def _generate_reflection_insights(
-        self, decision: Dict[str, Any]
-    ) -> List[str]:
+    async def _generate_reflection_insights(self, decision: Dict[str, Any]) -> List[str]:
         """반성 통찰 생성"""
         return ["기본 반성 통찰"]
 

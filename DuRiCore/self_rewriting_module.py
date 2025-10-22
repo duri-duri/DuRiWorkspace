@@ -15,16 +15,16 @@ DuRi Phase Ω: Self-Rewriting Module
 
 import ast
 import asyncio
-from dataclasses import dataclass, field
-from datetime import datetime
 import difflib
-from enum import Enum
 import json
 import logging
 import os
 import shutil
 import tempfile
 import time
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 # 로깅 설정
@@ -185,9 +185,7 @@ class SelfRewritingModule:
             )
 
             # 예상 영향도 계산
-            expected_impact = await self._calculate_expected_impact(
-                rewrite_type, assessment
-            )
+            expected_impact = await self._calculate_expected_impact(rewrite_type, assessment)
 
             # 위험 수준 계산
             risk_level = await self._calculate_risk_level(rewrite_type, proposed_code)
@@ -388,9 +386,7 @@ class SelfRewritingModule:
             # 복잡한 함수 식별
             for node in ast.walk(tree):
                 if isinstance(node, ast.FunctionDef) and len(node.body) > 10:
-                    opportunities.append(
-                        f"함수 '{node.name}' 리팩토링 필요 (너무 복잡함)"
-                    )
+                    opportunities.append(f"함수 '{node.name}' 리팩토링 필요 (너무 복잡함)")
 
             # 중복 코드 식별
             if code_content.count("def ") > 10:
@@ -482,9 +478,7 @@ class SelfRewritingModule:
 
         return min(1.0, max(0.0, base_impact))
 
-    async def _calculate_risk_level(
-        self, rewrite_type: RewriteType, proposed_code: str
-    ) -> float:
+    async def _calculate_risk_level(self, rewrite_type: RewriteType, proposed_code: str) -> float:
         """위험 수준 계산"""
         base_risk = 0.3
 
@@ -599,9 +593,7 @@ class SelfRewritingModule:
             risk_level=0.1,
         )
 
-    async def _create_failed_result(
-        self, target_file: str, error_message: str
-    ) -> RewriteResult:
+    async def _create_failed_result(self, target_file: str, error_message: str) -> RewriteResult:
         """실패 결과 생성"""
         return RewriteResult(
             success=False,

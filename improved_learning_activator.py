@@ -6,11 +6,11 @@ DuRi 개선된 학습 시스템 활성화 스크립트
 """
 
 import asyncio
-from datetime import datetime
 import logging
 import os
 import sys
 import time
+from datetime import datetime
 from typing import Any, Dict, List
 
 # 프로젝트 루트를 Python 경로에 추가
@@ -42,9 +42,7 @@ class ImprovedLearningActivator:
         for attempt in range(self.retry_count):
             try:
                 from DuRiCore.unified_learning_system import (
-                    LearningType,
-                    UnifiedLearningSystem,
-                )
+                    LearningType, UnifiedLearningSystem)
 
                 learning_system = UnifiedLearningSystem()
 
@@ -95,10 +93,10 @@ class ImprovedLearningActivator:
         """자율 학습 시스템 활성화 (개선됨)"""
         for attempt in range(self.retry_count):
             try:
-                from duri_modules.autonomous.continuous_learner import AutonomousLearner
-                from duri_modules.autonomous.duri_autonomous_core import (
-                    DuRiAutonomousCore,
-                )
+                from duri_modules.autonomous.continuous_learner import \
+                    AutonomousLearner
+                from duri_modules.autonomous.duri_autonomous_core import \
+                    DuRiAutonomousCore
 
                 # 자율 학습 시작
                 autonomous_learner = AutonomousLearner()
@@ -154,9 +152,8 @@ class ImprovedLearningActivator:
         """학습 루프 매니저 활성화 (개선됨)"""
         for attempt in range(self.retry_count):
             try:
-                from duri_brain.learning.learning_loop_manager import (
-                    get_learning_loop_manager,
-                )
+                from duri_brain.learning.learning_loop_manager import \
+                    get_learning_loop_manager
 
                 learning_loop_manager = get_learning_loop_manager()
 
@@ -215,8 +212,10 @@ class ImprovedLearningActivator:
         """실시간 학습 시스템 활성화 (개선됨)"""
         for attempt in range(self.retry_count):
             try:
-                from duri_modules.autonomous.continuous_learner import AutonomousLearner
-                from duri_modules.autonomous.realtime_learner import RealtimeLearner
+                from duri_modules.autonomous.continuous_learner import \
+                    AutonomousLearner
+                from duri_modules.autonomous.realtime_learner import \
+                    RealtimeLearner
 
                 autonomous_learner = AutonomousLearner()
                 realtime_learner = RealtimeLearner(autonomous_learner)
@@ -273,7 +272,8 @@ class ImprovedLearningActivator:
 
             try:
                 if system_name == "통합 학습 시스템":
-                    from DuRiCore.unified_learning_system import UnifiedLearningSystem
+                    from DuRiCore.unified_learning_system import \
+                        UnifiedLearningSystem
 
                     learning_system = UnifiedLearningSystem()
                     active_sessions = [
@@ -288,9 +288,8 @@ class ImprovedLearningActivator:
                     }
 
                 elif system_name == "자율 학습 시스템":
-                    from duri_modules.autonomous.continuous_learner import (
-                        AutonomousLearner,
-                    )
+                    from duri_modules.autonomous.continuous_learner import \
+                        AutonomousLearner
 
                     autonomous_learner = AutonomousLearner()
                     health_status[system_name] = {
@@ -300,9 +299,8 @@ class ImprovedLearningActivator:
                     }
 
                 elif system_name == "학습 루프 매니저":
-                    from duri_brain.learning.learning_loop_manager import (
-                        get_learning_loop_manager,
-                    )
+                    from duri_brain.learning.learning_loop_manager import \
+                        get_learning_loop_manager
 
                     learning_loop_manager = get_learning_loop_manager()
                     health_status[system_name] = {
@@ -312,10 +310,10 @@ class ImprovedLearningActivator:
                     }
 
                 elif system_name == "실시간 학습 시스템":
-                    from duri_modules.autonomous.continuous_learner import (
-                        AutonomousLearner,
-                    )
-                    from duri_modules.autonomous.realtime_learner import RealtimeLearner
+                    from duri_modules.autonomous.continuous_learner import \
+                        AutonomousLearner
+                    from duri_modules.autonomous.realtime_learner import \
+                        RealtimeLearner
 
                     autonomous_learner = AutonomousLearner()
                     realtime_learner = RealtimeLearner(autonomous_learner)
@@ -344,9 +342,7 @@ class ImprovedLearningActivator:
         if result["success"]:
             print("   ✅ 통합 학습 시스템 활성화 완료")
         else:
-            print(
-                f"   ❌ 통합 학습 시스템 활성화 실패: {result.get('error', '알 수 없는 오류')}"
-            )
+            print(f"   ❌ 통합 학습 시스템 활성화 실패: {result.get('error', '알 수 없는 오류')}")
 
         # 2. 자율 학습 시스템 활성화
         print("\n2️⃣ 자율 학습 시스템 활성화 중...")
@@ -355,9 +351,7 @@ class ImprovedLearningActivator:
         if result["success"]:
             print("   ✅ 자율 학습 시스템 활성화 완료")
         else:
-            print(
-                f"   ❌ 자율 학습 시스템 활성화 실패: {result.get('error', '알 수 없는 오류')}"
-            )
+            print(f"   ❌ 자율 학습 시스템 활성화 실패: {result.get('error', '알 수 없는 오류')}")
 
         # 3. 학습 루프 매니저 활성화
         print("\n3️⃣ 학습 루프 매니저 활성화 중...")
@@ -366,9 +360,7 @@ class ImprovedLearningActivator:
         if result["success"]:
             print("   ✅ 학습 루프 매니저 활성화 완료")
         else:
-            print(
-                f"   ❌ 학습 루프 매니저 활성화 실패: {result.get('error', '알 수 없는 오류')}"
-            )
+            print(f"   ❌ 학습 루프 매니저 활성화 실패: {result.get('error', '알 수 없는 오류')}")
 
         # 4. 실시간 학습 시스템 활성화
         print("\n4️⃣ 실시간 학습 시스템 활성화 중...")
@@ -377,9 +369,7 @@ class ImprovedLearningActivator:
         if result["success"]:
             print("   ✅ 실시간 학습 시스템 활성화 완료")
         else:
-            print(
-                f"   ❌ 실시간 학습 시스템 활성화 실패: {result.get('error', '알 수 없는 오류')}"
-            )
+            print(f"   ❌ 실시간 학습 시스템 활성화 실패: {result.get('error', '알 수 없는 오류')}")
 
         # 시스템 상태 검증
         print("\n🔍 시스템 상태 검증 중...")
@@ -485,9 +475,7 @@ class ImprovedLearningActivator:
                 status_icon = "🔴"
                 status_text = "문제"
 
-            print(
-                f"  {status_icon} {system_name}: {status_text} (실행 시간: {runtime_str})"
-            )
+            print(f"  {status_icon} {system_name}: {status_text} (실행 시간: {runtime_str})")
 
             # 추가 정보 표시
             if "session_count" in health:

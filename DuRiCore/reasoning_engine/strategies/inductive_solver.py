@@ -10,9 +10,8 @@ from __future__ import annotations
 
 from typing import Any, Dict
 
-from DuRiCore.reasoning_system.reasoning_strategies.inductive_reasoning import (
-    InductiveReasoning,
-)
+from DuRiCore.reasoning_system.reasoning_strategies.inductive_reasoning import \
+    InductiveReasoning
 
 
 class InductiveSolver:

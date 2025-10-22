@@ -3,10 +3,10 @@
 DuRi 진화 분석 시스템
 양적/질적/시간적 진화를 종합적으로 분석하는 시스템
 """
-from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
 import json
 import logging
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
@@ -47,8 +47,7 @@ class EvolutionAnalyzer:
             with open(self.analysis_data_file, "r", encoding="utf-8") as f:
                 data = json.load(f)
                 self.analysis_history = [
-                    EvolutionAnalysis(**analysis)
-                    for analysis in data.get("history", [])
+                    EvolutionAnalysis(**analysis) for analysis in data.get("history", [])
                 ]
         except FileNotFoundError:
             logger.info("분석 데이터 파일이 없습니다. 새로 시작합니다.")
@@ -71,14 +70,10 @@ class EvolutionAnalyzer:
         """진화 분석 실행"""
         try:
             # 양적 지표 분석
-            quantitative_metrics = self.analysis_models["quantitative"].analyze(
-                evolution_data
-            )
+            quantitative_metrics = self.analysis_models["quantitative"].analyze(evolution_data)
 
             # 질적 특성 분석
-            qualitative_metrics = self.analysis_models["qualitative"].analyze(
-                evolution_data
-            )
+            qualitative_metrics = self.analysis_models["qualitative"].analyze(evolution_data)
 
             # 시간적 변화 분석
             temporal_metrics = self.analysis_models["temporal"].analyze(evolution_data)
@@ -269,12 +264,8 @@ class QuantitativeAnalyzer:
                 "performance_trend": performance_trend,
                 "learning_trend": learning_trend,
                 "autonomy_trend": autonomy_trend,
-                "latest_performance": (
-                    performance_scores[-1] if performance_scores else 0.0
-                ),
-                "latest_learning": (
-                    learning_efficiency[-1] if learning_efficiency else 0.0
-                ),
+                "latest_performance": (performance_scores[-1] if performance_scores else 0.0),
+                "latest_learning": (learning_efficiency[-1] if learning_efficiency else 0.0),
                 "latest_autonomy": autonomy_levels[-1] if autonomy_levels else 0.0,
             }
         except Exception as e:
@@ -415,12 +406,7 @@ class QualitativeAnalyzer:
         """질적 점수 계산"""
         try:
             # 가중 평균 계산
-            score = (
-                autonomy * 0.3
-                + learning * 0.25
-                + problem_solving * 0.25
-                + evolution * 0.2
-            )
+            score = autonomy * 0.3 + learning * 0.25 + problem_solving * 0.25 + evolution * 0.2
 
             return max(0.0, min(1.0, score))
         except Exception as e:
@@ -434,9 +420,7 @@ class QualitativeAnalyzer:
         try:
             # 데이터 완성도 기반 신뢰도
             available_indicators = sum(
-                1
-                for indicator in [autonomy, learning, problem_solving, evolution]
-                if indicator > 0
+                1 for indicator in [autonomy, learning, problem_solving, evolution] if indicator > 0
             )
 
             confidence = available_indicators / 4.0
@@ -539,9 +523,7 @@ class TemporalAnalyzer:
 
             for i in range(1, len(recent_scores)):
                 if recent_scores[i - 1] > 0:
-                    improvement = (
-                        recent_scores[i] - recent_scores[i - 1]
-                    ) / recent_scores[i - 1]
+                    improvement = (recent_scores[i] - recent_scores[i - 1]) / recent_scores[i - 1]
                     improvements.append(improvement)
 
             return sum(improvements) / len(improvements) if improvements else 0.0
@@ -562,15 +544,9 @@ class TemporalAnalyzer:
                 return "steady_improvement"
             elif recent_scores[0] > recent_scores[1] > recent_scores[2]:
                 return "steady_decline"
-            elif (
-                recent_scores[1] > recent_scores[0]
-                and recent_scores[1] > recent_scores[2]
-            ):
+            elif recent_scores[1] > recent_scores[0] and recent_scores[1] > recent_scores[2]:
                 return "peak_and_decline"
-            elif (
-                recent_scores[1] < recent_scores[0]
-                and recent_scores[1] < recent_scores[2]
-            ):
+            elif recent_scores[1] < recent_scores[0] and recent_scores[1] < recent_scores[2]:
                 return "valley_and_improvement"
             else:
                 return "fluctuating"
@@ -598,9 +574,7 @@ class TemporalAnalyzer:
             logger.error(f"진화 단계 분석 오류: {e}")
             return "unknown"
 
-    def _calculate_temporal_score(
-        self, speed: float, pattern: str, stage: str
-    ) -> float:
+    def _calculate_temporal_score(self, speed: float, pattern: str, stage: str) -> float:
         """시간적 점수 계산"""
         try:
             # 속도 점수 (0-0.4)

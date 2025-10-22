@@ -4,24 +4,20 @@ DuRi 추론 엔진 - 성능 모니터링
 Phase 3 리팩토링: logical_reasoning_engine.py에서 분리
 """
 
-from dataclasses import dataclass
-from datetime import datetime
-from enum import Enum
 import json
 import logging
 import statistics
 import time
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
-from ..core.logical_processor import (
-    InferenceType,
-    LogicalProcessor,
-    LogicalStep,
-    PremiseType,
-    SemanticPremise,
-)
+from ..core.logical_processor import (InferenceType, LogicalProcessor,
+                                      LogicalStep, PremiseType,
+                                      SemanticPremise)
 
 logger = logging.getLogger(__name__)
 
@@ -156,9 +152,7 @@ class PerformanceMonitor:
         metadata = {
             "version": "1.0",
             "processor_type": type(self.logical_processor).__name__,
-            "vector_dimension": getattr(
-                self.logical_processor, "vector_dimension", 100
-            ),
+            "vector_dimension": getattr(self.logical_processor, "vector_dimension", 100),
         }
 
         snapshot = PerformanceSnapshot(
@@ -255,9 +249,7 @@ class PerformanceMonitor:
 
         return total_memory
 
-    def _measure_accuracy(
-        self, premises: List[SemanticPremise], steps: List[LogicalStep]
-    ) -> float:
+    def _measure_accuracy(self, premises: List[SemanticPremise], steps: List[LogicalStep]) -> float:
         """정확도 측정"""
         if not premises or not steps:
             return 0.0
@@ -316,9 +308,7 @@ class PerformanceMonitor:
         # 전제들의 신뢰도
         premise_confidences = [premise.confidence for premise in premises]
         avg_premise_confidence = (
-            sum(premise_confidences) / len(premise_confidences)
-            if premise_confidences
-            else 0.0
+            sum(premise_confidences) / len(premise_confidences) if premise_confidences else 0.0
         )
 
         # 논리적 단계들의 신뢰도
@@ -454,9 +444,7 @@ class PerformanceMonitor:
 
         return report
 
-    def _calculate_average_metrics(
-        self, history: List[PerformanceSnapshot]
-    ) -> Dict[str, float]:
+    def _calculate_average_metrics(self, history: List[PerformanceSnapshot]) -> Dict[str, float]:
         """평균 지표 계산"""
         if not history:
             return {}
@@ -475,15 +463,11 @@ class PerformanceMonitor:
 
         average_metrics = {}
         for metric_name in metrics_sum:
-            average_metrics[metric_name] = (
-                metrics_sum[metric_name] / metrics_count[metric_name]
-            )
+            average_metrics[metric_name] = metrics_sum[metric_name] / metrics_count[metric_name]
 
         return average_metrics
 
-    def _calculate_peak_metrics(
-        self, history: List[PerformanceSnapshot]
-    ) -> Dict[str, float]:
+    def _calculate_peak_metrics(self, history: List[PerformanceSnapshot]) -> Dict[str, float]:
         """최고 지표 계산"""
         if not history:
             return {}
@@ -502,14 +486,10 @@ class PerformanceMonitor:
                         "latency",
                         "error_rate",
                     ]:
-                        peak_metrics[metric_name] = max(
-                            peak_metrics[metric_name], value
-                        )
+                        peak_metrics[metric_name] = max(peak_metrics[metric_name], value)
                     # 나머지는 최소값
                     else:
-                        peak_metrics[metric_name] = min(
-                            peak_metrics[metric_name], value
-                        )
+                        peak_metrics[metric_name] = min(peak_metrics[metric_name], value)
 
         return peak_metrics
 
@@ -599,9 +579,7 @@ class PerformanceMonitor:
                 )
 
         if not recommendations:
-            recommendations.append(
-                "현재 성능이 양호합니다. 정기적인 모니터링을 계속하세요."
-            )
+            recommendations.append("현재 성능이 양호합니다. 정기적인 모니터링을 계속하세요.")
 
         return recommendations
 
@@ -653,9 +631,7 @@ class PerformanceMonitor:
 
         # 최근 10개 스냅샷의 평균
         recent_snapshots = (
-            self.performance_history[-10:]
-            if total_snapshots >= 10
-            else self.performance_history
+            self.performance_history[-10:] if total_snapshots >= 10 else self.performance_history
         )
         recent_averages = self._calculate_average_metrics(recent_snapshots)
 

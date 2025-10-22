@@ -4,11 +4,11 @@ Day 35: 멀티목표 목적함수(J) 파라미터 튜닝 시스템
 """
 
 import asyncio
+import json
+import logging
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from enum import Enum
-import json
-import logging
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -158,9 +158,7 @@ class MultiObjectiveOptimizer:
         score += self.performance_weights["error_rate"] * (1.0 - metrics.error_rate)
 
         # 사용자 만족도 (높을수록 좋음)
-        score += (
-            self.performance_weights["user_satisfaction"] * metrics.user_satisfaction
-        )
+        score += self.performance_weights["user_satisfaction"] * metrics.user_satisfaction
 
         return score
 
@@ -193,9 +191,7 @@ class MultiObjectiveOptimizer:
 
         return combinations
 
-    async def simulate_metrics(
-        self, parameters: Dict[str, float]
-    ) -> OptimizationMetrics:
+    async def simulate_metrics(self, parameters: Dict[str, float]) -> OptimizationMetrics:
         """파라미터에 따른 성능 지표 시뮬레이션"""
         # 실제 환경에서는 실제 시스템에서 측정
         # 여기서는 시뮬레이션으로 근사치 계산
@@ -230,9 +226,7 @@ class MultiObjectiveOptimizer:
             100,
             800 * (1.0 - memory_factor * 0.2 - cpu_factor * 0.3 - network_factor * 0.2),
         )
-        throughput = max(
-            50, 120 * (1.0 + thread_factor * 0.2 + connection_factor * 0.1)
-        )
+        throughput = max(50, 120 * (1.0 + thread_factor * 0.2 + connection_factor * 0.1))
 
         user_satisfaction = min(
             1.0, 0.85 * (1.0 + (1.0 - overhead) * 0.3 + (1.0 - error_rate) * 0.4)
@@ -304,9 +298,7 @@ class MultiObjectiveOptimizer:
                 continue
 
         self.optimization_status = OptimizationStatus.COMPLETED
-        logger.info(
-            f"파라미터 최적화 완료. 최적 목적함수 값: {best_objective_value:.4f}"
-        )
+        logger.info(f"파라미터 최적화 완료. 최적 목적함수 값: {best_objective_value:.4f}")
 
         return best_result
 

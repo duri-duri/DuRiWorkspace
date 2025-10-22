@@ -4,21 +4,17 @@ DuRi 추론 엔진 - 귀납적 추론 전략
 Phase 3 리팩토링: logical_reasoning_engine.py에서 분리
 """
 
-from dataclasses import dataclass
-from enum import Enum
 import logging
 import statistics
+from dataclasses import dataclass
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
-from ..core.logical_processor import (
-    InferenceType,
-    LogicalProcessor,
-    LogicalStep,
-    PremiseType,
-    SemanticPremise,
-)
+from ..core.logical_processor import (InferenceType, LogicalProcessor,
+                                      LogicalStep, PremiseType,
+                                      SemanticPremise)
 
 logger = logging.getLogger(__name__)
 
@@ -98,9 +94,7 @@ class InductiveReasoning:
 
         if len(observations) < 3:
             logger.warning("관찰 수가 너무 적습니다 (최소 3개 필요)")
-            return self._create_invalid_premise(
-                observations, InductivePattern.ENUMERATION
-            )
+            return self._create_invalid_premise(observations, InductivePattern.ENUMERATION)
 
         # 관찰들의 의미 벡터 인코딩
         observation_vectors = []
@@ -113,9 +107,7 @@ class InductiveReasoning:
         conclusion_vector = self.logical_processor.encode_semantics(conclusion)
 
         # 신뢰도 계산
-        confidence = self._calculate_enumeration_confidence(
-            observations, observation_vectors
-        )
+        confidence = self._calculate_enumeration_confidence(observations, observation_vectors)
 
         # 표본 크기와 대표성 평가
         sample_size = len(observations)
@@ -184,9 +176,7 @@ class InductiveReasoning:
 
         return min(confidence, 1.0)
 
-    def _evaluate_observation_consistency(
-        self, observation_vectors: List[np.ndarray]
-    ) -> float:
+    def _evaluate_observation_consistency(self, observation_vectors: List[np.ndarray]) -> float:
         """관찰 일관성 평가"""
         if len(observation_vectors) < 2:
             return 0.5
@@ -229,14 +219,10 @@ class InductiveReasoning:
         target_vector = self.logical_processor.encode_semantics(target_case)
 
         # 유사도 계산
-        similarity = self.logical_processor.calculate_similarity(
-            source_vector, target_vector
-        )
+        similarity = self.logical_processor.calculate_similarity(source_vector, target_vector)
 
         # 결론 도출
-        conclusion = self._derive_analogy_conclusion(
-            source_case, target_case, similarity
-        )
+        conclusion = self._derive_analogy_conclusion(source_case, target_case, similarity)
         conclusion_vector = self.logical_processor.encode_semantics(conclusion)
 
         # 신뢰도 계산
@@ -293,9 +279,7 @@ class InductiveReasoning:
         std_dev = statistics.stdev(data_points) if len(data_points) > 1 else 0
 
         # 결론 도출
-        conclusion = self._derive_statistical_conclusion(
-            data_points, mean_value, std_dev
-        )
+        conclusion = self._derive_statistical_conclusion(data_points, mean_value, std_dev)
         conclusion_vector = self.logical_processor.encode_semantics(conclusion)
 
         # 신뢰도 계산
@@ -305,14 +289,10 @@ class InductiveReasoning:
         sample_size = len(data_points)
         representativeness = self._evaluate_statistical_representativeness(data_points)
 
-        observations = [
-            f"{label}: {value}" for label, value in zip(labels, data_points)
-        ]
+        observations = [f"{label}: {value}" for label, value in zip(labels, data_points)]
 
         semantic_vectors = {
-            "data_points": [
-                self.logical_processor.encode_semantics(str(d)) for d in data_points
-            ],
+            "data_points": [self.logical_processor.encode_semantics(str(d)) for d in data_points],
             "conclusion": conclusion_vector,
         }
 
@@ -331,17 +311,13 @@ class InductiveReasoning:
     ) -> str:
         """통계적 귀납 결론 도출"""
         if std_dev < 0.1 * mean_value:
-            return (
-                f"데이터가 일관적이며 평균값 {mean_value:.2f} 주변에 집중되어 있습니다."
-            )
+            return f"데이터가 일관적이며 평균값 {mean_value:.2f} 주변에 집중되어 있습니다."
         elif std_dev < 0.3 * mean_value:
             return f"데이터가 비교적 일관적이며 평균값 {mean_value:.2f}를 중심으로 분포합니다."
         else:
             return f"데이터가 분산되어 있으며 평균값 {mean_value:.2f}이지만 변동성이 큽니다."
 
-    def _calculate_statistical_confidence(
-        self, data_points: List[float], std_dev: float
-    ) -> float:
+    def _calculate_statistical_confidence(self, data_points: List[float], std_dev: float) -> float:
         """통계적 귀납 신뢰도 계산"""
         # 표본 크기에 따른 기본 신뢰도
         base_confidence = min(0.9, len(data_points) * 0.05)
@@ -360,9 +336,7 @@ class InductiveReasoning:
 
         return base_confidence * confidence_adjustment
 
-    def _evaluate_statistical_representativeness(
-        self, data_points: List[float]
-    ) -> float:
+    def _evaluate_statistical_representativeness(self, data_points: List[float]) -> float:
         """통계적 대표성 평가"""
         if len(data_points) < 5:
             return 0.3

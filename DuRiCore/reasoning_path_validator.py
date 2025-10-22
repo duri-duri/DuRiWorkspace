@@ -11,14 +11,14 @@ DuRi 추론 경로 검증 시스템 - Phase 1-3 Week 3 Day 2
 """
 
 import asyncio
-from collections import defaultdict, deque
-from dataclasses import asdict, dataclass, field
-from datetime import datetime
-from enum import Enum
 import heapq
 import json
 import logging
 import re
+from collections import defaultdict, deque
+from dataclasses import asdict, dataclass, field
+from datetime import datetime
+from enum import Enum
 from typing import Any, Dict, List, Optional, Set, Tuple
 
 import numpy as np
@@ -174,9 +174,7 @@ class ReasoningPathValidator:
         )
 
         # 이슈 및 권장사항 생성
-        issues = self._generate_issues(
-            path, logical_consistency, completeness, coherence, strength
-        )
+        issues = self._generate_issues(path, logical_consistency, completeness, coherence, strength)
         recommendations = self._generate_recommendations(issues)
 
         result = PathValidationResult(
@@ -230,20 +228,12 @@ class ReasoningPathValidator:
 
                 if node1 and node2:
                     # 간단한 의미적 유사도 계산
-                    similarity = self._calculate_simple_similarity(
-                        node1.content, node2.content
-                    )
-                    consistency_scores.append(
-                        similarity * 0.5
-                    )  # 직접 연결이 없으므로 가중치 감소
+                    similarity = self._calculate_simple_similarity(node1.content, node2.content)
+                    consistency_scores.append(similarity * 0.5)  # 직접 연결이 없으므로 가중치 감소
                 else:
                     consistency_scores.append(0.0)
 
-        return (
-            sum(consistency_scores) / len(consistency_scores)
-            if consistency_scores
-            else 0.0
-        )
+        return sum(consistency_scores) / len(consistency_scores) if consistency_scores else 0.0
 
     async def _validate_completeness(
         self, path: ReasoningPath, graph: "DynamicReasoningGraph"
@@ -266,9 +256,9 @@ class ReasoningPathValidator:
                 path_node_types.add(node.node_type)
 
         # 필수 노드 유형 포함도
-        completeness_score = len(
-            path_node_types.intersection(required_node_types)
-        ) / len(required_node_types)
+        completeness_score = len(path_node_types.intersection(required_node_types)) / len(
+            required_node_types
+        )
 
         # 경로 길이 적절성 (너무 짧거나 긴 경로는 완전성이 낮음)
         optimal_length = 5  # 최적 경로 길이
@@ -295,9 +285,7 @@ class ReasoningPathValidator:
 
             if node1 and node2:
                 # 의미적 유사도 계산
-                similarity = self._calculate_simple_similarity(
-                    node1.content, node2.content
-                )
+                similarity = self._calculate_simple_similarity(node1.content, node2.content)
                 coherence_scores.append(similarity)
 
         # 엣지의 의미적 일관성 검증
@@ -306,9 +294,7 @@ class ReasoningPathValidator:
             if edge:
                 coherence_scores.append(edge.semantic_similarity)
 
-        return (
-            sum(coherence_scores) / len(coherence_scores) if coherence_scores else 0.0
-        )
+        return sum(coherence_scores) / len(coherence_scores) if coherence_scores else 0.0
 
     async def _validate_strength(
         self, path: ReasoningPath, graph: "DynamicReasoningGraph"
@@ -335,9 +321,7 @@ class ReasoningPathValidator:
             if edge:
                 edge_strengths.append(edge.strength)
 
-        avg_edge_strength = (
-            sum(edge_strengths) / len(edge_strengths) if edge_strengths else 0.0
-        )
+        avg_edge_strength = sum(edge_strengths) / len(edge_strengths) if edge_strengths else 0.0
 
         # 종합 강도 (노드 60%, 엣지 40%)
         overall_strength = avg_node_confidence * 0.6 + avg_edge_strength * 0.4
@@ -446,9 +430,7 @@ class ReasoningPathOptimizer:
         max_paths: int = 5,
     ) -> List[ReasoningPath]:
         """최적 경로 탐색"""
-        logger.info(
-            f"최적 경로 탐색 시작: {len(start_nodes)} 시작점, {len(end_nodes)} 종료점"
-        )
+        logger.info(f"최적 경로 탐색 시작: {len(start_nodes)} 시작점, {len(end_nodes)} 종료점")
 
         optimal_paths = []
 
@@ -509,9 +491,7 @@ class ReasoningPathOptimizer:
                         h_score = self._calculate_heuristic(neighbor, end_node, graph)
                         f_score = g_score + h_score
 
-                        heapq.heappush(
-                            open_set, (f_score, neighbor, new_path, new_edges)
-                        )
+                        heapq.heappush(open_set, (f_score, neighbor, new_path, new_edges))
 
                 elif edge.target_node == current_node:
                     neighbor = edge.source_node
@@ -523,9 +503,7 @@ class ReasoningPathOptimizer:
                         h_score = self._calculate_heuristic(neighbor, end_node, graph)
                         f_score = g_score + h_score
 
-                        heapq.heappush(
-                            open_set, (f_score, neighbor, new_path, new_edges)
-                        )
+                        heapq.heappush(open_set, (f_score, neighbor, new_path, new_edges))
 
         return None
 
@@ -558,9 +536,7 @@ class ReasoningPathOptimizer:
 
         return abs(current_type_score - end_type_score)
 
-    async def _calculate_path_metrics(
-        self, path: ReasoningPath, graph: "DynamicReasoningGraph"
-    ):
+    async def _calculate_path_metrics(self, path: ReasoningPath, graph: "DynamicReasoningGraph"):
         """경로 메트릭 계산"""
         if not path.nodes:
             return
@@ -572,9 +548,7 @@ class ReasoningPathOptimizer:
             if node:
                 node_confidences.append(node.confidence)
 
-        path.confidence = (
-            sum(node_confidences) / len(node_confidences) if node_confidences else 0.0
-        )
+        path.confidence = sum(node_confidences) / len(node_confidences) if node_confidences else 0.0
 
         # 강도 계산
         edge_strengths = []
@@ -583,9 +557,7 @@ class ReasoningPathOptimizer:
             if edge:
                 edge_strengths.append(edge.strength)
 
-        path.strength = (
-            sum(edge_strengths) / len(edge_strengths) if edge_strengths else 0.0
-        )
+        path.strength = sum(edge_strengths) / len(edge_strengths) if edge_strengths else 0.0
 
         # 일관성 계산
         coherence_scores = []
@@ -594,14 +566,10 @@ class ReasoningPathOptimizer:
             node2 = graph.nodes.get(path.nodes[i + 1])
 
             if node1 and node2:
-                similarity = self._calculate_simple_similarity(
-                    node1.content, node2.content
-                )
+                similarity = self._calculate_simple_similarity(node1.content, node2.content)
                 coherence_scores.append(similarity)
 
-        path.coherence = (
-            sum(coherence_scores) / len(coherence_scores) if coherence_scores else 0.0
-        )
+        path.coherence = sum(coherence_scores) / len(coherence_scores) if coherence_scores else 0.0
 
         # 완전성 계산
         required_types = {NodeType.PREMISE, NodeType.INFERENCE, NodeType.CONCLUSION}
@@ -612,14 +580,10 @@ class ReasoningPathOptimizer:
             if node:
                 path_types.add(node.node_type)
 
-        path.completeness = len(path_types.intersection(required_types)) / len(
-            required_types
-        )
+        path.completeness = len(path_types.intersection(required_types)) / len(required_types)
 
         # 유효성 계산
-        path.validity = (
-            path.confidence + path.strength + path.coherence + path.completeness
-        ) / 4.0
+        path.validity = (path.confidence + path.strength + path.coherence + path.completeness) / 4.0
 
 
 class ReasoningPathDiversityGenerator:
@@ -649,21 +613,15 @@ class ReasoningPathDiversityGenerator:
         diverse_paths = []
 
         # 1. 대안적 관점 기반 경로
-        alternative_paths = await self._generate_alternative_perspective_paths(
-            graph, base_path
-        )
+        alternative_paths = await self._generate_alternative_perspective_paths(graph, base_path)
         diverse_paths.extend(alternative_paths[: num_variations // 3])
 
         # 2. 다양한 추론 유형 기반 경로
-        reasoning_type_paths = await self._generate_different_reasoning_type_paths(
-            graph, base_path
-        )
+        reasoning_type_paths = await self._generate_different_reasoning_type_paths(graph, base_path)
         diverse_paths.extend(reasoning_type_paths[: num_variations // 3])
 
         # 3. 다양한 복잡도 기반 경로
-        complexity_paths = await self._generate_varying_complexity_paths(
-            graph, base_path
-        )
+        complexity_paths = await self._generate_varying_complexity_paths(graph, base_path)
         diverse_paths.extend(complexity_paths[: num_variations // 3])
 
         return diverse_paths[:num_variations]
@@ -699,12 +657,8 @@ class ReasoningPathDiversityGenerator:
         reasoning_type_paths = []
 
         # 다양한 추론 유형의 노드들 찾기
-        inference_nodes = [
-            n for n in graph.nodes.values() if n.node_type == NodeType.INFERENCE
-        ]
-        evidence_nodes = [
-            n for n in graph.nodes.values() if n.node_type == NodeType.EVIDENCE
-        ]
+        inference_nodes = [n for n in graph.nodes.values() if n.node_type == NodeType.INFERENCE]
+        evidence_nodes = [n for n in graph.nodes.values() if n.node_type == NodeType.EVIDENCE]
 
         # 추론 노드 기반 경로
         for inference_node in inference_nodes:
@@ -740,9 +694,7 @@ class ReasoningPathDiversityGenerator:
 
         # 복잡화된 경로 (더 많은 노드 포함)
         all_node_ids = list(graph.nodes.keys())
-        complex_nodes = (
-            base_path.nodes + [n for n in all_node_ids if n not in base_path.nodes][:3]
-        )
+        complex_nodes = base_path.nodes + [n for n in all_node_ids if n not in base_path.nodes][:3]
 
         complex_path = ReasoningPath(
             path_id=f"complex_path_{len(complex_nodes)}_{int(datetime.now().timestamp())}",
@@ -817,16 +769,13 @@ class ReasoningPathEvaluator:
             "evaluation_results": evaluation_results,
             "best_path": evaluation_results[0] if evaluation_results else None,
             "average_score": (
-                sum(r["overall_score"] for r in evaluation_results)
-                / len(evaluation_results)
+                sum(r["overall_score"] for r in evaluation_results) / len(evaluation_results)
                 if evaluation_results
                 else 0.0
             ),
         }
 
-    async def _evaluate_quality(
-        self, path: ReasoningPath, graph: "DynamicReasoningGraph"
-    ) -> float:
+    async def _evaluate_quality(self, path: ReasoningPath, graph: "DynamicReasoningGraph") -> float:
         """품질 평가"""
         if not path.nodes:
             return 0.0
@@ -838,9 +787,7 @@ class ReasoningPathEvaluator:
             if node:
                 node_qualities.append(node.confidence)
 
-        avg_node_quality = (
-            sum(node_qualities) / len(node_qualities) if node_qualities else 0.0
-        )
+        avg_node_quality = sum(node_qualities) / len(node_qualities) if node_qualities else 0.0
 
         # 엣지 품질 (강도 기반)
         edge_qualities = []
@@ -849,9 +796,7 @@ class ReasoningPathEvaluator:
             if edge:
                 edge_qualities.append(edge.strength)
 
-        avg_edge_quality = (
-            sum(edge_qualities) / len(edge_qualities) if edge_qualities else 0.0
-        )
+        avg_edge_quality = sum(edge_qualities) / len(edge_qualities) if edge_qualities else 0.0
 
         # 종합 품질
         overall_quality = avg_node_quality * 0.6 + avg_edge_quality * 0.4
@@ -900,18 +845,14 @@ class ReasoningPathEvaluator:
                 importance_scores.append(node.importance_score)
 
         avg_importance = (
-            sum(importance_scores) / len(importance_scores)
-            if importance_scores
-            else 0.0
+            sum(importance_scores) / len(importance_scores) if importance_scores else 0.0
         )
 
         # 종합 견고성
         overall_robustness = type_diversity * 0.5 + avg_importance * 0.5
         return overall_robustness
 
-    async def _evaluate_novelty(
-        self, path: ReasoningPath, graph: "DynamicReasoningGraph"
-    ) -> float:
+    async def _evaluate_novelty(self, path: ReasoningPath, graph: "DynamicReasoningGraph") -> float:
         """신규성 평가"""
         if not path.nodes:
             return 0.0
@@ -929,9 +870,7 @@ class ReasoningPathEvaluator:
             if node:
                 path_node_types.add(node.node_type)
 
-        novelty_score = len(path_node_types.intersection(novel_node_types)) / len(
-            novel_node_types
-        )
+        novelty_score = len(path_node_types.intersection(novel_node_types)) / len(novel_node_types)
 
         # 경로 길이 신규성 (표준과 다른 길이)
         standard_length = 5
@@ -955,39 +894,21 @@ async def test_reasoning_path_validator():
         "node1": DynamicReasoningNode(
             "node1", NodeType.PREMISE, "상황: 윤리적 딜레마", 0.8, "test"
         ),
-        "node2": DynamicReasoningNode(
-            "node2", NodeType.INFERENCE, "칸트적 분석", 0.7, "test"
-        ),
-        "node3": DynamicReasoningNode(
-            "node3", NodeType.INFERENCE, "공리주의 분석", 0.6, "test"
-        ),
-        "node4": DynamicReasoningNode(
-            "node4", NodeType.CONCLUSION, "최종 판단", 0.9, "test"
-        ),
-        "node5": DynamicReasoningNode(
-            "node5", NodeType.COUNTER_ARGUMENT, "반론", 0.5, "test"
-        ),
+        "node2": DynamicReasoningNode("node2", NodeType.INFERENCE, "칸트적 분석", 0.7, "test"),
+        "node3": DynamicReasoningNode("node3", NodeType.INFERENCE, "공리주의 분석", 0.6, "test"),
+        "node4": DynamicReasoningNode("node4", NodeType.CONCLUSION, "최종 판단", 0.9, "test"),
+        "node5": DynamicReasoningNode("node5", NodeType.COUNTER_ARGUMENT, "반론", 0.5, "test"),
     }
 
     graph.nodes = nodes
 
     # 테스트 엣지들 생성
     edges = {
-        "edge1": DynamicReasoningEdge(
-            "edge1", "node1", "node2", EdgeType.SUPPORTS, 0.8, "지원"
-        ),
-        "edge2": DynamicReasoningEdge(
-            "edge2", "node1", "node3", EdgeType.SUPPORTS, 0.7, "지원"
-        ),
-        "edge3": DynamicReasoningEdge(
-            "edge3", "node2", "node4", EdgeType.INFERS, 0.9, "추론"
-        ),
-        "edge4": DynamicReasoningEdge(
-            "edge4", "node3", "node4", EdgeType.INFERS, 0.8, "추론"
-        ),
-        "edge5": DynamicReasoningEdge(
-            "edge5", "node5", "node4", EdgeType.CHALLENGES, 0.6, "도전"
-        ),
+        "edge1": DynamicReasoningEdge("edge1", "node1", "node2", EdgeType.SUPPORTS, 0.8, "지원"),
+        "edge2": DynamicReasoningEdge("edge2", "node1", "node3", EdgeType.SUPPORTS, 0.7, "지원"),
+        "edge3": DynamicReasoningEdge("edge3", "node2", "node4", EdgeType.INFERS, 0.9, "추론"),
+        "edge4": DynamicReasoningEdge("edge4", "node3", "node4", EdgeType.INFERS, 0.8, "추론"),
+        "edge5": DynamicReasoningEdge("edge5", "node5", "node4", EdgeType.CHALLENGES, 0.6, "도전"),
     }
 
     graph.edges = edges
@@ -1025,9 +946,7 @@ async def test_reasoning_path_validator():
 
     # 3. 경로 다양성 생성 테스트
     diversity_generator = ReasoningPathDiversityGenerator()
-    diverse_paths = await diversity_generator.generate_diverse_paths(
-        graph, test_path, 3
-    )
+    diverse_paths = await diversity_generator.generate_diverse_paths(graph, test_path, 3)
 
     print(f"\n🌈 다양한 경로 생성 결과:")
     print(f"  • 생성된 다양한 경로 수: {len(diverse_paths)}")

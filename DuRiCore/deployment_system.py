@@ -5,14 +5,10 @@ DuRiCore Phase 9 - 통합 배포 시스템
 """
 
 import asyncio
-from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
-from enum import Enum
 import json
 import logging
 import math
 import os
-from pathlib import Path
 import platform
 import random
 import statistics
@@ -20,6 +16,10 @@ import subprocess
 import sys
 import threading
 import time
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
+from enum import Enum
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import psutil
@@ -30,11 +30,8 @@ try:
     from application_system import ApplicationSystem
     from enhanced_integration_system import EnhancedIntegrationSystem
     from integrated_system_manager import IntegratedSystemManager
-    from real_environment_deployment import (
-        DeploymentStatus,
-        EnvironmentType,
-        RealEnvironmentDeployment,
-    )
+    from real_environment_deployment import (DeploymentStatus, EnvironmentType,
+                                             RealEnvironmentDeployment)
 except ImportError:
     print("⚠️ 일부 기존 모듈을 찾을 수 없습니다. 기본 기능으로 진행합니다.")
 
@@ -261,22 +258,16 @@ class IntegratedDeploymentSystem:
             system_metrics = await self._monitor_system_performance(deployment_config)
 
             # 6. 성능 분석
-            performance_analysis = await self._analyze_deployment_performance(
-                system_metrics
-            )
+            performance_analysis = await self._analyze_deployment_performance(system_metrics)
 
             # 7. 적응성 검증
-            adaptation_success = await self._validate_system_adaptation(
-                performance_analysis
-            )
+            adaptation_success = await self._validate_system_adaptation(performance_analysis)
 
             # 8. 사용자 피드백 수집
             user_feedback = await self._collect_user_feedback(deployment_config)
 
             # 9. 권장사항 생성
-            recommendations = await self._generate_deployment_recommendations(
-                performance_analysis
-            )
+            recommendations = await self._generate_deployment_recommendations(performance_analysis)
 
             # 10. 배포 보고서 생성
             deployment_report = DeploymentReport(
@@ -380,9 +371,7 @@ class IntegratedDeploymentSystem:
         # 의존성 확인
         await self._check_dependencies(deployment_config)
 
-    async def _execute_deployment(
-        self, deployment_config: DeploymentConfig
-    ) -> DeploymentStatus:
+    async def _execute_deployment(self, deployment_config: DeploymentConfig) -> DeploymentStatus:
         """배포 실행"""
         logger.info(f"🚀 배포 실행 중: {deployment_config.config_id}")
 
@@ -406,9 +395,7 @@ class IntegratedDeploymentSystem:
             logger.error(f"배포 실행 실패: {e}")
             return DeploymentStatus.FAILED
 
-    async def _deploy_user_interface(
-        self, deployment_config: DeploymentConfig
-    ) -> Dict[str, Any]:
+    async def _deploy_user_interface(self, deployment_config: DeploymentConfig) -> Dict[str, Any]:
         """사용자 인터페이스 배포"""
         logger.info(f"🖥️ UI 배포 중: {deployment_config.ui_type.value}")
 
@@ -433,9 +420,7 @@ class IntegratedDeploymentSystem:
             logger.error(f"UI 배포 실패: {e}")
             return ui_performance
 
-    async def _deploy_web_dashboard(
-        self, deployment_config: DeploymentConfig
-    ) -> Dict[str, Any]:
+    async def _deploy_web_dashboard(self, deployment_config: DeploymentConfig) -> Dict[str, Any]:
         """웹 대시보드 배포"""
         # 기존 대시보드 코드 활용
         dashboard_html = self._generate_dashboard_html(deployment_config)
@@ -617,9 +602,7 @@ class IntegratedDeploymentSystem:
 
         return metrics_list
 
-    async def _collect_system_metrics(
-        self, deployment_config: DeploymentConfig
-    ) -> SystemMetrics:
+    async def _collect_system_metrics(self, deployment_config: DeploymentConfig) -> SystemMetrics:
         """시스템 지표 수집"""
         try:
             # CPU 사용률
@@ -731,9 +714,7 @@ class IntegratedDeploymentSystem:
                 "response_time_trend": "stable",
             },
             "bottlenecks": self._identify_bottlenecks(system_metrics),
-            "optimization_opportunities": self._identify_optimization_opportunities(
-                system_metrics
-            ),
+            "optimization_opportunities": self._identify_optimization_opportunities(system_metrics),
             "stability_assessment": self._assess_stability(system_metrics),
         }
 
@@ -764,13 +745,9 @@ class IntegratedDeploymentSystem:
         avg_memory = statistics.mean([m.memory_usage for m in system_metrics])
 
         if avg_cpu < 30:
-            opportunities.append(
-                "CPU 사용률이 낮습니다. 리소스 다운사이징을 고려하세요."
-            )
+            opportunities.append("CPU 사용률이 낮습니다. 리소스 다운사이징을 고려하세요.")
         if avg_memory < 50:
-            opportunities.append(
-                "메모리 사용률이 낮습니다. 메모리 최적화를 고려하세요."
-            )
+            opportunities.append("메모리 사용률이 낮습니다. 메모리 최적화를 고려하세요.")
 
         return opportunities
 
@@ -784,9 +761,7 @@ class IntegratedDeploymentSystem:
         memory_values = [m.memory_usage for m in system_metrics]
 
         cpu_variance = statistics.variance(cpu_values) if len(cpu_values) > 1 else 0
-        memory_variance = (
-            statistics.variance(memory_values) if len(memory_values) > 1 else 0
-        )
+        memory_variance = statistics.variance(memory_values) if len(memory_values) > 1 else 0
 
         # 안정성 점수 계산 (낮은 변동성 = 높은 안정성)
         stability_score = max(0, 100 - (cpu_variance + memory_variance) / 2)
@@ -807,9 +782,7 @@ class IntegratedDeploymentSystem:
             "memory_variance": memory_variance,
         }
 
-    async def _validate_system_adaptation(
-        self, performance_analysis: Dict[str, Any]
-    ) -> bool:
+    async def _validate_system_adaptation(self, performance_analysis: Dict[str, Any]) -> bool:
         """시스템 적응성 검증"""
         performance_score = performance_analysis.get("performance_score", 0)
         stability_score = performance_analysis.get("stability_assessment", {}).get(
@@ -820,14 +793,9 @@ class IntegratedDeploymentSystem:
         adaptation_threshold = 0.7
         stability_threshold = 75
 
-        return (
-            performance_score >= adaptation_threshold
-            and stability_score >= stability_threshold
-        )
+        return performance_score >= adaptation_threshold and stability_score >= stability_threshold
 
-    async def _collect_user_feedback(
-        self, deployment_config: DeploymentConfig
-    ) -> Dict[str, Any]:
+    async def _collect_user_feedback(self, deployment_config: DeploymentConfig) -> Dict[str, Any]:
         """사용자 피드백 수집"""
         # 실제 환경에서는 실제 사용자 피드백을 수집
         # 여기서는 시뮬레이션된 피드백을 생성
@@ -859,9 +827,7 @@ class IntegratedDeploymentSystem:
         opportunities = performance_analysis.get("optimization_opportunities", [])
 
         if performance_score < 0.8:
-            recommendations.append(
-                "성능 최적화가 필요합니다. 리소스 확장을 고려하세요."
-            )
+            recommendations.append("성능 최적화가 필요합니다. 리소스 확장을 고려하세요.")
 
         for bottleneck in bottlenecks:
             recommendations.append(f"병목 해결: {bottleneck}")
@@ -891,49 +857,37 @@ class IntegratedDeploymentSystem:
         )
 
     # 플랫폼별 배포 메서드들
-    async def _deploy_local(
-        self, deployment_config: DeploymentConfig
-    ) -> DeploymentStatus:
+    async def _deploy_local(self, deployment_config: DeploymentConfig) -> DeploymentStatus:
         """로컬 배포"""
         logger.info("로컬 환경에 배포 중...")
         await asyncio.sleep(2)  # 시뮬레이션
         return DeploymentStatus.COMPLETED
 
-    async def _deploy_docker(
-        self, deployment_config: DeploymentConfig
-    ) -> DeploymentStatus:
+    async def _deploy_docker(self, deployment_config: DeploymentConfig) -> DeploymentStatus:
         """Docker 배포"""
         logger.info("Docker 컨테이너에 배포 중...")
         await asyncio.sleep(3)  # 시뮬레이션
         return DeploymentStatus.COMPLETED
 
-    async def _deploy_heroku(
-        self, deployment_config: DeploymentConfig
-    ) -> DeploymentStatus:
+    async def _deploy_heroku(self, deployment_config: DeploymentConfig) -> DeploymentStatus:
         """Heroku 배포"""
         logger.info("Heroku에 배포 중...")
         await asyncio.sleep(5)  # 시뮬레이션
         return DeploymentStatus.COMPLETED
 
-    async def _deploy_railway(
-        self, deployment_config: DeploymentConfig
-    ) -> DeploymentStatus:
+    async def _deploy_railway(self, deployment_config: DeploymentConfig) -> DeploymentStatus:
         """Railway 배포"""
         logger.info("Railway에 배포 중...")
         await asyncio.sleep(3)  # 시뮬레이션
         return DeploymentStatus.COMPLETED
 
-    async def _deploy_render(
-        self, deployment_config: DeploymentConfig
-    ) -> DeploymentStatus:
+    async def _deploy_render(self, deployment_config: DeploymentConfig) -> DeploymentStatus:
         """Render 배포"""
         logger.info("Render에 배포 중...")
         await asyncio.sleep(4)  # 시뮬레이션
         return DeploymentStatus.COMPLETED
 
-    async def _deploy_vercel(
-        self, deployment_config: DeploymentConfig
-    ) -> DeploymentStatus:
+    async def _deploy_vercel(self, deployment_config: DeploymentConfig) -> DeploymentStatus:
         """Vercel 배포"""
         logger.info("Vercel에 배포 중...")
         await asyncio.sleep(2)  # 시뮬레이션
@@ -1060,9 +1014,7 @@ async def test_integrated_deployment_system():
     )
 
     print(f"✅ 배포 완료: {local_report.report_id}")
-    print(
-        f"📊 성능 점수: {local_report.performance_analysis.get('performance_score', 0):.2f}"
-    )
+    print(f"📊 성능 점수: {local_report.performance_analysis.get('performance_score', 0):.2f}")
     print(f"🎯 적응성: {'성공' if local_report.adaptation_success else '실패'}")
 
     # Docker 환경 배포 테스트
@@ -1075,9 +1027,7 @@ async def test_integrated_deployment_system():
     )
 
     print(f"✅ 배포 완료: {docker_report.report_id}")
-    print(
-        f"📊 성능 점수: {docker_report.performance_analysis.get('performance_score', 0):.2f}"
-    )
+    print(f"📊 성능 점수: {docker_report.performance_analysis.get('performance_score', 0):.2f}")
     print(f"🎯 적응성: {'성공' if docker_report.adaptation_success else '실패'}")
 
     # 사용 가능한 플랫폼 정보 출력

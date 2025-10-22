@@ -32,9 +32,7 @@ async def test_phase2_system():
     print(
         f"   📋 감정 상태: {system_status.get('emotion_status', {}).get('current_emotion', 'unknown')}"
     )
-    print(
-        f"   📋 성장 레벨: {system_status.get('growth_status', {}).get('current_level', 1)}"
-    )
+    print(f"   📋 성장 레벨: {system_status.get('growth_status', {}).get('current_level', 1)}")
     print(
         f"   📋 판단 상태: {system_status.get('judgment_status', {}).get('total_detections', 0)}회 탐지"
     )
@@ -62,9 +60,7 @@ async def test_phase2_system():
                 # 감정 결과
                 emotion_result = result.get("emotion", {})
                 emotion_state = emotion_result.get("emotion_state", {})
-                print(
-                    f"      📊 감정 상태: {emotion_state.get('current_emotion', 'unknown')}"
-                )
+                print(f"      📊 감정 상태: {emotion_state.get('current_emotion', 'unknown')}")
 
                 # 성장 결과
                 growth_result = result.get("growth", {})
@@ -110,9 +106,7 @@ async def test_phase2_system():
     reflection_engine = unified_manager.self_reflection_engine
     reflection_summary = reflection_engine.get_reflection_summary()
     print(f"      📊 총 반영 일지: {reflection_summary.get('total_reflections', 0)}개")
-    print(
-        f"      📊 평균 신뢰도: {reflection_summary.get('average_confidence', 0.0):.2f}"
-    )
+    print(f"      📊 평균 신뢰도: {reflection_summary.get('average_confidence', 0.0):.2f}")
 
     # 이정표 추적기 테스트
     print("\n   📈 이정표 추적기 테스트...")
@@ -126,18 +120,14 @@ async def test_phase2_system():
     performance_scorer = unified_manager.performance_scorer
     performance_summary = performance_scorer.get_performance_summary()
     print(f"      📊 총 루프: {performance_summary.get('total_loops', 0)}개")
-    print(
-        f"      📊 평균 점수: {performance_summary.get('recent_average_score', 0.0):.2f}"
-    )
+    print(f"      📊 평균 점수: {performance_summary.get('recent_average_score', 0.0):.2f}")
 
     # 자율 퀘스트 생성기 테스트
     print("\n   🎯 자율 퀘스트 생성기 테스트...")
     quest_generator = unified_manager.quest_auto_generator
     generation_summary = quest_generator.get_generation_summary()
     print(f"      📊 총 생성: {generation_summary.get('total_generated', 0)}개")
-    print(
-        f"      📊 카테고리 분포: {len(generation_summary.get('category_distribution', {}))}개"
-    )
+    print(f"      📊 카테고리 분포: {len(generation_summary.get('category_distribution', {}))}개")
 
     # 5. Phase 2 시스템 요약
     print("\n5️⃣ Phase 2 시스템 요약...")
@@ -157,9 +147,7 @@ async def test_individual_phase2_modules():
     # 자가 반영 엔진 테스트
     print("\n🧠 자가 반영 엔진 테스트...")
     from duri_brain.reflection.self_reflection_engine import (
-        ReflectionType,
-        SelfReflectionEngine,
-    )
+        ReflectionType, SelfReflectionEngine)
 
     reflection_engine = SelfReflectionEngine()
 
@@ -188,9 +176,7 @@ async def test_individual_phase2_modules():
             emotional_state="neutral",
             growth_impact=0.5,
         )
-        print(
-            f"   반영 {i}: {entry.reflection_level.value} - {len(entry.insights)}개 통찰"
-        )
+        print(f"   반영 {i}: {entry.reflection_level.value} - {len(entry.insights)}개 통찰")
 
     # 이정표 추적기 테스트
     print("\n📈 이정표 추적기 테스트...")

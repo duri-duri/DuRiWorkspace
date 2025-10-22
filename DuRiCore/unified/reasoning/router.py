@@ -4,9 +4,8 @@ import os
 import random
 from typing import Any, Dict
 
-from DuRiCore.reasoning_engine.core.reasoning_engine import (  # 기존 파사드 유지
-    ReasoningEngine,
-)
+from DuRiCore.reasoning_engine.core.reasoning_engine import \
+    ReasoningEngine  # 기존 파사드 유지
 from DuRiCore.unified.reasoning.service import UnifiedReasoningService
 
 _svc = UnifiedReasoningService()

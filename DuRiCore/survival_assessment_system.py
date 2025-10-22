@@ -14,12 +14,12 @@ DuRi Phase Ω: 생존 평가 시스템
 """
 
 import asyncio
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
 import json
 import logging
 import time
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
@@ -152,9 +152,7 @@ class SurvivalAssessmentSystem:
                 environment_data = {}
 
             # 환경 위험 식별
-            environmental_risks = await self._identify_environmental_risks(
-                environment_data
-            )
+            environmental_risks = await self._identify_environmental_risks(environment_data)
 
             # 위험 수준 평가
             risk_assessments = []
@@ -190,15 +188,11 @@ class SurvivalAssessmentSystem:
 
             # 각 자원 유형별 평가
             for resource_type in ResourceType:
-                resource_assessment = await self._assess_resource_type(
-                    resource_type, resource_data
-                )
+                resource_assessment = await self._assess_resource_type(resource_type, resource_data)
                 resource_assessments[resource_type] = resource_assessment
 
             # 자원 상호작용 분석
-            resource_assessments = await self._analyze_resource_interactions(
-                resource_assessments
-            )
+            resource_assessments = await self._analyze_resource_interactions(resource_assessments)
 
             execution_time = time.time() - start_time
             logger.info(f"자원 가용성 평가 완료: {execution_time:.2f}초")
@@ -219,9 +213,7 @@ class SurvivalAssessmentSystem:
             start_time = time.time()
 
             # 환경 점수 계산
-            environmental_score = await self._calculate_environmental_score(
-                risk_assessments
-            )
+            environmental_score = await self._calculate_environmental_score(risk_assessments)
 
             # 자원 점수 계산
             resource_score = await self._calculate_resource_score(resource_assessments)
@@ -257,9 +249,7 @@ class SurvivalAssessmentSystem:
             )
 
             execution_time = time.time() - start_time
-            logger.info(
-                f"생존 점수 계산 완료: {execution_time:.2f}초, 점수: {overall_score:.3f}"
-            )
+            logger.info(f"생존 점수 계산 완료: {execution_time:.2f}초, 점수: {overall_score:.3f}")
 
             return survival_score
 
@@ -280,23 +270,17 @@ class SurvivalAssessmentSystem:
             recommendations = []
 
             # 위험 기반 권장사항
-            risk_recommendations = await self._generate_risk_based_recommendations(
-                risk_assessments
-            )
+            risk_recommendations = await self._generate_risk_based_recommendations(risk_assessments)
             recommendations.extend(risk_recommendations)
 
             # 자원 기반 권장사항
-            resource_recommendations = (
-                await self._generate_resource_based_recommendations(
-                    resource_assessments
-                )
+            resource_recommendations = await self._generate_resource_based_recommendations(
+                resource_assessments
             )
             recommendations.extend(resource_recommendations)
 
             # 생존 점수 기반 권장사항
-            score_recommendations = await self._generate_score_based_recommendations(
-                survival_score
-            )
+            score_recommendations = await self._generate_score_based_recommendations(survival_score)
             recommendations.extend(score_recommendations)
 
             # 권장사항 우선순위 설정
@@ -413,9 +397,7 @@ class SurvivalAssessmentSystem:
             logger.error(f"위험 수준 평가 실패: {e}")
             return await self._create_default_risk_assessment()
 
-    async def _determine_risk_level(
-        self, probability: float, impact_score: float
-    ) -> RiskLevel:
+    async def _determine_risk_level(self, probability: float, impact_score: float) -> RiskLevel:
         """위험 수준 결정"""
         try:
             # 위험 점수 계산 (확률 * 영향도)
@@ -490,9 +472,7 @@ class SurvivalAssessmentSystem:
                 risk.risk_id = f"{risk_score:.3f}_{risk.risk_id}"
 
             # 위험 점수 기준으로 정렬 (높은 순)
-            risk_assessments.sort(
-                key=lambda x: x.probability * x.impact_score, reverse=True
-            )
+            risk_assessments.sort(key=lambda x: x.probability * x.impact_score, reverse=True)
 
             return risk_assessments
 
@@ -555,16 +535,12 @@ class SurvivalAssessmentSystem:
                     if ResourceType.MEMORY in resource_assessments:
                         memory_assessment = resource_assessments[ResourceType.MEMORY]
                         if memory_assessment.availability < 0.6:
-                            assessment.optimization_opportunities.append(
-                                "memory_optimization"
-                            )
+                            assessment.optimization_opportunities.append("memory_optimization")
 
                 elif resource_type == ResourceType.MEMORY:
                     # 메모리는 컴퓨팅 자원과 밀접한 관련
                     if ResourceType.COMPUTATIONAL in resource_assessments:
-                        comp_assessment = resource_assessments[
-                            ResourceType.COMPUTATIONAL
-                        ]
+                        comp_assessment = resource_assessments[ResourceType.COMPUTATIONAL]
                         if comp_assessment.utilization > 0.9:
                             assessment.optimization_opportunities.append(
                                 "computational_optimization"
@@ -576,9 +552,7 @@ class SurvivalAssessmentSystem:
             logger.error(f"자원 상호작용 분석 실패: {e}")
             return resource_assessments
 
-    async def _calculate_environmental_score(
-        self, risk_assessments: List[RiskAssessment]
-    ) -> float:
+    async def _calculate_environmental_score(self, risk_assessments: List[RiskAssessment]) -> float:
         """환경 점수 계산"""
         try:
             if not risk_assessments:
@@ -637,9 +611,7 @@ class SurvivalAssessmentSystem:
                 mitigation_strategies_count = sum(
                     len(risk.mitigation_strategies) for risk in risk_assessments
                 )
-                avg_mitigation_strategies = mitigation_strategies_count / len(
-                    risk_assessments
-                )
+                avg_mitigation_strategies = mitigation_strategies_count / len(risk_assessments)
                 risk_mitigation_capacity = min(
                     1.0, avg_mitigation_strategies / 3.0
                 )  # 최대 3개 전략 기준
@@ -659,9 +631,7 @@ class SurvivalAssessmentSystem:
                 )  # 최대 2개 기회 기준
 
             # 적응 점수 = (위험 완화 능력 + 자원 최적화 능력) / 2
-            adaptation_score = (
-                risk_mitigation_capacity + resource_optimization_capacity
-            ) / 2
+            adaptation_score = (risk_mitigation_capacity + resource_optimization_capacity) / 2
 
             return min(1.0, max(0.0, adaptation_score))
 
@@ -678,17 +648,13 @@ class SurvivalAssessmentSystem:
         try:
             # 위험 다양성 평가 (다양한 위험에 대한 대응 능력)
             risk_diversity = (
-                len(set(risk.risk_type for risk in risk_assessments))
-                if risk_assessments
-                else 0
+                len(set(risk.risk_type for risk in risk_assessments)) if risk_assessments else 0
             )
             risk_diversity_score = min(1.0, risk_diversity / 4.0)  # 최대 4개 유형 기준
 
             # 자원 다양성 평가
             resource_diversity = len(resource_assessments)
-            resource_diversity_score = min(
-                1.0, resource_diversity / 6.0
-            )  # 최대 6개 자원 유형 기준
+            resource_diversity_score = min(1.0, resource_diversity / 6.0)  # 최대 6개 자원 유형 기준
 
             # 시스템 안정성 평가
             system_stability_score = 0.8  # 기본값, 실제로는 시스템 상태에서 계산
@@ -740,9 +706,7 @@ class SurvivalAssessmentSystem:
             # 위험 평가 데이터 품질
             if risk_assessments:
                 risk_data_quality = sum(
-                    1
-                    for risk in risk_assessments
-                    if risk.probability > 0 and risk.impact_score > 0
+                    1 for risk in risk_assessments if risk.probability > 0 and risk.impact_score > 0
                 )
                 risk_data_quality_score = risk_data_quality / len(risk_assessments)
                 data_quality_score += risk_data_quality_score * 0.5
@@ -754,9 +718,7 @@ class SurvivalAssessmentSystem:
                     for assessment in resource_assessments.values()
                     if assessment.availability > 0 and assessment.efficiency > 0
                 )
-                resource_data_quality_score = resource_data_quality / len(
-                    resource_assessments
-                )
+                resource_data_quality_score = resource_data_quality / len(resource_assessments)
                 data_quality_score += resource_data_quality_score * 0.5
 
             # 신뢰도 수준 = 데이터 품질 점수
@@ -966,9 +928,7 @@ async def main():
             }
         ],
     }
-    risk_assessments = await survival_assessment_system.assess_environmental_risks(
-        environment_data
-    )
+    risk_assessments = await survival_assessment_system.assess_environmental_risks(environment_data)
     print(f"위험 평가: {len(risk_assessments)}개 위험 식별")
 
     # 자원 가용성 평가
@@ -986,8 +946,8 @@ async def main():
             "capacity": 1.0,
         },
     }
-    resource_assessments = (
-        await survival_assessment_system.evaluate_resource_availability(resource_data)
+    resource_assessments = await survival_assessment_system.evaluate_resource_availability(
+        resource_data
     )
     print(f"자원 평가: {len(resource_assessments)}개 자원 평가")
 
@@ -998,10 +958,8 @@ async def main():
     print(f"생존 점수: {survival_score.overall_score:.3f}")
 
     # 생존 권장사항 생성
-    recommendations = (
-        await survival_assessment_system.generate_survival_recommendations(
-            survival_score, risk_assessments, resource_assessments
-        )
+    recommendations = await survival_assessment_system.generate_survival_recommendations(
+        survival_score, risk_assessments, resource_assessments
     )
     print(f"권장사항: {len(recommendations)}개 생성")
 

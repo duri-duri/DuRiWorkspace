@@ -5,28 +5,25 @@ DuRiCore Phase 10 - 고급 미래 예측 엔진
 """
 
 import asyncio
-from collections import defaultdict, deque
-from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
-from enum import Enum
 import json
 import logging
 import math
 import random
 import statistics
 import time
+from collections import defaultdict, deque
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-from advanced_cognitive_system import (
-    AbstractionType,
-    AdvancedCognitiveSystem,
-    CognitiveLevel,
-)
+from advanced_cognitive_system import (AbstractionType,
+                                       AdvancedCognitiveSystem, CognitiveLevel)
 from emotion_weight_system import EmotionWeightSystem
 from lida_attention_system import LIDAAttentionSystem
-
 # 기존 시스템들 import
-from prediction_system import PredictionConfidence, PredictionSystem, PredictionType
+from prediction_system import (PredictionConfidence, PredictionSystem,
+                               PredictionType)
 
 logger = logging.getLogger(__name__)
 
@@ -187,9 +184,7 @@ class FuturePredictionEngine:
     ) -> List[TrendAnalysis]:
         """트렌드 분석"""
         try:
-            logger.info(
-                f"트렌드 분석 시작: 타입 {len(trend_types) if trend_types else '전체'}"
-            )
+            logger.info(f"트렌드 분석 시작: 타입 {len(trend_types) if trend_types else '전체'}")
 
             # 컨텍스트 전처리
             processed_context = await self._preprocess_prediction_context(context)
@@ -236,24 +231,18 @@ class FuturePredictionEngine:
             key_drivers = await self._identify_key_drivers(prediction_context)
 
             # 시나리오 생성
-            scenarios = await self._generate_scenarios(
-                key_drivers, num_scenarios, prediction_level
-            )
+            scenarios = await self._generate_scenarios(key_drivers, num_scenarios, prediction_level)
 
             # 시나리오 분석
             analyzed_scenarios = await self._analyze_scenarios(scenarios)
 
             # 확률 및 신뢰도 평가
-            evaluated_scenarios = await self._evaluate_scenario_probabilities(
-                analyzed_scenarios
-            )
+            evaluated_scenarios = await self._evaluate_scenario_probabilities(analyzed_scenarios)
 
             # 결과 저장
             self.future_scenarios.extend(evaluated_scenarios)
 
-            logger.info(
-                f"미래 시나리오 예측 완료: {len(evaluated_scenarios)}개 시나리오"
-            )
+            logger.info(f"미래 시나리오 예측 완료: {len(evaluated_scenarios)}개 시나리오")
             return evaluated_scenarios
 
         except Exception as e:
@@ -297,9 +286,7 @@ class FuturePredictionEngine:
             logger.info(f"예측 정확도 평가 시작: 주제 {subject}")
 
             # 예측 정확도 분석
-            accuracy_analysis = await self._analyze_prediction_accuracy(
-                subject, context
-            )
+            accuracy_analysis = await self._analyze_prediction_accuracy(subject, context)
 
             # 신뢰도 평가
             confidence_level = await self._assess_confidence_level(accuracy_analysis)
@@ -315,9 +302,7 @@ class FuturePredictionEngine:
 
             # 강점 및 개선 영역 식별
             strengths = await self._identify_prediction_strengths(accuracy_analysis)
-            improvement_areas = await self._identify_prediction_improvement_areas(
-                accuracy_analysis
-            )
+            improvement_areas = await self._identify_prediction_improvement_areas(accuracy_analysis)
 
             # 권장사항 생성
             recommendations = await self._generate_prediction_recommendations(
@@ -342,18 +327,14 @@ class FuturePredictionEngine:
             # 결과 저장
             self.prediction_assessments.append(assessment)
 
-            logger.info(
-                f"예측 정확도 평가 완료: 정확도 {assessment.prediction_accuracy:.2f}"
-            )
+            logger.info(f"예측 정확도 평가 완료: 정확도 {assessment.prediction_accuracy:.2f}")
             return assessment
 
         except Exception as e:
             logger.error(f"예측 정확도 평가 실패: {str(e)}")
             return None
 
-    async def _preprocess_prediction_context(
-        self, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _preprocess_prediction_context(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """예측 컨텍스트 전처리"""
         processed_context = context.copy()
 
@@ -430,17 +411,12 @@ class FuturePredictionEngine:
 
         for analysis in analyses:
             # 신뢰도 임계값 검사
-            if (
-                analysis.confidence_level
-                >= self.prediction_thresholds["confidence_minimum"]
-            ):
+            if analysis.confidence_level >= self.prediction_thresholds["confidence_minimum"]:
                 evaluated_analyses.append(analysis)
 
         return evaluated_analyses
 
-    async def _analyze_prediction_context(
-        self, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _analyze_prediction_context(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """예측 컨텍스트 분석"""
         analysis = {
             "domain": context.get("domain", "general"),
@@ -492,9 +468,7 @@ class FuturePredictionEngine:
 
         return scenarios
 
-    async def _analyze_scenarios(
-        self, scenarios: List[Dict[str, Any]]
-    ) -> List[Dict[str, Any]]:
+    async def _analyze_scenarios(self, scenarios: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """시나리오 분석"""
         analyzed_scenarios = []
 
@@ -525,8 +499,7 @@ class FuturePredictionEngine:
             # 확률 및 신뢰도 임계값 검사
             if (
                 scenario["probability"] >= 0.2
-                and scenario["confidence"]
-                >= self.prediction_thresholds["confidence_minimum"]
+                and scenario["confidence"] >= self.prediction_thresholds["confidence_minimum"]
             ):
 
                 future_scenario = FutureScenario(
@@ -547,9 +520,7 @@ class FuturePredictionEngine:
 
         return evaluated_scenarios
 
-    async def _identify_risk_factors(
-        self, context: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    async def _identify_risk_factors(self, context: Dict[str, Any]) -> List[Dict[str, Any]]:
         """위험 요소 식별"""
         risk_factors = []
 
@@ -618,9 +589,7 @@ class FuturePredictionEngine:
 
         for risk in risk_forecasts:
             # 모니터링 지표 추가
-            risk.monitoring_indicators.extend(
-                ["위험 지수 추적", "트렌드 분석", "경고 신호 감지"]
-            )
+            risk.monitoring_indicators.extend(["위험 지수 추적", "트렌드 분석", "경고 신호 감지"])
 
             monitored_risks.append(risk)
 
@@ -656,9 +625,7 @@ class FuturePredictionEngine:
         """모델 성능 평가"""
         return analysis.get("model_performance", 0.7)
 
-    async def _identify_prediction_strengths(
-        self, analysis: Dict[str, Any]
-    ) -> List[str]:
+    async def _identify_prediction_strengths(self, analysis: Dict[str, Any]) -> List[str]:
         """예측 강점 식별"""
         strengths = []
         threshold = 0.7
@@ -669,9 +636,7 @@ class FuturePredictionEngine:
 
         return strengths
 
-    async def _identify_prediction_improvement_areas(
-        self, analysis: Dict[str, Any]
-    ) -> List[str]:
+    async def _identify_prediction_improvement_areas(self, analysis: Dict[str, Any]) -> List[str]:
         """예측 개선 영역 식별"""
         improvement_areas = []
         threshold = 0.6

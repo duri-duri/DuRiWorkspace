@@ -7,10 +7,10 @@
 
 import hashlib
 import os
-from pathlib import Path
 import random
 import sys
 import time
+from pathlib import Path
 from typing import Dict, List, Tuple
 
 
@@ -144,9 +144,7 @@ class DualVerification:
         print(f"  - 소요 시간: {elapsed_time:.2f}초")
         print(f"  - SHA256 검증: {'✅ 통과' if sha256_valid else '❌ 실패'}")
         print(f"  - 샘플 파일 검증: {'✅ 통과' if sample_valid else '❌ 실패'}")
-        print(
-            f"  - 전체 결과: {'✅ 통과' if (sha256_valid and sample_valid) else '❌ 실패'}"
-        )
+        print(f"  - 전체 결과: {'✅ 통과' if (sha256_valid and sample_valid) else '❌ 실패'}")
 
         # 상세 결과
         print(f"\n📋 상세 결과:")

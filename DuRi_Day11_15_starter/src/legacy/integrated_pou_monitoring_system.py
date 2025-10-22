@@ -4,11 +4,11 @@ Day 34: PoU 파일럿 통합 모니터링 시스템
 의료, 재활, 코딩 3개 도메인의 PoU 파일럿을 통합적으로 모니터링하고 성과를 분석합니다.
 """
 
-from datetime import datetime, timedelta
 import json
 import logging
 import random
 import time
+from datetime import datetime, timedelta
 from typing import Any, Dict, List
 
 
@@ -72,9 +72,7 @@ class PoUMonitoringSystem:
 
         metrics = base_metrics.get(pilot_name, {})
         metrics["last_updated"] = datetime.now().isoformat()
-        metrics["status"] = (
-            "healthy" if metrics.get("error_rate_percent", 0) < 1.0 else "warning"
-        )
+        metrics["status"] = "healthy" if metrics.get("error_rate_percent", 0) < 1.0 else "warning"
 
         self.logger.info(f"✅ {pilot_name} 메트릭 수집 완료: 상태={metrics['status']}")
         return metrics
@@ -148,9 +146,7 @@ class PoUMonitoringSystem:
             "avg_safety_score": round(total_safety / active_pilots, 1),
             "avg_performance_ms": round(total_performance / active_pilots, 0),
             "avg_error_rate_percent": round(total_error_rate / active_pilots, 2),
-            "avg_trace_coverage_percent": round(
-                total_trace_coverage / active_pilots, 1
-            ),
+            "avg_trace_coverage_percent": round(total_trace_coverage / active_pilots, 1),
             "active_pilots": active_pilots,
             "total_alerts": len(dashboard_data["alerts"]),
         }
@@ -165,28 +161,20 @@ class PoUMonitoringSystem:
 
         # 권장사항 생성
         if dashboard_data["summary_metrics"]["avg_quality_score"] < 85:
-            dashboard_data["recommendations"].append(
-                "전체 품질 점수 개선이 필요합니다."
-            )
+            dashboard_data["recommendations"].append("전체 품질 점수 개선이 필요합니다.")
 
         if dashboard_data["summary_metrics"]["avg_error_rate_percent"] > 0.5:
-            dashboard_data["recommendations"].append(
-                "오류율 감소를 위한 안정성 개선이 필요합니다."
-            )
+            dashboard_data["recommendations"].append("오류율 감소를 위한 안정성 개선이 필요합니다.")
 
         if dashboard_data["summary_metrics"]["avg_trace_coverage_percent"] < 95:
-            dashboard_data["recommendations"].append(
-                "Trace 커버리지 향상이 필요합니다."
-            )
+            dashboard_data["recommendations"].append("Trace 커버리지 향상이 필요합니다.")
 
         self.logger.info(
             f"✅ 통합 대시보드 생성 완료: 전체 상태={dashboard_data['overall_status']}"
         )
         return dashboard_data
 
-    def generate_performance_report(
-        self, dashboard_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def generate_performance_report(self, dashboard_data: Dict[str, Any]) -> Dict[str, Any]:
         """성과 분석 리포트 생성"""
         self.logger.info("📊 PoU 파일럿 성과 분석 리포트 생성 중...")
 
@@ -218,9 +206,7 @@ class PoUMonitoringSystem:
                 "target_score": 90.0,
                 "gap": round(90.0 - summary_metrics["avg_quality_score"], 1),
                 "status": (
-                    "meets_target"
-                    if summary_metrics["avg_quality_score"] >= 90
-                    else "below_target"
+                    "meets_target" if summary_metrics["avg_quality_score"] >= 90 else "below_target"
                 ),
             },
             "safety_analysis": {
@@ -252,11 +238,7 @@ class PoUMonitoringSystem:
                     "area": "품질",
                     "current": summary_metrics["avg_quality_score"],
                     "target": 90.0,
-                    "priority": (
-                        "high"
-                        if summary_metrics["avg_quality_score"] < 85
-                        else "medium"
-                    ),
+                    "priority": ("high" if summary_metrics["avg_quality_score"] < 85 else "medium"),
                 }
             )
 
@@ -267,9 +249,7 @@ class PoUMonitoringSystem:
                     "current": summary_metrics["avg_performance_ms"],
                     "target": 800,
                     "priority": (
-                        "high"
-                        if summary_metrics["avg_performance_ms"] > 1000
-                        else "medium"
+                        "high" if summary_metrics["avg_performance_ms"] > 1000 else "medium"
                     ),
                 }
             )
@@ -323,16 +303,10 @@ class PoUMonitoringSystem:
         print("=" * 60)
         print(f"전체 상태: {dashboard_data['overall_status'].upper()}")
         print(f"활성 파일럿: {dashboard_data['summary_metrics']['active_pilots']}개")
-        print(
-            f"평균 품질 점수: {dashboard_data['summary_metrics']['avg_quality_score']}"
-        )
-        print(
-            f"평균 안전 점수: {dashboard_data['summary_metrics']['avg_safety_score']}"
-        )
+        print(f"평균 품질 점수: {dashboard_data['summary_metrics']['avg_quality_score']}")
+        print(f"평균 안전 점수: {dashboard_data['summary_metrics']['avg_safety_score']}")
         print(f"평균 성능: {dashboard_data['summary_metrics']['avg_performance_ms']}ms")
-        print(
-            f"평균 오류율: {dashboard_data['summary_metrics']['avg_error_rate_percent']}%"
-        )
+        print(f"평균 오류율: {dashboard_data['summary_metrics']['avg_error_rate_percent']}%")
         print(f"총 알림 수: {dashboard_data['summary_metrics']['total_alerts']}")
 
         if dashboard_data["alerts"]:

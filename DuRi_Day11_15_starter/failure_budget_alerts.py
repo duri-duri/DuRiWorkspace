@@ -60,9 +60,7 @@ def main():
                     ["bash", str(legacy)], capture_output=True, text=True, timeout=300
                 )
                 if result.returncode != 0:
-                    print(
-                        f"[WARN] Legacy freeze failed: {result.stderr}", file=sys.stderr
-                    )
+                    print(f"[WARN] Legacy freeze failed: {result.stderr}", file=sys.stderr)
                     # 롤백 훅: 레거시 스크립트 실패 시 기본 롤백 스크립트로 폴백
                     if rollback.exists():
                         try:
@@ -74,9 +72,7 @@ def main():
                             )
                             print("[INFO] Rollback script executed")
                         except Exception as rollback_e:
-                            print(
-                                f"[WARN] Rollback failed: {rollback_e}", file=sys.stderr
-                            )
+                            print(f"[WARN] Rollback failed: {rollback_e}", file=sys.stderr)
             except subprocess.TimeoutExpired:
                 print("[WARN] Legacy freeze timeout", file=sys.stderr)
             except Exception as e:

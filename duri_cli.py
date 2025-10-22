@@ -4,9 +4,9 @@ DuRi CLI - 시스템 헌장 강제 적용 도구
 """
 
 import os
-from pathlib import Path
 import subprocess
 import sys
+from pathlib import Path
 
 
 def display_constitution():

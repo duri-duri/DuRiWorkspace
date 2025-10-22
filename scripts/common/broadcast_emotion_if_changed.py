@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-from datetime import datetime
 import json
 import os
+from datetime import datetime
 
 import yaml
 
@@ -134,9 +134,7 @@ def main():
         log(f"[⚠️] last_sent.json 읽기 오류: {e}")
         return
 
-    if json.dumps(current_delta, sort_keys=True) != json.dumps(
-        last_sent, sort_keys=True
-    ):
+    if json.dumps(current_delta, sort_keys=True) != json.dumps(last_sent, sort_keys=True):
         log("[📢] 변화 감지됨 - 전송 실행")
         send_to_all_targets(current_delta)
         write_json(LAST_SENT_FILE, current_delta)

@@ -4,21 +4,17 @@ DuRi 추론 엔진 - 가설적 추론 전략
 Phase 3 리팩토링: logical_reasoning_engine.py에서 분리
 """
 
-from dataclasses import dataclass
-from enum import Enum
 import itertools
 import logging
+from dataclasses import dataclass
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
-from ..core.logical_processor import (
-    InferenceType,
-    LogicalProcessor,
-    LogicalStep,
-    PremiseType,
-    SemanticPremise,
-)
+from ..core.logical_processor import (InferenceType, LogicalProcessor,
+                                      LogicalStep, PremiseType,
+                                      SemanticPremise)
 
 logger = logging.getLogger(__name__)
 
@@ -98,9 +94,7 @@ class AbductiveReasoning:
 
         if not observations:
             logger.warning("관찰 데이터가 없습니다")
-            return self._create_invalid_premise(
-                observations, AbductivePattern.BEST_EXPLANATION
-            )
+            return self._create_invalid_premise(observations, AbductivePattern.BEST_EXPLANATION)
 
         # 관찰들의 의미 벡터 인코딩
         observation_vectors = []
@@ -113,32 +107,22 @@ class AbductiveReasoning:
 
         if not hypotheses:
             logger.warning("가설을 생성할 수 없습니다")
-            return self._create_invalid_premise(
-                observations, AbductivePattern.BEST_EXPLANATION
-            )
+            return self._create_invalid_premise(observations, AbductivePattern.BEST_EXPLANATION)
 
         # 최선의 가설 선택
         best_hypothesis = self._select_best_hypothesis(observations, hypotheses)
-        best_hypothesis_vector = self.logical_processor.encode_semantics(
-            best_hypothesis
-        )
+        best_hypothesis_vector = self.logical_processor.encode_semantics(best_hypothesis)
 
         # 신뢰도 계산
-        confidence = self._calculate_abductive_confidence(
-            observations, hypotheses, best_hypothesis
-        )
+        confidence = self._calculate_abductive_confidence(observations, hypotheses, best_hypothesis)
 
         # 설명력과 단순성 평가
-        explanatory_power = self._evaluate_explanatory_power(
-            observations, best_hypothesis
-        )
+        explanatory_power = self._evaluate_explanatory_power(observations, best_hypothesis)
         simplicity = self._evaluate_simplicity(best_hypothesis)
 
         semantic_vectors = {
             "observations": observation_vectors,
-            "hypotheses": [
-                self.logical_processor.encode_semantics(h) for h in hypotheses
-            ],
+            "hypotheses": [self.logical_processor.encode_semantics(h) for h in hypotheses],
             "best_hypothesis": best_hypothesis_vector,
         }
 
@@ -247,15 +231,11 @@ class AbductiveReasoning:
         # 관찰의 다양성에 따른 가설
         observation_lengths = [len(obs) for obs in observations]
         if max(observation_lengths) - min(observation_lengths) > 20:
-            general_hypotheses.append(
-                "관찰된 현상들이 다양한 복잡성을 보이고 있습니다."
-            )
+            general_hypotheses.append("관찰된 현상들이 다양한 복잡성을 보이고 있습니다.")
 
         return general_hypotheses
 
-    def _select_best_hypothesis(
-        self, observations: List[str], hypotheses: List[str]
-    ) -> str:
+    def _select_best_hypothesis(self, observations: List[str], hypotheses: List[str]) -> str:
         """최선의 가설 선택"""
         if not hypotheses:
             return "가설을 생성할 수 없습니다."
@@ -271,9 +251,7 @@ class AbductiveReasoning:
 
         return best_hypothesis[0]
 
-    def _calculate_hypothesis_score(
-        self, observations: List[str], hypothesis: str
-    ) -> float:
+    def _calculate_hypothesis_score(self, observations: List[str], hypothesis: str) -> float:
         """가설 점수 계산"""
         score = 0.0
 
@@ -291,9 +269,7 @@ class AbductiveReasoning:
 
         return score
 
-    def _evaluate_explanatory_power(
-        self, observations: List[str], hypothesis: str
-    ) -> float:
+    def _evaluate_explanatory_power(self, observations: List[str], hypothesis: str) -> float:
         """설명력 평가"""
         if not observations or not hypothesis:
             return 0.0
@@ -310,9 +286,7 @@ class AbductiveReasoning:
             similarities.append(similarity)
 
         # 평균 유사도를 설명력으로 사용
-        explanatory_power = (
-            sum(similarities) / len(similarities) if similarities else 0.0
-        )
+        explanatory_power = sum(similarities) / len(similarities) if similarities else 0.0
 
         return explanatory_power
 
@@ -381,15 +355,11 @@ class AbductiveReasoning:
         hypothesis_factor = min(1.0, len(hypotheses) * 0.05)
 
         # 최선의 가설의 품질에 따른 조정
-        best_hypothesis_score = self._calculate_hypothesis_score(
-            observations, best_hypothesis
-        )
+        best_hypothesis_score = self._calculate_hypothesis_score(observations, best_hypothesis)
         quality_factor = best_hypothesis_score
 
         # 최종 신뢰도 계산
-        confidence = (
-            base_confidence * observation_factor * hypothesis_factor * quality_factor
-        )
+        confidence = base_confidence * observation_factor * hypothesis_factor * quality_factor
 
         return min(confidence, 1.0)
 
@@ -408,18 +378,14 @@ class AbductiveReasoning:
 
         if not diagnoses:
             logger.warning("진단을 생성할 수 없습니다")
-            return self._create_invalid_premise(
-                symptoms, AbductivePattern.DIAGNOSTIC_REASONING
-            )
+            return self._create_invalid_premise(symptoms, AbductivePattern.DIAGNOSTIC_REASONING)
 
         # 최선의 진단 선택
         best_diagnosis = self._select_best_diagnosis(symptoms, diagnoses)
         best_diagnosis_vector = self.logical_processor.encode_semantics(best_diagnosis)
 
         # 신뢰도 계산
-        confidence = self._calculate_diagnostic_confidence(
-            symptoms, diagnoses, best_diagnosis
-        )
+        confidence = self._calculate_diagnostic_confidence(symptoms, diagnoses, best_diagnosis)
 
         # 설명력과 단순성 평가
         explanatory_power = self._evaluate_explanatory_power(symptoms, best_diagnosis)
@@ -427,9 +393,7 @@ class AbductiveReasoning:
 
         semantic_vectors = {
             "symptoms": symptom_vectors,
-            "diagnoses": [
-                self.logical_processor.encode_semantics(d) for d in diagnoses
-            ],
+            "diagnoses": [self.logical_processor.encode_semantics(d) for d in diagnoses],
             "best_diagnosis": best_diagnosis_vector,
         }
 
@@ -496,9 +460,7 @@ class AbductiveReasoning:
         general_diagnoses = []
 
         if len(symptoms) > 2:
-            general_diagnoses.append(
-                "복합 증상이 나타나고 있어 종합적인 진단이 필요합니다."
-            )
+            general_diagnoses.append("복합 증상이 나타나고 있어 종합적인 진단이 필요합니다.")
 
         if any("급성" in symptom for symptom in symptoms):
             general_diagnoses.append("급성 질환이 의심됩니다.")
@@ -594,9 +556,7 @@ class AbductiveReasoning:
         quality_factor = best_diagnosis_score
 
         # 최종 신뢰도 계산
-        confidence = (
-            base_confidence * symptom_factor * diagnosis_factor * quality_factor
-        )
+        confidence = base_confidence * symptom_factor * diagnosis_factor * quality_factor
 
         return min(confidence, 1.0)
 

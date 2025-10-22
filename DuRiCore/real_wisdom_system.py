@@ -5,12 +5,12 @@ DuRi 진짜 지혜 판단 시스템
 """
 
 import asyncio
-from dataclasses import asdict, dataclass
-from datetime import datetime
-from enum import Enum
 import json
 import logging
 import time
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 logging.basicConfig(level=logging.INFO)
@@ -138,14 +138,10 @@ class RealWisdomSystem:
         ethical_judgment = self._make_ethical_judgment(situation, situation_analysis)
 
         # 3. 실용적 판단
-        practical_judgment = self._make_practical_judgment(
-            situation, situation_analysis
-        )
+        practical_judgment = self._make_practical_judgment(situation, situation_analysis)
 
         # 4. 통합 판단
-        integrated_judgment = self._integrate_judgments(
-            ethical_judgment, practical_judgment
-        )
+        integrated_judgment = self._integrate_judgments(ethical_judgment, practical_judgment)
 
         # 5. 대안 고려
         alternatives = self._consider_alternatives(situation, integrated_judgment)
@@ -200,9 +196,7 @@ class RealWisdomSystem:
 
         return analysis
 
-    def _make_ethical_judgment(
-        self, situation: str, analysis: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _make_ethical_judgment(self, situation: str, analysis: Dict[str, Any]) -> Dict[str, Any]:
         """윤리적 판단"""
         ethical_issues = analysis.get("ethical_issues", [])
 
@@ -245,9 +239,7 @@ class RealWisdomSystem:
             "confidence": 0.3,
         }
 
-    def _make_practical_judgment(
-        self, situation: str, analysis: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _make_practical_judgment(self, situation: str, analysis: Dict[str, Any]) -> Dict[str, Any]:
         """실용적 판단"""
         key_elements = analysis.get("key_elements", [])
 
@@ -302,9 +294,7 @@ class RealWisdomSystem:
                 "confidence": practical.get("confidence", 0.5),
             }
 
-    def _consider_alternatives(
-        self, situation: str, judgment: Dict[str, Any]
-    ) -> List[str]:
+    def _consider_alternatives(self, situation: str, judgment: Dict[str, Any]) -> List[str]:
         """대안 고려"""
         alternatives = []
 

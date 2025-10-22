@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-from datetime import datetime
 import hashlib
 import json
 import pathlib
 import re
 import sys
+from datetime import datetime
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 SRC = ROOT / "clinic" / "source_materials"
@@ -45,9 +45,7 @@ for p in SRC.rglob("*"):
     out = DER / f"{h}.txt"
     if raw:
         out.write_text(masked, encoding="utf-8")
-    index.append(
-        {"path": rel, "size": p.stat().st_size, "hash": h, "extracted": bool(raw)}
-    )
+    index.append({"path": rel, "size": p.stat().st_size, "hash": h, "extracted": bool(raw)})
     if raw and masked != raw:
         redactions.append({"path": rel, "diff": "masked"})
 

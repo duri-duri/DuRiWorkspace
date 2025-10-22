@@ -4,15 +4,15 @@ DuRi Core Node - API Gateway
 포트 8080에서 사용자 요청을 받아 Brain과 Evolution 노드로 라우팅
 """
 import asyncio
-from datetime import datetime
 import time
+from datetime import datetime
 from typing import Any, Dict, Optional
 
+import httpx
+import uvicorn
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse
-import httpx
 from pydantic import BaseModel
-import uvicorn
 
 # DuRi 로깅 시스템 초기화
 from DuRiCore.bootstrap import bootstrap_logging
@@ -26,7 +26,6 @@ logger = logging.getLogger(__name__)
 from cognitive_bandwidth_manager import cognitive_bandwidth_manager
 from enhanced_emotion_filter import enhanced_emotion_filter
 from growth_level_system import growth_level_system
-
 # 성능 최적화 임포트
 from performance_optimizer import LoadBalancer, PerformanceOptimizer
 
@@ -79,18 +78,14 @@ async def health_check():
         async with httpx.AsyncClient() as client:
             # Brain 노드 상태 확인
             try:
-                brain_response = await client.get(
-                    f"{BRAIN_NODE_URL}/health", timeout=2.0
-                )
+                brain_response = await client.get(f"{BRAIN_NODE_URL}/health", timeout=2.0)
                 node_status.brain_healthy = brain_response.status_code == 200
             except:
                 node_status.brain_healthy = False
 
             # Evolution 노드 상태 확인
             try:
-                evolution_response = await client.get(
-                    f"{EVOLUTION_NODE_URL}/health", timeout=2.0
-                )
+                evolution_response = await client.get(f"{EVOLUTION_NODE_URL}/health", timeout=2.0)
                 node_status.evolution_healthy = evolution_response.status_code == 200
             except:
                 node_status.evolution_healthy = False
@@ -127,9 +122,7 @@ async def process_conversation(request: ConversationRequest):
         metadata = request.metadata or {}
 
         if not user_input or not duri_response:
-            raise HTTPException(
-                status_code=400, detail="user_input과 duri_response가 필요합니다"
-            )
+            raise HTTPException(status_code=400, detail="user_input과 duri_response가 필요합니다")
 
         logger.info(
             f"🔄 최적화된 대화 처리 시작: {len(user_input)}자 입력, {len(duri_response)}자 응답"
@@ -385,9 +378,7 @@ async def analyze_emotion(text: str = ""):
                 "primary_emotion": analysis.primary_emotion.value,
                 "intensity": analysis.intensity.value,
                 "confidence": analysis.confidence,
-                "secondary_emotions": [
-                    emotion.value for emotion in analysis.secondary_emotions
-                ],
+                "secondary_emotions": [emotion.value for emotion in analysis.secondary_emotions],
                 "bias_detected": analysis.bias_detected.value,
                 "meta_cognition": analysis.meta_cognition,
                 "timestamp": analysis.timestamp,
@@ -418,9 +409,7 @@ async def analyze_emotion_post(request: dict):
                 "primary_emotion": analysis.primary_emotion.value,
                 "intensity": analysis.intensity.value,
                 "confidence": analysis.confidence,
-                "secondary_emotions": [
-                    emotion.value for emotion in analysis.secondary_emotions
-                ],
+                "secondary_emotions": [emotion.value for emotion in analysis.secondary_emotions],
                 "bias_detected": analysis.bias_detected.value,
                 "meta_cognition": analysis.meta_cognition,
                 "timestamp": analysis.timestamp,

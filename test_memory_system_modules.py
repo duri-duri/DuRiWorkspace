@@ -7,10 +7,10 @@ DuRiCore Phase 2-5: 메모리 시스템 모듈 테스트
 """
 
 import asyncio
-from datetime import datetime, timedelta
 import logging
 import os
 import sys
+from datetime import datetime, timedelta
 from typing import Any, Dict
 
 # 로깅 설정
@@ -24,13 +24,10 @@ def test_memory_allocator():
 
     try:
         # 메모리 할당기 import 테스트
-        from DuRiCore.memory.memory_manager import (
-            MemoryAllocation,
-            MemoryAllocator,
-            MemoryBlock,
-            MemoryStatus,
-            MemoryType,
-        )
+        from DuRiCore.memory.memory_manager import (MemoryAllocation,
+                                                    MemoryAllocator,
+                                                    MemoryBlock, MemoryStatus,
+                                                    MemoryType)
 
         # MemoryAllocator 인스턴스 생성 테스트
         memory_allocator = MemoryAllocator()
@@ -50,13 +47,10 @@ def test_memory_synchronizer():
 
     try:
         # 메모리 동기화기 import 테스트
-        from DuRiCore.memory.memory_sync import (
-            MemoryConflict,
-            MemorySynchronizer,
-            SyncOperation,
-            SyncStatus,
-            SyncType,
-        )
+        from DuRiCore.memory.memory_sync import (MemoryConflict,
+                                                 MemorySynchronizer,
+                                                 SyncOperation, SyncStatus,
+                                                 SyncType)
 
         # MemorySynchronizer 인스턴스 생성 테스트
         memory_synchronizer = MemorySynchronizer()
@@ -76,13 +70,11 @@ def test_memory_optimizer():
 
     try:
         # 메모리 최적화기 import 테스트
-        from DuRiCore.memory.memory_optimization import (
-            MemoryOptimizer,
-            MemoryUsageMetrics,
-            OptimizationStatus,
-            OptimizationTask,
-            OptimizationType,
-        )
+        from DuRiCore.memory.memory_optimization import (MemoryOptimizer,
+                                                         MemoryUsageMetrics,
+                                                         OptimizationStatus,
+                                                         OptimizationTask,
+                                                         OptimizationType)
 
         # MemoryOptimizer 인스턴스 생성 테스트
         memory_optimizer = MemoryOptimizer()
@@ -102,11 +94,10 @@ async def test_async_functionality():
 
     try:
         from DuRiCore.memory.memory_manager import MemoryAllocator, MemoryType
-        from DuRiCore.memory.memory_optimization import (
-            MemoryOptimizer,
-            OptimizationType,
-        )
-        from DuRiCore.memory.memory_sync import MemorySynchronizer, SyncStatus, SyncType
+        from DuRiCore.memory.memory_optimization import (MemoryOptimizer,
+                                                         OptimizationType)
+        from DuRiCore.memory.memory_sync import (MemorySynchronizer,
+                                                 SyncStatus, SyncType)
 
         # 1. 메모리 할당 테스트
         memory_allocator = MemoryAllocator()
@@ -150,15 +141,11 @@ async def test_async_functionality():
         memory_optimizer = MemoryOptimizer()
 
         # 최적화 작업 시작
-        optimization_id = await memory_optimizer.start_optimization(
-            OptimizationType.CLEANUP
-        )
+        optimization_id = await memory_optimizer.start_optimization(OptimizationType.CLEANUP)
         logger.info(f"✅ 최적화 작업 시작: {optimization_id}")
 
         # 최적화 상태 조회
-        optimization_status = await memory_optimizer.get_optimization_status(
-            optimization_id
-        )
+        optimization_status = await memory_optimizer.get_optimization_status(optimization_id)
         if optimization_status:
             logger.info(f"✅ 최적화 상태 조회: {optimization_status.status.value}")
 
@@ -184,14 +171,9 @@ def test_package_import():
 
     try:
         # 전체 패키지 import 테스트
-        from DuRiCore.memory import (
-            MemoryAllocator,
-            MemoryOptimizer,
-            MemorySynchronizer,
-            MemoryType,
-            OptimizationType,
-            SyncType,
-        )
+        from DuRiCore.memory import (MemoryAllocator, MemoryOptimizer,
+                                     MemorySynchronizer, MemoryType,
+                                     OptimizationType, SyncType)
 
         logger.info("✅ 패키지 전체 import 성공")
         return True

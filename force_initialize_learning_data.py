@@ -5,13 +5,12 @@ DuRi 강제 초기 학습 데이터 주입 스크립트
 기존 데이터가 있어도 강제로 초기 학습 데이터를 주입합니다.
 """
 
-from datetime import datetime, timedelta
 import logging
 import random
+from datetime import datetime, timedelta
 from typing import Any, Dict, List
 
 from duri_brain.learning.auto_retrospector import get_auto_retrospector
-
 # DuRi 모듈 import
 from duri_core.memory.memory_sync import get_memory_sync
 
@@ -323,15 +322,11 @@ class ForceLearningDataInitializer:
         failure_count = self.initial_data_count - success_count
 
         # 성공 케이스 선택
-        selected_success = random.sample(
-            success_cases, min(success_count, len(success_cases))
-        )
+        selected_success = random.sample(success_cases, min(success_count, len(success_cases)))
         experiences.extend(selected_success)
 
         # 실패 케이스 선택
-        selected_failure = random.sample(
-            failure_cases, min(failure_count, len(failure_cases))
-        )
+        selected_failure = random.sample(failure_cases, min(failure_count, len(failure_cases)))
         experiences.extend(selected_failure)
 
         # 시간대 분산을 위한 타임스탬프 추가
@@ -395,9 +390,7 @@ class ForceLearningDataInitializer:
 
             # 학습률 계산
             if experiences:
-                success_count = sum(
-                    1 for e in experiences if e.get("outcome") == "success"
-                )
+                success_count = sum(1 for e in experiences if e.get("outcome") == "success")
                 learning_rate = success_count / len(experiences)
             else:
                 learning_rate = 0.0

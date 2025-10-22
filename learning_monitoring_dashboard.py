@@ -6,14 +6,14 @@ DuRi 학습 시스템 모니터링 대시보드
 """
 
 import asyncio
-from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
 import json
 import logging
 import os
 import sys
 import threading
 import time
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
 # 프로젝트 루트를 Python 경로에 추가
@@ -150,9 +150,7 @@ class LearningMonitoringDashboard:
 
             learning_system = UnifiedLearningSystem()
             active_sessions = [
-                s
-                for s in learning_system.learning_sessions
-                if s.status.value == "in_progress"
+                s for s in learning_system.learning_sessions if s.status.value == "in_progress"
             ]
 
             is_active = len(active_sessions) > 0
@@ -191,8 +189,10 @@ class LearningMonitoringDashboard:
     async def _get_autonomous_learning_status(self) -> SystemStatus:
         """자율 학습 시스템 상태"""
         try:
-            from duri_modules.autonomous.continuous_learner import AutonomousLearner
-            from duri_modules.autonomous.duri_autonomous_core import DuRiAutonomousCore
+            from duri_modules.autonomous.continuous_learner import \
+                AutonomousLearner
+            from duri_modules.autonomous.duri_autonomous_core import \
+                DuRiAutonomousCore
 
             autonomous_learner = AutonomousLearner()
             autonomous_core = DuRiAutonomousCore()
@@ -242,9 +242,8 @@ class LearningMonitoringDashboard:
     async def _get_learning_loop_status(self) -> SystemStatus:
         """학습 루프 매니저 상태"""
         try:
-            from duri_brain.learning.learning_loop_manager import (
-                get_learning_loop_manager,
-            )
+            from duri_brain.learning.learning_loop_manager import \
+                get_learning_loop_manager
 
             learning_loop_manager = get_learning_loop_manager()
             current_status = learning_loop_manager.get_current_status()
@@ -276,9 +275,7 @@ class LearningMonitoringDashboard:
                     "learning_cycle_count": learning_loop_manager.learning_cycle_count,
                     "total_cycles": len(learning_loop_manager.learning_cycles),
                     "current_stage": current_status.get("current_stage"),
-                    "performance_metrics": current_status.get(
-                        "performance_metrics", {}
-                    ),
+                    "performance_metrics": current_status.get("performance_metrics", {}),
                 },
             )
         except Exception as e:
@@ -296,8 +293,10 @@ class LearningMonitoringDashboard:
     async def _get_realtime_learning_status(self) -> SystemStatus:
         """실시간 학습 시스템 상태"""
         try:
-            from duri_modules.autonomous.continuous_learner import AutonomousLearner
-            from duri_modules.autonomous.realtime_learner import RealtimeLearner
+            from duri_modules.autonomous.continuous_learner import \
+                AutonomousLearner
+            from duri_modules.autonomous.realtime_learner import \
+                RealtimeLearner
 
             autonomous_learner = AutonomousLearner()
             realtime_learner = RealtimeLearner(autonomous_learner)
@@ -393,9 +392,7 @@ class LearningMonitoringDashboard:
                 runtime_text = f" (실행: {status.runtime})" if status.runtime else ""
                 session_text = f" [{status.session_id}]" if status.session_id else ""
 
-                print(
-                    f"  {status_icon} {system_name}: {status_text}{runtime_text}{session_text}"
-                )
+                print(f"  {status_icon} {system_name}: {status_text}{runtime_text}{session_text}")
             else:
                 print(f"  ⚪ {system_name}: 상태 확인 불가")
 

@@ -7,10 +7,10 @@ DuRi 추론 시스템 모듈 테스트
 """
 
 import asyncio
-from datetime import datetime
 import logging
 import os
 import sys
+from datetime import datetime
 from typing import Any, Dict, List
 
 # 로깅 설정
@@ -27,20 +27,16 @@ async def test_reasoning_engine_modules():
 
     try:
         # Inference Engine 테스트
-        from reasoning_system.reasoning_engine import (
-            InferenceContext,
-            InferenceEngine,
-            InferenceType,
-        )
+        from reasoning_system.reasoning_engine import (InferenceContext,
+                                                       InferenceEngine,
+                                                       InferenceType)
 
         inference_engine = InferenceEngine()
         context = InferenceContext(
             context_type="test", input_data={"key1": "value1", "key2": "value2"}
         )
 
-        result = await inference_engine.perform_inference(
-            context, InferenceType.DEDUCTIVE
-        )
+        result = await inference_engine.perform_inference(context, InferenceType.DEDUCTIVE)
         logger.info(f"Inference Engine 테스트 성공: {result.confidence:.2f}")
 
         # Logic Processor 테스트
@@ -52,19 +48,15 @@ async def test_reasoning_engine_modules():
             "rule2": {"premises": ["D"], "conclusion": "E", "confidence": 0.7},
         }
 
-        analysis = await logic_processor.process_logic(
-            input_data, LogicType.PROPOSITIONAL
-        )
+        analysis = await logic_processor.process_logic(input_data, LogicType.PROPOSITIONAL)
         logger.info(f"Logic Processor 테스트 성공: {analysis.consistency_score:.2f}")
 
         # Decision Maker 테스트
-        from reasoning_system.reasoning_engine import (
-            DecisionContext,
-            DecisionCriteria,
-            DecisionMaker,
-            DecisionOption,
-            DecisionType,
-        )
+        from reasoning_system.reasoning_engine import (DecisionContext,
+                                                       DecisionCriteria,
+                                                       DecisionMaker,
+                                                       DecisionOption,
+                                                       DecisionType)
 
         decision_maker = DecisionMaker()
         criteria = [
@@ -84,12 +76,8 @@ async def test_reasoning_engine_modules():
             ),
         ]
         options = [
-            DecisionOption(
-                option_id="o1", name="Option 1", description="Test option 1"
-            ),
-            DecisionOption(
-                option_id="o2", name="Option 2", description="Test option 2"
-            ),
+            DecisionOption(option_id="o1", name="Option 1", description="Test option 1"),
+            DecisionOption(option_id="o2", name="Option 2", description="Test option 2"),
         ]
         decision_context = DecisionContext(
             context_id="test_context",
@@ -117,11 +105,9 @@ async def test_reasoning_strategies_modules():
 
     try:
         # Deductive Reasoning 테스트
-        from reasoning_system.reasoning_strategies import (
-            DeductivePremise,
-            DeductiveReasoning,
-            DeductiveRuleType,
-        )
+        from reasoning_system.reasoning_strategies import (DeductivePremise,
+                                                           DeductiveReasoning,
+                                                           DeductiveRuleType)
 
         deductive_reasoning = DeductiveReasoning()
         premises = [
@@ -136,22 +122,13 @@ async def test_reasoning_strategies_modules():
 
         # Inductive Reasoning 테스트
         from reasoning_system.reasoning_strategies import (
-            InductiveObservation,
-            InductiveReasoning,
-            InductiveType,
-        )
+            InductiveObservation, InductiveReasoning, InductiveType)
 
         inductive_reasoning = InductiveReasoning()
         observations = [
-            InductiveObservation(
-                observation_id="o1", content="Observation 1", confidence=0.8
-            ),
-            InductiveObservation(
-                observation_id="o2", content="Observation 2", confidence=0.7
-            ),
-            InductiveObservation(
-                observation_id="o3", content="Observation 3", confidence=0.9
-            ),
+            InductiveObservation(observation_id="o1", content="Observation 1", confidence=0.8),
+            InductiveObservation(observation_id="o2", content="Observation 2", confidence=0.7),
+            InductiveObservation(observation_id="o3", content="Observation 3", confidence=0.9),
         ]
 
         analysis = await inductive_reasoning.perform_inductive_reasoning(
@@ -161,10 +138,7 @@ async def test_reasoning_strategies_modules():
 
         # Abductive Reasoning 테스트
         from reasoning_system.reasoning_strategies import (
-            AbductiveObservation,
-            AbductiveReasoning,
-            AbductiveType,
-        )
+            AbductiveObservation, AbductiveReasoning, AbductiveType)
 
         abductive_reasoning = AbductiveReasoning()
         observations = [
@@ -179,9 +153,7 @@ async def test_reasoning_strategies_modules():
         analysis = await abductive_reasoning.perform_abductive_reasoning(
             observations, AbductiveType.SIMPLE
         )
-        logger.info(
-            f"Abductive Reasoning 테스트 성공: {analysis.explanatory_power:.2f}"
-        )
+        logger.info(f"Abductive Reasoning 테스트 성공: {analysis.explanatory_power:.2f}")
 
         logger.info("=== 추론 전략 모듈 테스트 완료 ===")
         return True
@@ -197,10 +169,7 @@ async def test_reasoning_optimization_modules():
 
     try:
         from reasoning_system.reasoning_optimization import (
-            OptimizationTarget,
-            OptimizationType,
-            ReasoningOptimizer,
-        )
+            OptimizationTarget, OptimizationType, ReasoningOptimizer)
 
         optimizer = ReasoningOptimizer()
         targets = [
@@ -218,12 +187,8 @@ async def test_reasoning_optimization_modules():
             ),
         ]
 
-        analysis = await optimizer.optimize_reasoning(
-            targets, OptimizationType.PERFORMANCE
-        )
-        logger.info(
-            f"Reasoning Optimizer 테스트 성공: {analysis.overall_improvement:.2f}"
-        )
+        analysis = await optimizer.optimize_reasoning(targets, OptimizationType.PERFORMANCE)
+        logger.info(f"Reasoning Optimizer 테스트 성공: {analysis.overall_improvement:.2f}")
 
         logger.info("=== 추론 최적화 모듈 테스트 완료 ===")
         return True
@@ -239,59 +204,39 @@ async def test_module_imports():
 
     try:
         # Reasoning Engine imports
-        from reasoning_system.reasoning_engine import (
-            DecisionContext,
-            DecisionCriteria,
-            DecisionMaker,
-            DecisionOption,
-            DecisionResult,
-            DecisionType,
-            InferenceContext,
-            InferenceEngine,
-            InferenceResult,
-            InferenceType,
-            LogicalChain,
-            LogicalRule,
-            LogicAnalysis,
-            LogicProcessor,
-            LogicType,
-        )
+        from reasoning_system.reasoning_engine import (DecisionContext,
+                                                       DecisionCriteria,
+                                                       DecisionMaker,
+                                                       DecisionOption,
+                                                       DecisionResult,
+                                                       DecisionType,
+                                                       InferenceContext,
+                                                       InferenceEngine,
+                                                       InferenceResult,
+                                                       InferenceType,
+                                                       LogicalChain,
+                                                       LogicalRule,
+                                                       LogicAnalysis,
+                                                       LogicProcessor,
+                                                       LogicType)
 
         logger.info("Reasoning Engine imports 성공")
 
         # Reasoning Strategies imports
         from reasoning_system.reasoning_strategies import (
-            AbductiveAnalysis,
-            AbductiveExplanation,
-            AbductiveHypothesis,
-            AbductiveObservation,
-            AbductiveReasoning,
-            AbductiveType,
-            DeductiveAnalysis,
-            DeductiveConclusion,
-            DeductivePremise,
-            DeductiveReasoning,
-            DeductiveRule,
-            DeductiveRuleType,
-            InductiveAnalysis,
-            InductiveGeneralization,
-            InductiveObservation,
-            InductivePattern,
-            InductiveReasoning,
-            InductiveType,
-        )
+            AbductiveAnalysis, AbductiveExplanation, AbductiveHypothesis,
+            AbductiveObservation, AbductiveReasoning, AbductiveType,
+            DeductiveAnalysis, DeductiveConclusion, DeductivePremise,
+            DeductiveReasoning, DeductiveRule, DeductiveRuleType,
+            InductiveAnalysis, InductiveGeneralization, InductiveObservation,
+            InductivePattern, InductiveReasoning, InductiveType)
 
         logger.info("Reasoning Strategies imports 성공")
 
         # Reasoning Optimization imports
         from reasoning_system.reasoning_optimization import (
-            OptimizationAnalysis,
-            OptimizationResult,
-            OptimizationStrategy,
-            OptimizationTarget,
-            OptimizationType,
-            ReasoningOptimizer,
-        )
+            OptimizationAnalysis, OptimizationResult, OptimizationStrategy,
+            OptimizationTarget, OptimizationType, ReasoningOptimizer)
 
         logger.info("Reasoning Optimization imports 성공")
 

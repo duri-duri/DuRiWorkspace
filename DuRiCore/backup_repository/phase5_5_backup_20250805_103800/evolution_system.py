@@ -5,15 +5,15 @@ DuRiCore Phase 5 Day 5 - 진화 시스템
 """
 
 import asyncio
-from dataclasses import dataclass
-from datetime import datetime
-from enum import Enum
 import json
 import logging
 import math
 import random
 import statistics
 import time
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 logger = logging.getLogger(__name__)
@@ -154,9 +154,7 @@ class EvolutionSystem:
             logger.error(f"진화 시스템 입력 처리 실패: {e}")
             return {"success": False, "error": str(e), "data": {}}
 
-    async def evolve_system(
-        self, learning_cycles: List[Dict[str, Any]]
-    ) -> EvolutionReport:
+    async def evolve_system(self, learning_cycles: List[Dict[str, Any]]) -> EvolutionReport:
         """시스템 진화 실행"""
         try:
             start_time = time.time()
@@ -168,9 +166,7 @@ class EvolutionSystem:
             evolution_results = await self._execute_evolution_cycles(learning_cycles)
 
             # 진화 효과 검증
-            validation_results = await self._validate_evolution_effects(
-                evolution_results
-            )
+            validation_results = await self._validate_evolution_effects(evolution_results)
 
             # 성능 향상 측정
             improvement_measurement = await self._measure_performance_improvement(
@@ -197,9 +193,7 @@ class EvolutionSystem:
             logger.error(f"시스템 진화 실패: {e}")
             return await self._create_failed_report()
 
-    async def validate_evolution_effects(
-        self, changes: List[Dict[str, Any]]
-    ) -> Dict[str, Any]:
+    async def validate_evolution_effects(self, changes: List[Dict[str, Any]]) -> Dict[str, Any]:
         """진화 효과 검증"""
         try:
             validation_results = {
@@ -223,15 +217,12 @@ class EvolutionSystem:
                     validation_results["stability_impacts"].append(
                         change_validation["stability_impact"]
                     )
-                    validation_results["learning_gains"].append(
-                        change_validation["learning_gain"]
-                    )
+                    validation_results["learning_gains"].append(change_validation["learning_gain"])
 
             # 전체 효과성 계산
             if validation_results["total_changes"] > 0:
                 validation_rate = (
-                    validation_results["validated_changes"]
-                    / validation_results["total_changes"]
+                    validation_results["validated_changes"] / validation_results["total_changes"]
                 )
                 avg_performance = (
                     sum(validation_results["performance_improvements"])
@@ -272,9 +263,7 @@ class EvolutionSystem:
                 "overall_effectiveness": 0.0,
             }
 
-    async def measure_performance_improvement(
-        self, before_after: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def measure_performance_improvement(self, before_after: Dict[str, Any]) -> Dict[str, Any]:
         """성능 향상 측정"""
         try:
             measurement_results = {
@@ -292,42 +281,26 @@ class EvolutionSystem:
             if before_metrics and after_metrics:
                 # 전체 성능 향상
                 before_overall = (
-                    sum(before_metrics.values()) / len(before_metrics)
-                    if before_metrics
-                    else 0.0
+                    sum(before_metrics.values()) / len(before_metrics) if before_metrics else 0.0
                 )
                 after_overall = (
-                    sum(after_metrics.values()) / len(after_metrics)
-                    if after_metrics
-                    else 0.0
+                    sum(after_metrics.values()) / len(after_metrics) if after_metrics else 0.0
                 )
-                measurement_results["overall_improvement"] = (
-                    after_overall - before_overall
-                )
+                measurement_results["overall_improvement"] = after_overall - before_overall
 
                 # 컴포넌트별 향상
                 for component in before_metrics:
                     if component in after_metrics:
-                        improvement = (
-                            after_metrics[component] - before_metrics[component]
-                        )
-                        measurement_results["component_improvements"][
-                            component
-                        ] = improvement
+                        improvement = after_metrics[component] - before_metrics[component]
+                        measurement_results["component_improvements"][component] = improvement
 
                 # 향상 분포 분석
-                improvements = list(
-                    measurement_results["component_improvements"].values()
-                )
+                improvements = list(measurement_results["component_improvements"].values())
                 if improvements:
                     measurement_results["improvement_distribution"] = {
                         "mean": statistics.mean(improvements),
                         "median": statistics.median(improvements),
-                        "std": (
-                            statistics.stdev(improvements)
-                            if len(improvements) > 1
-                            else 0.0
-                        ),
+                        "std": (statistics.stdev(improvements) if len(improvements) > 1 else 0.0),
                         "min": min(improvements),
                         "max": max(improvements),
                     }
@@ -338,8 +311,8 @@ class EvolutionSystem:
                 )
 
                 # 확장성 평가
-                measurement_results["scalability_assessment"] = (
-                    await self._assess_scalability(measurement_results)
+                measurement_results["scalability_assessment"] = await self._assess_scalability(
+                    measurement_results
                 )
 
             return measurement_results
@@ -371,9 +344,7 @@ class EvolutionSystem:
                 return stability_assessment
 
             # 안정성 지표 계산
-            stability_metrics = await self._calculate_stability_metrics(
-                evolution_history
-            )
+            stability_metrics = await self._calculate_stability_metrics(evolution_history)
             stability_assessment["stability_metrics"] = stability_metrics
 
             # 전체 안정성 점수
@@ -384,8 +355,8 @@ class EvolutionSystem:
             )
 
             # 안정성 트렌드 분석
-            stability_assessment["stability_trend"] = (
-                await self._analyze_stability_trend(evolution_history)
+            stability_assessment["stability_trend"] = await self._analyze_stability_trend(
+                evolution_history
             )
 
             # 위험 요인 식별
@@ -459,10 +430,7 @@ class EvolutionSystem:
                     cycle_count += 1
 
                     # 개선 임계값 확인
-                    if (
-                        cycle_result["performance_impact"]
-                        < self.min_improvement_threshold
-                    ):
+                    if cycle_result["performance_impact"] < self.min_improvement_threshold:
                         logger.info(
                             f"개선 임계값 미달로 진화 중단: {cycle_result['performance_impact']:.3f}"
                         )
@@ -501,18 +469,13 @@ class EvolutionSystem:
                     validation_results["performance_improvements"].append(
                         result["performance_impact"]
                     )
-                    validation_results["stability_impacts"].append(
-                        result["stability_impact"]
-                    )
-                    validation_results["learning_gains"].append(
-                        result["learning_impact"]
-                    )
+                    validation_results["stability_impacts"].append(result["stability_impact"])
+                    validation_results["learning_gains"].append(result["learning_impact"])
 
             # 검증 신뢰도 계산
             if validation_results["total_cycles"] > 0:
                 success_rate = (
-                    validation_results["successful_cycles"]
-                    / validation_results["total_cycles"]
+                    validation_results["successful_cycles"] / validation_results["total_cycles"]
                 )
                 avg_improvement = (
                     sum(validation_results["performance_improvements"])
@@ -568,8 +531,8 @@ class EvolutionSystem:
                 )
 
                 # 확장성 평가
-                measurement_results["scalability_assessment"] = (
-                    await self._assess_scalability(validation_results)
+                measurement_results["scalability_assessment"] = await self._assess_scalability(
+                    validation_results
                 )
 
                 # 상세 정보
@@ -577,12 +540,8 @@ class EvolutionSystem:
                     "total_cycles": validation_results["total_cycles"],
                     "successful_cycles": validation_results["successful_cycles"],
                     "average_improvement": measurement_results["improvement_rate"],
-                    "max_improvement": max(
-                        validation_results["performance_improvements"]
-                    ),
-                    "min_improvement": min(
-                        validation_results["performance_improvements"]
-                    ),
+                    "max_improvement": max(validation_results["performance_improvements"]),
+                    "min_improvement": min(validation_results["performance_improvements"]),
                 }
 
             return measurement_results
@@ -631,9 +590,7 @@ class EvolutionSystem:
             )
 
             # 평균 사이클 지속시간 계산
-            cycle_durations = [
-                result.get("execution_time", 0.0) for result in evolution_results
-            ]
+            cycle_durations = [result.get("execution_time", 0.0) for result in evolution_results]
             average_cycle_duration = (
                 sum(cycle_durations) / len(cycle_durations) if cycle_durations else 0.0
             )
@@ -734,9 +691,7 @@ class EvolutionSystem:
             logger.error(f"진화 사이클 생성 실패: {e}")
             return None
 
-    async def _execute_single_cycle(
-        self, evolution_cycle: EvolutionCycle
-    ) -> Dict[str, Any]:
+    async def _execute_single_cycle(self, evolution_cycle: EvolutionCycle) -> Dict[str, Any]:
         """단일 사이클 실행"""
         try:
             # 시뮬레이션된 진화 실행
@@ -829,9 +784,7 @@ class EvolutionSystem:
             if not performance_improvements:
                 return 0.0
 
-            avg_improvement = sum(performance_improvements) / len(
-                performance_improvements
-            )
+            avg_improvement = sum(performance_improvements) / len(performance_improvements)
             improvement_consistency = 1.0 - (
                 statistics.stdev(performance_improvements)
                 if len(performance_improvements) > 1
@@ -855,8 +808,7 @@ class EvolutionSystem:
             if evolution_history:
                 # 일관성: 성공률의 표준편차
                 success_rates = [
-                    1.0 if result.get("success", False) else 0.0
-                    for result in evolution_history
+                    1.0 if result.get("success", False) else 0.0 for result in evolution_history
                 ]
                 metrics["consistency"] = 1.0 - (
                     statistics.stdev(success_rates) if len(success_rates) > 1 else 0.0
@@ -874,9 +826,7 @@ class EvolutionSystem:
             logger.error(f"안정성 지표 계산 실패: {e}")
             return {"consistency": 0.0, "reliability": 0.0, "resilience": 0.0}
 
-    async def _analyze_stability_trend(
-        self, evolution_history: List[Dict[str, Any]]
-    ) -> str:
+    async def _analyze_stability_trend(self, evolution_history: List[Dict[str, Any]]) -> str:
         """안정성 트렌드 분석"""
         try:
             if len(evolution_history) < 3:
@@ -884,14 +834,10 @@ class EvolutionSystem:
 
             # 최근 5개 사이클의 안정성 분석
             recent_cycles = evolution_history[-5:]
-            success_rates = [
-                1.0 if cycle.get("success", False) else 0.0 for cycle in recent_cycles
-            ]
+            success_rates = [1.0 if cycle.get("success", False) else 0.0 for cycle in recent_cycles]
 
             if len(success_rates) >= 2:
-                trend = statistics.mean(success_rates[1:]) - statistics.mean(
-                    success_rates[:-1]
-                )
+                trend = statistics.mean(success_rates[1:]) - statistics.mean(success_rates[:-1])
 
                 if trend > 0.05:
                     return "improving"
@@ -906,9 +852,7 @@ class EvolutionSystem:
             logger.error(f"안정성 트렌드 분석 실패: {e}")
             return "unknown"
 
-    async def _identify_stability_risks(
-        self, stability_assessment: Dict[str, Any]
-    ) -> List[str]:
+    async def _identify_stability_risks(self, stability_assessment: Dict[str, Any]) -> List[str]:
         """안정성 위험 요인 식별"""
         try:
             risks = []
@@ -971,33 +915,23 @@ class EvolutionSystem:
             achievements = []
 
             # 성능 향상 성과
-            overall_improvement = improvement_measurement.get(
-                "overall_improvement", 0.0
-            )
+            overall_improvement = improvement_measurement.get("overall_improvement", 0.0)
             if overall_improvement > 0.1:
                 achievements.append(
                     f"Significant performance improvement: {overall_improvement:.3f}"
                 )
 
             # 사이클 성공률
-            successful_cycles = len(
-                [r for r in evolution_results if r.get("success", False)]
-            )
+            successful_cycles = len([r for r in evolution_results if r.get("success", False)])
             if successful_cycles > 0:
                 success_rate = successful_cycles / len(evolution_results)
                 if success_rate > 0.8:
-                    achievements.append(
-                        f"High evolution success rate: {success_rate:.1%}"
-                    )
+                    achievements.append(f"High evolution success rate: {success_rate:.1%}")
 
             # 지속가능성
-            sustainability_score = improvement_measurement.get(
-                "sustainability_score", 0.0
-            )
+            sustainability_score = improvement_measurement.get("sustainability_score", 0.0)
             if sustainability_score > 0.7:
-                achievements.append(
-                    f"Strong sustainability score: {sustainability_score:.3f}"
-                )
+                achievements.append(f"Strong sustainability score: {sustainability_score:.3f}")
 
             return achievements
 
@@ -1022,24 +956,16 @@ class EvolutionSystem:
                 challenges.append(f"Low evolution success rate: {success_rate:.1%}")
 
             # 성능 향상 부족
-            performance_improvements = validation_results.get(
-                "performance_improvements", []
-            )
+            performance_improvements = validation_results.get("performance_improvements", [])
             if performance_improvements:
-                avg_improvement = sum(performance_improvements) / len(
-                    performance_improvements
-                )
+                avg_improvement = sum(performance_improvements) / len(performance_improvements)
                 if avg_improvement < 0.05:
-                    challenges.append(
-                        f"Limited performance improvement: {avg_improvement:.3f}"
-                    )
+                    challenges.append(f"Limited performance improvement: {avg_improvement:.3f}")
 
             # 안정성 문제
             stability_impacts = validation_results.get("stability_impacts", [])
             if stability_impacts:
-                negative_impacts = [
-                    impact for impact in stability_impacts if impact < 0
-                ]
+                negative_impacts = [impact for impact in stability_impacts if impact < 0]
                 if len(negative_impacts) > len(stability_impacts) * 0.3:
                     challenges.append("Frequent stability degradation")
 
@@ -1071,9 +997,7 @@ class EvolutionSystem:
                 recommendations.append("Implement stability-first evolution strategy")
 
             # 확장성 관련 권장사항
-            scalability_assessment = improvement_measurement.get(
-                "scalability_assessment", 0.0
-            )
+            scalability_assessment = improvement_measurement.get("scalability_assessment", 0.0)
             if scalability_assessment < 0.6:
                 recommendations.append("Focus on scalable evolution patterns")
 
@@ -1161,8 +1085,8 @@ async def test_evolution_system():
             "before": {"accuracy": 0.75, "efficiency": 0.60, "stability": 0.80},
             "after": {"accuracy": 0.80, "efficiency": 0.68, "stability": 0.85},
         }
-        improvement_measurement = (
-            await evolution_system.measure_performance_improvement(before_after)
+        improvement_measurement = await evolution_system.measure_performance_improvement(
+            before_after
         )
         logger.info(f"향상 측정 결과: {improvement_measurement}")
 
@@ -1173,9 +1097,7 @@ async def test_evolution_system():
             {"success": True, "performance_impact": 0.08, "stability_impact": 0.01},
             {"success": False, "performance_impact": -0.02, "stability_impact": -0.01},
         ]
-        stability_assessment = await evolution_system.assess_system_stability(
-            evolution_history
-        )
+        stability_assessment = await evolution_system.assess_system_stability(evolution_history)
         logger.info(f"안정성 평가 결과: {stability_assessment}")
 
         logger.info("진화 시스템 테스트 완료")

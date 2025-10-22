@@ -11,16 +11,16 @@ DuRiCore Phase 2-4: 성능 메트릭 수집 모듈
 """
 
 import asyncio
-from collections import defaultdict, deque
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 import json
 import logging
 import statistics
 import time
-from typing import Any, Dict, List, Optional, Tuple, Union
 import uuid
+from collections import defaultdict, deque
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 
@@ -310,10 +310,7 @@ class MetricCollector:
                     m
                     for m in self.metric_history
                     if m.timestamp >= collection.start_time
-                    and (
-                        collection.end_time is None
-                        or m.timestamp <= collection.end_time
-                    )
+                    and (collection.end_time is None or m.timestamp <= collection.end_time)
                 ]
             )
 
@@ -321,9 +318,7 @@ class MetricCollector:
                 "collection_id": collection_id,
                 "collection_name": collection.collection_name,
                 "start_time": collection.start_time.isoformat(),
-                "end_time": (
-                    collection.end_time.isoformat() if collection.end_time else None
-                ),
+                "end_time": (collection.end_time.isoformat() if collection.end_time else None),
                 "status": collection.status,
                 "metrics_count": metrics_count,
                 "duration": (
@@ -346,15 +341,9 @@ class MetricCollector:
                 "total_metrics": len(self.metrics),
                 "active_collections": self.performance_metrics["active_collections"],
                 "total_collected": self.performance_metrics["total_metrics_collected"],
-                "collection_success_rate": self.performance_metrics[
-                    "collection_success_rate"
-                ],
-                "average_collection_time": self.performance_metrics[
-                    "average_collection_time"
-                ],
-                "retention_period": self.collection_config[
-                    "retention_period"
-                ].total_seconds(),
+                "collection_success_rate": self.performance_metrics["collection_success_rate"],
+                "average_collection_time": self.performance_metrics["average_collection_time"],
+                "retention_period": self.collection_config["retention_period"].total_seconds(),
                 "max_metrics": self.collection_config["max_metrics"],
             }
 

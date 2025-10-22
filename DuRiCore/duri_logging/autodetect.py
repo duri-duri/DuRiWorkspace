@@ -108,9 +108,7 @@ def test_autodetect():
 
     for logger_name, expected in test_cases:
         result = infer_component(logger_name)
-        assert (
-            result == expected
-        ), f"Expected {expected} for {logger_name}, got {result}"
+        assert result == expected, f"Expected {expected} for {logger_name}, got {result}"
 
     # 경로 테스트
     path_test_cases = [

@@ -13,8 +13,8 @@ DuRi 의존성 그래프 시스템
 - 의존성 분석
 """
 
-from collections import defaultdict, deque
 import logging
+from collections import defaultdict, deque
 from typing import Dict, List, Set
 
 logger = logging.getLogger(__name__)

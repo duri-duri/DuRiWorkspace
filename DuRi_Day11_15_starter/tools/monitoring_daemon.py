@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 import argparse
-from collections import defaultdict
 import csv
-from datetime import datetime, timedelta, timezone
 import glob
 import json
 import os
-from pathlib import Path
-from statistics import mean
 import subprocess
 import time
+from collections import defaultdict
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+from statistics import mean
 
 
 def load_cfg(p):
@@ -84,9 +84,7 @@ def eval_J(evaluator, cfg, preset, metrics_dict):
     import json
     import tempfile
 
-    with tempfile.NamedTemporaryFile(
-        "w", delete=False, suffix=".json", encoding="utf-8"
-    ) as tf:
+    with tempfile.NamedTemporaryFile("w", delete=False, suffix=".json", encoding="utf-8") as tf:
         json.dump(metrics_dict, tf)
         tmp = tf.name
     try:

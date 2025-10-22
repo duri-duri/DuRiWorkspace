@@ -8,8 +8,8 @@ DuRiExpressionEngine 테스트
 
 import asyncio
 import logging
-from pathlib import Path
 import sys
+from pathlib import Path
 
 # 현재 디렉토리를 sys.path에 추가
 sys.path.append(str(Path(__file__).parent))
@@ -26,7 +26,8 @@ async def test_judgment_expression():
     logger.info("🧪 판단 결과 표현 테스트 시작")
 
     try:
-        from duri_expression_engine import DuRiExpressionEngine, ExpressionStyle
+        from duri_expression_engine import (DuRiExpressionEngine,
+                                            ExpressionStyle)
 
         # 엔진 초기화
         engine = DuRiExpressionEngine()
@@ -67,7 +68,8 @@ async def test_thought_flow_expression():
     logger.info("🧪 사고 흐름 표현 테스트 시작")
 
     try:
-        from duri_expression_engine import DuRiExpressionEngine, ExpressionStyle
+        from duri_expression_engine import (DuRiExpressionEngine,
+                                            ExpressionStyle)
 
         # 엔진 초기화
         engine = DuRiExpressionEngine()
@@ -119,7 +121,8 @@ async def test_decision_tree_expression():
     logger.info("🧪 결정 트리 표현 테스트 시작")
 
     try:
-        from duri_expression_engine import DuRiExpressionEngine, ExpressionStyle
+        from duri_expression_engine import (DuRiExpressionEngine,
+                                            ExpressionStyle)
 
         # 엔진 초기화
         engine = DuRiExpressionEngine()
@@ -159,7 +162,8 @@ async def test_integrated_expression():
     logger.info("🧪 통합 표현 테스트 시작")
 
     try:
-        from duri_expression_engine import DuRiExpressionEngine, ExpressionStyle
+        from duri_expression_engine import (DuRiExpressionEngine,
+                                            ExpressionStyle)
 
         # 엔진 초기화
         engine = DuRiExpressionEngine()
@@ -207,7 +211,8 @@ async def test_expression_styles():
     logger.info("🧪 표현 스타일 테스트 시작")
 
     try:
-        from duri_expression_engine import DuRiExpressionEngine, ExpressionStyle
+        from duri_expression_engine import (DuRiExpressionEngine,
+                                            ExpressionStyle)
 
         # 엔진 초기화
         engine = DuRiExpressionEngine()
@@ -230,9 +235,7 @@ async def test_expression_styles():
 
         results = []
         for style in styles:
-            result = await engine.express_judgment(
-                judgment_data=judgment_data, style=style
-            )
+            result = await engine.express_judgment(judgment_data=judgment_data, style=style)
             results.append(result)
 
             logger.info(f"   - {style.value} 스타일: {result.expression_text}")
@@ -262,9 +265,7 @@ async def test_convenience_function():
         }
 
         # 편의 함수 사용
-        expression = await express_duri_judgment(
-            judgment_data=judgment_data, style="casual"
-        )
+        expression = await express_duri_judgment(judgment_data=judgment_data, style="casual")
 
         logger.info(f"✅ 편의 함수 테스트 완료:")
         logger.info(f"   - 표현: {expression}")

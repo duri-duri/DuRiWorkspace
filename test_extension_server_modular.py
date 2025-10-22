@@ -3,25 +3,21 @@
 모듈화된 DuRi 자가진화 AI 시스템
 """
 
-from datetime import datetime
 import os
 import sys
+from datetime import datetime
 from typing import Any, Dict
 
+import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
 
 # 모듈 경로 추가
 sys.path.append(os.path.join(os.path.dirname(__file__), "duri_modules"))
 
 # 모듈화된 시스템 import
-from duri_modules import (
-    chatgpt_evaluator,
-    conversation_store,
-    duri_chatgpt_discussion,
-    duri_self_reflector,
-)
+from duri_modules import (chatgpt_evaluator, conversation_store,
+                          duri_chatgpt_discussion, duri_self_reflector)
 
 app = FastAPI(
     title="DuRi Modular Self-Evolving AI System",
@@ -66,9 +62,7 @@ async def chatgpt_evaluate_response(evaluation_request: Dict[str, Any]):
             )
 
         # 모듈화된 평가 시스템 사용
-        evaluation_result = chatgpt_evaluator.evaluate_response(
-            duri_response, user_question
-        )
+        evaluation_result = chatgpt_evaluator.evaluate_response(duri_response, user_question)
 
         return {
             "status": "success",
@@ -115,9 +109,7 @@ async def duri_self_reflect_endpoint(reflection_request: Dict[str, Any]):
 async def duri_chatgpt_discussion_endpoint(discussion_request: Dict[str, Any]):
     """DuRi-ChatGPT 논의 (모듈화된 버전)"""
     try:
-        duri_improvement_proposal = discussion_request.get(
-            "duri_improvement_proposal", {}
-        )
+        duri_improvement_proposal = discussion_request.get("duri_improvement_proposal", {})
         chatgpt_evaluation = discussion_request.get("chatgpt_evaluation", {})
 
         if not duri_improvement_proposal or not chatgpt_evaluation:
@@ -152,21 +144,15 @@ async def capture_conversation_endpoint(conversation_data: Dict[str, Any]):
         metadata = conversation_data.get("metadata", {})
 
         if not user_input or not duri_response:
-            raise HTTPException(
-                status_code=400, detail="user_input과 duri_response가 필요합니다"
-            )
+            raise HTTPException(status_code=400, detail="user_input과 duri_response가 필요합니다")
 
         # 대화 데이터 저장
-        conversation_id = conversation_store.store_conversation(
-            user_input, duri_response, metadata
-        )
+        conversation_id = conversation_store.store_conversation(user_input, duri_response, metadata)
 
         # 자동 학습 루프 시작 (선택적)
         if conversation_data.get("auto_learn", False):
             # ChatGPT 평가
-            evaluation_result = chatgpt_evaluator.evaluate_response(
-                duri_response, user_input
-            )
+            evaluation_result = chatgpt_evaluator.evaluate_response(duri_response, user_input)
 
             # DuRi 자기성찰
             reflection_result = duri_self_reflector.reflect_on_chatgpt_feedback(

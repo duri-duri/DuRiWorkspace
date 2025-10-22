@@ -75,18 +75,10 @@ def main(inp, outp):
     cond_single_timeout = len(system_timeouts) == 1
     cond_pass_rate = pass_rate is not None and float(pass_rate) >= thr_pass
     cond_delta_p95 = False
-    if (
-        isinstance(p95, (int, float))
-        and isinstance(base_p95, (int, float))
-        and base_p95 > 0
-    ):
+    if isinstance(p95, (int, float)) and isinstance(base_p95, (int, float)) and base_p95 > 0:
         cond_delta_p95 = ((p95 - base_p95) / base_p95) <= thr_dp95
     cond_p99 = False
-    if (
-        isinstance(p99, (int, float))
-        and isinstance(slo_p99, (int, float))
-        and slo_p99 > 0
-    ):
+    if isinstance(p99, (int, float)) and isinstance(slo_p99, (int, float)) and slo_p99 > 0:
         cond_p99 = p99 <= (slo_p99 * thr_p99mul)
     cond_canary = isinstance(canary_pct, (int, float)) and canary_pct < thr_canary
     freeze_on = _find_freeze_flag(base) if req_freeze else False
@@ -128,9 +120,7 @@ def main(inp, outp):
         },
         "notes": note,
     }
-    pathlib.Path(outp).write_text(
-        json.dumps(out, ensure_ascii=False, indent=2), encoding="utf-8"
-    )
+    pathlib.Path(outp).write_text(json.dumps(out, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 if __name__ == "__main__":

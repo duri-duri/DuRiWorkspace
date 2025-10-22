@@ -8,8 +8,8 @@ DuRi 언어 생성 시스템 - 창의적 생성기
 - 창의성 평가
 """
 
-from dataclasses import dataclass
 import logging
+from dataclasses import dataclass
 from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)

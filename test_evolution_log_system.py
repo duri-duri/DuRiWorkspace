@@ -5,9 +5,9 @@
 """
 
 import asyncio
-from datetime import datetime
 import logging
 import time
+from datetime import datetime
 from typing import Any, Dict
 
 # 로깅 설정
@@ -18,7 +18,8 @@ logger = logging.getLogger(__name__)
 
 # 모듈 import
 from duri_modules.data.conversation_logger import conversation_logger
-from duri_modules.unified.unified_conversation_processor import unified_processor
+from duri_modules.unified.unified_conversation_processor import \
+    unified_processor
 
 
 async def test_conversation_logging():
@@ -27,9 +28,7 @@ async def test_conversation_logging():
         logger.info("🧠 대화 로그 수집 시스템 테스트 시작")
 
         # 1. 대화 세션 시작
-        conversation_id = conversation_logger.start_conversation(
-            "test_conversation_001"
-        )
+        conversation_id = conversation_logger.start_conversation("test_conversation_001")
         logger.info(f"✅ 대화 세션 시작: {conversation_id}")
 
         # 2. 여러 대화 교환 로그
@@ -264,9 +263,7 @@ async def main():
             else:
                 print(f"❌ {test_name}: 실패")
 
-        print(
-            f"\n📊 성공률: {success_count}/{len(tests)} ({success_count/len(tests)*100:.1f}%)"
-        )
+        print(f"\n📊 성공률: {success_count}/{len(tests)} ({success_count/len(tests)*100:.1f}%)")
 
         if success_count == len(tests):
             print("🎉 모든 테스트가 성공했습니다!")

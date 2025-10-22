@@ -12,119 +12,78 @@ from .adaptive.dynamic_reasoning_engine import DynamicReasoningEngine
 from .adaptive.evolutionary_improvement import EvolutionaryImprovementMechanism
 from .adaptive.feedback_loop import FeedbackLoopSystem
 from .adaptive.learning_integration import LearningIntegrationInterface
-from .consistency.integration_evaluator import (
-    IntegrationAssessment,
-    IntegrationEvaluator,
-)
-from .consistency.knowledge_conflict import (
-    ConflictResolutionStrategy,
-    KnowledgeConflict,
-    KnowledgeConflictResolver,
-)
-
+from .consistency.integration_evaluator import (IntegrationAssessment,
+                                                IntegrationEvaluator)
+from .consistency.knowledge_conflict import (ConflictResolutionStrategy,
+                                             KnowledgeConflict,
+                                             KnowledgeConflictResolver)
 # Consistency 모듈
-from .consistency.logical_connectivity import (
-    LogicalConnection,
-    LogicalConnectionType,
-    LogicalConnectivityValidator,
-)
-
+from .consistency.logical_connectivity import (LogicalConnection,
+                                               LogicalConnectionType,
+                                               LogicalConnectivityValidator)
 # Data structures
 from .data_structures import *
-
 # Efficiency 모듈
-from .efficiency.dynamic_resource_allocator import (
-    DynamicResourceAllocator,
-    ResourceAllocation,
-    ResourceType,
-)
-from .efficiency.learning_strategy_optimizer import (
-    LearningOptimization,
-    LearningStrategy,
-    LearningStrategyOptimizer,
-)
-from .efficiency.optimization_strategy import (
-    OptimizationResult as EfficiencyOptimizationResult,
-    OptimizationStrategy as EfficiencyOptimizationStrategy,
-)
-from .efficiency.performance_monitor import PerformanceMetrics, PerformanceMonitor
-
+from .efficiency.dynamic_resource_allocator import (DynamicResourceAllocator,
+                                                    ResourceAllocation,
+                                                    ResourceType)
+from .efficiency.learning_strategy_optimizer import (LearningOptimization,
+                                                     LearningStrategy,
+                                                     LearningStrategyOptimizer)
+from .efficiency.optimization_strategy import \
+    OptimizationResult as EfficiencyOptimizationResult
+from .efficiency.optimization_strategy import \
+    OptimizationStrategy as EfficiencyOptimizationStrategy
+from .efficiency.performance_monitor import (PerformanceMetrics,
+                                             PerformanceMonitor)
 # Integration 모듈
-from .integration.conflict_detection import (
-    ConflictDetectionSystem,
-    ConflictType,
-    IntegrationConflict,
-)
-from .integration.priority_system import (
-    IntegrationPriority,
-    IntegrationPriorityItem,
-    IntegrationPrioritySystem,
-)
-from .integration.resolution_algorithm import ResolutionAlgorithm, ResolutionMethod
-from .integration.success_monitoring import (
-    IntegrationMonitor,
-    IntegrationSuccess,
-    SuccessMonitoringSystem,
-)
-from .reasoning_engine.decision_maker import (
-    DecisionContext,
-    DecisionCriteria,
-    DecisionMaker,
-    DecisionOption,
-    DecisionResult,
-    DecisionType,
-)
-
+from .integration.conflict_detection import (ConflictDetectionSystem,
+                                             ConflictType, IntegrationConflict)
+from .integration.priority_system import (IntegrationPriority,
+                                          IntegrationPriorityItem,
+                                          IntegrationPrioritySystem)
+from .integration.resolution_algorithm import (ResolutionAlgorithm,
+                                               ResolutionMethod)
+from .integration.success_monitoring import (IntegrationMonitor,
+                                             IntegrationSuccess,
+                                             SuccessMonitoringSystem)
+from .reasoning_engine.decision_maker import (DecisionContext,
+                                              DecisionCriteria, DecisionMaker,
+                                              DecisionOption, DecisionResult,
+                                              DecisionType)
 # Reasoning Engine 모듈
-from .reasoning_engine.inference_engine import (
-    InferenceContext,
-    InferenceEngine,
-    InferenceResult,
-    InferenceType,
-)
-from .reasoning_engine.logic_processor import (
-    LogicalChain,
-    LogicalRule,
-    LogicAnalysis,
-    LogicProcessor,
-    LogicType,
-)
-
+from .reasoning_engine.inference_engine import (InferenceContext,
+                                                InferenceEngine,
+                                                InferenceResult, InferenceType)
+from .reasoning_engine.logic_processor import (LogicalChain, LogicalRule,
+                                               LogicAnalysis, LogicProcessor,
+                                               LogicType)
 # Reasoning Optimization 모듈
-from .reasoning_optimization.reasoning_optimizer import (
-    OptimizationAnalysis,
-    OptimizationResult,
-    OptimizationStrategy,
-    OptimizationTarget,
-    OptimizationType,
-    ReasoningOptimizer,
-)
-from .reasoning_strategies.abductive_reasoning import (
-    AbductiveAnalysis,
-    AbductiveExplanation,
-    AbductiveHypothesis,
-    AbductiveObservation,
-    AbductiveReasoning,
-    AbductiveType,
-)
-
+from .reasoning_optimization.reasoning_optimizer import (OptimizationAnalysis,
+                                                         OptimizationResult,
+                                                         OptimizationStrategy,
+                                                         OptimizationTarget,
+                                                         OptimizationType,
+                                                         ReasoningOptimizer)
+from .reasoning_strategies.abductive_reasoning import (AbductiveAnalysis,
+                                                       AbductiveExplanation,
+                                                       AbductiveHypothesis,
+                                                       AbductiveObservation,
+                                                       AbductiveReasoning,
+                                                       AbductiveType)
 # Reasoning Strategies 모듈
-from .reasoning_strategies.deductive_reasoning import (
-    DeductiveAnalysis,
-    DeductiveConclusion,
-    DeductivePremise,
-    DeductiveReasoning,
-    DeductiveRule,
-    DeductiveRuleType,
-)
-from .reasoning_strategies.inductive_reasoning import (
-    InductiveAnalysis,
-    InductiveGeneralization,
-    InductiveObservation,
-    InductivePattern,
-    InductiveReasoning,
-    InductiveType,
-)
+from .reasoning_strategies.deductive_reasoning import (DeductiveAnalysis,
+                                                       DeductiveConclusion,
+                                                       DeductivePremise,
+                                                       DeductiveReasoning,
+                                                       DeductiveRule,
+                                                       DeductiveRuleType)
+from .reasoning_strategies.inductive_reasoning import (InductiveAnalysis,
+                                                       InductiveGeneralization,
+                                                       InductiveObservation,
+                                                       InductivePattern,
+                                                       InductiveReasoning,
+                                                       InductiveType)
 
 __all__ = [
     # Reasoning Engine

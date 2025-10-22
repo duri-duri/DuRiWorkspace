@@ -8,8 +8,8 @@ DuRi 언어 생성 시스템 - 맥락 기반 생성기
 - 맥락 관련성 평가
 """
 
-from dataclasses import dataclass
 import logging
+from dataclasses import dataclass
 from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
@@ -44,16 +44,12 @@ class ContextualGenerator:
             elif context_type == "일":
                 return "일에 대한 이야기를 하고 계시는군요. 어떤 어려움이 있으신가요?"
             else:
-                return (
-                    "맥락을 고려한 응답을 드리고 싶습니다. 더 구체적으로 말씀해 주세요."
-                )
+                return "맥락을 고려한 응답을 드리고 싶습니다. 더 구체적으로 말씀해 주세요."
         except Exception as e:
             self.logger.error(f"맥락 기반 텍스트 생성 중 오류 발생: {e}")
             return "맥락을 고려한 응답을 드리고 싶습니다. 더 구체적으로 말씀해 주세요."
 
-    async def evaluate_contextual_relevance(
-        self, text: str, context: Dict[str, Any]
-    ) -> float:
+    async def evaluate_contextual_relevance(self, text: str, context: Dict[str, Any]) -> float:
         """맥락 관련성 평가"""
         try:
             # 간단한 관련성 평가 (실제로는 더 정교한 방법 사용)

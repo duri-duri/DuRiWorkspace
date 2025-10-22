@@ -5,15 +5,15 @@ DuRiCore Phase 5 Day 8 - 시스템 안정성 강화기
 """
 
 import asyncio
-from dataclasses import dataclass
-from datetime import datetime
-from enum import Enum
 import json
 import logging
 import math
 import random
 import statistics
 import time
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 logger = logging.getLogger(__name__)
@@ -156,14 +156,10 @@ class SystemStabilityEnhancer:
             before_health = await self._collect_current_health_metrics()
 
             # 향상 방법 결정
-            enhancement_method = await self._determine_enhancement_method(
-                stability_data
-            )
+            enhancement_method = await self._determine_enhancement_method(stability_data)
 
             # 안정성 향상 적용
-            enhancement_result = await self._apply_stability_enhancement(
-                enhancement_method
-            )
+            enhancement_result = await self._apply_stability_enhancement(enhancement_method)
 
             # 향상 후 건강도 측정
             after_health = await self._collect_current_health_metrics()
@@ -174,9 +170,7 @@ class SystemStabilityEnhancer:
             )
 
             # 향상 타입 결정
-            enhancement_type = await self._determine_enhancement_type(
-                enhancement_method
-            )
+            enhancement_type = await self._determine_enhancement_type(enhancement_method)
 
             # 안정성 향상 객체 생성
             stability_improvement = StabilityImprovement(
@@ -200,18 +194,14 @@ class SystemStabilityEnhancer:
             logger.error(f"안정성 향상 실패: {str(e)}")
             raise
 
-    async def monitor_system_health(
-        self, health_metrics: Dict[str, Any]
-    ) -> HealthReport:
+    async def monitor_system_health(self, health_metrics: Dict[str, Any]) -> HealthReport:
         """시스템 건강도 모니터링"""
         try:
             self.enhancement_status = EnhancementStatus.ANALYZING
             logger.info("시스템 건강도 모니터링 시작")
 
             # 건강도 메트릭 수집
-            metrics_collected = await self._collect_health_metrics_over_time(
-                health_metrics
-            )
+            metrics_collected = await self._collect_health_metrics_over_time(health_metrics)
 
             # 건강도 트렌드 분석
             health_trend = await self._analyze_health_trend(metrics_collected)
@@ -266,9 +256,7 @@ class SystemStabilityEnhancer:
             )
 
             # 성공률 계산
-            success_rate = await self._calculate_maintenance_success_rate(
-                applied_changes
-            )
+            success_rate = await self._calculate_maintenance_success_rate(applied_changes)
 
             # 안정성 영향 측정
             stability_impact = await self._measure_stability_impact(applied_changes)
@@ -310,9 +298,7 @@ class SystemStabilityEnhancer:
             reliability_score = await self._measure_reliability_score(improvement_data)
 
             # 성능 영향 측정
-            performance_impact = await self._measure_performance_impact(
-                improvement_data
-            )
+            performance_impact = await self._measure_performance_impact(improvement_data)
 
             # 검증 상태 결정
             validation_status = await self._determine_validation_status(
@@ -373,9 +359,7 @@ class SystemStabilityEnhancer:
         await asyncio.sleep(0.1)
         return health_metrics
 
-    async def _determine_enhancement_method(
-        self, stability_data: Dict[str, Any]
-    ) -> str:
+    async def _determine_enhancement_method(self, stability_data: Dict[str, Any]) -> str:
         """향상 방법 결정"""
         methods = [
             "error_prevention_enhancement",
@@ -388,9 +372,7 @@ class SystemStabilityEnhancer:
         await asyncio.sleep(0.1)
         return random.choice(methods)
 
-    async def _apply_stability_enhancement(
-        self, enhancement_method: str
-    ) -> Dict[str, Any]:
+    async def _apply_stability_enhancement(self, enhancement_method: str) -> Dict[str, Any]:
         """안정성 향상 적용"""
         enhancement_result = {
             "method_applied": enhancement_method,
@@ -409,9 +391,7 @@ class SystemStabilityEnhancer:
         self, before: SystemHealthMetrics, after: SystemHealthMetrics
     ) -> float:
         """안정성 향상 효과 계산"""
-        improvement = (
-            (after.overall_health - before.overall_health) / before.overall_health
-        ) * 100
+        improvement = ((after.overall_health - before.overall_health) / before.overall_health) * 100
         return max(0.0, improvement)  # 음수 개선은 0으로 처리
 
     async def _determine_enhancement_type(
@@ -426,9 +406,7 @@ class SystemStabilityEnhancer:
             "recovery_mechanism_enhancement": StabilityEnhancementType.RECOVERY_MECHANISM,
         }
 
-        return method_to_type.get(
-            enhancement_method, StabilityEnhancementType.ERROR_PREVENTION
-        )
+        return method_to_type.get(enhancement_method, StabilityEnhancementType.ERROR_PREVENTION)
 
     async def _collect_health_metrics_over_time(
         self, health_metrics: Dict[str, Any]
@@ -443,9 +421,7 @@ class SystemStabilityEnhancer:
 
         return metrics_collected
 
-    async def _analyze_health_trend(
-        self, metrics_collected: List[SystemHealthMetrics]
-    ) -> str:
+    async def _analyze_health_trend(self, metrics_collected: List[SystemHealthMetrics]) -> str:
         """건강도 트렌드 분석"""
         if len(metrics_collected) < 2:
             return "insufficient_data"
@@ -454,9 +430,7 @@ class SystemStabilityEnhancer:
 
         # 트렌드 분석
         if len(health_scores) >= 3:
-            trend = statistics.mean(health_scores[-3:]) - statistics.mean(
-                health_scores[:3]
-            )
+            trend = statistics.mean(health_scores[-3:]) - statistics.mean(health_scores[:3])
             if trend > 0.05:
                 return "improving"
             elif trend < -0.05:
@@ -466,9 +440,7 @@ class SystemStabilityEnhancer:
         else:
             return "stable"
 
-    async def _assess_risk_level(
-        self, metrics_collected: List[SystemHealthMetrics]
-    ) -> str:
+    async def _assess_risk_level(self, metrics_collected: List[SystemHealthMetrics]) -> str:
         """위험도 평가"""
         if not metrics_collected:
             return "unknown"
@@ -512,9 +484,7 @@ class SystemStabilityEnhancer:
         await asyncio.sleep(0.1)
         return random.choice(maintenance_types)
 
-    async def _identify_target_components(
-        self, maintenance_data: Dict[str, Any]
-    ) -> List[str]:
+    async def _identify_target_components(self, maintenance_data: Dict[str, Any]) -> List[str]:
         """대상 컴포넌트 식별"""
         components = [
             "cpu_management",
@@ -547,16 +517,12 @@ class SystemStabilityEnhancer:
         total_changes = applied_changes["changes_applied"]
         success_rate = random.uniform(0.8, 0.98)
         applied_changes["successful_changes"] = int(total_changes * success_rate)
-        applied_changes["failed_changes"] = (
-            total_changes - applied_changes["successful_changes"]
-        )
+        applied_changes["failed_changes"] = total_changes - applied_changes["successful_changes"]
 
         await asyncio.sleep(0.2)
         return applied_changes
 
-    async def _calculate_maintenance_success_rate(
-        self, applied_changes: Dict[str, Any]
-    ) -> float:
+    async def _calculate_maintenance_success_rate(self, applied_changes: Dict[str, Any]) -> float:
         """유지보수 성공률 계산"""
         total_changes = applied_changes["changes_applied"]
         successful_changes = applied_changes["successful_changes"]
@@ -580,18 +546,14 @@ class SystemStabilityEnhancer:
         await asyncio.sleep(0.1)
         return stability
 
-    async def _measure_reliability_score(
-        self, improvement_data: Dict[str, Any]
-    ) -> float:
+    async def _measure_reliability_score(self, improvement_data: Dict[str, Any]) -> float:
         """신뢰성 점수 측정"""
         # 실제 구현에서는 신뢰성 메트릭을 분석
         reliability = random.uniform(0.85, 0.99)
         await asyncio.sleep(0.1)
         return reliability
 
-    async def _measure_performance_impact(
-        self, improvement_data: Dict[str, Any]
-    ) -> float:
+    async def _measure_performance_impact(self, improvement_data: Dict[str, Any]) -> float:
         """성능 영향 측정"""
         # 실제 구현에서는 성능 메트릭을 분석
         impact = random.uniform(0.9, 1.1)

@@ -5,9 +5,9 @@ A/B 테스트 호환성 테스트
 """
 import json
 import os
-from pathlib import Path
 import sys
 import tempfile
+from pathlib import Path
 
 import pytest
 
@@ -45,9 +45,7 @@ B,135
 B,140
 B,132"""
 
-            with tempfile.NamedTemporaryFile(
-                mode="w", suffix=".csv", delete=False
-            ) as f:
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
                 f.write(csv_content)
                 csv_path = f.name
 
@@ -105,9 +103,7 @@ B,120
 B,115
 B,125"""
 
-            with tempfile.NamedTemporaryFile(
-                mode="w", suffix=".csv", delete=False
-            ) as f:
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
                 f.write(csv_content)
                 csv_path = f.name
 
@@ -152,9 +148,7 @@ A,115
 B,135
 B,140"""
 
-            with tempfile.NamedTemporaryFile(
-                mode="w", suffix=".csv", delete=False
-            ) as f:
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
                 f.write(csv_content)
                 csv_path = f.name
 
@@ -216,9 +210,7 @@ B,135
 B,140
 B,132"""
 
-            with tempfile.NamedTemporaryFile(
-                mode="w", suffix=".csv", delete=False
-            ) as f:
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
                 f.write(csv_content)
                 csv_path = f.name
 

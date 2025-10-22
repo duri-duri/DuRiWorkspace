@@ -50,9 +50,7 @@ def demonstrate_duRi_self_analysis():
         time.sleep(0.1)
         return "테스트 성공"
 
-    before_metrics = self_growth_manager.performance_scorer.measure_performance(
-        test_function
-    )
+    before_metrics = self_growth_manager.performance_scorer.measure_performance(test_function)
 
     print(f"✅ 성능 측정 완료:")
     print(f"   - 응답 시간: {before_metrics.response_time:.3f}초")
@@ -67,10 +65,8 @@ def demonstrate_duRi_self_analysis():
     print("   - 예상 효과 계산")
     print()
 
-    improvement_plan = (
-        self_growth_manager.improvement_strategist.generate_improvement_plan(
-            analysis_result
-        )
+    improvement_plan = self_growth_manager.improvement_strategist.generate_improvement_plan(
+        analysis_result
     )
 
     print(f"✅ 개선 계획 수립 완료:")
@@ -99,13 +95,11 @@ def demonstrate_duRi_self_analysis():
     print("   - 결과 평가")
     print()
 
-    after_metrics = self_growth_manager.performance_scorer.measure_performance(
-        test_function
-    )
+    after_metrics = self_growth_manager.performance_scorer.measure_performance(test_function)
 
-    improvement_rate = (
-        after_metrics.overall_score - before_metrics.overall_score
-    ) / max(before_metrics.overall_score, 0.01)
+    improvement_rate = (after_metrics.overall_score - before_metrics.overall_score) / max(
+        before_metrics.overall_score, 0.01
+    )
 
     print(f"✅ 개선 결과:")
     print(f"   - 개선 전 점수: {before_metrics.overall_score:.2f}")

@@ -5,9 +5,9 @@ Pattern Visualization Script
 experience_stats.json 파일을 불러와서 감정-행동 별 성공률을 heatmap으로 시각화합니다.
 """
 
-from datetime import datetime
 import json
 import os
+from datetime import datetime
 
 import matplotlib
 import numpy as np
@@ -158,12 +158,8 @@ class PatternVisualizer:
         # 전체 통계
         total_combinations = len(self.stats_data)
         total_attempts = sum(data["total_count"] for data in self.stats_data.values())
-        total_successes = sum(
-            data["success_count"] for data in self.stats_data.values()
-        )
-        overall_success_rate = (
-            (total_successes / total_attempts * 100) if total_attempts > 0 else 0
-        )
+        total_successes = sum(data["success_count"] for data in self.stats_data.values())
+        overall_success_rate = (total_successes / total_attempts * 100) if total_attempts > 0 else 0
 
         print(f"Total combinations: {total_combinations}")
         print(f"Total attempts: {total_attempts}")
@@ -181,12 +177,8 @@ class PatternVisualizer:
             emotion_stats[emotion]["success"] += data["success_count"]
 
         for emotion, stats in sorted(emotion_stats.items()):
-            success_rate = (
-                (stats["success"] / stats["total"] * 100) if stats["total"] > 0 else 0
-            )
-            print(
-                f"{emotion}: {success_rate:.1f}% ({stats['success']}/{stats['total']})"
-            )
+            success_rate = (stats["success"] / stats["total"] * 100) if stats["total"] > 0 else 0
+            print(f"{emotion}: {success_rate:.1f}% ({stats['success']}/{stats['total']})")
 
         # 행동별 통계
         print("\n--- Action Statistics ---")
@@ -199,12 +191,8 @@ class PatternVisualizer:
             action_stats[action]["success"] += data["success_count"]
 
         for action, stats in sorted(action_stats.items()):
-            success_rate = (
-                (stats["success"] / stats["total"] * 100) if stats["total"] > 0 else 0
-            )
-            print(
-                f"{action}: {success_rate:.1f}% ({stats['success']}/{stats['total']})"
-            )
+            success_rate = (stats["success"] / stats["total"] * 100) if stats["total"] > 0 else 0
+            print(f"{action}: {success_rate:.1f}% ({stats['success']}/{stats['total']})")
 
         # 최고/최저 성공률 조합
         print("\n--- Best/Worst Success Rate Combinations ---")
@@ -215,12 +203,8 @@ class PatternVisualizer:
 
         if success_rates:
             success_rates.sort(key=lambda x: x[1], reverse=True)
-            print(
-                f"Best success rate: {success_rates[0][0]} ({success_rates[0][1]:.1f}%)"
-            )
-            print(
-                f"Worst success rate: {success_rates[-1][0]} ({success_rates[-1][1]:.1f}%)"
-            )
+            print(f"Best success rate: {success_rates[0][0]} ({success_rates[0][1]:.1f}%)")
+            print(f"Worst success rate: {success_rates[-1][0]} ({success_rates[-1][1]:.1f}%)")
 
     def run_visualization(self, output_file: str = None):
         """전체 시각화 프로세스 실행"""

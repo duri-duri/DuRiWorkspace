@@ -1,4 +1,5 @@
-from duri_trace import CoreMemoryTrace, EmotionTrace, JudgmentTrace, strategy_trace
+from duri_trace import (CoreMemoryTrace, EmotionTrace, JudgmentTrace,
+                        strategy_trace)
 
 #!/usr/bin/env python3
 # @preserve_identity: 판단 이유 기록 시스템 강제 통합

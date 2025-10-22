@@ -188,17 +188,11 @@ class ConflictResolver:
                 self._trigger_rollback_condition()
 
             # 존재형 AI: 진화 가능성 확인
-            if (
-                self.existence_ai
-                and self.existence_ai.evolution_capability.can_evolve()
-            ):
+            if self.existence_ai and self.existence_ai.evolution_capability.can_evolve():
                 self.existence_ai.evolution_capability.evolve()
 
             # 최종 실행 준비 완료: 최종 실행 준비 완료 확인
-            if (
-                self.final_execution_verifier
-                and self.final_execution_verifier.verify_readiness()
-            ):
+            if self.final_execution_verifier and self.final_execution_verifier.verify_readiness():
                 logger.info("최종 실행 준비 완료 확인됨")
 
             # 강제 조건: 판단 결과 기록
@@ -207,9 +201,7 @@ class ConflictResolver:
             # 충돌 상태 업데이트
             self.conflict_state["resolution_count"] += 1
             self.conflict_state["last_resolution"] = datetime.now().isoformat()
-            self.conflict_state["conflicts_resolved"].append(
-                conflict_data.get("id", "unknown")
-            )
+            self.conflict_state["conflicts_resolved"].append(conflict_data.get("id", "unknown"))
             self._save_conflict_state(self.conflict_state)
 
             logger.info(f"충돌 해결 완료: {resolution_result}")
@@ -250,9 +242,7 @@ class ConflictResolver:
         except Exception as e:
             logger.error(f"해결 의도 로그 실패: {str(e)}")
 
-    def _execute_resolution_logic(
-        self, conflict_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _execute_resolution_logic(self, conflict_data: Dict[str, Any]) -> Dict[str, Any]:
         """해결 로직 실행"""
         try:
             # 충돌 유형 분석
@@ -270,12 +260,8 @@ class ConflictResolver:
                 "conflict_type": conflict_type,
                 "resolution_strategy": resolution_strategy,
                 "resolution_type": "adaptive",
-                "changes": self._generate_resolution_changes(
-                    conflict_type, resolution_strategy
-                ),
-                "impact": self._calculate_resolution_impact(
-                    conflict_type, resolution_strategy
-                ),
+                "changes": self._generate_resolution_changes(conflict_type, resolution_strategy),
+                "impact": self._calculate_resolution_impact(conflict_type, resolution_strategy),
             }
 
             return resolution_result
@@ -393,9 +379,7 @@ class ConflictResolver:
             return {
                 "resolution_count": self.conflict_state.get("resolution_count", 0),
                 "conflicts_resolved": self.conflict_state.get("conflicts_resolved", []),
-                "resolution_strength": self.conflict_state.get(
-                    "resolution_strength", 0.0
-                ),
+                "resolution_strength": self.conflict_state.get("resolution_strength", 0.0),
             }
         except Exception as e:
             logger.error(f"구조적 변화 조회 실패: {str(e)}")
@@ -414,9 +398,7 @@ class ConflictResolver:
                 "created_at": self.conflict_state.get("created_at"),
                 "resolution_count": self.conflict_state.get("resolution_count", 0),
                 "last_resolution": self.conflict_state.get("last_resolution"),
-                "resolution_strength": self.conflict_state.get(
-                    "resolution_strength", 0.0
-                ),
+                "resolution_strength": self.conflict_state.get("resolution_strength", 0.0),
                 "conflicts_resolved": self.conflict_state.get("conflicts_resolved", []),
                 "resolution_ready": self.conflict_state.get("resolution_ready", False),
             }

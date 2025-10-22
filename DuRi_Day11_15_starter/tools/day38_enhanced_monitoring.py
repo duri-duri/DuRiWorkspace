@@ -9,17 +9,17 @@ Day38 Enhanced: PoU 고도화 모니터링 시스템 (Day34 기반 확장)
 """
 
 import argparse
-from collections import defaultdict
 import csv
-from datetime import datetime, timedelta, timezone
 import glob
 import json
 import logging
-from pathlib import Path
-from statistics import mean
 import subprocess
 import tempfile
 import time
+from collections import defaultdict
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+from statistics import mean
 from typing import Any, Dict, List, Tuple
 
 
@@ -108,9 +108,7 @@ class EnhancedPoUMonitoringSystem:
                         try:
                             items.append(json.loads(line))
                         except json.JSONDecodeError as e:
-                            self.logger.warning(
-                                f"JSONL 파싱 실패 {path}:{line_num} - {e}"
-                            )
+                            self.logger.warning(f"JSONL 파싱 실패 {path}:{line_num} - {e}")
         except Exception as e:
             self.logger.error(f"JSONL 파일 읽기 실패 {path}: {e}")
 
@@ -118,12 +116,7 @@ class EnhancedPoUMonitoringSystem:
 
     def normalize_metrics(self, rec: Dict[str, Any]) -> Dict[str, float]:
         """메트릭 정규화 (기존 방식 확장)"""
-        lat = (
-            rec.get("p95_latency_ms")
-            or rec.get("latency_ms")
-            or rec.get("latency")
-            or 0
-        )
+        lat = rec.get("p95_latency_ms") or rec.get("latency_ms") or rec.get("latency") or 0
         acc = rec.get("accuracy", 0)
         exp = rec.get("explainability", rec.get("explain", 0))
         status = rec.get("status", "ok")
@@ -140,9 +133,7 @@ class EnhancedPoUMonitoringSystem:
 
     def bin_key(self, ts_iso: str, bin_minutes: int) -> datetime:
         """시간 bin 키 생성"""
-        dt = datetime.fromisoformat(ts_iso.replace("Z", "+00:00")).astimezone(
-            timezone.utc
-        )
+        dt = datetime.fromisoformat(ts_iso.replace("Z", "+00:00")).astimezone(timezone.utc)
         minute = (dt.minute // bin_minutes) * bin_minutes
         dt2 = dt.replace(minute=0, second=0, microsecond=0) + timedelta(minutes=minute)
         return dt2.replace(tzinfo=timezone.utc)
@@ -257,9 +248,7 @@ class EnhancedPoUMonitoringSystem:
 
         return {"status": "active", "metrics": metrics}
 
-    def check_alerts(
-        self, domain: str, metrics: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    def check_alerts(self, domain: str, metrics: Dict[str, Any]) -> List[Dict[str, Any]]:
         """알람 체크 (기존 Day34 방식 확장)"""
         alerts = []
         al_cfg = self.config["alerts"]
@@ -418,9 +407,7 @@ class EnhancedPoUMonitoringSystem:
     def _save_dashboard(self, dashboard_data: Dict[str, Any]):
         """대시보드 저장"""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        dashboard_filename = (
-            f"artifacts/day38/day38_enhanced_dashboard_{timestamp}.json"
-        )
+        dashboard_filename = f"artifacts/day38/day38_enhanced_dashboard_{timestamp}.json"
 
         Path(dashboard_filename).parent.mkdir(parents=True, exist_ok=True)
         with open(dashboard_filename, "w", encoding="utf-8") as f:
@@ -434,21 +421,11 @@ class EnhancedPoUMonitoringSystem:
         print("📊 Day38 Enhanced PoU 모니터링 결과")
         print("=" * 80)
         print(f"전체 상태: {dashboard_data['overall_status'].upper()}")
-        print(
-            f"활성 파일럿: {dashboard_data['summary_metrics'].get('active_pilots', 0)}개"
-        )
-        print(
-            f"평균 품질 점수: {dashboard_data['summary_metrics'].get('avg_quality_score', 0)}"
-        )
-        print(
-            f"평균 안전 점수: {dashboard_data['summary_metrics'].get('avg_safety_score', 0)}"
-        )
-        print(
-            f"평균 성능: {dashboard_data['summary_metrics'].get('avg_performance_ms', 0)}ms"
-        )
-        print(
-            f"평균 오류율: {dashboard_data['summary_metrics'].get('avg_error_rate_percent', 0)}%"
-        )
+        print(f"활성 파일럿: {dashboard_data['summary_metrics'].get('active_pilots', 0)}개")
+        print(f"평균 품질 점수: {dashboard_data['summary_metrics'].get('avg_quality_score', 0)}")
+        print(f"평균 안전 점수: {dashboard_data['summary_metrics'].get('avg_safety_score', 0)}")
+        print(f"평균 성능: {dashboard_data['summary_metrics'].get('avg_performance_ms', 0)}ms")
+        print(f"평균 오류율: {dashboard_data['summary_metrics'].get('avg_error_rate_percent', 0)}%")
         print(
             f"평균 목적함수 J: {dashboard_data['summary_metrics'].get('avg_objective_function_J', 0)}"
         )

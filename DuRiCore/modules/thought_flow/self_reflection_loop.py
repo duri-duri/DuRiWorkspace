@@ -4,10 +4,10 @@ DuRi 자가 반성 루프 시스템
 매일 또는 일정 트리거마다 판단 기록들을 분석하고 자기 신념과 행동 패턴을 업데이트하는 시스템
 """
 
-from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
 import json
 import os
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
 
@@ -52,8 +52,7 @@ class SelfReflectionLoop:
                 with open(self.reflection_file, "r", encoding="utf-8") as f:
                     data = json.load(f)
                     self.insights = [
-                        ReflectionInsight(**insight)
-                        for insight in data.get("insights", [])
+                        ReflectionInsight(**insight) for insight in data.get("insights", [])
                     ]
 
             # 핵심 신념 로드
@@ -226,9 +225,7 @@ class SelfReflectionLoop:
 
         return "; ".join(regrets)
 
-    def _generate_improvement_suggestion(
-        self, trace, analysis: str, regret: str
-    ) -> str:
+    def _generate_improvement_suggestion(self, trace, analysis: str, regret: str) -> str:
         """개선 제안을 생성합니다."""
         suggestions = []
 
@@ -309,8 +306,7 @@ class SelfReflectionLoop:
             "total_rules": len(self.judgment_rules),
             "recent_insights": len(self.insights[-10:]) if self.insights else 0,
             "average_confidence_impact": (
-                sum(insight.confidence_impact for insight in self.insights)
-                / len(self.insights)
+                sum(insight.confidence_impact for insight in self.insights) / len(self.insights)
                 if self.insights
                 else 0
             ),

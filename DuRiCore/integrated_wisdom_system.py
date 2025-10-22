@@ -6,12 +6,12 @@ DuRi 통합적 지혜 시스템 (Phase 4.3)
 """
 
 import asyncio
-from dataclasses import asdict, dataclass
-from datetime import datetime
 import json
 import logging
 import random
 import time
+from dataclasses import asdict, dataclass
+from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
 # 로깅 설정
@@ -24,9 +24,7 @@ class WiseJudgment:
     """지혜로운 판단 데이터 클래스"""
 
     judgment_id: str
-    judgment_type: (
-        str  # 'practical', 'ethical', 'strategic', 'philosophical', 'transcendental'
-    )
+    judgment_type: str  # 'practical', 'ethical', 'strategic', 'philosophical', 'transcendental'
     wisdom_level: float
     context_understanding: float
     long_term_perspective: float
@@ -40,7 +38,9 @@ class EthicalInsight:
     """윤리적 통찰 데이터 클래스"""
 
     insight_id: str
-    insight_type: str  # 'moral_principle', 'value_clarification', 'ethical_dilemma', 'virtue_ethics'
+    insight_type: (
+        str  # 'moral_principle', 'value_clarification', 'ethical_dilemma', 'virtue_ethics'
+    )
     ethical_maturity: float
     principle_clarity: float
     value_hierarchy: float
@@ -53,9 +53,7 @@ class LifePhilosophy:
     """인생 철학 데이터 클래스"""
 
     philosophy_id: str
-    philosophy_type: (
-        str  # 'existential', 'purpose', 'meaning', 'growth', 'transcendence'
-    )
+    philosophy_type: str  # 'existential', 'purpose', 'meaning', 'growth', 'transcendence'
     coherence_level: float
     depth_of_understanding: float
     practical_applicability: float
@@ -78,9 +76,7 @@ class IntegratedWisdomSystem:
         self.life_philosophy_engine = LifePhilosophyEngine()
         self.integrated_wisdom_engine = IntegratedWisdomEngine()
 
-    async def process_integrated_wisdom(
-        self, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def process_integrated_wisdom(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """통합적 지혜 처리 메인 함수"""
         try:
             logger.info("=== 통합적 지혜 시스템 시작 ===")
@@ -89,9 +85,7 @@ class IntegratedWisdomSystem:
             wise_judgments = await self.generate_wise_judgments(context)
 
             # 2. 윤리적 통찰 생성
-            ethical_insights = await self.generate_ethical_insights(
-                context, wise_judgments
-            )
+            ethical_insights = await self.generate_ethical_insights(context, wise_judgments)
 
             # 3. 인생 철학 생성
             life_philosophies = await self.generate_life_philosophies(
@@ -109,9 +103,7 @@ class IntegratedWisdomSystem:
                 "timestamp": datetime.now().isoformat(),
                 "wise_judgments": [asdict(judgment) for judgment in wise_judgments],
                 "ethical_insights": [asdict(insight) for insight in ethical_insights],
-                "life_philosophies": [
-                    asdict(philosophy) for philosophy in life_philosophies
-                ],
+                "life_philosophies": [asdict(philosophy) for philosophy in life_philosophies],
                 "integrated_wisdom_analysis": integrated_wisdom_analysis,
                 "integrated_wisdom_score": self.calculate_integrated_wisdom_score(
                     wise_judgments, ethical_insights, life_philosophies
@@ -125,15 +117,13 @@ class IntegratedWisdomSystem:
             logger.error(f"통합적 지혜 처리 중 오류: {e}")
             return {"error": str(e)}
 
-    async def generate_wise_judgments(
-        self, context: Dict[str, Any]
-    ) -> List[WiseJudgment]:
+    async def generate_wise_judgments(self, context: Dict[str, Any]) -> List[WiseJudgment]:
         """지혜로운 판단 생성"""
         judgments = []
 
         # 실용적 판단
-        practical_judgments = (
-            await self.wisdom_judgment_engine.generate_practical_judgments(context)
+        practical_judgments = await self.wisdom_judgment_engine.generate_practical_judgments(
+            context
         )
         for judgment in practical_judgments:
             wise_judgment = WiseJudgment(
@@ -149,9 +139,7 @@ class IntegratedWisdomSystem:
             judgments.append(wise_judgment)
 
         # 윤리적 판단
-        ethical_judgments = (
-            await self.wisdom_judgment_engine.generate_ethical_judgments(context)
-        )
+        ethical_judgments = await self.wisdom_judgment_engine.generate_ethical_judgments(context)
         for judgment in ethical_judgments:
             wise_judgment = WiseJudgment(
                 judgment_id=f"judgment_{int(time.time() * 1000)}",
@@ -192,10 +180,8 @@ class IntegratedWisdomSystem:
         insights = []
 
         # 도덕적 원칙 통찰
-        moral_insights = (
-            await self.ethical_insight_engine.generate_moral_principle_insights(
-                context, judgments
-            )
+        moral_insights = await self.ethical_insight_engine.generate_moral_principle_insights(
+            context, judgments
         )
         for insight in moral_insights:
             ethical_insight = EthicalInsight(
@@ -210,10 +196,8 @@ class IntegratedWisdomSystem:
             insights.append(ethical_insight)
 
         # 가치 명확화 통찰
-        value_insights = (
-            await self.ethical_insight_engine.generate_value_clarification_insights(
-                context, judgments
-            )
+        value_insights = await self.ethical_insight_engine.generate_value_clarification_insights(
+            context, judgments
         )
         for insight in value_insights:
             ethical_insight = EthicalInsight(
@@ -228,10 +212,8 @@ class IntegratedWisdomSystem:
             insights.append(ethical_insight)
 
         # 덕 윤리 통찰
-        virtue_insights = (
-            await self.ethical_insight_engine.generate_virtue_ethics_insights(
-                context, judgments
-            )
+        virtue_insights = await self.ethical_insight_engine.generate_virtue_ethics_insights(
+            context, judgments
         )
         for insight in virtue_insights:
             ethical_insight = EthicalInsight(
@@ -277,10 +259,8 @@ class IntegratedWisdomSystem:
             philosophies.append(life_philosophy)
 
         # 목적 철학
-        purpose_philosophies = (
-            await self.life_philosophy_engine.generate_purpose_philosophies(
-                context, judgments, insights
-            )
+        purpose_philosophies = await self.life_philosophy_engine.generate_purpose_philosophies(
+            context, judgments, insights
         )
         for philosophy in purpose_philosophies:
             life_philosophy = LifePhilosophy(
@@ -329,13 +309,9 @@ class IntegratedWisdomSystem:
             "total_insights": len(insights),
             "total_philosophies": len(philosophies),
             "judgment_distribution": {
-                "practical": len(
-                    [j for j in judgments if j.judgment_type == "practical"]
-                ),
+                "practical": len([j for j in judgments if j.judgment_type == "practical"]),
                 "ethical": len([j for j in judgments if j.judgment_type == "ethical"]),
-                "philosophical": len(
-                    [j for j in judgments if j.judgment_type == "philosophical"]
-                ),
+                "philosophical": len([j for j in judgments if j.judgment_type == "philosophical"]),
             },
             "insight_distribution": {
                 "moral_principle": len(
@@ -344,30 +320,20 @@ class IntegratedWisdomSystem:
                 "value_clarification": len(
                     [i for i in insights if i.insight_type == "value_clarification"]
                 ),
-                "virtue_ethics": len(
-                    [i for i in insights if i.insight_type == "virtue_ethics"]
-                ),
+                "virtue_ethics": len([i for i in insights if i.insight_type == "virtue_ethics"]),
             },
             "philosophy_distribution": {
-                "existential": len(
-                    [p for p in philosophies if p.philosophy_type == "existential"]
-                ),
-                "purpose": len(
-                    [p for p in philosophies if p.philosophy_type == "purpose"]
-                ),
+                "existential": len([p for p in philosophies if p.philosophy_type == "existential"]),
+                "purpose": len([p for p in philosophies if p.philosophy_type == "purpose"]),
                 "transcendence": len(
                     [p for p in philosophies if p.philosophy_type == "transcendence"]
                 ),
             },
             "average_wisdom_level": (
-                sum(j.wisdom_level for j in judgments) / len(judgments)
-                if judgments
-                else 0
+                sum(j.wisdom_level for j in judgments) / len(judgments) if judgments else 0
             ),
             "average_ethical_maturity": (
-                sum(i.ethical_maturity for i in insights) / len(insights)
-                if insights
-                else 0
+                sum(i.ethical_maturity for i in insights) / len(insights) if insights else 0
             ),
             "average_philosophy_depth": (
                 sum(p.depth_of_understanding for p in philosophies) / len(philosophies)
@@ -389,14 +355,12 @@ class IntegratedWisdomSystem:
             return 0.0
 
         judgment_score = (
-            sum(j.wisdom_level * j.context_understanding for j in judgments)
-            / len(judgments)
+            sum(j.wisdom_level * j.context_understanding for j in judgments) / len(judgments)
             if judgments
             else 0
         )
         insight_score = (
-            sum(i.ethical_maturity * i.principle_clarity for i in insights)
-            / len(insights)
+            sum(i.ethical_maturity * i.principle_clarity for i in insights) / len(insights)
             if insights
             else 0
         )
@@ -424,9 +388,7 @@ class IntegratedWisdomSystem:
 class WisdomJudgmentEngine:
     """지혜 판단 엔진"""
 
-    async def generate_practical_judgments(
-        self, context: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    async def generate_practical_judgments(self, context: Dict[str, Any]) -> List[Dict[str, Any]]:
         """실용적 판단 생성"""
         judgments = []
 
@@ -440,9 +402,7 @@ class WisdomJudgmentEngine:
 
         return judgments
 
-    async def generate_ethical_judgments(
-        self, context: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    async def generate_ethical_judgments(self, context: Dict[str, Any]) -> List[Dict[str, Any]]:
         """윤리적 판단 생성"""
         judgments = []
 
@@ -472,41 +432,27 @@ class WisdomJudgmentEngine:
 
         return judgments
 
-    def _generate_adaptive_judgments(
-        self, context: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    def _generate_adaptive_judgments(self, context: Dict[str, Any]) -> List[Dict[str, Any]]:
         """적응적 판단 생성"""
         judgments = []
 
-        judgments.append(
-            {"type": "context_adaptive", "description": "맥락 적응적 판단"}
-        )
+        judgments.append({"type": "context_adaptive", "description": "맥락 적응적 판단"})
 
-        judgments.append(
-            {"type": "flexible_response", "description": "유연한 대응 판단"}
-        )
+        judgments.append({"type": "flexible_response", "description": "유연한 대응 판단"})
 
         return judgments
 
-    def _generate_efficiency_judgments(
-        self, context: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    def _generate_efficiency_judgments(self, context: Dict[str, Any]) -> List[Dict[str, Any]]:
         """효율성 기반 판단 생성"""
         judgments = []
 
-        judgments.append(
-            {"type": "resource_optimization", "description": "자원 최적화 판단"}
-        )
+        judgments.append({"type": "resource_optimization", "description": "자원 최적화 판단"})
 
-        judgments.append(
-            {"type": "effort_effectiveness", "description": "노력 효과성 판단"}
-        )
+        judgments.append({"type": "effort_effectiveness", "description": "노력 효과성 판단"})
 
         return judgments
 
-    def _generate_moral_judgments(
-        self, context: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    def _generate_moral_judgments(self, context: Dict[str, Any]) -> List[Dict[str, Any]]:
         """도덕적 판단 생성"""
         judgments = []
 
@@ -516,23 +462,17 @@ class WisdomJudgmentEngine:
 
         return judgments
 
-    def _generate_value_judgments(
-        self, context: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    def _generate_value_judgments(self, context: Dict[str, Any]) -> List[Dict[str, Any]]:
         """가치 기반 판단 생성"""
         judgments = []
 
         judgments.append({"type": "virtue_promotion", "description": "덕 촉진 판단"})
 
-        judgments.append(
-            {"type": "wellbeing_enhancement", "description": "웰빙 증진 판단"}
-        )
+        judgments.append({"type": "wellbeing_enhancement", "description": "웰빙 증진 판단"})
 
         return judgments
 
-    def _generate_ontological_judgments(
-        self, context: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    def _generate_ontological_judgments(self, context: Dict[str, Any]) -> List[Dict[str, Any]]:
         """존재론적 판단 생성"""
         judgments = []
 
@@ -542,9 +482,7 @@ class WisdomJudgmentEngine:
 
         return judgments
 
-    def _generate_epistemological_judgments(
-        self, context: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    def _generate_epistemological_judgments(self, context: Dict[str, Any]) -> List[Dict[str, Any]]:
         """인식론적 판단 생성"""
         judgments = []
 
@@ -624,13 +562,9 @@ class EthicalInsightEngine:
         """특수적 원칙 생성"""
         principles = []
 
-        principles.append(
-            {"type": "cultural_sensitivity", "description": "문화 민감성 원칙"}
-        )
+        principles.append({"type": "cultural_sensitivity", "description": "문화 민감성 원칙"})
 
-        principles.append(
-            {"type": "context_appropriateness", "description": "맥락 적절성 원칙"}
-        )
+        principles.append({"type": "context_appropriateness", "description": "맥락 적절성 원칙"})
 
         return principles
 
@@ -652,13 +586,9 @@ class EthicalInsightEngine:
         """가치 우선순위 생성"""
         priorities = []
 
-        priorities.append(
-            {"type": "hierarchy_establishment", "description": "가치 계층 수립"}
-        )
+        priorities.append({"type": "hierarchy_establishment", "description": "가치 계층 수립"})
 
-        priorities.append(
-            {"type": "conflict_resolution", "description": "가치 충돌 해결"}
-        )
+        priorities.append({"type": "conflict_resolution", "description": "가치 충돌 해결"})
 
         return priorities
 
@@ -670,9 +600,7 @@ class EthicalInsightEngine:
 
         developments.append({"type": "character_formation", "description": "성격 형성"})
 
-        developments.append(
-            {"type": "moral_excellence", "description": "도덕적 탁월성"}
-        )
+        developments.append({"type": "moral_excellence", "description": "도덕적 탁월성"})
 
         return developments
 
@@ -684,9 +612,7 @@ class EthicalInsightEngine:
 
         practices.append({"type": "habit_formation", "description": "습관 형성"})
 
-        practices.append(
-            {"type": "consistent_application", "description": "일관된 적용"}
-        )
+        practices.append({"type": "consistent_application", "description": "일관된 적용"})
 
         return practices
 
@@ -704,15 +630,11 @@ class LifePhilosophyEngine:
         philosophies = []
 
         # 존재의 의미
-        meaning_of_existence = self._generate_meaning_of_existence(
-            context, judgments, insights
-        )
+        meaning_of_existence = self._generate_meaning_of_existence(context, judgments, insights)
         philosophies.extend(meaning_of_existence)
 
         # 자유와 책임
-        freedom_responsibility = self._generate_freedom_responsibility(
-            context, judgments, insights
-        )
+        freedom_responsibility = self._generate_freedom_responsibility(context, judgments, insights)
         philosophies.extend(freedom_responsibility)
 
         return philosophies
@@ -785,9 +707,7 @@ class LifePhilosophyEngine:
 
         concepts.append({"type": "radical_freedom", "description": "근본적 자유"})
 
-        concepts.append(
-            {"type": "existential_responsibility", "description": "실존적 책임"}
-        )
+        concepts.append({"type": "existential_responsibility", "description": "실존적 책임"})
 
         return concepts
 
@@ -815,13 +735,9 @@ class LifePhilosophyEngine:
         """사회적 목적 생성"""
         purposes = []
 
-        purposes.append(
-            {"type": "collective_wellbeing", "description": "집단 웰빙 목적"}
-        )
+        purposes.append({"type": "collective_wellbeing", "description": "집단 웰빙 목적"})
 
-        purposes.append(
-            {"type": "social_contribution", "description": "사회 기여 목적"}
-        )
+        purposes.append({"type": "social_contribution", "description": "사회 기여 목적"})
 
         return purposes
 
@@ -834,9 +750,7 @@ class LifePhilosophyEngine:
         """영적 초월 생성"""
         transcendences = []
 
-        transcendences.append(
-            {"type": "divine_connection", "description": "신성과의 연결"}
-        )
+        transcendences.append({"type": "divine_connection", "description": "신성과의 연결"})
 
         transcendences.append({"type": "cosmic_unity", "description": "우주적 통합"})
 
@@ -855,9 +769,7 @@ class LifePhilosophyEngine:
             {"type": "meta_cognitive_awareness", "description": "메타 인지적 의식"}
         )
 
-        transcendences.append(
-            {"type": "transcendental_knowledge", "description": "초월적 지식"}
-        )
+        transcendences.append({"type": "transcendental_knowledge", "description": "초월적 지식"})
 
         return transcendences
 

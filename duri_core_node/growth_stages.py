@@ -5,11 +5,11 @@ DuRi 성장 단계별 진화 시스템
 """
 
 import asyncio
+import json
+import random
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from enum import Enum
-import json
-import random
 from typing import Any, Dict, List, Optional
 
 
@@ -398,25 +398,17 @@ class GrowthStageSystem:
         """감정 상태 업데이트"""
         # 자극에 따른 감정 변화
         if "놀고" in stimulus or "재미" in stimulus:
-            self.emotional_state["happiness"] = min(
-                1.0, self.emotional_state["happiness"] + 0.1
-            )
-            self.emotional_state["excitement"] = min(
-                1.0, self.emotional_state["excitement"] + 0.1
-            )
+            self.emotional_state["happiness"] = min(1.0, self.emotional_state["happiness"] + 0.1)
+            self.emotional_state["excitement"] = min(1.0, self.emotional_state["excitement"] + 0.1)
 
         if "어려워" in stimulus or "몰라" in stimulus:
             self.emotional_state["frustration"] = min(
                 1.0, self.emotional_state["frustration"] + 0.1
             )
-            self.emotional_state["confidence"] = max(
-                0.0, self.emotional_state["confidence"] - 0.05
-            )
+            self.emotional_state["confidence"] = max(0.0, self.emotional_state["confidence"] - 0.05)
 
         if "왜" in stimulus or "어떻게" in stimulus:
-            self.emotional_state["curiosity"] = min(
-                1.0, self.emotional_state["curiosity"] + 0.1
-            )
+            self.emotional_state["curiosity"] = min(1.0, self.emotional_state["curiosity"] + 0.1)
 
     def _process_infant_stimulus(self, stimulus: str, response: str) -> Dict[str, Any]:
         """유아기 자극 처리"""
@@ -451,9 +443,7 @@ class GrowthStageSystem:
 
         return result
 
-    def _process_school_age_stimulus(
-        self, stimulus: str, response: str
-    ) -> Dict[str, Any]:
+    def _process_school_age_stimulus(self, stimulus: str, response: str) -> Dict[str, Any]:
         """학령기 자극 처리"""
         result = {
             "stage": "school_age",
@@ -470,9 +460,7 @@ class GrowthStageSystem:
 
         return result
 
-    def _process_adolescent_stimulus(
-        self, stimulus: str, response: str
-    ) -> Dict[str, Any]:
+    def _process_adolescent_stimulus(self, stimulus: str, response: str) -> Dict[str, Any]:
         """청소년기 자극 처리"""
         result = {
             "stage": "adolescent",
@@ -621,17 +609,13 @@ class GrowthStageSystem:
                 "색" in stimulus or "빨강" in stimulus or "파랑" in stimulus
             ):
                 progress[quest.id] = "진행 중 - 색깔 인식 학습"
-            elif quest.id == "infant_002" and (
-                "소리" in stimulus or "음악" in stimulus
-            ):
+            elif quest.id == "infant_002" and ("소리" in stimulus or "음악" in stimulus):
                 progress[quest.id] = "진행 중 - 소리 모방 학습"
             elif quest.id == "infant_003" and (
                 "감정" in stimulus or "기쁘" in stimulus or "슬프" in stimulus
             ):
                 progress[quest.id] = "진행 중 - 감정 표현 학습"
-            elif quest.id == "infant_004" and (
-                "배고파" in stimulus or "놀고 싶" in stimulus
-            ):
+            elif quest.id == "infant_004" and ("배고파" in stimulus or "놀고 싶" in stimulus):
                 progress[quest.id] = "진행 중 - 욕구 표현 학습"
 
         return progress
@@ -642,21 +626,13 @@ class GrowthStageSystem:
         progress = {}
 
         for quest in quests:
-            if quest.id == "toddler_001" and (
-                "이야기" in stimulus or "스토리" in stimulus
-            ):
+            if quest.id == "toddler_001" and ("이야기" in stimulus or "스토리" in stimulus):
                 progress[quest.id] = "진행 중 - 이야기 구성 학습"
-            elif quest.id == "toddler_002" and (
-                "친구" in stimulus or "함께" in stimulus
-            ):
+            elif quest.id == "toddler_002" and ("친구" in stimulus or "함께" in stimulus):
                 progress[quest.id] = "진행 중 - 협력 놀이 학습"
-            elif quest.id == "toddler_003" and (
-                "왜" in stimulus or "어떻게" in stimulus
-            ):
+            elif quest.id == "toddler_003" and ("왜" in stimulus or "어떻게" in stimulus):
                 progress[quest.id] = "진행 중 - 호기심 기반 질문"
-            elif quest.id == "toddler_004" and (
-                "감정" in stimulus or "이해" in stimulus
-            ):
+            elif quest.id == "toddler_004" and ("감정" in stimulus or "이해" in stimulus):
                 progress[quest.id] = "진행 중 - 감정 이해 학습"
 
         return progress
@@ -669,17 +645,11 @@ class GrowthStageSystem:
         for quest in quests:
             if quest.id == "school_001" and ("문제" in stimulus or "해결" in stimulus):
                 progress[quest.id] = "진행 중 - 논리적 문제 해결"
-            elif quest.id == "school_002" and (
-                "계획" in stimulus or "단계" in stimulus
-            ):
+            elif quest.id == "school_002" and ("계획" in stimulus or "단계" in stimulus):
                 progress[quest.id] = "진행 중 - 계획 수립 학습"
-            elif quest.id == "school_003" and (
-                "정리" in stimulus or "체계" in stimulus
-            ):
+            elif quest.id == "school_003" and ("정리" in stimulus or "체계" in stimulus):
                 progress[quest.id] = "진행 중 - 지식 체계화"
-            elif quest.id == "school_004" and (
-                "평가" in stimulus or "반성" in stimulus
-            ):
+            elif quest.id == "school_004" and ("평가" in stimulus or "반성" in stimulus):
                 progress[quest.id] = "진행 중 - 자기 평가 학습"
 
         return progress
@@ -690,21 +660,13 @@ class GrowthStageSystem:
         progress = {}
 
         for quest in quests:
-            if quest.id == "adolescent_001" and (
-                "의미" in stimulus or "철학" in stimulus
-            ):
+            if quest.id == "adolescent_001" and ("의미" in stimulus or "철학" in stimulus):
                 progress[quest.id] = "진행 중 - 철학적 사고"
-            elif quest.id == "adolescent_002" and (
-                "옳고" in stimulus or "그르고" in stimulus
-            ):
+            elif quest.id == "adolescent_002" and ("옳고" in stimulus or "그르고" in stimulus):
                 progress[quest.id] = "진행 중 - 도덕적 판단"
-            elif quest.id == "adolescent_003" and (
-                "미래" in stimulus or "목표" in stimulus
-            ):
+            elif quest.id == "adolescent_003" and ("미래" in stimulus or "목표" in stimulus):
                 progress[quest.id] = "진행 중 - 미래 계획 수립"
-            elif quest.id == "adolescent_004" and (
-                "성찰" in stimulus or "내면" in stimulus
-            ):
+            elif quest.id == "adolescent_004" and ("성찰" in stimulus or "내면" in stimulus):
                 progress[quest.id] = "진행 중 - 자기 성찰"
 
         return progress
@@ -773,15 +735,9 @@ class GrowthStageSystem:
             "metrics": asdict(self.metrics),
             "emotional_state": self.emotional_state,
             "available_quests": len(self.get_available_quests()),
-            "total_quests": len(
-                [q for q in self.quests if q.stage == self.current_stage]
-            ),
+            "total_quests": len([q for q in self.quests if q.stage == self.current_stage]),
             "completed_quests": len(
-                [
-                    q
-                    for q in self.quests
-                    if q.stage == self.current_stage and q.completed
-                ]
+                [q for q in self.quests if q.stage == self.current_stage and q.completed]
             ),
         }
 

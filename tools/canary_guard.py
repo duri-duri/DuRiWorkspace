@@ -147,9 +147,7 @@ def guard(args):
 
 def main():
     ap = argparse.ArgumentParser(description="DuRi Canary Guard")
-    ap.add_argument(
-        "--prom-url", default="http://localhost:9090", help="Prometheus URL"
-    )
+    ap.add_argument("--prom-url", default="http://localhost:9090", help="Prometheus URL")
     ap.add_argument("--window", default="15m", help="분석 윈도우 (예: 10m, 1h)")
     ap.add_argument("--step", default="15s", help="샘플 간격 (예: 15s, 30s)")
     ap.add_argument("--p95-slo-ms", type=float, default=350.0, help="p95 SLO (ms)")

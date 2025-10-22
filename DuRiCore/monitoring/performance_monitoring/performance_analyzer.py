@@ -11,16 +11,16 @@ DuRiCore Phase 2-4: 성능 분석 모듈
 """
 
 import asyncio
-from collections import defaultdict, deque
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 import json
 import logging
 import statistics
 import time
-from typing import Any, Dict, List, Optional, Tuple, Union
 import uuid
+from collections import defaultdict, deque
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 from scipy import stats
@@ -147,9 +147,7 @@ class PerformanceAnalyzer:
         """트렌드 분석"""
         try:
             if len(metrics) < self.analysis_config["min_data_points"]:
-                logger.warning(
-                    f"트렌드 분석을 위한 데이터가 부족합니다: {len(metrics)}개"
-                )
+                logger.warning(f"트렌드 분석을 위한 데이터가 부족합니다: {len(metrics)}개")
                 return None
 
             # 시간과 값 추출
@@ -160,9 +158,7 @@ class PerformanceAnalyzer:
             time_nums = [(t - timestamps[0]).total_seconds() for t in timestamps]
 
             # 선형 회귀 분석
-            slope, intercept, r_value, p_value, std_err = stats.linregress(
-                time_nums, values
-            )
+            slope, intercept, r_value, p_value, std_err = stats.linregress(time_nums, values)
             r_squared = r_value**2
 
             # 트렌드 방향 결정
@@ -217,23 +213,17 @@ class PerformanceAnalyzer:
             timestamps = [m.timestamp for m in metrics]
 
             # 1. 주기성 패턴 감지
-            periodic_pattern = await self._detect_periodic_pattern(
-                values, timestamps, metric_name
-            )
+            periodic_pattern = await self._detect_periodic_pattern(values, timestamps, metric_name)
             if periodic_pattern:
                 patterns.append(periodic_pattern)
 
             # 2. 계절성 패턴 감지
-            seasonal_pattern = await self._detect_seasonal_pattern(
-                values, timestamps, metric_name
-            )
+            seasonal_pattern = await self._detect_seasonal_pattern(values, timestamps, metric_name)
             if seasonal_pattern:
                 patterns.append(seasonal_pattern)
 
             # 3. 이상 패턴 감지
-            anomaly_pattern = await self._detect_anomaly_pattern(
-                values, timestamps, metric_name
-            )
+            anomaly_pattern = await self._detect_anomaly_pattern(values, timestamps, metric_name)
             if anomaly_pattern:
                 patterns.append(anomaly_pattern)
 
@@ -260,14 +250,10 @@ class PerformanceAnalyzer:
 
             # 간단한 선형 예측
             time_nums = [(t - timestamps[0]).total_seconds() for t in timestamps]
-            slope, intercept, r_value, p_value, std_err = stats.linregress(
-                time_nums, values
-            )
+            slope, intercept, r_value, p_value, std_err = stats.linregress(time_nums, values)
 
             # 예측 시간 계산
-            prediction_time = (
-                timestamps[-1] + self.analysis_config["prediction_horizon"]
-            )
+            prediction_time = timestamps[-1] + self.analysis_config["prediction_horizon"]
             prediction_time_num = (prediction_time - timestamps[0]).total_seconds()
 
             # 예측값 계산
@@ -289,9 +275,7 @@ class PerformanceAnalyzer:
             self.predictions.append(prediction)
             self.performance_metrics["total_predictions_made"] += 1
 
-            logger.info(
-                f"성능 예측 완료: {prediction.prediction_id} ({predicted_value:.2f})"
-            )
+            logger.info(f"성능 예측 완료: {prediction.prediction_id} ({predicted_value:.2f})")
             return prediction
 
         except Exception as e:
@@ -406,10 +390,7 @@ class PerformanceAnalyzer:
             }
 
             # 계절성 검사
-            if (
-                len(hourly_std) > 6
-                and max(hourly_std.values()) > min(hourly_std.values()) * 2
-            ):
+            if len(hourly_std) > 6 and max(hourly_std.values()) > min(hourly_std.values()) * 2:
                 return PerformancePattern(
                     pattern_id=f"pattern_{int(time.time())}_{uuid.uuid4().hex[:8]}",
                     pattern_type="seasonal",
@@ -481,23 +462,15 @@ class PerformanceAnalyzer:
 
             # 최근 트렌드
             recent_trends = [
-                t
-                for t in self.trends
-                if not metric_name or t.metric_name == metric_name
+                t for t in self.trends if not metric_name or t.metric_name == metric_name
             ]
-            report["recent_trends"] = [
-                self._trend_to_dict(t) for t in recent_trends[-5:]
-            ]
+            report["recent_trends"] = [self._trend_to_dict(t) for t in recent_trends[-5:]]
 
             # 최근 패턴
             recent_patterns = [
-                p
-                for p in self.patterns
-                if not metric_name or p.metric_name == metric_name
+                p for p in self.patterns if not metric_name or p.metric_name == metric_name
             ]
-            report["recent_patterns"] = [
-                self._pattern_to_dict(p) for p in recent_patterns[-5:]
-            ]
+            report["recent_patterns"] = [self._pattern_to_dict(p) for p in recent_patterns[-5:]]
 
             # 최근 예측
             recent_predictions = [

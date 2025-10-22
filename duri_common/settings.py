@@ -4,10 +4,11 @@ DuRi 통합 설정 관리 시스템 (확장 버전)
 """
 
 from __future__ import annotations
-from dataclasses import dataclass
-from functools import lru_cache
+
 import json
 import os
+from dataclasses import dataclass
+from functools import lru_cache
 from typing import Any, Dict, List, Literal, Optional
 
 from pydantic import BaseModel
@@ -117,7 +118,9 @@ class MonitoringSettings(BaseModel):
     prometheus_url: str = "http://prometheus:9090"
     grafana_url: str = "http://grafana:3000"
     grafana_user: str = "duri-duri"
-    grafana_password: str = "DuRi@2025!"  # tests expect this - 로컬/테스트 전용, 실제 배포시 ENV로 오버라이드 필수
+    grafana_password: str = (
+        "DuRi@2025!"  # tests expect this - 로컬/테스트 전용, 실제 배포시 ENV로 오버라이드 필수
+    )
 
 
 # 간단한 dataclass 기반 설정 (테스트 호환성 우선)
@@ -159,30 +162,30 @@ class DuRiSettings:
                 "password": "CHANGE_ME_DB_PASSWORD",
                 "pool_size": 10,
                 "max_overflow": 20,
-            }
+            },
         }
-        
+
         # JSON 파일에서 설정 로드
         cfg = _merge(base, _from_json_env())
         # 중첩 환경변수에서 설정 로드
         cfg = _merge(cfg, _from_nested_env())
-        
+
         # 객체 초기화
-        object.__setattr__(self, 'env', cfg.get("env", "dev"))
-        object.__setattr__(self, 'debug', cfg.get("debug", False))
-        object.__setattr__(self, 'version', cfg.get("version", "latest"))
-        object.__setattr__(self, 'monitoring', MonitoringSettings(**cfg.get("monitoring", {})))
-        object.__setattr__(self, 'database', DatabaseSettings(**cfg.get("database", {})))
-        object.__setattr__(self, 'redis', RedisSettings())
-        object.__setattr__(self, 'server', ServerSettings())
-        object.__setattr__(self, 'evolution', EvolutionSettings())
-        object.__setattr__(self, 'data', DataSettings())
-        object.__setattr__(self, 'analysis', AnalysisSettings())
-        object.__setattr__(self, 'recommendations', RecommendationsSettings())
-        object.__setattr__(self, 'logging', LoggingSettings())
-        object.__setattr__(self, 'services', ServiceSettings())
-        object.__setattr__(self, 'performance', PerformanceSettings())
-        object.__setattr__(self, 'security', SecuritySettings())
+        object.__setattr__(self, "env", cfg.get("env", "dev"))
+        object.__setattr__(self, "debug", cfg.get("debug", False))
+        object.__setattr__(self, "version", cfg.get("version", "latest"))
+        object.__setattr__(self, "monitoring", MonitoringSettings(**cfg.get("monitoring", {})))
+        object.__setattr__(self, "database", DatabaseSettings(**cfg.get("database", {})))
+        object.__setattr__(self, "redis", RedisSettings())
+        object.__setattr__(self, "server", ServerSettings())
+        object.__setattr__(self, "evolution", EvolutionSettings())
+        object.__setattr__(self, "data", DataSettings())
+        object.__setattr__(self, "analysis", AnalysisSettings())
+        object.__setattr__(self, "recommendations", RecommendationsSettings())
+        object.__setattr__(self, "logging", LoggingSettings())
+        object.__setattr__(self, "services", ServiceSettings())
+        object.__setattr__(self, "performance", PerformanceSettings())
+        object.__setattr__(self, "security", SecuritySettings())
 
     def to_dict(self) -> Dict[str, Any]:
         """딕셔너리로 변환 (기존 코드 호환용)"""
@@ -216,7 +219,7 @@ class DuRiSettings:
                 "grafana_url": self.monitoring.grafana_url,
                 "grafana_user": self.monitoring.grafana_user,
                 "grafana_password": self.monitoring.grafana_password,
-            }
+            },
         }
 
     def get_service_port(self, service: str) -> int:
@@ -235,6 +238,7 @@ def _merge(a: Dict[str, Any], b: Dict[str, Any]) -> Dict[str, Any]:
             out[k] = v
     return out
 
+
 def _from_json_env() -> Dict[str, Any]:
     """JSON 파일에서 설정 로드"""
     p = os.getenv("DURI_CONFIG_JSON")
@@ -246,14 +250,15 @@ def _from_json_env() -> Dict[str, Any]:
     except Exception:
         return {}
 
+
 def _from_nested_env() -> Dict[str, Any]:
     """중첩 환경변수에서 설정 로드 (DURI_MONITORING__PROMETHEUS_URL 등)"""
     pref = "DURI_"
     result: Dict[str, Any] = {}
     for k, v in os.environ.items():
-        if not k.startswith(pref) or "__" not in k[len(pref):]:
+        if not k.startswith(pref) or "__" not in k[len(pref) :]:
             continue
-        path = k[len(pref):].lower().split("__")
+        path = k[len(pref) :].lower().split("__")
         cur = result
         for key in path[:-1]:
             cur = cur.setdefault(key, {})
@@ -262,6 +267,7 @@ def _from_nested_env() -> Dict[str, Any]:
     if os.getenv("DURI_ENV"):
         result.setdefault("env", os.getenv("DURI_ENV"))
     return result
+
 
 # 테스트 호환성을 위한 함수 (새로운 로직 적용)
 @lru_cache(maxsize=1)
@@ -280,6 +286,7 @@ def get_settings() -> DuRiSettings:
     cfg = _merge(cfg, _from_nested_env())
     mon = MonitoringSettings(**cfg.get("monitoring", {}))
     return DuRiSettings(env=cfg.get("env", "dev"), monitoring=mon)
+
 
 # 전역 설정 인스턴스 (새로운 로직 사용)
 settings = get_settings()

@@ -5,12 +5,12 @@ DuRiCore Phase 5 Day 3 - 판단 시스템
 """
 
 import asyncio
-from dataclasses import dataclass
-from datetime import datetime
-from enum import Enum
 import json
 import logging
 import math
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
@@ -103,9 +103,7 @@ class JudgmentSystem:
             context = memory_data.get("context", {})
 
             # 상황 분석
-            situation_analysis = await self.analyze_situation(
-                {"content": content}, context
-            )
+            situation_analysis = await self.analyze_situation({"content": content}, context)
 
             # 의사결정
             available_actions = ["proceed", "wait", "reconsider", "escalate"]
@@ -144,9 +142,7 @@ class JudgmentSystem:
             context_elements = await self._extract_context_elements(context)
 
             # 3. 상황 패턴 인식
-            situation_pattern = await self._recognize_situation_pattern(
-                input_data, context
-            )
+            situation_pattern = await self._recognize_situation_pattern(input_data, context)
 
             # 4. 핵심 요소 식별
             key_factors = await self._identify_key_factors(input_data, context)
@@ -215,19 +211,13 @@ class JudgmentSystem:
             )
 
             # 4. 최종 의사결정 (하이브리드)
-            final_decision = await self._hybrid_decision(
-                rule_decision, ml_decision, ethical_review
-            )
+            final_decision = await self._hybrid_decision(rule_decision, ml_decision, ethical_review)
 
             # 5. 대안 생성
-            alternatives = await self._generate_alternatives(
-                situation_analysis, available_actions
-            )
+            alternatives = await self._generate_alternatives(situation_analysis, available_actions)
 
             # 6. 위험 평가
-            risk_assessment = await self._assess_decision_risk(
-                final_decision, situation_analysis
-            )
+            risk_assessment = await self._assess_decision_risk(final_decision, situation_analysis)
 
             decision_time = (datetime.now() - start_time).total_seconds()
 
@@ -272,9 +262,7 @@ class JudgmentSystem:
             )
 
             # 3. 윤리성 평가
-            ethical_score = await self._evaluate_ethical_quality(
-                decision_result, outcome
-            )
+            ethical_score = await self._evaluate_ethical_quality(decision_result, outcome)
 
             # 4. 효율성 평가
             efficiency_score = await self._evaluate_efficiency(decision_result, outcome)
@@ -323,9 +311,7 @@ class JudgmentSystem:
             analysis = {
                 "data_type": type(input_data).__name__,
                 "data_size": len(str(input_data)),
-                "key_fields": (
-                    list(input_data.keys()) if isinstance(input_data, dict) else []
-                ),
+                "key_fields": (list(input_data.keys()) if isinstance(input_data, dict) else []),
                 "complexity": self._calculate_data_complexity(input_data),
                 "quality_score": self._assess_data_quality(input_data),
             }
@@ -651,9 +637,7 @@ class JudgmentSystem:
             if situation_analysis.complexity_score > 0.7:
                 alternatives.append("detailed_analysis_action")
 
-            alternatives.extend(
-                ["wait_and_observe", "consult_expert", "gather_more_info"]
-            )
+            alternatives.extend(["wait_and_observe", "consult_expert", "gather_more_info"])
 
             return alternatives[:5]
         except Exception as e:
@@ -668,9 +652,7 @@ class JudgmentSystem:
             risk_assessment = {}
             risk_assessment["base_risk"] = situation_analysis.risk_level
             risk_assessment["confidence_risk"] = 1.0 - decision["confidence"]
-            risk_assessment["complexity_risk"] = (
-                situation_analysis.complexity_score * 0.5
-            )
+            risk_assessment["complexity_risk"] = situation_analysis.complexity_score * 0.5
             risk_assessment["total_risk"] = (
                 risk_assessment["base_risk"]
                 + risk_assessment["confidence_risk"]
@@ -702,10 +684,7 @@ class JudgmentSystem:
         try:
             consistency = 0.5
 
-            if (
-                situation_analysis.risk_level > 0.7
-                and "risk" in decision_result.decision.lower()
-            ):
+            if situation_analysis.risk_level > 0.7 and "risk" in decision_result.decision.lower():
                 consistency += 0.2
 
             if (
@@ -878,9 +857,7 @@ async def test_judgment_system():
 
     # 1. 상황 분석 테스트
     print("\n1. 상황 분석 테스트")
-    situation_analysis = await judgment_system.analyze_situation(
-        test_input, test_context
-    )
+    situation_analysis = await judgment_system.analyze_situation(test_input, test_context)
     print(f"상황 타입: {situation_analysis.situation_type}")
     print(f"위험도: {situation_analysis.risk_level:.3f}")
     print(f"긴급도: {situation_analysis.urgency_level:.3f}")

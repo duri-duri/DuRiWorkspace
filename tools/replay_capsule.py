@@ -14,12 +14,8 @@ def replay_capsule(capsule_file):
     x = [
         1 if cap["core"]["tag"] else 0,  # core_hit
         max((d.get("sim", 0) for d in cap["rag"]), default=0),  # similarity
-        max(
-            (1.0 / (1 + d.get("age_days", 0)) for d in cap["rag"]), default=0
-        ),  # recency
-        max(
-            (d.get("sim", 0) > 0 and 1 or 0 for d in cap["rag"]), default=0
-        ),  # provenance
+        max((1.0 / (1 + d.get("age_days", 0)) for d in cap["rag"]), default=0),  # recency
+        max((d.get("sim", 0) > 0 and 1 or 0 for d in cap["rag"]), default=0),  # provenance
     ]
 
     # 확률 계산

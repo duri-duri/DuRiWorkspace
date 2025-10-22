@@ -5,14 +5,14 @@ DuRi 학습 피드백 시스템 (Day 6)
 """
 
 import asyncio
-from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
-from enum import Enum
 import json
 import logging
 import pickle
 import re
 import sqlite3
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 logging.basicConfig(level=logging.INFO)
@@ -338,9 +338,7 @@ class SelfImprovementSystem:
         learning_metrics = await self._calculate_learning_metrics(recent_judgments)
 
         # 개선 패턴 식별
-        improvement_patterns = await self._identify_improvement_patterns(
-            recent_judgments
-        )
+        improvement_patterns = await self._identify_improvement_patterns(recent_judgments)
 
         # 개선 제안 생성
         improvement_suggestions = await self._generate_improvement_suggestions(
@@ -354,9 +352,7 @@ class SelfImprovementSystem:
             "analysis_period": time_period,
         }
 
-    async def _get_recent_judgments(
-        self, time_period: timedelta
-    ) -> List[JudgmentMemory]:
+    async def _get_recent_judgments(self, time_period: timedelta) -> List[JudgmentMemory]:
         """최근 판단들 조회"""
         try:
             conn = sqlite3.connect(self.memory_system.db_path)
@@ -410,12 +406,8 @@ class SelfImprovementSystem:
 
         # 신뢰도 트렌드
         if len(judgments) >= 2:
-            recent_avg = sum(
-                j.confidence_score for j in judgments[: len(judgments) // 2]
-            )
-            older_avg = sum(
-                j.confidence_score for j in judgments[len(judgments) // 2 :]
-            )
+            recent_avg = sum(j.confidence_score for j in judgments[: len(judgments) // 2])
+            older_avg = sum(j.confidence_score for j in judgments[len(judgments) // 2 :])
             metrics["confidence_trend"] = recent_avg - older_avg
         else:
             metrics["confidence_trend"] = 0.0
@@ -432,9 +424,7 @@ class SelfImprovementSystem:
         # 피드백 효과성
         feedback_count = 0
         for judgment in judgments:
-            feedback = await self.memory_system.get_judgment_feedback(
-                judgment.judgment_id
-            )
+            feedback = await self.memory_system.get_judgment_feedback(judgment.judgment_id)
             feedback_count += len(feedback)
 
         metrics["feedback_effectiveness"] = min(feedback_count / len(judgments), 1.0)
@@ -489,9 +479,7 @@ class SelfImprovementSystem:
 
         return patterns
 
-    def _calculate_reasoning_consistency(
-        self, judgments: List[JudgmentMemory]
-    ) -> float:
+    def _calculate_reasoning_consistency(self, judgments: List[JudgmentMemory]) -> float:
         """추론 일관성 계산"""
         if not judgments:
             return 0.0
@@ -514,11 +502,7 @@ class SelfImprovementSystem:
                 ) / len(confidences)
                 consistency_scores.append(1.0 - min(variance, 1.0))
 
-        return (
-            sum(consistency_scores) / len(consistency_scores)
-            if consistency_scores
-            else 0.0
-        )
+        return sum(consistency_scores) / len(consistency_scores) if consistency_scores else 0.0
 
     async def _generate_improvement_suggestions(
         self, metrics: Dict[str, float], patterns: List[Dict[str, Any]]
@@ -534,14 +518,10 @@ class SelfImprovementSystem:
             suggestions.append("추론 일관성 향상을 위해 논리적 단계를 명확화하세요")
 
         if metrics["adaptation_rate"] < 0.5:
-            suggestions.append(
-                "상황 적응력을 높이기 위해 다양한 상황에 대한 학습을 강화하세요"
-            )
+            suggestions.append("상황 적응력을 높이기 위해 다양한 상황에 대한 학습을 강화하세요")
 
         if metrics["feedback_effectiveness"] < 0.3:
-            suggestions.append(
-                "피드백 활용도를 높이기 위해 피드백 수집 및 분석을 강화하세요"
-            )
+            suggestions.append("피드백 활용도를 높이기 위해 피드백 수집 및 분석을 강화하세요")
 
         # 패턴 기반 제안
         for pattern in patterns:
@@ -563,9 +543,7 @@ class AdaptiveLearningEngine:
         self.learning_rate = 0.1
         self.adaptation_threshold = 0.7
 
-    async def adapt_to_feedback(
-        self, judgment_id: str, feedback: FeedbackEntry
-    ) -> Dict[str, Any]:
+    async def adapt_to_feedback(self, judgment_id: str, feedback: FeedbackEntry) -> Dict[str, Any]:
         """피드백에 따른 적응"""
         logger.info(f"피드백 적응 시작: {judgment_id}")
 
@@ -578,9 +556,7 @@ class AdaptiveLearningEngine:
         feedback_analysis = self._analyze_feedback_impact(feedback, original_judgment)
 
         # 학습 패턴 업데이트
-        learning_pattern = await self._update_learning_pattern(
-            original_judgment, feedback
-        )
+        learning_pattern = await self._update_learning_pattern(original_judgment, feedback)
 
         # 적응 제안 생성
         adaptation_suggestions = self._generate_adaptation_suggestions(
@@ -600,9 +576,7 @@ class AdaptiveLearningEngine:
             conn = sqlite3.connect(self.memory_system.db_path)
             cursor = conn.cursor()
 
-            cursor.execute(
-                "SELECT * FROM judgments WHERE judgment_id = ?", (judgment_id,)
-            )
+            cursor.execute("SELECT * FROM judgments WHERE judgment_id = ?", (judgment_id,))
             result = cursor.fetchone()
             conn.close()
 
@@ -665,9 +639,7 @@ class AdaptiveLearningEngine:
         self, judgment: JudgmentMemory, feedback: FeedbackEntry
     ) -> LearningPattern:
         """학습 패턴 업데이트"""
-        pattern_id = (
-            f"pattern_{judgment.judgment_type.value}_{feedback.feedback_type.value}"
-        )
+        pattern_id = f"pattern_{judgment.judgment_type.value}_{feedback.feedback_type.value}"
 
         # 기존 패턴 조회 또는 새로 생성
         try:
@@ -686,9 +658,7 @@ class AdaptiveLearningEngine:
             if result:
                 # 기존 패턴 업데이트
                 frequency = result[2] + 1
-                success_rate = (
-                    result[3] * (frequency - 1) + feedback.impact_score
-                ) / frequency
+                success_rate = (result[3] * (frequency - 1) + feedback.impact_score) / frequency
 
                 cursor.execute(
                     """
@@ -800,15 +770,9 @@ async def test_learning_feedback_system():
     learning_progress = await improvement_system.analyze_learning_progress()
 
     print(f"\n📊 학습 진행도 분석:")
-    print(
-        f"  • 전체 개선도: {learning_progress['learning_metrics']['overall_improvement']:.2f}"
-    )
-    print(
-        f"  • 신뢰도 트렌드: {learning_progress['learning_metrics']['confidence_trend']:.2f}"
-    )
-    print(
-        f"  • 일관성 점수: {learning_progress['learning_metrics']['consistency_score']:.2f}"
-    )
+    print(f"  • 전체 개선도: {learning_progress['learning_metrics']['overall_improvement']:.2f}")
+    print(f"  • 신뢰도 트렌드: {learning_progress['learning_metrics']['confidence_trend']:.2f}")
+    print(f"  • 일관성 점수: {learning_progress['learning_metrics']['consistency_score']:.2f}")
     print(f"  • 적응률: {learning_progress['learning_metrics']['adaptation_rate']:.2f}")
     print(
         f"  • 피드백 효과성: {learning_progress['learning_metrics']['feedback_effectiveness']:.2f}"
@@ -823,19 +787,13 @@ async def test_learning_feedback_system():
         print(f"  • {suggestion}")
 
     # 피드백 적응 테스트
-    adaptation_result = await learning_engine.adapt_to_feedback(
-        "test_judgment_001", test_feedback
-    )
+    adaptation_result = await learning_engine.adapt_to_feedback("test_judgment_001", test_feedback)
 
     print(f"\n🔄 피드백 적응 결과:")
     print(f"  • 성공: {adaptation_result['success']}")
     print(f"  • 영향 수준: {adaptation_result['feedback_analysis']['impact_level']}")
-    print(
-        f"  • 학습 잠재력: {adaptation_result['feedback_analysis']['learning_potential']:.2f}"
-    )
-    print(
-        f"  • 적응 필요: {adaptation_result['feedback_analysis']['adaptation_needed']}"
-    )
+    print(f"  • 학습 잠재력: {adaptation_result['feedback_analysis']['learning_potential']:.2f}")
+    print(f"  • 적응 필요: {adaptation_result['feedback_analysis']['adaptation_needed']}")
 
     print(f"\n📝 적응 제안:")
     for suggestion in adaptation_result["adaptation_suggestions"]:

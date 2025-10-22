@@ -5,13 +5,13 @@ DuRiCore Phase 5 Day 4 - 행동 시스템
 """
 
 import asyncio
-from dataclasses import dataclass
-from datetime import datetime
-from enum import Enum
 import json
 import logging
 import math
 import time
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
@@ -152,9 +152,7 @@ class ActionSystem:
 
             # 결과 분석
             expected_outcome = {"success": True, "completion": 1.0}
-            action_result = await self.analyze_action_result(
-                action_execution, expected_outcome
-            )
+            action_result = await self.analyze_action_result(action_execution, expected_outcome)
 
             return {
                 "success": True,
@@ -212,9 +210,7 @@ class ActionSystem:
     ) -> ActionResult:
         """행동 결과 분석"""
         try:
-            return await self.result_analyzer.analyze_result(
-                action_execution, expected_outcome
-            )
+            return await self.result_analyzer.analyze_result(action_execution, expected_outcome)
         except Exception as e:
             logger.error(f"행동 결과 분석 실패: {e}")
             raise
@@ -279,9 +275,7 @@ class ActionSystem:
 
         return patterns
 
-    async def _optimize_patterns(
-        self, patterns: List[BehaviorPattern]
-    ) -> List[BehaviorPattern]:
+    async def _optimize_patterns(self, patterns: List[BehaviorPattern]) -> List[BehaviorPattern]:
         """패턴 최적화"""
         optimized_patterns = []
 
@@ -390,9 +384,7 @@ class ActionGenerator:
         risk_factors = await self._identify_risk_factors(decision_result)
 
         # 4. 성공 기준 정의
-        success_criteria = await self._define_success_criteria(
-            action_type, decision_result
-        )
+        success_criteria = await self._define_success_criteria(action_type, decision_result)
 
         # 5. 행동 계획 생성
         action_id = f"action_{int(time.time())}_{hash(description) % 10000}"
@@ -410,9 +402,7 @@ class ActionGenerator:
             created_at=datetime.now(),
         )
 
-    async def _determine_action_type(
-        self, decision_result: Dict[str, Any]
-    ) -> ActionType:
+    async def _determine_action_type(self, decision_result: Dict[str, Any]) -> ActionType:
         """행동 타입 결정"""
         urgency = decision_result.get("urgency_level", 0.0)
         complexity = decision_result.get("complexity_score", 0.0)
@@ -492,9 +482,7 @@ class ActionGenerator:
         else:
             return ["cpu", "memory", "storage"]
 
-    async def _identify_dependencies(
-        self, decision_result: Dict[str, Any]
-    ) -> List[str]:
+    async def _identify_dependencies(self, decision_result: Dict[str, Any]) -> List[str]:
         """의존성 식별"""
         dependencies = []
 
@@ -507,9 +495,7 @@ class ActionGenerator:
 
         return dependencies
 
-    async def _identify_risk_factors(
-        self, decision_result: Dict[str, Any]
-    ) -> List[str]:
+    async def _identify_risk_factors(self, decision_result: Dict[str, Any]) -> List[str]:
         """위험 요소 식별"""
         risk_factors = []
 
@@ -581,9 +567,7 @@ class ActionExecutor:
             # 실행 완료
             execution.status = ActionStatus.COMPLETED
             execution.end_time = datetime.now()
-            execution.actual_duration = (
-                execution.end_time - execution.start_time
-            ).total_seconds()
+            execution.actual_duration = (execution.end_time - execution.start_time).total_seconds()
             execution.progress = 100.0
             execution.current_step = "완료"
 
@@ -721,9 +705,7 @@ class ActionResultAnalyzer:
     ) -> ActionResult:
         """행동 결과 분석"""
         # 1. 효과성 평가
-        effectiveness_score = await self._evaluate_effectiveness(
-            action_execution, expected_outcome
-        )
+        effectiveness_score = await self._evaluate_effectiveness(action_execution, expected_outcome)
 
         # 2. 효율성 평가
         efficiency_score = await self._evaluate_efficiency(action_execution)
@@ -737,9 +719,7 @@ class ActionResultAnalyzer:
         )
 
         # 5. 다음 행동 제안
-        next_actions = await self._suggest_next_actions(
-            action_execution, effectiveness_score
-        )
+        next_actions = await self._suggest_next_actions(action_execution, effectiveness_score)
 
         # 6. 성공 여부 판단
         success = effectiveness_score > 0.7 and efficiency_score > 0.6
@@ -766,9 +746,7 @@ class ActionResultAnalyzer:
     ) -> float:
         """효과성 평가"""
         # 실행 성공 여부
-        success_factor = (
-            1.0 if action_execution.status == ActionStatus.COMPLETED else 0.0
-        )
+        success_factor = 1.0 if action_execution.status == ActionStatus.COMPLETED else 0.0
 
         # 목표 달성도 (시뮬레이션)
         goal_achievement = 0.85 if success_factor > 0 else 0.0
@@ -798,23 +776,17 @@ class ActionResultAnalyzer:
         time_efficiency = 1.0 / (1.0 + action_execution.actual_duration / 60.0)
 
         # 리소스 효율성 (시뮬레이션)
-        resource_efficiency = (
-            0.85 if action_execution.status == ActionStatus.COMPLETED else 0.5
-        )
+        resource_efficiency = 0.85 if action_execution.status == ActionStatus.COMPLETED else 0.5
 
         # 비용 효율성 (시뮬레이션)
         cost_efficiency = 0.9 if len(action_execution.errors) == 0 else 0.6
 
         # 가중 평균
-        efficiency = (
-            time_efficiency * 0.4 + resource_efficiency * 0.4 + cost_efficiency * 0.2
-        )
+        efficiency = time_efficiency * 0.4 + resource_efficiency * 0.4 + cost_efficiency * 0.2
 
         return min(efficiency, 1.0)
 
-    async def _extract_learning_points(
-        self, action_execution: ActionExecution
-    ) -> List[str]:
+    async def _extract_learning_points(self, action_execution: ActionExecution) -> List[str]:
         """학습 포인트 추출"""
         learning_points = []
 

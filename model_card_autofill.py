@@ -48,9 +48,7 @@ def ms(x):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--template", default="", help="Template markdown path (optional)")
-    ap.add_argument(
-        "--out", default="model_card_v1.autofilled.md", help="Output markdown path"
-    )
+    ap.add_argument("--out", default="model_card_v1.autofilled.md", help="Output markdown path")
     args = ap.parse_args()
 
     # Sources
@@ -78,9 +76,7 @@ def main():
         if passed is not None and total:
             pass_rate = passed / total
     # Format
-    pass_rate_pct = (
-        pct(pass_rate) if pass_rate is not None and pass_rate <= 1 else f"{pass_rate}%"
-    )
+    pass_rate_pct = pct(pass_rate) if pass_rate is not None and pass_rate <= 1 else f"{pass_rate}%"
     p95_latency_fmt = ms(p95_latency_ms) if p95_latency_ms is not None else "TBD"
     fail_rate_reg_pct = (
         pct(fail_rate_reg)
@@ -93,9 +89,7 @@ def main():
         else (f"{safety_hit}%" if safety_hit is not None else "TBD")
     )
     explain_score_fmt = (
-        f"{explain_score:.2f} / 5.0"
-        if isinstance(explain_score, (int, float))
-        else "TBD"
+        f"{explain_score:.2f} / 5.0" if isinstance(explain_score, (int, float)) else "TBD"
     )
     hitl_accept_pct = (
         pct(hitl_accept)
@@ -107,11 +101,7 @@ def main():
     quality_fmt = (
         f"{quality:.0f}%"
         if isinstance(quality, (int, float)) and quality <= 1
-        else (
-            f"{quality:.0f}%"
-            if isinstance(quality, (int, float)) and quality > 1
-            else "TBD"
-        )
+        else (f"{quality:.0f}%" if isinstance(quality, (int, float)) and quality > 1 else "TBD")
     )
 
     # Build markdown (use template if provided)

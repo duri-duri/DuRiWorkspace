@@ -10,14 +10,14 @@ DuRi 리팩토링 Phase 1 - 에러 핸들링 시스템
 - 자동 복구 시도
 """
 
-from dataclasses import asdict, dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 import json
 import logging
 import sys
 import time
 import traceback
+from dataclasses import asdict, dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
 from typing import Any, Callable, Dict, List, Optional
 
 # 로깅 설정
@@ -124,18 +124,14 @@ class ErrorHandler:
             if severity in [ErrorSeverity.HIGH, ErrorSeverity.CRITICAL]:
                 self._attempt_recovery(error_report)
 
-            logger.error(
-                f"시스템 에러 처리 완료: {error_report.error_id} ({severity.value})"
-            )
+            logger.error(f"시스템 에러 처리 완료: {error_report.error_id} ({severity.value})")
             return error_report
 
         except Exception as e:
             logger.error(f"에러 처리 중 추가 에러 발생: {e}")
             return self._create_fallback_error_report(error, context)
 
-    def log_error_with_context(
-        self, error: Exception, context: Dict[str, Any]
-    ) -> ErrorReport:
+    def log_error_with_context(self, error: Exception, context: Dict[str, Any]) -> ErrorReport:
         """컨텍스트와 함께 에러 로깅"""
         try:
             # 컨텍스트에서 정보 추출
@@ -291,9 +287,7 @@ class ErrorHandler:
                 timestamp=datetime.now(),
             )
 
-    def _determine_severity(
-        self, error: Exception, context: Dict[str, Any]
-    ) -> ErrorSeverity:
+    def _determine_severity(self, error: Exception, context: Dict[str, Any]) -> ErrorSeverity:
         """에러 심각도 결정"""
         error_type = type(error).__name__
 
@@ -307,9 +301,7 @@ class ErrorHandler:
         else:
             return ErrorSeverity.MEDIUM
 
-    def _determine_category(
-        self, error: Exception, context: Dict[str, Any]
-    ) -> ErrorCategory:
+    def _determine_category(self, error: Exception, context: Dict[str, Any]) -> ErrorCategory:
         """에러 카테고리 결정"""
         error_type = type(error).__name__
         error_message = str(error).lower()
@@ -370,9 +362,7 @@ class ErrorHandler:
             except Exception as e:
                 logger.error(f"에러 복구 실패: {e}")
 
-    def _create_fallback_error_report(
-        self, error: Exception, context: str
-    ) -> ErrorReport:
+    def _create_fallback_error_report(self, error: Exception, context: str) -> ErrorReport:
         """폴백 에러 리포트 생성"""
         return ErrorReport(
             error_id=f"error_{int(time.time())}",

@@ -20,7 +20,6 @@ logging.basicConfig(
 )
 
 from duri_core.core.metrics import maybe_expose_metrics_port
-
 # OTel 초기화
 from ops.observability.otel_init import get_tracer, init_tracing
 
@@ -72,9 +71,7 @@ def test_otel_integration():
             edit_trace_id = f"{edit_ctx.trace_id:032x}"
             edit_span_id = f"{edit_ctx.span_id:016x}"
 
-            print(
-                f"📊 중첩 Span 생성됨: trace_id={edit_trace_id}, span_id={edit_span_id}"
-            )
+            print(f"📊 중첩 Span 생성됨: trace_id={edit_trace_id}, span_id={edit_span_id}")
 
             logger.info(
                 "test_edit_completed",
@@ -89,9 +86,7 @@ def test_otel_integration():
     print("\n4️⃣ JudgmentTraceSystem 테스트...")
     try:
         from duri_core.tracing.judgment_trace_system import (
-            JudgmentTraceSystem,
-            JudgmentType,
-        )
+            JudgmentTraceSystem, JudgmentType)
 
         trace_system = JudgmentTraceSystem()
 

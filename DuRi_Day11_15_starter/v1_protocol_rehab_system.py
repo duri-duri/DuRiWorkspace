@@ -4,12 +4,12 @@ V1 프로토콜 통합 재활 시스템 (Day 32 Enhanced)
 원장님의 재활 철학과 V1 프로토콜을 완전 통합한 시스템
 """
 
-from dataclasses import dataclass
-from datetime import datetime, timedelta
 import json
 import logging
-from pathlib import Path
 import time
+from dataclasses import dataclass
+from datetime import datetime, timedelta
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import numpy as np
@@ -28,9 +28,7 @@ class V1ProtocolConfig:
     compliance_threshold: float = 0.6  # 순응도 <60%
 
     # 자세 관리 원칙
-    posture_check_weight_threshold: float = (
-        0.7  # 자세 체크 무게 임계값 (최대 무게의 70%)
-    )
+    posture_check_weight_threshold: float = 0.7  # 자세 체크 무게 임계값 (최대 무게의 70%)
     posture_collapse_reduction: float = 0.2  # 자세 붕괴 시 무게 감소율 (20%)
 
 
@@ -176,9 +174,7 @@ class V1ProtocolRehabSystem:
         handler = logging.FileHandler(
             f"v1_protocol_rehab_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
         )
-        formatter = logging.Formatter(
-            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-        )
+        formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
         handler.setFormatter(formatter)
         logger.addHandler(handler)
 
@@ -223,16 +219,10 @@ class V1ProtocolRehabSystem:
             created_at=datetime.now(),
             exercises=selected_exercises,
             total_duration=sum(ex.duration_minutes for ex in selected_exercises),
-            difficulty_score=self._calculate_v1_difficulty_score(
-                selected_exercises, profile
-            ),
+            difficulty_score=self._calculate_v1_difficulty_score(selected_exercises, profile),
             safety_score=self._calculate_v1_safety_score(selected_exercises, profile),
-            effectiveness_score=self._calculate_v1_effectiveness_score(
-                selected_exercises, profile
-            ),
-            v1_compliance_score=self._calculate_v1_compliance_score(
-                selected_exercises, profile
-            ),
+            effectiveness_score=self._calculate_v1_effectiveness_score(selected_exercises, profile),
+            v1_compliance_score=self._calculate_v1_compliance_score(selected_exercises, profile),
             rpe_score=self._calculate_v1_rpe_score(selected_exercises, profile),
             pain_management_score=self._calculate_v1_pain_management_score(
                 selected_exercises, profile
@@ -348,15 +338,11 @@ class V1ProtocolRehabSystem:
         goal_coverage = 0.0
         for goal in profile.goals:
             for exercise in exercises:
-                if any(
-                    goal.lower() in muscle.lower() for muscle in exercise.target_muscles
-                ):
+                if any(goal.lower() in muscle.lower() for muscle in exercise.target_muscles):
                     goal_coverage += 1.0
                     break
 
-        goal_score = (
-            (goal_coverage / len(profile.goals)) * 100.0 if profile.goals else 50.0
-        )
+        goal_score = (goal_coverage / len(profile.goals)) * 100.0 if profile.goals else 50.0
 
         # 운동 다양성
         categories = set(ex.category for ex in exercises)
@@ -382,9 +368,7 @@ class V1ProtocolRehabSystem:
             score -= 10.0
 
         # RPE 범위 준수 (4-6)
-        avg_rpe = (
-            sum(ex.rpe_level for ex in exercises) / len(exercises) if exercises else 0
-        )
+        avg_rpe = sum(ex.rpe_level for ex in exercises) / len(exercises) if exercises else 0
         if avg_rpe < profile.v1_protocol.rpe_range[0]:
             score -= 15.0
         elif avg_rpe > profile.v1_protocol.rpe_range[1]:
@@ -392,25 +376,19 @@ class V1ProtocolRehabSystem:
 
         # 통증 관리 준수
         if profile.current_pain_level >= profile.v1_protocol.pain_threshold:
-            high_pain_exercises = [
-                ex for ex in exercises if ex.pain_sensitivity == "high"
-            ]
+            high_pain_exercises = [ex for ex in exercises if ex.pain_sensitivity == "high"]
             if high_pain_exercises:
                 score -= 30.0
 
         return max(0.0, score)
 
-    def _calculate_v1_rpe_score(
-        self, exercises: List[ExerciseV1], profile: UserProfileV1
-    ) -> float:
+    def _calculate_v1_rpe_score(self, exercises: List[ExerciseV1], profile: UserProfileV1) -> float:
         """V1 프로토콜 RPE 점수"""
         if not exercises:
             return 0.0
 
         avg_rpe = sum(ex.rpe_level for ex in exercises) / len(exercises)
-        target_rpe = (
-            profile.v1_protocol.rpe_range[0] + profile.v1_protocol.rpe_range[1]
-        ) / 2
+        target_rpe = (profile.v1_protocol.rpe_range[0] + profile.v1_protocol.rpe_range[1]) / 2
 
         # RPE 차이에 따른 점수 계산
         rpe_diff = abs(avg_rpe - target_rpe)
@@ -476,18 +454,16 @@ class V1ProtocolRehabSystem:
             report["summary"]["avg_difficulty_score"] = sum(
                 r.difficulty_score for r in routines
             ) / len(routines)
-            report["summary"]["avg_safety_score"] = sum(
-                r.safety_score for r in routines
-            ) / len(routines)
+            report["summary"]["avg_safety_score"] = sum(r.safety_score for r in routines) / len(
+                routines
+            )
             report["summary"]["avg_effectiveness_score"] = sum(
                 r.effectiveness_score for r in routines
             ) / len(routines)
             report["summary"]["avg_v1_compliance_score"] = sum(
                 r.v1_compliance_score for r in routines
             ) / len(routines)
-            report["summary"]["avg_rpe_score"] = sum(
-                r.rpe_score for r in routines
-            ) / len(routines)
+            report["summary"]["avg_rpe_score"] = sum(r.rpe_score for r in routines) / len(routines)
             report["summary"]["avg_pain_management_score"] = sum(
                 r.pain_management_score for r in routines
             ) / len(routines)

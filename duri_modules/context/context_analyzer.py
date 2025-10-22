@@ -4,9 +4,9 @@ DuRi 맥락 이해 시스템
 대화 흐름, 주제 추적, 감정 추정, 사용자 목표 예측
 """
 
-from datetime import datetime
 import json
 import re
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 
@@ -40,9 +40,7 @@ class ContextAnalyzer:
             "problem_solving": ["문제", "해결", "개선", "수정", "고치"],
         }
 
-    def analyze_conversation_context(
-        self, conversation_history: List[Dict]
-    ) -> Dict[str, Any]:
+    def analyze_conversation_context(self, conversation_history: List[Dict]) -> Dict[str, Any]:
         """
         대화 맥락을 종합적으로 분석
 
@@ -71,9 +69,7 @@ class ContextAnalyzer:
         flow_analysis = self._analyze_conversation_flow(recent_conversations)
 
         # 5. 신뢰도 계산
-        confidence = self._calculate_confidence(
-            topic_analysis, emotion_analysis, intent_analysis
-        )
+        confidence = self._calculate_confidence(topic_analysis, emotion_analysis, intent_analysis)
 
         return {
             "topic": topic_analysis["primary_topic"],
@@ -145,9 +141,7 @@ class ContextAnalyzer:
         confidence = min(total_indicators / max(total_words, 1) * 10, 1.0)
 
         return {
-            "primary_emotion": (
-                primary_emotion[0] if primary_emotion[1] > 0 else "neutral"
-            ),
+            "primary_emotion": (primary_emotion[0] if primary_emotion[1] > 0 else "neutral"),
             "emotion_scores": emotion_scores,
             "confidence": confidence,
         }
@@ -193,9 +187,7 @@ class ContextAnalyzer:
 
         # 질문 패턴 분석
         question_count = sum(
-            1
-            for text in recent_inputs
-            if "?" in text or "어떻게" in text or "왜" in text
+            1 for text in recent_inputs if "?" in text or "어떻게" in text or "왜" in text
         )
 
         # 명령 패턴 분석
@@ -239,9 +231,7 @@ class ContextAnalyzer:
         intent_confidence = intent_analysis["confidence"]
 
         # 가중 평균 (감정과 의도에 더 높은 가중치)
-        confidence = (
-            topic_confidence * 0.3 + emotion_confidence * 0.4 + intent_confidence * 0.3
-        )
+        confidence = topic_confidence * 0.3 + emotion_confidence * 0.4 + intent_confidence * 0.3
 
         return min(confidence, 1.0)
 

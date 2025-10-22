@@ -20,7 +20,8 @@ def test_rules_matching_accuracy():
     """RULES 매칭 정확도 테스트"""
     print("🔍 RULES 매칭 정확도 테스트 시작...")
 
-    from DuRiCore.duri_logging.autodetect import get_all_components, infer_component
+    from DuRiCore.duri_logging.autodetect import (get_all_components,
+                                                  infer_component)
 
     # 각 패키지 경로→라벨 테스트
     test_cases = [
@@ -66,14 +67,10 @@ def test_context_fields():
     """컨텍스트 필드 존재성 테스트"""
     print("🔍 컨텍스트 필드 존재성 테스트 시작...")
 
-    from DuRiCore.duri_logging.context import (
-        clear_context,
-        get_context,
-        set_learning_session_id,
-        set_phase,
-        set_request_id,
-        set_session_id,
-    )
+    from DuRiCore.duri_logging.context import (clear_context, get_context,
+                                               set_learning_session_id,
+                                               set_phase, set_request_id,
+                                               set_session_id)
 
     # 컨텍스트 설정
     set_request_id("test_req_123")

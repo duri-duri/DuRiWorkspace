@@ -5,14 +5,14 @@ DuRiCore Phase 5 Day 2 - 고도화된 기억 시스템
 """
 
 import asyncio
-from collections import Counter, defaultdict
-from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
-from enum import Enum
 import hashlib
 import json
 import logging
 import math
+from collections import Counter, defaultdict
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
@@ -148,14 +148,10 @@ class EnhancedMemorySystem:
             tags = await self._extract_enhanced_tags(content, context)
 
             # 우선순위 점수 계산
-            priority_score = self._calculate_priority_score(
-                importance, 0, datetime.now()
-            )
+            priority_score = self._calculate_priority_score(importance, 0, datetime.now())
 
             # 보존 점수 계산
-            retention_score = self._calculate_retention_score(
-                content, memory_type, importance
-            )
+            retention_score = self._calculate_retention_score(content, memory_type, importance)
 
             # 메모리 엔트리 생성
             memory_entry = MemoryEntry(
@@ -187,9 +183,7 @@ class EnhancedMemorySystem:
             # 연관성 분석 및 연결
             await self._analyze_and_link_associations(memory_id)
 
-            logger.info(
-                f"고도화된 메모리 저장 완료: {memory_id} (타입: {memory_type.value})"
-            )
+            logger.info(f"고도화된 메모리 저장 완료: {memory_id} (타입: {memory_type.value})")
             return memory_id
 
         except Exception as e:
@@ -210,9 +204,7 @@ class EnhancedMemorySystem:
             for memory_id in search_ids:
                 if memory_id in self.memories:
                     memory = self.memories[memory_id]
-                    similarity = self._cosine_similarity(
-                        query_vector, memory.vector_data
-                    )
+                    similarity = self._cosine_similarity(query_vector, memory.vector_data)
 
                     if similarity > 0.3:  # 임계값
                         results.append((memory, similarity))
@@ -249,15 +241,10 @@ class EnhancedMemorySystem:
             # 연관성 링크 검색
             for link_id, link in self.associations.items():
                 if (link.source_id == memory_id or link.target_id == memory_id) and (
-                    association_type is None
-                    or link.association_type == association_type
+                    association_type is None or link.association_type == association_type
                 ):
 
-                    related_id = (
-                        link.target_id
-                        if link.source_id == memory_id
-                        else link.source_id
-                    )
+                    related_id = link.target_id if link.source_id == memory_id else link.source_id
                     if related_id in self.memories:
                         related_memory = self.memories[related_id]
                         related_memories.append((related_memory, link.strength))
@@ -300,20 +287,14 @@ class EnhancedMemorySystem:
 
             # 타입별 통계
             for memory_type in MemoryType:
-                type_memories = [
-                    m for m in self.memories.values() if m.memory_type == memory_type
-                ]
+                type_memories = [m for m in self.memories.values() if m.memory_type == memory_type]
                 stats["memory_types"][memory_type.value] = {
                     "count": len(type_memories),
                     "avg_importance": (
-                        np.mean([m.importance for m in type_memories])
-                        if type_memories
-                        else 0
+                        np.mean([m.importance for m in type_memories]) if type_memories else 0
                     ),
                     "avg_priority": (
-                        np.mean([m.priority_score for m in type_memories])
-                        if type_memories
-                        else 0
+                        np.mean([m.priority_score for m in type_memories]) if type_memories else 0
                     ),
                 }
 
@@ -327,15 +308,11 @@ class EnhancedMemorySystem:
             }
 
             # 연관성 통계
-            association_types = [
-                link.association_type for link in self.associations.values()
-            ]
+            association_types = [link.association_type for link in self.associations.values()]
             type_counts = Counter(association_types)
             stats["association_stats"] = {
                 "total_links": len(self.associations),
-                "type_distribution": {
-                    t.value: count for t, count in type_counts.items()
-                },
+                "type_distribution": {t.value: count for t, count in type_counts.items()},
             }
 
             # 접근 패턴
@@ -412,9 +389,7 @@ class EnhancedMemorySystem:
             logger.error(f"메모리 타입 분류 오류: {e}")
             return MemoryType.EXPERIENCE, 0.5
 
-    async def _create_enhanced_vector(
-        self, content: str, context: Dict[str, Any]
-    ) -> List[float]:
+    async def _create_enhanced_vector(self, content: str, context: Dict[str, Any]) -> List[float]:
         """고도화된 벡터 생성"""
         try:
             # 간단한 해시 기반 벡터 생성 (실제로는 임베딩 모델 사용)
@@ -431,9 +406,7 @@ class EnhancedMemorySystem:
             logger.error(f"벡터 생성 오류: {e}")
             return [0.0] * self.vector_dim
 
-    async def _extract_enhanced_tags(
-        self, content: str, context: Dict[str, Any]
-    ) -> List[str]:
+    async def _extract_enhanced_tags(self, content: str, context: Dict[str, Any]) -> List[str]:
         """고도화된 태그 추출"""
         try:
             tags = []
@@ -464,9 +437,7 @@ class EnhancedMemorySystem:
         try:
             # 시간 가중치 (최근일수록 높음)
             time_diff = datetime.now() - last_accessed
-            time_weight = max(
-                0, 1 - (time_diff.total_seconds() / (24 * 3600))
-            )  # 24시간 기준
+            time_weight = max(0, 1 - (time_diff.total_seconds() / (24 * 3600)))  # 24시간 기준
 
             # 접근 빈도 가중치
             access_weight = min(1.0, access_count / 10.0)  # 최대 10회 기준
@@ -751,9 +722,7 @@ async def test_enhanced_memory_system():
     # 연관 메모리 검색 테스트
     print("\n3. 연관 메모리 검색 테스트")
     if memory_ids:
-        related_memories = await memory_system.get_related_memories(
-            memory_ids[0], limit=3
-        )
+        related_memories = await memory_system.get_related_memories(memory_ids[0], limit=3)
         print(f"첫 번째 메모리의 연관 메모리: {len(related_memories)}개")
         for memory, strength in related_memories:
             print(f"  - {memory.content[:50]}... (강도: {strength:.3f})")

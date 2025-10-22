@@ -1,4 +1,5 @@
-from duri_trace import CoreMemoryTrace, EmotionTrace, JudgmentTrace, strategy_trace
+from duri_trace import (CoreMemoryTrace, EmotionTrace, JudgmentTrace,
+                        strategy_trace)
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-

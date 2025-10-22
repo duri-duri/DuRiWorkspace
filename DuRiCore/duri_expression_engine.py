@@ -14,14 +14,14 @@ DuRi Expression Engine - DuRi의 판단 결과를 자연어로 변환하는 엔�
 """
 
 import asyncio
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
 import json
 import logging
 import random
 import re
 import time
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 # 모듈 레지스트리 시스템 import
@@ -252,17 +252,13 @@ class DuRiExpressionEngine(BaseModule):
                 )
 
             # 핵심 판단 포인트 추출
-            key_points = await self._extract_key_points(
-                judgment_data, thought_flow, decision_tree
-            )
+            key_points = await self._extract_key_points(judgment_data, thought_flow, decision_tree)
 
             # 자연어 템플릿 선택
             template = self._select_template(context.expression_type, context.style)
 
             # 문장 구성
-            expression_text = await self._construct_expression(
-                key_points, template, context
-            )
+            expression_text = await self._construct_expression(key_points, template, context)
 
             # DuRi 명의로 출력 형식 지정
             final_expression = f"DuRi: {expression_text}"
@@ -292,9 +288,7 @@ class DuRiExpressionEngine(BaseModule):
                 expression_text="DuRi: 죄송해요, 지금은 제대로 생각을 정리하지 못했어요.",
                 confidence=0.0,
                 style=context.style if context else self.default_style,
-                expression_type=(
-                    context.expression_type if context else ExpressionType.INTEGRATED
-                ),
+                expression_type=(context.expression_type if context else ExpressionType.INTEGRATED),
                 processing_time=processing_time,
                 success=False,
                 error_message=str(e),
@@ -344,9 +338,7 @@ class DuRiExpressionEngine(BaseModule):
 
         return key_points
 
-    def _extract_reasoning_from_thought_flow(
-        self, thought_process: List[Dict[str, Any]]
-    ) -> str:
+    def _extract_reasoning_from_thought_flow(self, thought_process: List[Dict[str, Any]]) -> str:
         """사고 흐름에서 추론 과정 추출"""
         reasoning_parts = []
 
@@ -388,18 +380,14 @@ class DuRiExpressionEngine(BaseModule):
             base_template = template.get("base", "나는 {decision}라고 생각해요.")
 
             # 신뢰도에 따른 표현 조정
-            confidence_expression = self._get_confidence_expression(
-                key_points["confidence"]
-            )
+            confidence_expression = self._get_confidence_expression(key_points["confidence"])
 
             # 추론 과정 포함 여부 결정
             if key_points["reasoning"] and len(key_points["reasoning"]) > 10:
                 reasoning_template = template.get(
                     "with_reasoning", "왜냐하면 {reasoning}이기 때문이에요."
                 )
-                reasoning_part = reasoning_template.format(
-                    reasoning=key_points["reasoning"]
-                )
+                reasoning_part = reasoning_template.format(reasoning=key_points["reasoning"])
             else:
                 reasoning_part = ""
 
@@ -410,12 +398,8 @@ class DuRiExpressionEngine(BaseModule):
                     "with_alternatives",
                     "다른 방법도 고려했지만, {alternatives}보다는 이 방법이 더 적절하다고 판단했어요.",
                 )
-                alternatives_text = ", ".join(
-                    key_points["alternatives"][:2]
-                )  # 최대 2개만
-                alternatives_part = alternatives_template.format(
-                    alternatives=alternatives_text
-                )
+                alternatives_text = ", ".join(key_points["alternatives"][:2])  # 최대 2개만
+                alternatives_part = alternatives_template.format(alternatives=alternatives_text)
 
             # 최종 문장 구성
             expression_parts = []
@@ -522,9 +506,7 @@ class DuRiExpressionEngine(BaseModule):
         for expression_type, styles in self.expression_templates.items():
             for style, templates in styles.items():
                 if "base" not in templates:
-                    logger.warning(
-                        f"템플릿에 'base' 키가 없음: {expression_type}.{style}"
-                    )
+                    logger.warning(f"템플릿에 'base' 키가 없음: {expression_type}.{style}")
 
     def _initialize_expression_styles(self):
         """표현 스타일 초기화"""

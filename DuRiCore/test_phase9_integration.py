@@ -5,29 +5,23 @@ DuRiCore Phase 9 - 통합 테스트 시스템
 """
 
 import asyncio
-from datetime import datetime
 import json
 import logging
 import statistics
 import time
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 # Phase 9 모듈들 import
 try:
-    from deployment_system import (
-        DeploymentPlatform,
-        EnvironmentType,
-        IntegratedDeploymentSystem,
-        UserInterfaceType,
-    )
+    from deployment_system import (DeploymentPlatform, EnvironmentType,
+                                   IntegratedDeploymentSystem,
+                                   UserInterfaceType)
     from integrated_system_manager import IntegratedSystemManager
-    from real_environment_deployment import DeploymentStatus, RealEnvironmentDeployment
-    from user_interface import (
-        InterfaceType,
-        LanguageType,
-        ThemeType,
-        UserInterfaceSystem,
-    )
+    from real_environment_deployment import (DeploymentStatus,
+                                             RealEnvironmentDeployment)
+    from user_interface import (InterfaceType, LanguageType, ThemeType,
+                                UserInterfaceSystem)
 
     PHASE9_MODULES_AVAILABLE = True
 except ImportError as e:
@@ -307,9 +301,7 @@ class Phase9IntegrationTest:
                 feature_requests=["다크 모드", "모바일 최적화"],
                 bug_reports=[],
             )
-            test_result["details"].append(
-                f"✅ 사용자 피드백 수집: {feedback.feedback_id}"
-            )
+            test_result["details"].append(f"✅ 사용자 피드백 수집: {feedback.feedback_id}")
 
             # 인터페이스 분석 테스트
             analytics = self.ui_system.get_interface_analytics(web_ui.ui_id)
@@ -397,9 +389,7 @@ class Phase9IntegrationTest:
             if self.ui_system:
                 ui = self.ui_system.create_interface(InterfaceType.WEB_DASHBOARD)
                 response_time = time.time() - start_time
-                test_result["details"].append(
-                    f"✅ UI 생성 응답 시간: {response_time:.3f}초"
-                )
+                test_result["details"].append(f"✅ UI 생성 응답 시간: {response_time:.3f}초")
 
                 if response_time < 1.0:
                     test_result["details"].append("✅ 응답 시간 우수")
@@ -465,9 +455,7 @@ class Phase9IntegrationTest:
             if self.ui_system:
                 for i in range(5):
                     try:
-                        ui = self.ui_system.create_interface(
-                            InterfaceType.WEB_DASHBOARD
-                        )
+                        ui = self.ui_system.create_interface(InterfaceType.WEB_DASHBOARD)
                         test_result["details"].append(f"✅ 반복 실행 {i+1}/5 성공")
                     except Exception as e:
                         test_result["errors"].append(f"❌ 반복 실행 {i+1}/5 실패: {e}")
@@ -601,9 +589,7 @@ class Phase9IntegrationTest:
         scores = [result.get("score", 0) for result in test_results]
         return statistics.mean(scores)
 
-    def _generate_test_recommendations(
-        self, test_results: List[Dict[str, Any]]
-    ) -> List[str]:
+    def _generate_test_recommendations(self, test_results: List[Dict[str, Any]]) -> List[str]:
         """테스트 권장사항 생성"""
         recommendations = []
 

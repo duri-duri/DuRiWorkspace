@@ -4,12 +4,12 @@ PoU 파일럿 통합 실행 시스템 (Day 31)
 의료, 재활, 코딩 도메인의 PoU 파일럿을 통합 관리
 """
 
-from dataclasses import dataclass
-from datetime import datetime
 import json
 import logging
-from pathlib import Path
 import time
+from dataclasses import dataclass
+from datetime import datetime
+from pathlib import Path
 from typing import Any, Dict, List
 
 
@@ -78,9 +78,7 @@ class PoUPilotManager:
         handler = logging.FileHandler(
             f"pou_pilot_logs_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
         )
-        formatter = logging.Formatter(
-            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-        )
+        formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
         handler.setFormatter(formatter)
         logger.addHandler(handler)
 
@@ -176,9 +174,7 @@ class PoUPilotManager:
 
         # 평균 계산
         if self.metrics:
-            metrics_list = [
-                m["metrics"] for m in self.metrics.values() if "metrics" in m
-            ]
+            metrics_list = [m["metrics"] for m in self.metrics.values() if "metrics" in m]
             if metrics_list:
                 report["summary"]["avg_quality_score"] = sum(
                     m["quality_score"] for m in metrics_list

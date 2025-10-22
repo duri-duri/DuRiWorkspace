@@ -66,9 +66,7 @@ async def process_learning(request: LearningRequest):
         )
 
     except Exception as e:
-        raise HTTPException(
-            status_code=500, detail=f"학습 처리 중 오류가 발생했습니다: {str(e)}"
-        )
+        raise HTTPException(status_code=500, detail=f"학습 처리 중 오류가 발생했습니다: {str(e)}")
 
 
 @router.get("/stats")
@@ -85,9 +83,7 @@ async def get_learning_stats():
         }
 
     except Exception as e:
-        raise HTTPException(
-            status_code=500, detail=f"통계 조회 중 오류가 발생했습니다: {str(e)}"
-        )
+        raise HTTPException(status_code=500, detail=f"통계 조회 중 오류가 발생했습니다: {str(e)}")
 
 
 @router.post("/batch-process")
@@ -119,17 +115,13 @@ async def batch_process_learning(requests: List[LearningRequest]):
             "results": results,
             "total_processed": len(results),
             "average_score": (
-                sum(r["learning_score"] for r in results) / len(results)
-                if results
-                else 0
+                sum(r["learning_score"] for r in results) / len(results) if results else 0
             ),
             "message": f"{len(results)}개의 콘텐츠에 대한 학습 처리가 완료되었습니다.",
         }
 
     except Exception as e:
-        raise HTTPException(
-            status_code=500, detail=f"배치 처리 중 오류가 발생했습니다: {str(e)}"
-        )
+        raise HTTPException(status_code=500, detail=f"배치 처리 중 오류가 발생했습니다: {str(e)}")
 
 
 @router.get("/content-types")

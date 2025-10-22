@@ -4,9 +4,9 @@ DuRiCore - 감정 엔진
 LLM 기반 감정 분석 및 공감 능력 구현
 """
 
+import logging
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-import logging
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
@@ -42,9 +42,7 @@ class LLMInterface:
         # 임시로 기존 로직 사용
         return self._fallback_emotion_analysis(text, context)
 
-    def _fallback_emotion_analysis(
-        self, text: str, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _fallback_emotion_analysis(self, text: str, context: Dict[str, Any]) -> Dict[str, Any]:
         """LLM 연결 전 임시 감정 분석"""
         # 기존 emotional_intelligence_service.py 로직 활용
         emotion_dimensions = [
@@ -138,9 +136,7 @@ class EmotionEngine:
             )
 
             # 3. 맥락 기반 감정 해석
-            contextual_emotion = self._analyze_contextual_emotion(
-                complex_analysis, context
-            )
+            contextual_emotion = self._analyze_contextual_emotion(complex_analysis, context)
 
             # 4. 감정-이성 균형 계산
             emotion_reason_balance = self._calculate_emotion_reason_balance(
@@ -219,9 +215,7 @@ class EmotionEngine:
             logger.error(f"감정 조합 분석 실패: {e}")
             return {"error": str(e)}
 
-    def _detect_emotion_conflicts(
-        self, emotion_vector: Dict[str, float]
-    ) -> List[Dict[str, Any]]:
+    def _detect_emotion_conflicts(self, emotion_vector: Dict[str, float]) -> List[Dict[str, Any]]:
         """감정 충돌 탐지"""
         conflicts = []
 
@@ -239,10 +233,7 @@ class EmotionEngine:
                     {
                         "conflict_type": "opposing_emotions",
                         "emotions": [emotion1, emotion2],
-                        "intensity": (
-                            emotion_vector[emotion1] + emotion_vector[emotion2]
-                        )
-                        / 2,
+                        "intensity": (emotion_vector[emotion1] + emotion_vector[emotion2]) / 2,
                     }
                 )
 
@@ -300,26 +291,18 @@ class EmotionEngine:
 
             # 맥락별 해석
             if context_type == "work":
-                interpretation.update(
-                    self._interpret_work_emotion(emotion_vector, context)
-                )
+                interpretation.update(self._interpret_work_emotion(emotion_vector, context))
             elif context_type == "social":
-                interpretation.update(
-                    self._interpret_social_emotion(emotion_vector, context)
-                )
+                interpretation.update(self._interpret_social_emotion(emotion_vector, context))
             elif context_type == "personal":
-                interpretation.update(
-                    self._interpret_personal_emotion(emotion_vector, context)
-                )
+                interpretation.update(self._interpret_personal_emotion(emotion_vector, context))
 
             # 맥락 적합성 평가
             context_fit = self._evaluate_context_fit(emotion_vector, context)
             interpretation["context_fit"] = context_fit
 
             # 권장사항 생성
-            recommendations = self._generate_context_recommendations(
-                interpretation, context_fit
-            )
+            recommendations = self._generate_context_recommendations(interpretation, context_fit)
             interpretation["recommendations"] = recommendations
 
             return interpretation
@@ -335,8 +318,7 @@ class EmotionEngine:
         return {
             "work_impact": "neutral",
             "productivity_effect": 0.5,
-            "stress_level": emotion_vector.get("fear", 0.0)
-            + emotion_vector.get("anger", 0.0),
+            "stress_level": emotion_vector.get("fear", 0.0) + emotion_vector.get("anger", 0.0),
         }
 
     def _interpret_social_emotion(
@@ -346,8 +328,7 @@ class EmotionEngine:
         return {
             "social_comfort": 1.0
             - (emotion_vector.get("fear", 0.0) + emotion_vector.get("anger", 0.0)),
-            "empathy_level": emotion_vector.get("trust", 0.0)
-            + emotion_vector.get("joy", 0.0),
+            "empathy_level": emotion_vector.get("trust", 0.0) + emotion_vector.get("joy", 0.0),
         }
 
     def _interpret_personal_emotion(
@@ -381,14 +362,10 @@ class EmotionEngine:
             negative_emotions = ["anger", "fear", "sadness", "disgust"]
 
             # 긍정적 감정 점수
-            positive_score = sum(
-                emotion_vector.get(emotion, 0.0) for emotion in positive_emotions
-            )
+            positive_score = sum(emotion_vector.get(emotion, 0.0) for emotion in positive_emotions)
 
             # 부정적 감정 점수
-            negative_score = sum(
-                emotion_vector.get(emotion, 0.0) for emotion in negative_emotions
-            )
+            negative_score = sum(emotion_vector.get(emotion, 0.0) for emotion in negative_emotions)
 
             # 적합성 계산
             fit_score = max(0.0, positive_score - negative_score)
@@ -479,9 +456,7 @@ class EmotionEngine:
             empathy_level = self._calculate_empathy_level(interpretation, balance_type)
 
             # 공감적 반응 생성
-            response = self._create_empathetic_response(
-                interpretation, empathy_level, balance_type
-            )
+            response = self._create_empathetic_response(interpretation, empathy_level, balance_type)
 
             return response
 
@@ -489,9 +464,7 @@ class EmotionEngine:
             logger.error(f"공감적 반응 생성 실패: {e}")
             return "당신의 감정을 이해하고 있어요."
 
-    def _calculate_empathy_level(
-        self, interpretation: Dict[str, Any], balance_type: str
-    ) -> float:
+    def _calculate_empathy_level(self, interpretation: Dict[str, Any], balance_type: str) -> float:
         """공감 수준 계산"""
         try:
             context_fit = interpretation.get("context_fit", 0.5)

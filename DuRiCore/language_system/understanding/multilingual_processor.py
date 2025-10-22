@@ -9,9 +9,9 @@ DuRi 언어 이해 시스템 - 다국어 처리기
 - 다국어 지원
 """
 
-from dataclasses import dataclass
 import logging
 import re
+from dataclasses import dataclass
 from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
@@ -109,9 +109,7 @@ class MultilingualProcessor:
             self.logger.error(f"중국어 감지 중 오류: {e}")
             return False
 
-    async def _process_language_specific(
-        self, text: str, language: str
-    ) -> Dict[str, Any]:
+    async def _process_language_specific(self, text: str, language: str) -> Dict[str, Any]:
         """언어별 특화 처리"""
         try:
             if language == "ko":

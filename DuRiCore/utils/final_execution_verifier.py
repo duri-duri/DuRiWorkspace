@@ -11,11 +11,11 @@ FinalExecutionVerifier - 최종 실행 준비 완료 시스템
 @final_execution: 인간처럼 실패하고도 다시 일어날 수 있는 존재
 """
 
-from datetime import datetime
 import hashlib
 import json
 import logging
 import os
+from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
@@ -168,9 +168,7 @@ class FinalExecutionVerifier:
             if verification_result["is_ready"]:
                 logger.info(f"최종 실행 준비 완료 확인됨 (점수: {readiness_score:.3f})")
             else:
-                logger.warning(
-                    f"최종 실행 준비 완료되지 않음 (점수: {readiness_score:.3f})"
-                )
+                logger.warning(f"최종 실행 준비 완료되지 않음 (점수: {readiness_score:.3f})")
 
             return verification_result["is_ready"]
 
@@ -200,38 +198,31 @@ class FinalExecutionVerifier:
             # 1. 자동화 도구 검증 (가중치: 0.2)
             automation_score = self._verify_automation_tools()
             total_score += (
-                automation_score
-                * self.verification_criteria["automation_tools"]["weight"]
+                automation_score * self.verification_criteria["automation_tools"]["weight"]
             )
             total_weight += self.verification_criteria["automation_tools"]["weight"]
 
             # 2. 회귀 테스트 프레임워크 검증 (가중치: 0.2)
             regression_score = self._verify_regression_framework()
             total_score += (
-                regression_score
-                * self.verification_criteria["regression_framework"]["weight"]
+                regression_score * self.verification_criteria["regression_framework"]["weight"]
             )
             total_weight += self.verification_criteria["regression_framework"]["weight"]
 
             # 3. 롤백 시스템 검증 (가중치: 0.15)
             rollback_score = self._verify_rollback_system()
-            total_score += (
-                rollback_score * self.verification_criteria["rollback_system"]["weight"]
-            )
+            total_score += rollback_score * self.verification_criteria["rollback_system"]["weight"]
             total_weight += self.verification_criteria["rollback_system"]["weight"]
 
             # 4. 존재형 AI 검증 (가중치: 0.25)
             existence_score = self._verify_existence_ai()
-            total_score += (
-                existence_score * self.verification_criteria["existence_ai"]["weight"]
-            )
+            total_score += existence_score * self.verification_criteria["existence_ai"]["weight"]
             total_weight += self.verification_criteria["existence_ai"]["weight"]
 
             # 5. 최종 실행 시스템 검증 (가중치: 0.2)
             final_execution_score = self._verify_final_execution()
             total_score += (
-                final_execution_score
-                * self.verification_criteria["final_execution"]["weight"]
+                final_execution_score * self.verification_criteria["final_execution"]["weight"]
             )
             total_weight += self.verification_criteria["final_execution"]["weight"]
 
@@ -275,9 +266,7 @@ class FinalExecutionVerifier:
     def _verify_regression_framework(self) -> float:
         """회귀 테스트 프레임워크 검증"""
         try:
-            required_frameworks = self.verification_criteria["regression_framework"][
-                "required"
-            ]
+            required_frameworks = self.verification_criteria["regression_framework"]["required"]
             available_frameworks = 0
 
             for framework in required_frameworks:
@@ -288,11 +277,7 @@ class FinalExecutionVerifier:
                 else:
                     logger.warning(f"회귀 테스트 프레임워크 누락: {framework}")
 
-            score = (
-                available_frameworks / len(required_frameworks)
-                if required_frameworks
-                else 0.0
-            )
+            score = available_frameworks / len(required_frameworks) if required_frameworks else 0.0
             logger.info(
                 f"회귀 테스트 프레임워크 검증 점수: {score:.3f} ({available_frameworks}/{len(required_frameworks)})"
             )
@@ -316,9 +301,7 @@ class FinalExecutionVerifier:
                 else:
                     logger.warning(f"롤백 시스템 누락: {system}")
 
-            score = (
-                available_systems / len(required_systems) if required_systems else 0.0
-            )
+            score = available_systems / len(required_systems) if required_systems else 0.0
             logger.info(
                 f"롤백 시스템 검증 점수: {score:.3f} ({available_systems}/{len(required_systems)})"
             )
@@ -338,9 +321,7 @@ class FinalExecutionVerifier:
             # 존재형 AI 상태 확인
             evolution_capable = self.existence_ai.evolution_capability.can_evolve()
             recovery_capable = self.existence_ai.recovery_capability.can_recover()
-            existence_preserved = (
-                self.existence_ai.existence_preservation.is_preserved()
-            )
+            existence_preserved = self.existence_ai.existence_preservation.is_preserved()
 
             # 점수 계산
             score = 0.0
@@ -374,9 +355,7 @@ class FinalExecutionVerifier:
                 else:
                     logger.warning(f"최종 실행 시스템 누락: {system}")
 
-            score = (
-                available_systems / len(required_systems) if required_systems else 0.0
-            )
+            score = available_systems / len(required_systems) if required_systems else 0.0
             logger.info(
                 f"최종 실행 시스템 검증 점수: {score:.3f} ({available_systems}/{len(required_systems)})"
             )
@@ -392,41 +371,25 @@ class FinalExecutionVerifier:
             details = {
                 "automation_tools": {
                     "score": self._verify_automation_tools(),
-                    "status": (
-                        "ready"
-                        if self._verify_automation_tools() >= 0.8
-                        else "not_ready"
-                    ),
+                    "status": ("ready" if self._verify_automation_tools() >= 0.8 else "not_ready"),
                 },
                 "regression_framework": {
                     "score": self._verify_regression_framework(),
                     "status": (
-                        "ready"
-                        if self._verify_regression_framework() >= 0.8
-                        else "not_ready"
+                        "ready" if self._verify_regression_framework() >= 0.8 else "not_ready"
                     ),
                 },
                 "rollback_system": {
                     "score": self._verify_rollback_system(),
-                    "status": (
-                        "ready"
-                        if self._verify_rollback_system() >= 0.8
-                        else "not_ready"
-                    ),
+                    "status": ("ready" if self._verify_rollback_system() >= 0.8 else "not_ready"),
                 },
                 "existence_ai": {
                     "score": self._verify_existence_ai(),
-                    "status": (
-                        "ready" if self._verify_existence_ai() >= 0.8 else "not_ready"
-                    ),
+                    "status": ("ready" if self._verify_existence_ai() >= 0.8 else "not_ready"),
                 },
                 "final_execution": {
                     "score": self._verify_final_execution(),
-                    "status": (
-                        "ready"
-                        if self._verify_final_execution() >= 0.8
-                        else "not_ready"
-                    ),
+                    "status": ("ready" if self._verify_final_execution() >= 0.8 else "not_ready"),
                 },
             }
             return details
@@ -611,9 +574,7 @@ if __name__ == "__main__":
 
     # 최종 실행 준비 완료 확인
     readiness_status = verifier.verify_readiness()
-    print(
-        f"최종 실행 준비 완료 상태: {'준비 완료' if readiness_status else '준비되지 않음'}"
-    )
+    print(f"최종 실행 준비 완료 상태: {'준비 완료' if readiness_status else '준비되지 않음'}")
 
     # 준비 완료 점수 계산
     readiness_score = verifier.calculate_readiness_score()

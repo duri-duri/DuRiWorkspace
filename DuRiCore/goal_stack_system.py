@@ -5,14 +5,14 @@ Soar 기반 목표/하위목표 구조를 통한 의식적 조절 시스템
 """
 
 import asyncio
-from dataclasses import asdict, dataclass
-from datetime import datetime
-from enum import Enum
 import json
 import logging
 import time
-from typing import Any, Dict, List, Optional, Union
 import uuid
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional, Union
 
 # 로깅 설정
 logging.basicConfig(
@@ -236,9 +236,7 @@ class GoalStackSystem:
     def _handle_goal_overflow(self, new_goal: Goal):
         """목표 스택 오버플로우 처리"""
         # 가장 낮은 우선순위 목표 찾기
-        lowest_priority_goal = min(
-            self.goal_stack.active_goals, key=lambda g: g.priority.value
-        )
+        lowest_priority_goal = min(self.goal_stack.active_goals, key=lambda g: g.priority.value)
 
         if new_goal.priority.value < lowest_priority_goal.priority.value:
             # 새 목표가 더 높은 우선순위인 경우 교체
@@ -296,9 +294,7 @@ class GoalStackSystem:
 
         # 대기 중인 목표 중 하나를 활성화
         if self.goal_stack.suspended_goals:
-            next_goal = max(
-                self.goal_stack.suspended_goals, key=lambda g: g.priority.value
-            )
+            next_goal = max(self.goal_stack.suspended_goals, key=lambda g: g.priority.value)
             next_goal.status = GoalStatus.ACTIVE
             self.goal_stack.active_goals.append(next_goal)
             self.goal_stack.suspended_goals.remove(next_goal)
@@ -328,9 +324,7 @@ class GoalStackSystem:
             / self.goal_stack.max_active_goals,
         }
 
-    def calculate_goal_priority_score(
-        self, goal: Goal, context: Dict[str, Any]
-    ) -> float:
+    def calculate_goal_priority_score(self, goal: Goal, context: Dict[str, Any]) -> float:
         """Soar 기반 목표 우선순위 점수 계산"""
         urgency_score = self._calculate_urgency_score(goal, context)
         importance_score = self._calculate_importance_score(goal, context)
@@ -388,9 +382,7 @@ class GoalStackSystem:
 
         return base_score * dependency_factor
 
-    def _calculate_feasibility_score(
-        self, goal: Goal, context: Dict[str, Any]
-    ) -> float:
+    def _calculate_feasibility_score(self, goal: Goal, context: Dict[str, Any]) -> float:
         """실행 가능성 점수 계산"""
         # 리소스 가용성 확인
         resource_score = 1.0
@@ -401,9 +393,7 @@ class GoalStackSystem:
             ) / len(goal.resources)
 
         # 진행률 기반 보정
-        progress_factor = (
-            1.0 - goal.progress * 0.3
-        )  # 진행률이 높을수록 실행 가능성 증가
+        progress_factor = 1.0 - goal.progress * 0.3  # 진행률이 높을수록 실행 가능성 증가
 
         return resource_score * progress_factor
 
@@ -446,9 +436,7 @@ class GoalStackSystem:
             "deadline": best_goal.deadline,
         }
 
-    def _get_goal_type_action(
-        self, goal: Goal, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _get_goal_type_action(self, goal: Goal, context: Dict[str, Any]) -> Dict[str, Any]:
         """목표 유형별 행동 추천"""
         if goal.goal_type == GoalType.ACHIEVEMENT:
             return {
@@ -688,9 +676,7 @@ class GoalStackSystem:
                 "conflict_resolution": [],
             }
 
-    def _extract_goals_from_context(
-        self, context: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    def _extract_goals_from_context(self, context: Dict[str, Any]) -> List[Dict[str, Any]]:
         """컨텍스트에서 목표 정보 추출"""
         goals = []
 
@@ -779,9 +765,7 @@ class GoalStackSystem:
                     {
                         "action": "create",
                         "goal_data": goal_data,
-                        "priority": self._calculate_context_priority(
-                            goal_data, context
-                        ),
+                        "priority": self._calculate_context_priority(goal_data, context),
                     }
                 )
 
@@ -829,9 +813,7 @@ class GoalStackSystem:
         urgency_keywords = ["urgent", "critical", "emergency", "deadline", "immediate"]
         context_text = str(context).lower()
 
-        urgency_count = sum(
-            1 for keyword in urgency_keywords if keyword in context_text
-        )
+        urgency_count = sum(1 for keyword in urgency_keywords if keyword in context_text)
         return min(1.0, urgency_count * 0.2)
 
     def _assess_context_importance(self, context: Dict[str, Any]) -> float:
@@ -846,14 +828,10 @@ class GoalStackSystem:
         ]
         context_text = str(context).lower()
 
-        importance_count = sum(
-            1 for keyword in importance_keywords if keyword in context_text
-        )
+        importance_count = sum(1 for keyword in importance_keywords if keyword in context_text)
         return min(1.0, importance_count * 0.2)
 
-    def _reprioritize_goals(
-        self, aligned_goals: List[Dict[str, Any]], context: Dict[str, Any]
-    ):
+    def _reprioritize_goals(self, aligned_goals: List[Dict[str, Any]], context: Dict[str, Any]):
         """목표 우선순위 재조정"""
         for aligned_goal in aligned_goals:
             if aligned_goal["action"] == "update":
@@ -900,9 +878,7 @@ async def test_goal_stack_system():
         description="중요한 프로젝트를 완료합니다",
         goal_type=GoalType.ACHIEVEMENT,
         priority=GoalPriority.HIGH,
-        deadline=(
-            datetime.now().replace(hour=18, minute=0, second=0, microsecond=0)
-        ).isoformat(),
+        deadline=(datetime.now().replace(hour=18, minute=0, second=0, microsecond=0)).isoformat(),
         emotional_weight=0.8,
     )
 

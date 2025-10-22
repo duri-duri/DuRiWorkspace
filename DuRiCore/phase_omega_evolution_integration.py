@@ -15,33 +15,26 @@ Self-Rewriting, Genetic Programming, MetaCoder를 통합하여 DuRi가 스스로
 """
 
 import asyncio
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
 import json
 import logging
 import os
 import time
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 # Phase Z 및 Phase Ω 모듈들 import
 from duri_thought_flow import DuRiThoughtFlow
-from genetic_evolution_engine import (
-    EvolutionConfig,
-    EvolutionResult,
-    GeneticEvolutionEngine,
-    GeneticIndividual,
-)
-from meta_coder import CodeAnalysis, MetaCoder, RefactorProposal, RefactorResult
+from genetic_evolution_engine import (EvolutionConfig, EvolutionResult,
+                                      GeneticEvolutionEngine,
+                                      GeneticIndividual)
+from meta_coder import (CodeAnalysis, MetaCoder, RefactorProposal,
+                        RefactorResult)
 from phase_omega_integration import DuRiPhaseOmega
-
 # Phase Ω 모듈들 import
-from self_rewriting_module import (
-    CodeAssessment,
-    RewriteProposal,
-    RewriteResult,
-    SelfRewritingModule,
-)
+from self_rewriting_module import (CodeAssessment, RewriteProposal,
+                                   RewriteResult, SelfRewritingModule)
 
 # 로깅 설정
 logging.basicConfig(
@@ -166,9 +159,7 @@ class DuRiEvolutionIntegration:
             logger.error(f"진화 세션 시작 실패: {e}")
             raise
 
-    async def execute_evolution_cycle(
-        self, session: EvolutionSession
-    ) -> EvolutionResult:
+    async def execute_evolution_cycle(self, session: EvolutionSession) -> EvolutionResult:
         """진화 사이클 실행"""
         try:
             logger.info(f"🔄 진화 사이클 실행 시작: {session.session_id}")
@@ -179,45 +170,35 @@ class DuRiEvolutionIntegration:
             session.steps.append(assessment_step)
 
             if assessment_step.status == EvolutionStatus.FAILED:
-                return await self._create_failed_result(
-                    session, assessment_step.error_message
-                )
+                return await self._create_failed_result(session, assessment_step.error_message)
 
             # 2단계: Self-Rewriting
             rewriting_step = await self._execute_self_rewriting_phase(session)
             session.steps.append(rewriting_step)
 
             if rewriting_step.status == EvolutionStatus.FAILED:
-                return await self._create_failed_result(
-                    session, rewriting_step.error_message
-                )
+                return await self._create_failed_result(session, rewriting_step.error_message)
 
             # 3단계: Genetic Evolution
             genetic_step = await self._execute_genetic_evolution_phase(session)
             session.steps.append(genetic_step)
 
             if genetic_step.status == EvolutionStatus.FAILED:
-                return await self._create_failed_result(
-                    session, genetic_step.error_message
-                )
+                return await self._create_failed_result(session, genetic_step.error_message)
 
             # 4단계: MetaCoding
             metacoding_step = await self._execute_meta_coding_phase(session)
             session.steps.append(metacoding_step)
 
             if metacoding_step.status == EvolutionStatus.FAILED:
-                return await self._create_failed_result(
-                    session, metacoding_step.error_message
-                )
+                return await self._create_failed_result(session, metacoding_step.error_message)
 
             # 5단계: 통합 및 검증
             integration_step = await self._execute_integration_phase(session)
             session.steps.append(integration_step)
 
             if integration_step.status == EvolutionStatus.FAILED:
-                return await self._create_failed_result(
-                    session, integration_step.error_message
-                )
+                return await self._create_failed_result(session, integration_step.error_message)
 
             # 최종 결과 생성
             evolution_time = time.time() - start_time
@@ -227,9 +208,7 @@ class DuRiEvolutionIntegration:
             session.overall_status = EvolutionStatus.COMPLETED
             session.final_result = result.__dict__
 
-            logger.info(
-                f"✅ 진화 사이클 완료: {session.session_id}, 시간={evolution_time:.2f}초"
-            )
+            logger.info(f"✅ 진화 사이클 완료: {session.session_id}, 시간={evolution_time:.2f}초")
 
             return result
 
@@ -237,9 +216,7 @@ class DuRiEvolutionIntegration:
             logger.error(f"진화 사이클 실행 실패: {e}")
             return await self._create_failed_result(session, str(e))
 
-    async def _execute_assessment_phase(
-        self, session: EvolutionSession
-    ) -> EvolutionStep:
+    async def _execute_assessment_phase(self, session: EvolutionSession) -> EvolutionStep:
         """코드 평가 단계"""
         try:
             logger.info("📊 코드 평가 단계 시작")
@@ -269,20 +246,17 @@ class DuRiEvolutionIntegration:
                 "assessments": assessments,
                 "total_modules": len(assessments),
                 "average_complexity": (
-                    sum(a.complexity_score for a in assessments.values())
-                    / len(assessments)
+                    sum(a.complexity_score for a in assessments.values()) / len(assessments)
                     if assessments
                     else 0
                 ),
                 "average_maintainability": (
-                    sum(a.maintainability_score for a in assessments.values())
-                    / len(assessments)
+                    sum(a.maintainability_score for a in assessments.values()) / len(assessments)
                     if assessments
                     else 0
                 ),
                 "average_performance": (
-                    sum(a.performance_score for a in assessments.values())
-                    / len(assessments)
+                    sum(a.performance_score for a in assessments.values()) / len(assessments)
                     if assessments
                     else 0
                 ),
@@ -302,9 +276,7 @@ class DuRiEvolutionIntegration:
             step.end_time = datetime.now()
             return step
 
-    async def _execute_self_rewriting_phase(
-        self, session: EvolutionSession
-    ) -> EvolutionStep:
+    async def _execute_self_rewriting_phase(self, session: EvolutionSession) -> EvolutionStep:
         """Self-Rewriting 단계"""
         try:
             logger.info("🔧 Self-Rewriting 단계 시작")
@@ -372,9 +344,7 @@ class DuRiEvolutionIntegration:
             step.end_time = datetime.now()
             return step
 
-    async def _execute_genetic_evolution_phase(
-        self, session: EvolutionSession
-    ) -> EvolutionStep:
+    async def _execute_genetic_evolution_phase(self, session: EvolutionSession) -> EvolutionStep:
         """Genetic Evolution 단계"""
         try:
             logger.info("🧬 Genetic Evolution 단계 시작")
@@ -408,9 +378,7 @@ class DuRiEvolutionIntegration:
             step.status = EvolutionStatus.COMPLETED
             step.end_time = datetime.now()
 
-            logger.info(
-                f"✅ Genetic Evolution 완료: 적합도={evolution_result.final_fitness:.3f}"
-            )
+            logger.info(f"✅ Genetic Evolution 완료: 적합도={evolution_result.final_fitness:.3f}")
 
             return step
 
@@ -421,9 +389,7 @@ class DuRiEvolutionIntegration:
             step.end_time = datetime.now()
             return step
 
-    async def _execute_meta_coding_phase(
-        self, session: EvolutionSession
-    ) -> EvolutionStep:
+    async def _execute_meta_coding_phase(self, session: EvolutionSession) -> EvolutionStep:
         """MetaCoding 단계"""
         try:
             logger.info("🤖 MetaCoding 단계 시작")
@@ -473,8 +439,7 @@ class DuRiEvolutionIntegration:
                 "modules_processed": len(target_modules),
                 "successful_refactorings": len(refactoring_results),
                 "average_improvement": (
-                    sum(r["improvement"] for r in refactoring_results)
-                    / len(refactoring_results)
+                    sum(r["improvement"] for r in refactoring_results) / len(refactoring_results)
                     if refactoring_results
                     else 0
                 ),
@@ -494,9 +459,7 @@ class DuRiEvolutionIntegration:
             step.end_time = datetime.now()
             return step
 
-    async def _execute_integration_phase(
-        self, session: EvolutionSession
-    ) -> EvolutionStep:
+    async def _execute_integration_phase(self, session: EvolutionSession) -> EvolutionStep:
         """통합 및 검증 단계"""
         try:
             logger.info("🔗 통합 및 검증 단계 시작")
@@ -619,9 +582,7 @@ class DuRiCore:
             for step in session.steps:
                 if step.result:
                     if step.phase == EvolutionPhase.SELF_REWRITING:
-                        improvements_made.extend(
-                            step.result.get("improvements_made", [])
-                        )
+                        improvements_made.extend(step.result.get("improvements_made", []))
                     elif step.phase == EvolutionPhase.META_CODING:
                         for refactoring in step.result.get("refactoring_results", []):
                             improvements_made.append(
@@ -640,9 +601,7 @@ class DuRiCore:
                             "average_maintainability", 0.0
                         )
                     elif step.phase == EvolutionPhase.META_CODING:
-                        quality_improvement = step.result.get(
-                            "average_improvement", 0.0
-                        )
+                        quality_improvement = step.result.get("average_improvement", 0.0)
                     elif step.phase == EvolutionPhase.GENETIC_EVOLUTION:
                         performance_improvement = step.result.get("best_fitness", 0.0)
 
@@ -695,9 +654,7 @@ async def main():
     evolution_integration = DuRiEvolutionIntegration()
 
     # 진화 세션 시작
-    session = await evolution_integration.start_evolution_session(
-        "성능 최적화 및 코드 품질 향상"
-    )
+    session = await evolution_integration.start_evolution_session("성능 최적화 및 코드 품질 향상")
 
     # 진화 사이클 실행
     result = await evolution_integration.execute_evolution_cycle(session)

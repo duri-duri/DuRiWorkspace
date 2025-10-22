@@ -11,15 +11,15 @@ DuRi Phase 1-3 Week 3 Day 14 - 통합 성공도 개선 시스템
 """
 
 import asyncio
-from collections import Counter, defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 import hashlib
 import json
 import logging
 import re
 import time
+from collections import Counter, defaultdict
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
@@ -124,9 +124,7 @@ class ConflictDetectionSystem:
 
         for i, element1 in enumerate(knowledge_elements):
             for j, element2 in enumerate(knowledge_elements[i + 1 :], i + 1):
-                conflict = await self._check_for_integration_conflict(
-                    element1, element2
-                )
+                conflict = await self._check_for_integration_conflict(element1, element2)
                 if conflict:
                     conflicts.append(conflict)
 
@@ -221,9 +219,7 @@ class ResolutionAlgorithm:
 
         return resolution_result
 
-    async def _resolve_value_conflict(
-        self, conflict: IntegrationConflict
-    ) -> ResolutionMethod:
+    async def _resolve_value_conflict(self, conflict: IntegrationConflict) -> ResolutionMethod:
         """값 충돌 해결"""
         # 우선순위 기반 해결
         if conflict.priority == IntegrationPriority.CRITICAL:
@@ -233,23 +229,17 @@ class ResolutionAlgorithm:
         else:
             return ResolutionMethod.MERGE
 
-    async def _resolve_type_conflict(
-        self, conflict: IntegrationConflict
-    ) -> ResolutionMethod:
+    async def _resolve_type_conflict(self, conflict: IntegrationConflict) -> ResolutionMethod:
         """유형 충돌 해결"""
         # 변환 기반 해결
         return ResolutionMethod.TRANSFORM
 
-    async def _resolve_structure_conflict(
-        self, conflict: IntegrationConflict
-    ) -> ResolutionMethod:
+    async def _resolve_structure_conflict(self, conflict: IntegrationConflict) -> ResolutionMethod:
         """구조 충돌 해결"""
         # 병합 기반 해결
         return ResolutionMethod.MERGE
 
-    async def _resolve_general_conflict(
-        self, conflict: IntegrationConflict
-    ) -> ResolutionMethod:
+    async def _resolve_general_conflict(self, conflict: IntegrationConflict) -> ResolutionMethod:
         """일반 충돌 해결"""
         # 협상 기반 해결
         return ResolutionMethod.NEGOTIATE
@@ -299,9 +289,7 @@ class IntegrationPrioritySystem:
 
         return priorities
 
-    async def _calculate_element_priority(
-        self, element: Dict[str, Any]
-    ) -> IntegrationPriorityItem:
+    async def _calculate_element_priority(self, element: Dict[str, Any]) -> IntegrationPriorityItem:
         """요소 우선순위 계산"""
         priority_id = f"priority_{int(time.time())}"
 
@@ -344,9 +332,7 @@ class IntegrationPrioritySystem:
 
         return np.mean(score_factors) if score_factors else 0.0
 
-    async def _determine_priority_level(
-        self, priority_score: float
-    ) -> IntegrationPriority:
+    async def _determine_priority_level(self, priority_score: float) -> IntegrationPriority:
         """우선순위 수준 결정"""
         if priority_score >= 0.8:
             return IntegrationPriority.CRITICAL
@@ -399,15 +385,11 @@ class SuccessMonitoringSystem:
         failure_factors = await self._analyze_failure_factors(integration_session)
 
         # 개선 제안 생성
-        improvement_suggestions = await self._generate_improvement_suggestions(
-            integration_session
-        )
+        improvement_suggestions = await self._generate_improvement_suggestions(integration_session)
 
         success = IntegrationSuccess(
             success_id=success_id,
-            integration_session_id=str(
-                integration_session.get("session_id", "unknown")
-            ),
+            integration_session_id=str(integration_session.get("session_id", "unknown")),
             success_score=success_score,
             success_factors=success_factors,
             failure_factors=failure_factors,
@@ -417,9 +399,7 @@ class SuccessMonitoringSystem:
         self.monitoring_history.append(success)
         return success
 
-    async def _calculate_success_score(
-        self, integration_session: Dict[str, Any]
-    ) -> float:
+    async def _calculate_success_score(self, integration_session: Dict[str, Any]) -> float:
         """성공도 점수 계산"""
         success_factors = []
 
@@ -428,9 +408,7 @@ class SuccessMonitoringSystem:
         success_factors.append(completion_score)
 
         # 충돌 해결률
-        conflict_resolution_rate = integration_session.get(
-            "conflict_resolution_rate", 0.5
-        )
+        conflict_resolution_rate = integration_session.get("conflict_resolution_rate", 0.5)
         success_factors.append(conflict_resolution_rate)
 
         # 일관성 점수
@@ -443,9 +421,7 @@ class SuccessMonitoringSystem:
 
         return np.mean(success_factors) if success_factors else 0.0
 
-    async def _analyze_success_factors(
-        self, integration_session: Dict[str, Any]
-    ) -> List[str]:
+    async def _analyze_success_factors(self, integration_session: Dict[str, Any]) -> List[str]:
         """성공 요인 분석"""
         factors = []
 
@@ -463,9 +439,7 @@ class SuccessMonitoringSystem:
 
         return factors
 
-    async def _analyze_failure_factors(
-        self, integration_session: Dict[str, Any]
-    ) -> List[str]:
+    async def _analyze_failure_factors(self, integration_session: Dict[str, Any]) -> List[str]:
         """실패 요인 분석"""
         factors = []
 
@@ -524,9 +498,7 @@ class IntegrationSuccessSystem:
         conflicts = await self.conflict_detector.detect_conflicts(knowledge_elements)
 
         # 2. 우선순위 결정
-        priorities = await self.priority_system.determine_integration_priorities(
-            knowledge_elements
-        )
+        priorities = await self.priority_system.determine_integration_priorities(knowledge_elements)
 
         # 3. 충돌 해결
         resolved_conflicts = []
@@ -541,15 +513,11 @@ class IntegrationSuccessSystem:
             "conflicts": conflicts,
             "resolved_conflicts": resolved_conflicts,
             "priorities": priorities,
-            "completion_rate": await self._calculate_completion_rate(
-                knowledge_elements, conflicts
-            ),
+            "completion_rate": await self._calculate_completion_rate(knowledge_elements, conflicts),
             "conflict_resolution_rate": await self._calculate_conflict_resolution_rate(
                 conflicts, resolved_conflicts
             ),
-            "consistency_score": await self._calculate_consistency_score(
-                knowledge_elements
-            ),
+            "consistency_score": await self._calculate_consistency_score(knowledge_elements),
             "quality_score": await self._calculate_quality_score(knowledge_elements),
         }
 
@@ -608,17 +576,11 @@ class IntegrationSuccessSystem:
             return 1.0
 
         resolved_count = len(
-            [
-                res
-                for res in resolved_conflicts
-                if res["resolution_status"] == "resolved"
-            ]
+            [res for res in resolved_conflicts if res["resolution_status"] == "resolved"]
         )
         return resolved_count / len(conflicts)
 
-    async def _calculate_consistency_score(
-        self, knowledge_elements: List[Dict[str, Any]]
-    ) -> float:
+    async def _calculate_consistency_score(self, knowledge_elements: List[Dict[str, Any]]) -> float:
         """일관성 점수 계산"""
         if not knowledge_elements:
             return 0.0
@@ -627,9 +589,7 @@ class IntegrationSuccessSystem:
         consistency_scores = []
         for i, element1 in enumerate(knowledge_elements):
             for element2 in knowledge_elements[i + 1 :]:
-                consistency = await self._evaluate_element_consistency(
-                    element1, element2
-                )
+                consistency = await self._evaluate_element_consistency(element1, element2)
                 consistency_scores.append(consistency)
 
         return np.mean(consistency_scores) if consistency_scores else 0.0
@@ -647,9 +607,7 @@ class IntegrationSuccessSystem:
 
         return 0.5
 
-    async def _calculate_quality_score(
-        self, knowledge_elements: List[Dict[str, Any]]
-    ) -> float:
+    async def _calculate_quality_score(self, knowledge_elements: List[Dict[str, Any]]) -> float:
         """품질 점수 계산"""
         if not knowledge_elements:
             return 0.0

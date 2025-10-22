@@ -4,8 +4,8 @@ DuRi 전략 학습 엔진 - 확장 버전
 판단 결과를 관찰하고 패턴을 분석하여 전략적 통찰을 도출
 """
 
-from datetime import datetime
 import json
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 
@@ -39,7 +39,9 @@ class StrategicLearningEngine:
 
         summary = "DuRi가 전략적으로 판단한 흐름 요약:\n"
         for idx, h in enumerate(self.history):
-            summary += f"{idx+1}. 상황: {h['situation']} → 행동: {h['action']} (이유: {h['reasoning']})\n"
+            summary += (
+                f"{idx+1}. 상황: {h['situation']} → 행동: {h['action']} (이유: {h['reasoning']})\n"
+            )
 
         return summary
 

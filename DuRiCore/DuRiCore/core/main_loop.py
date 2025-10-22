@@ -5,9 +5,9 @@ DuRiCore - 메인 루프
 """
 
 import asyncio
+import logging
 from dataclasses import dataclass
 from datetime import datetime
-import logging
 from typing import Any, Dict, List, Optional
 
 # 모듈 임포트
@@ -129,9 +129,7 @@ class MainLoop:
             logger.info(f"성찰 완료: {len(reflection.insights)}개 인사이트")
 
             # 5단계: 메모리 저장
-            memory_entry = await self._store_memory(
-                input_data, judgment, execution, reflection
-            )
+            memory_entry = await self._store_memory(input_data, judgment, execution, reflection)
             logger.info(f"메모리 저장 완료")
 
             # 6단계: 자기 진화 (주기적)
@@ -165,9 +163,7 @@ class MainLoop:
             # 감정 엔진을 통한 분석
             analysis_input = {"text": input_data.text, "context": input_data.context}
 
-            emotional_analysis = self.emotion_engine.analyze_complex_emotion(
-                analysis_input
-            )
+            emotional_analysis = self.emotion_engine.analyze_complex_emotion(analysis_input)
 
             # 현재 상태 업데이트
             self.current_state["emotional_state"] = emotional_analysis.primary_emotion
@@ -257,9 +253,7 @@ class MainLoop:
             action = judgment.decision
 
             # 실행 성공률 계산 (감정 상태와 판단 신뢰도 기반)
-            success_probability = judgment.confidence * (
-                1 - emotional_analysis.intensity * 0.3
-            )
+            success_probability = judgment.confidence * (1 - emotional_analysis.intensity * 0.3)
             success = success_probability > 0.5
 
             # 피드백 생성
@@ -316,28 +310,20 @@ class MainLoop:
             # 2. 판단 품질 분석
             if judgment.confidence < 0.6:
                 insights.append("판단에 대한 확신이 낮았습니다.")
-                improvement_suggestions.append(
-                    "더 많은 정보를 수집하여 판단의 정확도를 높이세요."
-                )
+                improvement_suggestions.append("더 많은 정보를 수집하여 판단의 정확도를 높이세요.")
 
             # 3. 실행 결과 분석
             if execution.success:
                 lessons_learned.append("성공적인 실행 패턴을 학습했습니다.")
             else:
                 lessons_learned.append("실패한 실행에서 교훈을 얻었습니다.")
-                improvement_suggestions.append(
-                    "다음에는 다른 접근 방식을 시도해보세요."
-                )
+                improvement_suggestions.append("다음에는 다른 접근 방식을 시도해보세요.")
 
             # 4. 감정-이성 균형 분석
-            balance_type = emotional_analysis.emotion_reason_balance.get(
-                "balance_type", "balanced"
-            )
+            balance_type = emotional_analysis.emotion_reason_balance.get("balance_type", "balanced")
             if balance_type == "emotion_dominant":
                 insights.append("감정이 이성보다 우세했습니다.")
-                improvement_suggestions.append(
-                    "더 객관적인 판단을 위해 이성적 분석을 강화하세요."
-                )
+                improvement_suggestions.append("더 객관적인 판단을 위해 이성적 분석을 강화하세요.")
             elif balance_type == "reason_dominant":
                 insights.append("이성이 감정보다 우세했습니다.")
                 improvement_suggestions.append("감정적 공감 능력을 향상시키세요.")
@@ -448,10 +434,7 @@ class MainLoop:
             last_evolution = self.current_state.get("last_evolution")
             current_time = datetime.now()
 
-            if (
-                last_evolution is None
-                or (current_time - last_evolution).total_seconds() > 3600
-            ):
+            if last_evolution is None or (current_time - last_evolution).total_seconds() > 3600:
 
                 logger.info("자기 진화 분석 시작")
                 evolution_result = self.self_evolution_engine.analyze_and_evolve()
@@ -459,9 +442,7 @@ class MainLoop:
                 # 진화 결과 적용
                 self.current_state["last_evolution"] = current_time
 
-                logger.info(
-                    f"자기 진화 완료: 점수 {evolution_result.evolution_score:.2f}"
-                )
+                logger.info(f"자기 진화 완료: 점수 {evolution_result.evolution_score:.2f}")
                 return evolution_result
 
             return None
@@ -498,9 +479,9 @@ class MainLoop:
 
     def get_memory_summary(self, limit: int = 10) -> List[Dict[str, Any]]:
         """메모리 요약 반환"""
-        recent_memories = sorted(
-            self.memory_store, key=lambda x: x.created_at, reverse=True
-        )[:limit]
+        recent_memories = sorted(self.memory_store, key=lambda x: x.created_at, reverse=True)[
+            :limit
+        ]
 
         return [
             {

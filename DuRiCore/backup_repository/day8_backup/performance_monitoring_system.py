@@ -5,15 +5,15 @@ DuRiCore Phase 5 Day 7 - 성능 모니터링 시스템
 """
 
 import asyncio
-from dataclasses import dataclass
-from datetime import datetime
-from enum import Enum
 import json
 import logging
 import math
 import random
 import statistics
 import time
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 logger = logging.getLogger(__name__)
@@ -156,18 +156,14 @@ class PerformanceMonitoringSystem:
             # 데이터 정리 (최대 개수 초과 시)
             await self._cleanup_old_data()
 
-            logger.info(
-                f"실시간 성능 모니터링 완료: {len(performance_data_list)}개 지표 수집"
-            )
+            logger.info(f"실시간 성능 모니터링 완료: {len(performance_data_list)}개 지표 수집")
             return performance_data_list
 
         except Exception as e:
             logger.error(f"실시간 성능 모니터링 실패: {e}")
             return []
 
-    async def analyze_performance_trends(
-        self, trend_data: List[Dict[str, Any]]
-    ) -> Dict[str, Any]:
+    async def analyze_performance_trends(self, trend_data: List[Dict[str, Any]]) -> Dict[str, Any]:
         """성능 트렌드 분석"""
         try:
             logger.info("성능 트렌드 분석 시작")
@@ -183,9 +179,7 @@ class PerformanceMonitoringSystem:
             # 각 지표별 트렌드 분석
             for metric_type in PerformanceMetric:
                 metric_data = [
-                    data
-                    for data in self.performance_data
-                    if data.metric_type == metric_type
+                    data for data in self.performance_data if data.metric_type == metric_type
                 ]
                 if len(metric_data) >= 2:
                     trend_analysis = await self._analyze_metric_trend(metric_data)
@@ -204,9 +198,7 @@ class PerformanceMonitoringSystem:
             analysis_result["predictions"] = predictions
 
             # 권장사항 생성
-            recommendations = await self._generate_trend_recommendations(
-                analysis_result
-            )
+            recommendations = await self._generate_trend_recommendations(analysis_result)
             analysis_result["recommendations"] = recommendations
 
             logger.info("성능 트렌드 분석 완료")
@@ -233,9 +225,7 @@ class PerformanceMonitoringSystem:
                     self.active_alerts.append(alert)
 
             # 조건 기반 알림 생성
-            condition_alerts = await self._create_condition_based_alerts(
-                alert_conditions
-            )
+            condition_alerts = await self._create_condition_based_alerts(alert_conditions)
             alerts.extend(condition_alerts)
 
             logger.info(f"성능 알림 생성 완료: {len(alerts)}개 알림")
@@ -268,15 +258,11 @@ class PerformanceMonitoringSystem:
             validation_result["improvement_verified"] = improvement_verified
 
             # 개선 세부사항
-            improvement_details = await self._analyze_improvement_details(
-                improvement_data
-            )
+            improvement_details = await self._analyze_improvement_details(improvement_data)
             validation_result["improvement_details"] = improvement_details
 
             # 검증 신뢰도
-            validation_confidence = await self._calculate_validation_confidence(
-                improvement_data
-            )
+            validation_confidence = await self._calculate_validation_confidence(improvement_data)
             validation_result["validation_confidence"] = validation_confidence
 
             logger.info(f"성능 개선 검증 완료: {improvement_verified}")
@@ -286,9 +272,7 @@ class PerformanceMonitoringSystem:
             logger.error(f"성능 개선 검증 실패: {e}")
             return {"error": str(e)}
 
-    async def _check_performance_alerts(
-        self, performance_data: PerformanceData
-    ) -> None:
+    async def _check_performance_alerts(self, performance_data: PerformanceData) -> None:
         """성능 알림 확인"""
         metric_type = performance_data.metric_type
         current_value = performance_data.value
@@ -323,9 +307,7 @@ class PerformanceMonitoringSystem:
 
             logger.warning(f"성능 알림 생성: {alert.message}")
 
-    async def _analyze_metric_trend(
-        self, metric_data: List[PerformanceData]
-    ) -> Dict[str, Any]:
+    async def _analyze_metric_trend(self, metric_data: List[PerformanceData]) -> Dict[str, Any]:
         """개별 지표 트렌드 분석"""
         if len(metric_data) < 2:
             return {"trend": "insufficient_data"}
@@ -361,9 +343,7 @@ class PerformanceMonitoringSystem:
             if len(self.performance_data) >= 10
             else self.performance_data
         )
-        previous_data = (
-            self.performance_data[-20:-10] if len(self.performance_data) >= 20 else []
-        )
+        previous_data = self.performance_data[-20:-10] if len(self.performance_data) >= 20 else []
 
         if not previous_data:
             return "insufficient_data"
@@ -385,9 +365,7 @@ class PerformanceMonitoringSystem:
 
         for metric_type in PerformanceMetric:
             metric_data = [
-                data
-                for data in self.performance_data
-                if data.metric_type == metric_type
+                data for data in self.performance_data if data.metric_type == metric_type
             ]
             if len(metric_data) >= 5:
                 values = [data.value for data in metric_data]
@@ -421,9 +399,7 @@ class PerformanceMonitoringSystem:
 
         for metric_type in PerformanceMetric:
             metric_data = [
-                data
-                for data in self.performance_data
-                if data.metric_type == metric_type
+                data for data in self.performance_data if data.metric_type == metric_type
             ]
             if len(metric_data) >= 5:
                 values = [data.value for data in metric_data]
@@ -441,22 +417,16 @@ class PerformanceMonitoringSystem:
 
         return predictions
 
-    async def _generate_trend_recommendations(
-        self, analysis_result: Dict[str, Any]
-    ) -> List[str]:
+    async def _generate_trend_recommendations(self, analysis_result: Dict[str, Any]) -> List[str]:
         """트렌드 기반 권장사항 생성"""
         recommendations = []
 
         # 전체 트렌드 기반 권장사항
         overall_trend = analysis_result.get("overall_trend", "stable")
         if overall_trend == "declining":
-            recommendations.append(
-                "전체 성능이 하락하고 있습니다. 최적화가 필요합니다."
-            )
+            recommendations.append("전체 성능이 하락하고 있습니다. 최적화가 필요합니다.")
         elif overall_trend == "improving":
-            recommendations.append(
-                "전체 성능이 개선되고 있습니다. 현재 설정을 유지하세요."
-            )
+            recommendations.append("전체 성능이 개선되고 있습니다. 현재 설정을 유지하세요.")
 
         # 개별 지표 기반 권장사항
         metric_trends = analysis_result.get("metric_trends", {})
@@ -549,17 +519,13 @@ class PerformanceMonitoringSystem:
 
         return alerts
 
-    async def _measure_improvement_effect(
-        self, improvement_data: Dict[str, Any]
-    ) -> float:
+    async def _measure_improvement_effect(self, improvement_data: Dict[str, Any]) -> float:
         """개선 효과 측정"""
         before_performance = improvement_data.get("before_performance", 0.0)
         after_performance = improvement_data.get("after_performance", 0.0)
 
         if before_performance > 0:
-            improvement_score = (
-                after_performance - before_performance
-            ) / before_performance
+            improvement_score = (after_performance - before_performance) / before_performance
             return max(improvement_score, 0.0)
 
         return 0.0
@@ -575,43 +541,26 @@ class PerformanceMonitoringSystem:
         }
 
         # 성능 개선 분석
-        if (
-            "before_performance" in improvement_data
-            and "after_performance" in improvement_data
-        ):
+        if "before_performance" in improvement_data and "after_performance" in improvement_data:
             before = improvement_data["before_performance"]
             after = improvement_data["after_performance"]
-            details["performance_improvement"] = (
-                (after - before) / before if before > 0 else 0.0
-            )
+            details["performance_improvement"] = (after - before) / before if before > 0 else 0.0
 
         # 안정성 개선 분석
-        if (
-            "before_stability" in improvement_data
-            and "after_stability" in improvement_data
-        ):
+        if "before_stability" in improvement_data and "after_stability" in improvement_data:
             before = improvement_data["before_stability"]
             after = improvement_data["after_stability"]
-            details["stability_improvement"] = (
-                (after - before) / before if before > 0 else 0.0
-            )
+            details["stability_improvement"] = (after - before) / before if before > 0 else 0.0
 
         # 효율성 개선 분석
-        if (
-            "before_efficiency" in improvement_data
-            and "after_efficiency" in improvement_data
-        ):
+        if "before_efficiency" in improvement_data and "after_efficiency" in improvement_data:
             before = improvement_data["before_efficiency"]
             after = improvement_data["after_efficiency"]
-            details["efficiency_improvement"] = (
-                (after - before) / before if before > 0 else 0.0
-            )
+            details["efficiency_improvement"] = (after - before) / before if before > 0 else 0.0
 
         return details
 
-    async def _calculate_validation_confidence(
-        self, improvement_data: Dict[str, Any]
-    ) -> float:
+    async def _calculate_validation_confidence(self, improvement_data: Dict[str, Any]) -> float:
         """검증 신뢰도 계산"""
         confidence_factors = []
 
@@ -626,17 +575,13 @@ class PerformanceMonitoringSystem:
         # 샘플 크기
         if "sample_size" in improvement_data:
             sample_size = improvement_data["sample_size"]
-            sample_confidence = min(
-                sample_size / 100.0, 1.0
-            )  # 100개 이상이면 최대 신뢰도
+            sample_confidence = min(sample_size / 100.0, 1.0)  # 100개 이상이면 최대 신뢰도
             confidence_factors.append(sample_confidence)
 
         # 시간 범위
         if "time_range" in improvement_data:
             time_range = improvement_data["time_range"]
-            time_confidence = min(
-                time_range / 3600.0, 1.0
-            )  # 1시간 이상이면 최대 신뢰도
+            time_confidence = min(time_range / 3600.0, 1.0)  # 1시간 이상이면 최대 신뢰도
             confidence_factors.append(time_confidence)
 
         return statistics.mean(confidence_factors) if confidence_factors else 0.5
@@ -683,9 +628,7 @@ async def test_performance_monitoring_system():
         "availability": random.uniform(0.92, 0.999),
     }
 
-    performance_data = await monitoring_system.monitor_real_time_performance(
-        system_metrics
-    )
+    performance_data = await monitoring_system.monitor_real_time_performance(system_metrics)
     print(f"   - 수집된 성능 데이터: {len(performance_data)}개")
     print(f"   - 활성 알림: {len(monitoring_system.active_alerts)}개")
 
@@ -718,14 +661,10 @@ async def test_performance_monitoring_system():
         "time_range": 7200,  # 2시간
     }
 
-    validation_result = await monitoring_system.validate_performance_improvements(
-        improvement_data
-    )
+    validation_result = await monitoring_system.validate_performance_improvements(improvement_data)
     print(f"   - 개선 검증: {validation_result.get('improvement_verified', False)}")
     print(f"   - 개선 점수: {validation_result.get('improvement_score', 0.0):.3f}")
-    print(
-        f"   - 검증 신뢰도: {validation_result.get('validation_confidence', 0.0):.3f}"
-    )
+    print(f"   - 검증 신뢰도: {validation_result.get('validation_confidence', 0.0):.3f}")
 
     print("=== 성능 모니터링 시스템 테스트 완료 ===")
 

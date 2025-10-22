@@ -5,9 +5,9 @@ DuRi 컨텍스트 전파 시스템
 요청/세션/학습 세션 ID와 단계를 전파합니다.
 """
 
+import uuid
 from contextvars import ContextVar
 from typing import Dict, Optional
-import uuid
 
 # 컨텍스트 변수들
 _request_id = ContextVar("request_id", default="-")

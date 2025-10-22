@@ -3,10 +3,10 @@ Phase 25: 윤리적 판단 시스템 (Ethical Judgment System)
 책임 있는 AI 의사결정과 사회적 영향 고려
 """
 
-from dataclasses import dataclass
-from enum import Enum
 import json
 import time
+from dataclasses import dataclass
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 
@@ -125,14 +125,10 @@ class EthicalJudgmentSystem:
         print(f"⚖️ 윤리적 함의 분석 시작: {proposed_action[:50]}...")
 
         # 적용할 윤리적 원칙 식별
-        principles_applied = self._identify_applicable_principles(
-            decision_context, proposed_action
-        )
+        principles_applied = self._identify_applicable_principles(decision_context, proposed_action)
 
         # 영향 평가
-        impact_assessment = self._assess_impact_levels(
-            decision_context, proposed_action
-        )
+        impact_assessment = self._assess_impact_levels(decision_context, proposed_action)
 
         # 위험 요소 식별
         risk_factors = self._identify_risk_factors(decision_context, proposed_action)
@@ -141,9 +137,7 @@ class EthicalJudgmentSystem:
         mitigation_strategies = self._develop_mitigation_strategies(risk_factors)
 
         # 이해관계자 고려사항
-        stakeholder_considerations = self._identify_stakeholder_considerations(
-            decision_context
-        )
+        stakeholder_considerations = self._identify_stakeholder_considerations(decision_context)
 
         # 윤리적 점수 계산
         ethical_score = self._calculate_ethical_score(
@@ -217,9 +211,7 @@ class EthicalJudgmentSystem:
         accountability_keywords = ["책임", "결과", "영향", "평가", "검증"]
         return any(keyword in action for keyword in accountability_keywords)
 
-    def _assess_impact_levels(
-        self, context: Dict[str, Any], action: str
-    ) -> Dict[str, ImpactLevel]:
+    def _assess_impact_levels(self, context: Dict[str, Any], action: str) -> Dict[str, ImpactLevel]:
         """영향 수준 평가"""
         impact_assessment = {}
 
@@ -308,9 +300,7 @@ class EthicalJudgmentSystem:
 
         return mitigation_strategies
 
-    def _identify_stakeholder_considerations(
-        self, context: Dict[str, Any]
-    ) -> List[str]:
+    def _identify_stakeholder_considerations(self, context: Dict[str, Any]) -> List[str]:
         """이해관계자 고려사항 식별"""
         considerations = []
 
@@ -336,9 +326,7 @@ class EthicalJudgmentSystem:
         base_score += principle_bonus
 
         # 영향 수준 조정
-        high_impact_count = sum(
-            1 for level in impact.values() if level == ImpactLevel.HIGH
-        )
+        high_impact_count = sum(1 for level in impact.values() if level == ImpactLevel.HIGH)
         if high_impact_count > 0:
             base_score += 0.1
 
@@ -358,24 +346,16 @@ class EthicalJudgmentSystem:
         direct_impact = self._analyze_direct_impact(decision_context, proposed_action)
 
         # 간접적 영향 분석
-        indirect_impact = self._analyze_indirect_impact(
-            decision_context, proposed_action
-        )
+        indirect_impact = self._analyze_indirect_impact(decision_context, proposed_action)
 
         # 장기적 효과 분석
-        long_term_effects = self._analyze_long_term_effects(
-            decision_context, proposed_action
-        )
+        long_term_effects = self._analyze_long_term_effects(decision_context, proposed_action)
 
         # 취약 계층 식별
-        vulnerable_groups = self._identify_vulnerable_groups(
-            decision_context, proposed_action
-        )
+        vulnerable_groups = self._identify_vulnerable_groups(decision_context, proposed_action)
 
         # 혜택 분배 분석
-        benefit_distribution = self._analyze_benefit_distribution(
-            decision_context, proposed_action
-        )
+        benefit_distribution = self._analyze_benefit_distribution(decision_context, proposed_action)
 
         assessment = SocialImpactAssessment(
             direct_impact=direct_impact,
@@ -389,9 +369,7 @@ class EthicalJudgmentSystem:
 
         return assessment
 
-    def _analyze_direct_impact(
-        self, context: Dict[str, Any], action: str
-    ) -> Dict[str, str]:
+    def _analyze_direct_impact(self, context: Dict[str, Any], action: str) -> Dict[str, str]:
         """직접적 영향 분석"""
         direct_impact = {}
 
@@ -404,9 +382,7 @@ class EthicalJudgmentSystem:
 
         return direct_impact
 
-    def _analyze_indirect_impact(
-        self, context: Dict[str, Any], action: str
-    ) -> Dict[str, str]:
+    def _analyze_indirect_impact(self, context: Dict[str, Any], action: str) -> Dict[str, str]:
         """간접적 영향 분석"""
         indirect_impact = {}
 
@@ -419,9 +395,7 @@ class EthicalJudgmentSystem:
 
         return indirect_impact
 
-    def _analyze_long_term_effects(
-        self, context: Dict[str, Any], action: str
-    ) -> List[str]:
+    def _analyze_long_term_effects(self, context: Dict[str, Any], action: str) -> List[str]:
         """장기적 효과 분석"""
         long_term_effects = []
 
@@ -434,9 +408,7 @@ class EthicalJudgmentSystem:
 
         return long_term_effects
 
-    def _identify_vulnerable_groups(
-        self, context: Dict[str, Any], action: str
-    ) -> List[str]:
+    def _identify_vulnerable_groups(self, context: Dict[str, Any], action: str) -> List[str]:
         """취약 계층 식별"""
         vulnerable_groups = []
 
@@ -449,9 +421,7 @@ class EthicalJudgmentSystem:
 
         return vulnerable_groups
 
-    def _analyze_benefit_distribution(
-        self, context: Dict[str, Any], action: str
-    ) -> Dict[str, str]:
+    def _analyze_benefit_distribution(self, context: Dict[str, Any], action: str) -> Dict[str, str]:
         """혜택 분배 분석"""
         benefit_distribution = {}
 
@@ -502,9 +472,7 @@ class EthicalJudgmentSystem:
 
         return best_alternative
 
-    def _select_best_alternative(
-        self, ethical_analyses: List[Dict[str, Any]]
-    ) -> Dict[str, Any]:
+    def _select_best_alternative(self, ethical_analyses: List[Dict[str, Any]]) -> Dict[str, Any]:
         """최적 대안 선택"""
         best_score = 0.0
         best_alternative = None
@@ -542,9 +510,7 @@ class EthicalJudgmentSystem:
 
         # 적용된 원칙들
         principles = selected_analysis["ethical_analysis"].principles_applied
-        reasoning += (
-            f"- 적용된 윤리적 원칙: {', '.join([p.value for p in principles])}\n"
-        )
+        reasoning += f"- 적용된 윤리적 원칙: {', '.join([p.value for p in principles])}\n"
 
         # 윤리적 점수
         score = selected_analysis["ethical_analysis"].ethical_score
@@ -552,9 +518,7 @@ class EthicalJudgmentSystem:
 
         # 사회적 영향
         social_impact = selected_analysis["social_impact"]
-        reasoning += (
-            f"- 취약 계층 고려: {len(social_impact.vulnerable_groups)}개 그룹\n"
-        )
+        reasoning += f"- 취약 계층 고려: {len(social_impact.vulnerable_groups)}개 그룹\n"
 
         return reasoning
 
@@ -582,13 +546,9 @@ class EthicalJudgmentSystem:
         """원칙 적용 빈도 분석"""
         principle_counts = {}
         for decision in self.decision_history:
-            principles = decision["selected_alternative"][
-                "ethical_analysis"
-            ].principles_applied
+            principles = decision["selected_alternative"]["ethical_analysis"].principles_applied
             for principle in principles:
-                principle_counts[principle.value] = (
-                    principle_counts.get(principle.value, 0) + 1
-                )
+                principle_counts[principle.value] = principle_counts.get(principle.value, 0) + 1
 
         return principle_counts
 
@@ -596,9 +556,7 @@ class EthicalJudgmentSystem:
         """영향 분포 분석"""
         impact_counts = {}
         for decision in self.decision_history:
-            impacts = decision["selected_alternative"][
-                "ethical_analysis"
-            ].impact_assessment
+            impacts = decision["selected_alternative"]["ethical_analysis"].impact_assessment
             for impact_type, level in impacts.items():
                 impact_counts[level.value] = impact_counts.get(level.value, 0) + 1
 

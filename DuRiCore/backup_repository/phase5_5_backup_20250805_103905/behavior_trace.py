@@ -5,15 +5,15 @@ Memory → Judgment → Action → Evolution 전체 루프 추적 및 메타데�
 """
 
 import asyncio
-from dataclasses import asdict, dataclass
-from datetime import datetime
-from enum import Enum
 import hashlib
 import json
 import logging
 import time
-from typing import Any, Dict, List, Optional, Tuple
 import uuid
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -210,9 +210,7 @@ class BehaviorTracer:
             logger.error(f"추적 업데이트 실패: {e}")
             raise
 
-    async def create_memory_trace(
-        self, trace_id: str, memory_data: Dict[str, Any]
-    ) -> MemoryTrace:
+    async def create_memory_trace(self, trace_id: str, memory_data: Dict[str, Any]) -> MemoryTrace:
         """기억 추적 생성"""
         try:
             metadata = self.trace_store[trace_id]
@@ -265,9 +263,7 @@ class BehaviorTracer:
             logger.error(f"판단 추적 생성 실패: {e}")
             raise
 
-    async def create_action_trace(
-        self, trace_id: str, action_data: Dict[str, Any]
-    ) -> ActionTrace:
+    async def create_action_trace(self, trace_id: str, action_data: Dict[str, Any]) -> ActionTrace:
         """행동 추적 생성"""
         try:
             metadata = self.trace_store[trace_id]
@@ -303,9 +299,7 @@ class BehaviorTracer:
 
             evolution_trace = EvolutionTrace(
                 evolution_id=evolution_data.get("evolution_id", str(uuid.uuid4())),
-                evolution_type=evolution_data.get(
-                    "evolution_type", "pattern_improvement"
-                ),
+                evolution_type=evolution_data.get("evolution_type", "pattern_improvement"),
                 improvement_score=evolution_data.get("improvement_score", 0.0),
                 changes_applied=evolution_data.get("changes_applied", []),
                 performance_impact=evolution_data.get("performance_impact", {}),
@@ -359,12 +353,8 @@ class BehaviorTracer:
             }
 
             if evolution_trace:
-                performance_metrics["evolution_improvement"] = (
-                    evolution_trace.improvement_score
-                )
-                performance_metrics["evolution_stability"] = (
-                    evolution_trace.stability_score
-                )
+                performance_metrics["evolution_improvement"] = evolution_trace.improvement_score
+                performance_metrics["evolution_stability"] = evolution_trace.stability_score
 
             # 전체 성공 여부 판단
             overall_success = (
@@ -421,9 +411,7 @@ class BehaviorTracer:
             if self.performance_history:
                 metric_keys = self.performance_history[0]["metrics"].keys()
                 for key in metric_keys:
-                    values = [
-                        p["metrics"].get(key, 0.0) for p in self.performance_history
-                    ]
+                    values = [p["metrics"].get(key, 0.0) for p in self.performance_history]
                     avg_metrics[key] = sum(values) / len(values)
 
             # 성능 트렌드 분석
@@ -433,8 +421,7 @@ class BehaviorTracer:
                 else self.performance_history
             )
             recent_success_rate = (
-                sum(1 for p in recent_performance if p["success"])
-                / len(recent_performance)
+                sum(1 for p in recent_performance if p["success"]) / len(recent_performance)
                 if recent_performance
                 else 0.0
             )
@@ -447,9 +434,7 @@ class BehaviorTracer:
                 "performance_trend": (
                     "improving"
                     if recent_success_rate > success_rate
-                    else (
-                        "stable" if recent_success_rate == success_rate else "declining"
-                    )
+                    else ("stable" if recent_success_rate == success_rate else "declining")
                 ),
             }
 
@@ -499,9 +484,7 @@ class BehaviorTracer:
                 )
 
             # 응답 시간 기반 제안
-            avg_cycle_time = patterns.get("average_metrics", {}).get(
-                "total_cycle_time", 0.0
-            )
+            avg_cycle_time = patterns.get("average_metrics", {}).get("total_cycle_time", 0.0)
             if avg_cycle_time > 1.0:
                 suggestions.append(
                     {
@@ -515,9 +498,7 @@ class BehaviorTracer:
                 )
 
             # 효과성 기반 제안
-            avg_effectiveness = patterns.get("average_metrics", {}).get(
-                "action_effectiveness", 0.0
-            )
+            avg_effectiveness = patterns.get("average_metrics", {}).get("action_effectiveness", 0.0)
             if avg_effectiveness < 0.8:
                 suggestions.append(
                     {
@@ -623,9 +604,7 @@ async def test_behavior_tracer():
     }
 
     await tracer.update_trace(judgment_trace_id, TraceStatus.COMPLETED, judgment_output)
-    judgment_trace = await tracer.create_judgment_trace(
-        judgment_trace_id, judgment_output
-    )
+    judgment_trace = await tracer.create_judgment_trace(judgment_trace_id, judgment_output)
 
     print(f"판단 추적 완료: {judgment_trace.judgment_id}")
 

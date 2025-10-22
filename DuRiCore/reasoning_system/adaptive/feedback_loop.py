@@ -10,10 +10,10 @@ DuRi 추론 시스템 - 피드백 루프 시스템
 - 적응 제안 생성
 """
 
-from dataclasses import dataclass
-from datetime import datetime
 import logging
 import time
+from dataclasses import dataclass
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 from ..data_structures import ReasoningFeedback, ReasoningSession
@@ -41,9 +41,7 @@ class FeedbackLoopSystem:
             feedback_content = await self._generate_feedback_content(reasoning_session)
             feedback_score = await self._calculate_feedback_score(reasoning_session)
             learning_impact = await self._calculate_learning_impact(reasoning_session)
-            adaptation_suggestions = await self._generate_adaptation_suggestions(
-                reasoning_session
-            )
+            adaptation_suggestions = await self._generate_adaptation_suggestions(reasoning_session)
 
             feedback = ReasoningFeedback(
                 feedback_id=feedback_id,
@@ -61,9 +59,7 @@ class FeedbackLoopSystem:
             self.logger.error(f"피드백 처리 중 오류 발생: {e}")
             return self._create_fallback_feedback(reasoning_session)
 
-    async def _generate_feedback_content(
-        self, reasoning_session: ReasoningSession
-    ) -> str:
+    async def _generate_feedback_content(self, reasoning_session: ReasoningSession) -> str:
         """피드백 내용 생성"""
         try:
             content_parts = []
@@ -93,9 +89,7 @@ class FeedbackLoopSystem:
             self.logger.error(f"피드백 내용 생성 중 오류: {e}")
             return "기본 피드백 내용"
 
-    async def _calculate_feedback_score(
-        self, reasoning_session: ReasoningSession
-    ) -> float:
+    async def _calculate_feedback_score(self, reasoning_session: ReasoningSession) -> float:
         """피드백 점수 계산"""
         try:
             # 신뢰도, 적응도, 효율성의 가중 평균
@@ -112,9 +106,7 @@ class FeedbackLoopSystem:
             self.logger.error(f"피드백 점수 계산 중 오류: {e}")
             return 0.5
 
-    async def _calculate_learning_impact(
-        self, reasoning_session: ReasoningSession
-    ) -> float:
+    async def _calculate_learning_impact(self, reasoning_session: ReasoningSession) -> float:
         """학습 영향도 계산"""
         try:
             # 추론 과정에서의 학습 기회 평가
@@ -154,9 +146,7 @@ class FeedbackLoopSystem:
             self.logger.error(f"적응 제안 생성 중 오류: {e}")
             return ["기본 적응 제안"]
 
-    def _create_fallback_feedback(
-        self, reasoning_session: ReasoningSession
-    ) -> ReasoningFeedback:
+    def _create_fallback_feedback(self, reasoning_session: ReasoningSession) -> ReasoningFeedback:
         """폴백 피드백 생성"""
         return ReasoningFeedback(
             feedback_id=f"fallback_{int(time.time())}",

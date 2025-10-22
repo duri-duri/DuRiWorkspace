@@ -6,13 +6,13 @@ DuRiCore Phase 3.1: 다중 시스템 통합 메커니즘 (Multi-System Integrati
 """
 
 import asyncio
+import logging
+import random
+import time
 from collections import defaultdict
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-import logging
-import random
-import time
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 
@@ -226,9 +226,7 @@ class MultiSystemIntegration:
         logger.info(f"🔗 시스템 연결 수립 완료: {len(connections)}개 연결")
         return connections
 
-    async def make_integrated_decision(
-        self, context: Dict[str, Any]
-    ) -> IntegratedDecision:
+    async def make_integrated_decision(self, context: Dict[str, Any]) -> IntegratedDecision:
         """통합된 의사결정 수행"""
         decision_id = f"decision_{int(time.time())}"
 
@@ -236,19 +234,13 @@ class MultiSystemIntegration:
         participating_systems = await self._select_participating_systems(context)
 
         # 협력 모드 결정
-        cooperation_mode = await self._determine_cooperation_mode(
-            context, participating_systems
-        )
+        cooperation_mode = await self._determine_cooperation_mode(context, participating_systems)
 
         # 개별 시스템 의사결정
-        individual_decisions = await self._get_individual_decisions(
-            context, participating_systems
-        )
+        individual_decisions = await self._get_individual_decisions(context, participating_systems)
 
         # 통합된 의사결정 생성
-        integrated_decision = await self._synthesize_decisions(
-            individual_decisions, context
-        )
+        integrated_decision = await self._synthesize_decisions(individual_decisions, context)
 
         # 신뢰도 계산
         confidence = await self._calculate_integrated_confidence(
@@ -268,9 +260,7 @@ class MultiSystemIntegration:
         self.integration_state.integrated_decisions.append(decision)
         await self._update_decision_quality_metrics(decision)
 
-        logger.info(
-            f"🤝 통합 의사결정 완료: {len(participating_systems)}개 시스템 참여"
-        )
+        logger.info(f"🤝 통합 의사결정 완료: {len(participating_systems)}개 시스템 참여")
         return decision
 
     async def assess_system_cooperation(self) -> Dict[str, Any]:
@@ -279,14 +269,10 @@ class MultiSystemIntegration:
 
         for system_name, system in self.systems.items():
             # 시스템별 협력 점수 계산
-            cooperation_score = await self._calculate_system_cooperation_score(
-                system_name
-            )
+            cooperation_score = await self._calculate_system_cooperation_score(system_name)
 
             # 성능 지표 수집
-            performance_metrics = await self._collect_system_performance(
-                system_name, system
-            )
+            performance_metrics = await self._collect_system_performance(system_name, system)
 
             # 통합 수준 평가
             integration_level = await self._assess_integration_level(system_name)
@@ -489,9 +475,7 @@ class MultiSystemIntegration:
         # 실제 구현에서는 더 정교한 계산 로직 사용
         return random.uniform(0.5, 0.9)
 
-    async def _collect_system_performance(
-        self, system_name: str, system: Any
-    ) -> Dict[str, float]:
+    async def _collect_system_performance(self, system_name: str, system: Any) -> Dict[str, float]:
         """시스템 성능 수집"""
         # 실제 구현에서는 각 시스템의 실제 성능 지표를 수집
         return {
@@ -544,9 +528,7 @@ class MultiSystemIntegration:
         recommendations = []
 
         # 통합 수준에 따른 권장사항
-        integration_level = (
-            self.integration_state.integration_metrics.overall_integration_score
-        )
+        integration_level = self.integration_state.integration_metrics.overall_integration_score
 
         if integration_level < 0.4:
             recommendations.append("기본적인 시스템 연결 강화")
@@ -563,18 +545,14 @@ class MultiSystemIntegration:
 
         return recommendations
 
-    async def _update_connection_density_metrics(
-        self, connections: List[SystemConnection]
-    ) -> None:
+    async def _update_connection_density_metrics(self, connections: List[SystemConnection]) -> None:
         """연결 밀도 메트릭 업데이트"""
         # 실제 구현에서는 더 정교한 업데이트 로직 사용
         self.integration_state.integration_metrics.connection_density = min(
             1.0, self.integration_state.integration_metrics.connection_density + 0.01
         )
 
-    async def _update_decision_quality_metrics(
-        self, decision: IntegratedDecision
-    ) -> None:
+    async def _update_decision_quality_metrics(self, decision: IntegratedDecision) -> None:
         """의사결정 품질 메트릭 업데이트"""
         # 실제 구현에서는 더 정교한 업데이트 로직 사용
         self.integration_state.integration_metrics.decision_quality = min(
@@ -652,9 +630,7 @@ async def test_multi_system_integration():
         f"통합 점수: {integration_system.integration_state.integration_metrics.overall_integration_score:.3f}"
     )
     print(f"시스템 연결: {len(connections)}개")
-    print(
-        f"통합 의사결정: {len(integration_system.integration_state.integrated_decisions)}개"
-    )
+    print(f"통합 의사결정: {len(integration_system.integration_state.integrated_decisions)}개")
     print(f"참여 시스템: {len(integration_system.systems)}개")
 
     print("✅ 다중 시스템 통합 메커니즘 테스트 완료!")

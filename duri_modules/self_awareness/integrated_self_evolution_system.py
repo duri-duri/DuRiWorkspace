@@ -3,18 +3,19 @@
 DuRi 통합 자가 진화 인식 시스템
 모든 자가 진화 인식 기능을 통합하는 메인 시스템
 """
-from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
 import json
 import logging
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
 from duri_modules.self_awareness.evolution_analyzer import evolution_analyzer
 from duri_modules.self_awareness.evolution_reporter import evolution_reporter
-from duri_modules.self_awareness.self_assessment_system import self_assessment_system
-
+from duri_modules.self_awareness.self_assessment_system import \
+    self_assessment_system
 # 자가 진화 인식 모듈들 import
-from duri_modules.self_awareness.self_evolution_tracker import self_evolution_tracker
+from duri_modules.self_awareness.self_evolution_tracker import \
+    self_evolution_tracker
 
 logger = logging.getLogger(__name__)
 
@@ -55,8 +56,7 @@ class IntegratedSelfEvolutionSystem:
             with open(self.integration_data_file, "r", encoding="utf-8") as f:
                 data = json.load(f)
                 self.integration_history = [
-                    IntegratedEvolutionResult(**result)
-                    for result in data.get("history", [])
+                    IntegratedEvolutionResult(**result) for result in data.get("history", [])
                 ]
         except FileNotFoundError:
             logger.info("통합 데이터 파일이 없습니다. 새로 시작합니다.")
@@ -88,14 +88,10 @@ class IntegratedSelfEvolutionSystem:
             )
 
             # 2단계: 자가 평가
-            self_assessment_result = self.assessment_system.assess_self_evolution(
-                interaction_data
-            )
+            self_assessment_result = self.assessment_system.assess_self_evolution(interaction_data)
 
             # 3단계: 진화 분석
-            evolution_analysis_result = self.analyzer.analyze_evolution(
-                interaction_data
-            )
+            evolution_analysis_result = self.analyzer.analyze_evolution(interaction_data)
 
             # 4단계: 진화 보고서 생성
             evolution_report_result = self.reporter.generate_evolution_report(
@@ -233,9 +229,7 @@ class IntegratedSelfEvolutionSystem:
             # 각 분석의 신뢰도 수집
             if tracking_result.get("status") == "success":
                 confidences.append(
-                    tracking_result.get("evolution_analysis", {}).get(
-                        "evolution_confidence", 0.0
-                    )
+                    tracking_result.get("evolution_analysis", {}).get("evolution_confidence", 0.0)
                 )
 
             if assessment_result.get("status") == "success":
@@ -294,9 +288,7 @@ class IntegratedSelfEvolutionSystem:
 
             # 진화 보고서 인사이트
             if report_result.get("status") == "success":
-                conclusion = report_result.get("report_content", {}).get(
-                    "conclusion", ""
-                )
+                conclusion = report_result.get("report_content", {}).get("conclusion", "")
                 if conclusion:
                     insights.append(conclusion)
 
@@ -400,9 +392,7 @@ class IntegratedSelfEvolutionSystem:
             # 다음 단계 추출
             report_result = latest_result.evolution_report_result
             if report_result.get("status") == "success":
-                next_plan = report_result.get("report_content", {}).get(
-                    "next_evolution_plan", []
-                )
+                next_plan = report_result.get("report_content", {}).get("next_evolution_plan", [])
                 summary["next_steps"] = next_plan[:3]
 
             return summary
@@ -444,9 +434,7 @@ class IntegratedSelfEvolutionSystem:
             }
 
             # 완전한 자가 진화 분석 실행
-            result = self.execute_complete_self_evolution_analysis(
-                test_interaction_data
-            )
+            result = self.execute_complete_self_evolution_analysis(test_interaction_data)
 
             # 테스트 결과 평가
             test_success = result.get("status") == "success"
@@ -461,9 +449,7 @@ class IntegratedSelfEvolutionSystem:
 
             return {
                 "status": (
-                    "success"
-                    if test_success and all_systems_working
-                    else "partial_success"
+                    "success" if test_success and all_systems_working else "partial_success"
                 ),
                 "test_success": test_success,
                 "all_systems_working": all_systems_working,

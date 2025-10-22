@@ -11,37 +11,29 @@ DuRi Phase 1-3 Week 3 Day 13 - 통합 고급 학습 시스템
 """
 
 import asyncio
-from collections import Counter, defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 import hashlib
 import json
 import logging
 import re
 import time
+from collections import Counter, defaultdict
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 
 # 기존 시스템들 import
 try:
-    from adaptive_learning_system import (
-        AdaptationType,
-        AdaptiveLearningSystem,
-        LearningType,
-    )
-    from cognitive_meta_learning_system import (
-        CognitiveMetaLearningSystem,
-        MetaLearningType,
-    )
+    from adaptive_learning_system import (AdaptationType,
+                                          AdaptiveLearningSystem, LearningType)
+    from cognitive_meta_learning_system import (CognitiveMetaLearningSystem,
+                                                MetaLearningType)
     from integrated_learning_system import IntegratedLearningSystem
     from meta_cognition_system import MetaCognitionLevel, MetaCognitionSystem
-    from self_directed_learning_system import (
-        LearningDomain,
-        LearningPhase,
-        SelfDirectedLearningSystem,
-    )
+    from self_directed_learning_system import (LearningDomain, LearningPhase,
+                                               SelfDirectedLearningSystem)
 except ImportError as e:
     logging.warning(f"일부 기존 시스템 import 실패: {e}")
 
@@ -169,14 +161,10 @@ class ContinuousLearningEngine:
         knowledge_gained = await self._acquire_knowledge(learning_content)
 
         # 통찰 발견
-        insights_discovered = await self._discover_insights(
-            learning_content, knowledge_gained
-        )
+        insights_discovered = await self._discover_insights(learning_content, knowledge_gained)
 
         # 효율성 평가
-        efficiency_score = await self._evaluate_efficiency(
-            learning_content, knowledge_gained
-        )
+        efficiency_score = await self._evaluate_efficiency(learning_content, knowledge_gained)
 
         # 진화 점수 계산
         evolution_score = await self._calculate_evolution_score(
@@ -197,9 +185,7 @@ class ContinuousLearningEngine:
         self.learning_sessions.append(session)
         return session
 
-    async def _analyze_learning_content(
-        self, context: Dict[str, Any] = None
-    ) -> Dict[str, Any]:
+    async def _analyze_learning_content(self, context: Dict[str, Any] = None) -> Dict[str, Any]:
         """학습 내용 분석"""
         if not context:
             return {"type": "general", "content": "기본 학습"}
@@ -474,9 +460,7 @@ class KnowledgeEvolutionSystem:
         )
 
         # 관련성 점수 계산
-        relevance_score = await self._calculate_relevance_score(
-            evolved_knowledge, new_information
-        )
+        relevance_score = await self._calculate_relevance_score(evolved_knowledge, new_information)
 
         # 통합 수준 계산
         integration_level = await self._calculate_integration_level(
@@ -503,16 +487,12 @@ class KnowledgeEvolutionSystem:
         factors = []
 
         # 지식 충돌 분석
-        conflicts = self._analyze_knowledge_conflicts(
-            original_knowledge, new_information
-        )
+        conflicts = self._analyze_knowledge_conflicts(original_knowledge, new_information)
         if conflicts:
             factors.extend(conflicts)
 
         # 지식 확장 분석
-        extensions = self._analyze_knowledge_extensions(
-            original_knowledge, new_information
-        )
+        extensions = self._analyze_knowledge_extensions(original_knowledge, new_information)
         if extensions:
             factors.extend(extensions)
 
@@ -531,9 +511,7 @@ class KnowledgeEvolutionSystem:
         for key, value in new_information.items():
             if key in evolved_knowledge:
                 # 기존 지식과 새로운 정보 통합
-                evolved_knowledge[key] = self._integrate_knowledge(
-                    evolved_knowledge[key], value
-                )
+                evolved_knowledge[key] = self._integrate_knowledge(evolved_knowledge[key], value)
             else:
                 # 새로운 지식 추가
                 evolved_knowledge[key] = value
@@ -579,10 +557,7 @@ class KnowledgeEvolutionSystem:
         conflicts = []
 
         for key in new_information.keys():
-            if (
-                key in original_knowledge
-                and original_knowledge[key] != new_information[key]
-            ):
+            if key in original_knowledge and original_knowledge[key] != new_information[key]:
                 conflicts.append(f"지식 충돌: {key}")
 
         return conflicts
@@ -665,9 +640,7 @@ class LearningEfficiencyOptimizer:
         self.efficiency_history.append(efficiency)
         return efficiency
 
-    async def _calculate_speed_score(
-        self, learning_session: ContinuousLearningSession
-    ) -> float:
+    async def _calculate_speed_score(self, learning_session: ContinuousLearningSession) -> float:
         """속도 점수 계산"""
         # 학습 시간 기반 속도 점수
         if learning_session.duration:
@@ -678,9 +651,7 @@ class LearningEfficiencyOptimizer:
 
         return speed_score
 
-    async def _calculate_quality_score(
-        self, learning_session: ContinuousLearningSession
-    ) -> float:
+    async def _calculate_quality_score(self, learning_session: ContinuousLearningSession) -> float:
         """품질 점수 계산"""
         # 지식 획득량과 통찰 발견량 기반 품질 점수
         knowledge_count = len(learning_session.knowledge_gained)
@@ -772,9 +743,7 @@ class KnowledgeIntegrationSystem:
         )
 
         # 접근성 점수 계산
-        accessibility_score = await self._calculate_accessibility_score(
-            integrated_knowledge
-        )
+        accessibility_score = await self._calculate_accessibility_score(integrated_knowledge)
 
         integration = KnowledgeIntegration(
             integration_id=integration_id,
@@ -821,9 +790,7 @@ class KnowledgeIntegrationSystem:
 
         return integrated
 
-    async def _network_integration(
-        self, source_knowledge: List[Dict[str, Any]]
-    ) -> Dict[str, Any]:
+    async def _network_integration(self, source_knowledge: List[Dict[str, Any]]) -> Dict[str, Any]:
         """네트워크 통합"""
         integrated = {"nodes": [], "connections": []}
 
@@ -839,9 +806,7 @@ class KnowledgeIntegrationSystem:
 
         return integrated
 
-    async def _semantic_integration(
-        self, source_knowledge: List[Dict[str, Any]]
-    ) -> Dict[str, Any]:
+    async def _semantic_integration(self, source_knowledge: List[Dict[str, Any]]) -> Dict[str, Any]:
         """시맨틱 통합"""
         integrated = {"semantic_graph": {}, "relationships": []}
 
@@ -852,9 +817,7 @@ class KnowledgeIntegrationSystem:
 
         return integrated
 
-    async def _default_integration(
-        self, source_knowledge: List[Dict[str, Any]]
-    ) -> Dict[str, Any]:
+    async def _default_integration(self, source_knowledge: List[Dict[str, Any]]) -> Dict[str, Any]:
         """기본 통합"""
         integrated = {}
 
@@ -863,9 +826,7 @@ class KnowledgeIntegrationSystem:
 
         return integrated
 
-    async def _calculate_coherence_score(
-        self, integrated_knowledge: Dict[str, Any]
-    ) -> float:
+    async def _calculate_coherence_score(self, integrated_knowledge: Dict[str, Any]) -> float:
         """일관성 점수 계산"""
         # 지식 간 일관성 분석
         coherence_score = 0.5  # 기본값
@@ -892,9 +853,7 @@ class KnowledgeIntegrationSystem:
 
         return completeness_score
 
-    async def _calculate_accessibility_score(
-        self, integrated_knowledge: Dict[str, Any]
-    ) -> float:
+    async def _calculate_accessibility_score(self, integrated_knowledge: Dict[str, Any]) -> float:
         """접근성 점수 계산"""
         # 지식의 접근 용이성
         accessibility_score = 0.5  # 기본값
@@ -950,8 +909,8 @@ class IntegratedAdvancedLearningSystem:
         try:
             # 1. 지속적 학습 실행
             continuous_learning_sessions = []
-            continuous_session = (
-                await self.continuous_learning_engine.start_continuous_learning(context)
+            continuous_session = await self.continuous_learning_engine.start_continuous_learning(
+                context
             )
             continuous_learning_sessions.append(continuous_session)
 
@@ -967,10 +926,8 @@ class IntegratedAdvancedLearningSystem:
 
             # 3. 학습 효율성 최적화
             learning_efficiencies = []
-            efficiency = (
-                await self.learning_efficiency_optimizer.optimize_learning_efficiency(
-                    continuous_session
-                )
+            efficiency = await self.learning_efficiency_optimizer.optimize_learning_efficiency(
+                continuous_session
             )
             learning_efficiencies.append(efficiency)
 
@@ -980,10 +937,8 @@ class IntegratedAdvancedLearningSystem:
                 source_knowledge = [
                     evolution.evolved_knowledge for evolution in knowledge_evolutions
                 ]
-                integration = (
-                    await self.knowledge_integration_system.integrate_knowledge(
-                        source_knowledge
-                    )
+                integration = await self.knowledge_integration_system.integrate_knowledge(
+                    source_knowledge
                 )
                 knowledge_integrations.append(integration)
 
@@ -995,15 +950,9 @@ class IntegratedAdvancedLearningSystem:
                 knowledge_integrations,
             )
 
-            evolution_progress = self._calculate_evolution_progress(
-                knowledge_evolutions
-            )
-            efficiency_improvement = self._calculate_efficiency_improvement(
-                learning_efficiencies
-            )
-            integration_success = self._calculate_integration_success(
-                knowledge_integrations
-            )
+            evolution_progress = self._calculate_evolution_progress(knowledge_evolutions)
+            efficiency_improvement = self._calculate_efficiency_improvement(learning_efficiencies)
+            integration_success = self._calculate_integration_success(knowledge_integrations)
 
             # 6. 결과 생성
             result = AdvancedLearningResult(
@@ -1089,9 +1038,9 @@ class IntegratedAdvancedLearningSystem:
         if not knowledge_evolutions:
             return 0.0
 
-        progress = sum(
-            evolution.integration_level for evolution in knowledge_evolutions
-        ) / len(knowledge_evolutions)
+        progress = sum(evolution.integration_level for evolution in knowledge_evolutions) / len(
+            knowledge_evolutions
+        )
         return progress
 
     def _calculate_efficiency_improvement(
@@ -1113,9 +1062,9 @@ class IntegratedAdvancedLearningSystem:
         if not knowledge_integrations:
             return 0.0
 
-        success = sum(
-            integration.coherence_score for integration in knowledge_integrations
-        ) / len(knowledge_integrations)
+        success = sum(integration.coherence_score for integration in knowledge_integrations) / len(
+            knowledge_integrations
+        )
         return success
 
     def _update_performance_metrics(self, processing_time: float, overall_score: float):
@@ -1145,11 +1094,8 @@ class IntegratedAdvancedLearningSystem:
         """성능 리포트 조회"""
         return {
             "total_sessions": self.performance_metrics["total_sessions"],
-            "average_learning_score": self.performance_metrics[
-                "average_learning_score"
-            ],
-            "system_efficiency": self.performance_metrics["average_learning_score"]
-            * 100,
+            "average_learning_score": self.performance_metrics["average_learning_score"],
+            "system_efficiency": self.performance_metrics["average_learning_score"] * 100,
             "timestamp": datetime.now().isoformat(),
         }
 

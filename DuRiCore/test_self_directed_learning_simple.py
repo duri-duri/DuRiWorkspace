@@ -5,15 +5,12 @@ Day 6: 자발적 학습 시스템 간단 테스트
 """
 
 import asyncio
-from datetime import datetime
 import json
+from datetime import datetime
 
-from self_directed_learning_system import (
-    LearningDomain,
-    LearningMotivation,
-    LearningPhase,
-    SelfDirectedLearningSystem,
-)
+from self_directed_learning_system import (LearningDomain, LearningMotivation,
+                                           LearningPhase,
+                                           SelfDirectedLearningSystem)
 
 
 async def test_simple_learning():
@@ -59,9 +56,7 @@ async def test_simple_learning():
 
         print(f"\n=== 학습 목표 ({len(result.learning_goals)}개) ===")
         for goal in result.learning_goals[:3]:  # 처음 3개만 출력
-            print(
-                f"- {goal.target_skill}: {goal.description} (우선순위: {goal.priority:.2f})"
-            )
+            print(f"- {goal.target_skill}: {goal.description} (우선순위: {goal.priority:.2f})")
 
         print(f"\n=== 학습 활동 ({len(result.learning_activities)}개) ===")
         for activity in result.learning_activities[:3]:  # 처음 3개만 출력

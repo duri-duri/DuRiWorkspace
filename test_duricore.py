@@ -5,9 +5,9 @@ DuRiCore 테스트 스크립트
 """
 
 import asyncio
-from datetime import datetime
 import os
 import sys
+from datetime import datetime
 
 # DuRiCore 모듈 임포트를 위한 경로 추가
 sys.path.append(os.path.join(os.path.dirname(__file__), "DuRiCore"))
@@ -80,9 +80,7 @@ async def test_self_evolution_engine():
     if evolution_result.improvement_areas:
         print("\n개선 영역:")
         for area in evolution_result.improvement_areas:
-            print(
-                f"  - {area['system']}: {area['current_score']:.1f}점 → {area['target_score']}점"
-            )
+            print(f"  - {area['system']}: {area['current_score']:.1f}점 → {area['target_score']}점")
 
     # 진화 방향 출력
     if evolution_result.evolution_directions:

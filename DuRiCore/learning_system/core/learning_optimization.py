@@ -11,13 +11,13 @@ DuRiCore Phase 2-3: 학습 최적화 시스템 (Learning Optimization System)
 """
 
 import asyncio
+import json
+import logging
+import time
 from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-import json
-import logging
-import time
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
@@ -174,9 +174,7 @@ class LearningOptimizationSystem:
         logger.info(f"최적화 전략 생성: {strategy_id} ({strategy_name})")
         return strategy_id
 
-    async def execute_optimization(
-        self, target_id: str, strategy_id: str
-    ) -> Optional[str]:
+    async def execute_optimization(self, target_id: str, strategy_id: str) -> Optional[str]:
         """최적화 실행"""
         if target_id not in self.optimization_targets:
             logger.error(f"최적화 대상을 찾을 수 없음: {target_id}")
@@ -191,9 +189,7 @@ class LearningOptimizationSystem:
 
         # 최적화 실행
         start_time = time.time()
-        optimization_success = await self._execute_optimization_strategy(
-            target, strategy
-        )
+        optimization_success = await self._execute_optimization_strategy(target, strategy)
         implementation_time = time.time() - start_time
 
         # 결과 생성
@@ -213,16 +209,12 @@ class LearningOptimizationSystem:
             optimization_type=strategy.optimization_type,
             before_value=target.current_value,
             after_value=(
-                target.current_value + improvement
-                if optimization_success
-                else target.current_value
+                target.current_value + improvement if optimization_success else target.current_value
             ),
             improvement=improvement,
             implementation_time=implementation_time,
             success=optimization_success,
-            notes=await self._generate_optimization_notes(
-                target, strategy, optimization_success
-            ),
+            notes=await self._generate_optimization_notes(target, strategy, optimization_success),
         )
 
         self.optimization_results.append(result)
@@ -259,9 +251,7 @@ class LearningOptimizationSystem:
         """전략 최적화 실행"""
         # 전략 최적화 로직 구현
         improvement_factor = strategy.parameters.get("improvement_factor", 0.1)
-        target.current_value += (
-            target.target_value - target.current_value
-        ) * improvement_factor
+        target.current_value += (target.target_value - target.current_value) * improvement_factor
 
         return True
 
@@ -271,9 +261,7 @@ class LearningOptimizationSystem:
         """효율성 최적화 실행"""
         # 효율성 최적화 로직 구현
         efficiency_boost = strategy.parameters.get("efficiency_boost", 0.15)
-        target.current_value = min(
-            target.current_value + efficiency_boost, target.target_value
-        )
+        target.current_value = min(target.current_value + efficiency_boost, target.target_value)
 
         return True
 
@@ -283,9 +271,7 @@ class LearningOptimizationSystem:
         """성능 최적화 실행"""
         # 성능 최적화 로직 구현
         performance_boost = strategy.parameters.get("performance_boost", 0.2)
-        target.current_value = min(
-            target.current_value + performance_boost, target.target_value
-        )
+        target.current_value = min(target.current_value + performance_boost, target.target_value)
 
         return True
 
@@ -295,9 +281,7 @@ class LearningOptimizationSystem:
         """자원 최적화 실행"""
         # 자원 최적화 로직 구현
         resource_saving = strategy.parameters.get("resource_saving", 0.1)
-        target.current_value = min(
-            target.current_value + resource_saving, target.target_value
-        )
+        target.current_value = min(target.current_value + resource_saving, target.target_value)
 
         return True
 
@@ -370,9 +354,7 @@ class LearningOptimizationSystem:
 
         self.performance_metrics.append(metrics)
 
-        logger.info(
-            f"성능 메트릭 추가: {metrics_id} (전체 성능: {overall_performance:.2f})"
-        )
+        logger.info(f"성능 메트릭 추가: {metrics_id} (전체 성능: {overall_performance:.2f})")
         return metrics_id
 
     async def get_optimization_recommendations(
@@ -403,8 +385,7 @@ class LearningOptimizationSystem:
                     "strategy_name": strategy.strategy_name,
                     "expected_improvement": strategy.expected_improvement,
                     "priority": target.priority,
-                    "recommendation_score": target.priority
-                    * strategy.expected_improvement,
+                    "recommendation_score": target.priority * strategy.expected_improvement,
                 }
                 recommendations.append(recommendation)
 
@@ -460,21 +441,19 @@ class LearningOptimizationSystem:
         # 최근 메트릭 분석
         recent_metrics = self.performance_metrics[-10:]  # 최근 10개
 
-        avg_learning_efficiency = sum(
-            m.learning_efficiency for m in recent_metrics
-        ) / len(recent_metrics)
-        avg_knowledge_retention = sum(
-            m.knowledge_retention for m in recent_metrics
-        ) / len(recent_metrics)
-        avg_processing_speed = sum(m.processing_speed for m in recent_metrics) / len(
+        avg_learning_efficiency = sum(m.learning_efficiency for m in recent_metrics) / len(
             recent_metrics
         )
-        avg_resource_utilization = sum(
-            m.resource_utilization for m in recent_metrics
-        ) / len(recent_metrics)
-        avg_overall_performance = sum(
-            m.overall_performance for m in recent_metrics
-        ) / len(recent_metrics)
+        avg_knowledge_retention = sum(m.knowledge_retention for m in recent_metrics) / len(
+            recent_metrics
+        )
+        avg_processing_speed = sum(m.processing_speed for m in recent_metrics) / len(recent_metrics)
+        avg_resource_utilization = sum(m.resource_utilization for m in recent_metrics) / len(
+            recent_metrics
+        )
+        avg_overall_performance = sum(m.overall_performance for m in recent_metrics) / len(
+            recent_metrics
+        )
 
         return {
             "performance_summary": {

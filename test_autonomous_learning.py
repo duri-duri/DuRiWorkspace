@@ -2,9 +2,9 @@
 """
 DuRi 24/7 자동 학습 시스템 테스트
 """
-from datetime import datetime
 import json
 import time
+from datetime import datetime
 
 import requests
 
@@ -72,9 +72,7 @@ def test_autonomous_learning_system():
                 problems = autonomous_data.get("total_problems_detected", 0)
                 decisions = autonomous_data.get("total_decisions_made", 0)
 
-                print(
-                    f"   ⏱️  {i*5+5}초: 사이클={cycles}, 문제={problems}, 결정={decisions}"
-                )
+                print(f"   ⏱️  {i*5+5}초: 사이클={cycles}, 문제={problems}, 결정={decisions}")
             else:
                 print(f"   ❌ {i*5+5}초: 상태 확인 실패")
 
@@ -172,9 +170,7 @@ def test_autonomous_learning_integration():
 
     for i, conversation in enumerate(test_conversations, 1):
         try:
-            response = requests.post(
-                f"{base_url}/capture-conversation", json=conversation
-            )
+            response = requests.post(f"{base_url}/capture-conversation", json=conversation)
             result = response.json()
             print(f"   대화 {i}: {result.get('status', 'unknown')}")
         except Exception as e:

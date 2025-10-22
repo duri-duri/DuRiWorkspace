@@ -11,14 +11,14 @@ DuRi의 중앙 제어 시스템 - DuRi의 심장
 """
 
 import asyncio
-from dataclasses import asdict, dataclass
-from datetime import datetime
 import importlib
 import json
 import logging
-from pathlib import Path
 import sys
 import time
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
 
 # 로깅 설정
@@ -400,9 +400,7 @@ class DuRiOrchestrator:
     def generate_status_report(self) -> Dict[str, Any]:
         """상태 리포트 생성"""
         return {
-            "orchestrator_status": (
-                "active" if self.execution_loop_active else "inactive"
-            ),
+            "orchestrator_status": ("active" if self.execution_loop_active else "inactive"),
             "system_count": len(self.systems),
             "active_systems": sum(
                 1 for status in self.system_status.values() if status.status == "active"

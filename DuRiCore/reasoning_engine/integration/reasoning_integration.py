@@ -220,17 +220,11 @@ class ReasoningIntegration:
                 self._trigger_rollback_condition()
 
             # 존재형 AI: 진화 가능성 확인
-            if (
-                self.existence_ai
-                and self.existence_ai.evolution_capability.can_evolve()
-            ):
+            if self.existence_ai and self.existence_ai.evolution_capability.can_evolve():
                 self.existence_ai.evolution_capability.evolve()
 
             # 최종 실행 준비 완료: 최종 실행 준비 완료 확인
-            if (
-                self.final_execution_verifier
-                and self.final_execution_verifier.verify_readiness()
-            ):
+            if self.final_execution_verifier and self.final_execution_verifier.verify_readiness():
                 logger.info("최종 실행 준비 완료 확인됨")
 
             # 강제 조건: 판단 결과 기록
@@ -254,17 +248,13 @@ class ReasoningIntegration:
             return {
                 "integration_count": self.integration_state.get("integration_count", 0),
                 "last_integration": self.integration_state.get("last_integration"),
-                "modules_connected": self.integration_state.get(
-                    "modules_connected", []
-                ),
+                "modules_connected": self.integration_state.get("modules_connected", []),
             }
         except Exception as e:
             logger.error(f"기존 방식 조회 실패: {str(e)}")
             return {}
 
-    def _log_integration_intent(
-        self, intent: str, previous_approach: Dict[str, Any]
-    ) -> None:
+    def _log_integration_intent(self, intent: str, previous_approach: Dict[str, Any]) -> None:
         """통합 의도 로그"""
         try:
             log_entry = {
@@ -359,9 +349,7 @@ class ReasoningIntegration:
         except Exception as e:
             logger.error(f"통합 결과 기록 실패: {str(e)}")
 
-    def _generate_integration_changes(
-        self, connected_modules: List[str]
-    ) -> List[Dict[str, Any]]:
+    def _generate_integration_changes(self, connected_modules: List[str]) -> List[Dict[str, Any]]:
         """통합 변화 생성"""
         try:
             changes = [
@@ -386,9 +374,7 @@ class ReasoningIntegration:
             logger.error(f"통합 변화 생성 실패: {str(e)}")
             return []
 
-    def _calculate_integration_impact(
-        self, connected_modules: List[str]
-    ) -> Dict[str, float]:
+    def _calculate_integration_impact(self, connected_modules: List[str]) -> Dict[str, float]:
         """통합 영향도 계산"""
         try:
             impact = {
@@ -407,12 +393,8 @@ class ReasoningIntegration:
         try:
             return {
                 "integration_count": self.integration_state.get("integration_count", 0),
-                "modules_connected": self.integration_state.get(
-                    "modules_connected", []
-                ),
-                "integration_strength": self.integration_state.get(
-                    "integration_strength", 0.0
-                ),
+                "modules_connected": self.integration_state.get("modules_connected", []),
+                "integration_strength": self.integration_state.get("integration_strength", 0.0),
             }
         except Exception as e:
             logger.error(f"구조적 변화 조회 실패: {str(e)}")
@@ -431,15 +413,9 @@ class ReasoningIntegration:
                 "created_at": self.integration_state.get("created_at"),
                 "integration_count": self.integration_state.get("integration_count", 0),
                 "last_integration": self.integration_state.get("last_integration"),
-                "integration_strength": self.integration_state.get(
-                    "integration_strength", 0.0
-                ),
-                "modules_connected": self.integration_state.get(
-                    "modules_connected", []
-                ),
-                "integration_ready": self.integration_state.get(
-                    "integration_ready", False
-                ),
+                "integration_strength": self.integration_state.get("integration_strength", 0.0),
+                "modules_connected": self.integration_state.get("modules_connected", []),
+                "integration_ready": self.integration_state.get("integration_ready", False),
             }
         except Exception as e:
             logger.error(f"통합 상태 조회 실패: {str(e)}")

@@ -19,9 +19,7 @@ def run_tests():
     if not gate_script.exists():
         # beta fallback
         test_json.write_text(
-            json.dumps(
-                {"pass_rate": 0.85, "failures": []}, ensure_ascii=False, indent=2
-            ),
+            json.dumps({"pass_rate": 0.85, "failures": []}, ensure_ascii=False, indent=2),
             encoding="utf-8",
         )
         return True
@@ -52,9 +50,7 @@ def main():
     try:
         tests = json.loads(tests_path.read_text(encoding="utf-8"))
     except Exception as e:
-        print(
-            json.dumps({"promote": False, "reason": "bad_test_json", "error": str(e)})
-        )
+        print(json.dumps({"promote": False, "reason": "bad_test_json", "error": str(e)}))
         sys.exit(1)
 
     if not risk_gate():
@@ -65,9 +61,7 @@ def main():
     try:
         risks = json.loads(risks_path.read_text(encoding="utf-8"))
     except Exception as e:
-        print(
-            json.dumps({"promote": False, "reason": "bad_risk_json", "error": str(e)})
-        )
+        print(json.dumps({"promote": False, "reason": "bad_risk_json", "error": str(e)}))
         sys.exit(1)
 
     pass_rate = float(tests.get("pass_rate", 0))

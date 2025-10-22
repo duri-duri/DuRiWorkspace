@@ -5,14 +5,14 @@ DuRiCore Phase 6.2.5 - CLARION 이중 학습 시스템
 """
 
 import asyncio
-from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
-from enum import Enum
 import json
 import logging
 import math
 import random
 import time
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
@@ -121,9 +121,7 @@ class CLARIONLearningSystem:
 
         logger.info("CLARION 이중 학습 시스템 초기화 완료")
 
-    async def process_learning_log(
-        self, log_data: Dict[str, Any]
-    ) -> CLARIONLearningResult:
+    async def process_learning_log(self, log_data: Dict[str, Any]) -> CLARIONLearningResult:
         """학습 로그 처리 및 패턴 분석"""
         try:
             # 1. 로그 데이터 정규화
@@ -133,9 +131,7 @@ class CLARIONLearningSystem:
             learning_type = await self._determine_learning_type(normalized_log)
 
             # 3. 강화 유형 결정
-            reinforcement_type = await self._determine_reinforcement_type(
-                normalized_log
-            )
+            reinforcement_type = await self._determine_reinforcement_type(normalized_log)
 
             # 4. 패턴 분석 및 생성
             pattern_result = await self.pattern_analyzer.analyze_pattern(
@@ -148,10 +144,8 @@ class CLARIONLearningSystem:
             )
 
             # 6. 통합 관리
-            consolidation_result = (
-                await self.consolidation_manager.manage_consolidation(
-                    pattern_result, reinforcement_result
-                )
+            consolidation_result = await self.consolidation_manager.manage_consolidation(
+                pattern_result, reinforcement_result
             )
 
             # 7. 전이 분석
@@ -172,9 +166,7 @@ class CLARIONLearningSystem:
             # 9. 로그 저장
             await self._save_learning_log(normalized_log, learning_result)
 
-            logger.info(
-                f"학습 로그 처리 완료: {learning_type.value} - {reinforcement_type.value}"
-            )
+            logger.info(f"학습 로그 처리 완료: {learning_type.value} - {reinforcement_type.value}")
             return learning_result
 
         except Exception as e:
@@ -210,9 +202,7 @@ class CLARIONLearningSystem:
         # 명시적 학습 vs 암묵적 학습 판단
         context_complexity = self._calculate_context_complexity(log_data["context"])
         action_consciousness = self._calculate_action_consciousness(log_data["action"])
-        outcome_predictability = self._calculate_outcome_predictability(
-            log_data["outcome"]
-        )
+        outcome_predictability = self._calculate_outcome_predictability(log_data["outcome"])
 
         # 명시적 학습 지표
         explicit_indicators = [
@@ -230,9 +220,7 @@ class CLARIONLearningSystem:
         else:
             return LearningType.HYBRID
 
-    async def _determine_reinforcement_type(
-        self, log_data: Dict[str, Any]
-    ) -> ReinforcementType:
+    async def _determine_reinforcement_type(self, log_data: Dict[str, Any]) -> ReinforcementType:
         """강화 유형 결정"""
         success = log_data["success"]
         learning_score = log_data["learning_score"]
@@ -271,12 +259,8 @@ class CLARIONLearningSystem:
 
         action_lower = action.lower()
 
-        conscious_count = sum(
-            1 for keyword in conscious_keywords if keyword in action_lower
-        )
-        unconscious_count = sum(
-            1 for keyword in unconscious_keywords if keyword in action_lower
-        )
+        conscious_count = sum(1 for keyword in conscious_keywords if keyword in action_lower)
+        unconscious_count = sum(1 for keyword in unconscious_keywords if keyword in action_lower)
 
         if conscious_count > unconscious_count:
             return 0.8
@@ -293,9 +277,7 @@ class CLARIONLearningSystem:
 
         outcome_lower = outcome.lower()
 
-        predictable_count = sum(
-            1 for keyword in predictable_keywords if keyword in outcome_lower
-        )
+        predictable_count = sum(1 for keyword in predictable_keywords if keyword in outcome_lower)
         unpredictable_count = sum(
             1 for keyword in unpredictable_keywords if keyword in outcome_lower
         )
@@ -320,9 +302,7 @@ class CLARIONLearningSystem:
         return CLARIONLearningResult(
             learning_type=learning_type,
             reinforcement_type=reinforcement_type,
-            learning_phase=consolidation_result.get(
-                "learning_phase", LearningPhase.ACQUISITION
-            ),
+            learning_phase=consolidation_result.get("learning_phase", LearningPhase.ACQUISITION),
             pattern_strength=pattern_result.get("strength", 0.0),
             learning_efficiency=reinforcement_result.get("efficiency", 0.0),
             transfer_ability=transfer_result.get("ability", 0.0),
@@ -465,9 +445,7 @@ class CLARIONLearningSystem:
                 phase_counts[LearningPhase.TRANSFER] += 1
 
         return {
-            "phase_counts": {
-                phase.value: count for phase, count in phase_counts.items()
-            },
+            "phase_counts": {phase.value: count for phase, count in phase_counts.items()},
             "total_phases": sum(phase_counts.values()),
         }
 
@@ -731,9 +709,7 @@ async def test_clarion_learning_system():
     print("=== CLARION 학습 시스템 테스트 결과 ===")
     print(f"처리된 로그 수: {len(results)}")
     print(f"생성된 패턴 수: {len(system.learning_patterns)}")
-    print(
-        f"학습 유형 분포: {pattern_analysis.get('phase_analysis', {}).get('phase_counts', {})}"
-    )
+    print(f"학습 유형 분포: {pattern_analysis.get('phase_analysis', {}).get('phase_counts', {})}")
     print(
         f"전이 능력: {pattern_analysis.get('transfer_analysis', {}).get('transfer_ability', 0.0):.3f}"
     )

@@ -18,15 +18,10 @@ from fastapi.middleware.cors import CORSMiddleware
 sys.path.append(os.path.join(os.path.dirname(__file__), "duri_modules"))
 
 # 모듈화된 시스템 import
-from duri_modules import (
-    chatgpt_evaluator,
-    conversation_store,
-    dashboard_generator,
-    duri_chatgpt_discussion,
-    duri_self_reflector,
-    meta_loop_system,
-    performance_tracker,
-)
+from duri_modules import (chatgpt_evaluator, conversation_store,
+                          dashboard_generator, duri_chatgpt_discussion,
+                          duri_self_reflector, meta_loop_system,
+                          performance_tracker)
 
 app = FastAPI(
     title="DuRi Monitored Self-Evolving AI System",
@@ -106,9 +101,7 @@ async def chatgpt_evaluate_response(evaluation_request: Dict[str, Any]):
             )
 
         # 모듈화된 평가 시스템 사용
-        evaluation_result = chatgpt_evaluator.evaluate_response(
-            duri_response, user_question
-        )
+        evaluation_result = chatgpt_evaluator.evaluate_response(duri_response, user_question)
 
         # 학습 메트릭 추적
         performance_tracker.track_learning_metric(
@@ -150,9 +143,7 @@ async def duri_self_reflect_endpoint(reflection_request: Dict[str, Any]):
 
         # 학습 메트릭 추적
         improvement_count = len(
-            reflection_result.get("improvement_proposal", {}).get(
-                "specific_improvements", []
-            )
+            reflection_result.get("improvement_proposal", {}).get("specific_improvements", [])
         )
         performance_tracker.track_learning_metric(
             "improvement_suggestions",
@@ -181,19 +172,13 @@ async def capture_conversation_endpoint(conversation_data: Dict[str, Any]):
         metadata = conversation_data.get("metadata", {})
 
         if not user_input or not duri_response:
-            raise HTTPException(
-                status_code=400, detail="user_input과 duri_response가 필요합니다"
-            )
+            raise HTTPException(status_code=400, detail="user_input과 duri_response가 필요합니다")
 
         # 대화 데이터 저장
-        conversation_id = conversation_store.store_conversation(
-            user_input, duri_response, metadata
-        )
+        conversation_id = conversation_store.store_conversation(user_input, duri_response, metadata)
 
         # 학습 메트릭 추적
-        learning_value = conversation_store._calculate_learning_value(
-            user_input, duri_response
-        )
+        learning_value = conversation_store._calculate_learning_value(user_input, duri_response)
         performance_tracker.track_learning_metric(
             "conversation_learning_value",
             learning_value,
@@ -207,12 +192,8 @@ async def capture_conversation_endpoint(conversation_data: Dict[str, Any]):
             print(f"🔄 자동 학습 루프 시작: {conversation_id}")
 
             # 1단계: ChatGPT 평가
-            evaluation_result = chatgpt_evaluator.evaluate_response(
-                duri_response, user_input
-            )
-            print(
-                f"   📊 ChatGPT 평가 완료: 총점 {evaluation_result.get('total_score', 0):.3f}"
-            )
+            evaluation_result = chatgpt_evaluator.evaluate_response(duri_response, user_input)
+            print(f"   📊 ChatGPT 평가 완료: 총점 {evaluation_result.get('total_score', 0):.3f}")
 
             # 2단계: DuRi 자기성찰
             reflection_result = duri_self_reflector.reflect_on_chatgpt_feedback(

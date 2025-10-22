@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from decimal import Decimal, InvalidOperation
 import json
-from pathlib import Path
 import sys
+from decimal import Decimal, InvalidOperation
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 __all__ = ["evaluate", "load_policy", "as_decimal", "eval_rule"]

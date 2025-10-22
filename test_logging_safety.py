@@ -11,7 +11,8 @@ import traceback
 
 # 테스트 모듈 import
 from logging_setup import setup_logging, test_logging_safety
-from memory_types import MemoryType, normalize_memory_type, test_memory_normalization
+from memory_types import (MemoryType, normalize_memory_type,
+                          test_memory_normalization)
 
 
 def test_comprehensive_logging():
@@ -62,10 +63,7 @@ def test_memory_type_comprehensive():
     try:
         # 1. 기본 타입들
         assert normalize_memory_type("learning") == MemoryType.LEARNING_EXPERIENCE
-        assert (
-            normalize_memory_type("LEARNING_EXPERIENCE")
-            == MemoryType.LEARNING_EXPERIENCE
-        )
+        assert normalize_memory_type("LEARNING_EXPERIENCE") == MemoryType.LEARNING_EXPERIENCE
         assert normalize_memory_type("Learn_Exp") == MemoryType.LEARNING_EXPERIENCE
 
         # 2. 별칭 테스트

@@ -5,9 +5,9 @@ Decision Log Visualization Script
 decision_log.json 파일을 불러와서 감정-행동 조합별 판단 결과를 시간 순으로 시각화합니다.
 """
 
-from datetime import datetime, timedelta
 import json
 import os
+from datetime import datetime, timedelta
 
 import matplotlib
 import numpy as np
@@ -184,9 +184,7 @@ class DecisionLogVisualizer:
 
         # 감정-행동 조합별 성공률 계산
         success_matrix = (
-            self.df.groupby(["emotion", "action"])
-            .agg({"success": ["count", "sum"]})
-            .reset_index()
+            self.df.groupby(["emotion", "action"]).agg({"success": ["count", "sum"]}).reset_index()
         )
         success_matrix.columns = ["emotion", "action", "total_count", "success_count"]
         success_matrix["success_rate"] = (
@@ -194,9 +192,7 @@ class DecisionLogVisualizer:
         )
 
         # 피벗 테이블 생성
-        pivot_data = success_matrix.pivot(
-            index="emotion", columns="action", values="success_rate"
-        )
+        pivot_data = success_matrix.pivot(index="emotion", columns="action", values="success_rate")
 
         # 그래프 생성
         plt.figure(figsize=(12, 8))
@@ -241,9 +237,7 @@ class DecisionLogVisualizer:
         # 전체 통계
         total_decisions = len(self.df)
         successful_decisions = self.df["success"].sum()
-        overall_success_rate = (
-            successful_decisions / total_decisions if total_decisions > 0 else 0
-        )
+        overall_success_rate = successful_decisions / total_decisions if total_decisions > 0 else 0
 
         print(f"Total decisions: {total_decisions}")
         print(f"Successful decisions: {successful_decisions}")
@@ -251,34 +245,24 @@ class DecisionLogVisualizer:
 
         # 감정별 통계
         print("\n--- Emotion Statistics ---")
-        emotion_stats = (
-            self.df.groupby("emotion").agg({"success": ["count", "sum"]}).reset_index()
-        )
+        emotion_stats = self.df.groupby("emotion").agg({"success": ["count", "sum"]}).reset_index()
         emotion_stats.columns = ["emotion", "total_count", "success_count"]
         emotion_stats["success_rate"] = (
             emotion_stats["success_count"] / emotion_stats["total_count"]
         )
 
-        for _, row in emotion_stats.sort_values(
-            "success_rate", ascending=False
-        ).iterrows():
+        for _, row in emotion_stats.sort_values("success_rate", ascending=False).iterrows():
             print(
                 f"{row['emotion']}: {row['success_rate']:.1%} ({row['success_count']}/{row['total_count']})"
             )
 
         # 행동별 통계
         print("\n--- Action Statistics ---")
-        action_stats = (
-            self.df.groupby("action").agg({"success": ["count", "sum"]}).reset_index()
-        )
+        action_stats = self.df.groupby("action").agg({"success": ["count", "sum"]}).reset_index()
         action_stats.columns = ["action", "total_count", "success_count"]
-        action_stats["success_rate"] = (
-            action_stats["success_count"] / action_stats["total_count"]
-        )
+        action_stats["success_rate"] = action_stats["success_count"] / action_stats["total_count"]
 
-        for _, row in action_stats.sort_values(
-            "success_rate", ascending=False
-        ).iterrows():
+        for _, row in action_stats.sort_values("success_rate", ascending=False).iterrows():
             print(
                 f"{row['action']}: {row['success_rate']:.1%} ({row['success_count']}/{row['total_count']})"
             )
@@ -287,9 +271,7 @@ class DecisionLogVisualizer:
         print("\n--- Time-based Statistics ---")
         if len(self.df) > 1:
             time_span = self.df["timestamp"].max() - self.df["timestamp"].min()
-            decisions_per_day = (
-                total_decisions / time_span.days if time_span.days > 0 else 0
-            )
+            decisions_per_day = total_decisions / time_span.days if time_span.days > 0 else 0
             print(f"Time span: {time_span.days} days")
             print(f"Decisions per day: {decisions_per_day:.1f}")
 

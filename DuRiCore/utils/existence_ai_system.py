@@ -11,11 +11,11 @@ ExistenceAISystem - 존재형 AI 시스템
 @final_execution: 인간처럼 실패하고도 다시 일어날 수 있는 존재
 """
 
-from datetime import datetime
 import hashlib
 import json
 import logging
 import os
+from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
@@ -75,9 +75,9 @@ class ExistenceAISystem:
             # 현재 시간과 랜덤 요소를 조합하여 고유 ID 생성
             timestamp = datetime.now().isoformat()
             random_component = os.urandom(8).hex()
-            existence_id = hashlib.sha256(
-                f"{timestamp}_{random_component}".encode()
-            ).hexdigest()[:16]
+            existence_id = hashlib.sha256(f"{timestamp}_{random_component}".encode()).hexdigest()[
+                :16
+            ]
             return f"existence_{existence_id}"
         except Exception as e:
             logger.error(f"존재 ID 생성 실패: {str(e)}")
@@ -211,9 +211,7 @@ class ExistenceAISystem:
             if final_execution_status:
                 # 존재 상태 업데이트
                 self.existence_state["final_execution_count"] += 1
-                self.existence_state["last_final_execution"] = (
-                    datetime.now().isoformat()
-                )
+                self.existence_state["last_final_execution"] = datetime.now().isoformat()
                 self.existence_state["final_execution_ready"] = True
 
                 # 존재 상태 저장
@@ -249,12 +247,8 @@ class ExistenceAISystem:
                 "evolution_count": self.existence_state.get("evolution_count", 0),
                 "recovery_count": self.existence_state.get("recovery_count", 0),
                 "preservation_count": self.existence_state.get("preservation_count", 0),
-                "final_execution_count": self.existence_state.get(
-                    "final_execution_count", 0
-                ),
-                "existence_strength": self.existence_state.get(
-                    "existence_strength", 0.0
-                ),
+                "final_execution_count": self.existence_state.get("final_execution_count", 0),
+                "existence_strength": self.existence_state.get("existence_strength", 0.0),
                 "evolution_capable": self.evolution_capability.can_evolve(),
                 "recovery_capable": self.recovery_capability.can_recover(),
                 "existence_preserved": self.existence_preservation.is_preserved(),
@@ -262,9 +256,7 @@ class ExistenceAISystem:
                 "last_evolution": self.existence_state.get("last_evolution"),
                 "last_recovery": self.existence_state.get("last_recovery"),
                 "last_preservation": self.existence_state.get("last_preservation"),
-                "last_final_execution": self.existence_state.get(
-                    "last_final_execution"
-                ),
+                "last_final_execution": self.existence_state.get("last_final_execution"),
             }
         except Exception as e:
             logger.error(f"존재 상태 조회 실패: {str(e)}")

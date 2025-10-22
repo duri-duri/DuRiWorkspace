@@ -7,15 +7,15 @@ DuRi 추론 시스템 - 진화적 개선 메커니즘 모듈
 """
 
 import asyncio
-from collections import Counter, defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 import hashlib
 import json
 import logging
 import re
 import time
+from collections import Counter, defaultdict
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
@@ -56,9 +56,7 @@ class EvolutionaryImprovementMechanism:
         improvement_type = await self._determine_improvement_type(reasoning_session)
 
         # 진화 세부사항 생성
-        improvement_details = await self._generate_improvement_details(
-            reasoning_session
-        )
+        improvement_details = await self._generate_improvement_details(reasoning_session)
 
         improvement = EvolutionaryImprovement(
             improvement_id=improvement_id,
@@ -70,9 +68,7 @@ class EvolutionaryImprovementMechanism:
         self.improvement_history.append(improvement)
         return improvement
 
-    async def _calculate_improvement_score(
-        self, reasoning_session: Dict[str, Any]
-    ) -> float:
+    async def _calculate_improvement_score(self, reasoning_session: Dict[str, Any]) -> float:
         """개선 점수 계산"""
         score = 0.0
 
@@ -94,9 +90,7 @@ class EvolutionaryImprovementMechanism:
 
         return min(1.0, score)
 
-    async def _determine_improvement_type(
-        self, reasoning_session: Dict[str, Any]
-    ) -> str:
+    async def _determine_improvement_type(self, reasoning_session: Dict[str, Any]) -> str:
         """개선 유형 결정"""
         # 기본적으로 일반적인 개선 유형
         return "general_improvement"

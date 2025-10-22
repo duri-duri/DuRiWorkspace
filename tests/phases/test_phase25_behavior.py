@@ -1,9 +1,8 @@
 import json
 import pathlib
 
-from duri_finale.phase_25_creative_collaboration_system import (
-    CreativeCollaborationSystem,
-)
+from duri_finale.phase_25_creative_collaboration_system import \
+    CreativeCollaborationSystem
 
 GOLDEN = pathlib.Path("tests/golden/phase25_behavior.jsonl")
 
@@ -14,9 +13,7 @@ def test_behavior_creative_coherence_min():
         ex = json.loads(line)
         # 실제 API에 맞게 수정: generate_collaboration_strategy 사용
         from duri_finale.phase_25_creative_collaboration_system import (
-            CollaborationOpportunity,
-            HumanIntent,
-        )
+            CollaborationOpportunity, HumanIntent)
 
         # 간단한 테스트용 입력 생성
         human_intent = HumanIntent(

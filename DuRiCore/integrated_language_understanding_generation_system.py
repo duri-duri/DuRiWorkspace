@@ -11,22 +11,21 @@ DuRi Phase 1-3 Week 3 Day 12 - 통합 언어 이해 및 생성 시스템
 """
 
 import asyncio
-from collections import Counter, defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
 import hashlib
 import json
 import logging
 import re
 import time
-from typing import Any, Dict, List, Optional, Tuple, Union
 import unicodedata
+from collections import Counter, defaultdict
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
-
-from integrated_social_intelligence_system import IntegratedSocialIntelligenceSystem
-
+from integrated_social_intelligence_system import \
+    IntegratedSocialIntelligenceSystem
 # 기존 시스템들 import
 from natural_language_processing_system import NaturalLanguageProcessingSystem
 
@@ -134,9 +133,7 @@ class DeepLanguageUnderstandingEngine:
         intent_analysis = await self.intent_recognizer.recognize_intent(text, context)
 
         # 4. 의미 분석
-        semantic_analysis = await self.semantic_analyzer.analyze_semantics(
-            text, context
-        )
+        semantic_analysis = await self.semantic_analyzer.analyze_semantics(text, context)
 
         # 5. 다국어 처리
         multilingual_analysis = await self.multilingual_processor.process_multilingual(
@@ -223,51 +220,37 @@ class AdvancedLanguageGenerationEngine:
 
         # 생성 유형에 따른 처리
         if generation_type == LanguageGenerationType.CONVERSATIONAL_RESPONSE:
-            generated_text = await self.conversational_generator.generate_response(
-                enhanced_context
-            )
+            generated_text = await self.conversational_generator.generate_response(enhanced_context)
         elif generation_type == LanguageGenerationType.EMOTIONAL_EXPRESSION:
-            generated_text = (
-                await self.emotional_generator.generate_emotional_expression(
-                    enhanced_context
-                )
+            generated_text = await self.emotional_generator.generate_emotional_expression(
+                enhanced_context
             )
         elif generation_type == LanguageGenerationType.CONTEXTUAL_GENERATION:
             generated_text = await self.contextual_generator.generate_contextual_text(
                 enhanced_context
             )
         elif generation_type == LanguageGenerationType.MULTILINGUAL_GENERATION:
-            generated_text = (
-                await self.multilingual_generator.generate_multilingual_text(
-                    enhanced_context
-                )
+            generated_text = await self.multilingual_generator.generate_multilingual_text(
+                enhanced_context
             )
         elif generation_type == LanguageGenerationType.CREATIVE_WRITING:
-            generated_text = await self.creative_generator.generate_creative_text(
-                enhanced_context
-            )
+            generated_text = await self.creative_generator.generate_creative_text(enhanced_context)
         else:
-            generated_text = await self.conversational_generator.generate_response(
-                enhanced_context
-            )
+            generated_text = await self.conversational_generator.generate_response(enhanced_context)
 
         # 감정적 표현 분석
-        emotional_expression = (
-            await self.emotional_generator.analyze_emotional_expression(generated_text)
+        emotional_expression = await self.emotional_generator.analyze_emotional_expression(
+            generated_text
         )
 
         # 맥락 관련성 평가 (의미 분석 결과 반영)
-        contextual_relevance = (
-            await self.contextual_generator.evaluate_contextual_relevance(
-                generated_text, enhanced_context
-            )
+        contextual_relevance = await self.contextual_generator.evaluate_contextual_relevance(
+            generated_text, enhanced_context
         )
 
         # 다국어 지원
-        multilingual_support = (
-            await self.multilingual_generator.get_multilingual_support(
-                generated_text, enhanced_context
-            )
+        multilingual_support = await self.multilingual_generator.get_multilingual_support(
+            generated_text, enhanced_context
         )
 
         # 신뢰도 계산 (의미 분석 결과 반영)
@@ -301,9 +284,7 @@ class AdvancedLanguageGenerationEngine:
         """생성 신뢰도 계산 (의미 분석 결과 반영)"""
         try:
             # 텍스트 품질 평가
-            text_quality = min(
-                1.0, len(generated_text.strip()) / 100.0
-            )  # 기본 품질 점수
+            text_quality = min(1.0, len(generated_text.strip()) / 100.0)  # 기본 품질 점수
 
             # 감정적 표현 평가
             emotion_quality = 1.0 if emotional_expression else 0.5
@@ -317,22 +298,16 @@ class AdvancedLanguageGenerationEngine:
                 # 키 컨셉 반영
                 key_concepts = context.get("key_concepts", [])
                 if key_concepts:
-                    semantic_quality = min(
-                        1.0, semantic_quality + len(key_concepts) * 0.1
-                    )
+                    semantic_quality = min(1.0, semantic_quality + len(key_concepts) * 0.1)
 
                 # 학습 통찰 반영
                 learning_insights = context.get("learning_insights", [])
                 if learning_insights:
-                    semantic_quality = min(
-                        1.0, semantic_quality + len(learning_insights) * 0.1
-                    )
+                    semantic_quality = min(1.0, semantic_quality + len(learning_insights) * 0.1)
 
                 # 의미 분석 신뢰도 반영
                 semantic_confidence = context.get("semantic_confidence", 0.5)
-                semantic_quality = min(
-                    1.0, semantic_quality + semantic_confidence * 0.2
-                )
+                semantic_quality = min(1.0, semantic_quality + semantic_confidence * 0.2)
 
             # 통합 신뢰도 (의미 분석 가중치 추가)
             confidence = (
@@ -352,9 +327,7 @@ class AdvancedLanguageGenerationEngine:
 class ContextAnalyzer:
     """맥락 분석기"""
 
-    async def analyze_context(
-        self, text: str, context: Dict[str, Any] = None
-    ) -> Dict[str, Any]:
+    async def analyze_context(self, text: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
         """맥락 분석"""
         # 시간적 맥락
         temporal_context = self._extract_temporal_context(text)
@@ -431,9 +404,7 @@ class ContextAnalyzer:
     def _extract_social_context(self, text: str) -> Dict[str, Any]:
         """사회적 맥락 추출"""
         # 사회적 관계 키워드
-        social_keywords = re.findall(
-            r"가족|친구|동료|선생님|학생|부모|자식|형제|자매", text
-        )
+        social_keywords = re.findall(r"가족|친구|동료|선생님|학생|부모|자식|형제|자매", text)
 
         return {
             "social_keywords": social_keywords,
@@ -443,9 +414,7 @@ class ContextAnalyzer:
     def _extract_topical_context(self, text: str) -> Dict[str, Any]:
         """주제적 맥락 추출"""
         # 주제 관련 키워드
-        topic_keywords = re.findall(
-            r"학습|교육|일|취미|운동|음식|여행|영화|음악|책", text
-        )
+        topic_keywords = re.findall(r"학습|교육|일|취미|운동|음식|여행|영화|음악|책", text)
 
         return {
             "topic_keywords": topic_keywords,
@@ -455,9 +424,7 @@ class ContextAnalyzer:
     def _extract_emotional_context(self, text: str) -> Dict[str, Any]:
         """감정적 맥락 추출"""
         # 감정 관련 키워드
-        emotion_keywords = re.findall(
-            r"기쁨|슬픔|화남|놀람|두려움|사랑|미움|희망|절망|감사", text
-        )
+        emotion_keywords = re.findall(r"기쁨|슬픔|화남|놀람|두려움|사랑|미움|희망|절망|감사", text)
 
         return {
             "emotion_keywords": emotion_keywords,
@@ -513,9 +480,7 @@ class EmotionAnalyzer:
             "감사": ["감사하다", "고맙다", "은혜롭다", "축복받다"],
         }
 
-    async def analyze_emotion(
-        self, text: str, context: Dict[str, Any] = None
-    ) -> Dict[str, Any]:
+    async def analyze_emotion(self, text: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
         """감정 분석"""
         emotion_scores = {}
 
@@ -529,9 +494,7 @@ class EmotionAnalyzer:
 
         # 주요 감정 결정
         primary_emotion = (
-            max(emotion_scores.items(), key=lambda x: x[1])[0]
-            if emotion_scores
-            else "중립"
+            max(emotion_scores.items(), key=lambda x: x[1])[0] if emotion_scores else "중립"
         )
 
         # 감정 강도 계산
@@ -560,9 +523,7 @@ class IntentRecognizer:
             "반대": [r"아니다", r"틀렸다", r"싫다", r"안된다", r"아니요"],
         }
 
-    async def recognize_intent(
-        self, text: str, context: Dict[str, Any] = None
-    ) -> Dict[str, Any]:
+    async def recognize_intent(self, text: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
         """의도 인식"""
         intent_scores = {}
 
@@ -576,9 +537,7 @@ class IntentRecognizer:
 
         # 주요 의도 결정
         primary_intent = (
-            max(intent_scores.items(), key=lambda x: x[1])[0]
-            if intent_scores
-            else "일반"
+            max(intent_scores.items(), key=lambda x: x[1])[0] if intent_scores else "일반"
         )
 
         return {
@@ -591,9 +550,7 @@ class IntentRecognizer:
 class SemanticAnalyzer:
     """의미 분석기"""
 
-    async def analyze_semantics(
-        self, text: str, context: Dict[str, Any] = None
-    ) -> Dict[str, Any]:
+    async def analyze_semantics(self, text: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
         """의미 분석"""
         # 키워드 추출
         keywords = self._extract_keywords(text)
@@ -636,9 +593,7 @@ class SemanticAnalyzer:
 
         return list(set(concepts))
 
-    def _extract_learning_insights(
-        self, text: str, context: Dict[str, Any] = None
-    ) -> List[str]:
+    def _extract_learning_insights(self, text: str, context: Dict[str, Any] = None) -> List[str]:
         """학습 통찰 추출"""
         insights = []
 
@@ -688,9 +643,7 @@ class MultilingualProcessor:
         detected_language = self._detect_language(text)
 
         # 언어별 처리
-        language_specific_analysis = await self._process_language_specific(
-            text, detected_language
-        )
+        language_specific_analysis = await self._process_language_specific(text, detected_language)
 
         return {
             "detected_language": detected_language,
@@ -725,9 +678,7 @@ class MultilingualProcessor:
         chinese_pattern = re.compile(r"[\u4e00-\u9fff]")
         return bool(chinese_pattern.search(text))
 
-    async def _process_language_specific(
-        self, text: str, language: str
-    ) -> Dict[str, Any]:
+    async def _process_language_specific(self, text: str, language: str) -> Dict[str, Any]:
         """언어별 특화 처리"""
         if language == "ko":
             return self._process_korean(text)
@@ -796,9 +747,7 @@ class ConversationalGenerator:
 
     def _generate_general_response(self, context: Dict[str, Any]) -> str:
         """일반 응답 생성"""
-        return (
-            "이해했습니다. 더 구체적으로 말씀해 주시면 더 나은 도움을 드릴 수 있습니다."
-        )
+        return "이해했습니다. 더 구체적으로 말씀해 주시면 더 나은 도움을 드릴 수 있습니다."
 
 
 class EmotionalGenerator:
@@ -860,9 +809,7 @@ class ContextualGenerator:
         else:
             return "맥락을 고려한 응답을 드리고 싶습니다. 더 구체적으로 말씀해 주세요."
 
-    async def evaluate_contextual_relevance(
-        self, text: str, context: Dict[str, Any]
-    ) -> float:
+    async def evaluate_contextual_relevance(self, text: str, context: Dict[str, Any]) -> float:
         """맥락 관련성 평가"""
         # 간단한 관련성 평가 (실제로는 더 정교한 방법 사용)
         context_keywords = context.get("keywords", [])
@@ -893,9 +840,7 @@ class MultilingualGenerator:
         else:
             return "이해했습니다. 더 구체적으로 말씀해 주시면 더 나은 도움을 드릴 수 있습니다."
 
-    async def get_multilingual_support(
-        self, text: str, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def get_multilingual_support(self, text: str, context: Dict[str, Any]) -> Dict[str, Any]:
         """다국어 지원 정보"""
         return {
             "supported_languages": ["ko", "en", "ja", "zh"],
@@ -956,8 +901,8 @@ class IntegratedLanguageUnderstandingGenerationSystem:
                 text = "일반적인 대화"
 
             # 2. 심층 언어 이해
-            understanding_result = (
-                await self.deep_understanding_engine.understand_language(text, context)
+            understanding_result = await self.deep_understanding_engine.understand_language(
+                text, context
             )
 
             # 3. 고급 언어 생성 (의미 분석 결과가 언어 생성 가중치에 제대로 반영되도록 연결 보강)
@@ -1023,17 +968,13 @@ class IntegratedLanguageUnderstandingGenerationSystem:
         """통합 점수 계산 (재조정 및 0.0~1.0 정규화 적용)"""
         try:
             # 이해 점수 (0.0~1.0 정규화)
-            understanding_score = max(
-                0.0, min(1.0, understanding_result.confidence_score)
-            )
+            understanding_score = max(0.0, min(1.0, understanding_result.confidence_score))
 
             # 생성 점수 (0.0~1.0 정규화)
             generation_score = max(0.0, min(1.0, generation_result.confidence_score))
 
             # 맥락 관련성 점수 (0.0~1.0 정규화)
-            contextual_score = max(
-                0.0, min(1.0, generation_result.contextual_relevance)
-            )
+            contextual_score = max(0.0, min(1.0, generation_result.contextual_relevance))
 
             # 의미 분석 결과 반영 (새로운 가중치 추가)
             semantic_score = 0.0
@@ -1062,9 +1003,7 @@ class IntegratedLanguageUnderstandingGenerationSystem:
             logger.error(f"통합 점수 계산 실패: {e}")
             return 0.5  # 기본값 반환
 
-    def _update_performance_metrics(
-        self, processing_time: float, integration_score: float
-    ):
+    def _update_performance_metrics(self, processing_time: float, integration_score: float):
         """성능 메트릭 업데이트 (division by zero 예외 방지)"""
         try:
             self.performance_metrics["total_processing_time"] += processing_time
@@ -1079,9 +1018,7 @@ class IntegratedLanguageUnderstandingGenerationSystem:
                 )
 
                 # 평균 통합 점수 계산 (division by zero 예외 방지)
-                current_avg = self.performance_metrics.get(
-                    "average_integration_score", 0.0
-                )
+                current_avg = self.performance_metrics.get("average_integration_score", 0.0)
                 self.performance_metrics["average_integration_score"] = (
                     current_avg * current_count + integration_score
                 ) / new_count
@@ -1169,12 +1106,8 @@ async def test_integrated_language_system():
             )
 
             logger.info(f"✅ 테스트 케이스 {i} 완료")
-            logger.info(
-                f"   이해 점수: {result.understanding_result.confidence_score:.2f}"
-            )
-            logger.info(
-                f"   생성 점수: {result.generation_result.confidence_score:.2f}"
-            )
+            logger.info(f"   이해 점수: {result.understanding_result.confidence_score:.2f}")
+            logger.info(f"   생성 점수: {result.generation_result.confidence_score:.2f}")
             logger.info(f"   통합 점수: {result.integration_score:.2f}")
             logger.info(f"   생성된 텍스트: {result.generation_result.generated_text}")
 
@@ -1185,15 +1118,9 @@ async def test_integrated_language_system():
     # 전체 결과 요약
     successful_tests = [r for r in results if "error" not in r]
     if successful_tests:
-        avg_understanding_score = np.mean(
-            [r["understanding_score"] for r in successful_tests]
-        )
-        avg_generation_score = np.mean(
-            [r["generation_score"] for r in successful_tests]
-        )
-        avg_integration_score = np.mean(
-            [r["integration_score"] for r in successful_tests]
-        )
+        avg_understanding_score = np.mean([r["understanding_score"] for r in successful_tests])
+        avg_generation_score = np.mean([r["generation_score"] for r in successful_tests])
+        avg_integration_score = np.mean([r["integration_score"] for r in successful_tests])
 
         logger.info(f"\n=== 테스트 결과 요약 ===")
         logger.info(f"성공한 테스트: {len(successful_tests)}/{len(test_cases)}")

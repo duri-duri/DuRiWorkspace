@@ -11,16 +11,16 @@ DuRi Phase 6.1 - 통합 성능 최적화
 """
 
 import asyncio
-from collections import defaultdict
-from concurrent.futures import ThreadPoolExecutor
-from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
-from enum import Enum
 import hashlib
 import json
 import logging
 import statistics
 import time
+from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
+from enum import Enum
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
 # 로깅 설정
@@ -181,9 +181,7 @@ class EnhancedACTRParallelProcessor:
             else:
                 # 동기 함수를 비동기로 실행
                 loop = asyncio.get_event_loop()
-                result = await loop.run_in_executor(
-                    None, task.function, *task.args, **task.kwargs
-                )
+                result = await loop.run_in_executor(None, task.function, *task.args, **task.kwargs)
 
             task.status = TaskStatus.COMPLETED
             task.result = result
@@ -228,9 +226,7 @@ class EnhancedACTRParallelProcessor:
         # 캐시 크기 제한
         if len(self.cache) > self.cache_max_size:
             # 가장 오래된 항목 삭제
-            oldest_key = min(
-                self.cache.keys(), key=lambda k: self.cache[k]["timestamp"]
-            )
+            oldest_key = min(self.cache.keys(), key=lambda k: self.cache[k]["timestamp"])
             del self.cache[oldest_key]
 
     def _update_performance_metrics(self, execution_time: float, task_count: int):
@@ -240,9 +236,7 @@ class EnhancedACTRParallelProcessor:
 
         # 평균 실행 시간 계산
         if self.completed_tasks:
-            avg_time = statistics.mean(
-                [task.execution_time for task in self.completed_tasks]
-            )
+            avg_time = statistics.mean([task.execution_time for task in self.completed_tasks])
             self.performance_metrics["average_execution_time"] = avg_time
 
         # 병렬 효율성 계산
@@ -253,24 +247,20 @@ class EnhancedACTRParallelProcessor:
         # 성능 향상률 계산
         if self.baseline_execution_time > 0:
             improvement = (
-                (self.baseline_execution_time - execution_time)
-                / self.baseline_execution_time
+                (self.baseline_execution_time - execution_time) / self.baseline_execution_time
             ) * 100
             self.performance_metrics["performance_improvement"] = improvement
 
         # 캐시 히트율 계산
         total_cache_requests = (
-            self.performance_metrics["cache_hits"]
-            + self.performance_metrics["cache_misses"]
+            self.performance_metrics["cache_hits"] + self.performance_metrics["cache_misses"]
         )
         if total_cache_requests > 0:
             self.performance_metrics["cache_hit_rate"] = (
                 self.performance_metrics["cache_hits"] / total_cache_requests
             ) * 100
 
-    async def execute_judgment_parallel(
-        self, judgment_tasks: List[Callable]
-    ) -> List[Any]:
+    async def execute_judgment_parallel(self, judgment_tasks: List[Callable]) -> List[Any]:
         """판단 작업 병렬 실행 (로드 밸런싱 포함)"""
         logger.info("🧠 판단 작업 병렬 실행")
 
@@ -308,9 +298,7 @@ class EnhancedACTRParallelProcessor:
 
         return await self.execute_parallel_tasks(tasks)
 
-    async def execute_feedback_parallel(
-        self, feedback_tasks: List[Callable]
-    ) -> List[Any]:
+    async def execute_feedback_parallel(self, feedback_tasks: List[Callable]) -> List[Any]:
         """피드백 작업 병렬 실행 (로드 밸런싱 포함)"""
         logger.info("🔄 피드백 작업 병렬 실행")
 
@@ -336,11 +324,7 @@ class EnhancedACTRParallelProcessor:
         for node_name, node_info in self.node_status.items():
             if node_info["status"] == "active":
                 # 응답 시간과 부하를 고려한 점수 계산
-                score = (
-                    1.0
-                    / (node_info["response_time"] + 0.001)
-                    * (1.0 - node_info["load"])
-                )
+                score = 1.0 / (node_info["response_time"] + 0.001) * (1.0 - node_info["load"])
                 available_nodes.append((node_name, score))
 
         if available_nodes:

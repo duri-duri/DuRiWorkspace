@@ -4,13 +4,13 @@ DuRiCore Phase 5 Day 3 - 상황 분석 엔진
 입력 데이터 분석, 컨텍스트 추출, 상황 패턴 인식 시스템
 """
 
-from dataclasses import dataclass
-from datetime import datetime
-from enum import Enum
 import json
 import logging
 import math
 import re
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
@@ -147,9 +147,7 @@ class SituationAnalyzer:
             context_elements = await self._extract_context_elements(context)
 
             # 3. 상황 패턴 인식
-            situation_pattern = await self._recognize_situation_pattern(
-                input_data, context
-            )
+            situation_pattern = await self._recognize_situation_pattern(input_data, context)
 
             # 4. 위험도 평가
             risk_level = await self._assess_risk_level(input_data, context)
@@ -202,9 +200,7 @@ class SituationAnalyzer:
             analysis = {
                 "data_type": type(input_data).__name__,
                 "data_size": len(str(input_data)),
-                "key_fields": (
-                    list(input_data.keys()) if isinstance(input_data, dict) else []
-                ),
+                "key_fields": (list(input_data.keys()) if isinstance(input_data, dict) else []),
                 "complexity": self._calculate_data_complexity(input_data),
                 "quality_score": self._assess_data_quality(input_data),
                 "content_analysis": self._analyze_content(input_data),
@@ -216,9 +212,7 @@ class SituationAnalyzer:
             logger.error(f"입력 데이터 분석 오류: {e}")
             return {"error": str(e)}
 
-    async def _extract_context_elements(
-        self, context: Dict[str, Any]
-    ) -> List[ContextElement]:
+    async def _extract_context_elements(self, context: Dict[str, Any]) -> List[ContextElement]:
         """컨텍스트 요소 추출"""
         try:
             elements = []
@@ -277,15 +271,11 @@ class SituationAnalyzer:
 
                         # 위험 요소 확인
                         risk_keywords = pattern_info["risk_factors"]
-                        risk_factors = [
-                            kw for kw in risk_keywords if kw in content_lower
-                        ]
+                        risk_factors = [kw for kw in risk_keywords if kw in content_lower]
 
                         # 긴급도 지표 확인
                         urgency_keywords = pattern_info["urgency_indicators"]
-                        urgency_indicators = [
-                            kw for kw in urgency_keywords if kw in content_lower
-                        ]
+                        urgency_indicators = [kw for kw in urgency_keywords if kw in content_lower]
 
                         # 컨텍스트 지표 확인
                         context_indicators = self._extract_context_indicators(context)
@@ -521,9 +511,9 @@ class SituationAnalyzer:
 
             # 컨텍스트 요소 기반 신뢰도
             if context_elements:
-                avg_confidence = sum(
-                    elem.confidence for elem in context_elements
-                ) / len(context_elements)
+                avg_confidence = sum(elem.confidence for elem in context_elements) / len(
+                    context_elements
+                )
                 confidence += avg_confidence * 0.2
 
             # 패턴 신뢰도
@@ -708,9 +698,7 @@ async def test_situation_analyzer():
         print(f"\n테스트 케이스 {i+1}:")
         print(f"입력: {test_case['input']['content'][:50]}...")
 
-        result = await analyzer.analyze_situation(
-            test_case["input"], test_case["context"]
-        )
+        result = await analyzer.analyze_situation(test_case["input"], test_case["context"])
 
         print(f"상황 타입: {result['situation_type']}")
         print(f"위험도: {result['risk_level']:.3f}")

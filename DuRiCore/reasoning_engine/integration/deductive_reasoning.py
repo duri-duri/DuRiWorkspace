@@ -1,4 +1,5 @@
-from duri_trace import CoreMemoryTrace, EmotionTrace, JudgmentTrace, strategy_trace
+from duri_trace import (CoreMemoryTrace, EmotionTrace, JudgmentTrace,
+                        strategy_trace)
 
 #!/usr/bin/env python3
 # @preserve_identity: 판단 이유 기록 시스템 강제 통합
@@ -38,13 +39,9 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
-from ..core.logical_processor import (
-    InferenceType,
-    LogicalProcessor,
-    LogicalStep,
-    PremiseType,
-    SemanticPremise,
-)
+from ..core.logical_processor import (InferenceType, LogicalProcessor,
+                                      LogicalStep, PremiseType,
+                                      SemanticPremise)
 
 logger = logging.getLogger(__name__)
 

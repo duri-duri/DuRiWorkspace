@@ -15,21 +15,18 @@ Phase 14에서 구현된 커서 통합 시스템의 기능을 테스트하는 �
 """
 
 import asyncio
-from datetime import datetime
 import json
 import logging
 import time
+from datetime import datetime
 from typing import Any, Dict, List
 
 # Phase 14 시스템 import
 try:
-    from phase14_cursor_integration import (
-        CursorContext,
-        CursorIntegrationSystem,
-        CursorPhase,
-        CursorResult,
-        CursorStatus,
-    )
+    from phase14_cursor_integration import (CursorContext,
+                                            CursorIntegrationSystem,
+                                            CursorPhase, CursorResult,
+                                            CursorStatus)
 except ImportError as e:
     print(f"❌ Phase 14 시스템 import 실패: {e}")
     exit(1)
@@ -440,9 +437,7 @@ class Phase14TestRunner:
 
         # 결과 통계
         total_tests = len(self.test_results)
-        successful_tests = sum(
-            1 for result in self.test_results if result["status"] == "성공"
-        )
+        successful_tests = sum(1 for result in self.test_results if result["status"] == "성공")
         partial_success_tests = sum(
             1 for result in self.test_results if result["status"] == "부분 성공"
         )
@@ -450,9 +445,7 @@ class Phase14TestRunner:
             1 for result in self.test_results if result["status"] in ["실패", "오류"]
         )
 
-        success_rate = (
-            (successful_tests + partial_success_tests * 0.5) / total_tests * 100
-        )
+        success_rate = (successful_tests + partial_success_tests * 0.5) / total_tests * 100
 
         print(f"📈 전체 테스트 수: {total_tests}")
         print(f"✅ 성공: {successful_tests}")
@@ -499,9 +492,7 @@ class Phase14TestRunner:
 
         # 최종 평가
         if success_rate >= 80:
-            print(
-                "\n🎉 Phase 14 테스트 성공! 커서 통합 시스템이 정상적으로 작동합니다."
-            )
+            print("\n🎉 Phase 14 테스트 성공! 커서 통합 시스템이 정상적으로 작동합니다.")
         elif success_rate >= 60:
             print("\n⚠️ Phase 14 테스트 부분 성공! 일부 기능에 개선이 필요합니다.")
         else:

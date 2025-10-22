@@ -6,8 +6,8 @@ A/B 테스트 러너 - 기존 시스템과의 퍼사드 통합
 import argparse
 import json
 import os
-from pathlib import Path
 import sys
+from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
 import pandas as pd
@@ -83,9 +83,7 @@ class ABTestRunner:
         group_b = df[df[group_col] == b_label][metric_col].dropna().tolist()
 
         if len(group_a) < 2 or len(group_b) < 2:
-            raise ValueError(
-                f"Need ≥2 samples per variant. A: {len(group_a)}, B: {len(group_b)}"
-            )
+            raise ValueError(f"Need ≥2 samples per variant. A: {len(group_a)}, B: {len(group_b)}")
 
         return group_a, group_b
 
@@ -124,10 +122,8 @@ class ABTestRunner:
 
         # 효과 크기 계산 (Cohen's d)
         pooled_std = (
-            (len(group_a) - 1)
-            * (sum((x - mean_a) ** 2 for x in group_a) / (len(group_a) - 1))
-            + (len(group_b) - 1)
-            * (sum((x - mean_b) ** 2 for x in group_b) / (len(group_b) - 1))
+            (len(group_a) - 1) * (sum((x - mean_a) ** 2 for x in group_a) / (len(group_a) - 1))
+            + (len(group_b) - 1) * (sum((x - mean_b) ** 2 for x in group_b) / (len(group_b) - 1))
         ) / (len(group_a) + len(group_b) - 2)
         pooled_std = pooled_std**0.5
         cohens_d = (mean_a - mean_b) / pooled_std if pooled_std > 0 else 0
@@ -195,10 +191,8 @@ class ABTestRunner:
 
         # 효과 크기 계산 (Cohen's d)
         pooled_std = (
-            (len(group_a) - 1)
-            * (sum((x - mean_a) ** 2 for x in group_a) / (len(group_a) - 1))
-            + (len(group_b) - 1)
-            * (sum((x - mean_b) ** 2 for x in group_b) / (len(group_b) - 1))
+            (len(group_a) - 1) * (sum((x - mean_a) ** 2 for x in group_a) / (len(group_a) - 1))
+            + (len(group_b) - 1) * (sum((x - mean_b) ** 2 for x in group_b) / (len(group_b) - 1))
         ) / (len(group_a) + len(group_b) - 2)
         pooled_std = pooled_std**0.5
         cohens_d = (mean_a - mean_b) / pooled_std if pooled_std > 0 else 0
@@ -289,9 +283,7 @@ def main():
 
     # Legacy 모드 옵션
     parser.add_argument("--day", type=int, default=36, help="Day 번호 (legacy 모드)")
-    parser.add_argument(
-        "--variant", choices=["A", "B"], default="A", help="변형 (legacy 모드)"
-    )
+    parser.add_argument("--variant", choices=["A", "B"], default="A", help="변형 (legacy 모드)")
     parser.add_argument("--seed", type=int, default=42, help="시드 (legacy 모드)")
     parser.add_argument("--gate-policy", help="게이트 정책 파일 경로")
 

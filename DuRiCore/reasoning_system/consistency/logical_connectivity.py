@@ -7,15 +7,15 @@ DuRi 추론 시스템 - 논리적 연결성 검증 모듈
 """
 
 import asyncio
-from collections import Counter, defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 import hashlib
 import json
 import logging
 import re
 import time
+from collections import Counter, defaultdict
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
@@ -79,7 +79,9 @@ class LogicalConnectivityValidator:
         self, prev_step: Dict[str, Any], current_step: Dict[str, Any]
     ) -> Optional[LogicalConnection]:
         """단계 간 연결 검증"""
-        connection_id = f"connection_{int(time.time())}_{hash(str(prev_step))}_{hash(str(current_step))}"
+        connection_id = (
+            f"connection_{int(time.time())}_{hash(str(prev_step))}_{hash(str(current_step))}"
+        )
 
         # 연결 유형 분석
         connection_type = await self._analyze_connection_type(prev_step, current_step)
@@ -88,9 +90,7 @@ class LogicalConnectivityValidator:
         strength = await self._calculate_connection_strength(prev_step, current_step)
 
         # 연결 신뢰도 계산
-        confidence = await self._calculate_connection_confidence(
-            prev_step, current_step
-        )
+        confidence = await self._calculate_connection_confidence(prev_step, current_step)
 
         # 연결 증거 수집
         evidence = await self._collect_connection_evidence(prev_step, current_step)
@@ -124,9 +124,7 @@ class LogicalConnectivityValidator:
         similarity = await self._calculate_similarity(prev_step, current_step)
         return similarity
 
-    async def _calculate_similarity(
-        self, step1: Dict[str, Any], step2: Dict[str, Any]
-    ) -> float:
+    async def _calculate_similarity(self, step1: Dict[str, Any], step2: Dict[str, Any]) -> float:
         """단계 간 유사도 계산"""
         # 간단한 유사도 계산 (실제로는 더 복잡한 알고리즘 사용)
         common_keys = set(step1.keys()) & set(step2.keys())

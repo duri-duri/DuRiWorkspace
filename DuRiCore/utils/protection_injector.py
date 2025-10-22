@@ -166,9 +166,7 @@ def test_{module_name}_regression():
             protected_content = module_content
 
             # 1. 정체성 선언 추가
-            protected_content = self._add_preserve_identity(
-                protected_content, module_name
-            )
+            protected_content = self._add_preserve_identity(protected_content, module_name)
 
             # 2. 진화 보호 추가
             protected_content = self._add_evolution_protection(protected_content)
@@ -301,14 +299,12 @@ def test_{module_name}_regression():
                 ]
             ):
                 # 함수에 판단 흐름 Trace 구조 추가
-                trace_structure = self.injection_templates[
-                    "judgment_trace_structure"
-                ].format(module_name=module_name, intent=f"{func_name} 실행")
+                trace_structure = self.injection_templates["judgment_trace_structure"].format(
+                    module_name=module_name, intent=f"{func_name} 실행"
+                )
 
                 # 함수 내부에 Trace 구조 추가
-                content = self._inject_into_function(
-                    content, func_name, trace_structure
-                )
+                content = self._inject_into_function(content, func_name, trace_structure)
 
         return content
 
@@ -368,9 +364,7 @@ def test_{module_name}_regression():
 
         return content
 
-    def _inject_into_function(
-        self, content: str, func_name: str, trace_structure: str
-    ) -> str:
+    def _inject_into_function(self, content: str, func_name: str, trace_structure: str) -> str:
         """함수 내부에 Trace 구조 삽입"""
         # 함수 시작 부분 찾기
         func_pattern = rf"def {func_name}\("
@@ -401,17 +395,13 @@ def test_{module_name}_regression():
                             break
 
                         # 함수 본문 시작
-                        if not line.strip().startswith(
-                            "pass"
-                        ) and not line.strip().startswith("return"):
+                        if not line.strip().startswith("pass") and not line.strip().startswith(
+                            "return"
+                        ):
                             # Trace 구조 삽입
                             indent = len(line) - len(line.lstrip())
                             trace_indented = "\n".join(
-                                (
-                                    " " * indent + trace_line
-                                    if trace_line.strip()
-                                    else trace_line
-                                )
+                                (" " * indent + trace_line if trace_line.strip() else trace_line)
                                 for trace_line in trace_structure.split("\n")
                             )
 
@@ -462,9 +452,7 @@ def test_{module_name}_regression():
         """보호된 모듈 저장"""
         try:
             os.makedirs(output_dir, exist_ok=True)
-            protected_file_path = os.path.join(
-                output_dir, f"{module_name}_protected.py"
-            )
+            protected_file_path = os.path.join(output_dir, f"{module_name}_protected.py")
 
             with open(protected_file_path, "w", encoding="utf-8") as f:
                 f.write(module_content)

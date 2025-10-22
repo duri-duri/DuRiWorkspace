@@ -3,8 +3,8 @@ from __future__ import annotations
 import dataclasses
 import json
 import math
-from pathlib import Path
 import statistics
+from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 import yaml  # pyyaml 필요
@@ -80,9 +80,7 @@ def load_outputs_jsonl(path: Optional[Path]) -> Dict[str, Dict[str, Any]]:
     return out
 
 
-def _pick_candidate(
-    sample: Sample, outputs: Dict[str, Dict[str, Any]]
-) -> Tuple[str, str]:
+def _pick_candidate(sample: Sample, outputs: Dict[str, Dict[str, Any]]) -> Tuple[str, str]:
     """returns (tag, text). priority: external outputs > built-in candidate(baseline) > first candidate > ''"""
     if sample.id in outputs:
         o = outputs[sample.id]
@@ -143,17 +141,11 @@ def evaluate_league(
         },
         "overall": {
             "avg_composite": (
-                float(sum(overall_scores) / len(overall_scores))
-                if overall_scores
-                else 0.0
+                float(sum(overall_scores) / len(overall_scores)) if overall_scores else 0.0
             ),
             "min": float(min(overall_scores)) if overall_scores else 0.0,
             "max": float(max(overall_scores)) if overall_scores else 0.0,
-            "std": (
-                float(statistics.pstdev(overall_scores))
-                if len(overall_scores) > 1
-                else 0.0
-            ),
+            "std": (float(statistics.pstdev(overall_scores)) if len(overall_scores) > 1 else 0.0),
         },
         "by_group": groups,
         "results": per_sample,
@@ -163,9 +155,7 @@ def evaluate_league(
 
 def save_md_table(report: Dict[str, Any]) -> str:
     lines = []
-    lines.append(
-        f"# 📊 League Report — {report['sampleset']['name']} ({report['run']['name']})"
-    )
+    lines.append(f"# 📊 League Report — {report['sampleset']['name']} ({report['run']['name']})")
     o = report["overall"]
     lines += [
         "",
@@ -180,9 +170,7 @@ def save_md_table(report: Dict[str, Any]) -> str:
         lines.append(f"| `{g['group']}` | {g['count']} | `{g['avg_composite']:.3f}` |")
 
     # Top/Bottom
-    results = sorted(
-        report["results"], key=lambda x: x["composite_score"], reverse=True
-    )
+    results = sorted(report["results"], key=lambda x: x["composite_score"], reverse=True)
     head = results[:5]
     tail = results[-5:] if len(results) > 5 else []
 
@@ -190,9 +178,7 @@ def save_md_table(report: Dict[str, Any]) -> str:
         txt = r["text"]
         if len(txt) > 60:
             txt = txt[:60] + "..."
-        return (
-            f"| `{r['id']}` | `{r['group']}` | `{r['composite_score']:.3f}` | `{txt}` |"
-        )
+        return f"| `{r['id']}` | `{r['group']}` | `{r['composite_score']:.3f}` | `{txt}` |"
 
     lines += ["", "## Top 5", "", "| ID | Group | Score | Text |", "|---|---|---:|---|"]
     for r in head:

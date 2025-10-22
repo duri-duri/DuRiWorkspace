@@ -77,8 +77,8 @@ class Telemetry:
     """Insight Engine 연동용 계측 포인트 (기존 시스템 활용)"""
 
     def __init__(self):
-        from datetime import datetime
         import os
+        from datetime import datetime
 
         # 기존 judgment_trace_store.py 패턴 활용
         self.log_dir = "DuRiCore/memory/phase11_traces"
@@ -113,14 +113,13 @@ class Telemetry:
 
     def snapshot(self, ctx: TurnContext) -> None:
         """컨텍스트 스냅샷 저장"""
-        from datetime import datetime
         import json
+        from datetime import datetime
 
         snapshot = {
             "conv_id": ctx.conv_id,
             "messages": [
-                {"role": m.role, "content": m.content, "meta": m.meta}
-                for m in ctx.messages
+                {"role": m.role, "content": m.content, "meta": m.meta} for m in ctx.messages
             ],
             "memory": ctx.memory,
             "timestamp": datetime.now().isoformat(),

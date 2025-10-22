@@ -11,18 +11,18 @@ DuRiCore Phase 2-5: 메모리 동기화 모듈
 """
 
 import asyncio
-from collections import defaultdict, deque
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 import hashlib
 import json
 import logging
 import sqlite3
 import threading
 import time
-from typing import Any, Dict, List, Optional, Tuple, Union
 import uuid
+from collections import defaultdict, deque
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -229,9 +229,7 @@ class MemorySynchronizer:
 
             # 동기화 완료 처리
             sync_operation.completed_at = datetime.now()
-            sync_operation.status = (
-                SyncStatus.COMPLETED if success else SyncStatus.FAILED
-            )
+            sync_operation.status = SyncStatus.COMPLETED if success else SyncStatus.FAILED
 
             # 성능 메트릭 업데이트
             self.performance_metrics["total_sync_operations"] += 1
@@ -247,9 +245,7 @@ class MemorySynchronizer:
                 + sync_time
             ) / self.performance_metrics["total_sync_operations"]
 
-            logger.info(
-                f"동기화 완료: {sync_operation.sync_id} ({'성공' if success else '실패'})"
-            )
+            logger.info(f"동기화 완료: {sync_operation.sync_id} ({'성공' if success else '실패'})")
             return success
 
         except Exception as e:
@@ -262,9 +258,7 @@ class MemorySynchronizer:
         """전체 동기화 수행"""
         try:
             # 소스에서 모든 메모리 데이터 가져오기
-            source_memories = await self._get_memories_from_source(
-                sync_operation.source_id
-            )
+            source_memories = await self._get_memories_from_source(sync_operation.source_id)
 
             # 타겟에 동기화
             synced_count = 0
@@ -375,9 +369,7 @@ class MemorySynchronizer:
             backup_path = f"backup_{int(time.time())}_{uuid.uuid4().hex[:8]}.json"
 
             # 소스에서 모든 메모리 데이터 가져오기
-            source_memories = await self._get_memories_from_source(
-                sync_operation.source_id
-            )
+            source_memories = await self._get_memories_from_source(sync_operation.source_id)
 
             # 백업 파일에 저장
             backup_data = {
@@ -472,9 +464,7 @@ class MemorySynchronizer:
             logger.error(f"메모리 충돌 감지 실패: {e}")
             return None
 
-    async def resolve_conflict(
-        self, conflict_id: str, resolution_strategy: str
-    ) -> bool:
+    async def resolve_conflict(self, conflict_id: str, resolution_strategy: str) -> bool:
         """메모리 충돌 해결"""
         try:
             if conflict_id not in self.memory_conflicts:
@@ -500,18 +490,14 @@ class MemorySynchronizer:
                 return False
 
             # 해결된 버전 적용
-            success = await self._apply_resolved_version(
-                conflict.memory_id, resolved_version
-            )
+            success = await self._apply_resolved_version(conflict.memory_id, resolved_version)
 
             if success:
                 conflict.resolved = True
                 conflict.resolution_strategy = resolution_strategy
                 self.performance_metrics["conflicts_resolved"] += 1
 
-                logger.info(
-                    f"메모리 충돌 해결 완료: {conflict_id} ({resolution_strategy})"
-                )
+                logger.info(f"메모리 충돌 해결 완료: {conflict_id} ({resolution_strategy})")
                 return True
             else:
                 logger.error(f"메모리 충돌 해결 실패: {conflict_id}")
@@ -526,9 +512,7 @@ class MemorySynchronizer:
         # 실제 구현에서는 소스 시스템에서 데이터를 가져와야 함
         return []
 
-    async def _sync_memory_to_target(
-        self, target_id: str, memory_data: Dict[str, Any]
-    ) -> bool:
+    async def _sync_memory_to_target(self, target_id: str, memory_data: Dict[str, Any]) -> bool:
         """타겟에 메모리 동기화"""
         # 실제 구현에서는 타겟 시스템에 데이터를 저장해야 함
         return True
@@ -586,11 +570,7 @@ class MemorySynchronizer:
             stats = {
                 "total_operations": len(self.sync_operations),
                 "pending_operations": len(
-                    [
-                        op
-                        for op in self.sync_operations.values()
-                        if op.status == SyncStatus.PENDING
-                    ]
+                    [op for op in self.sync_operations.values() if op.status == SyncStatus.PENDING]
                 ),
                 "in_progress_operations": len(
                     [
@@ -607,11 +587,7 @@ class MemorySynchronizer:
                     ]
                 ),
                 "failed_operations": len(
-                    [
-                        op
-                        for op in self.sync_operations.values()
-                        if op.status == SyncStatus.FAILED
-                    ]
+                    [op for op in self.sync_operations.values() if op.status == SyncStatus.FAILED]
                 ),
                 "total_conflicts": len(self.memory_conflicts),
                 "resolved_conflicts": len(

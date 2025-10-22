@@ -11,14 +11,14 @@ DuRi Phase 1-3 Week 3 Day 9 - 의사결정 지원 시스템
 """
 
 import asyncio
-from collections import defaultdict, deque
-from dataclasses import dataclass, field
-from datetime import datetime
 import json
 import logging
 import math
 import random
 import time
+from collections import defaultdict, deque
+from dataclasses import dataclass, field
+from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
@@ -108,9 +108,7 @@ class MultiCriteriaDecisionMaker:
 
         # 기준 가중치 설정
         if criteria_weights is None:
-            criteria_weights = self.get_default_weights(
-                options[0].criteria_scores.keys()
-            )
+            criteria_weights = self.get_default_weights(options[0].criteria_scores.keys())
 
         # 각 옵션의 종합 점수 계산
         option_scores = {}
@@ -123,9 +121,7 @@ class MultiCriteriaDecisionMaker:
             }
 
         # 최적 옵션 선택
-        best_option_id = max(
-            option_scores.keys(), key=lambda x: option_scores[x]["score"]
-        )
+        best_option_id = max(option_scores.keys(), key=lambda x: option_scores[x]["score"])
         best_option_data = option_scores[best_option_id]
 
         # 신뢰도 계산
@@ -136,9 +132,7 @@ class MultiCriteriaDecisionMaker:
             "decision_id": decision_id,
             "selected_option": best_option_data["option"],
             "confidence": confidence,
-            "reasoning": self.generate_decision_reasoning(
-                best_option_data, criteria_weights
-            ),
+            "reasoning": self.generate_decision_reasoning(best_option_data, criteria_weights),
             "alternatives": [opt["option"] for opt in option_scores.values()],
             "score_details": option_scores,
             "criteria_weights": criteria_weights,
@@ -204,9 +198,7 @@ class MultiCriteriaDecisionMaker:
 
         # 최고 점수와 두 번째 점수의 차이
         sorted_scores = sorted(scores, reverse=True)
-        score_difference = (
-            sorted_scores[0] - sorted_scores[1] if len(sorted_scores) > 1 else 0
-        )
+        score_difference = sorted_scores[0] - sorted_scores[1] if len(sorted_scores) > 1 else 0
 
         # 신뢰도 계산 (점수 차이가 클수록 높은 신뢰도)
         confidence = min(1.0, score_difference * 2 + 0.5)
@@ -224,9 +216,7 @@ class MultiCriteriaDecisionMaker:
         reasoning += f"종합 점수: {score:.2f}. "
 
         # 주요 기준별 기여도
-        top_criteria = sorted(
-            criteria_weights.items(), key=lambda x: x[1], reverse=True
-        )[:3]
+        top_criteria = sorted(criteria_weights.items(), key=lambda x: x[1], reverse=True)[:3]
         reasoning += "주요 기준: "
         for criterion, weight in top_criteria:
             if criterion in option.criteria_scores:
@@ -376,17 +366,13 @@ class RiskAnalyzer:
         """리스크 수준 반환"""
         return self.determine_risk_level(risk_score)
 
-    def generate_mitigation_strategies(
-        self, risk_factors: List[Dict[str, Any]]
-    ) -> List[str]:
+    def generate_mitigation_strategies(self, risk_factors: List[Dict[str, Any]]) -> List[str]:
         """완화 전략 생성"""
         strategies = []
 
         for factor in risk_factors:
             if factor["level"] == "high":
-                strategies.append(
-                    f"{factor['description']}에 대한 상세한 계획 수립 필요"
-                )
+                strategies.append(f"{factor['description']}에 대한 상세한 계획 수립 필요")
             elif factor["level"] == "medium":
                 strategies.append(f"{factor['description']}에 대한 모니터링 강화")
             else:
@@ -482,9 +468,7 @@ class ScenarioSimulator:
         expected_outcome = base_value * (1 + growth_rate) * (1 - risk_factor)
         return max(0.0, min(1.0, expected_outcome))
 
-    def generate_alternative_scenarios(
-        self, base_scenario: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    def generate_alternative_scenarios(self, base_scenario: Dict[str, Any]) -> List[Dict[str, Any]]:
         """대안 시나리오 생성"""
         alternatives = []
 
@@ -498,12 +482,8 @@ class ScenarioSimulator:
         # 비관적 시나리오
         pessimistic_scenario = base_scenario.copy()
         pessimistic_scenario["name"] = "비관적 시나리오"
-        pessimistic_scenario["growth_rate"] = (
-            base_scenario.get("growth_rate", 0.0) - 0.2
-        )
-        pessimistic_scenario["risk_factor"] = (
-            base_scenario.get("risk_factor", 0.5) * 1.3
-        )
+        pessimistic_scenario["growth_rate"] = base_scenario.get("growth_rate", 0.0) - 0.2
+        pessimistic_scenario["risk_factor"] = base_scenario.get("risk_factor", 0.5) * 1.3
         alternatives.append(pessimistic_scenario)
 
         # 중립적 시나리오
@@ -547,12 +527,9 @@ class ScenarioSimulator:
 
         # 확률 분포
         probability_distribution = {
-            "excellent": len([v for v in outcome_values if v >= 0.8])
-            / len(outcome_values),
-            "good": len([v for v in outcome_values if 0.6 <= v < 0.8])
-            / len(outcome_values),
-            "fair": len([v for v in outcome_values if 0.4 <= v < 0.6])
-            / len(outcome_values),
+            "excellent": len([v for v in outcome_values if v >= 0.8]) / len(outcome_values),
+            "good": len([v for v in outcome_values if 0.6 <= v < 0.8]) / len(outcome_values),
+            "fair": len([v for v in outcome_values if 0.4 <= v < 0.6]) / len(outcome_values),
             "poor": len([v for v in outcome_values if v < 0.4]) / len(outcome_values),
         }
 
@@ -667,9 +644,7 @@ class OptimizationEngine:
             "converged": True,
         }
 
-    def define_variable_ranges(
-        self, variables: Dict[str, Any]
-    ) -> Dict[str, Tuple[float, float]]:
+    def define_variable_ranges(self, variables: Dict[str, Any]) -> Dict[str, Tuple[float, float]]:
         """변수 범위 정의"""
         ranges = {}
 
@@ -692,9 +667,7 @@ class OptimizationEngine:
 
         return solution
 
-    def check_constraints(
-        self, solution: Dict[str, float], constraints: Dict[str, Any]
-    ) -> bool:
+    def check_constraints(self, solution: Dict[str, float], constraints: Dict[str, Any]) -> bool:
         """제약 조건 확인"""
         for constraint_name, constraint_info in constraints.items():
             if constraint_info["type"] == "inequality":
@@ -705,9 +678,7 @@ class OptimizationEngine:
 
         return True
 
-    def generate_convergence_info(
-        self, optimal_solution: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def generate_convergence_info(self, optimal_solution: Dict[str, Any]) -> Dict[str, Any]:
         """수렴 정보 생성"""
         return {
             "iterations": optimal_solution.get("iterations", 0),
@@ -764,9 +735,7 @@ class DecisionSupportSystem:
                 "processing_time": time.time() - start_time,
             }
 
-    async def handle_multi_criteria_decision(
-        self, decision_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def handle_multi_criteria_decision(self, decision_data: Dict[str, Any]) -> Dict[str, Any]:
         """다중 기준 의사결정 처리"""
         options_data = decision_data.get("options", [])
         criteria_weights = decision_data.get("criteria_weights", {})
@@ -787,9 +756,7 @@ class DecisionSupportSystem:
             options.append(option)
 
         # 의사결정 실행
-        decision_result = self.multi_criteria_decision.make_decision(
-            options, criteria_weights
-        )
+        decision_result = self.multi_criteria_decision.make_decision(options, criteria_weights)
 
         return {
             "type": "multi_criteria_decision",
@@ -797,9 +764,7 @@ class DecisionSupportSystem:
             "status": "success",
         }
 
-    async def handle_risk_assessment(
-        self, decision_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def handle_risk_assessment(self, decision_data: Dict[str, Any]) -> Dict[str, Any]:
         """리스크 평가 처리"""
         option_data = decision_data.get("option", {})
 
@@ -824,9 +789,7 @@ class DecisionSupportSystem:
             "status": "success",
         }
 
-    async def handle_scenario_simulation(
-        self, decision_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def handle_scenario_simulation(self, decision_data: Dict[str, Any]) -> Dict[str, Any]:
         """시나리오 시뮬레이션 처리"""
         base_scenario = decision_data.get("base_scenario", {})
         num_simulations = decision_data.get("num_simulations", 1000)
@@ -842,9 +805,7 @@ class DecisionSupportSystem:
             "status": "success",
         }
 
-    async def handle_optimization(
-        self, decision_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def handle_optimization(self, decision_data: Dict[str, Any]) -> Dict[str, Any]:
         """최적화 처리"""
         objective_function = decision_data.get("objective_function", "maximize_benefit")
         constraints = decision_data.get("constraints", {})
@@ -861,9 +822,7 @@ class DecisionSupportSystem:
             "status": "success",
         }
 
-    async def handle_general_decision(
-        self, decision_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def handle_general_decision(self, decision_data: Dict[str, Any]) -> Dict[str, Any]:
         """일반 의사결정 처리"""
         return {
             "type": "general",

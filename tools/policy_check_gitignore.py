@@ -5,8 +5,8 @@ storage_policy.yml과 .gitignore의 일치성을 검증
 """
 
 import os
-from pathlib import Path
 import sys
+from pathlib import Path
 
 import yaml
 
@@ -25,9 +25,7 @@ def load_gitignore(file_path):
     """gitignore 파일 로드"""
     try:
         with open(file_path, "r", encoding="utf-8") as f:
-            lines = [
-                line.strip() for line in f if line.strip() and not line.startswith("#")
-            ]
+            lines = [line.strip() for line in f if line.strip() and not line.startswith("#")]
         return lines
     except Exception as e:
         print(f"[ERROR] Failed to load {file_path}: {e}")

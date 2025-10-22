@@ -5,19 +5,14 @@ CLARION 학습 시스템이 통합 시스템 매니저에 제대로 통합되었
 """
 
 import asyncio
-from datetime import datetime
 import json
 import logging
 import time
+from datetime import datetime
 from typing import Any, Dict, List
 
-from clarion_learning_system import (
-    CLARIONLearningSystem,
-    LearningPhase,
-    LearningType,
-    ReinforcementType,
-)
-
+from clarion_learning_system import (CLARIONLearningSystem, LearningPhase,
+                                     LearningType, ReinforcementType)
 # 테스트 대상 시스템들
 from integrated_system_manager import IntegratedSystemManager
 
@@ -54,9 +49,7 @@ class CLARIONIntegrationTest:
             try:
                 result = await test_suite()
                 self.test_results.append(result)
-                logger.info(
-                    f"테스트 완료: {result['test_name']} - 성공: {result['success']}"
-                )
+                logger.info(f"테스트 완료: {result['test_name']} - 성공: {result['success']}")
             except Exception as e:
                 error_result = {
                     "test_name": test_suite.__name__,
@@ -112,9 +105,7 @@ class CLARIONIntegrationTest:
 
             # 검증
             assert len(results) == 3, "로그 처리 결과 수가 맞지 않음"
-            assert (
-                len(self.clarion_system.learning_patterns) > 0
-            ), "학습 패턴이 생성되지 않음"
+            assert len(self.clarion_system.learning_patterns) > 0, "학습 패턴이 생성되지 않음"
             assert (
                 "pattern_frequency" in pattern_analysis
             ), "패턴 분석 결과에 pattern_frequency 없음"
@@ -184,9 +175,7 @@ class CLARIONIntegrationTest:
                 ReinforcementType.NEGATIVE,
                 ReinforcementType.NEUTRAL,
             ], "강화 유형이 올바르지 않음"
-            assert (
-                "clarion_result" in clarion_integration_result
-            ), "통합 결과에 clarion_result 없음"
+            assert "clarion_result" in clarion_integration_result, "통합 결과에 clarion_result 없음"
             assert (
                 "pattern_analysis" in clarion_integration_result
             ), "통합 결과에 pattern_analysis 없음"
@@ -252,9 +241,7 @@ class CLARIONIntegrationTest:
 
             # 검증
             assert "pattern_frequency" in pattern_analysis, "패턴 빈도 분석 없음"
-            assert (
-                "reinforcement_effectiveness" in pattern_analysis
-            ), "강화 효과 분석 없음"
+            assert "reinforcement_effectiveness" in pattern_analysis, "강화 효과 분석 없음"
             assert "phase_analysis" in pattern_analysis, "단계별 분석 없음"
             assert "transfer_analysis" in pattern_analysis, "전이 분석 없음"
 
@@ -318,18 +305,14 @@ class CLARIONIntegrationTest:
                 reinforcement_results.append(result)
 
             # 강화 유형 분포 확인
-            reinforcement_types = [
-                result.reinforcement_type for result in reinforcement_results
-            ]
+            reinforcement_types = [result.reinforcement_type for result in reinforcement_results]
             positive_count = sum(
                 1 for rt in reinforcement_types if rt == ReinforcementType.POSITIVE
             )
             negative_count = sum(
                 1 for rt in reinforcement_types if rt == ReinforcementType.NEGATIVE
             )
-            neutral_count = sum(
-                1 for rt in reinforcement_types if rt == ReinforcementType.NEUTRAL
-            )
+            neutral_count = sum(1 for rt in reinforcement_types if rt == ReinforcementType.NEUTRAL)
 
             # 검증
             assert len(reinforcement_results) == 3, "강화 결과 수가 맞지 않음"
@@ -454,15 +437,9 @@ class CLARIONIntegrationTest:
             assert "duration" in result, "통합 결과에 duration 없음"
 
             clarion_result = result["clarion_result"]
-            assert (
-                "learning_type" in clarion_result
-            ), "CLARION 결과에 learning_type 없음"
-            assert (
-                "reinforcement_type" in clarion_result
-            ), "CLARION 결과에 reinforcement_type 없음"
-            assert (
-                "pattern_strength" in clarion_result
-            ), "CLARION 결과에 pattern_strength 없음"
+            assert "learning_type" in clarion_result, "CLARION 결과에 learning_type 없음"
+            assert "reinforcement_type" in clarion_result, "CLARION 결과에 reinforcement_type 없음"
+            assert "pattern_strength" in clarion_result, "CLARION 결과에 pattern_strength 없음"
 
             duration = time.time() - start_time
             return {
@@ -499,9 +476,7 @@ class CLARIONIntegrationTest:
                 "total_tests": total_tests,
                 "successful_tests": successful_tests,
                 "failed_tests": failed_tests,
-                "success_rate": (
-                    (successful_tests / total_tests * 100) if total_tests > 0 else 0
-                ),
+                "success_rate": ((successful_tests / total_tests * 100) if total_tests > 0 else 0),
                 "total_duration": total_duration,
                 "timestamp": datetime.now().isoformat(),
             },
@@ -521,17 +496,13 @@ class CLARIONIntegrationTest:
             print("\n실패한 테스트들:")
             for result in self.test_results:
                 if not result["success"]:
-                    print(
-                        f"  - {result['test_name']}: {result.get('error', 'Unknown error')}"
-                    )
+                    print(f"  - {result['test_name']}: {result.get('error', 'Unknown error')}")
 
         # 결과를 파일로 저장
         with open("clarion_integration_test_results.json", "w", encoding="utf-8") as f:
             json.dump(summary, f, ensure_ascii=False, indent=2)
 
-        logger.info(
-            "테스트 결과가 clarion_integration_test_results.json에 저장되었습니다."
-        )
+        logger.info("테스트 결과가 clarion_integration_test_results.json에 저장되었습니다.")
         return summary
 
 

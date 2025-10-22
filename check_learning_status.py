@@ -6,10 +6,10 @@ DuRi 학습 시스템 상태 확인 스크립트
 """
 
 import asyncio
-from datetime import datetime
 import logging
 import os
 import sys
+from datetime import datetime
 from typing import Any, Dict
 
 # 프로젝트 루트를 Python 경로에 추가
@@ -30,14 +30,10 @@ async def check_unified_learning_system():
 
         # 현재 활성 세션 수 확인
         active_sessions = [
-            s
-            for s in learning_system.learning_sessions
-            if s.status.value == "in_progress"
+            s for s in learning_system.learning_sessions if s.status.value == "in_progress"
         ]
         evolution_sessions = [
-            s
-            for s in learning_system.evolution_sessions
-            if s.status.value == "in_progress"
+            s for s in learning_system.evolution_sessions if s.status.value == "in_progress"
         ]
 
         return {
@@ -58,8 +54,10 @@ async def check_unified_learning_system():
 async def check_autonomous_learning_system():
     """자율 학습 시스템 상태 확인"""
     try:
-        from duri_modules.autonomous.continuous_learner import AutonomousLearner
-        from duri_modules.autonomous.duri_autonomous_core import DuRiAutonomousCore
+        from duri_modules.autonomous.continuous_learner import \
+            AutonomousLearner
+        from duri_modules.autonomous.duri_autonomous_core import \
+            DuRiAutonomousCore
 
         # 자율 학습 시스템들 확인
         autonomous_learner = AutonomousLearner()
@@ -67,9 +65,7 @@ async def check_autonomous_learning_system():
 
         return {
             "system": "자율 학습 시스템",
-            "autonomous_learner_status": (
-                "실행 중" if autonomous_learner.is_running else "대기"
-            ),
+            "autonomous_learner_status": ("실행 중" if autonomous_learner.is_running else "대기"),
             "autonomous_core_status": "활성" if autonomous_core.is_active else "비활성",
             "current_session": (
                 autonomous_learner.current_session.session_id
@@ -89,7 +85,8 @@ async def check_autonomous_learning_system():
 async def check_learning_loop_manager():
     """학습 루프 매니저 상태 확인"""
     try:
-        from duri_brain.learning.learning_loop_manager import get_learning_loop_manager
+        from duri_brain.learning.learning_loop_manager import \
+            get_learning_loop_manager
 
         # 학습 루프 매니저 가져오기
         learning_loop_manager = get_learning_loop_manager()
@@ -118,7 +115,8 @@ async def check_learning_loop_manager():
 async def check_realtime_learner():
     """실시간 학습 시스템 상태 확인"""
     try:
-        from duri_modules.autonomous.continuous_learner import AutonomousLearner
+        from duri_modules.autonomous.continuous_learner import \
+            AutonomousLearner
         from duri_modules.autonomous.realtime_learner import RealtimeLearner
 
         # 실시간 학습 시스템 확인
@@ -205,9 +203,7 @@ async def generate_learning_summary():
         print("\n🚨 모든 학습 시스템이 비활성 상태입니다!")
         print("내일 학습 시스템을 활성화해야 합니다.")
     elif active_systems < total_systems:
-        print(
-            f"\n⚠️ 일부 학습 시스템이 비활성 상태입니다. ({total_systems - active_systems}개)"
-        )
+        print(f"\n⚠️ 일부 학습 시스템이 비활성 상태입니다. ({total_systems - active_systems}개)")
     else:
         print("\n🎉 모든 학습 시스템이 활성 상태입니다!")
 

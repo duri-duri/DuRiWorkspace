@@ -5,9 +5,9 @@ A/B 테스트 러너 스모크 테스트
 """
 import json
 import os
-from pathlib import Path
 import sys
 import tempfile
+from pathlib import Path
 
 import pytest
 
@@ -58,9 +58,7 @@ B,140"""
         try:
             # 임시 설정 파일 생성
             config = {"day": 36}
-            with tempfile.NamedTemporaryFile(
-                mode="w", suffix=".yaml", delete=False
-            ) as f:
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
                 import yaml
 
                 yaml.dump(config, f)
@@ -68,9 +66,7 @@ B,140"""
 
             try:
                 runner = ABTestRunner(config_path)
-                group_a, group_b = runner.csv_to_variants(
-                    csv_path, "latency_ms", "variant"
-                )
+                group_a, group_b = runner.csv_to_variants(csv_path, "latency_ms", "variant")
 
                 assert len(group_a) == 2
                 assert len(group_b) == 2
@@ -99,9 +95,7 @@ B,132"""
         try:
             # 임시 설정 파일 생성
             config = {"day": 36}
-            with tempfile.NamedTemporaryFile(
-                mode="w", suffix=".yaml", delete=False
-            ) as f:
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
                 import yaml
 
                 yaml.dump(config, f)
@@ -201,9 +195,7 @@ B,132"""
 A,120
 B,135"""
 
-            with tempfile.NamedTemporaryFile(
-                mode="w", suffix=".csv", delete=False
-            ) as f:
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
                 f.write(csv_content)
                 csv_path = f.name
 

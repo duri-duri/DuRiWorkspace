@@ -4,8 +4,8 @@ DuRi 직관적 판단 트리거 시스템
 논리 이전에 빠른 의사결정을 유도하는 인간형 반응 경로
 """
 
-from datetime import datetime
 import re
+from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
 
@@ -138,9 +138,7 @@ class IntuitiveJudgment:
                     return pattern_type
         return None
 
-    def _select_contextual_response(
-        self, pattern_type: str, context: Dict[str, Any]
-    ) -> str:
+    def _select_contextual_response(self, pattern_type: str, context: Dict[str, Any]) -> str:
         """맥락 기반 응답 선택"""
         responses = self.intuitive_responses.get(pattern_type, [])
 
@@ -169,9 +167,7 @@ class IntuitiveJudgment:
 
         for response in responses:
             # 감정에 따른 필터링
-            if emotion == "focused" and any(
-                word in response for word in ["우선", "먼저", "기본"]
-            ):
+            if emotion == "focused" and any(word in response for word in ["우선", "먼저", "기본"]):
                 filtered.append(response)
             elif emotion == "excited" and any(
                 word in response for word in ["훌륭", "성공", "완벽"]
@@ -202,9 +198,7 @@ class IntuitiveJudgment:
 
         return filtered if filtered else responses
 
-    def _calculate_intuitive_confidence(
-        self, pattern_type: str, context: Dict[str, Any]
-    ) -> float:
+    def _calculate_intuitive_confidence(self, pattern_type: str, context: Dict[str, Any]) -> float:
         """직관적 판단 신뢰도 계산"""
         base_confidence = 0.7  # 기본 신뢰도
 
@@ -223,15 +217,11 @@ class IntuitiveJudgment:
         pattern_conf = pattern_confidence.get(pattern_type, 0.7)
 
         # 최종 신뢰도 계산 (가중 평균)
-        final_confidence = (
-            base_confidence * 0.4 + context_confidence * 0.3 + pattern_conf * 0.3
-        )
+        final_confidence = base_confidence * 0.4 + context_confidence * 0.3 + pattern_conf * 0.3
 
         return min(final_confidence, 1.0)
 
-    def _generate_intuitive_reasoning(
-        self, pattern_type: str, context: Dict[str, Any]
-    ) -> str:
+    def _generate_intuitive_reasoning(self, pattern_type: str, context: Dict[str, Any]) -> str:
         """직관적 판단 근거 생성"""
         reasoning_templates = {
             "priority_decision": "사용자가 우선순위를 결정하려고 하므로, 가장 효율적인 순서를 제안했습니다.",
@@ -253,9 +243,7 @@ class IntuitiveJudgment:
 
         return base_reasoning + context_addition
 
-    def should_trigger_intuition(
-        self, user_input: str, context: Dict[str, Any]
-    ) -> bool:
+    def should_trigger_intuition(self, user_input: str, context: Dict[str, Any]) -> bool:
         """직관적 판단을 트리거해야 하는지 결정"""
         # 1. 직관적 패턴 매칭
         if self._match_intuitive_pattern(user_input):

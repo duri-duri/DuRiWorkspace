@@ -16,8 +16,8 @@ if "DISPLAY" not in os.environ:
     print("Headless 환경 감지: matplotlib backend를 'Agg'로 설정")
 
 import argparse
-from datetime import datetime, timedelta
 import json
+from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
 import matplotlib.dates as mdates
@@ -165,9 +165,7 @@ class BiasHistoryVisualizer:
                 # 타임스탬프 파싱
                 timestamp_str = entry.get("timestamp", "")
                 if timestamp_str:
-                    timestamp = datetime.fromisoformat(
-                        timestamp_str.replace("Z", "+00:00")
-                    )
+                    timestamp = datetime.fromisoformat(timestamp_str.replace("Z", "+00:00"))
                 else:
                     timestamp = datetime.now()
 
@@ -200,9 +198,7 @@ class BiasHistoryVisualizer:
         else:
             print("경고: 처리할 수 있는 편향 데이터가 없습니다.")
 
-    def create_timeline_plot(
-        self, save_path: str = "bias_timeline.png", show_plot: bool = True
-    ):
+    def create_timeline_plot(self, save_path: str = "bias_timeline.png", show_plot: bool = True):
         """
         시간 흐름에 따른 편향 타임라인 플롯 생성
 
@@ -369,9 +365,7 @@ class BiasHistoryVisualizer:
         fig, ax = plt.subplots(figsize=(10, 6))
         colors = [self.severity_colors[sev] for sev in severity_counts.index]
 
-        bars = ax.bar(
-            severity_counts.index, severity_counts.values, color=colors, alpha=0.7
-        )
+        bars = ax.bar(severity_counts.index, severity_counts.values, color=colors, alpha=0.7)
 
         # 값 표시
         for bar in bars:
@@ -405,9 +399,7 @@ class BiasHistoryVisualizer:
         self.df["day_of_week"] = self.df["timestamp"].dt.day_name()
 
         # 요일별, 시간대별 편향 발생 빈도
-        hourly_data = (
-            self.df.groupby(["day_of_week", "hour"]).size().unstack(fill_value=0)
-        )
+        hourly_data = self.df.groupby(["day_of_week", "hour"]).size().unstack(fill_value=0)
 
         # 요일 순서 정렬
         day_order = [
@@ -419,9 +411,7 @@ class BiasHistoryVisualizer:
             "Saturday",
             "Sunday",
         ]
-        hourly_data = hourly_data.reindex(
-            [day for day in day_order if day in hourly_data.index]
-        )
+        hourly_data = hourly_data.reindex([day for day in day_order if day in hourly_data.index])
 
         fig, ax = plt.subplots(figsize=(12, 8))
         sns.heatmap(hourly_data, annot=True, fmt="d", cmap="YlOrRd", ax=ax)
@@ -443,9 +433,7 @@ class BiasHistoryVisualizer:
     def _create_emotion_action_heatmap(self, save_dir: str, show_plot: bool):
         """감정-행동별 편향 분포 히트맵"""
         # 감정-행동 조합별 편향 발생 빈도
-        emotion_action_counts = (
-            self.df.groupby(["emotion", "action"]).size().unstack(fill_value=0)
-        )
+        emotion_action_counts = self.df.groupby(["emotion", "action"]).size().unstack(fill_value=0)
 
         fig, ax = plt.subplots(figsize=(12, 8))
         sns.heatmap(emotion_action_counts, annot=True, fmt="d", cmap="Blues", ax=ax)
@@ -480,9 +468,7 @@ class BiasHistoryVisualizer:
         # 기본 통계
         if KOREAN_FONT_AVAILABLE:
             print(f"총 편향 감지 횟수: {len(self.df)}")
-            print(
-                f"분석 기간: {self.df['timestamp'].min()} ~ {self.df['timestamp'].max()}"
-            )
+            print(f"분석 기간: {self.df['timestamp'].min()} ~ {self.df['timestamp'].max()}")
 
             # 편향 타입별 통계
             print(f"\n편향 타입별 분포:")
@@ -505,17 +491,13 @@ class BiasHistoryVisualizer:
             # 가장 빈번한 감정-행동 조합
             print(f"\n가장 빈번한 감정-행동 조합:")
             emotion_action_stats = (
-                self.df.groupby(["emotion", "action"])
-                .size()
-                .sort_values(ascending=False)
+                self.df.groupby(["emotion", "action"]).size().sort_values(ascending=False)
             )
             for (emotion, action), count in emotion_action_stats.head(5).items():
                 print(f"  {emotion} -> {action}: {count}회")
         else:
             print(f"Total bias detections: {len(self.df)}")
-            print(
-                f"Analysis period: {self.df['timestamp'].min()} ~ {self.df['timestamp'].max()}"
-            )
+            print(f"Analysis period: {self.df['timestamp'].min()} ~ {self.df['timestamp'].max()}")
 
             # 편향 타입별 통계
             print(f"\nBias type distribution:")
@@ -538,9 +520,7 @@ class BiasHistoryVisualizer:
             # 가장 빈번한 감정-행동 조합
             print(f"\nMost frequent emotion-action combinations:")
             emotion_action_stats = (
-                self.df.groupby(["emotion", "action"])
-                .size()
-                .sort_values(ascending=False)
+                self.df.groupby(["emotion", "action"]).size().sort_values(ascending=False)
             )
             for (emotion, action), count in emotion_action_stats.head(5).items():
                 print(f"  {emotion} -> {action}: {count} times")
@@ -610,12 +590,8 @@ def main():
         default="bias_history.json",
         help="편향 히스토리 파일 경로 (기본값: bias_history.json)",
     )
-    parser.add_argument(
-        "--output", "-o", default=".", help="출력 디렉토리 (기본값: 현재 디렉토리)"
-    )
-    parser.add_argument(
-        "--no-show", action="store_true", help="플롯을 화면에 표시하지 않음"
-    )
+    parser.add_argument("--output", "-o", default=".", help="출력 디렉토리 (기본값: 현재 디렉토리)")
+    parser.add_argument("--no-show", action="store_true", help="플롯을 화면에 표시하지 않음")
     parser.add_argument("--create-sample", action="store_true", help="샘플 데이터 생성")
 
     args = parser.parse_args()
@@ -629,9 +605,7 @@ def main():
     visualizer = BiasHistoryVisualizer(args.file)
 
     if not visualizer.load_data():
-        print(
-            "데이터 로드 실패. 샘플 데이터를 생성하려면 --create-sample 옵션을 사용하세요."
-        )
+        print("데이터 로드 실패. 샘플 데이터를 생성하려면 --create-sample 옵션을 사용하세요.")
         return
 
     visualizer.preprocess_data()
@@ -648,13 +622,9 @@ def main():
         visualizer.create_summary_plots(args.output, not args.no_show)
 
         if KOREAN_FONT_AVAILABLE:
-            print(
-                f"\n시각화 완료! 결과 파일들이 {args.output} 디렉토리에 저장되었습니다."
-            )
+            print(f"\n시각화 완료! 결과 파일들이 {args.output} 디렉토리에 저장되었습니다.")
         else:
-            print(
-                f"\nVisualization completed! Result files saved in {args.output} directory."
-            )
+            print(f"\nVisualization completed! Result files saved in {args.output} directory.")
     else:
         print("시각화할 데이터가 없습니다.")
 

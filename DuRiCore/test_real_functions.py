@@ -5,9 +5,9 @@ judgment → action → feedback 루프의 실제 기능 테스트
 """
 
 import asyncio
-from datetime import datetime
 import json
 import logging
+from datetime import datetime
 from typing import Any, Dict
 
 # 로깅 설정
@@ -18,7 +18,6 @@ logger = logging.getLogger(__name__)
 
 from action_system import ActionSystem
 from feedback_system import FeedbackSystem
-
 # 시스템 import
 from judgment_system import JudgmentSystem
 
@@ -153,9 +152,7 @@ async def test_complete_loop():
         }
 
         logger.info("✅ 전체 루프 테스트 완료")
-        logger.info(
-            f"전체 결과: {json.dumps(complete_result, indent=2, ensure_ascii=False)}"
-        )
+        logger.info(f"전체 결과: {json.dumps(complete_result, indent=2, ensure_ascii=False)}")
 
         return complete_result
 

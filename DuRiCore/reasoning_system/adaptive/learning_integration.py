@@ -9,10 +9,10 @@ DuRi 추론 시스템 - 학습 연동 인터페이스
 - 적응 제안 생성
 """
 
-from dataclasses import dataclass
-from datetime import datetime
 import logging
 import time
+from dataclasses import dataclass
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 from ..data_structures import ReasoningSession
@@ -43,21 +43,15 @@ class LearningIntegrationInterface:
             }
 
             # 학습 시스템에서 관련 지식 검색
-            relevant_knowledge = await self._search_relevant_knowledge(
-                reasoning_session
-            )
+            relevant_knowledge = await self._search_relevant_knowledge(reasoning_session)
             integration_result["knowledge_applied"] = relevant_knowledge
 
             # 추론 과정에서 학습 인사이트 생성
-            learning_insights = await self._generate_learning_insights(
-                reasoning_session
-            )
+            learning_insights = await self._generate_learning_insights(reasoning_session)
             integration_result["learning_insights"] = learning_insights
 
             # 적응 제안 생성
-            adaptation_suggestions = await self._generate_adaptation_suggestions(
-                reasoning_session
-            )
+            adaptation_suggestions = await self._generate_adaptation_suggestions(reasoning_session)
             integration_result["adaptation_suggestions"] = adaptation_suggestions
 
             return integration_result
@@ -92,18 +86,14 @@ class LearningIntegrationInterface:
             self.logger.error(f"관련 지식 검색 중 오류: {e}")
             return []
 
-    async def _generate_learning_insights(
-        self, reasoning_session: ReasoningSession
-    ) -> List[str]:
+    async def _generate_learning_insights(self, reasoning_session: ReasoningSession) -> List[str]:
         """학습 인사이트 생성"""
         try:
             insights = []
 
             # 추론 과정 분석
             if reasoning_session.reasoning_steps:
-                insights.append(
-                    f"추론 단계 수: {len(reasoning_session.reasoning_steps)}"
-                )
+                insights.append(f"추론 단계 수: {len(reasoning_session.reasoning_steps)}")
                 insights.append(f"추론 유형: {reasoning_session.reasoning_type.value}")
                 insights.append(f"추론 컨텍스트: {reasoning_session.context.value}")
 

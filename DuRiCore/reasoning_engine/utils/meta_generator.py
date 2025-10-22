@@ -4,11 +4,11 @@ DuRi 존재적 리팩토링 - meta.json 자동 생성 도구
 Phase 3 리팩토링: 자동화 도구 구현
 """
 
-from dataclasses import dataclass
 import json
 import logging
-from pathlib import Path
 import re
+from dataclasses import dataclass
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
@@ -112,9 +112,7 @@ class MetaGenerator:
         logger.info(f"meta.json 생성 완료: {module_name}")
         return meta_json
 
-    def _analyze_module_content(
-        self, module_name: str, module_content: str
-    ) -> ModuleAnalysis:
+    def _analyze_module_content(self, module_name: str, module_content: str) -> ModuleAnalysis:
         """모듈 내용 분석"""
         # 목적 추출
         purpose = self._extract_purpose(module_content, module_name)
@@ -243,9 +241,7 @@ class MetaGenerator:
 
         return list(set(default_integration))
 
-    def save_meta_json(
-        self, module_name: str, meta_json: dict, output_dir: str = "."
-    ) -> str:
+    def save_meta_json(self, module_name: str, meta_json: dict, output_dir: str = ".") -> str:
         """meta.json 파일 저장"""
         output_path = Path(output_dir) / f"{module_name}.meta.json"
 

@@ -5,15 +5,15 @@ DuRiCore Phase 5 Day 7 - 사용자 피드백 수집기
 """
 
 import asyncio
-from dataclasses import dataclass
-from datetime import datetime
-from enum import Enum
 import json
 import logging
 import math
 import random
 import statistics
 import time
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 logger = logging.getLogger(__name__)
@@ -135,9 +135,7 @@ class UserFeedbackCollector:
 
         logger.info("사용자 피드백 수집기 초기화 완료")
 
-    async def collect_user_feedback(
-        self, feedback_data: Dict[str, Any]
-    ) -> UserFeedback:
+    async def collect_user_feedback(self, feedback_data: Dict[str, Any]) -> UserFeedback:
         """사용자 피드백 수집"""
         try:
             logger.info("사용자 피드백 수집 시작")
@@ -145,17 +143,13 @@ class UserFeedbackCollector:
             # 피드백 유효성 검증
             validation_result = await self._validate_feedback_data(feedback_data)
             if not validation_result["valid"]:
-                raise ValueError(
-                    f"피드백 데이터 유효성 검증 실패: {validation_result['error']}"
-                )
+                raise ValueError(f"피드백 데이터 유효성 검증 실패: {validation_result['error']}")
 
             # 피드백 생성
             feedback = UserFeedback(
                 feedback_id=f"feedback_{int(time.time())}_{random.randint(1000, 9999)}",
                 user_id=feedback_data.get("user_id", "anonymous"),
-                feedback_type=FeedbackType(
-                    feedback_data.get("feedback_type", "satisfaction")
-                ),
+                feedback_type=FeedbackType(feedback_data.get("feedback_type", "satisfaction")),
                 priority=await self._determine_feedback_priority(feedback_data),
                 status=FeedbackStatus.RECEIVED,
                 content=feedback_data.get("content", ""),
@@ -193,17 +187,11 @@ class UserFeedbackCollector:
                 return analysis_result
 
             # 전체 만족도 계산
-            satisfaction_scores = [
-                feedback.get("rating", 0.0) for feedback in feedback_history
-            ]
-            analysis_result["overall_satisfaction"] = statistics.mean(
-                satisfaction_scores
-            )
+            satisfaction_scores = [feedback.get("rating", 0.0) for feedback in feedback_history]
+            analysis_result["overall_satisfaction"] = statistics.mean(satisfaction_scores)
 
             # 피드백 분포 분석
-            feedback_distribution = await self._analyze_feedback_distribution(
-                feedback_history
-            )
+            feedback_distribution = await self._analyze_feedback_distribution(feedback_history)
             analysis_result["feedback_distribution"] = feedback_distribution
 
             # 트렌드 분석
@@ -237,27 +225,21 @@ class UserFeedbackCollector:
             suggestions = []
 
             # 만족도 기반 제안
-            satisfaction_suggestions = (
-                await self._generate_satisfaction_based_suggestions(feedback_analysis)
+            satisfaction_suggestions = await self._generate_satisfaction_based_suggestions(
+                feedback_analysis
             )
             suggestions.extend(satisfaction_suggestions)
 
             # 이슈 기반 제안
-            issue_suggestions = await self._generate_issue_based_suggestions(
-                feedback_analysis
-            )
+            issue_suggestions = await self._generate_issue_based_suggestions(feedback_analysis)
             suggestions.extend(issue_suggestions)
 
             # 트렌드 기반 제안
-            trend_suggestions = await self._generate_trend_based_suggestions(
-                feedback_analysis
-            )
+            trend_suggestions = await self._generate_trend_based_suggestions(feedback_analysis)
             suggestions.extend(trend_suggestions)
 
             # 우선순위 정렬
-            suggestions.sort(
-                key=lambda x: self._calculate_suggestion_priority(x), reverse=True
-            )
+            suggestions.sort(key=lambda x: self._calculate_suggestion_priority(x), reverse=True)
 
             self.improvement_suggestions.extend(suggestions)
 
@@ -283,27 +265,19 @@ class UserFeedbackCollector:
             }
 
             # 구현 성공 여부 확인
-            implementation_success = await self._check_implementation_success(
-                implementation_data
-            )
+            implementation_success = await self._check_implementation_success(implementation_data)
             validation_result["implementation_success"] = implementation_success
 
             # 사용자 만족도 변화 측정
-            satisfaction_change = await self._measure_satisfaction_change(
-                implementation_data
-            )
+            satisfaction_change = await self._measure_satisfaction_change(implementation_data)
             validation_result["user_satisfaction_change"] = satisfaction_change
 
             # 구현 지표 분석
-            implementation_metrics = await self._analyze_implementation_metrics(
-                implementation_data
-            )
+            implementation_metrics = await self._analyze_implementation_metrics(implementation_data)
             validation_result["implementation_metrics"] = implementation_metrics
 
             # 검증 신뢰도 계산
-            validation_confidence = await self._calculate_validation_confidence(
-                implementation_data
-            )
+            validation_confidence = await self._calculate_validation_confidence(implementation_data)
             validation_result["validation_confidence"] = validation_confidence
 
             logger.info(f"피드백 구현 검증 완료: {implementation_success}")
@@ -313,9 +287,7 @@ class UserFeedbackCollector:
             logger.error(f"피드백 구현 검증 실패: {e}")
             return {"error": str(e)}
 
-    async def _validate_feedback_data(
-        self, feedback_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _validate_feedback_data(self, feedback_data: Dict[str, Any]) -> Dict[str, Any]:
         """피드백 데이터 유효성 검증"""
         validation_result = {"valid": True, "error": ""}
 
@@ -352,9 +324,7 @@ class UserFeedbackCollector:
 
         return validation_result
 
-    async def _determine_feedback_priority(
-        self, feedback_data: Dict[str, Any]
-    ) -> FeedbackPriority:
+    async def _determine_feedback_priority(self, feedback_data: Dict[str, Any]) -> FeedbackPriority:
         """피드백 우선순위 결정"""
         # 기본 우선순위
         base_priority = FeedbackPriority.MEDIUM
@@ -436,12 +406,8 @@ class UserFeedbackCollector:
         # 만족도 트렌드
         ratings = [feedback.get("rating", 0.0) for feedback in feedback_history]
         if len(ratings) >= 2:
-            recent_avg = (
-                statistics.mean(ratings[-5:]) if len(ratings) >= 5 else ratings[-1]
-            )
-            previous_avg = (
-                statistics.mean(ratings[:-5]) if len(ratings) >= 10 else ratings[0]
-            )
+            recent_avg = statistics.mean(ratings[-5:]) if len(ratings) >= 5 else ratings[-1]
+            previous_avg = statistics.mean(ratings[:-5]) if len(ratings) >= 10 else ratings[0]
 
             if recent_avg > previous_avg * 1.1:
                 trends["satisfaction_trend"] = "improving"
@@ -460,9 +426,7 @@ class UserFeedbackCollector:
 
         return trends
 
-    async def _identify_common_issues(
-        self, feedback_history: List[Dict[str, Any]]
-    ) -> List[str]:
+    async def _identify_common_issues(self, feedback_history: List[Dict[str, Any]]) -> List[str]:
         """공통 이슈 식별"""
         common_issues = []
 
@@ -495,8 +459,7 @@ class UserFeedbackCollector:
 
         # 피드백 분포 분석
         feedback_types = [
-            feedback.get("feedback_type", "satisfaction")
-            for feedback in feedback_history
+            feedback.get("feedback_type", "satisfaction") for feedback in feedback_history
         ]
         type_counts = {}
         for ft in feedback_types:
@@ -508,13 +471,9 @@ class UserFeedbackCollector:
             opportunities.append(f"increase_{most_common_type}_focus")
 
         # 평점이 낮은 영역
-        low_rating_feedback = [
-            f for f in feedback_history if f.get("rating", 0.0) < 0.5
-        ]
+        low_rating_feedback = [f for f in feedback_history if f.get("rating", 0.0) < 0.5]
         if low_rating_feedback:
-            low_rating_types = [
-                f.get("feedback_type", "satisfaction") for f in low_rating_feedback
-            ]
+            low_rating_types = [f.get("feedback_type", "satisfaction") for f in low_rating_feedback]
             most_common_low = max(set(low_rating_types), key=low_rating_types.count)
             opportunities.append(f"improve_{most_common_low}_experience")
 
@@ -594,9 +553,7 @@ class UserFeedbackCollector:
 
         return suggestions
 
-    async def _calculate_suggestion_priority(
-        self, suggestion: ImprovementSuggestion
-    ) -> float:
+    async def _calculate_suggestion_priority(self, suggestion: ImprovementSuggestion) -> float:
         """제안 우선순위 계산"""
         priority_scores = {
             FeedbackPriority.LOW: 0.25,
@@ -611,9 +568,7 @@ class UserFeedbackCollector:
 
         return (base_priority * impact_multiplier) / effort_divider
 
-    async def _check_implementation_success(
-        self, implementation_data: Dict[str, Any]
-    ) -> bool:
+    async def _check_implementation_success(self, implementation_data: Dict[str, Any]) -> bool:
         """구현 성공 여부 확인"""
         success_indicators = implementation_data.get("success_indicators", {})
 
@@ -624,9 +579,7 @@ class UserFeedbackCollector:
 
         return True  # 기본적으로 성공으로 간주
 
-    async def _measure_satisfaction_change(
-        self, implementation_data: Dict[str, Any]
-    ) -> float:
+    async def _measure_satisfaction_change(self, implementation_data: Dict[str, Any]) -> float:
         """만족도 변화 측정"""
         before_satisfaction = implementation_data.get("before_satisfaction", 0.0)
         after_satisfaction = implementation_data.get("after_satisfaction", 0.0)
@@ -644,16 +597,12 @@ class UserFeedbackCollector:
             "implementation_time": implementation_data.get("implementation_time", 0.0),
             "user_adoption_rate": implementation_data.get("user_adoption_rate", 0.0),
             "error_reduction": implementation_data.get("error_reduction", 0.0),
-            "performance_improvement": implementation_data.get(
-                "performance_improvement", 0.0
-            ),
+            "performance_improvement": implementation_data.get("performance_improvement", 0.0),
         }
 
         return metrics
 
-    async def _calculate_validation_confidence(
-        self, implementation_data: Dict[str, Any]
-    ) -> float:
+    async def _calculate_validation_confidence(self, implementation_data: Dict[str, Any]) -> float:
         """검증 신뢰도 계산"""
         confidence_factors = []
 
@@ -670,9 +619,7 @@ class UserFeedbackCollector:
         # 측정 기간
         if "measurement_duration" in implementation_data:
             duration = implementation_data["measurement_duration"]
-            duration_confidence = min(
-                duration / 86400.0, 1.0
-            )  # 1일 이상이면 최대 신뢰도
+            duration_confidence = min(duration / 86400.0, 1.0)  # 1일 이상이면 최대 신뢰도
             confidence_factors.append(duration_confidence)
 
         return statistics.mean(confidence_factors) if confidence_factors else 0.5
@@ -720,20 +667,14 @@ async def test_user_feedback_collector():
         },
     ]
 
-    pattern_analysis = await feedback_collector.analyze_feedback_patterns(
-        feedback_history
-    )
+    pattern_analysis = await feedback_collector.analyze_feedback_patterns(feedback_history)
     print(f"   - 전체 만족도: {pattern_analysis.get('overall_satisfaction', 0.0):.3f}")
     print(f"   - 공통 이슈: {len(pattern_analysis.get('common_issues', []))}개")
-    print(
-        f"   - 개선 기회: {len(pattern_analysis.get('improvement_opportunities', []))}개"
-    )
+    print(f"   - 개선 기회: {len(pattern_analysis.get('improvement_opportunities', []))}개")
 
     # 3. 개선 제안 생성 테스트
     print("3. 개선 제안 생성 테스트")
-    suggestions = await feedback_collector.generate_improvement_suggestions(
-        pattern_analysis
-    )
+    suggestions = await feedback_collector.generate_improvement_suggestions(pattern_analysis)
     print(f"   - 생성된 제안: {len(suggestions)}개")
 
     for suggestion in suggestions[:3]:  # 상위 3개만 출력
@@ -760,12 +701,8 @@ async def test_user_feedback_collector():
         implementation_data
     )
     print(f"   - 구현 성공: {validation_result.get('implementation_success', False)}")
-    print(
-        f"   - 만족도 변화: {validation_result.get('user_satisfaction_change', 0.0):.3f}"
-    )
-    print(
-        f"   - 검증 신뢰도: {validation_result.get('validation_confidence', 0.0):.3f}"
-    )
+    print(f"   - 만족도 변화: {validation_result.get('user_satisfaction_change', 0.0):.3f}")
+    print(f"   - 검증 신뢰도: {validation_result.get('validation_confidence', 0.0):.3f}")
 
     print("=== 사용자 피드백 수집기 테스트 완료 ===")
 

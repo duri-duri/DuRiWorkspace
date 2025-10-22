@@ -15,12 +15,12 @@ Phase 13에서 구현된 reasoning + learning 통합 시스템을
 """
 
 import asyncio
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 import json
 import logging
 import time
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
@@ -28,12 +28,8 @@ import numpy as np
 # Phase 13 시스템 import
 try:
     from phase13_reasoning_learning_integration import (
-        IntegrationContext,
-        IntegrationPhase,
-        IntegrationResult,
-        IntegrationStatus,
-        ReasoningLearningIntegrationSystem,
-    )
+        IntegrationContext, IntegrationPhase, IntegrationResult,
+        IntegrationStatus, ReasoningLearningIntegrationSystem)
 except ImportError as e:
     logging.warning(f"Phase 13 시스템 import 실패: {e}")
 
@@ -174,15 +170,11 @@ class ResponseGenerator:
 
             # 주요 인사이트 추가
             if reasoning_insights:
-                response_parts.append(
-                    f"💡 **주요 인사이트**: {', '.join(reasoning_insights[:3])}"
-                )
+                response_parts.append(f"💡 **주요 인사이트**: {', '.join(reasoning_insights[:3])}")
 
             # 개선사항 추가
             if learning_improvements:
-                response_parts.append(
-                    f"🚀 **개선사항**: {', '.join(learning_improvements[:2])}"
-                )
+                response_parts.append(f"🚀 **개선사항**: {', '.join(learning_improvements[:2])}")
 
             # 품질 지표 추가
             response_parts.append(
@@ -260,9 +252,7 @@ class CursorIntegrationSystem:
             )
 
             # 3. reasoning + learning 통합 실행
-            integration_result = await self._execute_reasoning_learning(
-                user_input, context
-            )
+            integration_result = await self._execute_reasoning_learning(user_input, context)
 
             # 4. 응답 생성
             response = await self.response_generator.generate_response(
@@ -291,9 +281,7 @@ class CursorIntegrationSystem:
                 success=True,
                 response=response,
                 reasoning_quality=integration_result.get("reasoning_quality", 0.0),
-                learning_effectiveness=integration_result.get(
-                    "learning_effectiveness", 0.0
-                ),
+                learning_effectiveness=integration_result.get("learning_effectiveness", 0.0),
                 response_time=response_time,
                 context_accuracy=0.85,  # 기본값
                 metadata=integration_result.get("metadata", {}),
@@ -330,10 +318,8 @@ class CursorIntegrationSystem:
                 "timestamp": datetime.now().isoformat(),
             }
 
-            integration_result = (
-                await self.reasoning_learning_system.execute_integration_flow(
-                    input_data=input_data, context=context.context_data
-                )
+            integration_result = await self.reasoning_learning_system.execute_integration_flow(
+                input_data=input_data, context=context.context_data
             )
 
             return {
@@ -427,9 +413,7 @@ async def test_cursor_integration():
     metrics = await cursor_system.get_performance_metrics()
     print(f"\n📊 성능 메트릭:")
     print(f"   총 요청: {metrics['total_requests']}")
-    print(
-        f"   성공률: {metrics['successful_requests']/metrics['total_requests']*100:.1f}%"
-    )
+    print(f"   성공률: {metrics['successful_requests']/metrics['total_requests']*100:.1f}%")
     print(f"   평균 응답 시간: {metrics['average_response_time']:.3f}초")
     print(f"   오류 수: {metrics['error_count']}")
 

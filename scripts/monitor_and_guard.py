@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 import json
 import os
-from pathlib import Path
 import re
 import subprocess as sp
 import time
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 LOGCSV = ROOT / "var/reports/rollout_watch.csv"
@@ -40,9 +40,7 @@ def bench_once():
 
 def grep_errors():
     # 운영 로그 error/fail/traceback 스캔(없어도 OK)
-    rc, out, err = sh(
-        r"ls -1 var/reports/final_verify_*/run.log 2>/dev/null | tail -n 2"
-    )
+    rc, out, err = sh(r"ls -1 var/reports/final_verify_*/run.log 2>/dev/null | tail -n 2")
     files = [l for l in out.splitlines() if l.strip()]
     bad = []
     for f in files:

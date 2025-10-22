@@ -65,24 +65,18 @@ def load_metrics(path):
         m = json.load(f)
     # normalize
     m2 = {
-        "latency_ms": float(
-            m.get("latency_ms") or m.get("p95_latency_ms") or m.get("latency")
-        ),
+        "latency_ms": float(m.get("latency_ms") or m.get("p95_latency_ms") or m.get("latency")),
         "accuracy": to01(m.get("accuracy")),
         "explainability": to01(m.get("explainability")),
         "failure_rate": float(m.get("failure_rate")),
     }
     if any(v is None for v in m2.values()):
-        raise ValueError(
-            "metrics must include latency_ms, accuracy, explainability, failure_rate"
-        )
+        raise ValueError("metrics must include latency_ms, accuracy, explainability, failure_rate")
     return m2
 
 
 def main():
-    ap = argparse.ArgumentParser(
-        description="Compute J given metrics and objective config"
-    )
+    ap = argparse.ArgumentParser(description="Compute J given metrics and objective config")
     ap.add_argument(
         "--metrics",
         required=True,
@@ -105,9 +99,7 @@ def main():
 
     # utilities 0..1
     u_lat = util_latency(m["latency_ms"], t["latency"])
-    u_acc = util_linear_minmax(
-        m["accuracy"], t["accuracy"]["min"], t["accuracy"]["max"]
-    )
+    u_acc = util_linear_minmax(m["accuracy"], t["accuracy"]["min"], t["accuracy"]["max"])
     u_exp = util_linear_minmax(
         m["explainability"], t["explainability"]["min"], t["explainability"]["max"]
     )

@@ -2,10 +2,10 @@
 #!/usr/bin/env python3
 # PZTA-CRA 튜닝 실험: 1주 내 A/B 테스트
 
-from datetime import datetime, timedelta
 import json
 import random
 import time
+from datetime import datetime, timedelta
 
 from tools.fusion import MonotoneLogit
 
@@ -74,9 +74,7 @@ class TuningExperiment:
             evidence_scores = [random.random() for _ in range(1000)]
 
             # ABSTAIN율 계산
-            abstain_rate = sum(1 for score in evidence_scores if score < tau) / len(
-                evidence_scores
-            )
+            abstain_rate = sum(1 for score in evidence_scores if score < tau) / len(evidence_scores)
 
             # MTTR 추정 (근거 부족 시 재탐색 시간)
             mttr = abstain_rate * 30  # 30초 재탐색 시간 가정
@@ -119,9 +117,7 @@ class TuningExperiment:
 
             print(f"  β_c={beta_c}: 정체성 보호={identity_protection:.1%}")
 
-            results.append(
-                {"beta_c": beta_c, "identity_protection": identity_protection}
-            )
+            results.append({"beta_c": beta_c, "identity_protection": identity_protection})
 
         return {"experiment": "beta_c_prior", "results": results}
 

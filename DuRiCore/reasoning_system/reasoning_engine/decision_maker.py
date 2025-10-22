@@ -10,10 +10,10 @@ DuRi 추론 시스템 - 의사결정 모듈
 """
 
 import asyncio
+import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-import logging
 from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
 logger = logging.getLogger(__name__)
@@ -143,9 +143,7 @@ class DecisionMaker:
         except Exception as e:
             self.logger.error(f"의사결정 중 오류 발생: {e}")
             return DecisionResult(
-                selected_option=DecisionOption(
-                    option_id="error", name="오류", description=str(e)
-                ),
+                selected_option=DecisionOption(option_id="error", name="오류", description=str(e)),
                 decision_type=decision_type,
                 confidence=0.0,
                 reasoning=[f"오류 발생: {str(e)}"],
@@ -193,9 +191,7 @@ class DecisionMaker:
         except Exception as e:
             self.logger.error(f"합리적 의사결정 중 오류: {e}")
             return DecisionResult(
-                selected_option=DecisionOption(
-                    option_id="error", name="오류", description=str(e)
-                ),
+                selected_option=DecisionOption(option_id="error", name="오류", description=str(e)),
                 decision_type=DecisionType.RATIONAL,
                 confidence=0.0,
                 reasoning=[f"오류: {str(e)}"],
@@ -216,9 +212,7 @@ class DecisionMaker:
             best_option = max(intuitive_scores, key=lambda x: x.overall_score)
 
             # 신뢰도 계산
-            confidence = self._calculate_intuitive_confidence(
-                intuitive_scores, best_option
-            )
+            confidence = self._calculate_intuitive_confidence(intuitive_scores, best_option)
 
             # 추론 과정
             reasoning = [
@@ -238,9 +232,7 @@ class DecisionMaker:
         except Exception as e:
             self.logger.error(f"직관적 의사결정 중 오류: {e}")
             return DecisionResult(
-                selected_option=DecisionOption(
-                    option_id="error", name="오류", description=str(e)
-                ),
+                selected_option=DecisionOption(option_id="error", name="오류", description=str(e)),
                 decision_type=DecisionType.INTUITIVE,
                 confidence=0.0,
                 reasoning=[f"오류: {str(e)}"],
@@ -261,9 +253,7 @@ class DecisionMaker:
             best_option = max(emotional_scores, key=lambda x: x.overall_score)
 
             # 신뢰도 계산
-            confidence = self._calculate_emotional_confidence(
-                emotional_scores, best_option
-            )
+            confidence = self._calculate_emotional_confidence(emotional_scores, best_option)
 
             # 추론 과정
             reasoning = [
@@ -283,9 +273,7 @@ class DecisionMaker:
         except Exception as e:
             self.logger.error(f"감정적 의사결정 중 오류: {e}")
             return DecisionResult(
-                selected_option=DecisionOption(
-                    option_id="error", name="오류", description=str(e)
-                ),
+                selected_option=DecisionOption(option_id="error", name="오류", description=str(e)),
                 decision_type=DecisionType.EMOTIONAL,
                 confidence=0.0,
                 reasoning=[f"오류: {str(e)}"],
@@ -298,9 +286,7 @@ class DecisionMaker:
             collaborative_scores = []
             for option in context.options:
                 # 협력적 점수 계산 (다양한 관점 고려)
-                collaborative_score = self._calculate_collaborative_score(
-                    option, context
-                )
+                collaborative_score = self._calculate_collaborative_score(option, context)
                 option.overall_score = collaborative_score
                 collaborative_scores.append(option)
 
@@ -308,9 +294,7 @@ class DecisionMaker:
             best_option = max(collaborative_scores, key=lambda x: x.overall_score)
 
             # 신뢰도 계산
-            confidence = self._calculate_collaborative_confidence(
-                collaborative_scores, best_option
-            )
+            confidence = self._calculate_collaborative_confidence(collaborative_scores, best_option)
 
             # 추론 과정
             reasoning = [
@@ -330,9 +314,7 @@ class DecisionMaker:
         except Exception as e:
             self.logger.error(f"협력적 의사결정 중 오류: {e}")
             return DecisionResult(
-                selected_option=DecisionOption(
-                    option_id="error", name="오류", description=str(e)
-                ),
+                selected_option=DecisionOption(option_id="error", name="오류", description=str(e)),
                 decision_type=DecisionType.COLLABORATIVE,
                 confidence=0.0,
                 reasoning=[f"오류: {str(e)}"],
@@ -353,9 +335,7 @@ class DecisionMaker:
             best_option = max(adaptive_scores, key=lambda x: x.overall_score)
 
             # 신뢰도 계산
-            confidence = self._calculate_adaptive_confidence(
-                adaptive_scores, best_option
-            )
+            confidence = self._calculate_adaptive_confidence(adaptive_scores, best_option)
 
             # 추론 과정
             reasoning = [
@@ -375,9 +355,7 @@ class DecisionMaker:
         except Exception as e:
             self.logger.error(f"적응적 의사결정 중 오류: {e}")
             return DecisionResult(
-                selected_option=DecisionOption(
-                    option_id="error", name="오류", description=str(e)
-                ),
+                selected_option=DecisionOption(option_id="error", name="오류", description=str(e)),
                 decision_type=DecisionType.ADAPTIVE,
                 confidence=0.0,
                 reasoning=[f"오류: {str(e)}"],
@@ -398,9 +376,7 @@ class DecisionMaker:
             best_option = max(strategic_scores, key=lambda x: x.overall_score)
 
             # 신뢰도 계산
-            confidence = self._calculate_strategic_confidence(
-                strategic_scores, best_option
-            )
+            confidence = self._calculate_strategic_confidence(strategic_scores, best_option)
 
             # 추론 과정
             reasoning = [
@@ -420,24 +396,18 @@ class DecisionMaker:
         except Exception as e:
             self.logger.error(f"전략적 의사결정 중 오류: {e}")
             return DecisionResult(
-                selected_option=DecisionOption(
-                    option_id="error", name="오류", description=str(e)
-                ),
+                selected_option=DecisionOption(option_id="error", name="오류", description=str(e)),
                 decision_type=DecisionType.STRATEGIC,
                 confidence=0.0,
                 reasoning=[f"오류: {str(e)}"],
             )
 
-    def _evaluate_criteria(
-        self, option: DecisionOption, criteria: DecisionCriteria
-    ) -> float:
+    def _evaluate_criteria(self, option: DecisionOption, criteria: DecisionCriteria) -> float:
         """기준별 평가"""
         try:
             # 간단한 평가 로직 (실제로는 더 복잡한 로직이 필요)
             if criteria.evaluation_method == "binary":
-                return (
-                    1.0 if option.name.lower() in criteria.description.lower() else 0.0
-                )
+                return 1.0 if option.name.lower() in criteria.description.lower() else 0.0
             elif criteria.evaluation_method == "scale":
                 # 0-1 스케일로 평가
                 return min(1.0, len(option.description) / 100.0)
@@ -473,9 +443,7 @@ class DecisionMaker:
             self.logger.error(f"신뢰도 계산 중 오류: {e}")
             return 0.5
 
-    def _calculate_intuitive_score(
-        self, option: DecisionOption, context: DecisionContext
-    ) -> float:
+    def _calculate_intuitive_score(self, option: DecisionOption, context: DecisionContext) -> float:
         """직관적 점수 계산"""
         try:
             # 간단한 직관적 점수 계산 (실제로는 더 복잡한 패턴 인식이 필요)
@@ -509,9 +477,9 @@ class DecisionMaker:
 
             # 직관적 점수의 분산을 기반으로 신뢰도 계산
             scores = [option.overall_score for option in options]
-            variance = sum(
-                (score - sum(scores) / len(scores)) ** 2 for score in scores
-            ) / len(scores)
+            variance = sum((score - sum(scores) / len(scores)) ** 2 for score in scores) / len(
+                scores
+            )
 
             # 분산이 작을수록 신뢰도가 높음
             confidence = max(0.3, 1.0 - variance)
@@ -521,9 +489,7 @@ class DecisionMaker:
             self.logger.error(f"직관적 신뢰도 계산 중 오류: {e}")
             return 0.5
 
-    def _calculate_emotional_score(
-        self, option: DecisionOption, context: DecisionContext
-    ) -> float:
+    def _calculate_emotional_score(self, option: DecisionOption, context: DecisionContext) -> float:
         """감정적 점수 계산"""
         try:
             # 간단한 감정적 점수 계산
@@ -616,9 +582,7 @@ class DecisionMaker:
             self.logger.error(f"협력적 신뢰도 계산 중 오류: {e}")
             return 0.5
 
-    def _calculate_adaptive_score(
-        self, option: DecisionOption, context: DecisionContext
-    ) -> float:
+    def _calculate_adaptive_score(self, option: DecisionOption, context: DecisionContext) -> float:
         """적응적 점수 계산"""
         try:
             # 상황 변화에 대한 적응성을 고려한 점수 계산
@@ -664,9 +628,7 @@ class DecisionMaker:
             self.logger.error(f"적응적 신뢰도 계산 중 오류: {e}")
             return 0.5
 
-    def _calculate_strategic_score(
-        self, option: DecisionOption, context: DecisionContext
-    ) -> float:
+    def _calculate_strategic_score(self, option: DecisionOption, context: DecisionContext) -> float:
         """전략적 점수 계산"""
         try:
             # 장기적 가치를 고려한 점수 계산
@@ -713,9 +675,7 @@ class DecisionMaker:
             self.logger.error(f"전략적 신뢰도 계산 중 오류: {e}")
             return 0.5
 
-    def _update_performance_metrics(
-        self, result: DecisionResult, processing_time: float
-    ):
+    def _update_performance_metrics(self, result: DecisionResult, processing_time: float):
         """성능 메트릭 업데이트"""
         self.performance_metrics["total_decisions"] += 1
         if result.confidence > 0.5:

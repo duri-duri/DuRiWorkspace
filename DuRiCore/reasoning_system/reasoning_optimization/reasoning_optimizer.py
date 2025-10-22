@@ -10,10 +10,10 @@ DuRi 추론 시스템 - 추론 최적화 모듈
 """
 
 import asyncio
+import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-import logging
 from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
 logger = logging.getLogger(__name__)
@@ -107,14 +107,10 @@ class ReasoningOptimizer:
             self.logger.info(f"추론 최적화 시작: {optimization_type.value}")
 
             # 최적화 전략 생성
-            strategies = self._generate_optimization_strategies(
-                targets, optimization_type
-            )
+            strategies = self._generate_optimization_strategies(targets, optimization_type)
 
             # 전략 평가 및 선택
-            selected_strategies = self._evaluate_and_select_strategies(
-                strategies, targets
-            )
+            selected_strategies = self._evaluate_and_select_strategies(strategies, targets)
 
             # 최적화 실행
             results = await self._execute_optimizations(selected_strategies, targets)
@@ -447,9 +443,7 @@ class ReasoningOptimizer:
                     improvement_factor = strategy.expected_improvement
                     after_value = target.current_value * (1 - improvement_factor)
                     after_values[target.target_id] = after_value
-                    improvement += (
-                        target.current_value - after_value
-                    ) / target.current_value
+                    improvement += (target.current_value - after_value) / target.current_value
                 else:
                     after_values[target.target_id] = target.current_value
 
@@ -462,14 +456,10 @@ class ReasoningOptimizer:
                 result_id=f"result_{len(self.optimization_history)}",
                 strategy=strategy,
                 before_value=(
-                    sum(before_values.values()) / len(before_values)
-                    if before_values
-                    else 0.0
+                    sum(before_values.values()) / len(before_values) if before_values else 0.0
                 ),
                 after_value=(
-                    sum(after_values.values()) / len(after_values)
-                    if after_values
-                    else 0.0
+                    sum(after_values.values()) / len(after_values) if after_values else 0.0
                 ),
                 improvement=improvement,
                 success=improvement > 0.0,
@@ -514,9 +504,7 @@ class ReasoningOptimizer:
             total_optimizations = len(results)
 
             # 최적 전략 찾기
-            best_strategy = (
-                max(results, key=lambda r: r.improvement).strategy if results else None
-            )
+            best_strategy = max(results, key=lambda r: r.improvement).strategy if results else None
 
             # 문제점 식별
             issues = self._identify_issues(results, targets)
@@ -565,21 +553,15 @@ class ReasoningOptimizer:
         try:
             # 성공률이 낮은 경우
             success_rate = (
-                sum(1 for result in results if result.success) / len(results)
-                if results
-                else 0.0
+                sum(1 for result in results if result.success) / len(results) if results else 0.0
             )
             if success_rate < 0.5:
                 issues.append("최적화 성공률이 낮습니다.")
 
             # 개선도가 낮은 경우
-            low_improvement_results = [
-                result for result in results if result.improvement < 0.1
-            ]
+            low_improvement_results = [result for result in results if result.improvement < 0.1]
             if low_improvement_results:
-                issues.append(
-                    f"개선도가 낮은 최적화가 {len(low_improvement_results)}개 있습니다."
-                )
+                issues.append(f"개선도가 낮은 최적화가 {len(low_improvement_results)}개 있습니다.")
 
             # 대상이 부족한 경우
             if len(targets) < 2:
@@ -600,19 +582,13 @@ class ReasoningOptimizer:
         try:
             # 성공률이 낮은 경우
             success_rate = (
-                sum(1 for result in results if result.success) / len(results)
-                if results
-                else 0.0
+                sum(1 for result in results if result.success) / len(results) if results else 0.0
             )
             if success_rate < 0.5:
-                suggestions.append(
-                    "최적화 전략의 신뢰도를 높이거나 대안 전략을 고려하세요."
-                )
+                suggestions.append("최적화 전략의 신뢰도를 높이거나 대안 전략을 고려하세요.")
 
             # 개선도가 낮은 경우
-            low_improvement_results = [
-                result for result in results if result.improvement < 0.1
-            ]
+            low_improvement_results = [result for result in results if result.improvement < 0.1]
             if low_improvement_results:
                 suggestions.append("더 효과적인 최적화 방법을 탐색하세요.")
 
@@ -626,9 +602,7 @@ class ReasoningOptimizer:
             self.logger.error(f"개선 제안 생성 중 오류: {e}")
             return [f"제안 생성 오류: {str(e)}"]
 
-    def _update_performance_metrics(
-        self, analysis: OptimizationAnalysis, processing_time: float
-    ):
+    def _update_performance_metrics(self, analysis: OptimizationAnalysis, processing_time: float):
         """성능 메트릭 업데이트"""
         self.performance_metrics["total_optimizations"] += 1
         if analysis.overall_improvement > 0.1:

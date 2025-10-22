@@ -5,15 +5,15 @@ DuRi 논리적 추론 엔진 (Phase 1-2 Week 2)
 """
 
 import asyncio
-from dataclasses import asdict, dataclass
-from datetime import datetime
-from enum import Enum
 import json
 import logging
 import random
 import re
 import statistics
 import time
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from enum import Enum
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
 import numpy as np
@@ -342,9 +342,7 @@ class LogicalReasoningEngine:
         }
         return rules
 
-    async def analyze_logical_reasoning(
-        self, situation: str, action: str
-    ) -> LogicalArgument:
+    async def analyze_logical_reasoning(self, situation: str, action: str) -> LogicalArgument:
         """논리적 추론 분석 - Day 1 핵심 메서드"""
         logger.info(f"논리적 추론 분석 시작: {action}")
 
@@ -369,22 +367,16 @@ class LogicalReasoningEngine:
         final_conclusion = self._derive_final_conclusion(logical_steps, reasoning_type)
 
         # 7. 논증 강도 계산
-        strength = self._calculate_argument_strength(
-            premises, logical_steps, reasoning_type
-        )
+        strength = self._calculate_argument_strength(premises, logical_steps, reasoning_type)
 
         # 8. 반론 및 한계 식별
         counter_arguments = self._identify_counter_arguments(
             premises, logical_steps, reasoning_type
         )
-        limitations = self._identify_limitations(
-            premises, logical_steps, reasoning_type
-        )
+        limitations = self._identify_limitations(premises, logical_steps, reasoning_type)
 
         # 9. 전체 신뢰도 계산
-        confidence = self._calculate_overall_confidence(
-            premises, logical_steps, strength
-        )
+        confidence = self._calculate_overall_confidence(premises, logical_steps, strength)
 
         # 10. 추론 경로 구성
         reasoning_path = self._construct_reasoning_path(logical_steps)
@@ -590,9 +582,7 @@ class LogicalReasoningEngine:
             if any(decision in keyword for decision in decision_keywords)
         )
         if decision_score > 0:
-            vector[45:55] += (
-                decision_score * 0.7
-            )  # 의사결정 요소는 논리적 요소 영역에 추가
+            vector[45:55] += decision_score * 0.7  # 의사결정 요소는 논리적 요소 영역에 추가
 
         return self._normalize_vector(vector)
 
@@ -767,9 +757,7 @@ class LogicalReasoningEngine:
             "거부",
         ]
         if any(
-            action in keyword
-            for keyword, weight in keywords.items()
-            for action in negative_actions
+            action in keyword for keyword, weight in keywords.items() for action in negative_actions
         ):
             vector[20:30] += 0.6  # 부정적 행위는 윤리적 요소에 추가
 
@@ -790,9 +778,7 @@ class LogicalReasoningEngine:
             "통합",
         ]
         if any(
-            action in keyword
-            for keyword, weight in keywords.items()
-            for action in positive_actions
+            action in keyword for keyword, weight in keywords.items() for action in positive_actions
         ):
             vector[25:35] += 0.7  # 긍정적 행위는 실용적 요소에 추가
 
@@ -1010,21 +996,13 @@ class LogicalReasoningEngine:
 
         for reasoning_type, pattern in self.reasoning_patterns.items():
             # Day 3: 개선된 유사도 계산
-            situation_similarity = self._calculate_enhanced_similarity(
-                situation_vector, pattern
-            )
-            action_similarity = self._calculate_enhanced_similarity(
-                action_vector, pattern
-            )
-            combined_similarity = self._calculate_enhanced_similarity(
-                combined_vector, pattern
-            )
+            situation_similarity = self._calculate_enhanced_similarity(situation_vector, pattern)
+            action_similarity = self._calculate_enhanced_similarity(action_vector, pattern)
+            combined_similarity = self._calculate_enhanced_similarity(combined_vector, pattern)
 
             # Day 3: 가중 평균 유사도 계산 (더 균형잡힌 가중치)
             total_similarity = (
-                situation_similarity * 0.35
-                + action_similarity * 0.35
-                + combined_similarity * 0.3
+                situation_similarity * 0.35 + action_similarity * 0.35 + combined_similarity * 0.3
             )
 
             similarities[reasoning_type] = total_similarity
@@ -1045,14 +1023,10 @@ class LogicalReasoningEngine:
         if len(similar_types) > 1:
             best_type = random.choice(similar_types)
 
-        logger.info(
-            f"선택된 추론 유형: {best_type.value}, 유사도: {best_similarity:.3f}"
-        )
+        logger.info(f"선택된 추론 유형: {best_type.value}, 유사도: {best_similarity:.3f}")
         return best_type
 
-    def _calculate_enhanced_similarity(
-        self, vector1: np.ndarray, vector2: np.ndarray
-    ) -> float:
+    def _calculate_enhanced_similarity(self, vector1: np.ndarray, vector2: np.ndarray) -> float:
         """향상된 유사도 계산 - Day 2 신규 (캐싱 포함)"""
         # Day 2: 캐시 키 생성
         cache_key = (tuple(vector1), tuple(vector2))
@@ -1075,9 +1049,7 @@ class LogicalReasoningEngine:
 
         return enhanced_similarity
 
-    def _calculate_cosine_similarity(
-        self, vector1: np.ndarray, vector2: np.ndarray
-    ) -> float:
+    def _calculate_cosine_similarity(self, vector1: np.ndarray, vector2: np.ndarray) -> float:
         """코사인 유사도 계산 - Day 2 개선"""
         # Day 2: 수치적 안정성 개선
         dot_product = np.dot(vector1, vector2)
@@ -1175,9 +1147,7 @@ class LogicalReasoningEngine:
 
         return steps
 
-    def _construct_kantian_argument(
-        self, premises: List[SemanticPremise]
-    ) -> List[LogicalStep]:
+    def _construct_kantian_argument(self, premises: List[SemanticPremise]) -> List[LogicalStep]:
         """칸트적 논증 패턴 - Day 3 신규"""
         steps = []
 
@@ -1235,9 +1205,7 @@ class LogicalReasoningEngine:
 
         return steps
 
-    def _construct_utilitarian_argument(
-        self, premises: List[SemanticPremise]
-    ) -> List[LogicalStep]:
+    def _construct_utilitarian_argument(self, premises: List[SemanticPremise]) -> List[LogicalStep]:
         """공리주의 논증 패턴 - Day 3 신규"""
         steps = []
 
@@ -1355,9 +1323,7 @@ class LogicalReasoningEngine:
 
         return steps
 
-    def _construct_pragmatic_argument(
-        self, premises: List[SemanticPremise]
-    ) -> List[LogicalStep]:
+    def _construct_pragmatic_argument(self, premises: List[SemanticPremise]) -> List[LogicalStep]:
         """실용주의 논증 패턴 - Day 3 신규"""
         steps = []
 
@@ -1475,9 +1441,7 @@ class LogicalReasoningEngine:
 
         return steps
 
-    def _construct_critical_argument(
-        self, premises: List[SemanticPremise]
-    ) -> List[LogicalStep]:
+    def _construct_critical_argument(self, premises: List[SemanticPremise]) -> List[LogicalStep]:
         """비판적 추론 패턴 - Day 3 신규"""
         steps = []
 
@@ -1629,9 +1593,7 @@ class LogicalReasoningEngine:
 
         return steps
 
-    def _construct_hybrid_argument(
-        self, premises: List[SemanticPremise]
-    ) -> List[LogicalStep]:
+    def _construct_hybrid_argument(self, premises: List[SemanticPremise]) -> List[LogicalStep]:
         """혼합론적 논증 패턴 - Day 5 신규"""
         steps = []
 
@@ -1819,9 +1781,7 @@ class LogicalReasoningEngine:
         consistency_score = self._calculate_logical_consistency(premises, logical_steps)
 
         # 5. 추론 완성도 점수 (Day 3: 신규)
-        completeness_score = self._calculate_reasoning_completeness(
-            logical_steps, reasoning_type
-        )
+        completeness_score = self._calculate_reasoning_completeness(logical_steps, reasoning_type)
 
         # 6. 종합 강도 계산 (Day 3: 더 정교한 공식)
         overall_strength = (
@@ -1901,9 +1861,7 @@ class LogicalReasoningEngine:
 
         # 4. 종합 일관성 점수
         overall_consistency = (
-            premise_consistency * 0.3
-            + step_consistency * 0.3
-            + premise_step_consistency * 0.4
+            premise_consistency * 0.3 + step_consistency * 0.3 + premise_step_consistency * 0.4
         )
 
         return overall_consistency
@@ -2149,15 +2107,11 @@ class LogicalReasoningEngine:
 
         # 논리적 단계들의 평균 신뢰도
         step_confidence = (
-            sum(s.confidence for s in logical_steps) / len(logical_steps)
-            if logical_steps
-            else 0.0
+            sum(s.confidence for s in logical_steps) / len(logical_steps) if logical_steps else 0.0
         )
 
         # 종합 신뢰도 계산
-        overall_confidence = (
-            premise_confidence * 0.3 + step_confidence * 0.4 + strength * 0.3
-        )
+        overall_confidence = premise_confidence * 0.3 + step_confidence * 0.4 + strength * 0.3
 
         return min(overall_confidence, 1.0)
 
@@ -2185,27 +2139,19 @@ class LogicalReasoningEngine:
         perspectives = []
         for reasoning_type in ReasoningType:
             try:
-                argument = await self._analyze_single_perspective(
-                    situation, action, reasoning_type
-                )
+                argument = await self._analyze_single_perspective(situation, action, reasoning_type)
                 perspectives.append(argument)
             except Exception as e:
                 logger.warning(f"추론 유형 {reasoning_type.value} 분석 실패: {e}")
 
         # 2. 관점 간 유사성 계산
-        perspective_similarities = self._calculate_perspective_similarities(
-            perspectives
-        )
+        perspective_similarities = self._calculate_perspective_similarities(perspectives)
 
         # 3. 관점 간 충돌 식별
-        conflicts = self._identify_perspective_conflicts(
-            perspectives, perspective_similarities
-        )
+        conflicts = self._identify_perspective_conflicts(perspectives, perspective_similarities)
 
         # 4. 관점별 가중치 계산
-        perspective_weights = self._calculate_perspective_weights(
-            perspectives, conflicts
-        )
+        perspective_weights = self._calculate_perspective_weights(perspectives, conflicts)
 
         # 5. 통합적 결론 도출
         integrated_conclusion = self._derive_integrated_conclusion(
@@ -2213,17 +2159,13 @@ class LogicalReasoningEngine:
         )
 
         # 6. 통합 강도 및 신뢰도 계산
-        integrated_strength = self._calculate_integrated_strength(
-            perspectives, perspective_weights
-        )
+        integrated_strength = self._calculate_integrated_strength(perspectives, perspective_weights)
         integrated_confidence = self._calculate_integrated_confidence(
             perspectives, perspective_weights
         )
 
         # 7. 충돌 해결 전략 수립
-        conflict_resolution_strategy = self._determine_conflict_resolution_strategy(
-            conflicts
-        )
+        conflict_resolution_strategy = self._determine_conflict_resolution_strategy(conflicts)
 
         # Day 5: 성능 모니터링 종료
         self._end_performance_monitoring()
@@ -2259,22 +2201,16 @@ class LogicalReasoningEngine:
         final_conclusion = self._derive_final_conclusion(logical_steps, reasoning_type)
 
         # 논증 강도 계산
-        strength = self._calculate_argument_strength(
-            premises, logical_steps, reasoning_type
-        )
+        strength = self._calculate_argument_strength(premises, logical_steps, reasoning_type)
 
         # 반론 및 한계 식별
         counter_arguments = self._identify_counter_arguments(
             premises, logical_steps, reasoning_type
         )
-        limitations = self._identify_limitations(
-            premises, logical_steps, reasoning_type
-        )
+        limitations = self._identify_limitations(premises, logical_steps, reasoning_type)
 
         # 전체 신뢰도 계산
-        confidence = self._calculate_overall_confidence(
-            premises, logical_steps, strength
-        )
+        confidence = self._calculate_overall_confidence(premises, logical_steps, strength)
 
         # 추론 경로 구성
         reasoning_path = self._construct_reasoning_path(logical_steps)
@@ -2312,9 +2248,7 @@ class LogicalReasoningEngine:
                     )
 
                     # 강도 유사성 계산
-                    strength_similarity = 1.0 - abs(
-                        perspective1.strength - perspective2.strength
-                    )
+                    strength_similarity = 1.0 - abs(perspective1.strength - perspective2.strength)
 
                     # 종합 유사성 계산
                     overall_similarity = (
@@ -2323,9 +2257,9 @@ class LogicalReasoningEngine:
                         + strength_similarity * 0.2
                     )
 
-                    similarities[
-                        (perspective1.reasoning_type, perspective2.reasoning_type)
-                    ] = overall_similarity
+                    similarities[(perspective1.reasoning_type, perspective2.reasoning_type)] = (
+                        overall_similarity
+                    )
 
         return similarities
 
@@ -2392,9 +2326,7 @@ class LogicalReasoningEngine:
                 "conflict_type": conflict_type,
                 "severity": severity,
                 "description": f"{perspective1.reasoning_type.value}와 {perspective2.reasoning_type.value} 관점 간 충돌",
-                "resolution_strategy": self._suggest_conflict_resolution(
-                    conflict_type, severity
-                ),
+                "resolution_strategy": self._suggest_conflict_resolution(conflict_type, severity),
             }
 
         return None
@@ -2558,9 +2490,7 @@ class LogicalReasoningEngine:
 
         keyword_counts = Counter(all_keywords)
         common_keywords = [
-            keyword
-            for keyword, count in keyword_counts.items()
-            if count > len(perspectives) / 2
+            keyword for keyword, count in keyword_counts.items() if count > len(perspectives) / 2
         ]
 
         if common_keywords:
@@ -2602,9 +2532,7 @@ class LogicalReasoningEngine:
 
         return weighted_confidence / total_weight if total_weight > 0 else 0.0
 
-    def _determine_conflict_resolution_strategy(
-        self, conflicts: List[Dict[str, Any]]
-    ) -> str:
+    def _determine_conflict_resolution_strategy(self, conflicts: List[Dict[str, Any]]) -> str:
         """충돌 해결 전략 결정 - Day 4 신규"""
         if not conflicts:
             return "충돌 없음"
@@ -2645,17 +2573,13 @@ class LogicalReasoningEngine:
             # 캐시 히트율 업데이트
             total_cache_requests = self.cache_hits + self.cache_misses
             if total_cache_requests > 0:
-                self.performance_metrics["cache_hit_rate"] = (
-                    self.cache_hits / total_cache_requests
-                )
+                self.performance_metrics["cache_hit_rate"] = self.cache_hits / total_cache_requests
 
             # 메모리 사용량 업데이트
             import psutil
 
             process = psutil.Process()
-            self.performance_metrics["memory_usage"] = (
-                process.memory_info().rss / 1024 / 1024
-            )  # MB
+            self.performance_metrics["memory_usage"] = process.memory_info().rss / 1024 / 1024  # MB
 
     def get_performance_metrics(self) -> Dict[str, Any]:
         """성능 메트릭 반환 - Day 5 신규"""
@@ -2683,9 +2607,7 @@ class LogicalReasoningEngine:
                 items_to_remove = len(cache) - self.max_cache_size
                 for _ in range(items_to_remove):
                     cache.popitem(last=False)  # FIFO 방식으로 제거
-                logger.info(
-                    f"캐시 {cache_name} 최적화 완료: {items_to_remove}개 항목 제거"
-                )
+                logger.info(f"캐시 {cache_name} 최적화 완료: {items_to_remove}개 항목 제거")
 
     def _update_cache_stats(self, cache_name: str, hit: bool):
         """캐시 통계 업데이트 - Day 5 신규"""
@@ -2773,14 +2695,10 @@ class LogicalReasoningEngine:
 
         # 캐시 히트율 계산
         total_cache_access = self.cache_hits + self.cache_misses
-        cache_hit_rate = (
-            self.cache_hits / total_cache_access if total_cache_access > 0 else 0.0
-        )
+        cache_hit_rate = self.cache_hits / total_cache_access if total_cache_access > 0 else 0.0
 
         # 처리량 계산 (요청/초)
-        throughput = (
-            len(test_situations) / execution_time if execution_time > 0 else 0.0
-        )
+        throughput = len(test_situations) / execution_time if execution_time > 0 else 0.0
 
         return PerformanceMetrics(
             execution_time=execution_time,
@@ -2803,9 +2721,7 @@ class LogicalReasoningEngine:
                 result = await self.analyze_logical_reasoning(situation, "테스트 행동")
 
                 # 정확도 점수 계산
-                accuracy_score = self._calculate_accuracy_score(
-                    result, expected_outcome
-                )
+                accuracy_score = self._calculate_accuracy_score(result, expected_outcome)
 
                 # 신뢰도 점수
                 confidence_score = result.confidence
@@ -2814,9 +2730,7 @@ class LogicalReasoningEngine:
                 reasoning_quality = self._calculate_reasoning_quality(result)
 
                 # 전체 점수
-                overall_score = (
-                    accuracy_score + confidence_score + reasoning_quality
-                ) / 3
+                overall_score = (accuracy_score + confidence_score + reasoning_quality) / 3
 
                 validation_results.append(
                     ValidationResult(
@@ -2846,9 +2760,7 @@ class LogicalReasoningEngine:
 
         return validation_results
 
-    def _calculate_accuracy_score(
-        self, result: LogicalArgument, expected_outcome: str
-    ) -> float:
+    def _calculate_accuracy_score(self, result: LogicalArgument, expected_outcome: str) -> float:
         """정확도 점수 계산 - Day 5 신규"""
         # 키워드 기반 정확도 계산
         expected_keywords = expected_outcome.lower().split()
@@ -2921,15 +2833,11 @@ class LogicalReasoningEngine:
     ) -> Dict[str, Any]:
         """리포트 요약 생성 - Day 5 신규"""
         # 평균 정확도 계산
-        avg_accuracy = (
-            statistics.mean([r.accuracy_score for r in accuracy]) if accuracy else 0.0
-        )
+        avg_accuracy = statistics.mean([r.accuracy_score for r in accuracy]) if accuracy else 0.0
         avg_confidence = (
             statistics.mean([r.confidence_score for r in accuracy]) if accuracy else 0.0
         )
-        avg_overall = (
-            statistics.mean([r.overall_score for r in accuracy]) if accuracy else 0.0
-        )
+        avg_overall = statistics.mean([r.overall_score for r in accuracy]) if accuracy else 0.0
 
         # 시스템 건강도
         system_health = integration.get("system_health", {})
@@ -2977,9 +2885,7 @@ class IntegrationTestSuite:
         return {
             "test_results": test_results,
             "system_health": system_health,
-            "recommendations": self._generate_recommendations(
-                test_results, system_health
-            ),
+            "recommendations": self._generate_recommendations(test_results, system_health),
         }
 
     async def _run_performance_tests(self) -> List[TestResult]:
@@ -3126,9 +3032,7 @@ class IntegrationTestSuite:
         long_action = "매우 긴 행동 설명 " * 100
 
         try:
-            result = await self.engine.analyze_logical_reasoning(
-                long_situation, long_action
-            )
+            result = await self.engine.analyze_logical_reasoning(long_situation, long_action)
             results.append(
                 TestResult(
                     test_name="긴 입력 처리 테스트",
@@ -3155,9 +3059,7 @@ class IntegrationTestSuite:
         special_action = "특수문자: !@#$%^&*()_+-=[]{}|;':\",./<>?"
 
         try:
-            result = await self.engine.analyze_logical_reasoning(
-                special_situation, special_action
-            )
+            result = await self.engine.analyze_logical_reasoning(special_situation, special_action)
             results.append(
                 TestResult(
                     test_name="특수 문자 처리 테스트",
@@ -3215,29 +3117,19 @@ class IntegrationTestSuite:
 
         return results
 
-    def _calculate_system_health(
-        self, test_results: Dict[str, List[TestResult]]
-    ) -> SystemHealth:
+    def _calculate_system_health(self, test_results: Dict[str, List[TestResult]]) -> SystemHealth:
         """시스템 건강도 계산 - Day 5 신규"""
         # 성능 건강도 계산
-        performance_scores = [
-            r.accuracy for r in test_results.get("performance_tests", [])
-        ]
-        performance_health = (
-            statistics.mean(performance_scores) if performance_scores else 0.0
-        )
+        performance_scores = [r.accuracy for r in test_results.get("performance_tests", [])]
+        performance_health = statistics.mean(performance_scores) if performance_scores else 0.0
 
         # 정확도 건강도 계산
         accuracy_scores = [r.accuracy for r in test_results.get("accuracy_tests", [])]
         accuracy_health = statistics.mean(accuracy_scores) if accuracy_scores else 0.0
 
         # 신뢰성 건강도 계산
-        reliability_scores = [
-            r.accuracy for r in test_results.get("reliability_tests", [])
-        ]
-        reliability_health = (
-            statistics.mean(reliability_scores) if reliability_scores else 0.0
-        )
+        reliability_scores = [r.accuracy for r in test_results.get("reliability_tests", [])]
+        reliability_health = statistics.mean(reliability_scores) if reliability_scores else 0.0
 
         # 전체 건강도 계산
         overall_health = (performance_health + accuracy_health + reliability_health) / 3
@@ -3277,9 +3169,7 @@ class IntegrationTestSuite:
             )
 
         if not recommendations:
-            recommendations.append(
-                "시스템이 양호한 상태입니다. 정기적인 모니터링을 계속하세요."
-            )
+            recommendations.append("시스템이 양호한 상태입니다. 정기적인 모니터링을 계속하세요.")
 
         return recommendations
 
@@ -3363,9 +3253,7 @@ async def test_logical_reasoning_engine():
         success_count = sum(1 for r in results if r.success)
         total_count = len(results)
         success_rate = success_count / total_count if total_count > 0 else 0.0
-        print(
-            f"  {test_category}: {success_count}/{total_count} 성공 ({success_rate:.1%})"
-        )
+        print(f"  {test_category}: {success_count}/{total_count} 성공 ({success_rate:.1%})")
 
     # 권장사항 출력
     recommendations = integration_results.get("recommendations", [])

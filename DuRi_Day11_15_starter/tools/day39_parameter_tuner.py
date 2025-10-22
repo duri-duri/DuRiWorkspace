@@ -8,13 +8,13 @@ Day39: PoU 파라미터 미세조정 시스템 (기존 trace_sweep 기반)
 """
 
 import argparse
-from datetime import datetime
 import json
 import logging
 import pathlib
 import subprocess
 import sys
 import time
+from datetime import datetime
 from typing import Any, Dict, List, Tuple
 
 try:
@@ -173,9 +173,7 @@ class Day39ParameterTuner:
         self.logger.info(f"안 B 실험 완료: {out_dir}")
         return out_dir
 
-    def run_ab_comparison(
-        self, dir_a: pathlib.Path, dir_b: pathlib.Path
-    ) -> Dict[str, Any]:
+    def run_ab_comparison(self, dir_a: pathlib.Path, dir_b: pathlib.Path) -> Dict[str, Any]:
         """A/B 비교 실행"""
         self.logger.info("📊 A/B 비교 실행 중...")
 
@@ -210,16 +208,12 @@ class Day39ParameterTuner:
 
         # 결과 저장
         results_file = results_dir / "ab_stats.json"
-        self.atomic_write(
-            results_file, json.dumps(ab_results, ensure_ascii=False, indent=2)
-        )
+        self.atomic_write(results_file, json.dumps(ab_results, ensure_ascii=False, indent=2))
 
         self.logger.info(f"A/B 비교 완료: {results_file}")
         return ab_results
 
-    def make_decision(
-        self, ab_results: Dict[str, Any], sensitivity: Dict[str, float]
-    ) -> str:
+    def make_decision(self, ab_results: Dict[str, Any], sensitivity: Dict[str, float]) -> str:
         """최종 판정"""
         self.logger.info("🎯 최종 판정 중...")
 
@@ -263,9 +257,7 @@ class Day39ParameterTuner:
         # 카나리 설정 저장
         canary_file = ROOT / "artifacts" / "day39" / "canary_rules.json"
         canary_file.parent.mkdir(parents=True, exist_ok=True)
-        self.atomic_write(
-            canary_file, json.dumps(canary_rules, ensure_ascii=False, indent=2)
-        )
+        self.atomic_write(canary_file, json.dumps(canary_rules, ensure_ascii=False, indent=2))
 
         self.logger.info(f"카나리 규칙 저장: {canary_file}")
         return canary_rules
@@ -343,9 +335,7 @@ class Day39ParameterTuner:
             canary_rules = self.setup_canary_rules()
 
             # 7. 리포트 생성
-            report = self.generate_report(
-                sensitivity, ab_results, decision, canary_rules
-            )
+            report = self.generate_report(sensitivity, ab_results, decision, canary_rules)
 
             result = {
                 "status": "SUCCESS",

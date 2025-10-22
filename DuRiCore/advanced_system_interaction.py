@@ -11,19 +11,19 @@ DuRi 시스템 간 고급 상호작용 시스템 - Phase 1-3 Week 3 Day 8
 """
 
 import asyncio
-from collections import defaultdict, deque
-from dataclasses import asdict, dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 import json
 import logging
 import queue
 import statistics
 import threading
 import time
-from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 import uuid
 import weakref
+from collections import defaultdict, deque
+from dataclasses import asdict, dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 
 import numpy as np
 
@@ -239,9 +239,7 @@ class AdvancedSystemInteraction:
             elif interaction.interaction_type == InteractionType.COORDINATION:
                 result = await self._execute_coordination(interaction)
             else:
-                raise ValueError(
-                    f"지원하지 않는 상호작용 유형: {interaction.interaction_type}"
-                )
+                raise ValueError(f"지원하지 않는 상호작용 유형: {interaction.interaction_type}")
 
             # 상호작용 완료
             interaction.status = InteractionStatus.COMPLETED
@@ -252,9 +250,7 @@ class AdvancedSystemInteraction:
             execution_time = time.time() - start_time
             self._update_interaction_metrics(True, execution_time)
 
-            logger.info(
-                f"상호작용 실행 완료: {interaction_id} ({execution_time:.2f}초)"
-            )
+            logger.info(f"상호작용 실행 완료: {interaction_id} ({execution_time:.2f}초)")
             return result
 
         except Exception as e:
@@ -270,9 +266,7 @@ class AdvancedSystemInteraction:
             logger.error(f"상호작용 실행 실패: {interaction_id} - {e}")
             raise
 
-    async def create_workflow(
-        self, workflow_name: str, steps: List[Dict[str, Any]]
-    ) -> str:
+    async def create_workflow(self, workflow_name: str, steps: List[Dict[str, Any]]) -> str:
         """워크플로우 생성"""
         workflow_id = f"workflow_{int(time.time())}_{uuid.uuid4().hex[:8]}"
 
@@ -396,19 +390,14 @@ class AdvancedSystemInteraction:
             for dependency in self.dependencies.values():
                 if dependency.dependent_system == current_system:
                     required_system = dependency.required_system
-                    if (
-                        required_system not in visited
-                        and required_system not in resolved_systems
-                    ):
+                    if required_system not in visited and required_system not in resolved_systems:
                         pending_systems.append(required_system)
 
             resolved_systems.append(current_system)
 
         return resolved_systems
 
-    async def _execute_data_share(
-        self, interaction: SystemInteraction
-    ) -> Dict[str, Any]:
+    async def _execute_data_share(self, interaction: SystemInteraction) -> Dict[str, Any]:
         """데이터 공유 실행"""
         source_system = interaction.source_system
         target_system = interaction.target_system
@@ -428,9 +417,7 @@ class AdvancedSystemInteraction:
             "result": result,
         }
 
-    async def _execute_workflow_interaction(
-        self, interaction: SystemInteraction
-    ) -> Dict[str, Any]:
+    async def _execute_workflow_interaction(self, interaction: SystemInteraction) -> Dict[str, Any]:
         """워크플로우 상호작용 실행"""
         workflow_id = interaction.data.get("workflow_id")
         if not workflow_id or workflow_id not in self.workflows:
@@ -460,9 +447,7 @@ class AdvancedSystemInteraction:
             "resolved_systems": resolved_systems,
         }
 
-    async def _execute_collaboration(
-        self, interaction: SystemInteraction
-    ) -> Dict[str, Any]:
+    async def _execute_collaboration(self, interaction: SystemInteraction) -> Dict[str, Any]:
         """협력 실행"""
         systems = interaction.data.get("systems", [])
         collaboration_type = interaction.data.get("collaboration_type", "parallel")
@@ -471,9 +456,7 @@ class AdvancedSystemInteraction:
             # 병렬 협력
             tasks = []
             for system_name in systems:
-                task = self._execute_system_action(
-                    system_name, interaction.data.get("action")
-                )
+                task = self._execute_system_action(system_name, interaction.data.get("action"))
                 tasks.append(task)
 
             results = await asyncio.gather(*tasks, return_exceptions=True)
@@ -493,9 +476,7 @@ class AdvancedSystemInteraction:
             "results": results,
         }
 
-    async def _execute_synchronization(
-        self, interaction: SystemInteraction
-    ) -> Dict[str, Any]:
+    async def _execute_synchronization(self, interaction: SystemInteraction) -> Dict[str, Any]:
         """동기화 실행"""
         systems = interaction.data.get("systems", [])
         sync_data = interaction.data.get("sync_data", {})
@@ -512,9 +493,7 @@ class AdvancedSystemInteraction:
             "sync_results": sync_results,
         }
 
-    async def _execute_coordination(
-        self, interaction: SystemInteraction
-    ) -> Dict[str, Any]:
+    async def _execute_coordination(self, interaction: SystemInteraction) -> Dict[str, Any]:
         """조율 실행"""
         coordinator_system = interaction.source_system
         target_systems = interaction.data.get("target_systems", [])
@@ -526,9 +505,7 @@ class AdvancedSystemInteraction:
             result = await self._coordinate_systems(
                 coordinator_system, target_system, coordination_action
             )
-            coordination_results.append(
-                {"target_system": target_system, "result": result}
-            )
+            coordination_results.append({"target_system": target_system, "result": result})
 
         return {
             "interaction_type": "coordination",
@@ -609,9 +586,7 @@ class AdvancedSystemInteraction:
                 "timestamp": datetime.now(),
             }
 
-    async def _execute_system_action(
-        self, system_name: str, action: str
-    ) -> Dict[str, Any]:
+    async def _execute_system_action(self, system_name: str, action: str) -> Dict[str, Any]:
         """시스템 액션 실행"""
         if system_name not in self.system_registry:
             raise ValueError(f"시스템을 찾을 수 없음: {system_name}")
@@ -764,9 +739,7 @@ async def test_advanced_system_interaction():
         },
     ]
 
-    workflow_id = await interaction_system.create_workflow(
-        "테스트 워크플로우", workflow_steps
-    )
+    workflow_id = await interaction_system.create_workflow("테스트 워크플로우", workflow_steps)
     workflow_result = await interaction_system.execute_workflow(workflow_id)
     print(f"워크플로우 결과: {workflow_result['status']}")
 
@@ -775,9 +748,7 @@ async def test_advanced_system_interaction():
     await interaction_system.add_dependency("realtime_learning", "lida_attention")
     await interaction_system.add_dependency("dynamic_reasoning", "realtime_learning")
 
-    resolved_systems = await interaction_system.resolve_dependencies(
-        "dynamic_reasoning"
-    )
+    resolved_systems = await interaction_system.resolve_dependencies("dynamic_reasoning")
     print(f"의존성 해결 결과: {resolved_systems}")
 
     # 4. 협력 상호작용 테스트
@@ -793,9 +764,7 @@ async def test_advanced_system_interaction():
         },
     )
 
-    collaboration_result = await interaction_system.execute_interaction(
-        collaboration_id
-    )
+    collaboration_result = await interaction_system.execute_interaction(collaboration_id)
     print(f"협력 상호작용 결과: {collaboration_result}")
 
     # 5. 메트릭 확인

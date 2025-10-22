@@ -3,14 +3,13 @@
 DuRi 자가 진화 인식 시스템 테스트
 """
 import asyncio
-from datetime import datetime
 import logging
+from datetime import datetime
 from typing import Any, Dict
 
 # 자가 진화 인식 시스템 import
-from duri_modules.self_awareness.integrated_self_evolution_system import (
-    integrated_self_evolution_system,
-)
+from duri_modules.self_awareness.integrated_self_evolution_system import \
+    integrated_self_evolution_system
 
 # 로깅 설정
 logging.basicConfig(
@@ -62,13 +61,9 @@ def print_evolution_report(test_result: Dict[str, Any]):
         assessment_result = test_data.get("self_assessment", {})
         if assessment_result.get("status") == "success":
             current_assessment = assessment_result.get("current_assessment", {})
-            print(
-                f"✅ 자가 평가: 전체 점수 {current_assessment.get('overall_score', 0.0):.3f}"
-            )
+            print(f"✅ 자가 평가: 전체 점수 {current_assessment.get('overall_score', 0.0):.3f}")
             print(f"   자율성: {current_assessment.get('autonomy_score', 0.0):.3f}")
-            print(
-                f"   학습 효율성: {current_assessment.get('learning_efficiency_score', 0.0):.3f}"
-            )
+            print(f"   학습 효율성: {current_assessment.get('learning_efficiency_score', 0.0):.3f}")
 
         # 진화 분석 결과
         analysis_result = test_data.get("evolution_analysis", {})
@@ -94,9 +89,7 @@ def print_evolution_report(test_result: Dict[str, Any]):
                 key_insights = getattr(integrated_result, "key_insights", [])
             else:
                 # dict인 경우
-                evolution_status = integrated_result.get(
-                    "overall_evolution_status", "N/A"
-                )
+                evolution_status = integrated_result.get("overall_evolution_status", "N/A")
                 confidence_level = integrated_result.get("confidence_level", 0.0)
                 key_insights = integrated_result.get("key_insights", [])
 
@@ -120,9 +113,7 @@ async def test_comprehensive_evolution_report():
         logger.info("📊 종합 진화 보고서 생성 테스트")
 
         # 종합 보고서 생성
-        report_result = (
-            integrated_self_evolution_system.generate_comprehensive_evolution_report()
-        )
+        report_result = integrated_self_evolution_system.generate_comprehensive_evolution_report()
 
         if report_result.get("status") == "success":
             logger.info("✅ 종합 진화 보고서 생성 성공")
@@ -220,9 +211,7 @@ def print_evolution_summary(summary_result: Dict[str, Any]):
         print("📋 DuRi 진화 요약")
         print("=" * 80)
 
-        print(
-            f"🎯 전체 진화 상태: {summary_result.get('overall_evolution_status', 'N/A')}"
-        )
+        print(f"🎯 전체 진화 상태: {summary_result.get('overall_evolution_status', 'N/A')}")
         print(f"📊 신뢰도: {summary_result.get('confidence_level', 0.0):.3f}")
         print(f"📅 최근 분석: {summary_result.get('latest_analysis_date', 'N/A')}")
         print(f"📈 총 분석 수: {summary_result.get('total_analyses', 0)}")
@@ -277,9 +266,7 @@ async def main():
             else:
                 print(f"❌ {test_name}: 실패")
 
-        print(
-            f"\n📊 성공률: {success_count}/{len(tests)} ({success_count/len(tests)*100:.1f}%)"
-        )
+        print(f"\n📊 성공률: {success_count}/{len(tests)} ({success_count/len(tests)*100:.1f}%)")
 
         if success_count == len(tests):
             print("🎉 모든 테스트가 성공했습니다!")

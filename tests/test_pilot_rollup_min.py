@@ -37,9 +37,7 @@ def test_rollup_keys():
 
     # explain_score는 None일 수 있음
     if metrics["explain_score"] is not None:
-        assert isinstance(
-            metrics["explain_score"], (int, float)
-        ), "explain_score must be numeric"
+        assert isinstance(metrics["explain_score"], (int, float)), "explain_score must be numeric"
 
 
 def test_domain_alias_normalization():
@@ -91,9 +89,7 @@ def test_domain_alias_normalization():
             )
 
             # 정규화된 도메인으로 검증 성공 확인
-            assert (
-                result.returncode == 0
-            ), f"Validation failed for {alias}: {result.stderr}"
+            assert result.returncode == 0, f"Validation failed for {alias}: {result.stderr}"
 
 
 def test_schema_version_required():

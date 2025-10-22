@@ -15,52 +15,36 @@ Phase Z의 DuRiThoughtFlow와 Phase Ω의 생존 본능 기반 자가 목표 생
 """
 
 import asyncio
-from collections import OrderedDict, defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
 import hashlib
 import json
 import logging
 import time
+from collections import OrderedDict, defaultdict
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
-
-from evolution_system import (
-    AdaptationResult,
-    EvolutionProgress,
-    EvolutionResult,
-    EvolutionSystem,
-    SurvivalStrategy,
-)
-from self_goal_generator import (
-    CurrentState,
-    ImprovementArea,
-    ImprovementAreaEnum,
-    SelfGoal,
-    SelfGoalGenerator,
-)
-from survival_assessment_system import (
-    Recommendation,
-    ResourceAssessment,
-    RiskAssessment,
-    SurvivalAssessmentSystem,
-    SurvivalScore,
-)
-
+from evolution_system import (AdaptationResult, EvolutionProgress,
+                              EvolutionResult, EvolutionSystem,
+                              SurvivalStrategy)
+from self_goal_generator import (CurrentState, ImprovementArea,
+                                 ImprovementAreaEnum, SelfGoal,
+                                 SelfGoalGenerator)
+from survival_assessment_system import (Recommendation, ResourceAssessment,
+                                        RiskAssessment,
+                                        SurvivalAssessmentSystem,
+                                        SurvivalScore)
 # Phase Ω 시스템들 import
-from survival_instinct_engine import (
-    SurvivalGoal,
-    SurvivalInstinctEngine,
-    SurvivalStatus,
-    SurvivalStatusEnum,
-    Threat,
-)
+from survival_instinct_engine import (SurvivalGoal, SurvivalInstinctEngine,
+                                      SurvivalStatus, SurvivalStatusEnum,
+                                      Threat)
 
 # Phase Z 시스템들 import
 try:
-    from duri_thought_flow import DuRiThoughtFlow, ReflectionResult, ThoughtFlowResult
+    from duri_thought_flow import (DuRiThoughtFlow, ReflectionResult,
+                                   ThoughtFlowResult)
 except ImportError as e:
     logging.warning(f"Phase Z 시스템 import 실패: {e}")
 
@@ -80,9 +64,7 @@ def _get_integrated_evolution_system():
     try:
         import importlib
 
-        INTEGRATED_EVOLUTION_MODULE = importlib.import_module(
-            "integrated_evolution_system"
-        )
+        INTEGRATED_EVOLUTION_MODULE = importlib.import_module("integrated_evolution_system")
         INTEGRATED_EVOLUTION_AVAILABLE = True
         logger.info("통합 진화 시스템 동적 import 성공")
         return INTEGRATED_EVOLUTION_MODULE
@@ -190,9 +172,7 @@ class AdvancedCacheSystem:
 
         logger.info(f"🚀 고급 캐시 시스템 초기화: 크기={max_size}, TTL={ttl}초")
 
-    def _optimize_cache_key(
-        self, input_data: Dict[str, Any], context: Dict[str, Any]
-    ) -> str:
+    def _optimize_cache_key(self, input_data: Dict[str, Any], context: Dict[str, Any]) -> str:
         """타임스탬프를 제외한 최적화된 캐시 키 생성"""
         try:
             # 1. 중요도 기반 필터링 (타임스탬프 제외)
@@ -205,9 +185,7 @@ class AdvancedCacheSystem:
 
             # 3. 시맨틱 키 생성 (새로 추가)
             if self.optimization_config["enable_semantic_caching"]:
-                semantic_key = self._generate_semantic_key(
-                    important_data, important_context
-                )
+                semantic_key = self._generate_semantic_key(important_data, important_context)
                 if semantic_key:
                     return semantic_key
 
@@ -281,11 +259,7 @@ class AdvancedCacheSystem:
                         availability_level = (
                             "high"
                             if resource_info["availability"] > 0.8
-                            else (
-                                "medium"
-                                if resource_info["availability"] > 0.5
-                                else "low"
-                            )
+                            else ("medium" if resource_info["availability"] > 0.5 else "low")
                         )
                         semantic_features.append(
                             f"{resource_type}_availability:{availability_level}"
@@ -294,15 +268,9 @@ class AdvancedCacheSystem:
                         utilization_level = (
                             "high"
                             if resource_info["utilization"] > 0.7
-                            else (
-                                "medium"
-                                if resource_info["utilization"] > 0.4
-                                else "low"
-                            )
+                            else ("medium" if resource_info["utilization"] > 0.4 else "low")
                         )
-                        semantic_features.append(
-                            f"{resource_type}_utilization:{utilization_level}"
-                        )
+                        semantic_features.append(f"{resource_type}_utilization:{utilization_level}")
 
             # 환경 변화 분석
             if "environmental_changes" in context:
@@ -315,9 +283,7 @@ class AdvancedCacheSystem:
                     )
                     semantic_features.append(f"change_magnitude:{magnitude_level}")
                 if "direction" in env_changes:
-                    semantic_features.append(
-                        f"change_direction:{env_changes['direction']}"
-                    )
+                    semantic_features.append(f"change_direction:{env_changes['direction']}")
 
             # 시맨틱 키 생성
             if semantic_features:
@@ -338,21 +304,13 @@ class AdvancedCacheSystem:
         # 키워드 기반 분류
         if any(word in text_lower for word in ["상태", "status", "확인", "check"]):
             return "status_check"
-        elif any(
-            word in text_lower
-            for word in ["성능", "performance", "최적화", "optimization"]
-        ):
+        elif any(word in text_lower for word in ["성능", "performance", "최적화", "optimization"]):
             return "performance_optimization"
         elif any(word in text_lower for word in ["보안", "security", "안전", "safe"]):
             return "security_enhancement"
-        elif any(
-            word in text_lower for word in ["분석", "analysis", "평가", "assessment"]
-        ):
+        elif any(word in text_lower for word in ["분석", "analysis", "평가", "assessment"]):
             return "analysis_assessment"
-        elif any(
-            word in text_lower
-            for word in ["개선", "improvement", "향상", "enhancement"]
-        ):
+        elif any(word in text_lower for word in ["개선", "improvement", "향상", "enhancement"]):
             return "improvement_enhancement"
         else:
             return "general_query"
@@ -547,9 +505,7 @@ class AdvancedCacheSystem:
                             # TTL 확인
                             if current_time - cached_item["timestamp"] < self.cache_ttl:
                                 # 유사도 검사
-                                if self._check_similarity(
-                                    input_data, context, cached_item
-                                ):
+                                if self._check_similarity(input_data, context, cached_item):
                                     return cached_item["data"]
 
             return None
@@ -583,9 +539,7 @@ class AdvancedCacheSystem:
             logger.error(f"시맨틱 캐시 확인 실패: {e}")
             return None
 
-    def set(
-        self, input_data: Dict[str, Any], context: Dict[str, Any], data: Any
-    ) -> str:
+    def set(self, input_data: Dict[str, Any], context: Dict[str, Any], data: Any) -> str:
         """캐시에 데이터 저장 (시맨틱 캐시 포함)"""
         cache_key = self._optimize_cache_key(input_data, context)
         current_time = time.time()
@@ -737,9 +691,7 @@ class AdvancedCacheSystem:
                 for semantic_key in self.semantic_cache.keys():
                     if semantic_key.startswith("semantic_"):
                         # 키 패턴 비교
-                        if self._compare_semantic_patterns(
-                            current_semantic_key, semantic_key
-                        ):
+                        if self._compare_semantic_patterns(current_semantic_key, semantic_key):
                             return True
 
             # 추가 유사도 검사: 입력 유형 및 환경 조건 비교
@@ -761,9 +713,7 @@ class AdvancedCacheSystem:
         """입력 유사도 비교"""
         try:
             # 사용자 입력 유형 비교
-            current_input_type = self._classify_input_type(
-                input_data.get("user_input", "")
-            )
+            current_input_type = self._classify_input_type(input_data.get("user_input", ""))
 
             # 환경 조건 비교
             current_env_conditions = self._extract_env_conditions(context)
@@ -816,15 +766,9 @@ class AdvancedCacheSystem:
                         availability = (
                             "high"
                             if resource_info["availability"] > 0.8
-                            else (
-                                "medium"
-                                if resource_info["availability"] > 0.5
-                                else "low"
-                            )
+                            else ("medium" if resource_info["availability"] > 0.5 else "low")
                         )
-                        conditions.append(
-                            f"{resource_type}_availability:{availability}"
-                        )
+                        conditions.append(f"{resource_type}_availability:{availability}")
 
             # 환경 변화 조건
             if "environmental_changes" in context:
@@ -937,9 +881,7 @@ class DuRiPhaseOmega:
             if self.integration_config["enable_advanced_cache"]:
                 cached_result = self.cache_system.get(input_data, context)
                 if cached_result:
-                    logger.info(
-                        f"⚡ 캐시 히트! 실행 시간: {time.time() - start_time:.4f}초"
-                    )
+                    logger.info(f"⚡ 캐시 히트! 실행 시간: {time.time() - start_time:.4f}초")
                     return cached_result
 
             # 통합 컨텍스트 생성
@@ -956,9 +898,7 @@ class DuRiPhaseOmega:
             integration_context.stage = IntegrationStage.SURVIVAL_ASSESSMENT
 
             # 2. 자가 목표 생성
-            self_goals = await self._generate_self_goals(
-                input_data, context, survival_status
-            )
+            self_goals = await self._generate_self_goals(input_data, context, survival_status)
             integration_context.results["self_goals"] = self_goals
             integration_context.stage = IntegrationStage.SELF_GOAL_GENERATION
 
@@ -997,10 +937,7 @@ class DuRiPhaseOmega:
             integration_context.end_time = datetime.now()
 
             # 7. 통합 진화 시스템 실행 (새로 추가)
-            if (
-                self.integration_config["enable_integrated_evolution"]
-                and self.integrated_evolution
-            ):
+            if self.integration_config["enable_integrated_evolution"] and self.integrated_evolution:
                 try:
                     # 진화 자극 생성
                     evolution_stimulus = {
@@ -1027,10 +964,8 @@ class DuRiPhaseOmega:
                     }
 
                     # 통합 진화 실행
-                    evolution_result_integrated = (
-                        await self.integrated_evolution.process_stimulus(
-                            evolution_stimulus, evolution_context
-                        )
+                    evolution_result_integrated = await self.integrated_evolution.process_stimulus(
+                        evolution_stimulus, evolution_context
                     )
 
                     integration_context.results["integrated_evolution"] = (
@@ -1076,9 +1011,7 @@ class DuRiPhaseOmega:
                 return await self._create_default_survival_status()
 
             # 생존 상태 평가
-            survival_status = await self.survival_engine.assess_survival_status(
-                input_data
-            )
+            survival_status = await self.survival_engine.assess_survival_status(input_data)
 
             logger.info(f"생존 상태 평가 완료: {survival_status.status.value}")
 
@@ -1103,9 +1036,7 @@ class DuRiPhaseOmega:
             current_state = await self.goal_generator.analyze_current_state(input_data)
 
             # 개선 영역 식별
-            improvement_areas = await self.goal_generator.identify_improvement_areas(
-                current_state
-            )
+            improvement_areas = await self.goal_generator.identify_improvement_areas(current_state)
 
             # 자가 목표 생성
             self_goals = await self.goal_generator.generate_self_goals(
@@ -1132,10 +1063,7 @@ class DuRiPhaseOmega:
     ) -> Optional[Any]:
         """사고 흐름 실행 (Phase Z)"""
         try:
-            if (
-                not self.integration_config["enable_thought_flow"]
-                or self.thought_flow is None
-            ):
+            if not self.integration_config["enable_thought_flow"] or self.thought_flow is None:
                 return None
 
             # Phase Z 컨텍스트에 생존 정보 추가
@@ -1172,9 +1100,7 @@ class DuRiPhaseOmega:
                 return None
 
             # 진화 진행도 평가
-            evolution_progress = (
-                await self.evolution_system.evaluate_evolution_progress(input_data)
-            )
+            evolution_progress = await self.evolution_system.evaluate_evolution_progress(input_data)
 
             # 환경 적응
             environmental_changes = context.get("environmental_changes", {})
@@ -1183,19 +1109,13 @@ class DuRiPhaseOmega:
             )
 
             # 능력 진화
-            target_capabilities = [
-                goal.title for goal in self_goals[:3]
-            ]  # 상위 3개 목표
-            evolution_result = await self.evolution_system.evolve_capabilities(
-                target_capabilities
-            )
+            target_capabilities = [goal.title for goal in self_goals[:3]]  # 상위 3개 목표
+            evolution_result = await self.evolution_system.evolve_capabilities(target_capabilities)
 
             # 생존 전략 최적화
             survival_strategy = await self.evolution_system.optimize_survival_strategy()
 
-            logger.info(
-                f"진화 시스템 실행 완료: 진화 점수={evolution_result.evolution_score:.3f}"
-            )
+            logger.info(f"진화 시스템 실행 완료: 진화 점수={evolution_result.evolution_score:.3f}")
 
             return evolution_result
 
@@ -1218,18 +1138,14 @@ class DuRiPhaseOmega:
 
             # 환경적 위험 평가
             environment_data = context.get("environment_data", {})
-            risk_assessments = (
-                await self.survival_assessment.assess_environmental_risks(
-                    environment_data
-                )
+            risk_assessments = await self.survival_assessment.assess_environmental_risks(
+                environment_data
             )
 
             # 자원 가용성 평가
             resource_data = context.get("resource_data", {})
-            resource_assessments = (
-                await self.survival_assessment.evaluate_resource_availability(
-                    resource_data
-                )
+            resource_assessments = await self.survival_assessment.evaluate_resource_availability(
+                resource_data
             )
 
             # 생존 점수 계산
@@ -1238,10 +1154,8 @@ class DuRiPhaseOmega:
             )
 
             # 생존 권장사항 생성
-            recommendations = (
-                await self.survival_assessment.generate_survival_recommendations(
-                    survival_score, risk_assessments, resource_assessments
-                )
+            recommendations = await self.survival_assessment.generate_survival_recommendations(
+                survival_score, risk_assessments, resource_assessments
             )
 
             assessment_result = {
@@ -1277,9 +1191,7 @@ class DuRiPhaseOmega:
                 evolution_result=evolution_result,
                 survival_score=survival_assessment.get("survival_score"),
                 risk_assessments=survival_assessment.get("risk_assessments", []),
-                resource_assessments=survival_assessment.get(
-                    "resource_assessments", {}
-                ),
+                resource_assessments=survival_assessment.get("resource_assessments", {}),
                 recommendations=survival_assessment.get("recommendations", []),
                 success=True,
             )
@@ -1309,15 +1221,10 @@ class DuRiPhaseOmega:
 
             # 생존 점수 검증
             if result.survival_score and result.survival_score.overall_score < 0.3:
-                logger.warning(
-                    f"생존 점수가 낮습니다: {result.survival_score.overall_score:.3f}"
-                )
+                logger.warning(f"생존 점수가 낮습니다: {result.survival_score.overall_score:.3f}")
 
             # 진화 결과 검증
-            if (
-                result.evolution_result
-                and result.evolution_result.evolution_score < 0.2
-            ):
+            if result.evolution_result and result.evolution_result.evolution_score < 0.2:
                 logger.warning(
                     f"진화 점수가 낮습니다: {result.evolution_result.evolution_score:.3f}"
                 )
@@ -1362,18 +1269,10 @@ class DuRiPhaseOmega:
             summary = {
                 "total_integrations": len(self.integration_history),
                 "successful_integrations": len(
-                    [
-                        h
-                        for h in self.integration_history
-                        if h.status == IntegrationStatus.COMPLETED
-                    ]
+                    [h for h in self.integration_history if h.status == IntegrationStatus.COMPLETED]
                 ),
                 "failed_integrations": len(
-                    [
-                        h
-                        for h in self.integration_history
-                        if h.status == IntegrationStatus.FAILED
-                    ]
+                    [h for h in self.integration_history if h.status == IntegrationStatus.FAILED]
                 ),
                 "average_integration_time": 0.0,
                 "last_integration": None,
@@ -1396,9 +1295,7 @@ class DuRiPhaseOmega:
                 integration_times = []
                 for history in self.integration_history:
                     if history.end_time:
-                        duration = (
-                            history.end_time - history.start_time
-                        ).total_seconds()
+                        duration = (history.end_time - history.start_time).total_seconds()
                         integration_times.append(duration)
 
                 if integration_times:
@@ -1413,9 +1310,7 @@ class DuRiPhaseOmega:
                     "status": last_integration.status.value,
                     "start_time": last_integration.start_time.isoformat(),
                     "end_time": (
-                        last_integration.end_time.isoformat()
-                        if last_integration.end_time
-                        else None
+                        last_integration.end_time.isoformat() if last_integration.end_time else None
                     ),
                 }
 
@@ -1512,24 +1407,18 @@ class DuRiPhaseOmega:
 
             # 권장사항 생성
             if cache_stats["hit_rate"] < 80:
-                performance_analysis["recommendations"].append(
-                    "캐시 키 생성 알고리즘 최적화 필요"
-                )
+                performance_analysis["recommendations"].append("캐시 키 생성 알고리즘 최적화 필요")
                 performance_analysis["recommendations"].append("캐시 크기 증가 고려")
                 performance_analysis["recommendations"].append("TTL 조정 검토")
 
             if cache_stats["cache_efficiency"] < 0.3:
-                performance_analysis["recommendations"].append(
-                    "캐시 접근 패턴 분석 필요"
-                )
+                performance_analysis["recommendations"].append("캐시 접근 패턴 분석 필요")
                 performance_analysis["recommendations"].append("LRU 정리 알고리즘 개선")
 
             return {
                 "cache_stats": cache_stats,
                 "performance_analysis": performance_analysis,
-                "optimization_status": (
-                    "완료" if cache_stats["hit_rate"] >= 80 else "진행 중"
-                ),
+                "optimization_status": ("완료" if cache_stats["hit_rate"] >= 80 else "진행 중"),
             }
 
         except Exception as e:
@@ -1625,9 +1514,7 @@ async def main():
         print(f"\n📊 테스트 {i+1}/6 실행 중...")
 
         start_time = time.time()
-        result = await phase_omega.process_with_survival_instinct(
-            test_case, test_case["context"]
-        )
+        result = await phase_omega.process_with_survival_instinct(test_case, test_case["context"])
         execution_time = time.time() - start_time
 
         print(f"✅ 테스트 {i+1} 완료: {execution_time:.4f}초")
@@ -1648,9 +1535,7 @@ async def main():
         analysis = performance_report["performance_analysis"]
 
         print(f"📊 캐시 히트율: {cache_stats['hit_rate']:.1f}%")
-        print(
-            f"🎯 목표 달성: {'✅ 달성' if cache_stats['hit_rate'] >= 80 else '🔄 진행 중'}"
-        )
+        print(f"🎯 목표 달성: {'✅ 달성' if cache_stats['hit_rate'] >= 80 else '🔄 진행 중'}")
         print(f"📈 성능 등급: {analysis['hit_rate_category']}")
         print(f"⚡ 캐시 효율성: {analysis['cache_efficiency']}")
 

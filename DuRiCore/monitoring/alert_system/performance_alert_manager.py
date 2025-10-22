@@ -11,15 +11,15 @@ DuRiCore Phase 2-4: 성능 알림 관리 모듈
 """
 
 import asyncio
+import json
+import logging
+import time
+import uuid
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-import json
-import logging
-import time
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
-import uuid
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -205,9 +205,7 @@ class PerformanceAlertManager:
                     continue
 
                 # 조건 확인
-                if await self._evaluate_condition(
-                    current_value, rule.condition, rule.threshold
-                ):
+                if await self._evaluate_condition(current_value, rule.condition, rule.threshold):
                     alert = await self._create_alert(rule, current_value)
                     if alert:
                         triggered_alerts.append(alert)
@@ -319,9 +317,7 @@ class PerformanceAlertManager:
             logger.error(f"알림 해결 실패: {e}")
             return False
 
-    async def send_notification(
-        self, alert: PerformanceAlert, channel: AlertChannel
-    ) -> bool:
+    async def send_notification(self, alert: PerformanceAlert, channel: AlertChannel) -> bool:
         """알림 전송"""
         try:
             notification_id = f"notif_{int(time.time())}_{uuid.uuid4().hex[:8]}"
@@ -361,9 +357,7 @@ class PerformanceAlertManager:
             logger.error(f"알림 전송 실패: {e}")
             return False
 
-    async def _format_alert_message(
-        self, alert: PerformanceAlert, channel: AlertChannel
-    ) -> str:
+    async def _format_alert_message(self, alert: PerformanceAlert, channel: AlertChannel) -> str:
         """알림 메시지 포맷"""
         try:
             if channel == AlertChannel.LOG:
@@ -396,8 +390,7 @@ class PerformanceAlertManager:
             recent_alerts = [
                 a
                 for a in self.alert_history
-                if a.rule_id == rule_id
-                and a.timestamp > datetime.now() - rule.cooldown_period
+                if a.rule_id == rule_id and a.timestamp > datetime.now() - rule.cooldown_period
             ]
 
             return len(recent_alerts) > 0
@@ -406,9 +399,7 @@ class PerformanceAlertManager:
             logger.error(f"쿨다운 확인 실패: {e}")
             return False
 
-    async def register_alert_handler(
-        self, channel: AlertChannel, handler: Callable
-    ) -> bool:
+    async def register_alert_handler(self, channel: AlertChannel, handler: Callable) -> bool:
         """알림 핸들러 등록"""
         try:
             self.alert_handlers[channel] = handler
@@ -422,11 +413,7 @@ class PerformanceAlertManager:
     async def get_active_alerts(self) -> List[PerformanceAlert]:
         """활성 알림 조회"""
         try:
-            return [
-                alert
-                for alert in self.alerts.values()
-                if alert.status == AlertStatus.ACTIVE
-            ]
+            return [alert for alert in self.alerts.values() if alert.status == AlertStatus.ACTIVE]
 
         except Exception as e:
             logger.error(f"활성 알림 조회 실패: {e}")
@@ -441,23 +428,13 @@ class PerformanceAlertManager:
                     [a for a in self.alerts.values() if a.status == AlertStatus.ACTIVE]
                 ),
                 "acknowledged_alerts": len(
-                    [
-                        a
-                        for a in self.alerts.values()
-                        if a.status == AlertStatus.ACKNOWLEDGED
-                    ]
+                    [a for a in self.alerts.values() if a.status == AlertStatus.ACKNOWLEDGED]
                 ),
                 "resolved_alerts": len(
-                    [
-                        a
-                        for a in self.alerts.values()
-                        if a.status == AlertStatus.RESOLVED
-                    ]
+                    [a for a in self.alerts.values() if a.status == AlertStatus.RESOLVED]
                 ),
                 "total_rules": len(self.alert_rules),
-                "enabled_rules": len(
-                    [r for r in self.alert_rules.values() if r.enabled]
-                ),
+                "enabled_rules": len([r for r in self.alert_rules.values() if r.enabled]),
                 "performance_metrics": self.performance_metrics.copy(),
             }
 

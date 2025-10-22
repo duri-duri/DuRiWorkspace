@@ -2,9 +2,9 @@
 """
 DuRi 실시간 학습 시스템 테스트
 """
-from datetime import datetime
 import json
 import time
+from datetime import datetime
 
 import requests
 
@@ -178,9 +178,7 @@ def test_realtime_learning_integration():
 
             print(f"   📊 실시간 학습 활성: {realtime_data.get('is_active', False)}")
             print(f"   📊 자동 학습 활성: {autonomous_data.get('is_running', False)}")
-            print(
-                f"   📊 학습 히스토리: {realtime_data.get('learning_history_count', 0)}"
-            )
+            print(f"   📊 학습 히스토리: {realtime_data.get('learning_history_count', 0)}")
         else:
             print("   ❌ 상태 확인 실패")
 

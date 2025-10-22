@@ -7,15 +7,15 @@ DuRi 추론 시스템 - 해결 알고리즘 모듈
 """
 
 import asyncio
-from collections import Counter, defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 import hashlib
 import json
 import logging
 import re
 import time
+from collections import Counter, defaultdict
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
@@ -53,9 +53,7 @@ class ResolutionAlgorithm:
             "resolution_confidence": await self._calculate_resolution_confidence(
                 conflict, resolution_method
             ),
-            "resolution_details": await self._apply_resolution_method(
-                conflict, resolution_method
-            ),
+            "resolution_details": await self._apply_resolution_method(conflict, resolution_method),
             "resolution_time": datetime.now().isoformat(),
         }
 
@@ -75,9 +73,7 @@ class ResolutionAlgorithm:
         else:
             return await self._resolve_general_conflict(conflict)
 
-    async def _resolve_value_conflict(
-        self, conflict: "IntegrationConflict"
-    ) -> ResolutionMethod:
+    async def _resolve_value_conflict(self, conflict: "IntegrationConflict") -> ResolutionMethod:
         """값 충돌 해결"""
         if conflict.severity > 0.7:
             return ResolutionMethod.NEGOTIATE
@@ -86,9 +82,7 @@ class ResolutionAlgorithm:
         else:
             return ResolutionMethod.OVERWRITE
 
-    async def _resolve_type_conflict(
-        self, conflict: "IntegrationConflict"
-    ) -> ResolutionMethod:
+    async def _resolve_type_conflict(self, conflict: "IntegrationConflict") -> ResolutionMethod:
         """유형 충돌 해결"""
         return ResolutionMethod.TRANSFORM
 
@@ -98,9 +92,7 @@ class ResolutionAlgorithm:
         """구조 충돌 해결"""
         return ResolutionMethod.MERGE
 
-    async def _resolve_general_conflict(
-        self, conflict: "IntegrationConflict"
-    ) -> ResolutionMethod:
+    async def _resolve_general_conflict(self, conflict: "IntegrationConflict") -> ResolutionMethod:
         """일반 충돌 해결"""
         return ResolutionMethod.SEPARATE
 

@@ -11,9 +11,9 @@ Day 9의 모든 시스템을 통합 테스트
 """
 
 import asyncio
-from datetime import datetime
 import json
 import time
+from datetime import datetime
 from typing import Any, Dict, List
 
 # Day 9 시스템들 import
@@ -73,14 +73,10 @@ class Day9IntegrationTest:
         # 전체 결과 분석
         test_results["end_time"] = datetime.now().isoformat()
         test_results["total_duration"] = time.time() - start_time
-        test_results["overall_status"] = self.analyze_overall_status(
-            test_results["systems"]
-        )
+        test_results["overall_status"] = self.analyze_overall_status(test_results["systems"])
         test_results["summary"] = self.generate_summary(test_results["systems"])
 
-        print(
-            f"\n✅ Day 9 통합 테스트 완료! (소요시간: {test_results['total_duration']:.2f}초)"
-        )
+        print(f"\n✅ Day 9 통합 테스트 완료! (소요시간: {test_results['total_duration']:.2f}초)")
         return test_results
 
     async def test_advanced_ai_system(self) -> Dict[str, Any]:
@@ -107,9 +103,7 @@ class Day9IntegrationTest:
                 {
                     "test_name": "Pattern Recognition",
                     "status": (
-                        "success"
-                        if pattern_result.get("status") == "success"
-                        else "failed"
+                        "success" if pattern_result.get("status") == "success" else "failed"
                     ),
                     "result": pattern_result,
                 }
@@ -128,9 +122,7 @@ class Day9IntegrationTest:
                 {
                     "test_name": "Problem Solving",
                     "status": (
-                        "success"
-                        if problem_result.get("status") == "success"
-                        else "failed"
+                        "success" if problem_result.get("status") == "success" else "failed"
                     ),
                     "result": problem_result,
                 }
@@ -154,9 +146,7 @@ class Day9IntegrationTest:
                 {
                     "test_name": "Decision Making",
                     "status": (
-                        "success"
-                        if decision_result.get("status") == "success"
-                        else "failed"
+                        "success" if decision_result.get("status") == "success" else "failed"
                     ),
                     "result": decision_result,
                 }
@@ -179,9 +169,7 @@ class Day9IntegrationTest:
                 {
                     "test_name": "Inference",
                     "status": (
-                        "success"
-                        if inference_result.get("status") == "success"
-                        else "failed"
+                        "success" if inference_result.get("status") == "success" else "failed"
                     ),
                     "result": inference_result,
                 }
@@ -213,9 +201,7 @@ class Day9IntegrationTest:
             results["tests"].append(
                 {
                     "test_name": "Text Analysis",
-                    "status": (
-                        "success" if "error" not in text_analysis_result else "failed"
-                    ),
+                    "status": ("success" if "error" not in text_analysis_result else "failed"),
                     "result": text_analysis_result,
                 }
             )
@@ -257,9 +243,7 @@ class Day9IntegrationTest:
             results["tests"].append(
                 {
                     "test_name": "Multilingual Support",
-                    "status": (
-                        "success" if "error" not in multilingual_result else "failed"
-                    ),
+                    "status": ("success" if "error" not in multilingual_result else "failed"),
                     "result": multilingual_result,
                 }
             )
@@ -315,9 +299,7 @@ class Day9IntegrationTest:
                 {
                     "test_name": "Multi-Criteria Decision",
                     "status": (
-                        "success"
-                        if decision_result.get("status") == "success"
-                        else "failed"
+                        "success" if decision_result.get("status") == "success" else "failed"
                     ),
                     "result": decision_result,
                 }
@@ -343,11 +325,7 @@ class Day9IntegrationTest:
             results["tests"].append(
                 {
                     "test_name": "Risk Assessment",
-                    "status": (
-                        "success"
-                        if risk_result.get("status") == "success"
-                        else "failed"
-                    ),
+                    "status": ("success" if risk_result.get("status") == "success" else "failed"),
                     "result": risk_result,
                 }
             )
@@ -375,9 +353,7 @@ class Day9IntegrationTest:
                 {
                     "test_name": "Scenario Simulation",
                     "status": (
-                        "success"
-                        if scenario_result.get("status") == "success"
-                        else "failed"
+                        "success" if scenario_result.get("status") == "success" else "failed"
                     ),
                     "result": scenario_result,
                 }
@@ -394,17 +370,13 @@ class Day9IntegrationTest:
                 },
             }
 
-            optimization_result = await self.dss_system.support_decision(
-                optimization_data
-            )
+            optimization_result = await self.dss_system.support_decision(optimization_data)
 
             results["tests"].append(
                 {
                     "test_name": "Optimization",
                     "status": (
-                        "success"
-                        if optimization_result.get("status") == "success"
-                        else "failed"
+                        "success" if optimization_result.get("status") == "success" else "failed"
                     ),
                     "result": optimization_result,
                 }
@@ -464,30 +436,22 @@ class Day9IntegrationTest:
                 {
                     "test_name": "Workflow Automation",
                     "status": (
-                        "success"
-                        if workflow_result.get("status") == "success"
-                        else "failed"
+                        "success" if workflow_result.get("status") == "success" else "failed"
                     ),
                     "result": workflow_result,
                 }
             )
 
             # 2. 성능 최적화 테스트
-            optimization_data = {
-                "target_metrics": ["response_time", "throughput", "accuracy"]
-            }
+            optimization_data = {"target_metrics": ["response_time", "throughput", "accuracy"]}
 
-            optimization_result = await self.aos_system.optimize_performance(
-                optimization_data
-            )
+            optimization_result = await self.aos_system.optimize_performance(optimization_data)
 
             results["tests"].append(
                 {
                     "test_name": "Performance Optimization",
                     "status": (
-                        "success"
-                        if optimization_result.get("status") == "success"
-                        else "failed"
+                        "success" if optimization_result.get("status") == "success" else "failed"
                     ),
                     "result": optimization_result,
                 }
@@ -502,9 +466,7 @@ class Day9IntegrationTest:
                 {
                     "test_name": "Resource Management",
                     "status": (
-                        "success"
-                        if resource_result.get("status") == "success"
-                        else "failed"
+                        "success" if resource_result.get("status") == "success" else "failed"
                     ),
                     "result": resource_result,
                 }
@@ -522,11 +484,7 @@ class Day9IntegrationTest:
             results["tests"].append(
                 {
                     "test_name": "Auto Tuning",
-                    "status": (
-                        "success"
-                        if tuning_result.get("status") == "success"
-                        else "failed"
-                    ),
+                    "status": ("success" if tuning_result.get("status") == "success" else "failed"),
                     "result": tuning_result,
                 }
             )

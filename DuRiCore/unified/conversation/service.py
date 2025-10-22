@@ -14,9 +14,8 @@ class UnifiedConversationService:
         self.router = router
         # 기존 통합 대화 서비스 활용
         try:
-            from DuRiCore.unified_conversation_service import (
-                UnifiedConversationService as ExistingService,
-            )
+            from DuRiCore.unified_conversation_service import \
+                UnifiedConversationService as ExistingService
 
             self.existing_service = ExistingService()
         except ImportError:

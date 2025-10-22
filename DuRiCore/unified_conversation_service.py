@@ -22,12 +22,12 @@ Phase 4: 모듈 통합 및 구조 리디자인 - 최종 실행 준비 완료 적
 """
 
 import asyncio
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
 import json
 import re
 import time
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
@@ -220,17 +220,11 @@ class UnifiedConversationService:
             self.family_context = family_context or {}
 
             # 존재형 AI: 진화 가능성 확인
-            if (
-                self.existence_ai
-                and self.existence_ai.evolution_capability.can_evolve()
-            ):
+            if self.existence_ai and self.existence_ai.evolution_capability.can_evolve():
                 self.existence_ai.evolution_capability.evolve()
 
             # 최종 실행 준비 완료: 최종 실행 준비 완료 확인
-            if (
-                self.final_execution_verifier
-                and self.final_execution_verifier.verify_readiness()
-            ):
+            if self.final_execution_verifier and self.final_execution_verifier.verify_readiness():
                 logger.info("최종 실행 준비 완료 확인됨")
 
             logger.info(f"대화 세션 시작: {session_id} - {family_member_name}")
@@ -251,14 +245,14 @@ class UnifiedConversationService:
         """메시지 처리 및 응답 생성"""
         try:
             # 메시지 생성
-            message_id = f"message_{len(self.messages) + 1}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+            message_id = (
+                f"message_{len(self.messages) + 1}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+            )
 
             # 대화 유형 및 감정 분석
             conversation_type = self._analyze_conversation_type(message)
             emotion_detected = self._detect_emotion(message)
-            response_style = self._determine_response_style(
-                conversation_type, emotion_detected
-            )
+            response_style = self._determine_response_style(conversation_type, emotion_detected)
 
             conversation_message = ConversationMessage(
                 id=message_id,
@@ -275,9 +269,7 @@ class UnifiedConversationService:
             self.messages.append(conversation_message)
 
             # 세션 업데이트
-            session = next(
-                (s for s in self.conversation_sessions if s.id == session_id), None
-            )
+            session = next((s for s in self.conversation_sessions if s.id == session_id), None)
             if session:
                 session.message_count += 1
 
@@ -291,12 +283,12 @@ class UnifiedConversationService:
                 response_text, emotion_detected
             )
             family_relevant = self._evaluate_family_relevance(response_text)
-            confidence_score = self._calculate_response_confidence(
-                response_text, conversation_type
-            )
+            confidence_score = self._calculate_response_confidence(response_text, conversation_type)
 
             # 응답 생성
-            response_id = f"response_{len(self.responses) + 1}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+            response_id = (
+                f"response_{len(self.responses) + 1}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+            )
 
             conversation_response = ConversationResponse(
                 id=response_id,
@@ -312,17 +304,11 @@ class UnifiedConversationService:
             self.responses.append(conversation_response)
 
             # 존재형 AI: 진화 가능성 확인
-            if (
-                self.existence_ai
-                and self.existence_ai.evolution_capability.can_evolve()
-            ):
+            if self.existence_ai and self.existence_ai.evolution_capability.can_evolve():
                 self.existence_ai.evolution_capability.evolve()
 
             # 최종 실행 준비 완료: 최종 실행 준비 완료 확인
-            if (
-                self.final_execution_verifier
-                and self.final_execution_verifier.verify_readiness()
-            ):
+            if self.final_execution_verifier and self.final_execution_verifier.verify_readiness():
                 logger.info("최종 실행 준비 완료 확인됨")
 
             logger.info(f"메시지 처리 완료: {message_id} -> {response_id}")
@@ -336,9 +322,7 @@ class UnifiedConversationService:
         """대화 유형 분석"""
         message_lower = message.lower()
 
-        if any(
-            word in message_lower for word in ["안녕", "좋은 아침", "좋은 밤", "고마워"]
-        ):
+        if any(word in message_lower for word in ["안녕", "좋은 아침", "좋은 밤", "고마워"]):
             return ConversationType.GREETING
         elif any(word in message_lower for word in ["슬퍼", "화나", "기뻐", "걱정"]):
             return ConversationType.EMOTIONAL_SUPPORT
@@ -421,9 +405,7 @@ class UnifiedConversationService:
         else:
             return f"{speaker_name}님의 말씀을 잘 들었습니다. 더 이야기해 주세요."
 
-    def _evaluate_emotion_appropriateness(
-        self, response: str, emotion: EmotionalState
-    ) -> bool:
+    def _evaluate_emotion_appropriateness(self, response: str, emotion: EmotionalState) -> bool:
         """감정 적절성 평가"""
         response_lower = response.lower()
 
@@ -482,9 +464,7 @@ class UnifiedConversationService:
     async def get_conversation_summary(self, session_id: str) -> Dict[str, Any]:
         """대화 요약 생성"""
         try:
-            session = next(
-                (s for s in self.conversation_sessions if s.id == session_id), None
-            )
+            session = next((s for s in self.conversation_sessions if s.id == session_id), None)
             if not session:
                 return {"error": "세션을 찾을 수 없습니다."}
 
@@ -515,8 +495,7 @@ class UnifiedConversationService:
                 "emotion_analysis": emotion_counts,
                 "conversation_type_analysis": type_counts,
                 "average_confidence": (
-                    sum(r.confidence_score for r in session_responses)
-                    / len(session_responses)
+                    sum(r.confidence_score for r in session_responses) / len(session_responses)
                     if session_responses
                     else 0
                 ),

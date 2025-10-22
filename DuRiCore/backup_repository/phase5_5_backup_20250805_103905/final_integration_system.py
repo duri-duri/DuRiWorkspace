@@ -14,16 +14,16 @@ DuRiCore Phase 5 Day 10 - 최종 통합 시스템
 """
 
 import asyncio
-from concurrent.futures import ThreadPoolExecutor
-from dataclasses import asdict, dataclass
-from datetime import datetime
 import json
 import logging
 import statistics
 import threading
 import time
-from typing import Any, Dict, List, Optional, Tuple
 import uuid
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from typing import Any, Dict, List, Optional, Tuple
 
 # 로깅 설정
 logging.basicConfig(
@@ -137,9 +137,7 @@ class FinalIntegrationSystem:
 
         logger.info("최종 통합 시스템 초기화 완료")
 
-    async def integrate_all_systems(
-        self, system_data: Dict[str, Any]
-    ) -> IntegrationResult:
+    async def integrate_all_systems(self, system_data: Dict[str, Any]) -> IntegrationResult:
         """전체 시스템 통합 수행"""
         integration_id = f"integration_{int(time.time())}_{uuid.uuid4().hex[:8]}"
         start_time = time.time()
@@ -157,9 +155,7 @@ class FinalIntegrationSystem:
                 await self._register_system(system_info)
 
             # 통합 전 검증
-            validation_result = await self._pre_integration_validation(
-                systems_to_integrate
-            )
+            validation_result = await self._pre_integration_validation(systems_to_integrate)
             if not validation_result["success"]:
                 return IntegrationResult(
                     integration_id=integration_id,
@@ -252,14 +248,10 @@ class FinalIntegrationSystem:
             metrics_before = await self._collect_system_metrics()
 
             # 최적화 전략 결정
-            optimization_strategy = await self._determine_optimization_strategy(
-                interaction_data
-            )
+            optimization_strategy = await self._determine_optimization_strategy(interaction_data)
 
             # 최적화 실행
-            optimization_results = await self._execute_optimizations(
-                optimization_strategy
-            )
+            optimization_results = await self._execute_optimizations(optimization_strategy)
 
             # 최적화 후 성능 메트릭 수집
             metrics_after = await self._collect_system_metrics()
@@ -332,12 +324,8 @@ class FinalIntegrationSystem:
             )
 
             # 성능 분석
-            overall_performance = self._calculate_overall_performance(
-                performance_data_points
-            )
-            system_performance = self._analyze_system_performance(
-                performance_data_points
-            )
+            overall_performance = self._calculate_overall_performance(performance_data_points)
+            system_performance = self._analyze_system_performance(performance_data_points)
             bottleneck_analysis = self._identify_bottlenecks(performance_data_points)
 
             # 권장사항 생성
@@ -346,9 +334,7 @@ class FinalIntegrationSystem:
             )
 
             # 알림 생성
-            alerts = self._generate_performance_alerts(
-                performance_data_points, alert_thresholds
-            )
+            alerts = self._generate_performance_alerts(performance_data_points, alert_thresholds)
 
             monitoring_time = time.time() - start_time
 
@@ -419,9 +405,7 @@ class FinalIntegrationSystem:
 
             # 전체 호환성 점수 계산
             compatibility_score = (
-                systems_passed / len(systems_to_validate)
-                if systems_to_validate
-                else 0.0
+                systems_passed / len(systems_to_validate) if systems_to_validate else 0.0
             )
 
             # 권장사항 생성
@@ -434,8 +418,7 @@ class FinalIntegrationSystem:
             result = ValidationReport(
                 validation_id=validation_id,
                 timestamp=datetime.now(),
-                success=compatibility_score
-                >= self.integration_config["compatibility_threshold"],
+                success=compatibility_score >= self.integration_config["compatibility_threshold"],
                 compatibility_score=compatibility_score,
                 validation_results=validation_results,
                 issues_found=issues_found,
@@ -486,9 +469,7 @@ class FinalIntegrationSystem:
         self.system_registry[system_name] = system_component
         logger.info(f"시스템 등록 완료: {system_name}")
 
-    async def _pre_integration_validation(
-        self, systems: List[Dict[str, Any]]
-    ) -> Dict[str, Any]:
+    async def _pre_integration_validation(self, systems: List[Dict[str, Any]]) -> Dict[str, Any]:
         """통합 전 검증"""
         errors = []
         warnings = []
@@ -500,9 +481,7 @@ class FinalIntegrationSystem:
             dependencies = system_info.get("dependencies", [])
             for dep in dependencies:
                 if dep not in self.system_registry:
-                    errors.append(
-                        f"시스템 {system_name}의 의존성 {dep}가 등록되지 않음"
-                    )
+                    errors.append(f"시스템 {system_name}의 의존성 {dep}가 등록되지 않음")
 
             # 호환성 검증
             compatibility_score = system_info.get("compatibility_score", 0.0)
@@ -558,16 +537,12 @@ class FinalIntegrationSystem:
         ) as executor:
             integration_tasks = []
             for system_info in systems:
-                task = executor.submit(
-                    asyncio.run, self._integrate_single_system(system_info)
-                )
+                task = executor.submit(asyncio.run, self._integrate_single_system(system_info))
                 integration_tasks.append((system_info["name"], task))
 
             for system_name, task in integration_tasks:
                 try:
-                    result = task.result(
-                        timeout=self.integration_config["timeout_seconds"]
-                    )
+                    result = task.result(timeout=self.integration_config["timeout_seconds"])
                     if result["success"]:
                         integrated_systems.append(system_name)
                     else:
@@ -581,9 +556,7 @@ class FinalIntegrationSystem:
             "errors": errors,
         }
 
-    async def _integrate_single_system(
-        self, system_info: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _integrate_single_system(self, system_info: Dict[str, Any]) -> Dict[str, Any]:
         """단일 시스템 통합"""
         system_name = system_info["name"]
 
@@ -608,9 +581,7 @@ class FinalIntegrationSystem:
                 "errors": [f"시스템 {system_name} 통합 중 오류: {str(e)}"],
             }
 
-    async def _post_integration_validation(
-        self, integrated_systems: List[str]
-    ) -> Dict[str, Any]:
+    async def _post_integration_validation(self, integrated_systems: List[str]) -> Dict[str, Any]:
         """통합 후 검증"""
         warnings = []
         compatibility_score = 0.0
@@ -632,9 +603,7 @@ class FinalIntegrationSystem:
 
         return {"compatibility_score": compatibility_score, "warnings": warnings}
 
-    async def _collect_performance_metrics(
-        self, integrated_systems: List[str]
-    ) -> Dict[str, float]:
+    async def _collect_performance_metrics(self, integrated_systems: List[str]) -> Dict[str, float]:
         """성능 메트릭 수집"""
         metrics = {}
 
@@ -771,9 +740,7 @@ class FinalIntegrationSystem:
 
         return metrics
 
-    async def _collect_performance_data(
-        self, duration: int, interval: int
-    ) -> List[Dict[str, Any]]:
+    async def _collect_performance_data(self, duration: int, interval: int) -> List[Dict[str, Any]]:
         """성능 데이터 수집"""
         data_points = []
         start_time = time.time()
@@ -785,9 +752,7 @@ class FinalIntegrationSystem:
 
         return data_points
 
-    def _calculate_overall_performance(
-        self, data_points: List[Dict[str, Any]]
-    ) -> float:
+    def _calculate_overall_performance(self, data_points: List[Dict[str, Any]]) -> float:
         """전체 성능 계산"""
         if not data_points:
             return 0.0
@@ -799,9 +764,7 @@ class FinalIntegrationSystem:
 
         return statistics.mean(overall_scores) if overall_scores else 0.0
 
-    def _analyze_system_performance(
-        self, data_points: List[Dict[str, Any]]
-    ) -> Dict[str, float]:
+    def _analyze_system_performance(self, data_points: List[Dict[str, Any]]) -> Dict[str, float]:
         """시스템별 성능 분석"""
         system_performance = {}
 
@@ -836,9 +799,7 @@ class FinalIntegrationSystem:
 
         for system_name, performance in system_performance.items():
             if performance < performance_threshold:
-                bottlenecks.append(
-                    f"시스템 {system_name}: 낮은 성능 ({performance:.2%})"
-                )
+                bottlenecks.append(f"시스템 {system_name}: 낮은 성능 ({performance:.2%})")
 
         return bottlenecks
 
@@ -879,9 +840,7 @@ class FinalIntegrationSystem:
                 if metric in point["metrics"]:
                     value = point["metrics"][metric]
                     if value < threshold:
-                        alerts.append(
-                            f"{metric} 임계값 미달: {value:.2%} < {threshold:.2%}"
-                        )
+                        alerts.append(f"{metric} 임계값 미달: {value:.2%} < {threshold:.2%}")
 
         return alerts
 
@@ -899,10 +858,7 @@ class FinalIntegrationSystem:
         issues = []
 
         # 호환성 점수 검증
-        if (
-            system.compatibility_score
-            < self.integration_config["compatibility_threshold"]
-        ):
+        if system.compatibility_score < self.integration_config["compatibility_threshold"]:
             issues.append(f"호환성 점수 부족: {system.compatibility_score:.2%}")
 
         # 성능 점수 검증
@@ -923,9 +879,7 @@ class FinalIntegrationSystem:
         recommendations = []
 
         # 실패한 시스템에 대한 권장사항
-        failed_systems = [
-            name for name, compatible in validation_results.items() if not compatible
-        ]
+        failed_systems = [name for name, compatible in validation_results.items() if not compatible]
 
         for system_name in failed_systems:
             recommendations.append(f"시스템 {system_name} 호환성 개선 필요")
@@ -983,9 +937,7 @@ async def main():
         "priority_systems": ["advanced_feature_engine"],
     }
 
-    integration_result = await integration_system.integrate_all_systems(
-        integration_data
-    )
+    integration_result = await integration_system.integrate_all_systems(integration_data)
     print(f"통합 결과: {integration_result.integration_id}")
     print(
         f"성공률: {integration_result.successful_integrations}/{integration_result.total_systems}"
@@ -1000,9 +952,7 @@ async def main():
         "target_systems": integration_result.integrated_systems,
     }
 
-    optimization_result = await integration_system.optimize_system_interactions(
-        optimization_data
-    )
+    optimization_result = await integration_system.optimize_system_interactions(optimization_data)
     print(f"최적화 결과: {optimization_result.optimization_id}")
     print(f"성능 개선: {optimization_result.performance_improvement:.2%}")
     print(f"리소스 사용량 감소: {optimization_result.resource_usage_reduction:.2%}")
@@ -1016,9 +966,7 @@ async def main():
         "alert_thresholds": {"overall_performance": 0.8, "overall_compatibility": 0.85},
     }
 
-    performance_report = await integration_system.monitor_integration_performance(
-        monitoring_data
-    )
+    performance_report = await integration_system.monitor_integration_performance(monitoring_data)
     print(f"성능 보고서: {performance_report.report_id}")
     print(f"전체 성능: {performance_report.overall_performance:.2%}")
     print(f"병목 지점: {len(performance_report.bottleneck_analysis)}개")
@@ -1031,9 +979,7 @@ async def main():
         "criteria": {"compatibility_threshold": 0.85, "performance_threshold": 0.80},
     }
 
-    validation_report = await integration_system.validate_system_compatibility(
-        validation_data
-    )
+    validation_report = await integration_system.validate_system_compatibility(validation_data)
     print(f"검증 결과: {validation_report.validation_id}")
     print(f"호환성 점수: {validation_report.compatibility_score:.2%}")
     print(f"검증된 시스템: {validation_report.systems_validated}개")

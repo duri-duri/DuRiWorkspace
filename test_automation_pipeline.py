@@ -3,9 +3,9 @@
 DuRi 자동화 파이프라인 테스트
 """
 import asyncio
-from datetime import datetime
 import json
 import time
+from datetime import datetime
 
 import aiohttp
 
@@ -57,9 +57,7 @@ async def test_automation_pipeline():
                     learning_stats = data.get("learning_stats", {})
 
                     print(f"   📊 자동화 통계:")
-                    print(
-                        f"      - 총 트리거 수: {automation_stats.get('total_triggers', 0)}"
-                    )
+                    print(f"      - 총 트리거 수: {automation_stats.get('total_triggers', 0)}")
                     print(
                         f"      - 성공한 학습 사이클: {automation_stats.get('successful_learning_cycles', 0)}"
                     )
@@ -71,15 +69,9 @@ async def test_automation_pipeline():
                     )
 
                     print(f"   📈 학습 통계:")
-                    print(
-                        f"      - 총 학습 결과: {learning_stats.get('total_results', 0)}"
-                    )
-                    print(
-                        f"      - 성공률: {learning_stats.get('success_rate', 0):.1%}"
-                    )
-                    print(
-                        f"      - 평균 점수: {learning_stats.get('average_score', 0):.3f}"
-                    )
+                    print(f"      - 총 학습 결과: {learning_stats.get('total_results', 0)}")
+                    print(f"      - 성공률: {learning_stats.get('success_rate', 0):.1%}")
+                    print(f"      - 평균 점수: {learning_stats.get('average_score', 0):.3f}")
                     print(
                         f"      - 평균 응답 시간: {learning_stats.get('average_duration', 0):.3f}초"
                     )
@@ -98,17 +90,13 @@ async def test_automation_pipeline():
                     cache_stats = data.get("cache_stats", {})
 
                     print(f"   ⚡ 성능 메트릭:")
-                    print(
-                        f"      - 총 요청 수: {perf_metrics.get('total_requests', 0)}"
-                    )
+                    print(f"      - 총 요청 수: {perf_metrics.get('total_requests', 0)}")
                     print(f"      - 캐시 히트: {perf_metrics.get('cache_hits', 0)}")
                     print(f"      - 캐시 미스: {perf_metrics.get('cache_misses', 0)}")
                     print(
                         f"      - 평균 응답 시간: {perf_metrics.get('average_response_time', 0):.3f}초"
                     )
-                    print(
-                        f"      - 병렬 요청 수: {perf_metrics.get('parallel_requests', 0)}"
-                    )
+                    print(f"      - 병렬 요청 수: {perf_metrics.get('parallel_requests', 0)}")
                     print(f"      - 오류 수: {perf_metrics.get('error_count', 0)}")
 
                     print(f"   💾 캐시 통계:")
@@ -244,8 +232,7 @@ async def test_performance_optimization():
         # 병렬 요청 테스트
         print("\n2. 병렬 요청 테스트...")
         test_requests = [
-            {"user_input": f"병렬 테스트 {i}", "duri_response": f"응답 {i}"}
-            for i in range(5)
+            {"user_input": f"병렬 테스트 {i}", "duri_response": f"응답 {i}"} for i in range(5)
         ]
 
         start_time = time.time()

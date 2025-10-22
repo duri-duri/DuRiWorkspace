@@ -4,8 +4,8 @@ DuRi Evolution Node - 자가 학습, 평가, 개선 시스템
 포트 8092에서 Evolution 기능 제공
 """
 import asyncio
-from datetime import datetime
 import time
+from datetime import datetime
 from typing import Any, Dict, Optional
 
 from fastapi import FastAPI, HTTPException
@@ -82,9 +82,7 @@ async def learn_and_improve(request: EvolutionLearningRequest):
         metadata = request.metadata or {}
 
         if not user_input or not duri_response:
-            raise HTTPException(
-                status_code=400, detail="user_input과 duri_response가 필요합니다"
-            )
+            raise HTTPException(status_code=400, detail="user_input과 duri_response가 필요합니다")
 
         logger.info(
             f"🔄 Evolution 학습 시작: {len(user_input)}자 입력, {len(duri_response)}자 응답"
@@ -232,14 +230,10 @@ async def _discuss_improvements(
     """DuRi-ChatGPT 논의"""
     try:
         # 논의 주제 식별
-        discussion_topics = _identify_discussion_topics(
-            chatgpt_evaluation, duri_self_reflection
-        )
+        discussion_topics = _identify_discussion_topics(chatgpt_evaluation, duri_self_reflection)
 
         # 합의 도출
-        agreements = _reach_agreements(
-            discussion_topics, chatgpt_evaluation, duri_self_reflection
-        )
+        agreements = _reach_agreements(discussion_topics, chatgpt_evaluation, duri_self_reflection)
 
         # 실행 계획 생성
         action_plan = _create_action_plan(agreements, duri_self_reflection)
@@ -266,9 +260,7 @@ async def _execute_autonomous_learning(
     """자율 학습 실행"""
     try:
         # 학습 데이터 수집
-        learning_data = _collect_learning_data(
-            user_input, duri_response, brain_analysis
-        )
+        learning_data = _collect_learning_data(user_input, duri_response, brain_analysis)
 
         # 학습 패턴 분석
         learning_patterns = _analyze_learning_patterns(learning_data)
@@ -277,9 +269,7 @@ async def _execute_autonomous_learning(
         autonomous_questions = _generate_autonomous_questions(learning_patterns)
 
         # 학습 실행
-        learning_execution = _execute_learning_cycle(
-            autonomous_questions, learning_data
-        )
+        learning_execution = _execute_learning_cycle(autonomous_questions, learning_data)
 
         return {
             "learning_data": learning_data,
@@ -300,9 +290,7 @@ async def _execute_realtime_learning(
     """실시간 학습 실행"""
     try:
         # 실시간 데이터 처리
-        realtime_data = _process_realtime_data(
-            user_input, duri_response, brain_analysis
-        )
+        realtime_data = _process_realtime_data(user_input, duri_response, brain_analysis)
 
         # 즉시 학습 적용
         immediate_learning = _apply_immediate_learning(realtime_data)
@@ -331,9 +319,7 @@ async def _execute_automatic_improvement(
     """자동 개선 실행"""
     try:
         # 개선 영역 식별
-        improvement_areas = _identify_improvement_areas(
-            chatgpt_evaluation, duri_self_reflection
-        )
+        improvement_areas = _identify_improvement_areas(chatgpt_evaluation, duri_self_reflection)
 
         # 개선 전략 수립
         improvement_strategies = _develop_improvement_strategies(improvement_areas)
@@ -374,9 +360,7 @@ def _calculate_evolution_score(
             discussion_result.get("agreement_level", 0.0),
             autonomous_learning.get("learning_execution", {}).get("success_rate", 0.0),
             realtime_learning.get("learning_effect", {}).get("effectiveness", 0.0),
-            automatic_improvement.get("improvement_effect", {}).get(
-                "effectiveness", 0.0
-            ),
+            automatic_improvement.get("improvement_effect", {}).get("effectiveness", 0.0),
         ]
 
         # 오류가 있는 경우 제외

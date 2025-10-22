@@ -14,14 +14,14 @@ DuRi 30일 진화 계획 - Day 5: 메타 인식 시스템
 """
 
 import asyncio
-from collections import defaultdict, deque
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 import json
 import logging
 import random
 import time
+from collections import defaultdict, deque
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
@@ -30,9 +30,11 @@ import numpy as np
 try:
     from creative_thinking_system import CreativeIdea, CreativeThinkingSystem
     from duri_thought_flow import DuRiThoughtFlow
-    from emotional_thinking_system import EmotionalState, EmotionalThinkingSystem
+    from emotional_thinking_system import (EmotionalState,
+                                           EmotionalThinkingSystem)
     from inner_thinking_system import InnerThinkingSystem, ThoughtDepth
-    from intuitive_thinking_system import IntuitivePattern, IntuitiveThinkingSystem
+    from intuitive_thinking_system import (IntuitivePattern,
+                                           IntuitiveThinkingSystem)
     from phase_omega_integration import DuRiPhaseOmega
 except ImportError as e:
     logging.warning(f"일부 기존 시스템 import 실패: {e}")
@@ -241,9 +243,7 @@ class MetaCognitionSystem:
         except Exception as e:
             logger.warning(f"기존 시스템 통합 중 오류 발생: {e}")
 
-    async def think_with_meta_cognition(
-        self, context: Dict[str, Any]
-    ) -> MetaCognitionResult:
+    async def think_with_meta_cognition(self, context: Dict[str, Any]) -> MetaCognitionResult:
         """메타 인식을 통한 사고 실행"""
         logger.info(f"=== 메타 인식 사고 시작 ===")
 
@@ -255,14 +255,10 @@ class MetaCognitionSystem:
             thinking_processes = await self._monitor_thinking_processes(context)
 
             # 2. 자기 성찰 실행
-            self_reflections = await self._perform_self_reflection(
-                context, thinking_processes
-            )
+            self_reflections = await self._perform_self_reflection(context, thinking_processes)
 
             # 3. 사고 품질 평가
-            quality_assessments = await self._assess_thinking_quality(
-                thinking_processes
-            )
+            quality_assessments = await self._assess_thinking_quality(thinking_processes)
 
             # 4. 메타 인식 통찰 발견
             meta_insights = await self._discover_meta_cognition_insights(
@@ -320,9 +316,7 @@ class MetaCognitionSystem:
                 error_message=str(e),
             )
 
-    async def _monitor_thinking_processes(
-        self, context: Dict[str, Any]
-    ) -> List[ThinkingProcess]:
+    async def _monitor_thinking_processes(self, context: Dict[str, Any]) -> List[ThinkingProcess]:
         """사고 과정 모니터링"""
         processes = []
 
@@ -373,9 +367,7 @@ class MetaCognitionSystem:
                 meta_cognition_level=MetaCognitionLevel.ENHANCED,
                 context={
                     "inner_thinking_result": (
-                        inner_result.__dict__
-                        if hasattr(inner_result, "__dict__")
-                        else {}
+                        inner_result.__dict__ if hasattr(inner_result, "__dict__") else {}
                     )
                 },
             )
@@ -391,9 +383,7 @@ class MetaCognitionSystem:
             meta_cognition_level=MetaCognitionLevel.BASIC,
         )
 
-    async def _monitor_emotional_thinking(
-        self, context: Dict[str, Any]
-    ) -> ThinkingProcess:
+    async def _monitor_emotional_thinking(self, context: Dict[str, Any]) -> ThinkingProcess:
         """감정적 사고 과정 모니터링"""
         start_time = datetime.now()
         process_id = f"emotional_thinking_{start_time.strftime('%Y%m%d_%H%M%S')}"
@@ -418,9 +408,7 @@ class MetaCognitionSystem:
                 meta_cognition_level=MetaCognitionLevel.ENHANCED,
                 context={
                     "emotional_thinking_result": (
-                        emotional_result.__dict__
-                        if hasattr(emotional_result, "__dict__")
-                        else {}
+                        emotional_result.__dict__ if hasattr(emotional_result, "__dict__") else {}
                     )
                 },
             )
@@ -436,9 +424,7 @@ class MetaCognitionSystem:
             meta_cognition_level=MetaCognitionLevel.BASIC,
         )
 
-    async def _monitor_intuitive_thinking(
-        self, context: Dict[str, Any]
-    ) -> ThinkingProcess:
+    async def _monitor_intuitive_thinking(self, context: Dict[str, Any]) -> ThinkingProcess:
         """직관적 사고 과정 모니터링"""
         start_time = datetime.now()
         process_id = f"intuitive_thinking_{start_time.strftime('%Y%m%d_%H%M%S')}"
@@ -463,9 +449,7 @@ class MetaCognitionSystem:
                 meta_cognition_level=MetaCognitionLevel.ENHANCED,
                 context={
                     "intuitive_thinking_result": (
-                        intuitive_result.__dict__
-                        if hasattr(intuitive_result, "__dict__")
-                        else {}
+                        intuitive_result.__dict__ if hasattr(intuitive_result, "__dict__") else {}
                     )
                 },
             )
@@ -481,9 +465,7 @@ class MetaCognitionSystem:
             meta_cognition_level=MetaCognitionLevel.BASIC,
         )
 
-    async def _monitor_creative_thinking(
-        self, context: Dict[str, Any]
-    ) -> ThinkingProcess:
+    async def _monitor_creative_thinking(self, context: Dict[str, Any]) -> ThinkingProcess:
         """창의적 사고 과정 모니터링"""
         start_time = datetime.now()
         process_id = f"creative_thinking_{start_time.strftime('%Y%m%d_%H%M%S')}"
@@ -508,9 +490,7 @@ class MetaCognitionSystem:
                 meta_cognition_level=MetaCognitionLevel.ENHANCED,
                 context={
                     "creative_thinking_result": (
-                        creative_result.__dict__
-                        if hasattr(creative_result, "__dict__")
-                        else {}
+                        creative_result.__dict__ if hasattr(creative_result, "__dict__") else {}
                     )
                 },
             )
@@ -539,9 +519,7 @@ class MetaCognitionSystem:
         reflections.append(observation_reflection)
 
         # 2. 분석적 성찰
-        analysis_reflection = await self._create_analysis_reflection(
-            context, thinking_processes
-        )
+        analysis_reflection = await self._create_analysis_reflection(context, thinking_processes)
         reflections.append(analysis_reflection)
 
         # 3. 평가적 성찰
@@ -551,9 +529,7 @@ class MetaCognitionSystem:
         reflections.append(evaluation_reflection)
 
         # 4. 종합적 성찰
-        synthesis_reflection = await self._create_synthesis_reflection(
-            context, thinking_processes
-        )
+        synthesis_reflection = await self._create_synthesis_reflection(context, thinking_processes)
         reflections.append(synthesis_reflection)
 
         # 5. 통합적 성찰
@@ -571,7 +547,9 @@ class MetaCognitionSystem:
         reflection_id = f"observation_reflection_{len(self.self_reflections)}"
 
         # 관찰 내용 생성
-        observation_content = f"사고 과정을 관찰한 결과, {len(thinking_processes)}개의 사고 과정이 실행되었습니다."
+        observation_content = (
+            f"사고 과정을 관찰한 결과, {len(thinking_processes)}개의 사고 과정이 실행되었습니다."
+        )
 
         if thinking_processes:
             avg_quality = np.mean([p.quality_score for p in thinking_processes])
@@ -613,7 +591,9 @@ class MetaCognitionSystem:
             if quality_scores:
                 best_quality = max(quality_scores)
                 worst_quality = min(quality_scores)
-                analysis_content += f" 최고 품질: {best_quality:.2f}, 최저 품질: {worst_quality:.2f}입니다."
+                analysis_content += (
+                    f" 최고 품질: {best_quality:.2f}, 최저 품질: {worst_quality:.2f}입니다."
+                )
         else:
             analysis_content += "분석할 사고 과정이 없습니다."
 
@@ -700,9 +680,7 @@ class MetaCognitionSystem:
         integration_content = "모든 사고 과정을 통합한 결과, "
 
         if thinking_processes:
-            integration_content += (
-                "메타 인식을 통해 사고 과정을 모니터링하고 개선할 수 있는 "
-            )
+            integration_content += "메타 인식을 통해 사고 과정을 모니터링하고 개선할 수 있는 "
             integration_content += "완전한 사고 시스템을 구축할 수 있었습니다."
         else:
             integration_content += "통합할 사고 과정이 없습니다."
@@ -788,21 +766,15 @@ class MetaCognitionSystem:
         insights = []
 
         # 1. 사고 과정에서 통찰 발견
-        process_insights = await self._extract_insights_from_processes(
-            thinking_processes
-        )
+        process_insights = await self._extract_insights_from_processes(thinking_processes)
         insights.extend(process_insights)
 
         # 2. 자기 성찰에서 통찰 발견
-        reflection_insights = await self._extract_insights_from_reflections(
-            self_reflections
-        )
+        reflection_insights = await self._extract_insights_from_reflections(self_reflections)
         insights.extend(reflection_insights)
 
         # 3. 품질 평가에서 통찰 발견
-        quality_insights = await self._extract_insights_from_assessments(
-            quality_assessments
-        )
+        quality_insights = await self._extract_insights_from_assessments(quality_assessments)
         insights.extend(quality_insights)
 
         # 4. 종합적 메타 인식 통찰
@@ -923,21 +895,15 @@ class MetaCognitionSystem:
         improvements = []
 
         # 1. 사고 과정 개선
-        process_improvements = await self._improve_thinking_processes(
-            thinking_processes
-        )
+        process_improvements = await self._improve_thinking_processes(thinking_processes)
         improvements.extend(process_improvements)
 
         # 2. 성찰 능력 개선
-        reflection_improvements = await self._improve_reflection_abilities(
-            self_reflections
-        )
+        reflection_improvements = await self._improve_reflection_abilities(self_reflections)
         improvements.extend(reflection_improvements)
 
         # 3. 품질 평가 개선
-        quality_improvements = await self._improve_quality_assessments(
-            quality_assessments
-        )
+        quality_improvements = await self._improve_quality_assessments(quality_assessments)
         improvements.extend(quality_improvements)
 
         return improvements
@@ -1017,9 +983,7 @@ class MetaCognitionSystem:
 
         # 사고 과정 메타 인식 수준
         for process in thinking_processes:
-            level_value = self._convert_meta_cognition_level_to_float(
-                process.meta_cognition_level
-            )
+            level_value = self._convert_meta_cognition_level_to_float(process.meta_cognition_level)
             total_level += level_value
             total_count += 1
 
@@ -1033,9 +997,7 @@ class MetaCognitionSystem:
 
         # 메타 인식 통찰 수준
         for insight in meta_insights:
-            level_value = self._convert_meta_cognition_level_to_float(
-                insight.meta_cognition_level
-            )
+            level_value = self._convert_meta_cognition_level_to_float(insight.meta_cognition_level)
             total_level += level_value
             total_count += 1
 
@@ -1062,16 +1024,12 @@ class MetaCognitionSystem:
 
         total_quality = 0.0
         for assessment in quality_assessments:
-            quality_value = self._convert_thinking_quality_to_float(
-                assessment.overall_quality
-            )
+            quality_value = self._convert_thinking_quality_to_float(assessment.overall_quality)
             total_quality += quality_value
 
         return total_quality / len(quality_assessments)
 
-    def _convert_thinking_quality_to_float(
-        self, thinking_quality: ThinkingQuality
-    ) -> float:
+    def _convert_thinking_quality_to_float(self, thinking_quality: ThinkingQuality) -> float:
         """사고 품질을 float로 변환"""
         quality_values = {
             ThinkingQuality.POOR: 0.2,
@@ -1094,9 +1052,7 @@ class MetaCognitionSystem:
             "thinking_type_distribution": self._get_thinking_type_distribution(),
             "reflection_type_distribution": self._get_reflection_type_distribution(),
             "recent_insights": (
-                [i.insight for i in self.meta_insights[-3:]]
-                if self.meta_insights
-                else []
+                [i.insight for i in self.meta_insights[-3:]] if self.meta_insights else []
             ),
         }
 

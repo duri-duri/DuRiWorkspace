@@ -12,11 +12,11 @@ MetaGenerator - meta.json 자동 생성 시스템
 """
 
 import ast
-from datetime import datetime
 import json
 import logging
 import os
 import re
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
@@ -107,9 +107,7 @@ class MetaGenerator:
             "final_execution": "# Final Execution: 인간처럼 실패하고도 다시 일어날 수 있는 존재",
         }
 
-    def generate_meta_json(
-        self, module_name: str, module_content: str
-    ) -> Dict[str, Any]:
+    def generate_meta_json(self, module_name: str, module_content: str) -> Dict[str, Any]:
         """
         모듈 내용 분석하여 자동으로 meta.json 생성
 
@@ -373,9 +371,7 @@ class MetaGenerator:
             "error": "분석 실패 - 수동 검토 필요",
         }
 
-    def save_meta_json(
-        self, module_name: str, meta: Dict[str, Any], output_dir: str = "."
-    ) -> str:
+    def save_meta_json(self, module_name: str, meta: Dict[str, Any], output_dir: str = ".") -> str:
         """meta.json 파일 저장"""
         try:
             os.makedirs(output_dir, exist_ok=True)

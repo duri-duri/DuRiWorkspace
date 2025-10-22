@@ -9,14 +9,12 @@ try:
 except Exception:
     try:
         # 백업 경로 1
-        from DuRiCore.reasoning_engine.core.logical_reasoning_engine import (
-            LogicalReasoningEngine as ReasoningEngine,
-        )
+        from DuRiCore.reasoning_engine.core.logical_reasoning_engine import \
+            LogicalReasoningEngine as ReasoningEngine
     except Exception:
         # 백업 경로 2
-        from duri_core.reasoning_engine.core.logical_reasoning_engine import (
-            LogicalReasoningEngine as ReasoningEngine,
-        )
+        from duri_core.reasoning_engine.core.logical_reasoning_engine import \
+            LogicalReasoningEngine as ReasoningEngine
 
 # 공통 입력 케이스
 INP_MATH = {"query": "1+1", "context": "math"}

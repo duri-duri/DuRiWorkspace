@@ -11,15 +11,15 @@ DuRi Phase 1-3 Week 3 Day 14 - 효율성 최적화 시스템
 """
 
 import asyncio
-from collections import Counter, defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 import hashlib
 import json
 import logging
 import re
 import time
+from collections import Counter, defaultdict
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
@@ -125,9 +125,7 @@ class DynamicResourceAllocator:
         allocations = []
 
         for resource_type in ResourceType:
-            allocation = await self._allocate_resource(
-                resource_type, requirements, strategy
-            )
+            allocation = await self._allocate_resource(resource_type, requirements, strategy)
             if allocation:
                 allocations.append(allocation)
 
@@ -152,9 +150,7 @@ class DynamicResourceAllocator:
         )
 
         # 활용률 계산
-        utilization_rate = (
-            allocated_amount / max_available if max_available > 0 else 0.0
-        )
+        utilization_rate = allocated_amount / max_available if max_available > 0 else 0.0
 
         # 우선순위 결정
         priority = await self._determine_priority(resource_type, strategy)
@@ -236,9 +232,7 @@ class LearningStrategyOptimizer:
         self.strategy_history = []
         self.performance_tracker = {}
 
-    async def optimize_learning_strategy(
-        self, context: Dict[str, Any]
-    ) -> LearningOptimization:
+    async def optimize_learning_strategy(self, context: Dict[str, Any]) -> LearningOptimization:
         """상황에 따른 최적 학습 전략 선택"""
         optimization_id = f"learning_optimization_{int(time.time())}"
 
@@ -252,19 +246,13 @@ class LearningStrategyOptimizer:
         optimized_strategy = await self._select_optimal_strategy(context_analysis)
 
         # 학습 효율성 계산
-        learning_efficiency = await self._calculate_learning_efficiency(
-            optimized_strategy, context
-        )
+        learning_efficiency = await self._calculate_learning_efficiency(optimized_strategy, context)
 
         # 적응도 점수 계산
-        adaptation_score = await self._calculate_adaptation_score(
-            optimized_strategy, context
-        )
+        adaptation_score = await self._calculate_adaptation_score(optimized_strategy, context)
 
         # 최적화 요인 분석
-        optimization_factors = await self._analyze_optimization_factors(
-            context_analysis
-        )
+        optimization_factors = await self._analyze_optimization_factors(context_analysis)
 
         optimization = LearningOptimization(
             optimization_id=optimization_id,
@@ -290,16 +278,12 @@ class LearningStrategyOptimizer:
 
         return analysis
 
-    async def _determine_current_strategy(
-        self, context: Dict[str, Any]
-    ) -> LearningStrategy:
+    async def _determine_current_strategy(self, context: Dict[str, Any]) -> LearningStrategy:
         """현재 전략 결정"""
         # 기본적으로 적응적 학습 전략 사용
         return LearningStrategy.ADAPTIVE_LEARNING
 
-    async def _select_optimal_strategy(
-        self, context_analysis: Dict[str, Any]
-    ) -> LearningStrategy:
+    async def _select_optimal_strategy(self, context_analysis: Dict[str, Any]) -> LearningStrategy:
         """최적 전략 선택"""
         complexity = context_analysis["complexity"]
         urgency = context_analysis["urgency"]
@@ -355,9 +339,7 @@ class LearningStrategyOptimizer:
 
         # 품질 요구사항 요인
         quality_requirement = context.get("quality_requirement", 0.5)
-        factors.append(
-            1 + quality_requirement * 0.1
-        )  # 품질 요구사항이 높을수록 효율성 증가
+        factors.append(1 + quality_requirement * 0.1)  # 품질 요구사항이 높을수록 효율성 증가
 
         return np.mean(factors) if factors else 1.0
 
@@ -381,9 +363,7 @@ class LearningStrategyOptimizer:
 
         return min(base_adaptation * adaptation_factor, 1.0)
 
-    async def _analyze_optimization_factors(
-        self, context_analysis: Dict[str, Any]
-    ) -> List[str]:
+    async def _analyze_optimization_factors(self, context_analysis: Dict[str, Any]) -> List[str]:
         """최적화 요인 분석"""
         factors = []
 
@@ -518,9 +498,7 @@ class EfficiencyOptimizationSystem:
         )
 
         # 학습 전략 최적화
-        learning_optimization = (
-            await self.learning_optimizer.optimize_learning_strategy(context)
-        )
+        learning_optimization = await self.learning_optimizer.optimize_learning_strategy(context)
 
         # 성능 모니터링
         performance_metrics = await self.performance_monitor.monitor_performance(

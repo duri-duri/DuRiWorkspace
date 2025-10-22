@@ -4,20 +4,16 @@ DuRi 추론 엔진 - 연역적 추론 전략
 Phase 3 리팩토링: logical_reasoning_engine.py에서 분리
 """
 
+import logging
 from dataclasses import dataclass
 from enum import Enum
-import logging
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
-from ..core.logical_processor import (
-    InferenceType,
-    LogicalProcessor,
-    LogicalStep,
-    PremiseType,
-    SemanticPremise,
-)
+from ..core.logical_processor import (InferenceType, LogicalProcessor,
+                                      LogicalStep, PremiseType,
+                                      SemanticPremise)
 
 logger = logging.getLogger(__name__)
 
@@ -94,9 +90,7 @@ class DeductiveReasoning:
             },
         }
 
-    def construct_syllogism(
-        self, major_premise: str, minor_premise: str
-    ) -> DeductivePremise:
+    def construct_syllogism(self, major_premise: str, minor_premise: str) -> DeductivePremise:
         """삼단논법 구성"""
         logger.info("삼단논법 구성 시작")
 
@@ -112,9 +106,7 @@ class DeductiveReasoning:
         validity = self._validate_syllogism(major_premise, minor_premise, conclusion)
 
         # 건전성 평가
-        soundness = self._evaluate_syllogistic_soundness(
-            major_premise, minor_premise, conclusion
-        )
+        soundness = self._evaluate_syllogistic_soundness(major_premise, minor_premise, conclusion)
 
         semantic_vectors = {
             "major_premise": major_vector,
@@ -132,9 +124,7 @@ class DeductiveReasoning:
             semantic_vectors=semantic_vectors,
         )
 
-    def _derive_syllogistic_conclusion(
-        self, major_premise: str, minor_premise: str
-    ) -> str:
+    def _derive_syllogistic_conclusion(self, major_premise: str, minor_premise: str) -> str:
         """삼단논법 결론 도출"""
         # 간단한 규칙 기반 결론 도출
         major_terms = self._extract_terms(major_premise)
@@ -146,9 +136,7 @@ class DeductiveReasoning:
             if middle_term:
                 # 결론 구성
                 subject = self._get_subject_term(major_terms, minor_terms, middle_term)
-                predicate = self._get_predicate_term(
-                    major_terms, minor_terms, middle_term
-                )
+                predicate = self._get_predicate_term(major_terms, minor_terms, middle_term)
 
                 if subject and predicate:
                     return f"{subject}는 {predicate}입니다."
@@ -168,9 +156,7 @@ class DeductiveReasoning:
 
         return terms
 
-    def _find_middle_term(
-        self, major_terms: List[str], minor_terms: List[str]
-    ) -> Optional[str]:
+    def _find_middle_term(self, major_terms: List[str], minor_terms: List[str]) -> Optional[str]:
         """중간항 찾기"""
         for term in major_terms:
             if term in minor_terms:
@@ -195,9 +181,7 @@ class DeductiveReasoning:
                 return term
         return None
 
-    def _validate_syllogism(
-        self, major_premise: str, minor_premise: str, conclusion: str
-    ) -> float:
+    def _validate_syllogism(self, major_premise: str, minor_premise: str, conclusion: str) -> float:
         """삼단논법 유효성 검증"""
         # 기본적인 유효성 검증 규칙들
         validity_score = 1.0
@@ -216,9 +200,7 @@ class DeductiveReasoning:
 
         return validity_score
 
-    def _check_middle_term_distribution(
-        self, major_premise: str, minor_premise: str
-    ) -> bool:
+    def _check_middle_term_distribution(self, major_premise: str, minor_premise: str) -> bool:
         """중간항 분포 검증"""
         # 간단한 중간항 분포 검증
         major_terms = self._extract_terms(major_premise)

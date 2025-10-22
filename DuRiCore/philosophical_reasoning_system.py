@@ -5,12 +5,12 @@ DuRi 철학적 논증 구조 시스템 (Day 3-4)
 """
 
 import asyncio
-from dataclasses import asdict, dataclass
-from datetime import datetime
-from enum import Enum
 import json
 import logging
 import re
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 logging.basicConfig(level=logging.INFO)
@@ -112,9 +112,7 @@ class KantianReasoning:
         humanity_test = self._test_humanity_formula(action, situation)
 
         # 3. 전제 구성
-        premises = self._construct_kantian_premises(
-            action, universalization_test, humanity_test
-        )
+        premises = self._construct_kantian_premises(action, universalization_test, humanity_test)
 
         # 4. 논리적 단계 구성
         logical_steps = self._construct_kantian_steps(action, premises)
@@ -133,9 +131,7 @@ class KantianReasoning:
             premises=premises,
             logical_steps=logical_steps,
             final_conclusion=final_conclusion,
-            strength=self._calculate_kantian_strength(
-                universalization_test, humanity_test
-            ),
+            strength=self._calculate_kantian_strength(universalization_test, humanity_test),
             counter_arguments=counter_arguments,
             limitations=limitations,
         )
@@ -361,9 +357,7 @@ class KantianReasoning:
             )
 
         # 덕윤리적 반론
-        counter_arguments.append(
-            "덕윤리적 관점: 행위자의 덕성과 동기가 고려되어야 한다"
-        )
+        counter_arguments.append("덕윤리적 관점: 행위자의 덕성과 동기가 고려되어야 한다")
 
         return counter_arguments
 
@@ -421,14 +415,10 @@ class UtilitarianReasoning:
         premises = self._construct_utilitarian_premises(action, utility_calculation)
 
         # 4. 논리적 단계 구성
-        logical_steps = self._construct_utilitarian_steps(
-            action, premises, utility_calculation
-        )
+        logical_steps = self._construct_utilitarian_steps(action, premises, utility_calculation)
 
         # 5. 결론 도출
-        final_conclusion = self._derive_utilitarian_conclusion(
-            action, utility_calculation
-        )
+        final_conclusion = self._derive_utilitarian_conclusion(action, utility_calculation)
 
         # 6. 반론 및 한계
         counter_arguments = self._identify_utilitarian_counter_arguments(action)
@@ -476,9 +466,7 @@ class UtilitarianReasoning:
 
         return stakeholders
 
-    def _calculate_utility(
-        self, action: str, stakeholders: List[Dict[str, Any]]
-    ) -> Dict[str, Any]:
+    def _calculate_utility(self, action: str, stakeholders: List[Dict[str, Any]]) -> Dict[str, Any]:
         """효용 계산"""
         total_utility = 0.0
         stakeholder_utilities = {}
@@ -499,9 +487,7 @@ class UtilitarianReasoning:
             "stakeholder_utilities": stakeholder_utilities,
             "is_positive": total_utility > 0,
             "efficiency": (
-                total_utility / sum(s["count"] for s in stakeholders)
-                if stakeholders
-                else 0
+                total_utility / sum(s["count"] for s in stakeholders) if stakeholders else 0
             ),
         }
 
@@ -593,9 +579,7 @@ class UtilitarianReasoning:
 
         return steps
 
-    def _derive_utilitarian_conclusion(
-        self, action: str, utility_calculation: Dict
-    ) -> str:
+    def _derive_utilitarian_conclusion(self, action: str, utility_calculation: Dict) -> str:
         """공리주의 결론 도출"""
         if utility_calculation["is_positive"]:
             return f"'{action}'은 도덕적으로 허용된다. 총 효용: {utility_calculation['total_utility']:.2f}"
@@ -626,19 +610,13 @@ class UtilitarianReasoning:
         counter_arguments = []
 
         # 의무론적 반론
-        counter_arguments.append(
-            "의무론적 관점: 결과와 무관하게 특정 행위는 본질적으로 잘못되었다"
-        )
+        counter_arguments.append("의무론적 관점: 결과와 무관하게 특정 행위는 본질적으로 잘못되었다")
 
         # 권리 기반 반론
-        counter_arguments.append(
-            "권리 기반 관점: 개인의 권리가 효용 계산에 의해 침해될 수 있다"
-        )
+        counter_arguments.append("권리 기반 관점: 개인의 권리가 효용 계산에 의해 침해될 수 있다")
 
         # 덕윤리적 반론
-        counter_arguments.append(
-            "덕윤리적 관점: 행위자의 덕성과 동기가 고려되지 않는다"
-        )
+        counter_arguments.append("덕윤리적 관점: 행위자의 덕성과 동기가 고려되지 않는다")
 
         return counter_arguments
 
@@ -673,16 +651,12 @@ class MultiPerspectiveAnalysis:
         )
 
         # 공리주의 분석
-        utilitarian_argument = (
-            await self.utilitarian_reasoning.apply_utilitarian_calculation(
-                action, situation
-            )
+        utilitarian_argument = await self.utilitarian_reasoning.apply_utilitarian_calculation(
+            action, situation
         )
 
         # 통합 분석
-        integrated_analysis = self._integrate_perspectives(
-            kantian_argument, utilitarian_argument
-        )
+        integrated_analysis = self._integrate_perspectives(kantian_argument, utilitarian_argument)
 
         return {
             "kantian": kantian_argument,
@@ -710,10 +684,7 @@ class MultiPerspectiveAnalysis:
         consensus = []
 
         # 두 관점 모두 허용하는 경우
-        if (
-            "허용" in kantian.final_conclusion
-            and "허용" in utilitarian.final_conclusion
-        ):
+        if "허용" in kantian.final_conclusion and "허용" in utilitarian.final_conclusion:
             consensus.append("두 관점 모두 해당 행위를 허용함")
 
         # 두 관점 모두 금지하는 경우
@@ -732,15 +703,9 @@ class MultiPerspectiveAnalysis:
         conflicts = []
 
         # 관점 간 충돌
-        if (
-            "허용" in kantian.final_conclusion
-            and "허용되지 않" in utilitarian.final_conclusion
-        ):
+        if "허용" in kantian.final_conclusion and "허용되지 않" in utilitarian.final_conclusion:
             conflicts.append("칸트적 관점은 허용하지만 공리주의 관점은 금지함")
-        elif (
-            "허용되지 않" in kantian.final_conclusion
-            and "허용" in utilitarian.final_conclusion
-        ):
+        elif "허용되지 않" in kantian.final_conclusion and "허용" in utilitarian.final_conclusion:
             conflicts.append("칸트적 관점은 금지하지만 공리주의 관점은 허용함")
 
         return conflicts
@@ -776,9 +741,7 @@ async def test_philosophical_reasoning_system():
         print(f"{'='*70}")
 
         # 다중 관점 분석
-        perspectives = await multi_analysis.analyze_multiple_perspectives(
-            action, action
-        )
+        perspectives = await multi_analysis.analyze_multiple_perspectives(action, action)
 
         # 칸트적 분석 결과
         kantian = perspectives["kantian"]

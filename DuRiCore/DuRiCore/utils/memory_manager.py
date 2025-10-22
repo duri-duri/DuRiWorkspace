@@ -5,16 +5,16 @@ Phase 4: Vector DB + JSON 저장 연동 메모리 구조
 """
 
 import asyncio
-from dataclasses import asdict, dataclass
-from datetime import datetime
 import gzip
 import hashlib
 import json
 import logging
 import os
-from pathlib import Path
 import pickle
 import time
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
@@ -335,9 +335,7 @@ class MemoryManager:
                 # 메모리 로드
                 for memory_id, memory_data in data["memories"].items():
                     # datetime 변환
-                    memory_data["created_at"] = datetime.fromisoformat(
-                        memory_data["created_at"]
-                    )
+                    memory_data["created_at"] = datetime.fromisoformat(memory_data["created_at"])
                     memory_data["last_accessed"] = datetime.fromisoformat(
                         memory_data["last_accessed"]
                     )
@@ -481,12 +479,8 @@ class MemoryManager:
 
             # 새 메모리 로드
             for memory_id, memory_data in import_data["memories"].items():
-                memory_data["created_at"] = datetime.fromisoformat(
-                    memory_data["created_at"]
-                )
-                memory_data["last_accessed"] = datetime.fromisoformat(
-                    memory_data["last_accessed"]
-                )
+                memory_data["created_at"] = datetime.fromisoformat(memory_data["created_at"])
+                memory_data["last_accessed"] = datetime.fromisoformat(memory_data["last_accessed"])
 
                 memory_entry = MemoryEntry(**memory_data)
                 self.memories[memory_id] = memory_entry
