@@ -1,4 +1,9 @@
-mutmut==2.4.4
-radon==6.0.1
-xenon==0.9.1
-pytest-mutagen==0.1.0
+pre-commit==3.7.1
+pytest==8.4.2
+pytest-asyncio==0.23.8
+pytest-benchmark==5.1.0
+black==24.10.0
+isort==5.13.2
+flake8==7.1.1
+flake8-bugbear==24.8.19
+yamllint==1.35.1

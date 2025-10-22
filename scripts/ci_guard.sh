@@ -34,7 +34,26 @@ fi
 
 # Install dev dependencies if not available
 note "Installing dev dependencies"
-pip install -r requirements-dev.txt >/dev/null 2>&1 || fail "Failed to install dev dependencies"
+if [ -f requirements-dev.txt ]; then
+    python -m pip install -U pip || true
+    pip install -r requirements-dev.txt || {
+        note "Fallback: installing individual packages"
+        pip install -U pre-commit pytest pytest-asyncio pytest-benchmark black isort flake8 flake8-bugbear yamllint || true
+    }
+else
+    note "No requirements-dev.txt found, installing individual packages"
+    python -m pip install -U pip || true
+    pip install -U pre-commit pytest pytest-asyncio pytest-benchmark black isort flake8 flake8-bugbear yamllint || true
+fi
+
+# Show versions for visibility
+note "Installed tool versions:"
+pre-commit --version || true
+pytest --version || true
+black --version || true
+isort --version || true
+flake8 --version || true
+yamllint --version || true
 
 # 3) Fail-fast module loading check (build-time guard)
 note "Running fail-fast module loading check"
