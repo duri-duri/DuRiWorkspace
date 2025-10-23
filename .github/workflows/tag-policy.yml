@@ -1,7 +1,7 @@
 name: tag-policy
 on:
   push:
-    tags: ['v*']  # 릴리즈 태그 푸시에만 동작
+    tags: ['v*']  # 태그에만 반응
 permissions: { contents: read }
 
 env:

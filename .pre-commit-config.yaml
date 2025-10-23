@@ -28,6 +28,8 @@ repos:
     rev: 7.1.1
     hooks:
       - id: flake8
+        args:
+          - --exclude=DuRiCore/backup_repository,DuRi_Day11_15_starter,build,dist,.venv,.mypy_cache,.pytest_cache,var,scripts/._*,scripts/common
         additional_dependencies:
           - flake8-bugbear==24.8.19
           - attrs>=23.2.0
