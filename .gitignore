@@ -60,7 +60,6 @@ test_result.json
 
 # === Misc temp & legacy ===
 scripts/_legacy/
-scripts/._*
 
 # dev scratch (prevent noisy commits & pre-push blocks)
 allow.re
