@@ -43,8 +43,17 @@ services:
       <<: *common-environment
       PORT: 8080
       SERVICE_NAME: core
-    <<: *common-depends
-    <<: *common-healthcheck
+    depends_on:
+      duri-postgres:
+        condition: service_healthy
+      duri-redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     restart: unless-stopped
 
   duri_brain:
@@ -60,8 +69,17 @@ services:
       <<: *common-environment
       PORT: 8081
       SERVICE_NAME: brain
-    <<: *common-depends
-    <<: *common-healthcheck
+    depends_on:
+      duri-postgres:
+        condition: service_healthy
+      duri-redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     restart: unless-stopped
 
   duri_evolution:
@@ -77,8 +95,17 @@ services:
       <<: *common-environment
       PORT: 8082
       SERVICE_NAME: evolution
-    <<: *common-depends
-    <<: *common-healthcheck
+    depends_on:
+      duri-postgres:
+        condition: service_healthy
+      duri-redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     restart: unless-stopped
 
   duri_control:
@@ -96,8 +123,17 @@ services:
       <<: *common-environment
       PORT: 8083
       SERVICE_NAME: control
-    <<: *common-depends
-    <<: *common-healthcheck
+    depends_on:
+      duri-postgres:
+        condition: service_healthy
+      duri-redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8083/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     command: ["bash", "/app/wait-for-postgres.sh"]
     restart: unless-stopped
 

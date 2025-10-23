@@ -49,12 +49,12 @@ jobs:
           if not alias_dir.exists():
               alias_dir.mkdir(parents=True, exist_ok=True)
               (alias_dir / '__init__.py').write_text('''
-from importlib import import_module as _im
-_target = _im(\"DuRiCore\")
-__path__ = _target.__path__
-def __getattr__(name):
-    return getattr(_target, name)
-''')
+          from importlib import import_module as _im
+          _target = _im(\"DuRiCore\")
+          __path__ = _target.__path__
+          def __getattr__(name):
+              return getattr(_target, name)
+          ''')
           "
 
       - name: Run scoped test suite

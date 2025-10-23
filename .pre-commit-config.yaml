@@ -5,6 +5,11 @@ repos:
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: check-yaml
+        exclude: |
+          (?x)^(
+            \.github/workflows-archive/.*\.yml|
+            .*\.optimized\.yml
+          )$
       - id: check-added-large-files
       - id: check-merge-conflict
       - id: check-json
@@ -39,3 +44,9 @@ repos:
     rev: v1.35.1
     hooks:
       - id: yamllint
+        exclude: |
+          (?x)^(
+            \.github/workflows-archive/.*\.yml|
+            .*\.optimized\.yml|
+            \.pre-commit-config\.yaml
+          )$

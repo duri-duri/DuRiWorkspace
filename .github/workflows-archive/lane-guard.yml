@@ -3,7 +3,6 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, labeled, unlabeled]
 
-<<<<<<< HEAD
 permissions:
   contents: read
   pull-requests: read
@@ -72,9 +71,9 @@ jobs:
           echo "검증중 Lane=$LANE"
           # Lane 별 허용 경로(글롭). 필요시 여기만 조정하면 됨.
           python3 - <<'PY'
-import sys, fnmatch, json, os
-lane = os.environ["LANE"]
-files = [x.strip() for x in open("files.txt").read().splitlines() if x.strip()]
+          import sys, fnmatch, json, os
+          lane = os.environ["LANE"]
+          files = [x.strip() for x in open("files.txt").read().splitlines() if x.strip()]
 
 ALLOW = {
   "lane:experiment": [
