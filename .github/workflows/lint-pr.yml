@@ -1,21 +1,43 @@
 name: lint (PR changed files)
+
 on:
   pull_request:
-    paths-ignore:
-      - '.github/workflows-archive/**'
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+
 jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with: {python-version: '3.10'}
+      - name: Checkout (full history for diff)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
       - name: Install pre-commit
-        run: pipx install pre-commit
-      - name: Lint only changed files
         run: |
-          pre-commit install-hooks
-          # pre-commit/action 대신 직접: 변경파일만 자동 검출
-          CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
-          if [ -z "$CHANGED" ]; then exit 0; fi
-          echo "$CHANGED" | xargs -r pre-commit run --files
+          pip install pre-commit
+
+      - name: Run pre-commit on changed files
+        env:
+          # pre-commit/action이 아니므로 명시적으로 범위를 지정
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.sha }}
+        run: |
+          pre-commit install
+          # 변경 파일만 추출
+          CHANGED=$(git diff --name-only "$BASE" "$HEAD" -- '*.py' '*.json' '*.yaml' '*.yml' | tr '\n' ' ')
+          if [ -z "$CHANGED" ]; then
+            echo "No changed lintable files."
+            exit 0
+          fi
+          echo "Changed files: $CHANGED"
+          # 훅은 파일 목록만 대상으로
+          pre-commit run --files $CHANGED --color always --show-diff-on-failure

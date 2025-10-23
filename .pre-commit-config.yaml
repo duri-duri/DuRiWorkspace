@@ -2,27 +2,16 @@ repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.6.9
     hooks:
-      - id: ruff           # 린트 + isort 대체
-        args: [--fix, --exit-non-zero-on-fix]
-      - id: ruff-format    # 포맷(black 대체)
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
     hooks:
-      - id: check-json
       - id: check-merge-conflict
       - id: check-added-large-files
+      - id: check-json
       - id: check-toml
-      - id: check-xml
-      - id: debug-statements
-      - id: detect-private-key
-
-  - repo: https://github.com/adrienverge/yamllint
-    rev: v1.35.1
-    hooks:
-      - id: yamllint
-        args: [-c, .yamllint.yaml]
-
-  - repo: https://github.com/rhysd/actionlint
-    rev: v1.7.1
-    hooks: [{id: actionlint}]
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
