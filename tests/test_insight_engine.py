@@ -1,5 +1,3 @@
-import pytest
-
 from insight import rank, score_candidate
 
 

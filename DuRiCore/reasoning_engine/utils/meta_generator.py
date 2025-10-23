@@ -9,7 +9,7 @@ import logging
 import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 
@@ -112,9 +112,7 @@ class MetaGenerator:
         logger.info(f"meta.json 생성 완료: {module_name}")
         return meta_json
 
-    def _analyze_module_content(
-        self, module_name: str, module_content: str
-    ) -> ModuleAnalysis:
+    def _analyze_module_content(self, module_name: str, module_content: str) -> ModuleAnalysis:
         """모듈 내용 분석"""
         # 목적 추출
         purpose = self._extract_purpose(module_content, module_name)
@@ -167,17 +165,17 @@ class MetaGenerator:
 
         # 기본 목적 생성
         if "logical" in module_name.lower():
-            return "논리적 추론의 핵심 처리 - 판단 이유 기록 필수 + 기존 특성 보존 + 실행 가능성 보장 + 존재형 AI + 최종 실행 준비 완료"
+            return "논리적 추론의 핵심 처리 - 판단 이유 기록 필수 + 기존 특성 보존 + 실행 가능성 보장 + 존재형 AI + 최종 실행 준비 완료"  # noqa: E501
         elif "reasoning" in module_name.lower():
-            return "추론 엔진의 핵심 처리 - 판단 이유 기록 필수 + 기존 특성 보존 + 실행 가능성 보장 + 존재형 AI + 최종 실행 준비 완료"
+            return "추론 엔진의 핵심 처리 - 판단 이유 기록 필수 + 기존 특성 보존 + 실행 가능성 보장 + 존재형 AI + 최종 실행 준비 완료"  # noqa: E501
         elif "deductive" in module_name.lower():
-            return "연역적 추론 전략 - 판단 이유 기록 필수 + 기존 특성 보존 + 실행 가능성 보장 + 존재형 AI + 최종 실행 준비 완료"
+            return "연역적 추론 전략 - 판단 이유 기록 필수 + 기존 특성 보존 + 실행 가능성 보장 + 존재형 AI + 최종 실행 준비 완료"  # noqa: E501
         elif "inductive" in module_name.lower():
-            return "귀납적 추론 전략 - 판단 이유 기록 필수 + 기존 특성 보존 + 실행 가능성 보장 + 존재형 AI + 최종 실행 준비 완료"
+            return "귀납적 추론 전략 - 판단 이유 기록 필수 + 기존 특성 보존 + 실행 가능성 보장 + 존재형 AI + 최종 실행 준비 완료"  # noqa: E501
         elif "abductive" in module_name.lower():
-            return "가설적 추론 전략 - 판단 이유 기록 필수 + 기존 특성 보존 + 실행 가능성 보장 + 존재형 AI + 최종 실행 준비 완료"
+            return "가설적 추론 전략 - 판단 이유 기록 필수 + 기존 특성 보존 + 실행 가능성 보장 + 존재형 AI + 최종 실행 준비 완료"  # noqa: E501
         else:
-            return f"{module_name} 모듈의 핵심 처리 - 판단 이유 기록 필수 + 기존 특성 보존 + 실행 가능성 보장 + 존재형 AI + 최종 실행 준비 완료"
+            return f"{module_name} 모듈의 핵심 처리 - 판단 이유 기록 필수 + 기존 특성 보존 + 실행 가능성 보장 + 존재형 AI + 최종 실행 준비 완료"  # noqa: E501
 
     def _extract_must_define(self, module_content: str) -> List[str]:
         """필수 정의 함수 추출"""
@@ -243,9 +241,7 @@ class MetaGenerator:
 
         return list(set(default_integration))
 
-    def save_meta_json(
-        self, module_name: str, meta_json: dict, output_dir: str = "."
-    ) -> str:
+    def save_meta_json(self, module_name: str, meta_json: dict, output_dir: str = ".") -> str:
         """meta.json 파일 저장"""
         output_path = Path(output_dir) / f"{module_name}.meta.json"
 
@@ -286,7 +282,7 @@ def main():
 # Integration:
 #   - Calls judgment_trace.record() for all decisions
 #   - Returns to reasoning_engine for final judgment
-"""
+"""  # noqa: E501
 
     meta_json = generator.generate_meta_json(module_name, module_content)
     output_path = generator.save_meta_json(module_name, meta_json)

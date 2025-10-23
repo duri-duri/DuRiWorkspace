@@ -6,8 +6,7 @@
 import json
 import os
 import statistics
-import time
-from collections import defaultdict, deque
+from collections import defaultdict
 from datetime import datetime, timedelta
 from typing import Any, Dict, List
 
@@ -60,13 +59,9 @@ class PerformanceTracker:
         # 시스템 전체 통계 업데이트
         self._update_system_health()
 
-        print(
-            f"📊 성능 추적: {endpoint} - {response_time:.3f}초 ({'성공' if success else '실패'})"
-        )
+        print(f"📊 성능 추적: {endpoint} - {response_time:.3f}초 ({'성공' if success else '실패'})")
 
-    def track_learning_metric(
-        self, metric_name: str, value: float, metadata: Dict[str, Any] = None
-    ):
+    def track_learning_metric(self, metric_name: str, value: float, metadata: Dict[str, Any] = None):
         """학습 메트릭 추적"""
         timestamp = datetime.now()
 
@@ -94,16 +89,12 @@ class PerformanceTracker:
 
         # 엔드포인트별 성능 분석
         for endpoint in self.response_times:
-            response_times = [
-                req["response_time"] for req in self.response_times[endpoint]
-            ]
+            response_times = [req["response_time"] for req in self.response_times[endpoint]]
             if response_times:
                 # 안전한 error_rate 계산
                 total_requests = self.request_counts.get(endpoint, 0)
                 total_errors = self.error_counts.get(endpoint, 0)
-                error_rate = (
-                    total_errors / total_requests if total_requests > 0 else 0.0
-                )
+                error_rate = total_errors / total_requests if total_requests > 0 else 0.0
 
                 summary["endpoint_performance"][endpoint] = {
                     "avg_response_time": statistics.mean(response_times),
@@ -130,15 +121,12 @@ class PerformanceTracker:
 
         return summary
 
-    def _get_recent_performance(
-        self, endpoint: str, minutes: int = 5
-    ) -> Dict[str, Any]:
+    def _get_recent_performance(self, endpoint: str, minutes: int = 5) -> Dict[str, Any]:
         """최근 성능 데이터"""
         recent_requests = [
             req
             for req in self.response_times[endpoint]
-            if datetime.fromisoformat(req["timestamp"])
-            > datetime.now() - timedelta(minutes=minutes)
+            if datetime.fromisoformat(req["timestamp"]) > datetime.now() - timedelta(minutes=minutes)
         ]
 
         if not recent_requests:
@@ -221,26 +209,18 @@ class PerformanceTracker:
         # 응답 시간 권장사항
         for endpoint, perf in summary["endpoint_performance"].items():
             if perf["avg_response_time"] > 2.0:
-                recommendations.append(
-                    f"{endpoint}: 응답 시간이 2초를 초과합니다. 최적화가 필요합니다."
-                )
+                recommendations.append(f"{endpoint}: 응답 시간이 2초를 초과합니다. 최적화가 필요합니다.")
             elif perf["error_rate"] > 0.05:
-                recommendations.append(
-                    f"{endpoint}: 오류율이 5%를 초과합니다. 안정성 개선이 필요합니다."
-                )
+                recommendations.append(f"{endpoint}: 오류율이 5%를 초과합니다. 안정성 개선이 필요합니다.")
 
         # 학습 메트릭 권장사항
         for metric_name, metric_data in summary["learning_metrics"].items():
             if metric_data["trend"] == "declining":
-                recommendations.append(
-                    f"{metric_name}: 학습 효과가 감소하고 있습니다. 학습 방법 개선이 필요합니다."
-                )
+                recommendations.append(f"{metric_name}: 학습 효과가 감소하고 있습니다. 학습 방법 개선이 필요합니다.")
 
         # 시스템 전체 권장사항
         if summary["system_health"]["error_rate"] > 0.1:
-            recommendations.append(
-                "전체 시스템 오류율이 높습니다. 시스템 안정성 점검이 필요합니다."
-            )
+            recommendations.append("전체 시스템 오류율이 높습니다. 시스템 안정성 점검이 필요합니다.")
 
         return recommendations
 
@@ -252,9 +232,7 @@ class PerformanceTracker:
                 "uptime_seconds": self.system_health.get("uptime", 0),
                 "total_requests": self.system_health.get("total_requests", 0),
                 "error_rate": self.system_health.get("error_rate", 0.0),
-                "last_check": self.system_health.get(
-                    "last_check", datetime.now().isoformat()
-                ),
+                "last_check": self.system_health.get("last_check", datetime.now().isoformat()),
             }
         except Exception as e:
             print(f"건강도 확인 오류: {e}")

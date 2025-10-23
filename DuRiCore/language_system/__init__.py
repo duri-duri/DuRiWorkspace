@@ -8,8 +8,7 @@ DuRi 언어 시스템 패키지
 
 from .core.advanced_generation_engine import AdvancedLanguageGenerationEngine
 from .core.deep_understanding_engine import DeepLanguageUnderstandingEngine
-from .core.integrated_language_system import \
-    IntegratedLanguageUnderstandingGenerationSystem
+from .core.integrated_language_system import IntegratedLanguageUnderstandingGenerationSystem
 
 __all__ = [
     "DeepLanguageUnderstandingEngine",

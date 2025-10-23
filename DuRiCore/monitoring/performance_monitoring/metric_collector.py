@@ -11,18 +11,14 @@ DuRiCore Phase 2-4: 성능 메트릭 수집 모듈
 """
 
 import asyncio
-import json
 import logging
 import statistics
 import time
 import uuid
-from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
-
-import numpy as np
+from typing import Any, Dict, List, Optional
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -151,9 +147,7 @@ class MetricCollector:
         try:
             collection_id = f"collection_{int(time.time())}_{uuid.uuid4().hex[:8]}"
 
-            collection = MetricCollection(
-                collection_id=collection_id, collection_name=collection_name
-            )
+            collection = MetricCollection(collection_id=collection_id, collection_name=collection_name)
 
             self.collections[collection_id] = collection
             self.performance_metrics["active_collections"] += 1
@@ -208,9 +202,7 @@ class MetricCollector:
             logger.error(f"메트릭 조회 실패: {e}")
             return []
 
-    async def get_metrics_by_source(
-        self, source: str, time_range: timedelta = None
-    ) -> List[PerformanceMetric]:
+    async def get_metrics_by_source(self, source: str, time_range: timedelta = None) -> List[PerformanceMetric]:
         """소스별 메트릭 조회"""
         try:
             current_time = datetime.now()
@@ -218,11 +210,7 @@ class MetricCollector:
 
             metrics = []
             for metric in self.metric_history:
-                if (
-                    metric.source == source
-                    and metric.timestamp >= start_time
-                    and metric.status == MetricStatus.ACTIVE
-                ):
+                if metric.source == source and metric.timestamp >= start_time and metric.status == MetricStatus.ACTIVE:
                     metrics.append(metric)
 
             return metrics
@@ -231,9 +219,7 @@ class MetricCollector:
             logger.error(f"메트릭 조회 실패: {e}")
             return []
 
-    async def get_metric_statistics(
-        self, metric_name: str, time_range: timedelta = None
-    ) -> Dict[str, Any]:
+    async def get_metric_statistics(self, metric_name: str, time_range: timedelta = None) -> Dict[str, Any]:
         """메트릭 통계 조회"""
         try:
             current_time = datetime.now()
@@ -310,10 +296,7 @@ class MetricCollector:
                     m
                     for m in self.metric_history
                     if m.timestamp >= collection.start_time
-                    and (
-                        collection.end_time is None
-                        or m.timestamp <= collection.end_time
-                    )
+                    and (collection.end_time is None or m.timestamp <= collection.end_time)
                 ]
             )
 
@@ -321,15 +304,11 @@ class MetricCollector:
                 "collection_id": collection_id,
                 "collection_name": collection.collection_name,
                 "start_time": collection.start_time.isoformat(),
-                "end_time": (
-                    collection.end_time.isoformat() if collection.end_time else None
-                ),
+                "end_time": (collection.end_time.isoformat() if collection.end_time else None),
                 "status": collection.status,
                 "metrics_count": metrics_count,
                 "duration": (
-                    (collection.end_time - collection.start_time).total_seconds()
-                    if collection.end_time
-                    else None
+                    (collection.end_time - collection.start_time).total_seconds() if collection.end_time else None
                 ),
             }
 
@@ -346,15 +325,9 @@ class MetricCollector:
                 "total_metrics": len(self.metrics),
                 "active_collections": self.performance_metrics["active_collections"],
                 "total_collected": self.performance_metrics["total_metrics_collected"],
-                "collection_success_rate": self.performance_metrics[
-                    "collection_success_rate"
-                ],
-                "average_collection_time": self.performance_metrics[
-                    "average_collection_time"
-                ],
-                "retention_period": self.collection_config[
-                    "retention_period"
-                ].total_seconds(),
+                "collection_success_rate": self.performance_metrics["collection_success_rate"],
+                "average_collection_time": self.performance_metrics["average_collection_time"],
+                "retention_period": self.collection_config["retention_period"].total_seconds(),
                 "max_metrics": self.collection_config["max_metrics"],
             }
 

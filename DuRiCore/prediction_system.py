@@ -5,23 +5,17 @@ DuRiCore Phase 5.5.3 - 예측 시스템
 """
 
 import asyncio
-import json
 import logging
-import math
-import random
 import time
 from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List
 
-from standard_response_system import (ErrorHandler, ErrorSeverity,
-                                      StandardResponse)
+from standard_response_system import ErrorHandler, ErrorSeverity, StandardResponse
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -111,14 +105,10 @@ class PredictionSystem:
             trend_analysis = await self.trend_analyzer.analyze_trends(context)
 
             # 4. 리스크 평가
-            risk_assessment = await self.risk_assessor.assess_risks(
-                context, prediction_type
-            )
+            risk_assessment = await self.risk_assessor.assess_risks(context, prediction_type)
 
             # 5. 시나리오 생성
-            scenarios = await self.scenario_generator.generate_scenarios(
-                context, prediction_type
-            )
+            scenarios = await self.scenario_generator.generate_scenarios(context, prediction_type)
 
             # 6. 예측 결과 생성
             prediction = self._generate_prediction(
@@ -131,14 +121,10 @@ class PredictionSystem:
             )
 
             # 7. 신뢰도 계산
-            confidence_score = self._calculate_confidence(
-                pattern_analysis, trend_analysis, risk_assessment
-            )
+            confidence_score = self._calculate_confidence(pattern_analysis, trend_analysis, risk_assessment)
 
             # 8. 대응 전략 생성
-            mitigation_strategies = self._generate_mitigation_strategies(
-                prediction, risk_assessment, prediction_type
-            )
+            mitigation_strategies = self._generate_mitigation_strategies(prediction, risk_assessment, prediction_type)
 
             result = PredictionResult(
                 prediction_type=prediction_type,
@@ -259,9 +245,7 @@ class PredictionSystem:
             logger.error(f"패턴 분석 실패: {e}")
             return {}
 
-    def _analyze_behavioral_patterns(
-        self, context: Dict[str, Any]
-    ) -> List[PatternAnalysis]:
+    def _analyze_behavioral_patterns(self, context: Dict[str, Any]) -> List[PatternAnalysis]:
         """행동 패턴 분석"""
         patterns = []
 
@@ -294,9 +278,7 @@ class PredictionSystem:
 
         return patterns
 
-    def _analyze_temporal_patterns(
-        self, context: Dict[str, Any]
-    ) -> List[PatternAnalysis]:
+    def _analyze_temporal_patterns(self, context: Dict[str, Any]) -> List[PatternAnalysis]:
         """시간적 패턴 분석"""
         patterns = []
 
@@ -316,9 +298,7 @@ class PredictionSystem:
 
         return patterns
 
-    def _analyze_structural_patterns(
-        self, context: Dict[str, Any]
-    ) -> List[PatternAnalysis]:
+    def _analyze_structural_patterns(self, context: Dict[str, Any]) -> List[PatternAnalysis]:
         """구조적 패턴 분석"""
         patterns = []
 
@@ -369,9 +349,7 @@ class PredictionSystem:
 
         except Exception as e:
             logger.error(f"예측 생성 실패: {e}")
-            return ErrorHandler.handle_exception(
-                e, "prediction_generation", ErrorSeverity.HIGH
-            )
+            return ErrorHandler.handle_exception(e, "prediction_generation", ErrorSeverity.HIGH)
 
     def _get_base_prediction(self, prediction_type: PredictionType) -> str:
         """기본 예측 템플릿"""
@@ -383,9 +361,7 @@ class PredictionSystem:
             PredictionType.PATTERN: "기존 패턴을 기반으로 한 예측 가능한 발전이 예상됩니다.",
             PredictionType.RISK: "리스크 요소를 고려한 신중한 발전이 예상됩니다.",
         }
-        base_prediction = predictions.get(
-            prediction_type, "기본 예측을 생성할 수 없습니다."
-        )
+        base_prediction = predictions.get(prediction_type, "기본 예측을 생성할 수 없습니다.")
         return StandardResponse.prediction(
             prediction_type=prediction_type.value,
             predicted_outcome=base_prediction,
@@ -417,9 +393,7 @@ class PredictionSystem:
         """트렌드 기반 예측 적용"""
         trends = trend_analysis.get("identified_trends", [])
         if trends:
-            prediction_message = (
-                f"트렌드 분석 결과, {trends[0]} 방향으로 발전할 것으로 예상됩니다."
-            )
+            prediction_message = f"트렌드 분석 결과, {trends[0]} 방향으로 발전할 것으로 예상됩니다."
             return StandardResponse.prediction(
                 prediction_type="trend_analysis",
                 predicted_outcome=prediction_message,
@@ -438,9 +412,7 @@ class PredictionSystem:
         """리스크 기반 예측 적용"""
         risks = risk_assessment.get("risk_factors", [])
         if risks:
-            prediction_message = (
-                f"리스크 평가 결과, {risks[0]}에 대한 대응이 필요할 것으로 예상됩니다."
-            )
+            prediction_message = f"리스크 평가 결과, {risks[0]}에 대한 대응이 필요할 것으로 예상됩니다."
             return StandardResponse.prediction(
                 prediction_type="risk_assessment",
                 predicted_outcome=prediction_message,
@@ -477,17 +449,13 @@ class PredictionSystem:
         else:
             return "현재 상황에서는 예측을 생성할 수 없습니다. 다른 접근 방법을 시도해보겠습니다."
 
-    def _calculate_confidence(
-        self, pattern_analysis: Dict, trend_analysis: Dict, risk_assessment: Dict
-    ) -> float:
+    def _calculate_confidence(self, pattern_analysis: Dict, trend_analysis: Dict, risk_assessment: Dict) -> float:
         """신뢰도 계산"""
         try:
             # 패턴 신뢰도
             pattern_confidence = 0.0
             if pattern_analysis.get("behavioral_patterns"):
-                pattern_confidence = max(
-                    p.confidence for p in pattern_analysis["behavioral_patterns"]
-                )
+                pattern_confidence = max(p.confidence for p in pattern_analysis["behavioral_patterns"])
 
             # 트렌드 신뢰도
             trend_confidence = trend_analysis.get("confidence", 0.5)
@@ -496,11 +464,7 @@ class PredictionSystem:
             risk_confidence = risk_assessment.get("confidence", 0.5)
 
             # 가중 평균
-            confidence = (
-                pattern_confidence * 0.4
-                + trend_confidence * 0.3
-                + risk_confidence * 0.3
-            )
+            confidence = pattern_confidence * 0.4 + trend_confidence * 0.3 + risk_confidence * 0.3
             return min(max(confidence, 0.0), 1.0)
 
         except Exception as e:
@@ -585,11 +549,7 @@ class PredictionSystem:
             "status": "active",
             "prediction_count": len(self.prediction_history),
             "pattern_count": len(self.pattern_database),
-            "last_prediction": (
-                self.prediction_history[-1].created_at
-                if self.prediction_history
-                else None
-            ),
+            "last_prediction": (self.prediction_history[-1].created_at if self.prediction_history else None),
         }
 
 
@@ -665,9 +625,7 @@ class TrendAnalyzer:
 class RiskAssessor:
     """리스크 평가기"""
 
-    async def assess_risks(
-        self, context: Dict[str, Any], prediction_type: PredictionType
-    ) -> Dict[str, Any]:
+    async def assess_risks(self, context: Dict[str, Any], prediction_type: PredictionType) -> Dict[str, Any]:
         """리스크 평가"""
         try:
             risks = {
@@ -736,9 +694,7 @@ class RiskAssessor:
 class ScenarioGenerator:
     """시나리오 생성기"""
 
-    async def generate_scenarios(
-        self, context: Dict[str, Any], prediction_type: PredictionType
-    ) -> Dict[str, Any]:
+    async def generate_scenarios(self, context: Dict[str, Any], prediction_type: PredictionType) -> Dict[str, Any]:
         """시나리오 생성"""
         try:
             scenarios = {
@@ -836,17 +792,13 @@ async def main():
     }
 
     # 예측 실행
-    prediction_result = await prediction_system.predict_future_situation(
-        test_context, PredictionType.MEDIUM_TERM
-    )
+    prediction_result = await prediction_system.predict_future_situation(test_context, PredictionType.MEDIUM_TERM)
 
     # 결과 출력
     print("\n=== 예측 시스템 테스트 결과 ===")
     print(f"예측 유형: {prediction_result.prediction_type.value}")
     print(f"예측 결과: {prediction_result.predicted_outcome}")
-    print(
-        f"신뢰도: {prediction_result.confidence_level.value} ({prediction_result.confidence_score:.2f})"
-    )
+    print(f"신뢰도: {prediction_result.confidence_level.value} ({prediction_result.confidence_score:.2f})")
     print(f"예측 기간: {prediction_result.timeframe}")
     print(f"지지 증거: {prediction_result.supporting_evidence}")
     print(f"리스크 요소: {prediction_result.risk_factors}")

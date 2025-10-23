@@ -16,22 +16,18 @@ import asyncio
 import hashlib
 import importlib
 import inspect
-import json
 import logging
 import os
 import shutil
 import threading
 import time
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Type
+from typing import Any, Callable, Dict, List, Optional
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -340,9 +336,7 @@ class PluginLifecycleManager:
             logger.error(f"❌ 플러그인 제거 실패: {plugin_name} - {e}")
             return False
 
-    async def update_plugin(
-        self, plugin_name: str, new_version: str, update_path: str
-    ) -> bool:
+    async def update_plugin(self, plugin_name: str, new_version: str, update_path: str) -> bool:
         """플러그인 업데이트"""
         if plugin_name not in self.plugins:
             return False
@@ -457,9 +451,7 @@ class PluginLifecycleManager:
     def _update_performance_metrics(self):
         """성능 메트릭 업데이트"""
         total_plugins = len(self.plugins)
-        active_plugins = sum(
-            1 for p in self.plugins.values() if p.state == PluginState.ACTIVE
-        )
+        active_plugins = sum(1 for p in self.plugins.values() if p.state == PluginState.ACTIVE)
 
         # 자동화율 계산
         automation_score = 0.0
@@ -478,24 +470,15 @@ class PluginLifecycleManager:
             automation_score = min(1.0, auto_features / 4.0)
 
         # 업데이트 성공률 계산
-        update_attempts = sum(
-            1 for p in self.plugins.values() if p.last_updated != p.created_at
-        )
+        update_attempts = sum(1 for p in self.plugins.values() if p.last_updated != p.created_at)
         update_successes = sum(
-            1
-            for p in self.plugins.values()
-            if p.last_updated != p.created_at and p.state != PluginState.ERROR
+            1 for p in self.plugins.values() if p.last_updated != p.created_at and p.state != PluginState.ERROR
         )
         update_success_rate = update_successes / max(update_attempts, 1)
 
         # 의존성 해결률 계산
         total_deps = sum(len(p.dependencies) for p in self.plugins.values())
-        resolved_deps = sum(
-            1
-            for p in self.plugins.values()
-            for dep in p.dependencies
-            if dep in self.plugins
-        )
+        resolved_deps = sum(1 for p in self.plugins.values() for dep in p.dependencies if dep in self.plugins)
         dependency_resolution_rate = resolved_deps / max(total_deps, 1)
 
         self.performance_metrics.update(
@@ -516,24 +499,13 @@ class PluginLifecycleManager:
             "metrics": self.performance_metrics,
             "target_automation_rate": 0.6,  # 목표 60%
             "current_automation_rate": self.performance_metrics["automation_rate"],
-            "automation_improvement": (
-                self.performance_metrics["automation_rate"] - 0.4
-            )
-            * 100,
+            "automation_improvement": (self.performance_metrics["automation_rate"] - 0.4) * 100,
             "total_plugins": len(self.plugins),
             "plugin_states": {
-                "active": sum(
-                    1 for p in self.plugins.values() if p.state == PluginState.ACTIVE
-                ),
-                "loaded": sum(
-                    1 for p in self.plugins.values() if p.state == PluginState.LOADED
-                ),
-                "inactive": sum(
-                    1 for p in self.plugins.values() if p.state == PluginState.INACTIVE
-                ),
-                "error": sum(
-                    1 for p in self.plugins.values() if p.state == PluginState.ERROR
-                ),
+                "active": sum(1 for p in self.plugins.values() if p.state == PluginState.ACTIVE),
+                "loaded": sum(1 for p in self.plugins.values() if p.state == PluginState.LOADED),
+                "inactive": sum(1 for p in self.plugins.values() if p.state == PluginState.INACTIVE),
+                "error": sum(1 for p in self.plugins.values() if p.state == PluginState.ERROR),
             },
             "lifecycle_hooks": {
                 "registered_hooks": len(self.lifecycle_hooks),
@@ -590,9 +562,7 @@ class AutoUpdateSystem:
             return True
 
         except Exception as e:
-            logger.error(
-                f"❌ 업데이트 다운로드 실패: {update_info['plugin_name']} - {e}"
-            )
+            logger.error(f"❌ 업데이트 다운로드 실패: {update_info['plugin_name']} - {e}")
             return False
 
     async def install_update(self, update_info: Dict[str, Any]) -> bool:
@@ -757,16 +727,14 @@ class {plugin_class}:
 
     # 성능 리포트
     report = lifecycle_manager.get_performance_report()
-    logger.info(f"📈 성능 리포트:")
+    logger.info("📈 성능 리포트:")
     logger.info(f"   총 플러그인 수: {report['total_plugins']}")
     logger.info(f"   활성 플러그인 수: {report['plugin_states']['active']}")
     logger.info(f"   자동화율: {report['current_automation_rate']:.1%}")
     logger.info(f"   자동화 향상: {report['automation_improvement']:.1f}%")
     logger.info(f"   목표 자동화율: {report['target_automation_rate']:.1%}")
     logger.info(f"   업데이트 성공률: {report['metrics']['update_success_rate']:.1%}")
-    logger.info(
-        f"   의존성 해결률: {report['metrics']['dependency_resolution_rate']:.1%}"
-    )
+    logger.info(f"   의존성 해결률: {report['metrics']['dependency_resolution_rate']:.1%}")
 
     return report
 

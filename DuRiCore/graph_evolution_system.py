@@ -11,16 +11,14 @@ DuRi 실시간 그래프 진화 시스템 - Phase 1-3 Week 3 Day 4
 """
 
 import asyncio
-import heapq
-import json
 import logging
 import random
 import re
-from collections import defaultdict, deque
-from dataclasses import asdict, dataclass, field
+from collections import defaultdict
+from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional
 
 import numpy as np
 
@@ -273,9 +271,7 @@ class DynamicNodeGenerator:
             return None
 
         # 노드 ID 생성
-        node_id = (
-            f"{node_type}_{len(graph.nodes) + 1}_{int(datetime.now().timestamp())}"
-        )
+        node_id = f"{node_type}_{len(graph.nodes) + 1}_{int(datetime.now().timestamp())}"
 
         # 내용 생성
         content = self._generate_content(node_type, context, template)
@@ -310,9 +306,7 @@ class DynamicNodeGenerator:
 
         return node
 
-    def _generate_content(
-        self, node_type: str, context: Dict[str, Any], template: Dict[str, Any]
-    ) -> str:
+    def _generate_content(self, node_type: str, context: Dict[str, Any], template: Dict[str, Any]) -> str:
         """내용 생성"""
         patterns = template.get("content_patterns", [f"{node_type}: {{content}}"])
         pattern = random.choice(patterns)
@@ -449,9 +443,7 @@ class DynamicEdgeGenerator:
         for node in graph.nodes.values():
             if node.node_type.value in can_connect_to:
                 # 의미적 유사도 계산
-                similarity = self._calculate_semantic_similarity(
-                    new_node.content, node.content
-                )
+                similarity = self._calculate_semantic_similarity(new_node.content, node.content)
                 if similarity > 0.1:  # 최소 유사도 임계값
                     potential_targets.append((node, similarity))
 
@@ -487,9 +479,7 @@ class DynamicEdgeGenerator:
         strength = min(1.0, base_strength + similarity * 0.3)
 
         # 추론 생성
-        reasoning_patterns = template.get(
-            "reasoning_patterns", [f"{edge_type.value}: {{source}} -> {{target}}"]
-        )
+        reasoning_patterns = template.get("reasoning_patterns", [f"{edge_type.value}: {{source}} -> {{target}}"])
         reasoning = random.choice(reasoning_patterns).format(
             source=source_node.content[:20], target=target_node.content[:20]
         )
@@ -600,9 +590,7 @@ class GraphEvolutionEngine:
         logger.info(f"그래프 진화 시작: {trigger.value} -> {strategy.value}")
 
         evolution_id = f"evolution_{int(datetime.now().timestamp())}"
-        strategy_config = self.evolution_strategies.get(
-            strategy.value, self.evolution_strategies["moderate"]
-        )
+        strategy_config = self.evolution_strategies.get(strategy.value, self.evolution_strategies["moderate"])
 
         # 진화 이벤트 생성
         evolution_event = EvolutionEvent(
@@ -621,9 +609,7 @@ class GraphEvolutionEngine:
         try:
             # 1. 동적 노드 생성
             if random.random() < strategy_config["node_generation_probability"]:
-                new_nodes = await self.node_generator.generate_dynamic_nodes(
-                    graph, trigger, context
-                )
+                new_nodes = await self.node_generator.generate_dynamic_nodes(graph, trigger, context)
 
                 # 노드 수 제한
                 max_nodes = strategy_config["max_new_nodes"]
@@ -637,9 +623,7 @@ class GraphEvolutionEngine:
 
             # 2. 동적 엣지 생성
             if random.random() < strategy_config["edge_generation_probability"]:
-                new_edges = await self.edge_generator.generate_dynamic_edges(
-                    graph, new_nodes
-                )
+                new_edges = await self.edge_generator.generate_dynamic_edges(graph, new_nodes)
 
                 # 엣지 수 제한
                 max_edges = strategy_config["max_new_edges"]
@@ -652,9 +636,7 @@ class GraphEvolutionEngine:
                     modified_edges.append(edge.edge_id)
 
             # 3. 진화 메트릭 계산
-            evolution_metrics = await self._calculate_evolution_metrics(
-                graph, new_nodes, new_edges
-            )
+            evolution_metrics = await self._calculate_evolution_metrics(graph, new_nodes, new_edges)
 
             # 4. 진화 결과 생성
             evolution_result = EvolutionResult(
@@ -679,9 +661,7 @@ class GraphEvolutionEngine:
                 }
             )
 
-            logger.info(
-                f"그래프 진화 완료: {len(new_nodes)}개 노드, {len(new_edges)}개 엣지 생성"
-            )
+            logger.info(f"그래프 진화 완료: {len(new_nodes)}개 노드, {len(new_edges)}개 엣지 생성")
             return evolution_result
 
         except Exception as e:
@@ -721,24 +701,16 @@ class GraphEvolutionEngine:
 
         # 평균 신뢰도
         node_confidences = [node.confidence for node in graph.nodes.values()]
-        avg_confidence = (
-            sum(node_confidences) / len(node_confidences) if node_confidences else 0.0
-        )
+        avg_confidence = sum(node_confidences) / len(node_confidences) if node_confidences else 0.0
         metrics["avg_confidence"] = avg_confidence
 
         # 평균 강도
         edge_strengths = [edge.strength for edge in graph.edges.values()]
-        avg_strength = (
-            sum(edge_strengths) / len(edge_strengths) if edge_strengths else 0.0
-        )
+        avg_strength = sum(edge_strengths) / len(edge_strengths) if edge_strengths else 0.0
         metrics["avg_strength"] = avg_strength
 
         # 연결성
-        connectivity = (
-            total_edges / (total_nodes * (total_nodes - 1) / 2)
-            if total_nodes > 1
-            else 0.0
-        )
+        connectivity = total_edges / (total_nodes * (total_nodes - 1) / 2) if total_nodes > 1 else 0.0
         metrics["connectivity"] = connectivity
 
         # 종합 신뢰도
@@ -773,9 +745,7 @@ class EvolutionValidator:
         evolution_success = self._evaluate_evolution_success(evolution_result)
 
         # 2. 품질 향상도 평가
-        quality_improvement = await self._evaluate_quality_improvement(
-            graph, evolution_result
-        )
+        quality_improvement = await self._evaluate_quality_improvement(graph, evolution_result)
 
         # 3. 시스템 안정성 평가
         system_stability = await self._evaluate_system_stability(graph)
@@ -786,11 +756,9 @@ class EvolutionValidator:
         # 종합 검증 점수
         overall_score = (
             evolution_success * self.validation_criteria["evolution_success"]["weight"]
-            + quality_improvement
-            * self.validation_criteria["quality_improvement"]["weight"]
+            + quality_improvement * self.validation_criteria["quality_improvement"]["weight"]
             + system_stability * self.validation_criteria["system_stability"]["weight"]
-            + evolution_efficiency
-            * self.validation_criteria["evolution_efficiency"]["weight"]
+            + evolution_efficiency * self.validation_criteria["evolution_efficiency"]["weight"]
         )
 
         return {
@@ -814,12 +782,8 @@ class EvolutionValidator:
             return 0.0
 
         # 새 노드와 엣지 생성 성공도
-        node_success = min(
-            1.0, len(evolution_result.new_nodes) / 2.0
-        )  # 최소 2개 노드 기준
-        edge_success = min(
-            1.0, len(evolution_result.new_edges) / 3.0
-        )  # 최소 3개 엣지 기준
+        node_success = min(1.0, len(evolution_result.new_nodes) / 2.0)  # 최소 2개 노드 기준
+        edge_success = min(1.0, len(evolution_result.new_edges) / 3.0)  # 최소 3개 엣지 기준
 
         return (node_success + edge_success) / 2.0
 
@@ -845,11 +809,7 @@ class EvolutionValidator:
         evolution_balance = max(0.0, evolution_balance)
 
         # 종합 품질 점수
-        quality_score = (
-            confidence_improvement * 0.4
-            + connectivity_improvement * 0.3
-            + evolution_balance * 0.3
-        )
+        quality_score = confidence_improvement * 0.4 + connectivity_improvement * 0.3 + evolution_balance * 0.3
 
         return quality_score
 
@@ -873,9 +833,7 @@ class EvolutionValidator:
 
         return (stability_score + strength_stability) / 2.0
 
-    def _evaluate_evolution_efficiency(
-        self, evolution_result: EvolutionResult
-    ) -> float:
+    def _evaluate_evolution_efficiency(self, evolution_result: EvolutionResult) -> float:
         """진화 효율성 평가"""
         # 진화 비용 대비 효과
         total_changes = (
@@ -889,9 +847,7 @@ class EvolutionValidator:
             return 0.0
 
         # 변화 대비 효과 (새 노드/엣지 비율)
-        effective_changes = len(evolution_result.new_nodes) + len(
-            evolution_result.new_edges
-        )
+        effective_changes = len(evolution_result.new_nodes) + len(evolution_result.new_edges)
         efficiency = effective_changes / total_changes if total_changes > 0 else 0.0
 
         return efficiency
@@ -906,32 +862,22 @@ async def test_graph_evolution_system():
 
     # 초기 노드들 생성
     initial_nodes = {
-        "node1": DynamicReasoningNode(
-            "node1", NodeType.PREMISE, "윤리적 행동은 옳다", 0.8, "test"
-        ),
-        "node2": DynamicReasoningNode(
-            "node2", NodeType.INFERENCE, "칸트적 분석", 0.7, "test"
-        ),
-        "node3": DynamicReasoningNode(
-            "node3", NodeType.CONCLUSION, "최종 판단", 0.9, "test"
-        ),
+        "node1": DynamicReasoningNode("node1", NodeType.PREMISE, "윤리적 행동은 옳다", 0.8, "test"),
+        "node2": DynamicReasoningNode("node2", NodeType.INFERENCE, "칸트적 분석", 0.7, "test"),
+        "node3": DynamicReasoningNode("node3", NodeType.CONCLUSION, "최종 판단", 0.9, "test"),
     }
 
     graph.nodes = initial_nodes
 
     # 초기 엣지들 생성
     initial_edges = {
-        "edge1": DynamicReasoningEdge(
-            "edge1", "node1", "node2", EdgeType.SUPPORTS, 0.8, "지원"
-        ),
-        "edge2": DynamicReasoningEdge(
-            "edge2", "node2", "node3", EdgeType.INFERS, 0.9, "추론"
-        ),
+        "edge1": DynamicReasoningEdge("edge1", "node1", "node2", EdgeType.SUPPORTS, 0.8, "지원"),
+        "edge2": DynamicReasoningEdge("edge2", "node2", "node3", EdgeType.INFERS, 0.9, "추론"),
     }
 
     graph.edges = initial_edges
 
-    print(f"\n📊 초기 그래프 상태:")
+    print("\n📊 초기 그래프 상태:")
     print(f"  • 노드 수: {len(graph.nodes)}")
     print(f"  • 엣지 수: {len(graph.edges)}")
 
@@ -964,9 +910,7 @@ async def test_graph_evolution_system():
         print(f"\n🔄 진화 시나리오: {trigger.value}")
 
         # 진화 실행
-        evolution_result = await evolution_engine.evolve_graph(
-            graph, trigger, context, EvolutionStrategy.MODERATE
-        )
+        evolution_result = await evolution_engine.evolve_graph(graph, trigger, context, EvolutionStrategy.MODERATE)
 
         evolution_results.append(evolution_result)
 
@@ -978,7 +922,7 @@ async def test_graph_evolution_system():
 
         if evolution_result.evolution_metrics:
             metrics = evolution_result.evolution_metrics
-            print(f"  • 진화 메트릭:")
+            print("  • 진화 메트릭:")
             print(f"    - 전체 노드 수: {metrics.get('total_nodes', 0)}")
             print(f"    - 전체 엣지 수: {metrics.get('total_edges', 0)}")
             print(f"    - 평균 신뢰도: {metrics.get('avg_confidence', 0.0):.2f}")
@@ -988,12 +932,10 @@ async def test_graph_evolution_system():
     # 2. 진화 검증 테스트
     validator = EvolutionValidator()
 
-    print(f"\n📊 진화 검증 결과:")
+    print("\n📊 진화 검증 결과:")
     for i, evolution_result in enumerate(evolution_results):
         if evolution_result.success:
-            validation_result = await validator.validate_evolution(
-                graph, evolution_result
-            )
+            validation_result = await validator.validate_evolution(graph, evolution_result)
 
             print(f"  • 진화 {i+1} 검증:")
             print(f"    - 종합 점수: {validation_result['overall_score']:.2f}")
@@ -1003,20 +945,16 @@ async def test_graph_evolution_system():
             print(f"    - 진화 효율성: {validation_result['evolution_efficiency']:.2f}")
 
     # 3. 최종 그래프 상태
-    print(f"\n📊 최종 그래프 상태:")
-    print(
-        f"  • 노드 수: {len(graph.nodes)} (증가: {len(graph.nodes) - len(initial_nodes)})"
-    )
-    print(
-        f"  • 엣지 수: {len(graph.edges)} (증가: {len(graph.edges) - len(initial_edges)})"
-    )
+    print("\n📊 최종 그래프 상태:")
+    print(f"  • 노드 수: {len(graph.nodes)} (증가: {len(graph.nodes) - len(initial_nodes)})")
+    print(f"  • 엣지 수: {len(graph.edges)} (증가: {len(graph.edges) - len(initial_edges)})")
 
     # 노드 유형별 분포
     node_types = defaultdict(int)
     for node in graph.nodes.values():
         node_types[node.node_type.value] += 1
 
-    print(f"  • 노드 유형별 분포:")
+    print("  • 노드 유형별 분포:")
     for node_type, count in node_types.items():
         print(f"    - {node_type}: {count}개")
 

@@ -11,13 +11,12 @@ RegressionTestFramework - 통합 회귀 테스트 프레임워크
 @final_execution: 인간처럼 실패하고도 다시 일어날 수 있는 존재
 """
 
-import hashlib
 import json
 import logging
 import os
 import re
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 
@@ -180,9 +179,7 @@ class RegressionTestFramework:
             # 랜덤 샘플링 (실제로는 더 정교한 샘플링 로직 필요)
             import random
 
-            sampled_judgments = random.sample(
-                available_judgments, min(count, len(available_judgments))
-            )
+            sampled_judgments = random.sample(available_judgments, min(count, len(available_judgments)))
 
             logger.info(f"{len(sampled_judgments)}개의 기존 판단 결과 샘플링 완료")
             return sampled_judgments
@@ -191,9 +188,7 @@ class RegressionTestFramework:
             logger.error(f"기존 판단 결과 샘플링 실패: {str(e)}")
             return []
 
-    def calculate_judgment_similarity(
-        self, expected: Dict[str, Any], actual: Dict[str, Any]
-    ) -> float:
+    def calculate_judgment_similarity(self, expected: Dict[str, Any], actual: Dict[str, Any]) -> float:
         """
         판단 다양성과 감정 반응까지 포함된 메타 비교
 
@@ -255,9 +250,7 @@ class RegressionTestFramework:
             logger.error(f"판단 유사도 계산 실패: {str(e)}")
             return 0.0
 
-    def _calculate_reasoning_similarity(
-        self, expected_reasoning: str, actual_reasoning: str
-    ) -> float:
+    def _calculate_reasoning_similarity(self, expected_reasoning: str, actual_reasoning: str) -> float:
         """추론 방식 유사도 계산"""
         try:
             if not expected_reasoning or not actual_reasoning:
@@ -279,9 +272,7 @@ class RegressionTestFramework:
             logger.error(f"추론 방식 유사도 계산 실패: {str(e)}")
             return 0.0
 
-    def _calculate_confidence_similarity(
-        self, expected_confidence: float, actual_confidence: float
-    ) -> float:
+    def _calculate_confidence_similarity(self, expected_confidence: float, actual_confidence: float) -> float:
         """신뢰도 유사도 계산"""
         try:
             if expected_confidence is None or actual_confidence is None:
@@ -297,9 +288,7 @@ class RegressionTestFramework:
             logger.error(f"신뢰도 유사도 계산 실패: {str(e)}")
             return 0.0
 
-    def _calculate_emotional_similarity(
-        self, expected_emotional: str, actual_emotional: str
-    ) -> float:
+    def _calculate_emotional_similarity(self, expected_emotional: str, actual_emotional: str) -> float:
         """감정 반응 유사도 계산"""
         try:
             if not expected_emotional or not actual_emotional:
@@ -312,12 +301,8 @@ class RegressionTestFramework:
                 "neutral": ["객관", "중립", "평온", "균형", "이성"],
             }
 
-            expected_category = self._categorize_emotion(
-                expected_emotional, emotional_keywords
-            )
-            actual_category = self._categorize_emotion(
-                actual_emotional, emotional_keywords
-            )
+            expected_category = self._categorize_emotion(expected_emotional, emotional_keywords)
+            actual_category = self._categorize_emotion(actual_emotional, emotional_keywords)
 
             return 1.0 if expected_category == actual_category else 0.3
 
@@ -325,9 +310,7 @@ class RegressionTestFramework:
             logger.error(f"감정 반응 유사도 계산 실패: {str(e)}")
             return 0.0
 
-    def _calculate_memory_similarity(
-        self, expected_memory: str, actual_memory: str
-    ) -> float:
+    def _calculate_memory_similarity(self, expected_memory: str, actual_memory: str) -> float:
         """기억 활성도 유사도 계산"""
         try:
             if not expected_memory or not actual_memory:
@@ -340,9 +323,7 @@ class RegressionTestFramework:
                 "integrated": ["통합", "연결", "통합", "조합"],
             }
 
-            expected_category = self._categorize_memory(
-                expected_memory, memory_keywords
-            )
+            expected_category = self._categorize_memory(expected_memory, memory_keywords)
             actual_category = self._categorize_memory(actual_memory, memory_keywords)
 
             return 1.0 if expected_category == actual_category else 0.3
@@ -351,9 +332,7 @@ class RegressionTestFramework:
             logger.error(f"기억 활성도 유사도 계산 실패: {str(e)}")
             return 0.0
 
-    def _calculate_creativity_similarity(
-        self, expected_creativity: str, actual_creativity: str
-    ) -> float:
+    def _calculate_creativity_similarity(self, expected_creativity: str, actual_creativity: str) -> float:
         """창의성 유사도 계산"""
         try:
             if not expected_creativity or not actual_creativity:
@@ -366,12 +345,8 @@ class RegressionTestFramework:
                 "low": ["기존", "전통", "보수", "안전"],
             }
 
-            expected_category = self._categorize_creativity(
-                expected_creativity, creativity_keywords
-            )
-            actual_category = self._categorize_creativity(
-                actual_creativity, creativity_keywords
-            )
+            expected_category = self._categorize_creativity(expected_creativity, creativity_keywords)
+            actual_category = self._categorize_creativity(actual_creativity, creativity_keywords)
 
             return 1.0 if expected_category == actual_category else 0.3
 
@@ -379,9 +354,7 @@ class RegressionTestFramework:
             logger.error(f"창의성 유사도 계산 실패: {str(e)}")
             return 0.0
 
-    def _categorize_emotion(
-        self, emotion_text: str, keywords: Dict[str, List[str]]
-    ) -> str:
+    def _categorize_emotion(self, emotion_text: str, keywords: Dict[str, List[str]]) -> str:
         """감정 카테고리 분류"""
         emotion_text_lower = emotion_text.lower()
 
@@ -391,9 +364,7 @@ class RegressionTestFramework:
 
         return "neutral"
 
-    def _categorize_memory(
-        self, memory_text: str, keywords: Dict[str, List[str]]
-    ) -> str:
+    def _categorize_memory(self, memory_text: str, keywords: Dict[str, List[str]]) -> str:
         """기억 카테고리 분류"""
         memory_text_lower = memory_text.lower()
 
@@ -403,9 +374,7 @@ class RegressionTestFramework:
 
         return "passive"
 
-    def _categorize_creativity(
-        self, creativity_text: str, keywords: Dict[str, List[str]]
-    ) -> str:
+    def _categorize_creativity(self, creativity_text: str, keywords: Dict[str, List[str]]) -> str:
         """창의성 카테고리 분류"""
         creativity_text_lower = creativity_text.lower()
 
@@ -440,11 +409,7 @@ class RegressionTestFramework:
                 "similarity_score": similarity_score,
                 "timestamp": datetime.now().isoformat(),
                 "module": test_case.get("module", "unknown"),
-                "severity": (
-                    "high"
-                    if similarity_score < 0.6
-                    else "medium" if similarity_score < 0.8 else "low"
-                ),
+                "severity": ("high" if similarity_score < 0.6 else "medium" if similarity_score < 0.8 else "low"),
             }
 
             self.conflict_memory["conflicts"].append(conflict_data)
@@ -528,9 +493,7 @@ class RegressionTestFramework:
                         ),
                     },
                 },
-                "overall_similarity": self.calculate_judgment_similarity(
-                    expected, actual
-                ),
+                "overall_similarity": self.calculate_judgment_similarity(expected, actual),
                 "recommendations": self._generate_recommendations(expected, actual),
             }
 
@@ -544,9 +507,7 @@ class RegressionTestFramework:
             logger.error(f"비교 보고서 생성 실패: {str(e)}")
             return {}
 
-    def _generate_recommendations(
-        self, expected: Dict[str, Any], actual: Dict[str, Any]
-    ) -> List[str]:
+    def _generate_recommendations(self, expected: Dict[str, Any], actual: Dict[str, Any]) -> List[str]:
         """권장사항 생성"""
         recommendations = []
 

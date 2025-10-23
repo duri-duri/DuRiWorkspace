@@ -15,9 +15,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent))
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -26,14 +24,13 @@ async def test_social_intelligence_registration():
     logger.info("🧪 SocialIntelligenceSystem 자동 등록 테스트 시작")
 
     try:
-        from module_registry import ModulePriority, ModuleRegistry
+        from module_registry import ModuleRegistry
 
         # 레지스트리 인스턴스 가져오기
         registry = ModuleRegistry.get_instance()
 
         # SocialIntelligenceSystem import (자동 등록 트리거)
         logger.info("📦 SocialIntelligenceSystem import 중...")
-        from social_intelligence_system import SocialIntelligenceSystem
 
         # 자동 등록 확인
         module_info = registry.get_module("social_intelligence_system")
@@ -83,9 +80,7 @@ async def test_social_intelligence_registration():
             }
 
             result = await module_instance.execute(test_context)
-            logger.info(
-                f"✅ SocialIntelligenceSystem 실행 성공: {result.get('status', 'unknown')}"
-            )
+            logger.info(f"✅ SocialIntelligenceSystem 실행 성공: {result.get('status', 'unknown')}")
         else:
             logger.error("❌ SocialIntelligenceSystem 인스턴스를 가져올 수 없습니다")
             return False
@@ -113,9 +108,7 @@ async def test_all_registered_modules():
         logger.info(f"📈 등록된 모듈 수: {len(all_modules)}")
 
         for name, info in all_modules.items():
-            logger.info(
-                f"   - {name}: {info.state.value} (의존성: {info.dependencies})"
-            )
+            logger.info(f"   - {name}: {info.state.value} (의존성: {info.dependencies})")
 
         return True
 

@@ -2,8 +2,6 @@
 import glob
 import re
 import sys
-import urllib.error
-import urllib.request
 
 RUNBOOK_URL_RE = re.compile(r'^\s*runbook_url:\s*["\']?([^"\']+)["\']?')
 REQUIRED_SECTIONS = [r"(?i)\bimpact\b", r"(?i)\bdiagnosis\b", r"(?i)\bmitigation\b"]

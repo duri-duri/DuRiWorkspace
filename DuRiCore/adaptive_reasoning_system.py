@@ -10,28 +10,23 @@ DuRi Phase 1-3 Week 3 Day 14 - 적응적 추론 시스템
 - 진화적 개선 메커니즘: 추론 과정 자체의 지속적 개선
 """
 
-import asyncio
-import hashlib
-import json
 import logging
-import re
 import time
-from collections import Counter, defaultdict
+from collections import defaultdict
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional
 
 import numpy as np
 
 # 기존 시스템들 import
 try:
-    from creative_thinking_system import CreativeThinkingSystem
-    from emotional_thinking_system import EmotionalThinkingSystem
-    from integrated_advanced_learning_system import \
-        IntegratedAdvancedLearningSystem
+    from creative_thinking_system import CreativeThinkingSystem  # noqa: F401
+    from emotional_thinking_system import EmotionalThinkingSystem  # noqa: F401
+    from integrated_advanced_learning_system import IntegratedAdvancedLearningSystem
     from integrated_thinking_system import IntegratedThinkingSystem
-    from intuitive_thinking_system import IntuitiveThinkingSystem
+    from intuitive_thinking_system import IntuitiveThinkingSystem  # noqa: F401
     from meta_cognition_system import MetaCognitionSystem
 except ImportError as e:
     logging.warning(f"일부 기존 시스템 import 실패: {e}")
@@ -149,9 +144,7 @@ class DynamicReasoningEngine:
             "average_efficiency": 0.0,
         }
 
-    async def adapt_reasoning_approach(
-        self, context: ReasoningContext, input_data: Dict[str, Any]
-    ) -> ReasoningType:
+    async def adapt_reasoning_approach(self, context: ReasoningContext, input_data: Dict[str, Any]) -> ReasoningType:
         """상황에 따라 추론 방식 자동 조정"""
         # 컨텍스트별 추론 방식 매핑
         context_mapping = {
@@ -193,9 +186,7 @@ class DynamicReasoningEngine:
         base_reasoning_types = context_mapping.get(context, [ReasoningType.INTEGRATED])
 
         # 입력 데이터 분석을 통한 적응
-        adapted_type = self._analyze_input_for_adaptation(
-            input_data, base_reasoning_types
-        )
+        adapted_type = self._analyze_input_for_adaptation(input_data, base_reasoning_types)
 
         return adapted_type
 
@@ -226,11 +217,7 @@ class DynamicReasoningEngine:
         complexity_factors = {
             "data_size": len(str(input_data)) / 1000,
             "nested_levels": self._count_nested_levels(input_data),
-            "diversity": (
-                len(set(str(v) for v in input_data.values())) / len(input_data)
-                if input_data
-                else 0
-            ),
+            "diversity": (len(set(str(v) for v in input_data.values())) / len(input_data) if input_data else 0),
         }
 
         return sum(complexity_factors.values()) / len(complexity_factors)
@@ -238,13 +225,9 @@ class DynamicReasoningEngine:
     def _count_nested_levels(self, data: Any, current_level: int = 0) -> int:
         """중첩 레벨 계산"""
         if isinstance(data, dict):
-            return max(
-                self._count_nested_levels(v, current_level + 1) for v in data.values()
-            )
+            return max(self._count_nested_levels(v, current_level + 1) for v in data.values())
         elif isinstance(data, list):
-            return max(
-                self._count_nested_levels(item, current_level + 1) for item in data
-            )
+            return max(self._count_nested_levels(item, current_level + 1) for item in data)
         else:
             return current_level
 
@@ -272,9 +255,7 @@ class DynamicReasoningEngine:
 
         data_str = str(input_data).lower()
 
-        emotional_count = sum(
-            1 for keyword in emotional_keywords if keyword in data_str
-        )
+        emotional_count = sum(1 for keyword in emotional_keywords if keyword in data_str)
         creative_count = sum(1 for keyword in creative_keywords if keyword in data_str)
         logical_count = sum(1 for keyword in logical_keywords if keyword in data_str)
 
@@ -295,9 +276,7 @@ class LearningIntegrationInterface:
         self.learning_system = learning_system
         self.integration_history = []
 
-    async def integrate_learning_with_reasoning(
-        self, reasoning_session: ReasoningSession
-    ) -> Dict[str, Any]:
+    async def integrate_learning_with_reasoning(self, reasoning_session: ReasoningSession) -> Dict[str, Any]:
         """추론과 학습의 실시간 연동"""
         integration_result = {
             "integration_id": f"integration_{int(time.time())}",
@@ -316,19 +295,15 @@ class LearningIntegrationInterface:
         integration_result["learning_insights"] = learning_insights
 
         # 적응 제안 생성
-        adaptation_suggestions = await self._generate_adaptation_suggestions(
-            reasoning_session
-        )
+        adaptation_suggestions = await self._generate_adaptation_suggestions(reasoning_session)
         integration_result["adaptation_suggestions"] = adaptation_suggestions
 
         return integration_result
 
-    async def _search_relevant_knowledge(
-        self, reasoning_session: ReasoningSession
-    ) -> List[Dict[str, Any]]:
+    async def _search_relevant_knowledge(self, reasoning_session: ReasoningSession) -> List[Dict[str, Any]]:
         """관련 지식 검색"""
         # 추론 컨텍스트와 유형에 따른 지식 검색
-        search_criteria = {
+        search_criteria = {  # noqa: F841
             "context": reasoning_session.context.value,
             "reasoning_type": reasoning_session.reasoning_type.value,
             "input_data": reasoning_session.input_data,
@@ -346,9 +321,7 @@ class LearningIntegrationInterface:
 
         return relevant_knowledge
 
-    async def _generate_learning_insights(
-        self, reasoning_session: ReasoningSession
-    ) -> List[str]:
+    async def _generate_learning_insights(self, reasoning_session: ReasoningSession) -> List[str]:
         """학습 인사이트 생성"""
         insights = []
 
@@ -366,9 +339,7 @@ class LearningIntegrationInterface:
 
         return insights
 
-    async def _generate_adaptation_suggestions(
-        self, reasoning_session: ReasoningSession
-    ) -> List[str]:
+    async def _generate_adaptation_suggestions(self, reasoning_session: ReasoningSession) -> List[str]:
         """적응 제안 생성"""
         suggestions = []
 
@@ -397,9 +368,7 @@ class FeedbackLoopSystem:
         self.feedback_history = []
         self.learning_impact_scores = []
 
-    async def process_reasoning_feedback(
-        self, reasoning_session: ReasoningSession
-    ) -> ReasoningFeedback:
+    async def process_reasoning_feedback(self, reasoning_session: ReasoningSession) -> ReasoningFeedback:
         """추론 결과를 학습 시스템에 피드백"""
         feedback_id = f"feedback_{int(time.time())}"
 
@@ -407,9 +376,7 @@ class FeedbackLoopSystem:
         feedback_content = await self._generate_feedback_content(reasoning_session)
         feedback_score = await self._calculate_feedback_score(reasoning_session)
         learning_impact = await self._calculate_learning_impact(reasoning_session)
-        adaptation_suggestions = await self._generate_adaptation_suggestions(
-            reasoning_session
-        )
+        adaptation_suggestions = await self._generate_adaptation_suggestions(reasoning_session)
 
         feedback = ReasoningFeedback(
             feedback_id=feedback_id,
@@ -424,9 +391,7 @@ class FeedbackLoopSystem:
         self.feedback_history.append(feedback)
         return feedback
 
-    async def _generate_feedback_content(
-        self, reasoning_session: ReasoningSession
-    ) -> str:
+    async def _generate_feedback_content(self, reasoning_session: ReasoningSession) -> str:
         """피드백 내용 생성"""
         content_parts = []
 
@@ -452,9 +417,7 @@ class FeedbackLoopSystem:
 
         return "; ".join(content_parts)
 
-    async def _calculate_feedback_score(
-        self, reasoning_session: ReasoningSession
-    ) -> float:
+    async def _calculate_feedback_score(self, reasoning_session: ReasoningSession) -> float:
         """피드백 점수 계산"""
         # 신뢰도, 적응도, 효율성의 가중 평균
         weights = {"confidence": 0.4, "adaptation": 0.3, "efficiency": 0.3}
@@ -467,9 +430,7 @@ class FeedbackLoopSystem:
 
         return score
 
-    async def _calculate_learning_impact(
-        self, reasoning_session: ReasoningSession
-    ) -> float:
+    async def _calculate_learning_impact(self, reasoning_session: ReasoningSession) -> float:
         """학습 영향도 계산"""
         # 추론 과정에서의 학습 기회 평가
         learning_opportunities = len(reasoning_session.reasoning_steps)
@@ -478,9 +439,7 @@ class FeedbackLoopSystem:
         impact_score = (learning_opportunities * 0.6 + learning_insights * 0.4) / 10
         return min(impact_score, 1.0)
 
-    async def _generate_adaptation_suggestions(
-        self, reasoning_session: ReasoningSession
-    ) -> List[str]:
+    async def _generate_adaptation_suggestions(self, reasoning_session: ReasoningSession) -> List[str]:
         """적응 제안 생성"""
         suggestions = []
 
@@ -509,32 +468,22 @@ class EvolutionaryImprovementMechanism:
         self.improvement_history = []
         self.evolution_track = []
 
-    async def evolve_reasoning_capabilities(
-        self, reasoning_sessions: List[ReasoningSession]
-    ) -> ReasoningEvolution:
+    async def evolve_reasoning_capabilities(self, reasoning_sessions: List[ReasoningSession]) -> ReasoningEvolution:
         """추론 과정 자체의 지속적 개선"""
         evolution_id = f"evolution_{int(time.time())}"
 
         # 현재 능력 분석
-        current_capabilities = await self._analyze_current_capabilities(
-            reasoning_sessions
-        )
+        current_capabilities = await self._analyze_current_capabilities(reasoning_sessions)
 
         # 개선 영역 식별
         improvement_areas = await self._identify_improvement_areas(reasoning_sessions)
 
         # 진화 실행
-        evolved_capabilities = await self._execute_evolution(
-            current_capabilities, improvement_areas
-        )
+        evolved_capabilities = await self._execute_evolution(current_capabilities, improvement_areas)
 
         # 진화 결과 평가
-        improvement_score = await self._evaluate_improvement(
-            current_capabilities, evolved_capabilities
-        )
-        adaptation_enhancement = await self._evaluate_adaptation_enhancement(
-            evolved_capabilities
-        )
+        improvement_score = await self._evaluate_improvement(current_capabilities, evolved_capabilities)
+        adaptation_enhancement = await self._evaluate_adaptation_enhancement(evolved_capabilities)
 
         evolution = ReasoningEvolution(
             evolution_id=evolution_id,
@@ -549,9 +498,7 @@ class EvolutionaryImprovementMechanism:
         self.evolution_track.append(evolution)
         return evolution
 
-    async def _analyze_current_capabilities(
-        self, reasoning_sessions: List[ReasoningSession]
-    ) -> Dict[str, Any]:
+    async def _analyze_current_capabilities(self, reasoning_sessions: List[ReasoningSession]) -> Dict[str, Any]:
         """현재 능력 분석"""
         if not reasoning_sessions:
             return {}
@@ -564,13 +511,10 @@ class EvolutionaryImprovementMechanism:
         # 추론 유형별 성능 분석
         type_performance = defaultdict(list)
         for session in reasoning_sessions:
-            type_performance[session.reasoning_type.value].append(
-                session.confidence_score
-            )
+            type_performance[session.reasoning_type.value].append(session.confidence_score)
 
         type_avg_performance = {
-            reasoning_type: np.mean(scores) if scores else 0.0
-            for reasoning_type, scores in type_performance.items()
+            reasoning_type: np.mean(scores) if scores else 0.0 for reasoning_type, scores in type_performance.items()
         }
 
         return {
@@ -581,9 +525,7 @@ class EvolutionaryImprovementMechanism:
             "total_sessions": len(reasoning_sessions),
         }
 
-    async def _identify_improvement_areas(
-        self, reasoning_sessions: List[ReasoningSession]
-    ) -> List[str]:
+    async def _identify_improvement_areas(self, reasoning_sessions: List[ReasoningSession]) -> List[str]:
         """개선 영역 식별"""
         improvement_areas = []
 
@@ -620,26 +562,18 @@ class EvolutionaryImprovementMechanism:
 
         for area in improvement_areas:
             if "신뢰도" in area:
-                evolved_capabilities["average_confidence"] = min(
-                    evolved_capabilities["average_confidence"] * 1.2, 1.0
-                )
+                evolved_capabilities["average_confidence"] = min(evolved_capabilities["average_confidence"] * 1.2, 1.0)
             elif "적응도" in area:
-                evolved_capabilities["average_adaptation"] = min(
-                    evolved_capabilities["average_adaptation"] * 1.15, 1.0
-                )
+                evolved_capabilities["average_adaptation"] = min(evolved_capabilities["average_adaptation"] * 1.15, 1.0)
             elif "효율성" in area:
-                evolved_capabilities["average_efficiency"] = min(
-                    evolved_capabilities["average_efficiency"] * 1.1, 1.0
-                )
+                evolved_capabilities["average_efficiency"] = min(evolved_capabilities["average_efficiency"] * 1.1, 1.0)
             elif "다양화" in area:
                 # 새로운 추론 유형 추가
                 evolved_capabilities["type_performance"]["new_integrated"] = 0.75
 
         return evolved_capabilities
 
-    async def _evaluate_improvement(
-        self, original: Dict[str, Any], evolved: Dict[str, Any]
-    ) -> float:
+    async def _evaluate_improvement(self, original: Dict[str, Any], evolved: Dict[str, Any]) -> float:
         """개선 점수 평가"""
         if not original or not evolved:
             return 0.0
@@ -648,30 +582,28 @@ class EvolutionaryImprovementMechanism:
 
         # 신뢰도 개선
         if "average_confidence" in original and "average_confidence" in evolved:
-            confidence_improvement = (
-                evolved["average_confidence"] - original["average_confidence"]
-            ) / original["average_confidence"]
+            confidence_improvement = (evolved["average_confidence"] - original["average_confidence"]) / original[
+                "average_confidence"
+            ]
             improvement_scores.append(confidence_improvement)
 
         # 적응도 개선
         if "average_adaptation" in original and "average_adaptation" in evolved:
-            adaptation_improvement = (
-                evolved["average_adaptation"] - original["average_adaptation"]
-            ) / original["average_adaptation"]
+            adaptation_improvement = (evolved["average_adaptation"] - original["average_adaptation"]) / original[
+                "average_adaptation"
+            ]
             improvement_scores.append(adaptation_improvement)
 
         # 효율성 개선
         if "average_efficiency" in original and "average_efficiency" in evolved:
-            efficiency_improvement = (
-                evolved["average_efficiency"] - original["average_efficiency"]
-            ) / original["average_efficiency"]
+            efficiency_improvement = (evolved["average_efficiency"] - original["average_efficiency"]) / original[
+                "average_efficiency"
+            ]
             improvement_scores.append(efficiency_improvement)
 
         return np.mean(improvement_scores) if improvement_scores else 0.0
 
-    async def _evaluate_adaptation_enhancement(
-        self, evolved_capabilities: Dict[str, Any]
-    ) -> float:
+    async def _evaluate_adaptation_enhancement(self, evolved_capabilities: Dict[str, Any]) -> float:
         """적응 향상도 평가"""
         if "average_adaptation" in evolved_capabilities:
             return evolved_capabilities["average_adaptation"]
@@ -711,7 +643,7 @@ class AdaptiveReasoningSystem:
         self, context: ReasoningContext, input_data: Dict[str, Any] = None
     ) -> ReasoningSession:
         """적응적 추론 처리"""
-        start_time = time.time()
+        start_time = time.time()  # noqa: F841
 
         if input_data is None:
             input_data = {}
@@ -720,11 +652,7 @@ class AdaptiveReasoningSystem:
 
         try:
             # 1. 동적 추론 방식 선택
-            reasoning_type = (
-                await self.dynamic_reasoning_engine.adapt_reasoning_approach(
-                    context, input_data
-                )
-            )
+            reasoning_type = await self.dynamic_reasoning_engine.adapt_reasoning_approach(context, input_data)
 
             # 2. 추론 세션 생성
             reasoning_session = ReasoningSession(
@@ -741,30 +669,16 @@ class AdaptiveReasoningSystem:
             reasoning_session.end_time = datetime.now()
 
             # 4. 학습 연동
-            learning_integration = (
-                await self.learning_integration.integrate_learning_with_reasoning(
-                    reasoning_session
-                )
-            )
-            reasoning_session.learning_feedback = learning_integration[
-                "learning_insights"
-            ]
+            learning_integration = await self.learning_integration.integrate_learning_with_reasoning(reasoning_session)
+            reasoning_session.learning_feedback = learning_integration["learning_insights"]
 
             # 5. 피드백 처리
-            feedback = await self.feedback_loop.process_reasoning_feedback(
-                reasoning_session
-            )
+            feedback = await self.feedback_loop.process_reasoning_feedback(reasoning_session)  # noqa: F841
 
             # 6. 성능 점수 계산
-            reasoning_session.confidence_score = await self._calculate_confidence_score(
-                reasoning_session
-            )
-            reasoning_session.adaptation_score = await self._calculate_adaptation_score(
-                reasoning_session
-            )
-            reasoning_session.efficiency_score = await self._calculate_efficiency_score(
-                reasoning_session
-            )
+            reasoning_session.confidence_score = await self._calculate_confidence_score(reasoning_session)
+            reasoning_session.adaptation_score = await self._calculate_adaptation_score(reasoning_session)
+            reasoning_session.efficiency_score = await self._calculate_efficiency_score(reasoning_session)
 
             # 7. 성능 메트릭 업데이트
             self._update_performance_metrics(reasoning_session)
@@ -787,51 +701,33 @@ class AdaptiveReasoningSystem:
                 efficiency_score=0.0,
             )
 
-    async def _execute_reasoning(
-        self, reasoning_session: ReasoningSession
-    ) -> Dict[str, Any]:
+    async def _execute_reasoning(self, reasoning_session: ReasoningSession) -> Dict[str, Any]:
         """추론 실행"""
         reasoning_steps = []
         intermediate_results = []
 
         # 추론 유형에 따른 실행
         if reasoning_session.reasoning_type == ReasoningType.DEDUCTIVE:
-            result = await self._execute_deductive_reasoning(
-                reasoning_session.input_data
-            )
+            result = await self._execute_deductive_reasoning(reasoning_session.input_data)
         elif reasoning_session.reasoning_type == ReasoningType.INDUCTIVE:
-            result = await self._execute_inductive_reasoning(
-                reasoning_session.input_data
-            )
+            result = await self._execute_inductive_reasoning(reasoning_session.input_data)
         elif reasoning_session.reasoning_type == ReasoningType.ABDUCTIVE:
-            result = await self._execute_abductive_reasoning(
-                reasoning_session.input_data
-            )
+            result = await self._execute_abductive_reasoning(reasoning_session.input_data)
         elif reasoning_session.reasoning_type == ReasoningType.CREATIVE:
-            result = await self._execute_creative_reasoning(
-                reasoning_session.input_data
-            )
+            result = await self._execute_creative_reasoning(reasoning_session.input_data)
         elif reasoning_session.reasoning_type == ReasoningType.INTUITIVE:
-            result = await self._execute_intuitive_reasoning(
-                reasoning_session.input_data
-            )
+            result = await self._execute_intuitive_reasoning(reasoning_session.input_data)
         elif reasoning_session.reasoning_type == ReasoningType.EMOTIONAL:
-            result = await self._execute_emotional_reasoning(
-                reasoning_session.input_data
-            )
+            result = await self._execute_emotional_reasoning(reasoning_session.input_data)
         else:
-            result = await self._execute_integrated_reasoning(
-                reasoning_session.input_data
-            )
+            result = await self._execute_integrated_reasoning(reasoning_session.input_data)
 
         reasoning_session.reasoning_steps = reasoning_steps
         reasoning_session.intermediate_results = intermediate_results
 
         return result
 
-    async def _execute_deductive_reasoning(
-        self, input_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _execute_deductive_reasoning(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
         """연역적 추론 실행"""
         # 연역적 추론 로직 구현
         premises = input_data.get("premises", [])
@@ -844,9 +740,7 @@ class AdaptiveReasoningSystem:
             "confidence": 0.85,
         }
 
-    async def _execute_inductive_reasoning(
-        self, input_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _execute_inductive_reasoning(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
         """귀납적 추론 실행"""
         # 귀납적 추론 로직 구현
         observations = input_data.get("observations", [])
@@ -859,9 +753,7 @@ class AdaptiveReasoningSystem:
             "confidence": 0.75,
         }
 
-    async def _execute_abductive_reasoning(
-        self, input_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _execute_abductive_reasoning(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
         """가설적 추론 실행"""
         # 가설적 추론 로직 구현
         evidence = input_data.get("evidence", {})
@@ -874,15 +766,11 @@ class AdaptiveReasoningSystem:
             "confidence": 0.70,
         }
 
-    async def _execute_creative_reasoning(
-        self, input_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _execute_creative_reasoning(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
         """창의적 추론 실행"""
         # 창의적 추론 로직 구현
         creative_elements = input_data.get("creative_elements", [])
-        creative_solution = (
-            f"창의적 해결책: {len(creative_elements)}개의 창의적 요소를 활용한 해결책"
-        )
+        creative_solution = f"창의적 해결책: {len(creative_elements)}개의 창의적 요소를 활용한 해결책"
 
         return {
             "reasoning_type": "creative",
@@ -891,15 +779,11 @@ class AdaptiveReasoningSystem:
             "confidence": 0.80,
         }
 
-    async def _execute_intuitive_reasoning(
-        self, input_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _execute_intuitive_reasoning(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
         """직관적 추론 실행"""
         # 직관적 추론 로직 구현
         intuitive_insights = input_data.get("intuitive_insights", [])
-        intuitive_conclusion = (
-            f"직관적 결론: {len(intuitive_insights)}개의 직관적 통찰로부터 도출된 결론"
-        )
+        intuitive_conclusion = f"직관적 결론: {len(intuitive_insights)}개의 직관적 통찰로부터 도출된 결론"
 
         return {
             "reasoning_type": "intuitive",
@@ -908,15 +792,11 @@ class AdaptiveReasoningSystem:
             "confidence": 0.65,
         }
 
-    async def _execute_emotional_reasoning(
-        self, input_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _execute_emotional_reasoning(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
         """감정적 추론 실행"""
         # 감정적 추론 로직 구현
         emotional_factors = input_data.get("emotional_factors", {})
-        emotional_conclusion = (
-            f"감정적 결론: {len(emotional_factors)}개의 감정적 요소를 고려한 결론"
-        )
+        emotional_conclusion = f"감정적 결론: {len(emotional_factors)}개의 감정적 요소를 고려한 결론"
 
         return {
             "reasoning_type": "emotional",
@@ -925,9 +805,7 @@ class AdaptiveReasoningSystem:
             "confidence": 0.60,
         }
 
-    async def _execute_integrated_reasoning(
-        self, input_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _execute_integrated_reasoning(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
         """통합적 추론 실행"""
         # 통합적 추론 로직 구현
         integrated_approach = "다양한 추론 방식을 통합한 종합적 접근"
@@ -938,9 +816,7 @@ class AdaptiveReasoningSystem:
             "confidence": 0.90,
         }
 
-    async def _calculate_confidence_score(
-        self, reasoning_session: ReasoningSession
-    ) -> float:
+    async def _calculate_confidence_score(self, reasoning_session: ReasoningSession) -> float:
         """신뢰도 점수 계산"""
         if not reasoning_session.final_result:
             return 0.0
@@ -954,14 +830,10 @@ class AdaptiveReasoningSystem:
         # 학습 피드백에 따른 보정
         feedback_factor = min(len(reasoning_session.learning_feedback) / 5, 1.0)
 
-        confidence_score = (
-            base_confidence * 0.6 + step_factor * 0.2 + feedback_factor * 0.2
-        )
+        confidence_score = base_confidence * 0.6 + step_factor * 0.2 + feedback_factor * 0.2
         return min(confidence_score, 1.0)
 
-    async def _calculate_adaptation_score(
-        self, reasoning_session: ReasoningSession
-    ) -> float:
+    async def _calculate_adaptation_score(self, reasoning_session: ReasoningSession) -> float:
         """적응도 점수 계산"""
         # 추론 유형과 컨텍스트의 적합성 평가
         context_type_mapping = {
@@ -989,30 +861,22 @@ class AdaptiveReasoningSystem:
         else:
             return 0.4
 
-    async def _calculate_efficiency_score(
-        self, reasoning_session: ReasoningSession
-    ) -> float:
+    async def _calculate_efficiency_score(self, reasoning_session: ReasoningSession) -> float:
         """효율성 점수 계산"""
         if not reasoning_session.end_time or not reasoning_session.start_time:
             return 0.0
 
         # 실행 시간 기반 효율성
-        execution_time = (
-            reasoning_session.end_time - reasoning_session.start_time
-        ).total_seconds()
+        execution_time = (reasoning_session.end_time - reasoning_session.start_time).total_seconds()
         time_efficiency = max(0, 1 - execution_time / 60)  # 60초 기준
 
         # 단계 수 기반 효율성
-        step_efficiency = max(
-            0, 1 - len(reasoning_session.reasoning_steps) / 20
-        )  # 20단계 기준
+        step_efficiency = max(0, 1 - len(reasoning_session.reasoning_steps) / 20)  # 20단계 기준
 
         # 결과 품질 기반 효율성
         quality_efficiency = reasoning_session.confidence_score
 
-        efficiency_score = (
-            time_efficiency * 0.3 + step_efficiency * 0.3 + quality_efficiency * 0.4
-        )
+        efficiency_score = time_efficiency * 0.3 + step_efficiency * 0.3 + quality_efficiency * 0.4
         return min(efficiency_score, 1.0)
 
     def _update_performance_metrics(self, reasoning_session: ReasoningSession):
@@ -1023,18 +887,15 @@ class AdaptiveReasoningSystem:
         total_sessions = self.performance_metrics["total_sessions"]
 
         self.performance_metrics["average_confidence"] = (
-            self.performance_metrics["average_confidence"] * (total_sessions - 1)
-            + reasoning_session.confidence_score
+            self.performance_metrics["average_confidence"] * (total_sessions - 1) + reasoning_session.confidence_score
         ) / total_sessions
 
         self.performance_metrics["average_adaptation"] = (
-            self.performance_metrics["average_adaptation"] * (total_sessions - 1)
-            + reasoning_session.adaptation_score
+            self.performance_metrics["average_adaptation"] * (total_sessions - 1) + reasoning_session.adaptation_score
         ) / total_sessions
 
         self.performance_metrics["average_efficiency"] = (
-            self.performance_metrics["average_efficiency"] * (total_sessions - 1)
-            + reasoning_session.efficiency_score
+            self.performance_metrics["average_efficiency"] * (total_sessions - 1) + reasoning_session.efficiency_score
         ) / total_sessions
 
     async def get_system_status(self) -> Dict[str, Any]:

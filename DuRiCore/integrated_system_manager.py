@@ -5,43 +5,47 @@ DuRiCore Phase 5.5.2 - 통합 시스템 매니저
 """
 
 import asyncio
-import json
 import logging
 import time
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from action_system import ActionSystem
 from adaptive_learning_system import AdaptiveLearningSystem
+
 # Phase 6.3 - 고급 인지 시스템 추가
 from advanced_cognitive_system import AdvancedCognitiveSystem
+
 # Phase 6.2.5 - CLARION 학습 시스템 추가
 from clarion_learning_system import CLARIONLearningSystem
 from creative_thinking_system import CreativeThinkingSystem
+
 # Phase 6.2.3 - 감정 가중치 시스템 추가
 from emotion_weight_system import EmotionWeightSystem
 from enhanced_memory_system import EnhancedMemorySystem
 from evolution_system import EvolutionSystem
 from feedback_system import FeedbackSystem
+
 # Phase 6.2.4 - Goal Stack 시스템 추가
 from goal_stack_system import GoalStackSystem
+
 # 기존 시스템들 import
 from judgment_system import JudgmentSystem
+
 # Phase 6.2.1 - LIDA 주의 시스템 추가
 from lida_attention_system import LIDAAttentionSystem
 from performance_monitoring_system import PerformanceMonitoringSystem
 from prediction_system import PredictionSystem
 from self_improvement_system import SelfImprovementSystem
+
 # Phase 6.2.6 - 시맨틱 지식 연결망 시스템 추가
 from semantic_knowledge_graph import SemanticKnowledgeGraph
 from social_intelligence_system import SocialIntelligenceSystem
 from strategic_thinking_system import StrategicThinkingSystem
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -98,9 +102,7 @@ class IntegratedSystemManager:
         self.system_status = {}
         self.performance_metrics = {}
 
-        logger.info(
-            "통합 시스템 매니저 초기화 완료 (Phase 6.2.1, 6.2.3, 6.2.4, 6.2.5, 6.2.6, 6.3 포함)"
-        )
+        logger.info("통합 시스템 매니저 초기화 완료 (Phase 6.2.1, 6.2.3, 6.2.4, 6.2.5, 6.2.6, 6.3 포함)")
 
     async def initialize_all_systems(self):
         """모든 시스템 초기화"""
@@ -130,37 +132,25 @@ class IntegratedSystemManager:
                 "error_rate": 0.01,
                 "availability": 0.999,
             }
-            performance_data = (
-                await self.performance_system.monitor_real_time_performance(
-                    system_metrics
-                )
-            )
+            performance_data = await self.performance_system.monitor_real_time_performance(system_metrics)
 
             # Phase 6.2.1 - LIDA 주의 시스템 실행
             attention_context = {
                 "cognitive_load": performance_data.get("cpu_usage", 0.3),
                 "judgment_request": context,
             }
-            attention_result = await self.attention_system.integrate_with_system(
-                attention_context
-            )
+            attention_result = await self.attention_system.integrate_with_system(attention_context)
 
             # Phase 6.2.3 - 감정 가중치 시스템 실행
             emotion_context = {
-                "emotion": context.get(
-                    "emotion", {"type": "neutral", "intensity": 0.5}
-                ),
+                "emotion": context.get("emotion", {"type": "neutral", "intensity": 0.5}),
                 "judgment_request": context,
             }
-            emotion_result = await self.emotion_system.integrate_with_system(
-                emotion_context
-            )
+            emotion_result = await self.emotion_system.integrate_with_system(emotion_context)
 
             # Phase 6.2.4 - Goal Stack 시스템 실행
             goal_context = {
-                "available_resources": context.get(
-                    "available_resources", ["time", "energy", "attention"]
-                ),
+                "available_resources": context.get("available_resources", ["time", "energy", "attention"]),
                 "current_situation": context,
                 "attention_result": attention_result,
                 "emotion_result": emotion_result,
@@ -174,9 +164,7 @@ class IntegratedSystemManager:
                 "emotion_result": emotion_result,
                 "goal_result": goal_result,
             }
-            clarion_result = await self._execute_clarion_learning_system(
-                clarion_context
-            )
+            clarion_result = await self._execute_clarion_learning_system(clarion_context)
 
             # Phase 6.2.6 - 시맨틱 지식 연결망 시스템 실행
             semantic_context = {
@@ -187,9 +175,7 @@ class IntegratedSystemManager:
                 "goal_result": goal_result,
                 "clarion_result": clarion_result,
             }
-            semantic_result = await self._execute_semantic_knowledge_system(
-                semantic_context
-            )
+            semantic_result = await self._execute_semantic_knowledge_system(semantic_context)
 
             # Phase 6.3 - 고급 인지 시스템 실행
             cognitive_context = {
@@ -201,16 +187,14 @@ class IntegratedSystemManager:
                 "clarion_result": clarion_result,
                 "semantic_result": semantic_result,
             }
-            cognitive_result = await self._execute_advanced_cognitive_system(
-                cognitive_context
-            )
+            cognitive_result = await self._execute_advanced_cognitive_system(cognitive_context)
 
             # 3. 예측 시스템 실행
             prediction_result = await self.prediction_system.predict_future_situation(
                 {**context, "memory_context": memory_context}
             )
 
-            # 4. 판단 시스템 실행 (메모리 정보, 예측 결과, 주의 시스템 결과, 감정 시스템 결과, 목표 시스템 결과, CLARION 학습 결과, 시맨틱 지식 결과, 고급 인지 결과 활용)
+            # 4. 판단 시스템 실행 (메모리 정보, 예측 결과, 주의 시스템 결과, 감정 시스템 결과, 목표 시스템 결과, CLARION 학습 결과, 시맨틱 지식 결과, 고급 인지 결과 활용)  # noqa: E501
             judgment_result = await self.judgment_system.judge(
                 {
                     **context,
@@ -242,45 +226,33 @@ class IntegratedSystemManager:
             )
 
             # 8. 적응형 학습 시스템 실행
-            adaptation_result = (
-                await self.adaptive_learning_system.adapt_to_environment(
-                    {
-                        **context,
-                        "judgment_result": judgment_result,
-                        "action_result": action_result,
-                        "feedback_result": feedback_result,
-                        "improvement_result": improvement_result,
-                    }
-                )
+            adaptation_result = await self.adaptive_learning_system.adapt_to_environment(
+                {
+                    **context,
+                    "judgment_result": judgment_result,
+                    "action_result": action_result,
+                    "feedback_result": feedback_result,
+                    "improvement_result": improvement_result,
+                }
             )
 
             # 9. 결과를 메모리에 저장
-            await self._save_to_memory(
-                judgment_result, action_result, feedback_result, prediction_result
-            )
+            await self._save_to_memory(judgment_result, action_result, feedback_result, prediction_result)
 
             # Phase 6.2.2 - Working Memory 연산 수행
             if len(memory_context.get("related_memories", [])) >= 2:
                 # 관련 메모리들로 연산 수행
-                memory_ids = [
-                    mem[0].id for mem in memory_context.get("related_memories", [])[:3]
-                ]
-                wm_operation_result = await self.memory_system.perform_memory_operation(
-                    "integration", memory_ids
-                )
+                memory_ids = [mem[0].id for mem in memory_context.get("related_memories", [])[:3]]
+                wm_operation_result = await self.memory_system.perform_memory_operation("integration", memory_ids)
                 if wm_operation_result.get("success"):
-                    logger.info(
-                        f"🧠 Working Memory 연산 완료: {wm_operation_result.get('buffer_id', '')}"
-                    )
+                    logger.info(f"🧠 Working Memory 연산 완료: {wm_operation_result.get('buffer_id', '')}")
 
             # 8. 창의적 사고 시스템을 통한 혁신적 해결책 생성
             creative_data = {
                 "behavior_traces": [action_result],
                 "performance_history": [performance_data],
             }
-            creative_insights = await self.creative_system.analyze_patterns(
-                creative_data
-            )
+            creative_insights = await self.creative_system.analyze_patterns(creative_data)
 
             # 9. 전략적 사고 시스템을 통한 장기 계획 수립
             strategic_context = {
@@ -292,9 +264,7 @@ class IntegratedSystemManager:
                 "strengths": ["technical_expertise"],
                 "weaknesses": ["resource_limitation"],
             }
-            strategic_plan = await self.strategic_system.plan_long_term(
-                strategic_context
-            )
+            strategic_plan = await self.strategic_system.plan_long_term(strategic_context)
 
             # 10. 사회적 지능 시스템을 통한 상황 이해 및 적응
             social_situation = {
@@ -310,9 +280,7 @@ class IntegratedSystemManager:
                     "conflict": 0.2,
                 },
             }
-            context_analysis = await self.social_system.understand_context(
-                social_situation
-            )
+            context_analysis = await self.social_system.understand_context(social_situation)
 
             # 12. 진화 시스템을 통한 개선
             learning_cycles = [
@@ -329,9 +297,7 @@ class IntegratedSystemManager:
                     "social_context": context_analysis,
                 }
             ]
-            evolution_result = await self.evolution_system.evolve_system(
-                learning_cycles
-            )
+            evolution_result = await self.evolution_system.evolve_system(learning_cycles)
 
             cycle_time = time.time() - start_time
 
@@ -374,16 +340,12 @@ class IntegratedSystemManager:
         """메모리에서 관련 컨텍스트 검색"""
         try:
             # 상황에 관련된 메모리 검색
-            relevant_memories = await self.memory_system.search_memories(
-                context.get("situation", ""), limit=5
-            )
+            relevant_memories = await self.memory_system.search_memories(context.get("situation", ""), limit=5)
 
             # 연관 메모리 검색
             associated_memories = []
             if relevant_memories:
-                associated_memories = await self.memory_system.get_associated_memories(
-                    relevant_memories[0]["id"]
-                )
+                associated_memories = await self.memory_system.get_associated_memories(relevant_memories[0]["id"])
 
             return {
                 "relevant_memories": relevant_memories,
@@ -443,9 +405,7 @@ class IntegratedSystemManager:
                 if hasattr(prediction_result, "predicted_outcome"):
                     predicted_outcome = prediction_result.predicted_outcome
                 elif isinstance(prediction_result, dict):
-                    predicted_outcome = prediction_result.get(
-                        "predicted_outcome", "unknown"
-                    )
+                    predicted_outcome = prediction_result.get("predicted_outcome", "unknown")
 
                 await self.memory_system.store_memory(
                     content=f"예측 결과: {predicted_outcome}",
@@ -457,18 +417,14 @@ class IntegratedSystemManager:
         except Exception as e:
             logger.warning(f"메모리 저장 실패: {e}")
 
-    async def _execute_goal_stack_system(
-        self, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _execute_goal_stack_system(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """Goal Stack 시스템 실행"""
         try:
             # 현재 상황에 따른 목표 관리
             goal_management_result = {
                 "active_goals": self.goal_stack_system.get_active_goals(),
                 "stack_status": self.goal_stack_system.get_goal_stack_status(),
-                "next_action": self.goal_stack_system.get_next_action_recommendation(
-                    context
-                ),
+                "next_action": self.goal_stack_system.get_next_action_recommendation(context),
                 "conflicts": self.goal_stack_system.resolve_goal_conflicts(),
             }
 
@@ -477,9 +433,7 @@ class IntegratedSystemManager:
                 # 활성 목표가 있는 경우 목표 기반 행동 결정
                 best_goal = max(
                     goal_management_result["active_goals"],
-                    key=lambda g: self.goal_stack_system.calculate_goal_priority_score(
-                        g, context
-                    ),
+                    key=lambda g: self.goal_stack_system.calculate_goal_priority_score(g, context),
                 )
 
                 goal_management_result["current_focus"] = {
@@ -508,9 +462,7 @@ class IntegratedSystemManager:
                 "next_action": {"action": "error", "reason": str(e)},
             }
 
-    async def _execute_clarion_learning_system(
-        self, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _execute_clarion_learning_system(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """CLARION 학습 시스템 실행"""
         try:
             # 학습 로그 데이터 생성
@@ -555,14 +507,12 @@ class IntegratedSystemManager:
                 "consolidation_level": 0.0,
             }
 
-    async def _execute_semantic_knowledge_system(
-        self, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _execute_semantic_knowledge_system(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """시맨틱 지식 연결망 시스템 실행"""
         try:
             # 현재 상황에서 시맨틱 개념들 추출
-            current_situation = context.get("current_situation", {})
-            memory_context = context.get("memory_context", {})
+            current_situation = context.get("current_situation", {})  # noqa: F841
+            memory_context = context.get("memory_context", {})  # noqa: F841
             attention_result = context.get("attention_result", {})
             emotion_result = context.get("emotion_result", {})
             goal_result = context.get("goal_result", {})
@@ -614,18 +564,14 @@ class IntegratedSystemManager:
             # 시맨틱 경로 찾기
             semantic_paths = []
             if len(semantic_concepts) >= 2:
-                path_result = await self.semantic_graph_system.find_semantic_path(
-                    "높은 집중", "높은 우선순위 목표", 3
-                )
+                path_result = await self.semantic_graph_system.find_semantic_path("높은 집중", "높은 우선순위 목표", 3)
                 if path_result:
                     semantic_paths.append(path_result)
 
             # 시맨틱 지식 추론
             semantic_inferences_knowledge = []
             for concept_name in ["높은 집중", "높은 우선순위 목표", "강한 학습 패턴"]:
-                inferences = await self.semantic_graph_system.infer_new_knowledge(
-                    concept_name
-                )
+                inferences = await self.semantic_graph_system.infer_new_knowledge(concept_name)
                 semantic_inferences_knowledge.extend(inferences)
 
             # 시맨틱 그래프 상태 확인
@@ -645,7 +591,7 @@ class IntegratedSystemManager:
             }
 
             logger.info(
-                f"시맨틱 지식 연결망 시스템 실행 완료: {len(semantic_concepts)}개 개념, {len(semantic_inferences)}개 추론"
+                f"시맨틱 지식 연결망 시스템 실행 완료: {len(semantic_concepts)}개 개념, {len(semantic_inferences)}개 추론"  # noqa: E501
             )
             return semantic_result
 
@@ -664,36 +610,22 @@ class IntegratedSystemManager:
                 "error": str(e),
             }
 
-    async def _execute_advanced_cognitive_system(
-        self, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _execute_advanced_cognitive_system(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """고급 인지 시스템 실행"""
         try:
             # 고급 인지 처리
-            cognitive_result = (
-                await self.advanced_cognitive_system.process_advanced_cognition(context)
-            )
+            cognitive_result = await self.advanced_cognitive_system.process_advanced_cognition(context)
 
             # 인지 시스템 통합
-            integration_result = (
-                await self.advanced_cognitive_system.integrate_cognitive_systems(
-                    context
-                )
-            )
+            integration_result = await self.advanced_cognitive_system.integrate_cognitive_systems(context)
 
             # 인지 성능 최적화
-            optimization_result = (
-                await self.advanced_cognitive_system.optimize_cognitive_performance(
-                    context
-                )
-            )
+            optimization_result = await self.advanced_cognitive_system.optimize_cognitive_performance(context)
 
             # 고급 인지 시스템 결과
             advanced_cognitive_result = {
                 "cognitive_insights_count": len(cognitive_result.cognitive_insights),
-                "metacognitive_processes_count": len(
-                    cognitive_result.metacognitive_processes
-                ),
+                "metacognitive_processes_count": len(cognitive_result.metacognitive_processes),
                 "abstract_concepts_count": len(cognitive_result.abstract_concepts),
                 "creative_solutions_count": len(cognitive_result.creative_solutions),
                 "overall_cognitive_score": cognitive_result.overall_cognitive_score,
@@ -703,7 +635,7 @@ class IntegratedSystemManager:
             }
 
             logger.info(
-                f"고급 인지 시스템 실행 완료: {len(cognitive_result.cognitive_insights)}개 통찰, {cognitive_result.overall_cognitive_score:.3f} 점수"
+                f"고급 인지 시스템 실행 완료: {len(cognitive_result.cognitive_insights)}개 통찰, {cognitive_result.overall_cognitive_score:.3f} 점수"  # noqa: E501
             )
             return advanced_cognitive_result
 
@@ -741,13 +673,9 @@ class IntegratedSystemManager:
             # 성능 데이터에서 평균 점수 계산
             performance_score = 0.0
             if performance and len(performance) > 0:
-                performance_values = [
-                    p.value for p in performance if hasattr(p, "value")
-                ]
+                performance_values = [p.value for p in performance if hasattr(p, "value")]
                 if performance_values:
-                    performance_score = sum(performance_values) / len(
-                        performance_values
-                    )
+                    performance_score = sum(performance_values) / len(performance_values)
 
             # 예측 점수 계산
             prediction_score = 0.0
@@ -845,9 +773,7 @@ class IntegratedSystemManager:
             "details": result,
         }
 
-        logger.info(
-            f"통합 테스트 완료: 성공={test_result['success']}, 점수={test_result['overall_score']}"
-        )
+        logger.info(f"통합 테스트 완료: 성공={test_result['success']}, 점수={test_result['overall_score']}")
         return test_result
 
 

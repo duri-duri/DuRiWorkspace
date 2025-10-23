@@ -7,24 +7,16 @@ Phase 10의 모든 고급 AI 엔진들의 통합 및 협력 기능을 테스트
 import asyncio
 import json
 import logging
-import random
-import time
 from datetime import datetime
-from typing import Any, Dict, List
 
 # 기존 시스템들 import
-from advanced_ai_system import (AdvancedAISystem, AICollaborationMode,
-                                AIIntegrationLevel)
+from advanced_ai_system import AdvancedAISystem, AICollaborationMode, AIIntegrationLevel
+
 # Phase 10 고급 AI 엔진들 import
-from creative_thinking_engine import (CreativeThinkingEngine, CreativityLevel,
-                                      InnovationMethod)
-from future_prediction_engine import (FuturePredictionEngine, PredictionLevel,
-                                      TrendType)
-from social_intelligence_engine import (EmotionType, SocialContextType,
-                                        SocialIntelligenceEngine,
-                                        SocialIntelligenceLevel)
-from strategic_thinking_engine import (RiskCategory, StrategicLevel,
-                                       StrategicThinkingEngine)
+from creative_thinking_engine import CreativeThinkingEngine, CreativityLevel, InnovationMethod
+from future_prediction_engine import FuturePredictionEngine, PredictionLevel
+from social_intelligence_engine import SocialIntelligenceEngine, SocialIntelligenceLevel
+from strategic_thinking_engine import StrategicLevel, StrategicThinkingEngine
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -91,9 +83,7 @@ class Phase10IntegrationTest:
             collaboration_mode=AICollaborationMode.COLLABORATIVE,
         )
 
-        logger.info(
-            f"협력 해결 결과: AGI 점수 {integration_result.overall_agi_score:.2f}"
-        )
+        logger.info(f"협력 해결 결과: AGI 점수 {integration_result.overall_agi_score:.2f}")
 
         # 결과 저장
         self.test_results.append(
@@ -121,9 +111,7 @@ class Phase10IntegrationTest:
 
         logger.info(f"현재 AGI 수준: {self.advanced_ai_system.current_agi_level:.2f}")
         logger.info(f"목표 AGI 수준: {self.advanced_ai_system.target_agi_level:.2f}")
-        logger.info(
-            f"AGI 개선 속도: {self.advanced_ai_system.agi_improvement_rate:.3f}"
-        )
+        logger.info(f"AGI 개선 속도: {self.advanced_ai_system.agi_improvement_rate:.3f}")
 
         # 결과 저장
         self.test_results.append(
@@ -173,9 +161,7 @@ class Phase10IntegrationTest:
         logger.info(f"생성된 창의적 해결책: {len(solutions)}개")
 
         # 창의성 평가 테스트
-        assessment = await self.creative_engine.assess_creativity(
-            subject="교육 혁신", context=creative_context
-        )
+        assessment = await self.creative_engine.assess_creativity(subject="교육 혁신", context=creative_context)
 
         logger.info(f"창의성 평가 점수: {assessment.overall_creativity_score:.2f}")
 
@@ -251,9 +237,7 @@ class Phase10IntegrationTest:
             "cultural_background": ["한국 문화", "기업 문화"],
         }
 
-        context_understanding = await self.social_engine.understand_social_context(
-            context=social_context
-        )
+        context_understanding = await self.social_engine.understand_social_context(context=social_context)
 
         logger.info(f"이해된 사회적 맥락: {context_understanding.context_type.value}")
 
@@ -306,9 +290,7 @@ class Phase10IntegrationTest:
         # 위험 예측 테스트
         risk_context = {"business_domain": "신기술 도입", "time_horizon": "2년"}
 
-        risks = await self.future_engine.forecast_risks(
-            context=risk_context, time_horizon="1년"
-        )
+        risks = await self.future_engine.forecast_risks(context=risk_context, time_horizon="1년")
 
         logger.info(f"예측된 위험: {len(risks)}개")
 
@@ -319,9 +301,7 @@ class Phase10IntegrationTest:
         report = {
             "test_summary": {
                 "total_tests": len(self.test_results),
-                "test_types": list(
-                    set(result["test_type"] for result in self.test_results)
-                ),
+                "test_types": list(set(result["test_type"] for result in self.test_results)),
                 "timestamp": datetime.now().isoformat(),
             },
             "engine_performance": {

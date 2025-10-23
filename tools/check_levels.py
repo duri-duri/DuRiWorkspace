@@ -16,7 +16,7 @@ def load_manifest(path):
     try:
         with open(path, "r", encoding="utf-8") as f:
             return json.load(f)
-    except:
+    except:  # noqa: E722
         return {}
 
 

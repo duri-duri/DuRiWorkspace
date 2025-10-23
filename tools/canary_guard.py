@@ -15,6 +15,7 @@ SLO 초과 비율의 Wilson Upper Bound로 유의하게 악화되었는지 판�
   0 = 모두 통과
   2 = 하나 이상 실패(경보)
 """
+
 from __future__ import annotations
 
 import argparse
@@ -128,7 +129,7 @@ def guard(args):
     # 출력
     def print_block(rep, slo_ms):
         print(
-            f"\n=== Guard against SLO {rep[0][0]} <= {slo_ms:.0f} ms (window={args.window}, step={args.step}, conf={args.confidence}) ==="
+            f"\n=== Guard against SLO {rep[0][0]} <= {slo_ms:.0f} ms (window={args.window}, step={args.step}, conf={args.confidence}) ==="  # noqa: E501
         )
         print("metric  phase          n   exceed  p_hat   wilson_UB  status")
         for m, phase, n, ex, p, ub, st in rep:
@@ -147,9 +148,7 @@ def guard(args):
 
 def main():
     ap = argparse.ArgumentParser(description="DuRi Canary Guard")
-    ap.add_argument(
-        "--prom-url", default="http://localhost:9090", help="Prometheus URL"
-    )
+    ap.add_argument("--prom-url", default="http://localhost:9090", help="Prometheus URL")
     ap.add_argument("--window", default="15m", help="분석 윈도우 (예: 10m, 1h)")
     ap.add_argument("--step", default="15s", help="샘플 간격 (예: 15s, 30s)")
     ap.add_argument("--p95-slo-ms", type=float, default=350.0, help="p95 SLO (ms)")

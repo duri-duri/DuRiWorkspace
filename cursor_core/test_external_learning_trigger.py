@@ -7,14 +7,14 @@ DuRi 외부 학습 트리거 테스트 시스템
 import asyncio
 import json
 import logging
-import random
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-from cursor_core.learning_config import (CursorMonitor, DuRiLearningConfig,
-                                         LearningTrigger, LLMModel,
-                                         get_duRi_learning_config)
+from cursor_core.learning_config import (
+    LLMModel,
+    get_duRi_learning_config,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -98,7 +98,7 @@ class DuRiLearningTestSystem:
 
         # 예산 상태 확인
         budget_summary = self.config.get_budget_summary()
-        logger.info(f"\n💰 예산 상태:")
+        logger.info("\n💰 예산 상태:")
         logger.info(f"  - 사용률: {budget_summary['usage_percentage']:.1f}%")
         logger.info(f"  - 남은 예산: ${budget_summary['remaining_budget']:.2f}")
         logger.info(f"  - 주간 호출: {budget_summary['calls_this_week']}")
@@ -120,9 +120,7 @@ class DuRiLearningTestSystem:
         logger.info(f"  - 내부 학습 루프 활성화: {self.status.learning_loop_active}")
         logger.info(f"  - 판단 충돌 트리거: {self.triggers.belief_conflict}")
         logger.info(f"  - 감정 불안정 트리거: {self.triggers.emotion_dysregulation}")
-        logger.info(
-            f"  - 학습 우선순위: {self.config.core_belief_score['learning_priority']}"
-        )
+        logger.info(f"  - 학습 우선순위: {self.config.core_belief_score['learning_priority']}")
 
         # 트리거 이벤트 로깅
         trigger_event = {
@@ -157,11 +155,7 @@ class DuRiLearningTestSystem:
         logger.info(f"🧠 호출 시작: {model_name} with {token_count} tokens")
 
         # 비용 추정
-        model = (
-            LLMModel(model_name)
-            if hasattr(LLMModel, model_name)
-            else LLMModel.CLAUDE3_HAIKU
-        )
+        model = LLMModel(model_name) if hasattr(LLMModel, model_name) else LLMModel.CLAUDE3_HAIKU
         estimated_cost = self.config.estimate_call_cost(model, token_count)
 
         logger.info(f"  💰 예상 비용: ${estimated_cost:.4f}")
@@ -173,9 +167,9 @@ class DuRiLearningTestSystem:
 
         # 모의 응답 생성 (실제로는 API 호출)
         if model == LLMModel.CLAUDE3_HAIKU:
-            response = f"Claude 3의 전략적 조언: 현재 상황에서 더 신중한 접근이 필요합니다. 장기적 관점을 고려하여 단계적 해결책을 제시하겠습니다."
+            response = "Claude 3의 전략적 조언: 현재 상황에서 더 신중한 접근이 필요합니다. 장기적 관점을 고려하여 단계적 해결책을 제시하겠습니다."  # noqa: E501
         elif model == LLMModel.GPT4O:
-            response = f"GPT-4의 감정적 피드백: 현재 감정 상태를 이해합니다. 스트레스 관리와 자기 돌봄이 중요합니다. 차분한 마음으로 상황을 재평가해보세요."
+            response = "GPT-4의 감정적 피드백: 현재 감정 상태를 이해합니다. 스트레스 관리와 자기 돌봄이 중요합니다. 차분한 마음으로 상황을 재평가해보세요."  # noqa: E501
         else:
             response = f"{model_name}의 응답: 학습과 성장을 위한 가치 있는 피드백을 제공합니다."
 
@@ -217,9 +211,7 @@ class DuRiLearningTestSystem:
                 logger.info(f"🎯 선택된 모델: {selected_model.value}")
 
                 # 외부 LLM 호출
-                response = await self.call_external_llm(
-                    selected_model.value, estimated_tokens
-                )
+                response = await self.call_external_llm(selected_model.value, estimated_tokens)
 
                 # 학습 결과 처리
                 learning_result = {
@@ -227,9 +219,7 @@ class DuRiLearningTestSystem:
                     "model_used": selected_model.value,
                     "tokens_used": estimated_tokens,
                     "response": response,
-                    "session_duration": (
-                        datetime.now() - session_start
-                    ).total_seconds(),
+                    "session_duration": (datetime.now() - session_start).total_seconds(),
                     "triggers": {
                         "belief_conflict": self.triggers.belief_conflict,
                         "emotion_dysregulation": self.triggers.emotion_dysregulation,
@@ -239,9 +229,7 @@ class DuRiLearningTestSystem:
 
                 self.logs.learning_sessions.append(learning_result)
 
-                logger.info(
-                    f"✅ 학습 세션 완료: {learning_result['session_duration']:.2f}초"
-                )
+                logger.info(f"✅ 학습 세션 완료: {learning_result['session_duration']:.2f}초")
 
                 return learning_result
             else:
@@ -270,9 +258,7 @@ class DuRiLearningTestSystem:
             "learning_status": {
                 "loop_active": self.status.learning_loop_active,
                 "external_enabled": self.status.external_learning_enabled,
-                "learning_priority": self.config.core_belief_score.get(
-                    "learning_priority", 0.0
-                ),
+                "learning_priority": self.config.core_belief_score.get("learning_priority", 0.0),
             },
             "external_calls": self.logs.external_calls,
             "learning_sessions": self.logs.learning_sessions,
@@ -293,7 +279,7 @@ async def run_test():
     test_system.inject_test_triggers()
 
     # 3단계: 학습 세션 실행
-    learning_result = await test_system.execute_learning_session()
+    learning_result = await test_system.execute_learning_session()  # noqa: F841
 
     # 4단계: 최종 상태 확인
     test_system.check_learning_status()
@@ -309,9 +295,7 @@ async def run_test():
     if test_report["external_calls"]:
         logger.info("\n📡 외부 호출 기록:")
         for call in test_report["external_calls"]:
-            logger.info(
-                f"  - {call['model']}: {call['tokens']} tokens ({call['timestamp']})"
-            )
+            logger.info(f"  - {call['model']}: {call['tokens']} tokens ({call['timestamp']})")
 
     logger.info("=== DuRi 외부 학습 트리거 테스트 완료 ===")
 

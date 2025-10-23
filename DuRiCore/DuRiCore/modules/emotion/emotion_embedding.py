@@ -8,7 +8,7 @@ import logging
 import re
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 
@@ -211,14 +211,10 @@ class NLPEmotionEmbedding:
             intensity = self._calculate_emotion_intensity(text, detected_emotions)
 
             # 3. 주요 감정 결정
-            primary_emotion = self._determine_primary_emotion(
-                detected_emotions, intensity
-            )
+            primary_emotion = self._determine_primary_emotion(detected_emotions, intensity)
 
             # 4. 보조 감정들
-            secondary_emotions = self._get_secondary_emotions(
-                detected_emotions, primary_emotion
-            )
+            secondary_emotions = self._get_secondary_emotions(detected_emotions, primary_emotion)
 
             # 5. 감정 신뢰도 계산
             confidence = self._calculate_confidence(detected_emotions, intensity)
@@ -227,14 +223,10 @@ class NLPEmotionEmbedding:
             emotional_context = self._analyze_emotional_context(text)
 
             # 7. 감정 점수 계산
-            sentiment_score = self._calculate_sentiment_score(
-                text, primary_emotion, intensity
-            )
+            sentiment_score = self._calculate_sentiment_score(text, primary_emotion, intensity)
 
             # 8. 감정 키워드 추출
-            emotional_keywords = self._extract_emotional_keywords(
-                text, detected_emotions
-            )
+            emotional_keywords = self._extract_emotional_keywords(text, detected_emotions)
 
             # 9. 감정 패턴 추출
             emotional_patterns = self._extract_emotional_patterns(text)
@@ -270,9 +262,7 @@ class NLPEmotionEmbedding:
 
         return detected
 
-    def _calculate_emotion_intensity(
-        self, text: str, detected_emotions: Dict[EmotionCategory, List[str]]
-    ) -> float:
+    def _calculate_emotion_intensity(self, text: str, detected_emotions: Dict[EmotionCategory, List[str]]) -> float:
         """감정 강도 계산"""
         if not detected_emotions:
             return 0.1  # 기본값
@@ -326,9 +316,7 @@ class NLPEmotionEmbedding:
 
         return secondary[:3]  # 최대 3개까지만
 
-    def _calculate_confidence(
-        self, detected_emotions: Dict[EmotionCategory, List[str]], intensity: float
-    ) -> float:
+    def _calculate_confidence(self, detected_emotions: Dict[EmotionCategory, List[str]], intensity: float) -> float:
         """감정 분석 신뢰도 계산"""
         if not detected_emotions:
             return 0.1
@@ -360,9 +348,7 @@ class NLPEmotionEmbedding:
         else:
             return "일반적"
 
-    def _calculate_sentiment_score(
-        self, text: str, primary_emotion: EmotionCategory, intensity: float
-    ) -> float:
+    def _calculate_sentiment_score(self, text: str, primary_emotion: EmotionCategory, intensity: float) -> float:
         """감정 점수 계산 (-1.0 ~ 1.0)"""
         # 감정별 기본 점수
         emotion_scores = {
@@ -389,9 +375,7 @@ class NLPEmotionEmbedding:
 
         return max(-1.0, min(1.0, adjusted_score))
 
-    def _extract_emotional_keywords(
-        self, text: str, detected_emotions: Dict[EmotionCategory, List[str]]
-    ) -> List[str]:
+    def _extract_emotional_keywords(self, text: str, detected_emotions: Dict[EmotionCategory, List[str]]) -> List[str]:
         """감정 키워드 추출"""
         keywords = []
         for emotion_keywords in detected_emotions.values():

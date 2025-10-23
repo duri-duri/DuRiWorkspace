@@ -1,52 +1,28 @@
 repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.9
+    hooks:
+      - id: ruff           # 린트 + isort 대체
+        args: [--fix, --exit-non-zero-on-fix]
+      - id: ruff-format    # 포맷(black 대체)
+
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
     hooks:
-      - id: trailing-whitespace
-      - id: end-of-file-fixer
-      - id: check-yaml
-        exclude: |
-          (?x)^(
-            \.github/workflows-archive/.*\.yml|
-            .*\.optimized\.yml
-          )$
-      - id: check-added-large-files
-      - id: check-merge-conflict
       - id: check-json
+      - id: check-merge-conflict
+      - id: check-added-large-files
       - id: check-toml
       - id: check-xml
       - id: debug-statements
       - id: detect-private-key
 
-  - repo: https://github.com/psf/black
-    rev: 24.10.0
-    hooks:
-      - id: black
-        language_version: python3
-
-  - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
-    hooks:
-      - id: isort
-
-  - repo: https://github.com/pycqa/flake8
-    rev: 7.1.1
-    hooks:
-      - id: flake8
-        args:
-          - --exclude=DuRiCore/backup_repository,DuRi_Day11_15_starter,build,dist,.venv,.mypy_cache,.pytest_cache,var,scripts/._*,scripts/common
-        additional_dependencies:
-          - flake8-bugbear==24.8.19
-          - attrs>=23.2.0
-          - radon==6.0.1
-
   - repo: https://github.com/adrienverge/yamllint
     rev: v1.35.1
     hooks:
       - id: yamllint
-        exclude: |
-          (?x)^(
-            \.github/workflows-archive/.*\.yml|
-            .*\.optimized\.yml|
-            \.pre-commit-config\.yaml
-          )$
+        args: [-c, .yamllint.yaml]
+
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.1
+    hooks: [{id: actionlint}]

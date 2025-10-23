@@ -5,23 +5,18 @@ DuRiCore Phase 10 - 고급 창의적 사고 엔진
 """
 
 import asyncio
-import json
 import logging
-import math
 import random
-import statistics
 import time
-from collections import defaultdict, deque
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional
 
-from advanced_cognitive_system import (AbstractionType,
-                                       AdvancedCognitiveSystem, CognitiveLevel)
+from advanced_cognitive_system import AdvancedCognitiveSystem
+
 # 기존 시스템들 import
-from creative_thinking_system import (CreativeThinkingSystem,
-                                      CreativeThinkingType, InnovationLevel)
+from creative_thinking_system import CreativeThinkingSystem
 from emotion_weight_system import EmotionWeightSystem
 from lida_attention_system import LIDAAttentionSystem
 
@@ -193,9 +188,7 @@ class CreativeThinkingEngine:
     ) -> List[CreativeIdea]:
         """창의적 아이디어 생성"""
         try:
-            logger.info(
-                f"창의적 아이디어 생성 시작: {num_ideas}개, 수준: {creativity_level.value}"
-            )
+            logger.info(f"창의적 아이디어 생성 시작: {num_ideas}개, 수준: {creativity_level.value}")
 
             # 컨텍스트 전처리
             processed_context = await self._preprocess_creative_context(context)
@@ -206,9 +199,7 @@ class CreativeThinkingEngine:
             # 아이디어 생성
             ideas = []
             for i in range(num_ideas):
-                idea = await self._generate_single_idea(
-                    processed_context, patterns, creativity_level
-                )
+                idea = await self._generate_single_idea(processed_context, patterns, creativity_level)
                 if idea:
                     ideas.append(idea)
 
@@ -243,22 +234,16 @@ class CreativeThinkingEngine:
             problem_analysis = await self._analyze_problem_creatively(problem_context)
 
             # 혁신 방법론 적용
-            solutions = await self._apply_innovation_method(
-                problem_analysis, innovation_method
-            )
+            solutions = await self._apply_innovation_method(problem_analysis, innovation_method)
 
             # 해결책 평가 및 개선
             evaluated_solutions = await self._evaluate_creative_solutions(solutions)
-            improved_solutions = await self._improve_creative_solutions(
-                evaluated_solutions
-            )
+            improved_solutions = await self._improve_creative_solutions(evaluated_solutions)
 
             # 결과 저장
             self.creative_solutions.extend(improved_solutions)
 
-            logger.info(
-                f"창의적 문제 해결 완료: {len(improved_solutions)}개 해결책 생성"
-            )
+            logger.info(f"창의적 문제 해결 완료: {len(improved_solutions)}개 해결책 생성")
             return improved_solutions
 
         except Exception as e:
@@ -275,19 +260,13 @@ class CreativeThinkingEngine:
             logger.info(f"혁신 개발 시작: 창의성 수준 {creativity_level.value}")
 
             # 혁신 컨텍스트 분석
-            innovation_analysis = await self._analyze_innovation_context(
-                innovation_context
-            )
+            innovation_analysis = await self._analyze_innovation_context(innovation_context)
 
             # 혁신 방법론 선택
-            selected_method = await self._select_innovation_method(
-                innovation_analysis, creativity_level
-            )
+            selected_method = await self._select_innovation_method(innovation_analysis, creativity_level)
 
             # 혁신 프로젝트 생성
-            project = await self._create_innovation_project(
-                innovation_analysis, selected_method, creativity_level
-            )
+            project = await self._create_innovation_project(innovation_analysis, selected_method, creativity_level)
 
             # 프로젝트 계획 수립
             planned_project = await self._plan_innovation_project(project)
@@ -302,33 +281,23 @@ class CreativeThinkingEngine:
             logger.error(f"혁신 개발 실패: {str(e)}")
             return None
 
-    async def assess_creativity(
-        self, subject: str, context: Dict[str, Any]
-    ) -> CreativityAssessment:
+    async def assess_creativity(self, subject: str, context: Dict[str, Any]) -> CreativityAssessment:
         """창의성 평가"""
         try:
             logger.info(f"창의성 평가 시작: 주제 {subject}")
 
             # 창의성 차원 분석
-            creativity_dimensions = await self._analyze_creativity_dimensions(
-                subject, context
-            )
+            creativity_dimensions = await self._analyze_creativity_dimensions(subject, context)
 
             # 전반적 창의성 점수 계산
-            overall_score = await self._calculate_overall_creativity_score(
-                creativity_dimensions
-            )
+            overall_score = await self._calculate_overall_creativity_score(creativity_dimensions)
 
             # 강점 및 개선 영역 식별
             strengths = await self._identify_creativity_strengths(creativity_dimensions)
-            improvement_areas = await self._identify_improvement_areas(
-                creativity_dimensions
-            )
+            improvement_areas = await self._identify_improvement_areas(creativity_dimensions)
 
             # 권장사항 생성
-            recommendations = await self._generate_creativity_recommendations(
-                strengths, improvement_areas
-            )
+            recommendations = await self._generate_creativity_recommendations(strengths, improvement_areas)
 
             # 평가 결과 생성
             assessment = CreativityAssessment(
@@ -352,9 +321,7 @@ class CreativeThinkingEngine:
             logger.error(f"창의성 평가 실패: {str(e)}")
             return None
 
-    async def _preprocess_creative_context(
-        self, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _preprocess_creative_context(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """창의적 컨텍스트 전처리"""
         processed_context = context.copy()
 
@@ -395,14 +362,10 @@ class CreativeThinkingEngine:
         """단일 창의적 아이디어 생성"""
         try:
             # 창의적 패턴 조합
-            combined_patterns = (
-                random.sample(patterns, min(3, len(patterns))) if patterns else []
-            )
+            combined_patterns = random.sample(patterns, min(3, len(patterns))) if patterns else []
 
             # 아이디어 생성 로직
-            idea_content = await self._combine_creative_elements(
-                context, combined_patterns, creativity_level
-            )
+            idea_content = await self._combine_creative_elements(context, combined_patterns, creativity_level)
 
             if idea_content:
                 idea = CreativeIdea(
@@ -415,9 +378,7 @@ class CreativeThinkingEngine:
                     usefulness_score=idea_content.get("usefulness_score", 0.0),
                     feasibility_score=idea_content.get("feasibility_score", 0.0),
                     impact_potential=idea_content.get("impact_potential", 0.0),
-                    implementation_complexity=idea_content.get(
-                        "implementation_complexity", 0.0
-                    ),
+                    implementation_complexity=idea_content.get("implementation_complexity", 0.0),
                     tags=idea_content.get("tags", []),
                     related_concepts=idea_content.get("related_concepts", []),
                     inspiration_sources=idea_content.get("inspiration_sources", []),
@@ -455,15 +416,13 @@ class CreativeThinkingEngine:
 
         return combined_elements
 
-    async def _evaluate_creative_ideas(
-        self, ideas: List[CreativeIdea]
-    ) -> List[CreativeIdea]:
+    async def _evaluate_creative_ideas(self, ideas: List[CreativeIdea]) -> List[CreativeIdea]:
         """창의적 아이디어 평가"""
         evaluated_ideas = []
 
         for idea in ideas:
             # 품질 점수 계산
-            quality_score = (
+            quality_score = (  # noqa: F841
                 idea.novelty_score * self.creativity_weights["novelty"]
                 + idea.usefulness_score * self.creativity_weights["usefulness"]
                 + idea.feasibility_score * self.creativity_weights["feasibility"]
@@ -479,9 +438,7 @@ class CreativeThinkingEngine:
 
         return evaluated_ideas
 
-    async def _analyze_problem_creatively(
-        self, problem_context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _analyze_problem_creatively(self, problem_context: Dict[str, Any]) -> Dict[str, Any]:
         """창의적 문제 분석"""
         analysis = {
             "problem_definition": problem_context.get("problem", ""),
@@ -515,9 +472,7 @@ class CreativeThinkingEngine:
 
         return solutions
 
-    async def _apply_design_thinking(
-        self, problem_analysis: Dict[str, Any]
-    ) -> List[CreativeSolution]:
+    async def _apply_design_thinking(self, problem_analysis: Dict[str, Any]) -> List[CreativeSolution]:
         """디자인 씽킹 방법론 적용"""
         solutions = []
 
@@ -545,9 +500,7 @@ class CreativeThinkingEngine:
 
         return solutions
 
-    async def _apply_triz_method(
-        self, problem_analysis: Dict[str, Any]
-    ) -> List[CreativeSolution]:
+    async def _apply_triz_method(self, problem_analysis: Dict[str, Any]) -> List[CreativeSolution]:
         """TRIZ 방법론 적용"""
         solutions = []
 
@@ -575,9 +528,7 @@ class CreativeThinkingEngine:
 
         return solutions
 
-    async def _apply_lateral_thinking(
-        self, problem_analysis: Dict[str, Any]
-    ) -> List[CreativeSolution]:
+    async def _apply_lateral_thinking(self, problem_analysis: Dict[str, Any]) -> List[CreativeSolution]:
         """측면 사고 방법론 적용"""
         solutions = []
 
@@ -605,9 +556,7 @@ class CreativeThinkingEngine:
 
         return solutions
 
-    async def _apply_general_innovation(
-        self, problem_analysis: Dict[str, Any]
-    ) -> List[CreativeSolution]:
+    async def _apply_general_innovation(self, problem_analysis: Dict[str, Any]) -> List[CreativeSolution]:
         """일반 혁신 방법론 적용"""
         solutions = []
 
@@ -632,9 +581,7 @@ class CreativeThinkingEngine:
 
         return solutions
 
-    async def _evaluate_creative_solutions(
-        self, solutions: List[CreativeSolution]
-    ) -> List[CreativeSolution]:
+    async def _evaluate_creative_solutions(self, solutions: List[CreativeSolution]) -> List[CreativeSolution]:
         """창의적 해결책 평가"""
         evaluated_solutions = []
 
@@ -654,9 +601,7 @@ class CreativeThinkingEngine:
 
         return evaluated_solutions
 
-    async def _improve_creative_solutions(
-        self, solutions: List[CreativeSolution]
-    ) -> List[CreativeSolution]:
+    async def _improve_creative_solutions(self, solutions: List[CreativeSolution]) -> List[CreativeSolution]:
         """창의적 해결책 개선"""
         improved_solutions = []
 
@@ -664,17 +609,13 @@ class CreativeThinkingEngine:
             # 개선 로직 적용
             improved_solution = solution
             improved_solution.novelty_score = min(1.0, solution.novelty_score * 1.1)
-            improved_solution.effectiveness_score = min(
-                1.0, solution.effectiveness_score * 1.05
-            )
+            improved_solution.effectiveness_score = min(1.0, solution.effectiveness_score * 1.05)
 
             improved_solutions.append(improved_solution)
 
         return improved_solutions
 
-    async def _analyze_innovation_context(
-        self, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _analyze_innovation_context(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """혁신 컨텍스트 분석"""
         analysis = {
             "domain": context.get("domain", "general"),
@@ -728,9 +669,7 @@ class CreativeThinkingEngine:
 
         return project
 
-    async def _plan_innovation_project(
-        self, project: InnovationProject
-    ) -> InnovationProject:
+    async def _plan_innovation_project(self, project: InnovationProject) -> InnovationProject:
         """혁신 프로젝트 계획 수립"""
         # 프로젝트 계획 세부화
         project.description += " - 상세 계획 수립됨"
@@ -739,9 +678,7 @@ class CreativeThinkingEngine:
 
         return project
 
-    async def _analyze_creativity_dimensions(
-        self, subject: str, context: Dict[str, Any]
-    ) -> Dict[str, float]:
+    async def _analyze_creativity_dimensions(self, subject: str, context: Dict[str, Any]) -> Dict[str, float]:
         """창의성 차원 분석"""
         dimensions = {
             "유창성": random.uniform(0.6, 0.9),
@@ -754,9 +691,7 @@ class CreativeThinkingEngine:
 
         return dimensions
 
-    async def _calculate_overall_creativity_score(
-        self, dimensions: Dict[str, float]
-    ) -> float:
+    async def _calculate_overall_creativity_score(self, dimensions: Dict[str, float]) -> float:
         """전반적 창의성 점수 계산"""
         weights = {
             "유창성": 0.15,
@@ -770,9 +705,7 @@ class CreativeThinkingEngine:
         overall_score = sum(dimensions[dim] * weights[dim] for dim in dimensions)
         return overall_score
 
-    async def _identify_creativity_strengths(
-        self, dimensions: Dict[str, float]
-    ) -> List[str]:
+    async def _identify_creativity_strengths(self, dimensions: Dict[str, float]) -> List[str]:
         """창의성 강점 식별"""
         strengths = []
         threshold = 0.7
@@ -783,9 +716,7 @@ class CreativeThinkingEngine:
 
         return strengths
 
-    async def _identify_improvement_areas(
-        self, dimensions: Dict[str, float]
-    ) -> List[str]:
+    async def _identify_improvement_areas(self, dimensions: Dict[str, float]) -> List[str]:
         """개선 영역 식별"""
         improvement_areas = []
         threshold = 0.6

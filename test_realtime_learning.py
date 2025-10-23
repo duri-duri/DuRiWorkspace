@@ -2,9 +2,9 @@
 """
 DuRi 실시간 학습 시스템 테스트
 """
+
 import json
 import time
-from datetime import datetime
 
 import requests
 
@@ -48,9 +48,7 @@ def test_realtime_learning_system():
 
     for i, conversation in enumerate(test_conversations, 1):
         try:
-            response = requests.post(
-                f"{base_url}/realtime-learning/conversation", json=conversation
-            )
+            response = requests.post(f"{base_url}/realtime-learning/conversation", json=conversation)
             result = response.json()
             print(f"   대화 {i}: {result.get('status', 'unknown')}")
         except Exception as e:
@@ -144,13 +142,11 @@ def test_realtime_learning_integration():
     for i in range(5):
         conversation = {
             "user_input": f"테스트 질문 {i+1}: Python에서 무엇을 배울 수 있나요?",
-            "assistant_response": f"Python에서는 웹 개발, 데이터 분석, AI, 자동화 등 다양한 것을 배울 수 있습니다. 테스트 응답 {i+1}입니다.",
+            "assistant_response": f"Python에서는 웹 개발, 데이터 분석, AI, 자동화 등 다양한 것을 배울 수 있습니다. 테스트 응답 {i+1}입니다.",  # noqa: E501
         }
 
         try:
-            response = requests.post(
-                f"{base_url}/realtime-learning/conversation", json=conversation
-            )
+            response = requests.post(f"{base_url}/realtime-learning/conversation", json=conversation)
             result = response.json()
             print(f"   대화 {i+1}: {result.get('status', 'unknown')}")
         except Exception as e:
@@ -169,18 +165,13 @@ def test_realtime_learning_integration():
         response = requests.get(f"{base_url}/autonomous-learning/status")
         autonomous_result = response.json()
 
-        if (
-            realtime_result.get("status") == "success"
-            and autonomous_result.get("status") == "success"
-        ):
+        if realtime_result.get("status") == "success" and autonomous_result.get("status") == "success":
             realtime_data = realtime_result.get("realtime_learning", {})
             autonomous_data = autonomous_result.get("autonomous_learning", {})
 
             print(f"   📊 실시간 학습 활성: {realtime_data.get('is_active', False)}")
             print(f"   📊 자동 학습 활성: {autonomous_data.get('is_running', False)}")
-            print(
-                f"   📊 학습 히스토리: {realtime_data.get('learning_history_count', 0)}"
-            )
+            print(f"   📊 학습 히스토리: {realtime_data.get('learning_history_count', 0)}")
         else:
             print("   ❌ 상태 확인 실패")
 

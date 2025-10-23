@@ -9,8 +9,6 @@ import asyncio
 import logging
 import os
 import sys
-from datetime import datetime
-from typing import Any, Dict
 
 # 프로젝트 루트를 Python 경로에 추가
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -29,16 +27,8 @@ async def check_unified_learning_system():
         learning_system = UnifiedLearningSystem()
 
         # 현재 활성 세션 수 확인
-        active_sessions = [
-            s
-            for s in learning_system.learning_sessions
-            if s.status.value == "in_progress"
-        ]
-        evolution_sessions = [
-            s
-            for s in learning_system.evolution_sessions
-            if s.status.value == "in_progress"
-        ]
+        active_sessions = [s for s in learning_system.learning_sessions if s.status.value == "in_progress"]
+        evolution_sessions = [s for s in learning_system.evolution_sessions if s.status.value == "in_progress"]
 
         return {
             "system": "통합 학습 시스템",
@@ -58,10 +48,8 @@ async def check_unified_learning_system():
 async def check_autonomous_learning_system():
     """자율 학습 시스템 상태 확인"""
     try:
-        from duri_modules.autonomous.continuous_learner import \
-            AutonomousLearner
-        from duri_modules.autonomous.duri_autonomous_core import \
-            DuRiAutonomousCore
+        from duri_modules.autonomous.continuous_learner import AutonomousLearner
+        from duri_modules.autonomous.duri_autonomous_core import DuRiAutonomousCore
 
         # 자율 학습 시스템들 확인
         autonomous_learner = AutonomousLearner()
@@ -69,14 +57,10 @@ async def check_autonomous_learning_system():
 
         return {
             "system": "자율 학습 시스템",
-            "autonomous_learner_status": (
-                "실행 중" if autonomous_learner.is_running else "대기"
-            ),
+            "autonomous_learner_status": ("실행 중" if autonomous_learner.is_running else "대기"),
             "autonomous_core_status": "활성" if autonomous_core.is_active else "비활성",
             "current_session": (
-                autonomous_learner.current_session.session_id
-                if autonomous_learner.current_session
-                else None
+                autonomous_learner.current_session.session_id if autonomous_learner.current_session else None
             ),
             "total_learning_cycles": autonomous_learner.total_learning_cycles,
             "total_problems_detected": autonomous_learner.total_problems_detected,
@@ -91,8 +75,7 @@ async def check_autonomous_learning_system():
 async def check_learning_loop_manager():
     """학습 루프 매니저 상태 확인"""
     try:
-        from duri_brain.learning.learning_loop_manager import \
-            get_learning_loop_manager
+        from duri_brain.learning.learning_loop_manager import get_learning_loop_manager
 
         # 학습 루프 매니저 가져오기
         learning_loop_manager = get_learning_loop_manager()
@@ -104,9 +87,7 @@ async def check_learning_loop_manager():
             "system": "학습 루프 매니저",
             "is_running": learning_loop_manager.is_running,
             "current_cycle": (
-                learning_loop_manager.current_cycle.cycle_id
-                if learning_loop_manager.current_cycle
-                else None
+                learning_loop_manager.current_cycle.cycle_id if learning_loop_manager.current_cycle else None
             ),
             "learning_cycle_count": learning_loop_manager.learning_cycle_count,
             "total_cycles": len(learning_loop_manager.learning_cycles),
@@ -121,8 +102,7 @@ async def check_learning_loop_manager():
 async def check_realtime_learner():
     """실시간 학습 시스템 상태 확인"""
     try:
-        from duri_modules.autonomous.continuous_learner import \
-            AutonomousLearner
+        from duri_modules.autonomous.continuous_learner import AutonomousLearner
         from duri_modules.autonomous.realtime_learner import RealtimeLearner
 
         # 실시간 학습 시스템 확인
@@ -134,15 +114,11 @@ async def check_realtime_learner():
             "is_active": realtime_learner.is_active,
             "learning_interval": realtime_learner.learning_interval,
             "last_learning_time": (
-                realtime_learner.last_learning_time.isoformat()
-                if realtime_learner.last_learning_time
-                else None
+                realtime_learner.last_learning_time.isoformat() if realtime_learner.last_learning_time else None
             ),
             "total_learning_sessions": len(realtime_learner.learning_history),
             "current_session": (
-                realtime_learner.current_session.session_id
-                if realtime_learner.current_session
-                else None
+                realtime_learner.current_session.session_id if realtime_learner.current_session else None
             ),
         }
     except Exception as e:
@@ -209,9 +185,7 @@ async def generate_learning_summary():
         print("\n🚨 모든 학습 시스템이 비활성 상태입니다!")
         print("내일 학습 시스템을 활성화해야 합니다.")
     elif active_systems < total_systems:
-        print(
-            f"\n⚠️ 일부 학습 시스템이 비활성 상태입니다. ({total_systems - active_systems}개)"
-        )
+        print(f"\n⚠️ 일부 학습 시스템이 비활성 상태입니다. ({total_systems - active_systems}개)")
     else:
         print("\n🎉 모든 학습 시스템이 활성 상태입니다!")
 

@@ -4,9 +4,7 @@ DuRi 전략 학습 엔진 - 확장 버전
 판단 결과를 관찰하고 패턴을 분석하여 전략적 통찰을 도출
 """
 
-import json
 from datetime import datetime
-from typing import Any, Dict, List, Optional
 
 
 class StrategicLearningEngine:

@@ -155,5 +155,11 @@ backup/BACKUP_LOG_*.txt
 
 # CI-generated
 ops/observability/slack_webhook_url
-evolution_log.json
+# === Ruff 단일화 설정에 따른 추가 항목 ===
 .mutmut-cache/
+.pytest_cache/
+.coverage
+htmlcov/
+reports/
+**/evolution_log.json
+DuRiCore/test_results_*.json

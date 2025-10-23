@@ -5,18 +5,13 @@ DuRiCore Phase 5 Day 8 - 고급 최적화 엔진
 """
 
 import asyncio
-import json
 import logging
-import math
 import random
-import statistics
 import time
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
-
-import numpy as np
+from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 
@@ -147,9 +142,7 @@ class AdvancedOptimizationEngine:
 
         logger.info("AdvancedOptimizationEngine 초기화 완료")
 
-    async def apply_ml_optimization(
-        self, system_data: Dict[str, Any]
-    ) -> OptimizationResult:
+    async def apply_ml_optimization(self, system_data: Dict[str, Any]) -> OptimizationResult:
         """ML 기반 최적화 적용"""
         try:
             logger.info("ML 기반 최적화 적용 시작")
@@ -161,18 +154,14 @@ class AdvancedOptimizationEngine:
             optimization_strategy = await self._generate_ml_strategy(system_data)
 
             # 최적화 적용
-            optimization_params = await self._apply_optimization_parameters(
-                optimization_strategy
-            )
+            optimization_params = await self._apply_optimization_parameters(optimization_strategy)  # noqa: F841
 
             # 최적화 후 성능 측정
             await asyncio.sleep(10)  # 최적화 효과 안정화 대기
             after_performance = await self._measure_current_performance()
 
             # 개선률 계산
-            improvement_percentage = await self._calculate_improvement_percentage(
-                before_performance, after_performance
-            )
+            improvement_percentage = await self._calculate_improvement_percentage(before_performance, after_performance)
 
             # 최적화 결과 생성
             optimization_result = OptimizationResult(
@@ -182,9 +171,7 @@ class AdvancedOptimizationEngine:
                 before_performance=before_performance,
                 after_performance=after_performance,
                 improvement_percentage=improvement_percentage,
-                validation_confidence=await self._calculate_validation_confidence(
-                    improvement_percentage
-                ),
+                validation_confidence=await self._calculate_validation_confidence(improvement_percentage),
                 created_at=datetime.now(),
             )
 
@@ -197,9 +184,7 @@ class AdvancedOptimizationEngine:
             logger.error(f"ML 기반 최적화 중 오류: {e}")
             return None
 
-    async def analyze_performance_patterns(
-        self, performance_data: List[Dict[str, Any]]
-    ) -> Dict[str, Any]:
+    async def analyze_performance_patterns(self, performance_data: List[Dict[str, Any]]) -> Dict[str, Any]:
         """성능 패턴 분석"""
         try:
             logger.info("성능 패턴 분석 시작")
@@ -219,9 +204,7 @@ class AdvancedOptimizationEngine:
             patterns.extend(response_patterns)
 
             # 처리량 패턴 분석
-            throughput_patterns = await self._analyze_throughput_patterns(
-                performance_data
-            )
+            throughput_patterns = await self._analyze_throughput_patterns(performance_data)
             patterns.extend(throughput_patterns)
 
             # 패턴 통합 분석
@@ -244,9 +227,7 @@ class AdvancedOptimizationEngine:
                 "confidence_score": 0.0,
             }
 
-    async def generate_optimization_strategies(
-        self, analysis_result: Dict[str, Any]
-    ) -> List[OptimizationStrategyData]:
+    async def generate_optimization_strategies(self, analysis_result: Dict[str, Any]) -> List[OptimizationStrategyData]:
         """최적화 전략 생성"""
         try:
             logger.info("최적화 전략 생성 시작")
@@ -254,9 +235,7 @@ class AdvancedOptimizationEngine:
             strategies = []
 
             # 패턴 기반 전략 생성
-            pattern_strategies = await self._generate_pattern_based_strategies(
-                analysis_result
-            )
+            pattern_strategies = await self._generate_pattern_based_strategies(analysis_result)
             strategies.extend(pattern_strategies)
 
             # ML 기반 전략 생성
@@ -264,9 +243,7 @@ class AdvancedOptimizationEngine:
             strategies.extend(ml_strategies)
 
             # 적응형 전략 생성
-            adaptive_strategies = await self._generate_adaptive_strategies(
-                analysis_result
-            )
+            adaptive_strategies = await self._generate_adaptive_strategies(analysis_result)
             strategies.extend(adaptive_strategies)
 
             # 전략 우선순위 정렬
@@ -279,25 +256,19 @@ class AdvancedOptimizationEngine:
             logger.error(f"최적화 전략 생성 중 오류: {e}")
             return []
 
-    async def validate_optimization_effects(
-        self, optimization_result: OptimizationResult
-    ) -> ValidationReport:
+    async def validate_optimization_effects(self, optimization_result: OptimizationResult) -> ValidationReport:
         """최적화 효과 검증"""
         try:
             logger.info("최적화 효과 검증 시작")
 
             # 성능 지표 검증
-            performance_metrics = await self._validate_performance_metrics(
-                optimization_result
-            )
+            performance_metrics = await self._validate_performance_metrics(optimization_result)
 
             # 안정성 검증
             stability_score = await self._validate_system_stability(optimization_result)
 
             # 사용자 만족도 검증
-            user_satisfaction = await self._validate_user_satisfaction(
-                optimization_result
-            )
+            user_satisfaction = await self._validate_user_satisfaction(optimization_result)
 
             # 종합 검증 결과
             validation_status = await self._determine_validation_status(
@@ -348,9 +319,7 @@ class AdvancedOptimizationEngine:
             logger.error(f"성능 측정 중 오류: {e}")
             return {}
 
-    async def _generate_ml_strategy(
-        self, system_data: Dict[str, Any]
-    ) -> OptimizationStrategy:
+    async def _generate_ml_strategy(self, system_data: Dict[str, Any]) -> OptimizationStrategy:
         """ML 기반 전략 생성"""
         try:
             # ML 모델을 통한 최적화 전략 생성 (실제 구현에서는 실제 ML 모델 사용)
@@ -370,9 +339,7 @@ class AdvancedOptimizationEngine:
             logger.error(f"ML 전략 생성 중 오류: {e}")
             return None
 
-    async def _apply_optimization_parameters(
-        self, strategy: OptimizationStrategy
-    ) -> Dict[str, Any]:
+    async def _apply_optimization_parameters(self, strategy: OptimizationStrategy) -> Dict[str, Any]:
         """최적화 파라미터 적용"""
         try:
             # 전략에 따른 파라미터 적용 (실제 구현에서는 실제 시스템 설정 변경)
@@ -391,9 +358,7 @@ class AdvancedOptimizationEngine:
             logger.error(f"최적화 파라미터 적용 중 오류: {e}")
             return {}
 
-    async def _calculate_improvement_percentage(
-        self, before: Dict[str, float], after: Dict[str, float]
-    ) -> float:
+    async def _calculate_improvement_percentage(self, before: Dict[str, float], after: Dict[str, float]) -> float:
         """개선률 계산"""
         try:
             if not before or not after:
@@ -420,9 +385,7 @@ class AdvancedOptimizationEngine:
             logger.error(f"개선률 계산 중 오류: {e}")
             return 0.0
 
-    async def _analyze_cpu_patterns(
-        self, performance_data: List[Dict[str, Any]]
-    ) -> List[PerformancePattern]:
+    async def _analyze_cpu_patterns(self, performance_data: List[Dict[str, Any]]) -> List[PerformancePattern]:
         """CPU 패턴 분석"""
         try:
             patterns = []
@@ -456,9 +419,7 @@ class AdvancedOptimizationEngine:
             logger.error(f"CPU 패턴 분석 중 오류: {e}")
             return []
 
-    async def _analyze_memory_patterns(
-        self, performance_data: List[Dict[str, Any]]
-    ) -> List[PerformancePattern]:
+    async def _analyze_memory_patterns(self, performance_data: List[Dict[str, Any]]) -> List[PerformancePattern]:
         """메모리 패턴 분석"""
         try:
             patterns = []
@@ -492,9 +453,7 @@ class AdvancedOptimizationEngine:
             logger.error(f"메모리 패턴 분석 중 오류: {e}")
             return []
 
-    async def _analyze_response_patterns(
-        self, performance_data: List[Dict[str, Any]]
-    ) -> List[PerformancePattern]:
+    async def _analyze_response_patterns(self, performance_data: List[Dict[str, Any]]) -> List[PerformancePattern]:
         """응답 시간 패턴 분석"""
         try:
             patterns = []
@@ -528,9 +487,7 @@ class AdvancedOptimizationEngine:
             logger.error(f"응답 시간 패턴 분석 중 오류: {e}")
             return []
 
-    async def _analyze_throughput_patterns(
-        self, performance_data: List[Dict[str, Any]]
-    ) -> List[PerformancePattern]:
+    async def _analyze_throughput_patterns(self, performance_data: List[Dict[str, Any]]) -> List[PerformancePattern]:
         """처리량 패턴 분석"""
         try:
             patterns = []
@@ -564,9 +521,7 @@ class AdvancedOptimizationEngine:
             logger.error(f"처리량 패턴 분석 중 오류: {e}")
             return []
 
-    async def _integrate_pattern_analysis(
-        self, patterns: List[PerformancePattern]
-    ) -> Dict[str, Any]:
+    async def _integrate_pattern_analysis(self, patterns: List[PerformancePattern]) -> Dict[str, Any]:
         """패턴 통합 분석"""
         try:
             if not patterns:
@@ -584,11 +539,7 @@ class AdvancedOptimizationEngine:
                 pattern_types[pattern.pattern_type].append(pattern)
 
             # 전체 트렌드 분석
-            overall_trend = (
-                "improving"
-                if len(patterns) < 3
-                else "degrading" if len(patterns) > 5 else "stable"
-            )
+            overall_trend = "improving" if len(patterns) < 3 else "degrading" if len(patterns) > 5 else "stable"
 
             # 위험도 계산
             risk_level = min(len(patterns) / 10.0, 1.0)
@@ -660,9 +611,7 @@ class AdvancedOptimizationEngine:
             logger.error(f"패턴 기반 전략 생성 중 오류: {e}")
             return []
 
-    async def _generate_ml_based_strategies(
-        self, analysis_result: Dict[str, Any]
-    ) -> List[OptimizationStrategyData]:
+    async def _generate_ml_based_strategies(self, analysis_result: Dict[str, Any]) -> List[OptimizationStrategyData]:
         """ML 기반 전략 생성"""
         try:
             strategies = []
@@ -688,16 +637,12 @@ class AdvancedOptimizationEngine:
             logger.error(f"ML 기반 전략 생성 중 오류: {e}")
             return []
 
-    async def _generate_adaptive_strategies(
-        self, analysis_result: Dict[str, Any]
-    ) -> List[OptimizationStrategyData]:
+    async def _generate_adaptive_strategies(self, analysis_result: Dict[str, Any]) -> List[OptimizationStrategyData]:
         """적응형 전략 생성"""
         try:
             strategies = []
 
-            risk_level = analysis_result.get("overall_analysis", {}).get(
-                "risk_level", 0.5
-            )
+            risk_level = analysis_result.get("overall_analysis", {}).get("risk_level", 0.5)
 
             if risk_level > 0.7:
                 # 높은 위험도 - 보수적 전략
@@ -763,9 +708,7 @@ class AdvancedOptimizationEngine:
 
             # 기대 개선률과 위험도를 고려한 우선순위 계산
             for strategy in strategies:
-                priority_score = strategy.expected_improvement / (
-                    strategy.risk_level + 0.1
-                )
+                priority_score = strategy.expected_improvement / (strategy.risk_level + 0.1)
                 strategy.priority_score = priority_score
 
             # 우선순위별 정렬
@@ -775,9 +718,7 @@ class AdvancedOptimizationEngine:
             logger.error(f"전략 우선순위 정렬 중 오류: {e}")
             return strategies
 
-    async def _calculate_validation_confidence(
-        self, improvement_percentage: float
-    ) -> float:
+    async def _calculate_validation_confidence(self, improvement_percentage: float) -> float:
         """검증 신뢰도 계산"""
         try:
             # 개선률에 따른 신뢰도 계산
@@ -796,9 +737,7 @@ class AdvancedOptimizationEngine:
             logger.error(f"검증 신뢰도 계산 중 오류: {e}")
             return 0.5
 
-    async def _calculate_pattern_confidence(
-        self, patterns: List[PerformancePattern]
-    ) -> float:
+    async def _calculate_pattern_confidence(self, patterns: List[PerformancePattern]) -> float:
         """패턴 신뢰도 계산"""
         try:
             if not patterns:
@@ -812,9 +751,7 @@ class AdvancedOptimizationEngine:
             logger.error(f"패턴 신뢰도 계산 중 오류: {e}")
             return 0.0
 
-    async def _validate_performance_metrics(
-        self, optimization_result: OptimizationResult
-    ) -> Dict[str, float]:
+    async def _validate_performance_metrics(self, optimization_result: OptimizationResult) -> Dict[str, float]:
         """성능 지표 검증"""
         try:
             # 최적화 결과의 성능 지표 검증
@@ -835,9 +772,7 @@ class AdvancedOptimizationEngine:
             logger.error(f"성능 지표 검증 중 오류: {e}")
             return {}
 
-    async def _validate_system_stability(
-        self, optimization_result: OptimizationResult
-    ) -> float:
+    async def _validate_system_stability(self, optimization_result: OptimizationResult) -> float:
         """시스템 안정성 검증"""
         try:
             # 가상 안정성 점수 (실제 구현에서는 실제 시스템 상태 모니터링)
@@ -848,9 +783,7 @@ class AdvancedOptimizationEngine:
             logger.error(f"시스템 안정성 검증 중 오류: {e}")
             return 0.8
 
-    async def _validate_user_satisfaction(
-        self, optimization_result: OptimizationResult
-    ) -> float:
+    async def _validate_user_satisfaction(self, optimization_result: OptimizationResult) -> float:
         """사용자 만족도 검증"""
         try:
             # 가상 사용자 만족도 (실제 구현에서는 실제 사용자 피드백 수집)
@@ -871,17 +804,11 @@ class AdvancedOptimizationEngine:
         try:
             # 종합적인 검증 상태 결정
             performance_score = (
-                sum(performance_metrics.values()) / len(performance_metrics)
-                if performance_metrics
-                else 0.0
+                sum(performance_metrics.values()) / len(performance_metrics) if performance_metrics else 0.0
             )
 
             # 모든 지표가 임계값을 넘으면 성공
-            return (
-                performance_score > 0.7
-                and stability_score > 0.9
-                and user_satisfaction > 0.8
-            )
+            return performance_score > 0.7 and stability_score > 0.9 and user_satisfaction > 0.8
 
         except Exception as e:
             logger.error(f"검증 상태 결정 중 오류: {e}")
@@ -900,9 +827,7 @@ class AdvancedOptimizationEngine:
 
             # 성능 기반 권장사항
             if performance_metrics:
-                avg_performance = sum(performance_metrics.values()) / len(
-                    performance_metrics
-                )
+                avg_performance = sum(performance_metrics.values()) / len(performance_metrics)
                 if avg_performance < 0.7:
                     recommendations.append("성능 최적화가 추가로 필요합니다")
 
@@ -946,9 +871,7 @@ async def test_advanced_optimization_engine():
 
         optimization_result = await engine.apply_ml_optimization(system_data)
         if optimization_result:
-            logger.info(
-                f"ML 최적화 결과: {optimization_result.improvement_percentage:.2f}% 개선"
-            )
+            logger.info(f"ML 최적화 결과: {optimization_result.improvement_percentage:.2f}% 개선")
 
         # 2. 성능 패턴 분석 테스트
         logger.info("2. 성능 패턴 분석 테스트")
@@ -984,9 +907,7 @@ async def test_advanced_optimization_engine():
         # 4. 최적화 효과 검증 테스트
         logger.info("4. 최적화 효과 검증 테스트")
         if optimization_result:
-            validation_report = await engine.validate_optimization_effects(
-                optimization_result
-            )
+            validation_report = await engine.validate_optimization_effects(optimization_result)
             if validation_report:
                 logger.info(f"검증 결과: 성공률 {validation_report.validation_status}")
 

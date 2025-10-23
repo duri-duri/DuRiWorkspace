@@ -10,9 +10,7 @@ Phase 5: 성능 최적화 - 최종 실행 준비 완료 적용
 import asyncio
 import json
 import logging
-import time
 from datetime import datetime
-from typing import Any, Dict
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -34,9 +32,7 @@ async def test_unified_performance_optimizer():
         await asyncio.sleep(5)
 
         # 성능 요약 생성
-        performance_summary = (
-            await unified_performance_optimizer.get_performance_summary()
-        )
+        performance_summary = await unified_performance_optimizer.get_performance_summary()
 
         logger.info("성능 요약:")
         logger.info(json.dumps(performance_summary, indent=2, ensure_ascii=False))
@@ -54,9 +50,7 @@ async def test_async_optimization_system():
         logger.info("=== 비동기 최적화 시스템 테스트 시작 ===")
 
         # 비동기 최적화 시스템 임포트
-        from async_optimization_system import (OptimizationStrategy,
-                                               TaskPriority,
-                                               async_optimization_system)
+        from async_optimization_system import OptimizationStrategy, TaskPriority, async_optimization_system
 
         # 테스트 작업 생성
         async def test_task_1():
@@ -72,28 +66,18 @@ async def test_async_optimization_system():
             return "작업 3 완료"
 
         # 작업 제출
-        task_id_1 = await async_optimization_system.submit_task(
-            "테스트 작업 1", test_task_1(), TaskPriority.HIGH
-        )
-        task_id_2 = await async_optimization_system.submit_task(
-            "테스트 작업 2", test_task_2(), TaskPriority.NORMAL
-        )
-        task_id_3 = await async_optimization_system.submit_task(
-            "테스트 작업 3", test_task_3(), TaskPriority.LOW
-        )
+        task_id_1 = await async_optimization_system.submit_task("테스트 작업 1", test_task_1(), TaskPriority.HIGH)  # noqa: F841
+        task_id_2 = await async_optimization_system.submit_task("테스트 작업 2", test_task_2(), TaskPriority.NORMAL)  # noqa: F841
+        task_id_3 = await async_optimization_system.submit_task("테스트 작업 3", test_task_3(), TaskPriority.LOW)  # noqa: F841
 
         # 작업 실행
-        results = await async_optimization_system.execute_tasks(
-            OptimizationStrategy.PARALLEL
-        )
+        results = await async_optimization_system.execute_tasks(OptimizationStrategy.PARALLEL)
 
         logger.info("비동기 최적화 결과:")
         logger.info(json.dumps(results, indent=2, ensure_ascii=False))
 
         # 최적화 요약 생성
-        optimization_summary = (
-            await async_optimization_system.get_optimization_summary()
-        )
+        optimization_summary = await async_optimization_system.get_optimization_summary()
 
         logger.info("최적화 요약:")
         logger.info(json.dumps(optimization_summary, indent=2, ensure_ascii=False))
@@ -111,8 +95,7 @@ async def test_memory_optimization_system():
         logger.info("=== 메모리 최적화 시스템 테스트 시작 ===")
 
         # 메모리 최적화 시스템 임포트
-        from memory_optimization_system import (MemoryOptimizationType,
-                                                memory_optimization_system)
+        from memory_optimization_system import MemoryOptimizationType, memory_optimization_system
 
         # 메모리 모니터링 시작
         await memory_optimization_system.start_monitoring()
@@ -121,10 +104,8 @@ async def test_memory_optimization_system():
         await asyncio.sleep(5)
 
         # 메모리 최적화 실행
-        optimization_result = (
-            await memory_optimization_system._execute_memory_optimization(
-                MemoryOptimizationType.GARBAGE_COLLECTION
-            )
+        optimization_result = await memory_optimization_system._execute_memory_optimization(
+            MemoryOptimizationType.GARBAGE_COLLECTION
         )
 
         logger.info("메모리 최적화 결과:")
@@ -170,9 +151,7 @@ async def test_integrated_performance_optimization():
             "test_timestamp": datetime.now().isoformat(),
             "test_results": results,
             "overall_status": (
-                "completed"
-                if all("error" not in result for result in results.values())
-                else "partial_failure"
+                "completed" if all("error" not in result for result in results.values()) else "partial_failure"
             ),
         }
 

@@ -3,18 +3,17 @@
 A/B 테스트 호환성 테스트
 기존 시스템과 새로운 시스템의 동치성 검증
 """
-import json
+
 import os
 import sys
 import tempfile
-from pathlib import Path
 
 import pytest
 
 # 프로젝트 루트를 Python 경로에 추가
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from ab_test_runner import ABTestRunner
+from ab_test_runner import ABTestRunner  # noqa: E402
 
 
 class TestABCompatibility:
@@ -34,7 +33,7 @@ class TestABCompatibility:
             runner = ABTestRunner(config_path)
 
             # 기존 모드 실행
-            legacy_result = runner.run_legacy_mode(day=36, variant="A", seed=42)
+            legacy_result = runner.run_legacy_mode(day=36, variant="A", seed=42)  # noqa: F841
 
             # 새로운 모드 실행 (동일한 데이터로)
             csv_content = """variant,latency_ms
@@ -45,9 +44,7 @@ B,135
 B,140
 B,132"""
 
-            with tempfile.NamedTemporaryFile(
-                mode="w", suffix=".csv", delete=False
-            ) as f:
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
                 f.write(csv_content)
                 csv_path = f.name
 
@@ -62,7 +59,7 @@ B,132"""
                     )
 
                     # 동치성 검증 (허용 오차 내)
-                    tolerance = 1e-4
+                    tolerance = 1e-4  # noqa: F841
 
                     # t_stat 비교 (기존 시스템이 스텁 데이터를 사용하므로 완전 일치하지 않을 수 있음)
                     # 대신 새로운 시스템의 결과가 유효한지 확인
@@ -105,9 +102,7 @@ B,120
 B,115
 B,125"""
 
-            with tempfile.NamedTemporaryFile(
-                mode="w", suffix=".csv", delete=False
-            ) as f:
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
                 f.write(csv_content)
                 csv_path = f.name
 
@@ -152,9 +147,7 @@ A,115
 B,135
 B,140"""
 
-            with tempfile.NamedTemporaryFile(
-                mode="w", suffix=".csv", delete=False
-            ) as f:
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
                 f.write(csv_content)
                 csv_path = f.name
 
@@ -216,9 +209,7 @@ B,135
 B,140
 B,132"""
 
-            with tempfile.NamedTemporaryFile(
-                mode="w", suffix=".csv", delete=False
-            ) as f:
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
                 f.write(csv_content)
                 csv_path = f.name
 
@@ -249,13 +240,10 @@ B,132"""
 
                     # 게이트와 함께 실행한 결과 (정책 파일이 없으므로 오류)
                     # 게이트 시스템이 정책 파일을 찾지 못하면 None을 반환할 수 있음
-                    assert (
-                        result_with_gate["gate_pass"] is None
-                        or result_with_gate["gate_pass"] is False
-                    )
-                    assert "gate_error" in str(
+                    assert result_with_gate["gate_pass"] is None or result_with_gate["gate_pass"] is False
+                    assert "gate_error" in str(result_with_gate["gate_reasons"]) or "gate_disabled" in str(
                         result_with_gate["gate_reasons"]
-                    ) or "gate_disabled" in str(result_with_gate["gate_reasons"])
+                    )
             finally:
                 os.unlink(csv_path)
         finally:

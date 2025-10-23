@@ -2,12 +2,12 @@
 """
 통합 PoU 매니저 - 기존 pou_manager.py, pou_pilot_manager.py, integrated_pou_monitoring_system.py 통합
 """
+
 from __future__ import annotations
 
-import json
 import time
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 import yaml
 
@@ -76,7 +76,7 @@ class PoUManager:
 
     def generate_report(self, results: Dict[str, Dict[str, Any]]) -> str:
         """통합 리포트 생성"""
-        report = f"# PoU 통합 리포트\n\n"
+        report = "# PoU 통합 리포트\n\n"
         report += f"생성 시간: {time.strftime('%Y-%m-%d %H:%M:%S')}\n\n"
 
         for domain, data in results.items():

@@ -6,19 +6,11 @@ DuRi 추론 시스템 - 지식 충돌 해결 모듈
 상충되는 지식 간의 충돌을 해결하는 모듈입니다.
 """
 
-import asyncio
-import hashlib
-import json
 import logging
-import re
 import time
-from collections import Counter, defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
-
-import numpy as np
+from typing import Any, Dict, List, Optional
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -54,9 +46,7 @@ class KnowledgeConflictResolver:
         self.conflict_history = []
         self.resolution_strategies = {}
 
-    async def detect_and_resolve_conflicts(
-        self, knowledge_elements: List[Dict[str, Any]]
-    ) -> List[KnowledgeConflict]:
+    async def detect_and_resolve_conflicts(self, knowledge_elements: List[Dict[str, Any]]) -> List[KnowledgeConflict]:
         """충돌 감지 및 해결"""
         conflicts = await self._detect_conflicts(knowledge_elements)
 
@@ -66,17 +56,13 @@ class KnowledgeConflictResolver:
 
         return conflicts
 
-    async def _detect_conflicts(
-        self, knowledge_elements: List[Dict[str, Any]]
-    ) -> List[KnowledgeConflict]:
+    async def _detect_conflicts(self, knowledge_elements: List[Dict[str, Any]]) -> List[KnowledgeConflict]:
         """충돌 감지"""
         conflicts = []
 
         for i in range(len(knowledge_elements)):
             for j in range(i + 1, len(knowledge_elements)):
-                conflict = await self._check_for_conflict(
-                    knowledge_elements[i], knowledge_elements[j]
-                )
+                conflict = await self._check_for_conflict(knowledge_elements[i], knowledge_elements[j])
                 if conflict:
                     conflicts.append(conflict)
 
@@ -90,9 +76,7 @@ class KnowledgeConflictResolver:
         common_keys = set(element1.keys()) & set(element2.keys())
 
         for key in common_keys:
-            if isinstance(element1[key], (str, int, float)) and isinstance(
-                element2[key], (str, int, float)
-            ):
+            if isinstance(element1[key], (str, int, float)) and isinstance(element2[key], (str, int, float)):
                 if element1[key] != element2[key]:
                     conflict_id = f"conflict_{int(time.time())}_{hash(str(element1))}_{hash(str(element2))}"
 
@@ -121,9 +105,7 @@ class KnowledgeConflictResolver:
         else:
             return await self._evidence_based_resolution(conflict)
 
-    async def _evidence_based_resolution(
-        self, conflict: KnowledgeConflict
-    ) -> Dict[str, Any]:
+    async def _evidence_based_resolution(self, conflict: KnowledgeConflict) -> Dict[str, Any]:
         """증거 기반 해결"""
         return {
             "resolution_method": "evidence_based",
@@ -132,9 +114,7 @@ class KnowledgeConflictResolver:
             "resolution_details": "증거 기반 해결 적용",
         }
 
-    async def _priority_based_resolution(
-        self, conflict: KnowledgeConflict
-    ) -> Dict[str, Any]:
+    async def _priority_based_resolution(self, conflict: KnowledgeConflict) -> Dict[str, Any]:
         """우선순위 기반 해결"""
         return {
             "resolution_method": "priority_based",
@@ -143,9 +123,7 @@ class KnowledgeConflictResolver:
             "resolution_details": "우선순위 기반 해결 적용",
         }
 
-    async def _consensus_based_resolution(
-        self, conflict: KnowledgeConflict
-    ) -> Dict[str, Any]:
+    async def _consensus_based_resolution(self, conflict: KnowledgeConflict) -> Dict[str, Any]:
         """합의 기반 해결"""
         return {
             "resolution_method": "consensus_based",

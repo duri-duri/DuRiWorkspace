@@ -19,17 +19,15 @@ Phase 5: 성능 최적화 - 최종 실행 준비 완료 적용
 
 import asyncio
 import gc
-import json
 import logging
-import sys
 import time
 import tracemalloc
 import weakref
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional
 
 import psutil
 
@@ -195,17 +193,11 @@ class MemoryOptimizationSystem:
                 asyncio.create_task(self._auto_optimization_loop())
 
             # 존재형 AI: 진화 가능성 확인
-            if (
-                self.existence_ai
-                and self.existence_ai.evolution_capability.can_evolve()
-            ):
+            if self.existence_ai and self.existence_ai.evolution_capability.can_evolve():
                 self.existence_ai.evolution_capability.evolve()
 
             # 최종 실행 준비 완료: 최종 실행 준비 완료 확인
-            if (
-                self.final_execution_verifier
-                and self.final_execution_verifier.verify_readiness()
-            ):
+            if self.final_execution_verifier and self.final_execution_verifier.verify_readiness():
                 logger.info("최종 실행 준비 완료 확인됨")
 
             return True
@@ -237,17 +229,11 @@ class MemoryOptimizationSystem:
                 await self._detect_memory_leaks()
 
                 # 존재형 AI: 진화 가능성 확인
-                if (
-                    self.existence_ai
-                    and self.existence_ai.evolution_capability.can_evolve()
-                ):
+                if self.existence_ai and self.existence_ai.evolution_capability.can_evolve():
                     self.existence_ai.evolution_capability.evolve()
 
                 # 최종 실행 준비 완료: 최종 실행 준비 완료 확인
-                if (
-                    self.final_execution_verifier
-                    and self.final_execution_verifier.verify_readiness()
-                ):
+                if self.final_execution_verifier and self.final_execution_verifier.verify_readiness():
                     logger.debug("최종 실행 준비 완료 확인됨")
 
                 await asyncio.sleep(self.monitoring_config["collection_interval"])
@@ -331,9 +317,7 @@ class MemoryOptimizationSystem:
             leak_score = max(0.0, 1.0 - (memory_leaks / 100.0))
 
             # 가중 평균 계산
-            optimization_score = (
-                memory_score * 0.5 + swap_score * 0.3 + leak_score * 0.2
-            )
+            optimization_score = memory_score * 0.5 + swap_score * 0.3 + leak_score * 0.2
 
             return min(1.0, optimization_score)
 
@@ -357,24 +341,15 @@ class MemoryOptimizationSystem:
             alerts = []
 
             # 메모리 사용률 체크
-            if (
-                metrics.memory_percentage
-                > self.monitoring_config["alert_thresholds"]["memory_usage"]
-            ):
+            if metrics.memory_percentage > self.monitoring_config["alert_thresholds"]["memory_usage"]:
                 alerts.append(f"메모리 사용률 높음: {metrics.memory_percentage:.1f}%")
 
             # 스왑 사용률 체크
-            if (
-                metrics.swap_percentage
-                > self.monitoring_config["alert_thresholds"]["swap_usage"]
-            ):
+            if metrics.swap_percentage > self.monitoring_config["alert_thresholds"]["swap_usage"]:
                 alerts.append(f"스왑 사용률 높음: {metrics.swap_percentage:.1f}%")
 
             # 메모리 누수 체크
-            if (
-                metrics.memory_leaks
-                > self.monitoring_config["alert_thresholds"]["memory_leaks"]
-            ):
+            if metrics.memory_leaks > self.monitoring_config["alert_thresholds"]["memory_leaks"]:
                 alerts.append(f"메모리 누수 의심: {metrics.memory_leaks}개")
 
             # 알림 생성
@@ -383,9 +358,7 @@ class MemoryOptimizationSystem:
                     logger.warning(f"메모리 알림: {alert}")
 
                     # 자동 최적화 실행
-                    await self._execute_memory_optimization(
-                        MemoryOptimizationType.GARBAGE_COLLECTION
-                    )
+                    await self._execute_memory_optimization(MemoryOptimizationType.GARBAGE_COLLECTION)
 
         except Exception as e:
             logger.error(f"메모리 임계값 체크 실패: {e}")
@@ -401,16 +374,12 @@ class MemoryOptimizationSystem:
 
             if hasattr(self, "_previous_snapshot") and self._previous_snapshot:
                 # 이전 스냅샷과 비교
-                top_stats = current_snapshot.compare_to(
-                    self._previous_snapshot, "lineno"
-                )
+                top_stats = current_snapshot.compare_to(self._previous_snapshot, "lineno")
 
                 # 메모리 누수 의심 객체 식별
                 for stat in top_stats[:10]:  # 상위 10개만 확인
                     if stat.size_diff > 1024 * 1024:  # 1MB 이상 증가
-                        logger.warning(
-                            f"메모리 누수 의심: {stat.traceback.format()[:200]}"
-                        )
+                        logger.warning(f"메모리 누수 의심: {stat.traceback.format()[:200]}")
 
             self._previous_snapshot = current_snapshot
 
@@ -445,9 +414,7 @@ class MemoryOptimizationSystem:
                 await asyncio.sleep(self.optimization_interval)
 
                 # 현재 메모리 상태 평가
-                current_metrics = (
-                    self.memory_history[-1] if self.memory_history else None
-                )
+                current_metrics = self.memory_history[-1] if self.memory_history else None
                 if not current_metrics:
                     continue
 
@@ -462,24 +429,16 @@ class MemoryOptimizationSystem:
 
                     # 최적화 결과 평가
                     if optimization_result.memory_freed > 0:
-                        logger.info(
-                            f"자동 메모리 최적화 완료: {optimization_result.memory_freed:.2f}MB 해제"
-                        )
+                        logger.info(f"자동 메모리 최적화 완료: {optimization_result.memory_freed:.2f}MB 해제")
                     else:
                         logger.warning("자동 메모리 최적화 실패")
 
                 # 존재형 AI: 진화 가능성 확인
-                if (
-                    self.existence_ai
-                    and self.existence_ai.evolution_capability.can_evolve()
-                ):
+                if self.existence_ai and self.existence_ai.evolution_capability.can_evolve():
                     self.existence_ai.evolution_capability.evolve()
 
                 # 최종 실행 준비 완료: 최종 실행 준비 완료 확인
-                if (
-                    self.final_execution_verifier
-                    and self.final_execution_verifier.verify_readiness()
-                ):
+                if self.final_execution_verifier and self.final_execution_verifier.verify_readiness():
                     logger.debug("최종 실행 준비 완료 확인됨")
 
             except Exception as e:
@@ -505,9 +464,7 @@ class MemoryOptimizationSystem:
             if len(self.memory_history) > 10:
                 recent_memory = [m.memory_percentage for m in self.memory_history[-10:]]
                 if len(recent_memory) >= 2:
-                    growth_rate = (recent_memory[-1] - recent_memory[0]) / len(
-                        recent_memory
-                    )
+                    growth_rate = (recent_memory[-1] - recent_memory[0]) / len(recent_memory)
                     if growth_rate > 0.1:  # 10% 이상 성장
                         return True
 
@@ -517,9 +474,7 @@ class MemoryOptimizationSystem:
             logger.error(f"메모리 최적화 필요성 판단 실패: {e}")
             return False
 
-    async def _execute_memory_optimization(
-        self, optimization_type: MemoryOptimizationType
-    ) -> MemoryOptimizationResult:
+    async def _execute_memory_optimization(self, optimization_type: MemoryOptimizationType) -> MemoryOptimizationResult:
         """메모리 최적화 실행"""
         try:
             optimization_id = f"memory_optimization_{int(time.time())}"
@@ -553,25 +508,17 @@ class MemoryOptimizationSystem:
             optimization_result.end_time = datetime.now()
             optimization_result.memory_freed = max(0.0, memory_freed)
             optimization_result.objects_collected = result.get("objects_collected", 0)
-            optimization_result.optimization_score = result.get(
-                "optimization_score", 0.0
-            )
+            optimization_result.optimization_score = result.get("optimization_score", 0.0)
             optimization_result.metadata = result.get("metadata", {})
 
             self.optimization_history.append(optimization_result)
 
             # 존재형 AI: 진화 가능성 확인
-            if (
-                self.existence_ai
-                and self.existence_ai.evolution_capability.can_evolve()
-            ):
+            if self.existence_ai and self.existence_ai.evolution_capability.can_evolve():
                 self.existence_ai.evolution_capability.evolve()
 
             # 최종 실행 준비 완료: 최종 실행 준비 완료 확인
-            if (
-                self.final_execution_verifier
-                and self.final_execution_verifier.verify_readiness()
-            ):
+            if self.final_execution_verifier and self.final_execution_verifier.verify_readiness():
                 logger.info("최종 실행 준비 완료 확인됨")
 
             return optimization_result
@@ -598,16 +545,12 @@ class MemoryOptimizationSystem:
             for generation in range(3):
                 collected = gc.collect(generation)
                 if collected > 0:
-                    logger.info(
-                        f"세대 {generation} 가비지 컬렉션: {collected}개 객체 수집"
-                    )
+                    logger.info(f"세대 {generation} 가비지 컬렉션: {collected}개 객체 수집")
 
             return {
                 "objects_collected": collected_objects,
                 "optimization_score": min(1.0, collected_objects / 1000.0),
-                "metadata": {
-                    "generation_collections": [gc.collect(i) for i in range(3)]
-                },
+                "metadata": {"generation_collections": [gc.collect(i) for i in range(3)]},
             }
 
         except Exception as e:
@@ -762,32 +705,22 @@ class MemoryOptimizationSystem:
                     "timestamp": latest_metrics.timestamp.isoformat(),
                 },
                 "memory_trends": {
-                    "memory_percentage_trend": (
-                        memory_trend[-10:] if memory_trend else []
-                    ),
+                    "memory_percentage_trend": (memory_trend[-10:] if memory_trend else []),
                     "swap_percentage_trend": swap_trend[-10:] if swap_trend else [],
-                    "optimization_score_trend": (
-                        optimization_trend[-10:] if optimization_trend else []
-                    ),
+                    "optimization_score_trend": (optimization_trend[-10:] if optimization_trend else []),
                     "memory_leaks_trend": leak_trend[-10:] if leak_trend else [],
                 },
                 "optimization_history": {
                     "total_optimizations": len(self.optimization_history),
-                    "total_memory_freed": sum(
-                        o.memory_freed for o in self.optimization_history
-                    ),
-                    "average_optimization_score": sum(
-                        o.optimization_score for o in self.optimization_history
-                    )
+                    "total_memory_freed": sum(o.memory_freed for o in self.optimization_history),
+                    "average_optimization_score": sum(o.optimization_score for o in self.optimization_history)
                     / max(1, len(self.optimization_history)),
                 },
                 "cache_status": {
                     "cache_size": len(self.memory_cache),
                     "max_cache_size": self.max_cache_size,
                     "cache_utilization": (
-                        len(self.memory_cache) / self.max_cache_size
-                        if self.max_cache_size > 0
-                        else 0
+                        len(self.memory_cache) / self.max_cache_size if self.max_cache_size > 0 else 0
                     ),
                 },
             }

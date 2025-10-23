@@ -10,8 +10,6 @@ DuRiCore Phase 2-3: 학습 모니터링 시스템 (Learning Monitoring)
 - 학습 이슈 감지
 """
 
-import asyncio
-import json
 import logging
 import statistics
 import time
@@ -19,9 +17,7 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
-
-import numpy as np
+from typing import Any, Dict, List, Optional
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -128,9 +124,7 @@ class LearningMonitoringSystem:
 
         logger.info("학습 모니터링 시스템 초기화 완료")
 
-    async def analyze_learning_patterns(
-        self, session_data: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    async def analyze_learning_patterns(self, session_data: Dict[str, Any]) -> List[Dict[str, Any]]:
         """학습 패턴 분석"""
         try:
             patterns = []
@@ -140,9 +134,7 @@ class LearningMonitoringSystem:
             patterns.extend(time_patterns)
 
             # 성과 기반 패턴 분석
-            performance_patterns = await self._analyze_performance_patterns(
-                session_data
-            )
+            performance_patterns = await self._analyze_performance_patterns(session_data)
             patterns.extend(performance_patterns)
 
             # 행동 기반 패턴 분석
@@ -156,9 +148,7 @@ class LearningMonitoringSystem:
             logger.error(f"학습 패턴 분석 오류: {e}")
             return []
 
-    async def detect_learning_issues(
-        self, session_data: Dict[str, Any]
-    ) -> List[LearningIssue]:
+    async def detect_learning_issues(self, session_data: Dict[str, Any]) -> List[LearningIssue]:
         """학습 이슈 감지"""
         try:
             issues = []
@@ -191,9 +181,7 @@ class LearningMonitoringSystem:
             logger.error(f"학습 이슈 감지 오류: {e}")
             return []
 
-    async def predict_learning_outcomes(
-        self, session_data: Dict[str, Any]
-    ) -> List[LearningPrediction]:
+    async def predict_learning_outcomes(self, session_data: Dict[str, Any]) -> List[LearningPrediction]:
         """학습 결과 예측"""
         try:
             predictions = []
@@ -233,21 +221,15 @@ class LearningMonitoringSystem:
             recommendations = []
 
             # 성과 최적화 추천
-            performance_recommendations = (
-                await self._generate_performance_recommendations(session_data)
-            )
+            performance_recommendations = await self._generate_performance_recommendations(session_data)
             recommendations.extend(performance_recommendations)
 
             # 효율성 최적화 추천
-            efficiency_recommendations = (
-                await self._generate_efficiency_recommendations(session_data)
-            )
+            efficiency_recommendations = await self._generate_efficiency_recommendations(session_data)
             recommendations.extend(efficiency_recommendations)
 
             # 참여도 최적화 추천
-            engagement_recommendations = (
-                await self._generate_engagement_recommendations(session_data)
-            )
+            engagement_recommendations = await self._generate_engagement_recommendations(session_data)
             recommendations.extend(engagement_recommendations)
 
             # 추천 저장
@@ -277,33 +259,22 @@ class LearningMonitoringSystem:
 
             # 최근 이슈
             recent_issues = [
-                issue
-                for issue in self.learning_issues
-                if not session_id or issue.session_id == session_id
+                issue for issue in self.learning_issues if not session_id or issue.session_id == session_id
             ]
-            report["recent_issues"] = [
-                self._issue_to_dict(issue) for issue in recent_issues[-10:]
-            ]
+            report["recent_issues"] = [self._issue_to_dict(issue) for issue in recent_issues[-10:]]
 
             # 최근 예측
             recent_predictions = [
-                pred
-                for pred in self.learning_predictions
-                if not session_id or pred.session_id == session_id
+                pred for pred in self.learning_predictions if not session_id or pred.session_id == session_id
             ]
-            report["recent_predictions"] = [
-                self._prediction_to_dict(pred) for pred in recent_predictions[-10:]
-            ]
+            report["recent_predictions"] = [self._prediction_to_dict(pred) for pred in recent_predictions[-10:]]
 
             # 최근 추천
             recent_recommendations = [
-                rec
-                for rec in self.optimization_recommendations
-                if not session_id or rec.session_id == session_id
+                rec for rec in self.optimization_recommendations if not session_id or rec.session_id == session_id
             ]
             report["recent_recommendations"] = [
-                self._recommendation_to_dict(rec)
-                for rec in recent_recommendations[-10:]
+                self._recommendation_to_dict(rec) for rec in recent_recommendations[-10:]
             ]
 
             return report
@@ -312,9 +283,7 @@ class LearningMonitoringSystem:
             logger.error(f"모니터링 리포트 생성 오류: {e}")
             return {"error": str(e)}
 
-    async def _analyze_time_patterns(
-        self, session_data: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    async def _analyze_time_patterns(self, session_data: Dict[str, Any]) -> List[Dict[str, Any]]:
         """시간 기반 패턴 분석"""
         patterns = []
 
@@ -340,9 +309,7 @@ class LearningMonitoringSystem:
 
         return patterns
 
-    async def _analyze_performance_patterns(
-        self, session_data: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    async def _analyze_performance_patterns(self, session_data: Dict[str, Any]) -> List[Dict[str, Any]]:
         """성과 기반 패턴 분석"""
         patterns = []
 
@@ -365,9 +332,7 @@ class LearningMonitoringSystem:
 
         return patterns
 
-    async def _analyze_behavior_patterns(
-        self, session_data: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    async def _analyze_behavior_patterns(self, session_data: Dict[str, Any]) -> List[Dict[str, Any]]:
         """행동 기반 패턴 분석"""
         patterns = []
 
@@ -392,9 +357,7 @@ class LearningMonitoringSystem:
 
         return patterns
 
-    async def _detect_performance_issues(
-        self, session_data: Dict[str, Any]
-    ) -> List[LearningIssue]:
+    async def _detect_performance_issues(self, session_data: Dict[str, Any]) -> List[LearningIssue]:
         """성과 이슈 감지"""
         issues = []
 
@@ -403,15 +366,10 @@ class LearningMonitoringSystem:
             if len(scores) >= 3:
                 # 최근 3개 점수의 평균과 이전 3개 점수의 평균 비교
                 recent_avg = statistics.mean(scores[-3:])
-                previous_avg = (
-                    statistics.mean(scores[-6:-3]) if len(scores) >= 6 else scores[0]
-                )
+                previous_avg = statistics.mean(scores[-6:-3]) if len(scores) >= 6 else scores[0]
 
                 decline = previous_avg - recent_avg
-                if (
-                    decline
-                    > self.monitoring_config["alert_thresholds"]["performance_decline"]
-                ):
+                if decline > self.monitoring_config["alert_thresholds"]["performance_decline"]:
                     issue = LearningIssue(
                         issue_id=f"perf_{int(time.time())}",
                         issue_type=LearningIssueType.PERFORMANCE_DECLINE,
@@ -429,9 +387,7 @@ class LearningMonitoringSystem:
 
         return issues
 
-    async def _detect_engagement_issues(
-        self, session_data: Dict[str, Any]
-    ) -> List[LearningIssue]:
+    async def _detect_engagement_issues(self, session_data: Dict[str, Any]) -> List[LearningIssue]:
         """참여도 이슈 감지"""
         issues = []
 
@@ -453,9 +409,7 @@ class LearningMonitoringSystem:
 
         return issues
 
-    async def _detect_efficiency_issues(
-        self, session_data: Dict[str, Any]
-    ) -> List[LearningIssue]:
+    async def _detect_efficiency_issues(self, session_data: Dict[str, Any]) -> List[LearningIssue]:
         """효율성 이슈 감지"""
         issues = []
 
@@ -477,9 +431,7 @@ class LearningMonitoringSystem:
 
         return issues
 
-    async def _detect_quality_issues(
-        self, session_data: Dict[str, Any]
-    ) -> List[LearningIssue]:
+    async def _detect_quality_issues(self, session_data: Dict[str, Any]) -> List[LearningIssue]:
         """품질 이슈 감지"""
         issues = []
 
@@ -501,14 +453,9 @@ class LearningMonitoringSystem:
 
         return issues
 
-    async def _predict_performance(
-        self, session_data: Dict[str, Any]
-    ) -> Optional[LearningPrediction]:
+    async def _predict_performance(self, session_data: Dict[str, Any]) -> Optional[LearningPrediction]:
         """성과 예측"""
-        if (
-            "performance_scores" in session_data
-            and len(session_data["performance_scores"]) >= 3
-        ):
+        if "performance_scores" in session_data and len(session_data["performance_scores"]) >= 3:
             scores = session_data["performance_scores"]
             # 간단한 선형 예측
             if len(scores) >= 3:
@@ -526,9 +473,7 @@ class LearningMonitoringSystem:
                 )
         return None
 
-    async def _predict_completion_time(
-        self, session_data: Dict[str, Any]
-    ) -> Optional[LearningPrediction]:
+    async def _predict_completion_time(self, session_data: Dict[str, Any]) -> Optional[LearningPrediction]:
         """완료 시간 예측"""
         if "progress" in session_data and "start_time" in session_data:
             progress = session_data["progress"]
@@ -550,14 +495,9 @@ class LearningMonitoringSystem:
                 )
         return None
 
-    async def _predict_efficiency(
-        self, session_data: Dict[str, Any]
-    ) -> Optional[LearningPrediction]:
+    async def _predict_efficiency(self, session_data: Dict[str, Any]) -> Optional[LearningPrediction]:
         """효율성 예측"""
-        if (
-            "efficiency_scores" in session_data
-            and len(session_data["efficiency_scores"]) >= 3
-        ):
+        if "efficiency_scores" in session_data and len(session_data["efficiency_scores"]) >= 3:
             scores = session_data["efficiency_scores"]
             recent_avg = statistics.mean(scores[-3:])
 
@@ -657,12 +597,8 @@ class LearningMonitoringSystem:
         health = {
             "overall_status": "healthy",
             "issues_count": len(self.learning_issues),
-            "unresolved_issues": len(
-                [i for i in self.learning_issues if not i.resolved]
-            ),
-            "predictions_accuracy": self.performance_metrics[
-                "average_prediction_accuracy"
-            ],
+            "unresolved_issues": len([i for i in self.learning_issues if not i.resolved]),
+            "predictions_accuracy": self.performance_metrics["average_prediction_accuracy"],
             "recommendations_effectiveness": 0.0,  # TODO: 구현 필요
         }
 
@@ -697,9 +633,7 @@ class LearningMonitoringSystem:
             "created_at": prediction.created_at.isoformat(),
         }
 
-    def _recommendation_to_dict(
-        self, recommendation: OptimizationRecommendation
-    ) -> Dict[str, Any]:
+    def _recommendation_to_dict(self, recommendation: OptimizationRecommendation) -> Dict[str, Any]:
         """추천을 딕셔너리로 변환"""
         return {
             "recommendation_id": recommendation.recommendation_id,

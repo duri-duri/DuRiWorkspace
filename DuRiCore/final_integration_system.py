@@ -15,19 +15,16 @@ DuRi Phase 1-3 Week 3 Day 10: 최종 통합 시스템
 """
 
 import asyncio
-import json
 import logging
 import time
 import traceback
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -191,9 +188,7 @@ class FinalIntegrationSystem:
                 dependencies=system_info["dependencies"],
             )
 
-    async def integrate_all_systems(
-        self, system_data: Dict[str, Any]
-    ) -> IntegrationResult:
+    async def integrate_all_systems(self, system_data: Dict[str, Any]) -> IntegrationResult:
         """
         모든 시스템 통합
 
@@ -231,9 +226,7 @@ class FinalIntegrationSystem:
             integration_time = time.time() - start_time
 
             # 성능 영향 측정
-            performance_impact = await self._measure_performance_impact(
-                integrated_systems
-            )
+            performance_impact = await self._measure_performance_impact(integrated_systems)
 
             result = IntegrationResult(
                 success=len(errors) == 0,
@@ -245,9 +238,7 @@ class FinalIntegrationSystem:
             )
 
             self.integration_status["full_integration"] = result
-            logger.info(
-                f"통합 완료: {len(integrated_systems)}개 시스템, 시간: {integration_time:.2f}초"
-            )
+            logger.info(f"통합 완료: {len(integrated_systems)}개 시스템, 시간: {integration_time:.2f}초")
 
             return result
 
@@ -295,9 +286,7 @@ class FinalIntegrationSystem:
             self.systems[system_name].status = SystemStatus.ACTIVE
             self.systems[system_name].last_updated = datetime.now()
 
-    async def _measure_performance_impact(
-        self, integrated_systems: List[str]
-    ) -> Dict[str, float]:
+    async def _measure_performance_impact(self, integrated_systems: List[str]) -> Dict[str, float]:
         """성능 영향 측정"""
         performance_impact = {}
 
@@ -315,9 +304,7 @@ class FinalIntegrationSystem:
 
         return performance_impact
 
-    async def optimize_system_interactions(
-        self, interaction_data: Dict[str, Any]
-    ) -> OptimizationResult:
+    async def optimize_system_interactions(self, interaction_data: Dict[str, Any]) -> OptimizationResult:
         """
         시스템 간 상호작용 최적화
 
@@ -333,22 +320,16 @@ class FinalIntegrationSystem:
             logger.info("시작: 시스템 간 상호작용 최적화")
 
             # 상호작용 패턴 분석
-            interaction_patterns = await self._analyze_interaction_patterns(
-                interaction_data
-            )
+            interaction_patterns = await self._analyze_interaction_patterns(interaction_data)
 
             # 최적화 전략 수립
-            optimization_strategies = await self._develop_optimization_strategies(
-                interaction_patterns
-            )
+            optimization_strategies = await self._develop_optimization_strategies(interaction_patterns)
 
             # 최적화 실행
             changes_made = await self._execute_optimizations(optimization_strategies)
 
             # 성능 개선 측정
-            performance_improvement = await self._measure_optimization_impact(
-                changes_made
-            )
+            performance_improvement = await self._measure_optimization_impact(changes_made)
 
             optimization_time = time.time() - start_time
 
@@ -361,9 +342,7 @@ class FinalIntegrationSystem:
             )
 
             self.optimization_history.append(result)
-            logger.info(
-                f"최적화 완료: {len(changes_made)}개 변경사항, 시간: {optimization_time:.2f}초"
-            )
+            logger.info(f"최적화 완료: {len(changes_made)}개 변경사항, 시간: {optimization_time:.2f}초")
 
             return result
 
@@ -378,9 +357,7 @@ class FinalIntegrationSystem:
                 changes_made=[],
             )
 
-    async def _analyze_interaction_patterns(
-        self, interaction_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _analyze_interaction_patterns(self, interaction_data: Dict[str, Any]) -> Dict[str, Any]:
         """상호작용 패턴 분석"""
         patterns = {
             "frequent_interactions": [],
@@ -395,9 +372,7 @@ class FinalIntegrationSystem:
 
         return patterns
 
-    async def _develop_optimization_strategies(
-        self, interaction_patterns: Dict[str, Any]
-    ) -> List[str]:
+    async def _develop_optimization_strategies(self, interaction_patterns: Dict[str, Any]) -> List[str]:
         """최적화 전략 수립"""
         strategies = []
 
@@ -426,9 +401,7 @@ class FinalIntegrationSystem:
 
         return changes_made
 
-    async def _measure_optimization_impact(
-        self, changes_made: List[str]
-    ) -> Dict[str, float]:
+    async def _measure_optimization_impact(self, changes_made: List[str]) -> Dict[str, float]:
         """최적화 영향 측정"""
         impact = {
             "response_time_improvement": 0.15,
@@ -447,9 +420,7 @@ class FinalIntegrationSystem:
 
         return impact
 
-    async def monitor_integration_performance(
-        self, performance_data: Dict[str, Any]
-    ) -> PerformanceReport:
+    async def monitor_integration_performance(self, performance_data: Dict[str, Any]) -> PerformanceReport:
         """
         통합 성능 모니터링
 
@@ -472,9 +443,7 @@ class FinalIntegrationSystem:
             bottlenecks = await self._identify_bottlenecks(system_performances)
 
             # 개선 권장사항 생성
-            recommendations = await self._generate_recommendations(
-                bottlenecks, system_performances
-            )
+            recommendations = await self._generate_recommendations(bottlenecks, system_performances)
 
             report = PerformanceReport(
                 timestamp=datetime.now(),
@@ -529,18 +498,14 @@ class FinalIntegrationSystem:
 
         return performances
 
-    async def _identify_bottlenecks(
-        self, system_performances: Dict[str, float]
-    ) -> List[str]:
+    async def _identify_bottlenecks(self, system_performances: Dict[str, float]) -> List[str]:
         """병목 지점 식별"""
         bottlenecks = []
         threshold = 0.8
 
         for system_name, performance in system_performances.items():
             if performance < threshold:
-                bottlenecks.append(
-                    f"{system_name}: 성능 {performance:.2f} (임계값: {threshold})"
-                )
+                bottlenecks.append(f"{system_name}: 성능 {performance:.2f} (임계값: {threshold})")
 
         return bottlenecks
 
@@ -559,9 +524,7 @@ class FinalIntegrationSystem:
 
         return recommendations
 
-    async def validate_system_compatibility(
-        self, compatibility_data: Dict[str, Any]
-    ) -> ValidationReport:
+    async def validate_system_compatibility(self, compatibility_data: Dict[str, Any]) -> ValidationReport:
         """
         시스템 호환성 검증
 
@@ -571,7 +534,7 @@ class FinalIntegrationSystem:
         Returns:
             ValidationReport: 검증 보고서
         """
-        start_time = time.time()
+        start_time = time.time()  # noqa: F841
 
         try:
             logger.info("시작: 시스템 호환성 검증")
@@ -580,17 +543,13 @@ class FinalIntegrationSystem:
             compatibility_issues = await self._check_system_compatibility()
 
             # 호환성 점수 계산
-            compatibility_score = await self._calculate_compatibility_score(
-                compatibility_issues
-            )
+            compatibility_score = await self._calculate_compatibility_score(compatibility_issues)
 
             # 검증된 시스템 목록
             systems_validated = list(self.systems.keys())
 
             # 개선 권장사항 생성
-            recommendations = await self._generate_compatibility_recommendations(
-                compatibility_issues
-            )
+            recommendations = await self._generate_compatibility_recommendations(compatibility_issues)
 
             report = ValidationReport(
                 success=len(compatibility_issues) == 0,
@@ -646,9 +605,7 @@ class FinalIntegrationSystem:
         score = max(0.0, 1.0 - (issue_count / total_systems))
         return score
 
-    async def _generate_compatibility_recommendations(
-        self, issues: List[str]
-    ) -> List[str]:
+    async def _generate_compatibility_recommendations(self, issues: List[str]) -> List[str]:
         """호환성 개선 권장사항 생성"""
         recommendations = []
 
@@ -682,9 +639,7 @@ class FinalIntegrationSystem:
             "is_running": self.is_running,
             "start_time": self.start_time.isoformat() if self.start_time else None,
             "systems_count": len(self.systems),
-            "active_systems": len(
-                [s for s in self.systems.values() if s.status == SystemStatus.ACTIVE]
-            ),
+            "active_systems": len([s for s in self.systems.values() if s.status == SystemStatus.ACTIVE]),
             "integration_status": len(self.integration_status),
             "performance_reports": len(self.performance_history),
             "optimization_history": len(self.optimization_history),
@@ -711,9 +666,7 @@ async def main():
         print(f"최적화 결과: {optimization_result.success}")
 
         # 성능 모니터링
-        performance_report = await integration_system.monitor_integration_performance(
-            {}
-        )
+        performance_report = await integration_system.monitor_integration_performance({})
         print(f"전체 성능: {performance_report.overall_performance:.2f}")
 
         # 호환성 검증

@@ -11,20 +11,14 @@ DuRi Phase 6.2.3 - 감정-판단 보정 가중치 모델
 """
 
 import asyncio
-import json
 import logging
-import random
-import statistics
-import time
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -216,9 +210,7 @@ class EmotionWeightSystem:
                 self.emotion_history.append(self.current_emotion_state)
 
             # 새로운 감정 상태 생성
-            secondary_emotions = self._determine_secondary_emotions(
-                emotion_type, context
-            )
+            secondary_emotions = self._determine_secondary_emotions(emotion_type, context)
             decision_bias = self._determine_decision_bias(emotion_type, intensity)
             emotional_stability = self._calculate_emotional_stability()
 
@@ -231,9 +223,7 @@ class EmotionWeightSystem:
                 created_at=datetime.now(),
             )
 
-            logger.info(
-                f"😊 감정 상태 업데이트: {emotion_type.value} (강도: {intensity:.2f})"
-            )
+            logger.info(f"😊 감정 상태 업데이트: {emotion_type.value} (강도: {intensity:.2f})")
 
             return {
                 "success": True,
@@ -246,9 +236,7 @@ class EmotionWeightSystem:
             logger.error(f"감정 상태 업데이트 실패: {e}")
             return {"success": False, "error": str(e)}
 
-    def _determine_secondary_emotions(
-        self, primary_emotion: EmotionType, context: Dict[str, Any]
-    ) -> List[EmotionType]:
+    def _determine_secondary_emotions(self, primary_emotion: EmotionType, context: Dict[str, Any]) -> List[EmotionType]:
         """보조 감정 결정"""
         secondary_emotions = []
 
@@ -264,24 +252,16 @@ class EmotionWeightSystem:
 
         return secondary_emotions
 
-    def _determine_decision_bias(
-        self, emotion_type: EmotionType, intensity: float
-    ) -> DecisionBias:
+    def _determine_decision_bias(self, emotion_type: EmotionType, intensity: float) -> DecisionBias:
         """의사결정 편향 결정"""
         if emotion_type == EmotionType.JOY:
             return DecisionBias.OPTIMISTIC if intensity > 0.7 else DecisionBias.NEUTRAL
         elif emotion_type == EmotionType.SADNESS:
-            return (
-                DecisionBias.PESSIMISTIC if intensity > 0.7 else DecisionBias.CAUTIOUS
-            )
+            return DecisionBias.PESSIMISTIC if intensity > 0.7 else DecisionBias.CAUTIOUS
         elif emotion_type == EmotionType.ANGER:
-            return (
-                DecisionBias.IMPULSIVE if intensity > 0.7 else DecisionBias.RISK_SEEKING
-            )
+            return DecisionBias.IMPULSIVE if intensity > 0.7 else DecisionBias.RISK_SEEKING
         elif emotion_type == EmotionType.FEAR:
-            return (
-                DecisionBias.RISK_AVERSE if intensity > 0.7 else DecisionBias.CAUTIOUS
-            )
+            return DecisionBias.RISK_AVERSE if intensity > 0.7 else DecisionBias.CAUTIOUS
         elif emotion_type == EmotionType.EXCITEMENT:
             return DecisionBias.OPTIMISTIC
         elif emotion_type == EmotionType.ANXIETY:
@@ -299,19 +279,14 @@ class EmotionWeightSystem:
         emotion_changes = 0
 
         for i in range(1, len(recent_emotions)):
-            if (
-                recent_emotions[i].primary_emotion
-                != recent_emotions[i - 1].primary_emotion
-            ):
+            if recent_emotions[i].primary_emotion != recent_emotions[i - 1].primary_emotion:
                 emotion_changes += 1
 
         # 안정성 점수 계산 (변화가 적을수록 안정적)
         stability_score = max(0.0, 1.0 - (emotion_changes / len(recent_emotions)))
         return stability_score
 
-    async def apply_emotion_to_judgment(
-        self, original_judgment: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def apply_emotion_to_judgment(self, original_judgment: Dict[str, Any]) -> Dict[str, Any]:
         """판단에 감정 가중치 적용"""
         try:
             self.performance_metrics["total_decisions"] += 1
@@ -332,12 +307,8 @@ class EmotionWeightSystem:
 
             # 판단 조정
             adjusted_decision = self._adjust_decision(original_decision, emotion_weight)
-            adjusted_confidence = self._adjust_confidence(
-                original_confidence, emotion_weight
-            )
-            adjusted_reasoning = self._adjust_reasoning(
-                original_reasoning, emotion_weight
-            )
+            adjusted_confidence = self._adjust_confidence(original_confidence, emotion_weight)
+            adjusted_reasoning = self._adjust_reasoning(original_reasoning, emotion_weight)
 
             # 감정적 의사결정 기록
             emotional_decision = EmotionalDecision(
@@ -396,9 +367,7 @@ class EmotionWeightSystem:
 
         return max(-0.3, min(0.3, total_influence))  # -30% ~ +30% 범위 제한
 
-    def _adjust_decision(
-        self, original_decision: str, emotion_weight: EmotionWeight
-    ) -> str:
+    def _adjust_decision(self, original_decision: str, emotion_weight: EmotionWeight) -> str:
         """의사결정 조정"""
         # 감정에 따른 의사결정 조정 로직
         if emotion_weight.emotion_type == EmotionType.JOY:
@@ -419,21 +388,15 @@ class EmotionWeightSystem:
 
         return original_decision
 
-    def _adjust_confidence(
-        self, original_confidence: float, emotion_weight: EmotionWeight
-    ) -> float:
+    def _adjust_confidence(self, original_confidence: float, emotion_weight: EmotionWeight) -> float:
         """신뢰도 조정"""
         confidence_modifier = emotion_weight.confidence_modifier
         intensity_factor = self.current_emotion_state.intensity
 
-        adjusted_confidence = original_confidence + (
-            confidence_modifier * intensity_factor
-        )
+        adjusted_confidence = original_confidence + (confidence_modifier * intensity_factor)
         return max(0.1, min(1.0, adjusted_confidence))
 
-    def _adjust_reasoning(
-        self, original_reasoning: str, emotion_weight: EmotionWeight
-    ) -> str:
+    def _adjust_reasoning(self, original_reasoning: str, emotion_weight: EmotionWeight) -> str:
         """추론 조정"""
         emotion_name = emotion_weight.emotion_type.value
 
@@ -448,9 +411,7 @@ class EmotionWeightSystem:
         else:
             return f"{original_reasoning} (감정 상태: {emotion_name})"
 
-    async def apply_emotion_to_action(
-        self, original_action: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def apply_emotion_to_action(self, original_action: Dict[str, Any]) -> Dict[str, Any]:
         """행동에 감정 가중치 적용"""
         try:
             emotion_weight = self.emotion_weights.get(
@@ -465,9 +426,7 @@ class EmotionWeightSystem:
 
             # 행동 조정
             adjusted_speed = self._adjust_action_speed(original_speed, emotion_weight)
-            adjusted_aggressiveness = self._adjust_aggressiveness(
-                original_aggressiveness, emotion_weight
-            )
+            adjusted_aggressiveness = self._adjust_aggressiveness(original_aggressiveness, emotion_weight)
 
             return {
                 "success": True,
@@ -485,9 +444,7 @@ class EmotionWeightSystem:
             logger.error(f"행동 감정 가중치 적용 실패: {e}")
             return {"success": False, "error": str(e)}
 
-    def _adjust_action_speed(
-        self, original_speed: str, emotion_weight: EmotionWeight
-    ) -> str:
+    def _adjust_action_speed(self, original_speed: str, emotion_weight: EmotionWeight) -> str:
         """행동 속도 조정"""
         speed_modifier = emotion_weight.decision_speed_modifier
 
@@ -504,9 +461,7 @@ class EmotionWeightSystem:
 
         return original_speed
 
-    def _adjust_aggressiveness(
-        self, original_aggressiveness: str, emotion_weight: EmotionWeight
-    ) -> str:
+    def _adjust_aggressiveness(self, original_aggressiveness: str, emotion_weight: EmotionWeight) -> str:
         """공격성 조정"""
         if emotion_weight.emotion_type == EmotionType.ANGER:
             if original_aggressiveness == "passive":
@@ -541,9 +496,7 @@ class EmotionWeightSystem:
             ],
         }
 
-    async def integrate_with_system(
-        self, system_context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def integrate_with_system(self, system_context: Dict[str, Any]) -> Dict[str, Any]:
         """통합 시스템과 연동"""
         # 시스템 컨텍스트에서 감정 정보 추출
         if "emotion" in system_context:
@@ -555,9 +508,7 @@ class EmotionWeightSystem:
 
         # 판단에 감정 가중치 적용
         if "judgment_request" in system_context:
-            judgment_result = await self.apply_emotion_to_judgment(
-                system_context["judgment_request"]
-            )
+            judgment_result = await self.apply_emotion_to_judgment(system_context["judgment_request"])
             return {
                 "emotion_system_result": judgment_result,
                 "emotion_state": asdict(self.current_emotion_state),
@@ -619,9 +570,7 @@ class EmotionWeightSystem:
             emotion_info = self._extract_emotion_from_context(context)
 
             # 감정 상태 업데이트
-            await self.update_emotion_state(
-                emotion_info["emotion_type"], emotion_info["intensity"], context
-            )
+            await self.update_emotion_state(emotion_info["emotion_type"], emotion_info["intensity"], context)
 
             # 감정 분석 결과 생성
             emotion_analysis = await self.get_emotion_analysis()
@@ -630,9 +579,7 @@ class EmotionWeightSystem:
                 "emotion_vector": {
                     "primary_emotion": self.current_emotion_state.primary_emotion.value,
                     "intensity": self.current_emotion_state.intensity,
-                    "secondary_emotions": [
-                        e.value for e in self.current_emotion_state.secondary_emotions
-                    ],
+                    "secondary_emotions": [e.value for e in self.current_emotion_state.secondary_emotions],
                     "decision_bias": self.current_emotion_state.decision_bias.value,
                     "emotional_stability": self.current_emotion_state.emotional_stability,
                 },
@@ -745,22 +692,16 @@ async def test_emotion_weight_system():
         result = await emotion_system.apply_emotion_to_judgment(judgment)
         if result.get("success"):
             adjusted = result["emotion_adjusted_judgment"]
-            logger.info(
-                f"   원본: {judgment['decision']} → 조정: {adjusted['decision']}"
-            )
-            logger.info(
-                f"   신뢰도: {judgment['confidence']:.2f} → {adjusted['confidence']:.2f}"
-            )
+            logger.info(f"   원본: {judgment['decision']} → 조정: {adjusted['decision']}")
+            logger.info(f"   신뢰도: {judgment['confidence']:.2f} → {adjusted['confidence']:.2f}")
 
     # 감정 분석 리포트
     analysis = await emotion_system.get_emotion_analysis()
-    logger.info(f"📊 감정 분석:")
+    logger.info("📊 감정 분석:")
     logger.info(f"   현재 감정: {analysis['current_emotion']['primary_emotion']}")
     logger.info(f"   감정 안정성: {analysis['emotional_stability']:.2f}")
     logger.info(f"   의사결정 편향: {analysis['decision_bias']}")
-    logger.info(
-        f"   평균 감정 영향: {analysis['performance_metrics']['average_emotion_influence']:.3f}"
-    )
+    logger.info(f"   평균 감정 영향: {analysis['performance_metrics']['average_emotion_influence']:.3f}")
 
     return analysis
 

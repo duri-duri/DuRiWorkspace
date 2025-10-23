@@ -5,22 +5,20 @@ DuRiCore Phase 5.5.4 - 고급 통합 시스템
 """
 
 import asyncio
-import json
 import logging
 import time
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from adaptive_learning_system import AdaptiveLearningSystem
+
 # 기존 시스템들 import
 from integrated_system_manager import IntegratedSystemManager
 from self_improvement_system import SelfImprovementSystem
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -45,9 +43,7 @@ class AdaptiveIntegrationManager:
         self.new_adaptive_system = AdaptiveLearningSystem()
         self.integration_history = []
 
-    async def combine_results(
-        self, efficiency_result: Dict, adaptation_result: Dict
-    ) -> Dict[str, Any]:
+    async def combine_results(self, efficiency_result: Dict, adaptation_result: Dict) -> Dict[str, Any]:
         """기존 시스템과 새 시스템의 결과를 통합"""
         try:
             # 효율성 결과 처리
@@ -101,9 +97,7 @@ class ImprovementIntegrationManager:
         self.new_improvement_system = SelfImprovementSystem()
         self.improvement_history = []
 
-    async def combine_results(
-        self, strategy_result: Dict, analysis_result: Dict
-    ) -> Dict[str, Any]:
+    async def combine_results(self, strategy_result: Dict, analysis_result: Dict) -> Dict[str, Any]:
         """기존 시스템과 새 시스템의 결과를 통합"""
         try:
             # 전략 개선 결과 처리
@@ -157,9 +151,7 @@ class MetaLearningIntegrationManager:
         self.metacognitive_learning = None  # 기존 시스템 (나중에 통합)
         self.meta_learning_history = []
 
-    async def combine_results(
-        self, meta_result: Dict, cognitive_result: Dict
-    ) -> Dict[str, Any]:
+    async def combine_results(self, meta_result: Dict, cognitive_result: Dict) -> Dict[str, Any]:
         """기존 시스템과 새 시스템의 결과를 통합"""
         try:
             # 고급 메타-학습 결과 처리
@@ -172,9 +164,7 @@ class MetaLearningIntegrationManager:
 
             # 통합 점수 계산
             combined_score = (meta_score + cognitive_score) / 2
-            enhanced_learning_efficiency = learning_efficiency * (
-                1 + cognitive_score * 0.2
-            )
+            enhanced_learning_efficiency = learning_efficiency * (1 + cognitive_score * 0.2)
 
             result = {
                 "combined_score": combined_score,
@@ -216,9 +206,7 @@ class EnhancedAdaptiveLearningSystem:
         self.integration_manager = AdaptiveIntegrationManager()
         self.performance_history = []
 
-    async def enhanced_adapt_to_environment(
-        self, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def enhanced_adapt_to_environment(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """고급 환경 적응 처리"""
         start_time = time.time()
 
@@ -227,14 +215,10 @@ class EnhancedAdaptiveLearningSystem:
             efficiency_result = await self._simulate_legacy_adaptive_system(context)
 
             # 새 시스템의 환경 변화 감지
-            adaptation_result = await self.new_adaptive_system.adapt_to_environment(
-                context
-            )
+            adaptation_result = await self.new_adaptive_system.adapt_to_environment(context)
 
             # 통합 결과 생성
-            combined_result = await self.integration_manager.combine_results(
-                efficiency_result, adaptation_result
-            )
+            combined_result = await self.integration_manager.combine_results(efficiency_result, adaptation_result)
 
             execution_time = time.time() - start_time
 
@@ -244,9 +228,7 @@ class EnhancedAdaptiveLearningSystem:
                     "timestamp": datetime.now().isoformat(),
                     "execution_time": execution_time,
                     "combined_score": combined_result.get("combined_score", 0.8),
-                    "environment_status": combined_result.get(
-                        "environment_status", "stable"
-                    ),
+                    "environment_status": combined_result.get("environment_status", "stable"),
                 }
             )
 
@@ -266,9 +248,7 @@ class EnhancedAdaptiveLearningSystem:
                 "system": "EnhancedAdaptiveLearningSystem",
             }
 
-    async def _simulate_legacy_adaptive_system(
-        self, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _simulate_legacy_adaptive_system(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """기존 적응형 시스템 시뮬레이션"""
         # 실제로는 기존 시스템을 호출하지만, 여기서는 시뮬레이션
         return {
@@ -291,27 +271,19 @@ class EnhancedSelfImprovementSystem:
         self.integration_manager = ImprovementIntegrationManager()
         self.improvement_history = []
 
-    async def enhanced_analyze_and_improve(
-        self, performance_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def enhanced_analyze_and_improve(self, performance_data: Dict[str, Any]) -> Dict[str, Any]:
         """고급 분석 및 개선 처리"""
         start_time = time.time()
 
         try:
             # 기존 시스템 시뮬레이션
-            strategy_result = await self._simulate_legacy_improvement_engine(
-                performance_data
-            )
+            strategy_result = await self._simulate_legacy_improvement_engine(performance_data)
 
             # 새 시스템의 성능 분석
-            analysis_result = await self.new_improvement_system.analyze_and_improve(
-                performance_data
-            )
+            analysis_result = await self.new_improvement_system.analyze_and_improve(performance_data)
 
             # 통합 결과 생성
-            combined_result = await self.integration_manager.combine_results(
-                strategy_result, analysis_result
-            )
+            combined_result = await self.integration_manager.combine_results(strategy_result, analysis_result)
 
             execution_time = time.time() - start_time
 
@@ -341,9 +313,7 @@ class EnhancedSelfImprovementSystem:
                 "system": "EnhancedSelfImprovementSystem",
             }
 
-    async def _simulate_legacy_improvement_engine(
-        self, performance_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _simulate_legacy_improvement_engine(self, performance_data: Dict[str, Any]) -> Dict[str, Any]:
         """기존 개선 엔진 시뮬레이션"""
         return {
             "strategy_score": 0.87,
@@ -365,9 +335,7 @@ class EnhancedMetaLearningSystem:
         self.integration_manager = MetaLearningIntegrationManager()
         self.meta_learning_history = []
 
-    async def enhanced_meta_learning_session(
-        self, learning_targets: List[str]
-    ) -> Dict[str, Any]:
+    async def enhanced_meta_learning_session(self, learning_targets: List[str]) -> Dict[str, Any]:
         """고급 메타 학습 세션"""
         start_time = time.time()
 
@@ -376,14 +344,10 @@ class EnhancedMetaLearningSystem:
             meta_result = await self._simulate_advanced_meta_learning(learning_targets)
 
             # 메타인지 학습 시뮬레이션
-            cognitive_result = await self._simulate_metacognitive_learning(
-                learning_targets
-            )
+            cognitive_result = await self._simulate_metacognitive_learning(learning_targets)
 
             # 통합 결과 생성
-            combined_result = await self.integration_manager.combine_results(
-                meta_result, cognitive_result
-            )
+            combined_result = await self.integration_manager.combine_results(meta_result, cognitive_result)
 
             execution_time = time.time() - start_time
 
@@ -413,9 +377,7 @@ class EnhancedMetaLearningSystem:
                 "system": "EnhancedMetaLearningSystem",
             }
 
-    async def _simulate_advanced_meta_learning(
-        self, learning_targets: List[str]
-    ) -> Dict[str, Any]:
+    async def _simulate_advanced_meta_learning(self, learning_targets: List[str]) -> Dict[str, Any]:
         """고급 메타-학습 시뮬레이션"""
         return {
             "meta_score": 0.89,
@@ -427,9 +389,7 @@ class EnhancedMetaLearningSystem:
             },
         }
 
-    async def _simulate_metacognitive_learning(
-        self, learning_targets: List[str]
-    ) -> Dict[str, Any]:
+    async def _simulate_metacognitive_learning(self, learning_targets: List[str]) -> Dict[str, Any]:
         """메타인지 학습 시뮬레이션"""
         return {
             "cognitive_score": 0.86,
@@ -466,41 +426,29 @@ class EnhancedIntegrationSystem:
         await self.integrated_manager.initialize_all_systems()
         logger.info("Enhanced Integration System initialized successfully")
 
-    async def run_enhanced_integration_cycle(
-        self, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def run_enhanced_integration_cycle(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """고급 통합 사이클 실행"""
         start_time = time.time()
 
         try:
             # 1. 기존 통합 시스템 실행
-            integrated_result = await self.integrated_manager.run_integrated_cycle(
-                context
-            )
+            integrated_result = await self.integrated_manager.run_integrated_cycle(context)
 
             # 2. 고급 적응형 학습
-            adaptive_result = (
-                await self.enhanced_adaptive_system.enhanced_adapt_to_environment(
-                    context
-                )
-            )
+            adaptive_result = await self.enhanced_adaptive_system.enhanced_adapt_to_environment(context)
 
             # 3. 고급 자기 개선
-            improvement_result = (
-                await self.enhanced_improvement_system.enhanced_analyze_and_improve(
-                    {
-                        "integrated_result": integrated_result,
-                        "adaptive_result": adaptive_result,
-                        "context": context,
-                    }
-                )
+            improvement_result = await self.enhanced_improvement_system.enhanced_analyze_and_improve(
+                {
+                    "integrated_result": integrated_result,
+                    "adaptive_result": adaptive_result,
+                    "context": context,
+                }
             )
 
             # 4. 고급 메타 학습
-            meta_learning_result = (
-                await self.enhanced_meta_learning_system.enhanced_meta_learning_session(
-                    ["adaptive_learning", "self_improvement", "meta_cognition"]
-                )
+            meta_learning_result = await self.enhanced_meta_learning_system.enhanced_meta_learning_session(
+                ["adaptive_learning", "self_improvement", "meta_cognition"]
             )
 
             # 5. 전체 결과 통합
@@ -599,15 +547,11 @@ class EnhancedIntegrationSystem:
 
         # 고급 적응형 학습 테스트
         try:
-            adaptive_test = (
-                await self.enhanced_adaptive_system.enhanced_adapt_to_environment(
-                    {"user_input": "테스트 환경 적응", "context": {"test_mode": True}}
-                )
+            adaptive_test = await self.enhanced_adaptive_system.enhanced_adapt_to_environment(
+                {"user_input": "테스트 환경 적응", "context": {"test_mode": True}}
             )
             test_results["enhanced_adaptive_learning"] = {
-                "status": (
-                    "success" if adaptive_test.get("status") == "success" else "error"
-                ),
+                "status": ("success" if adaptive_test.get("status") == "success" else "error"),
                 "score": adaptive_test.get("result", {}).get("combined_score", 0.0),
             }
         except Exception as e:
@@ -618,17 +562,11 @@ class EnhancedIntegrationSystem:
 
         # 고급 자기 개선 테스트
         try:
-            improvement_test = (
-                await self.enhanced_improvement_system.enhanced_analyze_and_improve(
-                    {"performance_data": {"test_mode": True}}
-                )
+            improvement_test = await self.enhanced_improvement_system.enhanced_analyze_and_improve(
+                {"performance_data": {"test_mode": True}}
             )
             test_results["enhanced_self_improvement"] = {
-                "status": (
-                    "success"
-                    if improvement_test.get("status") == "success"
-                    else "error"
-                ),
+                "status": ("success" if improvement_test.get("status") == "success" else "error"),
                 "score": improvement_test.get("result", {}).get("combined_score", 0.0),
             }
         except Exception as e:
@@ -639,20 +577,12 @@ class EnhancedIntegrationSystem:
 
         # 고급 메타 학습 테스트
         try:
-            meta_learning_test = (
-                await self.enhanced_meta_learning_system.enhanced_meta_learning_session(
-                    ["test_learning_target"]
-                )
+            meta_learning_test = await self.enhanced_meta_learning_system.enhanced_meta_learning_session(
+                ["test_learning_target"]
             )
             test_results["enhanced_meta_learning"] = {
-                "status": (
-                    "success"
-                    if meta_learning_test.get("status") == "success"
-                    else "error"
-                ),
-                "score": meta_learning_test.get("result", {}).get(
-                    "combined_score", 0.0
-                ),
+                "status": ("success" if meta_learning_test.get("status") == "success" else "error"),
+                "score": meta_learning_test.get("result", {}).get("combined_score", 0.0),
             }
         except Exception as e:
             test_results["enhanced_meta_learning"] = {
@@ -675,9 +605,7 @@ async def main():
     # 시스템 상태 확인
     status = await enhanced_system.get_system_status()
     print(f"📊 시스템 상태: {status['enhanced_integration_system']['status']}")
-    print(
-        f"🔧 고급 통합 시스템 수: {status['enhanced_integration_system']['enhanced_systems_count']}"
-    )
+    print(f"🔧 고급 통합 시스템 수: {status['enhanced_integration_system']['enhanced_systems_count']}")
     print(f"📈 전체 시스템 수: {status['total_systems']}")
 
     # 포괄적 테스트 실행

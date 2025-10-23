@@ -9,10 +9,7 @@ Author: DuRi Phase 11 Integration Team
 """
 
 import asyncio
-import json
-import os
 import sys
-import tempfile
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
@@ -25,7 +22,10 @@ sys.path.insert(0, str(project_root))
 # Phase 11 모듈 임포트
 try:
     from scripts.core.phase11.enhanced_orchestrator import (
-        EnhancedDuRiOrchestrator, EnhancedExecutionContext, Phase11Metrics)
+        EnhancedDuRiOrchestrator,
+        EnhancedExecutionContext,
+        Phase11Metrics,
+    )
 except ImportError as e:
     pytest.skip(f"Phase 11 모듈을 임포트할 수 없습니다: {e}", allow_module_level=True)
 
@@ -224,9 +224,7 @@ class TestPhase11Integration:
         orchestrator = EnhancedDuRiOrchestrator()
 
         # Mock 기존 상태 리포트
-        with patch.object(
-            orchestrator, "generate_status_report", return_value={"base": "report"}
-        ):
+        with patch.object(orchestrator, "generate_status_report", return_value={"base": "report"}):
             report = orchestrator.get_phase11_status_report()
 
             assert "phase11_metrics" in report
@@ -244,24 +242,17 @@ class TestPhase11Integration:
 
         # Mock을 사용하여 각 단계 시뮬레이션
         with (
-            patch.object(
-                orchestrator, "_execute_enhanced_judgment_phase"
-            ) as mock_judgment,
+            patch.object(orchestrator, "_execute_enhanced_judgment_phase") as mock_judgment,
             patch.object(orchestrator, "_execute_enhanced_action_phase") as mock_action,
-            patch.object(
-                orchestrator, "_execute_enhanced_feedback_phase"
-            ) as mock_feedback,
+            patch.object(orchestrator, "_execute_enhanced_feedback_phase") as mock_feedback,
             patch.object(orchestrator, "_execute_inner_reflection") as mock_reflection,
             patch.object(orchestrator, "_execute_external_learning") as mock_learning,
             patch.object(orchestrator, "_record_insight_metrics") as mock_insight,
-            patch.object(orchestrator, "_update_enhanced_system_status") as mock_update,
-            patch.object(orchestrator, "_monitor_enhanced_performance") as mock_monitor,
-            patch.object(orchestrator, "_record_phase11_metrics") as mock_record,
-            patch.object(
-                orchestrator.integrated_manager, "initialize_all_systems"
-            ) as mock_init,
+            patch.object(orchestrator, "_update_enhanced_system_status") as mock_update,  # noqa: F841
+            patch.object(orchestrator, "_monitor_enhanced_performance") as mock_monitor,  # noqa: F841
+            patch.object(orchestrator, "_record_phase11_metrics") as mock_record,  # noqa: F841
+            patch.object(orchestrator.integrated_manager, "initialize_all_systems") as mock_init,
         ):
-
             # Mock 반환값 설정
             mock_judgment.return_value = {"phase": "judgment", "status": "completed"}
             mock_action.return_value = {"phase": "action", "status": "completed"}
@@ -285,9 +276,7 @@ class TestPhase11Integration:
                 orchestrator.execution_loop_active = False
 
             # 병렬로 실행
-            await asyncio.gather(
-                orchestrator.start_enhanced_execution_loop(), stop_loop()
-            )
+            await asyncio.gather(orchestrator.start_enhanced_execution_loop(), stop_loop())
 
             # 각 단계가 호출되었는지 확인
             mock_init.assert_called_once()
@@ -341,9 +330,7 @@ class TestPhase11SystemIntegration:
 
         # Insight Engine이 초기화되었는지 확인 (없을 수도 있음)
         # insight_engine은 None일 수 있으므로 None 체크
-        assert orchestrator.insight_engine is None or hasattr(
-            orchestrator.insight_engine, "analyze_turn_quality"
-        )
+        assert orchestrator.insight_engine is None or hasattr(orchestrator.insight_engine, "analyze_turn_quality")
 
 
 class TestPhase11ErrorHandling:
@@ -355,9 +342,7 @@ class TestPhase11ErrorHandling:
         orchestrator = EnhancedDuRiOrchestrator()
 
         # 오류 발생 시뮬레이션
-        with patch.object(
-            orchestrator, "_execute_judgment_phase", side_effect=Exception("Test error")
-        ):
+        with patch.object(orchestrator, "_execute_judgment_phase", side_effect=Exception("Test error")):
             result = await orchestrator._execute_enhanced_judgment_phase()
 
             assert result["phase"] == "judgment"
@@ -372,9 +357,7 @@ class TestPhase11ErrorHandling:
         judgment_result = {"phase": "judgment", "status": "completed"}
 
         # 오류 발생 시뮬레이션
-        with patch.object(
-            orchestrator, "_execute_action_phase", side_effect=Exception("Test error")
-        ):
+        with patch.object(orchestrator, "_execute_action_phase", side_effect=Exception("Test error")):
             result = await orchestrator._execute_enhanced_action_phase(judgment_result)
 
             assert result["phase"] == "action"
@@ -389,9 +372,7 @@ class TestPhase11ErrorHandling:
         action_result = {"phase": "action", "status": "completed"}
 
         # 오류 발생 시뮬레이션
-        with patch.object(
-            orchestrator, "_execute_feedback_phase", side_effect=Exception("Test error")
-        ):
+        with patch.object(orchestrator, "_execute_feedback_phase", side_effect=Exception("Test error")):
             result = await orchestrator._execute_enhanced_feedback_phase(action_result)
 
             assert result["phase"] == "feedback"

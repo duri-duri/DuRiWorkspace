@@ -9,12 +9,11 @@ DuRi 추론 시스템 - 추론 엔진 핵심 모듈
 - 추론 결과 검증
 """
 
-import asyncio
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 
@@ -113,9 +112,7 @@ class InferenceEngine:
                 }
             )
 
-            self.logger.info(
-                f"추론 완료: {inference_type.value}, 신뢰도: {result.confidence:.2f}"
-            )
+            self.logger.info(f"추론 완료: {inference_type.value}, 신뢰도: {result.confidence:.2f}")
             return result
 
         except Exception as e:
@@ -147,9 +144,7 @@ class InferenceEngine:
             )
         except Exception as e:
             self.logger.error(f"연역적 추론 중 오류: {e}")
-            return InferenceResult(
-                conclusion=None, confidence=0.0, reasoning_path=[f"오류: {str(e)}"]
-            )
+            return InferenceResult(conclusion=None, confidence=0.0, reasoning_path=[f"오류: {str(e)}"])
 
     async def _inductive_inference(self, context: InferenceContext) -> InferenceResult:
         """귀납적 추론"""
@@ -171,9 +166,7 @@ class InferenceEngine:
             )
         except Exception as e:
             self.logger.error(f"귀납적 추론 중 오류: {e}")
-            return InferenceResult(
-                conclusion=None, confidence=0.0, reasoning_path=[f"오류: {str(e)}"]
-            )
+            return InferenceResult(conclusion=None, confidence=0.0, reasoning_path=[f"오류: {str(e)}"])
 
     async def _abductive_inference(self, context: InferenceContext) -> InferenceResult:
         """가설적 추론"""
@@ -188,24 +181,18 @@ class InferenceEngine:
             best_hypothesis = self._select_best_hypothesis(hypotheses, observations)
 
             # 신뢰도 계산
-            confidence = self._calculate_hypothesis_confidence(
-                best_hypothesis, observations
-            )
+            confidence = self._calculate_hypothesis_confidence(best_hypothesis, observations)
 
             return InferenceResult(
                 conclusion=best_hypothesis,
                 confidence=confidence,
-                reasoning_path=[
-                    f"가설적 추론: {len(observations)}개 관찰로부터 최적 가설 선택"
-                ],
+                reasoning_path=[f"가설적 추론: {len(observations)}개 관찰로부터 최적 가설 선택"],
                 evidence=observations,
                 alternatives=hypotheses,
             )
         except Exception as e:
             self.logger.error(f"가설적 추론 중 오류: {e}")
-            return InferenceResult(
-                conclusion=None, confidence=0.0, reasoning_path=[f"오류: {str(e)}"]
-            )
+            return InferenceResult(conclusion=None, confidence=0.0, reasoning_path=[f"오류: {str(e)}"])
 
     async def _analogical_inference(self, context: InferenceContext) -> InferenceResult:
         """유추적 추론"""
@@ -217,28 +204,20 @@ class InferenceEngine:
             similar_cases = self._find_similar_cases(similarities)
 
             # 유추적 결론 도출
-            conclusion = self._derive_analogical_conclusion(
-                similar_cases, context.input_data
-            )
+            conclusion = self._derive_analogical_conclusion(similar_cases, context.input_data)
 
             # 신뢰도 계산
-            confidence = self._calculate_analogical_confidence(
-                similarities, similar_cases
-            )
+            confidence = self._calculate_analogical_confidence(similarities, similar_cases)
 
             return InferenceResult(
                 conclusion=conclusion,
                 confidence=confidence,
-                reasoning_path=[
-                    f"유추적 추론: {len(similar_cases)}개 유사 사례로부터 결론 도출"
-                ],
+                reasoning_path=[f"유추적 추론: {len(similar_cases)}개 유사 사례로부터 결론 도출"],
                 evidence=similar_cases,
             )
         except Exception as e:
             self.logger.error(f"유추적 추론 중 오류: {e}")
-            return InferenceResult(
-                conclusion=None, confidence=0.0, reasoning_path=[f"오류: {str(e)}"]
-            )
+            return InferenceResult(conclusion=None, confidence=0.0, reasoning_path=[f"오류: {str(e)}"])
 
     async def _creative_inference(self, context: InferenceContext) -> InferenceResult:
         """창의적 추론"""
@@ -255,16 +234,12 @@ class InferenceEngine:
             return InferenceResult(
                 conclusion=best_idea,
                 confidence=confidence,
-                reasoning_path=[
-                    f"창의적 추론: {len(creative_ideas)}개 아이디어로부터 최적 선택"
-                ],
+                reasoning_path=[f"창의적 추론: {len(creative_ideas)}개 아이디어로부터 최적 선택"],
                 evidence=creative_ideas,
             )
         except Exception as e:
             self.logger.error(f"창의적 추론 중 오류: {e}")
-            return InferenceResult(
-                conclusion=None, confidence=0.0, reasoning_path=[f"오류: {str(e)}"]
-            )
+            return InferenceResult(conclusion=None, confidence=0.0, reasoning_path=[f"오류: {str(e)}"])
 
     async def _intuitive_inference(self, context: InferenceContext) -> InferenceResult:
         """직관적 추론"""
@@ -281,16 +256,12 @@ class InferenceEngine:
             return InferenceResult(
                 conclusion=conclusion,
                 confidence=confidence,
-                reasoning_path=[
-                    f"직관적 추론: {len(intuitive_patterns)}개 직관적 패턴으로부터 결론 도출"
-                ],
+                reasoning_path=[f"직관적 추론: {len(intuitive_patterns)}개 직관적 패턴으로부터 결론 도출"],
                 evidence=intuitive_patterns,
             )
         except Exception as e:
             self.logger.error(f"직관적 추론 중 오류: {e}")
-            return InferenceResult(
-                conclusion=None, confidence=0.0, reasoning_path=[f"오류: {str(e)}"]
-            )
+            return InferenceResult(conclusion=None, confidence=0.0, reasoning_path=[f"오류: {str(e)}"])
 
     async def _emotional_inference(self, context: InferenceContext) -> InferenceResult:
         """감정적 추론"""
@@ -307,16 +278,12 @@ class InferenceEngine:
             return InferenceResult(
                 conclusion=conclusion,
                 confidence=confidence,
-                reasoning_path=[
-                    f"감정적 추론: {len(emotional_factors)}개 감정적 요소로부터 결론 도출"
-                ],
+                reasoning_path=[f"감정적 추론: {len(emotional_factors)}개 감정적 요소로부터 결론 도출"],
                 evidence=emotional_factors,
             )
         except Exception as e:
             self.logger.error(f"감정적 추론 중 오류: {e}")
-            return InferenceResult(
-                conclusion=None, confidence=0.0, reasoning_path=[f"오류: {str(e)}"]
-            )
+            return InferenceResult(conclusion=None, confidence=0.0, reasoning_path=[f"오류: {str(e)}"])
 
     async def _integrated_inference(self, context: InferenceContext) -> InferenceResult:
         """통합적 추론"""
@@ -350,9 +317,7 @@ class InferenceEngine:
             )
         except Exception as e:
             self.logger.error(f"통합적 추론 중 오류: {e}")
-            return InferenceResult(
-                conclusion=None, confidence=0.0, reasoning_path=[f"오류: {str(e)}"]
-            )
+            return InferenceResult(conclusion=None, confidence=0.0, reasoning_path=[f"오류: {str(e)}"])
 
     def _extract_premises(self, input_data: Dict[str, Any]) -> List[Any]:
         """전제 조건 추출"""
@@ -407,17 +372,13 @@ class InferenceEngine:
             hypotheses.append(f"가설 {i+1}: {observation}로부터 추론")
         return hypotheses
 
-    def _select_best_hypothesis(
-        self, hypotheses: List[Any], observations: List[Any]
-    ) -> Any:
+    def _select_best_hypothesis(self, hypotheses: List[Any], observations: List[Any]) -> Any:
         """최적 가설 선택"""
         if hypotheses:
             return hypotheses[0]
         return "가설 없음"
 
-    def _calculate_hypothesis_confidence(
-        self, hypothesis: Any, observations: List[Any]
-    ) -> float:
+    def _calculate_hypothesis_confidence(self, hypothesis: Any, observations: List[Any]) -> float:
         """가설 신뢰도 계산"""
         return min(1.0, len(observations) * 0.1 + 0.2)
 
@@ -435,17 +396,13 @@ class InferenceEngine:
             cases.append(f"유사 사례: {similarity}")
         return cases
 
-    def _derive_analogical_conclusion(
-        self, similar_cases: List[Any], input_data: Dict[str, Any]
-    ) -> Any:
+    def _derive_analogical_conclusion(self, similar_cases: List[Any], input_data: Dict[str, Any]) -> Any:
         """유추적 결론 도출"""
         if similar_cases:
             return f"유추적 결론: {len(similar_cases)}개 유사 사례로부터"
         return "유추적 결론 없음"
 
-    def _calculate_analogical_confidence(
-        self, similarities: List[Any], similar_cases: List[Any]
-    ) -> float:
+    def _calculate_analogical_confidence(self, similarities: List[Any], similar_cases: List[Any]) -> float:
         """유추적 신뢰도 계산"""
         return min(1.0, len(similar_cases) * 0.2 + 0.1)
 
@@ -519,9 +476,7 @@ class InferenceEngine:
         total_confidence = sum(result.confidence for result in results)
         return min(1.0, total_confidence / len(results) * 1.2)
 
-    def _update_performance_metrics(
-        self, result: InferenceResult, processing_time: float
-    ):
+    def _update_performance_metrics(self, result: InferenceResult, processing_time: float):
         """성능 메트릭 업데이트"""
         self.performance_metrics["total_inferences"] += 1
         if result.confidence > 0.5:
@@ -539,9 +494,9 @@ class InferenceEngine:
         total_time = self.performance_metrics["average_processing_time"] * (
             self.performance_metrics["total_inferences"] - 1
         )
-        self.performance_metrics["average_processing_time"] = (
-            total_time + processing_time
-        ) / self.performance_metrics["total_inferences"]
+        self.performance_metrics["average_processing_time"] = (total_time + processing_time) / self.performance_metrics[
+            "total_inferences"
+        ]
 
     def get_performance_metrics(self) -> Dict[str, Any]:
         """성능 메트릭 조회"""

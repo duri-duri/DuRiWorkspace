@@ -14,7 +14,7 @@ from pydantic import BaseModel
 # DuRiCore 모듈 임포트를 위한 경로 추가
 sys.path.append(os.path.join(os.path.dirname(__file__), "../../.."))
 
-from DuRiCore.DuRiCore.modules.learning_engine import LearningEngine
+from DuRiCore.DuRiCore.modules.learning_engine import LearningEngine  # noqa: E402
 
 router = APIRouter()
 
@@ -66,9 +66,7 @@ async def process_learning(request: LearningRequest):
         )
 
     except Exception as e:
-        raise HTTPException(
-            status_code=500, detail=f"학습 처리 중 오류가 발생했습니다: {str(e)}"
-        )
+        raise HTTPException(status_code=500, detail=f"학습 처리 중 오류가 발생했습니다: {str(e)}")  # noqa: B904
 
 
 @router.get("/stats")
@@ -85,9 +83,7 @@ async def get_learning_stats():
         }
 
     except Exception as e:
-        raise HTTPException(
-            status_code=500, detail=f"통계 조회 중 오류가 발생했습니다: {str(e)}"
-        )
+        raise HTTPException(status_code=500, detail=f"통계 조회 중 오류가 발생했습니다: {str(e)}")  # noqa: B904
 
 
 @router.post("/batch-process")
@@ -118,18 +114,12 @@ async def batch_process_learning(requests: List[LearningRequest]):
             "success": True,
             "results": results,
             "total_processed": len(results),
-            "average_score": (
-                sum(r["learning_score"] for r in results) / len(results)
-                if results
-                else 0
-            ),
+            "average_score": (sum(r["learning_score"] for r in results) / len(results) if results else 0),
             "message": f"{len(results)}개의 콘텐츠에 대한 학습 처리가 완료되었습니다.",
         }
 
     except Exception as e:
-        raise HTTPException(
-            status_code=500, detail=f"배치 처리 중 오류가 발생했습니다: {str(e)}"
-        )
+        raise HTTPException(status_code=500, detail=f"배치 처리 중 오류가 발생했습니다: {str(e)}")  # noqa: B904
 
 
 @router.get("/content-types")
@@ -150,9 +140,7 @@ async def get_supported_content_types():
         }
 
     except Exception as e:
-        raise HTTPException(
-            status_code=500, detail=f"콘텐츠 타입 조회 중 오류가 발생했습니다: {str(e)}"
-        )
+        raise HTTPException(status_code=500, detail=f"콘텐츠 타입 조회 중 오류가 발생했습니다: {str(e)}")  # noqa: B904
 
 
 @router.get("/health")

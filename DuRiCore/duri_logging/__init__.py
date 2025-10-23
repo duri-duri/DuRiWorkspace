@@ -7,8 +7,7 @@ DuRi 로깅 자동 주입 시스템
 
 from .adapter import ContextAdapter, get_logger
 from .autodetect import infer_component
-from .context import (get_context, set_learning_session_id, set_phase,
-                      set_request_id, set_session_id)
+from .context import get_context, set_learning_session_id, set_phase, set_request_id, set_session_id
 from .decorators import log_calls, log_exceptions, timed
 from .setup import DefaultFieldsFilter, SafeLogger, setup_logging
 

@@ -10,7 +10,7 @@ import logging
 import os
 import sys
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 
@@ -22,9 +22,7 @@ class ImageProcessor:
         self.supported_formats = [".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff"]
         self.analysis_cache = {}
 
-    def analyze_image(
-        self, image_path: str, analysis_type: str = "comprehensive"
-    ) -> Dict[str, Any]:
+    def analyze_image(self, image_path: str, analysis_type: str = "comprehensive") -> Dict[str, Any]:
         """
         이미지 분석 함수
 
@@ -123,9 +121,7 @@ class ImageProcessor:
             logger.error(f"메타데이터 분석 실패: {e}")
             return {"error": str(e)}
 
-    def _basic_analysis(
-        self, image_path: str, metadata: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _basic_analysis(self, image_path: str, metadata: Dict[str, Any]) -> Dict[str, Any]:
         """기본 이미지 분석"""
         try:
             # 파일 크기 기반 분석
@@ -152,9 +148,7 @@ class ImageProcessor:
             logger.error(f"기본 분석 실패: {e}")
             return {"error": str(e)}
 
-    def _comprehensive_analysis(
-        self, image_path: str, metadata: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _comprehensive_analysis(self, image_path: str, metadata: Dict[str, Any]) -> Dict[str, Any]:
         """종합 이미지 분석"""
         try:
             # 기본 분석 결과
@@ -169,9 +163,7 @@ class ImageProcessor:
                     "size_category": basic_result.get("file_size_category", "unknown"),
                     "quality_estimate": basic_result.get("quality_estimate", "unknown"),
                 },
-                "processing_recommendations": self._generate_recommendations(
-                    metadata, basic_result
-                ),
+                "processing_recommendations": self._generate_recommendations(metadata, basic_result),
                 "metadata": metadata,
             }
 
@@ -200,9 +192,7 @@ class ImageProcessor:
         else:
             return "very_small"
 
-    def _generate_recommendations(
-        self, metadata: Dict[str, Any], basic_result: Dict[str, Any]
-    ) -> List[str]:
+    def _generate_recommendations(self, metadata: Dict[str, Any], basic_result: Dict[str, Any]) -> List[str]:
         """처리 권장사항 생성"""
         recommendations = []
 
@@ -225,9 +215,7 @@ class ImageProcessor:
 image_processor = ImageProcessor()
 
 
-def analyze_image(
-    image_path: str, analysis_type: str = "comprehensive"
-) -> Dict[str, Any]:
+def analyze_image(image_path: str, analysis_type: str = "comprehensive") -> Dict[str, Any]:
     """
     이미지 분석 함수 (전역 함수)
 
@@ -283,9 +271,7 @@ def main():
         """,
     )
 
-    parser.add_argument(
-        "--image_path", "-i", required=True, help="분석할 이미지 파일 경로"
-    )
+    parser.add_argument("--image_path", "-i", required=True, help="분석할 이미지 파일 경로")
 
     parser.add_argument(
         "--mode",
@@ -297,9 +283,7 @@ def main():
 
     parser.add_argument("--output", "-o", help="결과를 저장할 JSON 파일 경로")
 
-    parser.add_argument(
-        "--refresh-cache", action="store_true", help="캐시를 무시하고 재분석"
-    )
+    parser.add_argument("--refresh-cache", action="store_true", help="캐시를 무시하고 재분석")
 
     parser.add_argument("--verbose", "-v", action="store_true", help="상세 출력")
 
@@ -322,7 +306,7 @@ def main():
 
     # 결과 출력
     if result.get("status") == "success":
-        print(f"✅ 분석 완료!")
+        print("✅ 분석 완료!")
         print(f"📁 파일: {result.get('image_path')}")
         print(f"📊 분석 레벨: {result.get('analysis_level', 'unknown')}")
 

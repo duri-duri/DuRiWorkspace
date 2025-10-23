@@ -3,6 +3,7 @@
 DuRi Core Node - 성능 최적화 시스템
 병렬 처리, 캐싱, 로드 밸런싱 기능
 """
+
 import asyncio
 import hashlib
 import json
@@ -10,8 +11,8 @@ import logging
 import time
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
+from datetime import datetime
+from typing import Any, Dict, Optional
 
 import aiohttp
 
@@ -36,9 +37,7 @@ class PerformanceOptimizer:
         self.executor = ThreadPoolExecutor(max_workers=10)
         logger.info("⚡ 성능 최적화 시스템 초기화 완료")
 
-    async def optimize_request(
-        self, user_input: str, duri_response: str, metadata: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def optimize_request(self, user_input: str, duri_response: str, metadata: Dict[str, Any]) -> Dict[str, Any]:
         """요청 최적화 처리"""
         try:
             start_time = time.time()
@@ -55,9 +54,7 @@ class PerformanceOptimizer:
             self.performance_metrics["cache_misses"] += 1
 
             # 2. 병렬 처리 실행
-            result = await self._parallel_processing(
-                user_input, duri_response, metadata
-            )
+            result = await self._parallel_processing(user_input, duri_response, metadata)
 
             # 3. 결과 캐싱
             self._cache_result(cache_key, result)
@@ -73,9 +70,7 @@ class PerformanceOptimizer:
             self.performance_metrics["error_count"] += 1
             raise
 
-    def _generate_cache_key(
-        self, user_input: str, duri_response: str, metadata: Dict[str, Any]
-    ) -> str:
+    def _generate_cache_key(self, user_input: str, duri_response: str, metadata: Dict[str, Any]) -> str:
         """캐시 키 생성"""
         content = f"{user_input}:{duri_response}:{json.dumps(metadata, sort_keys=True)}"
         return hashlib.md5(content.encode()).hexdigest()
@@ -98,9 +93,7 @@ class PerformanceOptimizer:
         # 캐시 크기 제한 (최대 1000개)
         if len(self.cache) > 1000:
             # 가장 오래된 항목 삭제
-            oldest_key = min(
-                self.cache.keys(), key=lambda k: self.cache[k]["timestamp"]
-            )
+            oldest_key = min(self.cache.keys(), key=lambda k: self.cache[k]["timestamp"])
             del self.cache[oldest_key]
 
     async def _parallel_processing(
@@ -109,17 +102,11 @@ class PerformanceOptimizer:
         """병렬 처리 실행"""
         try:
             # Brain과 Evolution 노드에 동시 요청
-            brain_task = asyncio.create_task(
-                self._call_brain_node(user_input, duri_response, metadata)
-            )
-            evolution_task = asyncio.create_task(
-                self._call_evolution_node(user_input, duri_response, metadata)
-            )
+            brain_task = asyncio.create_task(self._call_brain_node(user_input, duri_response, metadata))
+            evolution_task = asyncio.create_task(self._call_evolution_node(user_input, duri_response, metadata))
 
             # 병렬로 결과 수집
-            brain_result, evolution_result = await asyncio.gather(
-                brain_task, evolution_task, return_exceptions=True
-            )
+            brain_result, evolution_result = await asyncio.gather(brain_task, evolution_task, return_exceptions=True)
 
             # 오류 처리
             if isinstance(brain_result, Exception):
@@ -139,9 +126,7 @@ class PerformanceOptimizer:
             logger.error(f"병렬 처리 오류: {e}")
             raise
 
-    async def _call_brain_node(
-        self, user_input: str, duri_response: str, metadata: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _call_brain_node(self, user_input: str, duri_response: str, metadata: Dict[str, Any]) -> Dict[str, Any]:
         """Brain 노드 호출 (비동기)"""
         try:
             async with aiohttp.ClientSession() as session:
@@ -187,9 +172,7 @@ class PerformanceOptimizer:
             logger.error(f"Evolution 노드 호출 오류: {e}")
             return {"error": str(e)}
 
-    def _integrate_results(
-        self, brain_result: Dict[str, Any], evolution_result: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _integrate_results(self, brain_result: Dict[str, Any], evolution_result: Dict[str, Any]) -> Dict[str, Any]:
         """결과 통합 (최적화된 버전)"""
         try:
             # 통합 점수 계산 (가중 평균)
@@ -229,19 +212,14 @@ class PerformanceOptimizer:
         # 평균 응답 시간 업데이트
         current_avg = self.performance_metrics["average_response_time"]
         total_requests = self.performance_metrics["total_requests"]
-        new_avg = (
-            (current_avg * (total_requests - 1)) + processing_time
-        ) / total_requests
+        new_avg = ((current_avg * (total_requests - 1)) + processing_time) / total_requests
         self.performance_metrics["average_response_time"] = new_avg
 
     def get_performance_metrics(self) -> Dict[str, Any]:
         """성능 메트릭 조회"""
         cache_hit_rate = 0.0
         if self.performance_metrics["total_requests"] > 0:
-            cache_hit_rate = (
-                self.performance_metrics["cache_hits"]
-                / self.performance_metrics["total_requests"]
-            )
+            cache_hit_rate = self.performance_metrics["cache_hits"] / self.performance_metrics["total_requests"]
 
         return {
             **self.performance_metrics,
@@ -283,36 +261,22 @@ class LoadBalancer:
             brain_start = time.time()
             try:
                 async with aiohttp.ClientSession() as session:
-                    async with session.get(
-                        "http://localhost:8091/health", timeout=2
-                    ) as response:
+                    async with session.get("http://localhost:8091/health", timeout=2) as response:
                         self.node_health["brain"]["healthy"] = response.status == 200
-                        self.node_health["brain"]["response_time"] = (
-                            time.time() - brain_start
-                        )
-                        self.node_health["brain"][
-                            "last_check"
-                        ] = datetime.now().isoformat()
-            except:
+                        self.node_health["brain"]["response_time"] = time.time() - brain_start
+                        self.node_health["brain"]["last_check"] = datetime.now().isoformat()
+            except:  # noqa: E722
                 self.node_health["brain"]["healthy"] = False
 
             # Evolution 노드 상태 확인
             evolution_start = time.time()
             try:
                 async with aiohttp.ClientSession() as session:
-                    async with session.get(
-                        "http://localhost:8092/health", timeout=2
-                    ) as response:
-                        self.node_health["evolution"]["healthy"] = (
-                            response.status == 200
-                        )
-                        self.node_health["evolution"]["response_time"] = (
-                            time.time() - evolution_start
-                        )
-                        self.node_health["evolution"][
-                            "last_check"
-                        ] = datetime.now().isoformat()
-            except:
+                    async with session.get("http://localhost:8092/health", timeout=2) as response:
+                        self.node_health["evolution"]["healthy"] = response.status == 200
+                        self.node_health["evolution"]["response_time"] = time.time() - evolution_start
+                        self.node_health["evolution"]["last_check"] = datetime.now().isoformat()
+            except:  # noqa: E722
                 self.node_health["evolution"]["healthy"] = False
 
         except Exception as e:
@@ -328,10 +292,7 @@ class LoadBalancer:
             return "evolution" if self.node_health["evolution"]["healthy"] else "brain"
         else:
             # 기본적으로 응답 시간이 빠른 노드 선택
-            if (
-                self.node_health["brain"]["response_time"]
-                <= self.node_health["evolution"]["response_time"]
-            ):
+            if self.node_health["brain"]["response_time"] <= self.node_health["evolution"]["response_time"]:
                 return "brain"
             else:
                 return "evolution"

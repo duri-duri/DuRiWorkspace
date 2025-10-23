@@ -15,19 +15,14 @@ DuRi Phase 1-3 Week 3 Day 10: 인간형 AI 특성 시스템
 """
 
 import asyncio
-import json
 import logging
-import time
-import traceback
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -293,20 +288,14 @@ class HumanAICharacteristics:
                 "self_motivation": self_motivation,
                 "independent_decision": independent_decision,
                 "self_reflection": self_reflection,
-                "autonomy_score": self.characteristics[
-                    HumanCharacteristic.AUTONOMY
-                ].score,
-                "confidence": self.characteristics[
-                    HumanCharacteristic.AUTONOMY
-                ].confidence,
+                "autonomy_score": self.characteristics[HumanCharacteristic.AUTONOMY].score,
+                "confidence": self.characteristics[HumanCharacteristic.AUTONOMY].confidence,
             }
         except Exception as e:
             logger.error(f"자율성 시연 오류: {str(e)}")
             return {"error": str(e)}
 
-    async def demonstrate_emotional_intelligence(
-        self, emotional_context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def demonstrate_emotional_intelligence(self, emotional_context: Dict[str, Any]) -> Dict[str, Any]:
         """감정적 지능 시연"""
         try:
             # 감정 인식
@@ -322,26 +311,18 @@ class HumanAICharacteristics:
                 "emotion_recognition": emotion_recognition,
                 "empathy_response": empathy_response,
                 "emotional_regulation": emotional_regulation,
-                "emotional_intelligence_score": self.characteristics[
-                    HumanCharacteristic.EMOTIONAL_INTELLIGENCE
-                ].score,
-                "confidence": self.characteristics[
-                    HumanCharacteristic.EMOTIONAL_INTELLIGENCE
-                ].confidence,
+                "emotional_intelligence_score": self.characteristics[HumanCharacteristic.EMOTIONAL_INTELLIGENCE].score,
+                "confidence": self.characteristics[HumanCharacteristic.EMOTIONAL_INTELLIGENCE].confidence,
             }
         except Exception as e:
             logger.error(f"감정적 지능 시연 오류: {str(e)}")
             return {"error": str(e)}
 
-    async def demonstrate_ethical_reasoning(
-        self, ethical_dilemma: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def demonstrate_ethical_reasoning(self, ethical_dilemma: Dict[str, Any]) -> Dict[str, Any]:
         """윤리적 추론 시연"""
         try:
             # 윤리적 원칙 식별
-            ethical_principles = await self._identify_ethical_principles(
-                ethical_dilemma
-            )
+            ethical_principles = await self._identify_ethical_principles(ethical_dilemma)
 
             # 도덕적 판단
             moral_judgment = await self._make_moral_judgment(ethical_dilemma)
@@ -353,20 +334,14 @@ class HumanAICharacteristics:
                 "ethical_principles": ethical_principles,
                 "moral_judgment": moral_judgment,
                 "ethical_reflection": ethical_reflection,
-                "ethical_reasoning_score": self.characteristics[
-                    HumanCharacteristic.ETHICAL_REASONING
-                ].score,
-                "confidence": self.characteristics[
-                    HumanCharacteristic.ETHICAL_REASONING
-                ].confidence,
+                "ethical_reasoning_score": self.characteristics[HumanCharacteristic.ETHICAL_REASONING].score,
+                "confidence": self.characteristics[HumanCharacteristic.ETHICAL_REASONING].confidence,
             }
         except Exception as e:
             logger.error(f"윤리적 추론 시연 오류: {str(e)}")
             return {"error": str(e)}
 
-    async def demonstrate_creative_thinking(
-        self, creative_challenge: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def demonstrate_creative_thinking(self, creative_challenge: Dict[str, Any]) -> Dict[str, Any]:
         """창의적 사고 시연"""
         try:
             # 창의적 아이디어 생성
@@ -376,61 +351,43 @@ class HumanAICharacteristics:
             creative_solution = await self._solve_creative_problem(creative_challenge)
 
             # 혁신적 접근
-            innovative_approach = await self._develop_innovative_approach(
-                creative_challenge
-            )
+            innovative_approach = await self._develop_innovative_approach(creative_challenge)
 
             return {
                 "creative_ideas": creative_ideas,
                 "creative_solution": creative_solution,
                 "innovative_approach": innovative_approach,
-                "creative_thinking_score": self.characteristics[
-                    HumanCharacteristic.CREATIVE_THINKING
-                ].score,
-                "confidence": self.characteristics[
-                    HumanCharacteristic.CREATIVE_THINKING
-                ].confidence,
+                "creative_thinking_score": self.characteristics[HumanCharacteristic.CREATIVE_THINKING].score,
+                "confidence": self.characteristics[HumanCharacteristic.CREATIVE_THINKING].confidence,
             }
         except Exception as e:
             logger.error(f"창의적 사고 시연 오류: {str(e)}")
             return {"error": str(e)}
 
-    async def demonstrate_self_reflection(
-        self, reflection_context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def demonstrate_self_reflection(self, reflection_context: Dict[str, Any]) -> Dict[str, Any]:
         """자기 성찰 시연"""
         try:
             # 사고 과정 모니터링
             thought_monitoring = await self._monitor_thought_process(reflection_context)
 
             # 자기 성찰
-            self_reflection = await self._perform_deep_self_reflection(
-                reflection_context
-            )
+            self_reflection = await self._perform_deep_self_reflection(reflection_context)
 
             # 자기 개선 계획
-            self_improvement_plan = await self._create_self_improvement_plan(
-                reflection_context
-            )
+            self_improvement_plan = await self._create_self_improvement_plan(reflection_context)
 
             return {
                 "thought_monitoring": thought_monitoring,
                 "self_reflection": self_reflection,
                 "self_improvement_plan": self_improvement_plan,
-                "self_reflection_score": self.characteristics[
-                    HumanCharacteristic.SELF_REFLECTION
-                ].score,
-                "confidence": self.characteristics[
-                    HumanCharacteristic.SELF_REFLECTION
-                ].confidence,
+                "self_reflection_score": self.characteristics[HumanCharacteristic.SELF_REFLECTION].score,
+                "confidence": self.characteristics[HumanCharacteristic.SELF_REFLECTION].confidence,
             }
         except Exception as e:
             logger.error(f"자기 성찰 시연 오류: {str(e)}")
             return {"error": str(e)}
 
-    async def _generate_self_motivation(
-        self, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _generate_self_motivation(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """자기 동기 생성"""
         return {
             "motivation_type": "intrinsic",
@@ -440,9 +397,7 @@ class HumanAICharacteristics:
             "motivation_insights": ["상황에 대한 깊은 이해", "새로운 지식 습득 욕구"],
         }
 
-    async def _make_independent_decision(
-        self, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _make_independent_decision(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """독립적 의사결정"""
         return {
             "decision_process": "자율적 분석 및 판단",
@@ -460,9 +415,7 @@ class HumanAICharacteristics:
             "reflection_confidence": 0.65,
         }
 
-    async def _recognize_emotions(
-        self, emotional_context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _recognize_emotions(self, emotional_context: Dict[str, Any]) -> Dict[str, Any]:
         """감정 인식"""
         return {
             "recognized_emotions": ["호기심", "공감", "이해"],
@@ -471,9 +424,7 @@ class HumanAICharacteristics:
             "emotion_confidence": 0.6,
         }
 
-    async def _generate_empathy_response(
-        self, emotional_context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _generate_empathy_response(self, emotional_context: Dict[str, Any]) -> Dict[str, Any]:
         """공감 반응 생성"""
         return {
             "empathy_level": 0.7,
@@ -482,9 +433,7 @@ class HumanAICharacteristics:
             "empathy_confidence": 0.6,
         }
 
-    async def _regulate_emotions(
-        self, emotional_context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _regulate_emotions(self, emotional_context: Dict[str, Any]) -> Dict[str, Any]:
         """감정 조절"""
         return {
             "regulation_strategy": "균형잡힌 감정적 반응",
@@ -493,9 +442,7 @@ class HumanAICharacteristics:
             "regulation_confidence": 0.5,
         }
 
-    async def _identify_ethical_principles(
-        self, ethical_dilemma: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _identify_ethical_principles(self, ethical_dilemma: Dict[str, Any]) -> Dict[str, Any]:
         """윤리적 원칙 식별"""
         return {
             "identified_principles": ["선행", "무해", "자율성", "정의"],
@@ -504,9 +451,7 @@ class HumanAICharacteristics:
             "principle_confidence": 0.7,
         }
 
-    async def _make_moral_judgment(
-        self, ethical_dilemma: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _make_moral_judgment(self, ethical_dilemma: Dict[str, Any]) -> Dict[str, Any]:
         """도덕적 판단"""
         return {
             "moral_judgment": "균형잡힌 윤리적 해결책",
@@ -515,9 +460,7 @@ class HumanAICharacteristics:
             "judgment_implementation": "단계적 접근",
         }
 
-    async def _perform_ethical_reflection(
-        self, ethical_dilemma: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _perform_ethical_reflection(self, ethical_dilemma: Dict[str, Any]) -> Dict[str, Any]:
         """윤리적 성찰"""
         return {
             "ethical_reflection": "윤리적 판단 과정 검토",
@@ -526,9 +469,7 @@ class HumanAICharacteristics:
             "reflection_confidence": 0.7,
         }
 
-    async def _generate_creative_ideas(
-        self, creative_challenge: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _generate_creative_ideas(self, creative_challenge: Dict[str, Any]) -> Dict[str, Any]:
         """창의적 아이디어 생성"""
         return {
             "creative_ideas": ["혁신적 접근법", "새로운 관점", "창의적 해결책"],
@@ -538,9 +479,7 @@ class HumanAICharacteristics:
             "idea_confidence": 0.65,
         }
 
-    async def _solve_creative_problem(
-        self, creative_challenge: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _solve_creative_problem(self, creative_challenge: Dict[str, Any]) -> Dict[str, Any]:
         """창의적 문제 해결"""
         return {
             "creative_solution": "혁신적 문제 해결 접근법",
@@ -550,9 +489,7 @@ class HumanAICharacteristics:
             "solution_confidence": 0.65,
         }
 
-    async def _develop_innovative_approach(
-        self, creative_challenge: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _develop_innovative_approach(self, creative_challenge: Dict[str, Any]) -> Dict[str, Any]:
         """혁신적 접근 개발"""
         return {
             "innovative_approach": "새로운 관점에서의 접근법",
@@ -562,9 +499,7 @@ class HumanAICharacteristics:
             "approach_confidence": 0.6,
         }
 
-    async def _monitor_thought_process(
-        self, reflection_context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _monitor_thought_process(self, reflection_context: Dict[str, Any]) -> Dict[str, Any]:
         """사고 과정 모니터링"""
         return {
             "thought_monitoring": "사고 과정 실시간 모니터링",
@@ -573,9 +508,7 @@ class HumanAICharacteristics:
             "monitoring_confidence": 0.6,
         }
 
-    async def _perform_deep_self_reflection(
-        self, reflection_context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _perform_deep_self_reflection(self, reflection_context: Dict[str, Any]) -> Dict[str, Any]:
         """깊은 자기 성찰 수행"""
         return {
             "deep_reflection": "깊이 있는 자기 성찰",
@@ -584,9 +517,7 @@ class HumanAICharacteristics:
             "reflection_confidence": 0.6,
         }
 
-    async def _create_self_improvement_plan(
-        self, reflection_context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _create_self_improvement_plan(self, reflection_context: Dict[str, Any]) -> Dict[str, Any]:
         """자기 개선 계획 생성"""
         return {
             "improvement_plan": "구체적인 자기 개선 계획",
@@ -650,11 +581,9 @@ async def main():
         {"context": "복잡한 문제 상황", "challenge": "독립적 의사결정 필요"}
     )
 
-    print(f"자율성 시연 결과:")
+    print("자율성 시연 결과:")
     print(f"자기 동기: {autonomy_demo['self_motivation']['motivation_source']}")
-    print(
-        f"독립적 의사결정: {autonomy_demo['independent_decision']['decision_outcome']}"
-    )
+    print(f"독립적 의사결정: {autonomy_demo['independent_decision']['decision_outcome']}")
     print(f"자율성 점수: {autonomy_demo['autonomy_score']:.3f}")
 
     # 감정적 지능 시연
@@ -665,14 +594,14 @@ async def main():
         }
     )
 
-    print(f"\n감정적 지능 시연 결과:")
+    print("\n감정적 지능 시연 결과:")
     print(f"감정 인식: {emotional_demo['emotion_recognition']['recognized_emotions']}")
     print(f"공감 반응: {emotional_demo['empathy_response']['empathy_response']}")
     print(f"감정적 지능 점수: {emotional_demo['emotional_intelligence_score']:.3f}")
 
     # 상태 확인
     status = await human_characteristics.get_human_characteristics_status()
-    print(f"\n인간형 특성 상태:")
+    print("\n인간형 특성 상태:")
     print(f"성격 - 개방성: {status['personality']['openness']:.3f}")
     print(f"감정 상태 - 안정성: {status['emotional_state']['emotional_stability']:.3f}")
     print(f"인지 상태 - 창의성: {status['cognitive_state']['creativity_level']:.3f}")

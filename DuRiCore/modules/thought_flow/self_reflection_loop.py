@@ -7,7 +7,7 @@ DuRi 자가 반성 루프 시스템
 import json
 import os
 from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 
@@ -51,10 +51,7 @@ class SelfReflectionLoop:
             if os.path.exists(self.reflection_file):
                 with open(self.reflection_file, "r", encoding="utf-8") as f:
                     data = json.load(f)
-                    self.insights = [
-                        ReflectionInsight(**insight)
-                        for insight in data.get("insights", [])
-                    ]
+                    self.insights = [ReflectionInsight(**insight) for insight in data.get("insights", [])]
 
             # 핵심 신념 로드
             if os.path.exists(self.beliefs_file):
@@ -144,9 +141,7 @@ class SelfReflectionLoop:
         }
         DuRiThoughtFlow.register_stream("reflection_loop", reflection_summary)
 
-        print(
-            f"✅ 자가 반성 루프 완료: {len(new_insights)}개 통찰 생성, {len(updated_beliefs)}개 신념 업데이트"
-        )
+        print(f"✅ 자가 반성 루프 완료: {len(new_insights)}개 통찰 생성, {len(updated_beliefs)}개 신념 업데이트")
 
         return {
             "status": "success",
@@ -226,9 +221,7 @@ class SelfReflectionLoop:
 
         return "; ".join(regrets)
 
-    def _generate_improvement_suggestion(
-        self, trace, analysis: str, regret: str
-    ) -> str:
+    def _generate_improvement_suggestion(self, trace, analysis: str, regret: str) -> str:
         """개선 제안을 생성합니다."""
         suggestions = []
 
@@ -309,9 +302,6 @@ class SelfReflectionLoop:
             "total_rules": len(self.judgment_rules),
             "recent_insights": len(self.insights[-10:]) if self.insights else 0,
             "average_confidence_impact": (
-                sum(insight.confidence_impact for insight in self.insights)
-                / len(self.insights)
-                if self.insights
-                else 0
+                sum(insight.confidence_impact for insight in self.insights) / len(self.insights) if self.insights else 0
             ),
         }

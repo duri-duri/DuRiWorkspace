@@ -10,9 +10,7 @@ import sys
 import time
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -60,7 +58,7 @@ async def simple_test():
         process_time = time.time() - start_time
 
         # 결과 출력
-        print(f"\n📊 테스트 결과:")
+        print("\n📊 테스트 결과:")
         print(f"   ✅ 성공 여부: {result.success}")
         print(f"   🧠 사회적 지능 점수: {result.context_understanding:.2f}")
         print(f"   📊 공감 점수: {result.empathy_score:.2f}")

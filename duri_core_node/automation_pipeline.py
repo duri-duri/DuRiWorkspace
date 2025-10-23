@@ -3,8 +3,7 @@
 DuRi 자동화 파이프라인 시스템
 외부 입력에 따른 자동 학습 루프 실행 및 실시간 튜닝
 """
-import asyncio
-import hashlib
+
 import json
 import logging
 import sqlite3
@@ -14,10 +13,7 @@ from collections import defaultdict
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from enum import Enum
-from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional
-
-import aiohttp
+from typing import Any, Callable, Dict, List
 
 logger = logging.getLogger(__name__)
 
@@ -78,9 +74,7 @@ class TriggerLayer:
         """모니터링 시작"""
         if not self.is_monitoring:
             self.is_monitoring = True
-            self.monitor_thread = threading.Thread(
-                target=self._monitor_loop, daemon=True
-            )
+            self.monitor_thread = threading.Thread(target=self._monitor_loop, daemon=True)
             self.monitor_thread.start()
             logger.info("🔍 트리거 레이어 모니터링 시작")
 
@@ -124,9 +118,7 @@ class TriggerLayer:
         # 구현: 스케줄 확인
         pass
 
-    def add_trigger(
-        self, trigger_type: TriggerType, data: Dict[str, Any], priority: int = 1
-    ):
+    def add_trigger(self, trigger_type: TriggerType, data: Dict[str, Any], priority: int = 1):
         """트리거 추가"""
         event = TriggerEvent(
             trigger_type=trigger_type,
@@ -151,9 +143,7 @@ class LearningExecutor:
         self.current_phase = None
         self.learning_history: List[LearningResult] = []
 
-    async def execute_learning_loop(
-        self, trigger_event: TriggerEvent
-    ) -> LearningResult:
+    async def execute_learning_loop(self, trigger_event: TriggerEvent) -> LearningResult:
         """학습 루프 실행"""
         logger.info(f"🚀 학습 루프 시작: {trigger_event.trigger_type.value}")
 
@@ -161,33 +151,23 @@ class LearningExecutor:
         results = []
 
         # 1. 모방 단계
-        imitation_result = await self._execute_phase(
-            LearningPhase.IMITATION, trigger_event
-        )
+        imitation_result = await self._execute_phase(LearningPhase.IMITATION, trigger_event)
         results.append(imitation_result)
 
         # 2. 반복 단계
-        repetition_result = await self._execute_phase(
-            LearningPhase.REPETITION, trigger_event
-        )
+        repetition_result = await self._execute_phase(LearningPhase.REPETITION, trigger_event)
         results.append(repetition_result)
 
         # 3. 피드백 단계
-        feedback_result = await self._execute_phase(
-            LearningPhase.FEEDBACK, trigger_event
-        )
+        feedback_result = await self._execute_phase(LearningPhase.FEEDBACK, trigger_event)
         results.append(feedback_result)
 
         # 4. 도전 단계
-        challenge_result = await self._execute_phase(
-            LearningPhase.CHALLENGE, trigger_event
-        )
+        challenge_result = await self._execute_phase(LearningPhase.CHALLENGE, trigger_event)
         results.append(challenge_result)
 
         # 5. 개선 단계
-        improvement_result = await self._execute_phase(
-            LearningPhase.IMPROVEMENT, trigger_event
-        )
+        improvement_result = await self._execute_phase(LearningPhase.IMPROVEMENT, trigger_event)
         results.append(improvement_result)
 
         # 통합 결과 생성
@@ -212,9 +192,7 @@ class LearningExecutor:
 
         return final_result
 
-    async def _execute_phase(
-        self, phase: LearningPhase, trigger_event: TriggerEvent
-    ) -> LearningResult:
+    async def _execute_phase(self, phase: LearningPhase, trigger_event: TriggerEvent) -> LearningResult:
         """개별 단계 실행"""
         start_time = time.time()
 
@@ -303,8 +281,7 @@ class ImprovementEvaluator:
             "timestamp": datetime.now().isoformat(),
             "result_id": id(result),
             "score_adequate": result.score >= self.evaluation_criteria["min_score"],
-            "response_time_adequate": result.duration
-            <= self.evaluation_criteria["max_response_time"],
+            "response_time_adequate": result.duration <= self.evaluation_criteria["max_response_time"],
             "success_adequate": result.success,
             "overall_adequate": self._is_overall_adequate(result),
             "recommendations": self._generate_recommendations(result),
@@ -492,9 +469,7 @@ class SchedulerWatcher:
         self.is_running = False
         self.watcher_thread = None
 
-    def add_schedule(
-        self, schedule_type: str, interval_minutes: int, callback: Callable
-    ):
+    def add_schedule(self, schedule_type: str, interval_minutes: int, callback: Callable):
         """스케줄 추가"""
         schedule = {
             "type": schedule_type,
@@ -510,9 +485,7 @@ class SchedulerWatcher:
         """감시 시작"""
         if not self.is_running:
             self.is_running = True
-            self.watcher_thread = threading.Thread(
-                target=self._watcher_loop, daemon=True
-            )
+            self.watcher_thread = threading.Thread(target=self._watcher_loop, daemon=True)
             self.watcher_thread.start()
             logger.info("👀 스케줄러 감시 시작")
 
@@ -535,14 +508,10 @@ class SchedulerWatcher:
                         try:
                             schedule["callback"]()
                             schedule["last_run"] = current_time
-                            schedule["next_run"] = current_time + timedelta(
-                                minutes=schedule["interval"]
-                            )
+                            schedule["next_run"] = current_time + timedelta(minutes=schedule["interval"])
                             logger.info(f"⏰ 스케줄 실행: {schedule['type']}")
                         except Exception as e:
-                            logger.error(
-                                f"❌ 스케줄 실행 오류: {schedule['type']} - {e}"
-                            )
+                            logger.error(f"❌ 스케줄 실행 오류: {schedule['type']} - {e}")
 
                 time.sleep(30)  # 30초마다 체크
 
@@ -577,14 +546,10 @@ class AutomationPipeline:
     def _setup_default_schedules(self):
         """기본 스케줄 설정"""
         # 10분마다 성능 재점검
-        self.scheduler_watcher.add_schedule(
-            "performance_check", 10, self._scheduled_performance_check
-        )
+        self.scheduler_watcher.add_schedule("performance_check", 10, self._scheduled_performance_check)
 
         # 30분마다 학습 통계 업데이트
-        self.scheduler_watcher.add_schedule(
-            "statistics_update", 30, self._scheduled_statistics_update
-        )
+        self.scheduler_watcher.add_schedule("statistics_update", 30, self._scheduled_statistics_update)
 
     def start_automation(self):
         """자동화 시작"""
@@ -608,14 +573,10 @@ class AutomationPipeline:
             self.automation_stats["total_triggers"] += 1
 
             # 1. 학습 실행
-            learning_result = await self.learning_executor.execute_learning_loop(
-                trigger_event
-            )
+            learning_result = await self.learning_executor.execute_learning_loop(trigger_event)
 
             # 2. 평가
-            evaluation = self.improvement_evaluator.evaluate_learning_result(
-                learning_result
-            )
+            evaluation = self.improvement_evaluator.evaluate_learning_result(learning_result)
 
             # 3. 메모리 동기화
             await self.memory_sync_engine.sync_learning_result(learning_result)
@@ -635,10 +596,7 @@ class AutomationPipeline:
                     - 1
                 )
                 + learning_result.score
-            ) / (
-                self.automation_stats["successful_learning_cycles"]
-                + self.automation_stats["failed_learning_cycles"]
-            )
+            ) / (self.automation_stats["successful_learning_cycles"] + self.automation_stats["failed_learning_cycles"])
 
             self.automation_stats["last_automation_run"] = datetime.now().isoformat()
 
@@ -675,9 +633,7 @@ class AutomationPipeline:
             # 성공률
             cursor.execute("SELECT COUNT(*) FROM learning_results WHERE success = 1")
             successful_results = cursor.fetchone()[0]
-            success_rate = (
-                successful_results / total_results if total_results > 0 else 0
-            )
+            success_rate = successful_results / total_results if total_results > 0 else 0
 
             # 평균 점수
             cursor.execute("SELECT AVG(score) FROM learning_results")

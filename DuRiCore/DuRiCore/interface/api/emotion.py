@@ -14,7 +14,7 @@ from pydantic import BaseModel
 # DuRiCore 모듈 임포트를 위한 경로 추가
 sys.path.append(os.path.join(os.path.dirname(__file__), "../../.."))
 
-from DuRiCore.DuRiCore.modules.emotion_engine import EmotionEngine, InputData
+from DuRiCore.DuRiCore.modules.emotion_engine import EmotionEngine, InputData  # noqa: E402
 
 router = APIRouter()
 
@@ -55,9 +55,7 @@ async def analyze_emotion(request: EmotionRequest):
 
         return EmotionResponse(
             primary_emotion=analysis.primary_emotion.value,
-            secondary_emotions=[
-                emotion.value for emotion in analysis.secondary_emotions
-            ],
+            secondary_emotions=[emotion.value for emotion in analysis.secondary_emotions],
             intensity=analysis.intensity,
             confidence=analysis.confidence,
             context_fit=analysis.context_fit,
@@ -68,9 +66,7 @@ async def analyze_emotion(request: EmotionRequest):
         )
 
     except Exception as e:
-        raise HTTPException(
-            status_code=500, detail=f"감정 분석 중 오류가 발생했습니다: {str(e)}"
-        )
+        raise HTTPException(status_code=500, detail=f"감정 분석 중 오류가 발생했습니다: {str(e)}")  # noqa: B904
 
 
 @router.get("/stats")
@@ -87,9 +83,7 @@ async def get_emotion_stats():
         }
 
     except Exception as e:
-        raise HTTPException(
-            status_code=500, detail=f"통계 조회 중 오류가 발생했습니다: {str(e)}"
-        )
+        raise HTTPException(status_code=500, detail=f"통계 조회 중 오류가 발생했습니다: {str(e)}")  # noqa: B904
 
 
 @router.post("/batch-analyze")
@@ -122,9 +116,7 @@ async def batch_analyze_emotions(requests: list[EmotionRequest]):
         }
 
     except Exception as e:
-        raise HTTPException(
-            status_code=500, detail=f"배치 분석 중 오류가 발생했습니다: {str(e)}"
-        )
+        raise HTTPException(status_code=500, detail=f"배치 분석 중 오류가 발생했습니다: {str(e)}")  # noqa: B904
 
 
 @router.get("/health")
@@ -134,9 +126,7 @@ async def emotion_health_check():
         emotion_engine = EmotionEngine()
 
         # 간단한 테스트 실행
-        test_input = InputData(
-            text="안녕하세요! 오늘 기분이 좋습니다.", context={"type": "greeting"}
-        )
+        test_input = InputData(text="안녕하세요! 오늘 기분이 좋습니다.", context={"type": "greeting"})
 
         analysis = emotion_engine.analyze_complex_emotion(test_input)
 

@@ -1,5 +1,4 @@
-from duri_finale.phase_25_creative_collaboration_system import \
-    CreativeCollaborationSystem
+from duri_finale.phase_25_creative_collaboration_system import CreativeCollaborationSystem
 from duri_finale.phase_25_ethical_judgment_system import EthicalJudgmentSystem
 from duri_finale.phase_25_final_evolution_ai import FinalEvolutionAI
 from duri_finale.phase_25_future_design_system import FutureDesignSystem

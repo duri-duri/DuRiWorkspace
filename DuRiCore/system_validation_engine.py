@@ -13,19 +13,16 @@ DuRi Phase 1-3 Week 3 Day 10: 시스템 검증 엔진
 """
 
 import asyncio
-import json
 import logging
 import time
 import traceback
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -265,19 +262,11 @@ class SystemValidationEngine:
         ]
 
         # 모든 규칙 등록
-        all_rules = (
-            functional_rules
-            + performance_rules
-            + security_rules
-            + compatibility_rules
-            + integration_rules
-        )
+        all_rules = functional_rules + performance_rules + security_rules + compatibility_rules + integration_rules
         for rule in all_rules:
             self.validation_rules[rule.name] = rule
 
-    async def validate_system(
-        self, system_name: str, validation_data: Dict[str, Any]
-    ) -> SystemValidation:
+    async def validate_system(self, system_name: str, validation_data: Dict[str, Any]) -> SystemValidation:
         """
         시스템 검증 수행
 
@@ -294,9 +283,7 @@ class SystemValidationEngine:
             logger.info(f"시작: 시스템 검증 - {system_name}")
 
             # 검증 규칙 선택
-            validation_types = validation_data.get(
-                "validation_types", [ValidationType.FUNCTIONAL]
-            )
+            validation_types = validation_data.get("validation_types", [ValidationType.FUNCTIONAL])
             selected_rules = []
 
             for rule in self.validation_rules.values():
@@ -304,9 +291,7 @@ class SystemValidationEngine:
                     selected_rules.append(rule)
 
             # 검증 실행
-            validation_results = await self._execute_validations(
-                selected_rules, validation_data
-            )
+            validation_results = await self._execute_validations(selected_rules, validation_data)
 
             # 전체 점수 계산
             overall_score = await self._calculate_overall_score(validation_results)
@@ -326,9 +311,7 @@ class SystemValidationEngine:
             )
 
             self.system_validations.append(validation)
-            logger.info(
-                f"시스템 검증 완료: {system_name} - 점수 {overall_score:.2f}, 품질 {quality_level.value}"
-            )
+            logger.info(f"시스템 검증 완료: {system_name} - 점수 {overall_score:.2f}, 품질 {quality_level.value}")
 
             return validation
 
@@ -376,32 +359,22 @@ class SystemValidationEngine:
     ) -> ValidationResult:
         """단일 검증 실행"""
         start_time = datetime.now()
-        result = ValidationResult(
-            rule=rule, status=ValidationStatus.RUNNING, start_time=start_time
-        )
+        result = ValidationResult(rule=rule, status=ValidationStatus.RUNNING, start_time=start_time)
 
         try:
             logger.info(f"검증 실행: {rule.name}")
 
             # 검증 타입에 따른 실행
             if rule.validation_type == ValidationType.FUNCTIONAL:
-                details = await self._execute_functional_validation(
-                    rule, validation_data
-                )
+                details = await self._execute_functional_validation(rule, validation_data)
             elif rule.validation_type == ValidationType.PERFORMANCE:
-                details = await self._execute_performance_validation(
-                    rule, validation_data
-                )
+                details = await self._execute_performance_validation(rule, validation_data)
             elif rule.validation_type == ValidationType.SECURITY:
                 details = await self._execute_security_validation(rule, validation_data)
             elif rule.validation_type == ValidationType.COMPATIBILITY:
-                details = await self._execute_compatibility_validation(
-                    rule, validation_data
-                )
+                details = await self._execute_compatibility_validation(rule, validation_data)
             elif rule.validation_type == ValidationType.INTEGRATION:
-                details = await self._execute_integration_validation(
-                    rule, validation_data
-                )
+                details = await self._execute_integration_validation(rule, validation_data)
             else:
                 details = await self._execute_general_validation(rule, validation_data)
 
@@ -419,13 +392,9 @@ class SystemValidationEngine:
             result.details = details
 
             if status == ValidationStatus.FAILED:
-                result.errors.append(
-                    f"검증 실패: 점수 {score:.2f} (기준: {rule.criteria})"
-                )
+                result.errors.append(f"검증 실패: 점수 {score:.2f} (기준: {rule.criteria})")
             elif status == ValidationStatus.WARNING:
-                result.warnings.append(
-                    f"검증 경고: 점수 {score:.2f} (기준: {rule.criteria})"
-                )
+                result.warnings.append(f"검증 경고: 점수 {score:.2f} (기준: {rule.criteria})")
 
             logger.info(f"검증 완료: {rule.name} - {status.value} (점수: {score:.2f})")
 
@@ -505,9 +474,7 @@ class SystemValidationEngine:
         """보안 검증 실행"""
         if "인증" in rule.name:
             authentication_strength = await self._measure_authentication_strength()
-            authentication_success_rate = (
-                await self._measure_authentication_success_rate()
-            )
+            authentication_success_rate = await self._measure_authentication_success_rate()
             return {
                 "authentication_strength": authentication_strength,
                 "authentication_success_rate": authentication_success_rate,
@@ -586,9 +553,7 @@ class SystemValidationEngine:
         await asyncio.sleep(0.1)
         return {"general_validation": True, "score": 0.8}
 
-    async def _calculate_validation_score(
-        self, rule: ValidationRule, details: Dict[str, Any]
-    ) -> float:
+    async def _calculate_validation_score(self, rule: ValidationRule, details: Dict[str, Any]) -> float:
         """검증 점수 계산"""
         if "error" in details:
             return 0.0
@@ -601,9 +566,7 @@ class SystemValidationEngine:
                 actual_value = details[key]
 
                 # 수치 비교
-                if isinstance(expected_value, (int, float)) and isinstance(
-                    actual_value, (int, float)
-                ):
+                if isinstance(expected_value, (int, float)) and isinstance(actual_value, (int, float)):
                     if key in [
                         "response_time",
                         "max_response_time",
@@ -663,9 +626,7 @@ class SystemValidationEngine:
 
         return score / total_weight if total_weight > 0 else 0.0
 
-    async def _determine_validation_status(
-        self, rule: ValidationRule, score: float
-    ) -> ValidationStatus:
+    async def _determine_validation_status(self, rule: ValidationRule, score: float) -> ValidationStatus:
         """검증 상태 결정"""
         if score >= 0.9:
             return ValidationStatus.PASSED
@@ -674,9 +635,7 @@ class SystemValidationEngine:
         else:
             return ValidationStatus.FAILED
 
-    async def _calculate_overall_score(
-        self, validation_results: List[ValidationResult]
-    ) -> float:
+    async def _calculate_overall_score(self, validation_results: List[ValidationResult]) -> float:
         """전체 점수 계산"""
         if not validation_results:
             return 0.0
@@ -780,9 +739,7 @@ class SystemValidationEngine:
     async def _measure_data_consistency_rate(self) -> float:
         return 0.91
 
-    async def generate_quality_report(
-        self, validation_data: Dict[str, Any]
-    ) -> QualityReport:
+    async def generate_quality_report(self, validation_data: Dict[str, Any]) -> QualityReport:
         """
         품질 보고서 생성
 
@@ -796,9 +753,7 @@ class SystemValidationEngine:
             logger.info("시작: 품질 보고서 생성")
 
             # 최근 검증 결과 수집
-            recent_validations = (
-                self.system_validations[-10:] if self.system_validations else []
-            )
+            recent_validations = self.system_validations[-10:] if self.system_validations else []
 
             if not recent_validations:
                 return QualityReport(
@@ -823,14 +778,10 @@ class SystemValidationEngine:
                 all_validation_results.extend(validation.validation_results)
 
             # 요약 생성
-            summary = await self._generate_quality_summary(
-                recent_validations, all_validation_results
-            )
+            summary = await self._generate_quality_summary(recent_validations, all_validation_results)
 
             # 권장사항 생성
-            recommendations = await self._generate_quality_recommendations(
-                recent_validations, all_validation_results
-            )
+            recommendations = await self._generate_quality_recommendations(recent_validations, all_validation_results)
 
             report = QualityReport(
                 timestamp=datetime.now(),
@@ -842,9 +793,7 @@ class SystemValidationEngine:
             )
 
             self.quality_reports.append(report)
-            logger.info(
-                f"품질 보고서 생성 완료: 전체 품질 {overall_quality.value}, 점수 {average_score:.2f}"
-            )
+            logger.info(f"품질 보고서 생성 완료: 전체 품질 {overall_quality.value}, 점수 {average_score:.2f}")
 
             return report
 
@@ -909,20 +858,12 @@ class SystemValidationEngine:
         recommendations = []
 
         # 전체 품질 기반 권장사항
-        avg_score = (
-            sum(v.overall_score for v in validations) / len(validations)
-            if validations
-            else 0.0
-        )
+        avg_score = sum(v.overall_score for v in validations) / len(validations) if validations else 0.0
         if avg_score < 0.8:
-            recommendations.append(
-                "전체 시스템 품질이 낮습니다. 종합적인 개선이 필요합니다."
-            )
+            recommendations.append("전체 시스템 품질이 낮습니다. 종합적인 개선이 필요합니다.")
 
         # 실패한 검증 기반 권장사항
-        failed_results = [
-            r for r in validation_results if r.status == ValidationStatus.FAILED
-        ]
+        failed_results = [r for r in validation_results if r.status == ValidationStatus.FAILED]
         if failed_results:
             failed_types = {}
             for result in failed_results:
@@ -930,25 +871,17 @@ class SystemValidationEngine:
                 failed_types[validation_type] = failed_types.get(validation_type, 0) + 1
 
             most_failed_type = max(failed_types.items(), key=lambda x: x[1])[0]
-            recommendations.append(
-                f"{most_failed_type} 검증 실패율이 높습니다. 해당 영역 개선이 필요합니다."
-            )
+            recommendations.append(f"{most_failed_type} 검증 실패율이 높습니다. 해당 영역 개선이 필요합니다.")
 
         # 경고 검증 기반 권장사항
-        warning_results = [
-            r for r in validation_results if r.status == ValidationStatus.WARNING
-        ]
+        warning_results = [r for r in validation_results if r.status == ValidationStatus.WARNING]
         if warning_results:
-            recommendations.append(
-                "일부 검증에서 경고가 발생했습니다. 해당 영역 모니터링이 필요합니다."
-            )
+            recommendations.append("일부 검증에서 경고가 발생했습니다. 해당 영역 모니터링이 필요합니다.")
 
         # 시스템별 권장사항
         for validation in validations:
             if validation.overall_score < 0.7:
-                recommendations.append(
-                    f"{validation.system_name} 시스템의 품질이 낮습니다. 개선이 필요합니다."
-                )
+                recommendations.append(f"{validation.system_name} 시스템의 품질이 낮습니다. 개선이 필요합니다.")
 
         return recommendations
 
@@ -997,14 +930,12 @@ async def main():
             },
         )
         print(
-            f"시스템 검증 결과: 점수 {system_validation.overall_score:.2f}, 품질 {system_validation.quality_level.value}"
+            f"시스템 검증 결과: 점수 {system_validation.overall_score:.2f}, 품질 {system_validation.quality_level.value}"  # noqa: E501
         )
 
         # 품질 보고서 생성
         quality_report = await validation_engine.generate_quality_report({})
-        print(
-            f"품질 보고서: 전체 품질 {quality_report.overall_quality.value}, 점수 {quality_report.quality_score:.2f}"
-        )
+        print(f"품질 보고서: 전체 품질 {quality_report.overall_quality.value}, 점수 {quality_report.quality_score:.2f}")
 
         # 엔진 상태 출력
         status = validation_engine.get_status()

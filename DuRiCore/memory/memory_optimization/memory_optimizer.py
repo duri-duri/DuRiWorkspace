@@ -11,18 +11,13 @@ DuRiCore Phase 2-5: 메모리 최적화 모듈
 """
 
 import asyncio
-import json
 import logging
-import statistics
 import time
 import uuid
-from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
-
-import numpy as np
+from typing import Any, Dict, List, Optional
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -109,9 +104,7 @@ class MemoryOptimizer:
 
         logger.info("메모리 최적화기 초기화 완료")
 
-    async def start_optimization(
-        self, optimization_type: OptimizationType, target_memory_ids: List[str] = None
-    ) -> str:
+    async def start_optimization(self, optimization_type: OptimizationType, target_memory_ids: List[str] = None) -> str:
         """최적화 작업 시작"""
         try:
             task_id = f"opt_{int(time.time())}_{uuid.uuid4().hex[:8]}"
@@ -145,38 +138,26 @@ class MemoryOptimizer:
             if optimization_task.optimization_type == OptimizationType.CLEANUP:
                 success = await self._perform_cleanup_optimization(optimization_task)
             elif optimization_task.optimization_type == OptimizationType.COMPRESSION:
-                success = await self._perform_compression_optimization(
-                    optimization_task
-                )
+                success = await self._perform_compression_optimization(optimization_task)
             elif optimization_task.optimization_type == OptimizationType.DEDUPLICATION:
-                success = await self._perform_deduplication_optimization(
-                    optimization_task
-                )
+                success = await self._perform_deduplication_optimization(optimization_task)
             elif optimization_task.optimization_type == OptimizationType.FRAGMENTATION:
-                success = await self._perform_fragmentation_optimization(
-                    optimization_task
-                )
+                success = await self._perform_fragmentation_optimization(optimization_task)
             elif optimization_task.optimization_type == OptimizationType.PRIORITY:
                 success = await self._perform_priority_optimization(optimization_task)
             else:
-                logger.error(
-                    f"알 수 없는 최적화 타입: {optimization_task.optimization_type}"
-                )
+                logger.error(f"알 수 없는 최적화 타입: {optimization_task.optimization_type}")
                 success = False
 
             # 최적화 완료 처리
             optimization_task.completed_at = datetime.now()
-            optimization_task.status = (
-                OptimizationStatus.COMPLETED if success else OptimizationStatus.FAILED
-            )
+            optimization_task.status = OptimizationStatus.COMPLETED if success else OptimizationStatus.FAILED
 
             # 성능 메트릭 업데이트
             self.performance_metrics["total_optimizations"] += 1
             if success:
                 self.performance_metrics["successful_optimizations"] += 1
-                self.performance_metrics[
-                    "total_space_saved"
-                ] += optimization_task.space_saved
+                self.performance_metrics["total_space_saved"] += optimization_task.space_saved
             else:
                 self.performance_metrics["failed_optimizations"] += 1
 
@@ -188,13 +169,10 @@ class MemoryOptimizer:
             ) / self.performance_metrics["total_optimizations"]
 
             self.performance_metrics["optimization_success_rate"] = (
-                self.performance_metrics["successful_optimizations"]
-                / self.performance_metrics["total_optimizations"]
+                self.performance_metrics["successful_optimizations"] / self.performance_metrics["total_optimizations"]
             )
 
-            logger.info(
-                f"최적화 완료: {optimization_task.task_id} ({'성공' if success else '실패'})"
-            )
+            logger.info(f"최적화 완료: {optimization_task.task_id} ({'성공' if success else '실패'})")
             return success
 
         except Exception as e:
@@ -203,15 +181,11 @@ class MemoryOptimizer:
             optimization_task.completed_at = datetime.now()
             return False
 
-    async def _perform_cleanup_optimization(
-        self, optimization_task: OptimizationTask
-    ) -> bool:
+    async def _perform_cleanup_optimization(self, optimization_task: OptimizationTask) -> bool:
         """정리 최적화 수행"""
         try:
             # 사용되지 않는 메모리 블록 정리
-            unused_memories = await self._find_unused_memories(
-                optimization_task.target_memory_ids
-            )
+            unused_memories = await self._find_unused_memories(optimization_task.target_memory_ids)
 
             cleaned_count = 0
             space_saved = 0
@@ -233,24 +207,18 @@ class MemoryOptimizer:
 
             optimization_task.space_saved = space_saved
 
-            logger.info(
-                f"정리 최적화 완료: {cleaned_count}개 메모리 정리, {space_saved}바이트 절약"
-            )
+            logger.info(f"정리 최적화 완료: {cleaned_count}개 메모리 정리, {space_saved}바이트 절약")
             return cleaned_count > 0
 
         except Exception as e:
             logger.error(f"정리 최적화 실패: {e}")
             return False
 
-    async def _perform_compression_optimization(
-        self, optimization_task: OptimizationTask
-    ) -> bool:
+    async def _perform_compression_optimization(self, optimization_task: OptimizationTask) -> bool:
         """압축 최적화 수행"""
         try:
             # 압축 가능한 메모리 블록 찾기
-            compressible_memories = await self._find_compressible_memories(
-                optimization_task.target_memory_ids
-            )
+            compressible_memories = await self._find_compressible_memories(optimization_task.target_memory_ids)
 
             compressed_count = 0
             space_saved = 0
@@ -273,24 +241,18 @@ class MemoryOptimizer:
 
             optimization_task.space_saved = space_saved
 
-            logger.info(
-                f"압축 최적화 완료: {compressed_count}개 메모리 압축, {space_saved}바이트 절약"
-            )
+            logger.info(f"압축 최적화 완료: {compressed_count}개 메모리 압축, {space_saved}바이트 절약")
             return compressed_count > 0
 
         except Exception as e:
             logger.error(f"압축 최적화 실패: {e}")
             return False
 
-    async def _perform_deduplication_optimization(
-        self, optimization_task: OptimizationTask
-    ) -> bool:
+    async def _perform_deduplication_optimization(self, optimization_task: OptimizationTask) -> bool:
         """중복 제거 최적화 수행"""
         try:
             # 중복된 메모리 블록 찾기
-            duplicate_groups = await self._find_duplicate_memories(
-                optimization_task.target_memory_ids
-            )
+            duplicate_groups = await self._find_duplicate_memories(optimization_task.target_memory_ids)
 
             deduplicated_count = 0
             space_saved = 0
@@ -304,9 +266,7 @@ class MemoryOptimizer:
 
                         for duplicate_id in duplicate_memories:
                             duplicate_size = await self._get_memory_size(duplicate_id)
-                            success = await self._replace_with_reference(
-                                duplicate_id, reference_memory
-                            )
+                            success = await self._replace_with_reference(duplicate_id, reference_memory)
 
                             if success:
                                 space_saved += duplicate_size
@@ -320,42 +280,30 @@ class MemoryOptimizer:
 
             optimization_task.space_saved = space_saved
 
-            logger.info(
-                f"중복 제거 최적화 완료: {deduplicated_count}개 메모리 중복 제거, {space_saved}바이트 절약"
-            )
+            logger.info(f"중복 제거 최적화 완료: {deduplicated_count}개 메모리 중복 제거, {space_saved}바이트 절약")
             return deduplicated_count > 0
 
         except Exception as e:
             logger.error(f"중복 제거 최적화 실패: {e}")
             return False
 
-    async def _perform_fragmentation_optimization(
-        self, optimization_task: OptimizationTask
-    ) -> bool:
+    async def _perform_fragmentation_optimization(self, optimization_task: OptimizationTask) -> bool:
         """단편화 최적화 수행"""
         try:
             # 단편화된 메모리 블록 찾기
-            fragmented_memories = await self._find_fragmented_memories(
-                optimization_task.target_memory_ids
-            )
+            fragmented_memories = await self._find_fragmented_memories(optimization_task.target_memory_ids)
 
             defragmented_count = 0
             space_saved = 0
 
             for memory_id in fragmented_memories:
                 try:
-                    original_fragmentation = await self._get_fragmentation_ratio(
-                        memory_id
-                    )
+                    original_fragmentation = await self._get_fragmentation_ratio(memory_id)
                     success = await self._defragment_memory(memory_id)
 
                     if success:
-                        new_fragmentation = await self._get_fragmentation_ratio(
-                            memory_id
-                        )
-                        space_saved += int(
-                            (original_fragmentation - new_fragmentation) * 1000
-                        )  # 가상의 절약 공간
+                        new_fragmentation = await self._get_fragmentation_ratio(memory_id)
+                        space_saved += int((original_fragmentation - new_fragmentation) * 1000)  # 가상의 절약 공간
                         defragmented_count += 1
                         optimization_task.items_optimized += 1
 
@@ -366,24 +314,18 @@ class MemoryOptimizer:
 
             optimization_task.space_saved = space_saved
 
-            logger.info(
-                f"단편화 최적화 완료: {defragmented_count}개 메모리 단편화 해제, {space_saved}바이트 절약"
-            )
+            logger.info(f"단편화 최적화 완료: {defragmented_count}개 메모리 단편화 해제, {space_saved}바이트 절약")
             return defragmented_count > 0
 
         except Exception as e:
             logger.error(f"단편화 최적화 실패: {e}")
             return False
 
-    async def _perform_priority_optimization(
-        self, optimization_task: OptimizationTask
-    ) -> bool:
+    async def _perform_priority_optimization(self, optimization_task: OptimizationTask) -> bool:
         """우선순위 최적화 수행"""
         try:
             # 우선순위가 낮은 메모리 블록 찾기
-            low_priority_memories = await self._find_low_priority_memories(
-                optimization_task.target_memory_ids
-            )
+            low_priority_memories = await self._find_low_priority_memories(optimization_task.target_memory_ids)
 
             optimized_count = 0
             space_saved = 0
@@ -406,9 +348,7 @@ class MemoryOptimizer:
 
             optimization_task.space_saved = space_saved
 
-            logger.info(
-                f"우선순위 최적화 완료: {optimized_count}개 메모리 최적화, {space_saved}바이트 절약"
-            )
+            logger.info(f"우선순위 최적화 완료: {optimized_count}개 메모리 최적화, {space_saved}바이트 절약")
             return optimized_count > 0
 
         except Exception as e:
@@ -490,36 +430,18 @@ class MemoryOptimizer:
             stats = {
                 "total_tasks": len(self.optimization_tasks),
                 "pending_tasks": len(
-                    [
-                        t
-                        for t in self.optimization_tasks.values()
-                        if t.status == OptimizationStatus.PENDING
-                    ]
+                    [t for t in self.optimization_tasks.values() if t.status == OptimizationStatus.PENDING]
                 ),
                 "in_progress_tasks": len(
-                    [
-                        t
-                        for t in self.optimization_tasks.values()
-                        if t.status == OptimizationStatus.IN_PROGRESS
-                    ]
+                    [t for t in self.optimization_tasks.values() if t.status == OptimizationStatus.IN_PROGRESS]
                 ),
                 "completed_tasks": len(
-                    [
-                        t
-                        for t in self.optimization_tasks.values()
-                        if t.status == OptimizationStatus.COMPLETED
-                    ]
+                    [t for t in self.optimization_tasks.values() if t.status == OptimizationStatus.COMPLETED]
                 ),
                 "failed_tasks": len(
-                    [
-                        t
-                        for t in self.optimization_tasks.values()
-                        if t.status == OptimizationStatus.FAILED
-                    ]
+                    [t for t in self.optimization_tasks.values() if t.status == OptimizationStatus.FAILED]
                 ),
-                "total_space_saved": sum(
-                    t.space_saved for t in self.optimization_tasks.values()
-                ),
+                "total_space_saved": sum(t.space_saved for t in self.optimization_tasks.values()),
                 "performance_metrics": self.performance_metrics.copy(),
             }
 

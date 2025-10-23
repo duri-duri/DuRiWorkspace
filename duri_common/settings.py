@@ -9,10 +9,9 @@ import json
 import os
 from dataclasses import dataclass
 from functools import lru_cache
-from typing import Any, Dict, List, Literal, Optional
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel
-from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class DatabaseSettings(BaseModel):
@@ -118,9 +117,7 @@ class MonitoringSettings(BaseModel):
     prometheus_url: str = "http://prometheus:9090"
     grafana_url: str = "http://grafana:3000"
     grafana_user: str = "duri-duri"
-    grafana_password: str = (
-        "DuRi@2025!"  # tests expect this - 로컬/테스트 전용, 실제 배포시 ENV로 오버라이드 필수
-    )
+    grafana_password: str = "DuRi@2025!"  # tests expect this - 로컬/테스트 전용, 실제 배포시 ENV로 오버라이드 필수
 
 
 # 간단한 dataclass 기반 설정 (테스트 호환성 우선)
@@ -174,12 +171,8 @@ class DuRiSettings:
         object.__setattr__(self, "env", cfg.get("env", "dev"))
         object.__setattr__(self, "debug", cfg.get("debug", False))
         object.__setattr__(self, "version", cfg.get("version", "latest"))
-        object.__setattr__(
-            self, "monitoring", MonitoringSettings(**cfg.get("monitoring", {}))
-        )
-        object.__setattr__(
-            self, "database", DatabaseSettings(**cfg.get("database", {}))
-        )
+        object.__setattr__(self, "monitoring", MonitoringSettings(**cfg.get("monitoring", {})))
+        object.__setattr__(self, "database", DatabaseSettings(**cfg.get("database", {})))
         object.__setattr__(self, "redis", RedisSettings())
         object.__setattr__(self, "server", ServerSettings())
         object.__setattr__(self, "evolution", EvolutionSettings())

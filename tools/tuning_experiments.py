@@ -5,7 +5,7 @@
 import json
 import random
 import time
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from tools.fusion import MonotoneLogit
 
@@ -47,7 +47,7 @@ class TuningExperiment:
             p = logit_b.prob(x)
             # k=7 시뮬레이션 (실제로는 더 많은 샘플)
             for _ in range(2):  # 추가 2개 샘플
-                p = logit_b.prob(x)
+                p = logit_b.prob(x)  # noqa: F841
 
         time_b = time.time() - start_time
 
@@ -74,9 +74,7 @@ class TuningExperiment:
             evidence_scores = [random.random() for _ in range(1000)]
 
             # ABSTAIN율 계산
-            abstain_rate = sum(1 for score in evidence_scores if score < tau) / len(
-                evidence_scores
-            )
+            abstain_rate = sum(1 for score in evidence_scores if score < tau) / len(evidence_scores)
 
             # MTTR 추정 (근거 부족 시 재탐색 시간)
             mttr = abstain_rate * 30  # 30초 재탐색 시간 가정
@@ -108,7 +106,7 @@ class TuningExperiment:
                     random.random(),
                     random.random(),
                 ]
-                p = logit.prob(x)
+                p = logit.prob(x)  # noqa: F841
 
                 if x[0] == 1:  # Core hit
                     core_hits += 1
@@ -119,9 +117,7 @@ class TuningExperiment:
 
             print(f"  β_c={beta_c}: 정체성 보호={identity_protection:.1%}")
 
-            results.append(
-                {"beta_c": beta_c, "identity_protection": identity_protection}
-            )
+            results.append({"beta_c": beta_c, "identity_protection": identity_protection})
 
         return {"experiment": "beta_c_prior", "results": results}
 
@@ -131,7 +127,7 @@ class TuningExperiment:
 
         from tools.sprt import SPRT
 
-        sprt = SPRT(p0=0.98, p1=0.995, alpha=0.05, beta=0.05)
+        sprt = SPRT(p0=0.98, p1=0.995, alpha=0.05, beta=0.05)  # noqa: F841
 
         # 시뮬레이션: 골든셋 테스트
         decisions = []

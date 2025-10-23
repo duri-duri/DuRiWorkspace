@@ -14,19 +14,16 @@ DuRi Phase 1-3 Week 3 Day 10: 종합 테스트 플랫폼
 """
 
 import asyncio
-import json
 import logging
 import time
 import traceback
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -260,9 +257,7 @@ class ComprehensiveTestingPlatform:
             parallel_execution=True,
         )
 
-    async def perform_comprehensive_tests(
-        self, test_data: Dict[str, Any]
-    ) -> TestReport:
+    async def perform_comprehensive_tests(self, test_data: Dict[str, Any]) -> TestReport:
         """
         종합 성능 테스트 수행
 
@@ -291,9 +286,7 @@ class ComprehensiveTestingPlatform:
             total_tests = len(test_results)
             passed_tests = len([r for r in test_results if r.success])
             failed_tests = len([r for r in test_results if not r.success])
-            skipped_tests = len(
-                [r for r in test_results if r.status == TestStatus.CANCELLED]
-            )
+            skipped_tests = len([r for r in test_results if r.status == TestStatus.CANCELLED])
 
             total_duration = time.time() - start_time
             success_rate = passed_tests / total_tests if total_tests > 0 else 0.0
@@ -335,9 +328,7 @@ class ComprehensiveTestingPlatform:
                 summary={"error": error_msg},
             )
 
-    async def _execute_test_suite(
-        self, test_suite: TestSuite, test_data: Dict[str, Any]
-    ) -> List[TestResult]:
+    async def _execute_test_suite(self, test_suite: TestSuite, test_data: Dict[str, Any]) -> List[TestResult]:
         """테스트 스위트 실행"""
         test_results = []
 
@@ -345,9 +336,7 @@ class ComprehensiveTestingPlatform:
             # 병렬 실행
             tasks = []
             for test_case in test_suite.test_cases:
-                task = asyncio.create_task(
-                    self._execute_test_case(test_case, test_data)
-                )
+                task = asyncio.create_task(self._execute_test_case(test_case, test_data))
                 tasks.append(task)
 
             results = await asyncio.gather(*tasks, return_exceptions=True)
@@ -357,9 +346,7 @@ class ComprehensiveTestingPlatform:
                 else:
                     # 예외 처리
                     error_result = TestResult(
-                        test_case=TestCase(
-                            "error", TestType.FUNCTIONAL, TestPriority.LOW, "", {}
-                        ),
+                        test_case=TestCase("error", TestType.FUNCTIONAL, TestPriority.LOW, "", {}),
                         status=TestStatus.FAILED,
                         start_time=datetime.now(),
                         success=False,
@@ -374,31 +361,23 @@ class ComprehensiveTestingPlatform:
 
         return test_results
 
-    async def _execute_test_case(
-        self, test_case: TestCase, test_data: Dict[str, Any]
-    ) -> TestResult:
+    async def _execute_test_case(self, test_case: TestCase, test_data: Dict[str, Any]) -> TestResult:
         """개별 테스트 케이스 실행"""
         start_time = datetime.now()
-        result = TestResult(
-            test_case=test_case, status=TestStatus.RUNNING, start_time=start_time
-        )
+        result = TestResult(test_case=test_case, status=TestStatus.RUNNING, start_time=start_time)
 
         try:
             logger.info(f"테스트 실행: {test_case.name}")
 
             # 테스트 타입에 따른 실행
             if test_case.test_type == TestType.PERFORMANCE:
-                actual_result = await self._execute_performance_test(
-                    test_case, test_data
-                )
+                actual_result = await self._execute_performance_test(test_case, test_data)
             elif test_case.test_type == TestType.STABILITY:
                 actual_result = await self._execute_stability_test(test_case, test_data)
             elif test_case.test_type == TestType.STRESS:
                 actual_result = await self._execute_stress_test(test_case, test_data)
             else:
-                actual_result = await self._execute_functional_test(
-                    test_case, test_data
-                )
+                actual_result = await self._execute_functional_test(test_case, test_data)
 
             # 결과 검증
             success = await self._validate_test_result(test_case, actual_result)
@@ -413,13 +392,9 @@ class ComprehensiveTestingPlatform:
             result.actual_result = actual_result
 
             if not success:
-                result.errors.append(
-                    f"테스트 실패: 예상 결과와 실제 결과가 일치하지 않음"
-                )
+                result.errors.append("테스트 실패: 예상 결과와 실제 결과가 일치하지 않음")
 
-            logger.info(
-                f"테스트 완료: {test_case.name} - {'성공' if success else '실패'}"
-            )
+            logger.info(f"테스트 완료: {test_case.name} - {'성공' if success else '실패'}")
 
         except Exception as e:
             error_msg = f"테스트 실행 중 오류: {str(e)}"
@@ -432,9 +407,7 @@ class ComprehensiveTestingPlatform:
 
         return result
 
-    async def _execute_performance_test(
-        self, test_case: TestCase, test_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _execute_performance_test(self, test_case: TestCase, test_data: Dict[str, Any]) -> Dict[str, Any]:
         """성능 테스트 실행"""
         if "응답 시간" in test_case.name:
             # 응답 시간 테스트
@@ -454,9 +427,7 @@ class ComprehensiveTestingPlatform:
         else:
             return {"error": "알 수 없는 성능 테스트"}
 
-    async def _execute_stability_test(
-        self, test_case: TestCase, test_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _execute_stability_test(self, test_case: TestCase, test_data: Dict[str, Any]) -> Dict[str, Any]:
         """안정성 테스트 실행"""
         if "장시간 실행" in test_case.name:
             # 장시간 실행 테스트
@@ -476,9 +447,7 @@ class ComprehensiveTestingPlatform:
         else:
             return {"error": "알 수 없는 안정성 테스트"}
 
-    async def _execute_stress_test(
-        self, test_case: TestCase, test_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _execute_stress_test(self, test_case: TestCase, test_data: Dict[str, Any]) -> Dict[str, Any]:
         """스트레스 테스트 실행"""
         if "고부하" in test_case.name:
             # 고부하 테스트
@@ -498,17 +467,13 @@ class ComprehensiveTestingPlatform:
         else:
             return {"error": "알 수 없는 스트레스 테스트"}
 
-    async def _execute_functional_test(
-        self, test_case: TestCase, test_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _execute_functional_test(self, test_case: TestCase, test_data: Dict[str, Any]) -> Dict[str, Any]:
         """기능 테스트 실행"""
         # 기본 기능 테스트 (시뮬레이션)
         await asyncio.sleep(0.1)
         return {"success": True, "functionality": "tested"}
 
-    async def _validate_test_result(
-        self, test_case: TestCase, actual_result: Dict[str, Any]
-    ) -> bool:
+    async def _validate_test_result(self, test_case: TestCase, actual_result: Dict[str, Any]) -> bool:
         """테스트 결과 검증"""
         expected = test_case.expected_result
 
@@ -517,9 +482,7 @@ class ComprehensiveTestingPlatform:
                 actual_value = actual_result[key]
 
                 # 수치 비교
-                if isinstance(expected_value, (int, float)) and isinstance(
-                    actual_value, (int, float)
-                ):
+                if isinstance(expected_value, (int, float)) and isinstance(actual_value, (int, float)):
                     if key in [
                         "response_time",
                         "memory_usage",
@@ -594,19 +557,13 @@ class ComprehensiveTestingPlatform:
         # 시뮬레이션: 95% 리소스 사용
         return 0.95
 
-    async def _generate_test_summary(
-        self, test_results: List[TestResult]
-    ) -> Dict[str, Any]:
+    async def _generate_test_summary(self, test_results: List[TestResult]) -> Dict[str, Any]:
         """테스트 요약 생성"""
         summary = {
             "total_tests": len(test_results),
             "passed_tests": len([r for r in test_results if r.success]),
             "failed_tests": len([r for r in test_results if not r.success]),
-            "average_duration": (
-                sum(r.duration for r in test_results) / len(test_results)
-                if test_results
-                else 0
-            ),
+            "average_duration": (sum(r.duration for r in test_results) / len(test_results) if test_results else 0),
             "test_types": {},
             "performance_metrics": {},
         }
@@ -628,9 +585,7 @@ class ComprehensiveTestingPlatform:
                 summary["test_types"][test_type]["failed"] += 1
 
         # 성능 메트릭 수집
-        performance_results = [
-            r for r in test_results if r.test_case.test_type == TestType.PERFORMANCE
-        ]
+        performance_results = [r for r in test_results if r.test_case.test_type == TestType.PERFORMANCE]
         if performance_results:
             response_times = [
                 r.actual_result.get("response_time", 0)
@@ -638,25 +593,17 @@ class ComprehensiveTestingPlatform:
                 if "response_time" in r.actual_result
             ]
             throughputs = [
-                r.actual_result.get("throughput", 0)
-                for r in performance_results
-                if "throughput" in r.actual_result
+                r.actual_result.get("throughput", 0) for r in performance_results if "throughput" in r.actual_result
             ]
 
             if response_times:
-                summary["performance_metrics"]["avg_response_time"] = sum(
-                    response_times
-                ) / len(response_times)
+                summary["performance_metrics"]["avg_response_time"] = sum(response_times) / len(response_times)
             if throughputs:
-                summary["performance_metrics"]["avg_throughput"] = sum(
-                    throughputs
-                ) / len(throughputs)
+                summary["performance_metrics"]["avg_throughput"] = sum(throughputs) / len(throughputs)
 
         return summary
 
-    async def conduct_stability_tests(
-        self, stability_data: Dict[str, Any]
-    ) -> TestReport:
+    async def conduct_stability_tests(self, stability_data: Dict[str, Any]) -> TestReport:
         """
         시스템 안정성 테스트 수행
 
@@ -666,9 +613,7 @@ class ComprehensiveTestingPlatform:
         Returns:
             TestReport: 테스트 보고서
         """
-        return await self.perform_comprehensive_tests(
-            {"test_suite": "stability", **stability_data}
-        )
+        return await self.perform_comprehensive_tests({"test_suite": "stability", **stability_data})
 
     async def execute_stress_tests(self, stress_data: Dict[str, Any]) -> TestReport:
         """
@@ -680,9 +625,7 @@ class ComprehensiveTestingPlatform:
         Returns:
             TestReport: 테스트 보고서
         """
-        return await self.perform_comprehensive_tests(
-            {"test_suite": "stress", **stress_data}
-        )
+        return await self.perform_comprehensive_tests({"test_suite": "stress", **stress_data})
 
     async def analyze_test_results(self, result_data: Dict[str, Any]) -> Dict[str, Any]:
         """
@@ -713,26 +656,18 @@ class ComprehensiveTestingPlatform:
                 # 전체 성공률 계산
                 total_tests = sum(r.total_tests for r in recent_reports)
                 total_passed = sum(r.passed_tests for r in recent_reports)
-                analysis["overall_success_rate"] = (
-                    total_passed / total_tests if total_tests > 0 else 0.0
-                )
+                analysis["overall_success_rate"] = total_passed / total_tests if total_tests > 0 else 0.0
 
                 # 트렌드 분석
                 analysis["trend_analysis"] = await self._analyze_trends(recent_reports)
 
                 # 성능 트렌드 분석
-                analysis["performance_trends"] = await self._analyze_performance_trends(
-                    recent_reports
-                )
+                analysis["performance_trends"] = await self._analyze_performance_trends(recent_reports)
 
                 # 권장사항 생성
-                analysis["recommendations"] = await self._generate_recommendations(
-                    recent_reports
-                )
+                analysis["recommendations"] = await self._generate_recommendations(recent_reports)
 
-            logger.info(
-                f"테스트 결과 분석 완료: 전체 성공률 {analysis['overall_success_rate']:.2%}"
-            )
+            logger.info(f"테스트 결과 분석 완료: 전체 성공률 {analysis['overall_success_rate']:.2%}")
 
             return analysis
 
@@ -764,9 +699,7 @@ class ComprehensiveTestingPlatform:
 
         return trends
 
-    async def _analyze_performance_trends(
-        self, reports: List[TestReport]
-    ) -> Dict[str, Any]:
+    async def _analyze_performance_trends(self, reports: List[TestReport]) -> Dict[str, Any]:
         """성능 트렌드 분석"""
         performance_trends = {
             "response_time_trend": [],
@@ -778,13 +711,9 @@ class ComprehensiveTestingPlatform:
             if "performance_metrics" in report.summary:
                 metrics = report.summary["performance_metrics"]
                 if "avg_response_time" in metrics:
-                    performance_trends["response_time_trend"].append(
-                        metrics["avg_response_time"]
-                    )
+                    performance_trends["response_time_trend"].append(metrics["avg_response_time"])
                 if "avg_throughput" in metrics:
-                    performance_trends["throughput_trend"].append(
-                        metrics["avg_throughput"]
-                    )
+                    performance_trends["throughput_trend"].append(metrics["avg_throughput"])
 
         return performance_trends
 
@@ -793,13 +722,9 @@ class ComprehensiveTestingPlatform:
         recommendations = []
 
         # 성공률 기반 권장사항
-        avg_success_rate = (
-            sum(r.success_rate for r in reports) / len(reports) if reports else 0.0
-        )
+        avg_success_rate = sum(r.success_rate for r in reports) / len(reports) if reports else 0.0
         if avg_success_rate < 0.8:
-            recommendations.append(
-                "전체 테스트 성공률이 낮습니다. 시스템 안정성 개선이 필요합니다."
-            )
+            recommendations.append("전체 테스트 성공률이 낮습니다. 시스템 안정성 개선이 필요합니다.")
 
         # 실패 패턴 기반 권장사항
         failure_patterns = []
@@ -817,13 +742,8 @@ class ComprehensiveTestingPlatform:
         for report in reports:
             if "performance_metrics" in report.summary:
                 metrics = report.summary["performance_metrics"]
-                if (
-                    "avg_response_time" in metrics
-                    and metrics["avg_response_time"] > 0.1
-                ):
-                    recommendations.append(
-                        "응답 시간이 느립니다. 성능 최적화가 필요합니다."
-                    )
+                if "avg_response_time" in metrics and metrics["avg_response_time"] > 0.1:
+                    recommendations.append("응답 시간이 느립니다. 성능 최적화가 필요합니다.")
 
         return recommendations
 
@@ -848,9 +768,7 @@ class ComprehensiveTestingPlatform:
             "test_suites_count": len(self.test_suites),
             "test_results_count": len(self.test_results),
             "test_reports_count": len(self.test_reports),
-            "total_tests_executed": sum(
-                len(suite.test_cases) for suite in self.test_suites.values()
-            ),
+            "total_tests_executed": sum(len(suite.test_cases) for suite in self.test_suites.values()),
         }
 
 
@@ -864,9 +782,7 @@ async def main():
 
     try:
         # 종합 성능 테스트
-        performance_report = await testing_platform.perform_comprehensive_tests(
-            {"test_suite": "performance"}
-        )
+        performance_report = await testing_platform.perform_comprehensive_tests({"test_suite": "performance"})
         print(f"성능 테스트 결과: 성공률 {performance_report.success_rate:.2%}")
 
         # 안정성 테스트
@@ -879,9 +795,7 @@ async def main():
 
         # 테스트 결과 분석
         analysis = await testing_platform.analyze_test_results({})
-        print(
-            f"테스트 분석 결과: 전체 성공률 {analysis.get('overall_success_rate', 0):.2%}"
-        )
+        print(f"테스트 분석 결과: 전체 성공률 {analysis.get('overall_success_rate', 0):.2%}")
 
         # 플랫폼 상태 출력
         status = testing_platform.get_status()

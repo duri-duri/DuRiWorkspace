@@ -12,10 +12,10 @@ from datetime import datetime
 # DuRiCore 모듈 경로 추가
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from modules.evolution import SelfEvolutionManager
-from modules.integrated_learning_system import IntegratedLearningSystem
-from modules.judgment_system import JudgmentTraceLogger
-from modules.thought_flow import SelfReflectionLoop
+from modules.evolution import SelfEvolutionManager  # noqa: E402
+from modules.integrated_learning_system import IntegratedLearningSystem  # noqa: E402
+from modules.judgment_system import JudgmentTraceLogger  # noqa: E402
+from modules.thought_flow import SelfReflectionLoop  # noqa: E402
 
 
 def test_judgment_trace_system():
@@ -71,7 +71,7 @@ def test_judgment_trace_system():
 
     # 판단 기록 요약 확인
     summary = judgment_logger.get_traces_summary()
-    print(f"\n📊 판단 기록 요약:")
+    print("\n📊 판단 기록 요약:")
     print(f"  - 총 기록 수: {summary['total_traces']}")
     print(f"  - 평균 신뢰도: {summary['average_confidence']:.2f}")
     print(f"  - 태그 분포: {summary['tag_distribution']}")
@@ -91,7 +91,7 @@ def test_reflection_loop():
     # 반성 루프 실행
     reflection_result = reflection_loop.reflection_loop("user_request")
 
-    print(f"✅ 반성 루프 실행 완료:")
+    print("✅ 반성 루프 실행 완료:")
     print(f"  - 분석된 판단 수: {reflection_result.get('traces_analyzed', 0)}")
     print(f"  - 생성된 통찰 수: {reflection_result.get('new_insights', 0)}")
     print(f"  - 업데이트된 신념 수: {reflection_result.get('beliefs_updated', 0)}")
@@ -112,12 +112,10 @@ def test_self_improvement_sequence():
     # 자기개선 시퀀스 실행
     evolution_result = evolution_manager.execute_self_improvement_sequence()
 
-    print(f"✅ 자기개선 시퀀스 실행 완료:")
+    print("✅ 자기개선 시퀀스 실행 완료:")
     print(f"  - 업데이트된 신념 수: {evolution_result.get('beliefs_updated', 0)}")
     print(f"  - 업데이트된 규칙 수: {evolution_result.get('rules_updated', 0)}")
-    print(
-        f"  - 업데이트된 행동 패턴 수: {evolution_result.get('behaviors_updated', 0)}"
-    )
+    print(f"  - 업데이트된 행동 패턴 수: {evolution_result.get('behaviors_updated', 0)}")
     print(f"  - 진화 단계 수: {evolution_result.get('evolution_steps', 0)}")
 
     return evolution_result
@@ -135,7 +133,7 @@ def test_integrated_learning_system():
     # 완전한 학습 사이클 실행
     cycle_result = integrated_system.execute_full_learning_cycle("user_request")
 
-    print(f"✅ 통합 학습 사이클 완료:")
+    print("✅ 통합 학습 사이클 완료:")
     print(f"  - 사이클 ID: {cycle_result.get('cycle_id', 'N/A')}")
     print(f"  - 트리거 타입: {cycle_result.get('trigger_type', 'N/A')}")
     print(f"  - 판단 기록 수: {cycle_result.get('judgment_traces', 0)}")
@@ -145,16 +143,10 @@ def test_integrated_learning_system():
 
     # 시스템 요약 확인
     system_summary = integrated_system.get_learning_system_summary()
-    print(f"\n📊 시스템 요약:")
-    print(
-        f"  - 판단 시스템: {system_summary.get('judgment_system', {}).get('total_traces', 0)}개 기록"
-    )
-    print(
-        f"  - 반성 시스템: {system_summary.get('reflection_system', {}).get('total_insights', 0)}개 통찰"
-    )
-    print(
-        f"  - 진화 시스템: {system_summary.get('evolution_system', {}).get('total_evolution_steps', 0)}개 단계"
-    )
+    print("\n📊 시스템 요약:")
+    print(f"  - 판단 시스템: {system_summary.get('judgment_system', {}).get('total_traces', 0)}개 기록")
+    print(f"  - 반성 시스템: {system_summary.get('reflection_system', {}).get('total_insights', 0)}개 통찰")
+    print(f"  - 진화 시스템: {system_summary.get('evolution_system', {}).get('total_evolution_steps', 0)}개 단계")
     print(f"  - 총 학습 사이클: {system_summary.get('total_learning_cycles', 0)}개")
 
     return cycle_result
@@ -218,7 +210,7 @@ def main():
             "judgment_recording_success": judgment_result.get("status") == "success",
         }
 
-        print(f"📊 최종 테스트 결과:")
+        print("📊 최종 테스트 결과:")
         for key, value in final_summary.items():
             if key != "test_timestamp":
                 print(f"  - {key}: {value}")
@@ -231,9 +223,7 @@ def main():
         ) as f:
             json.dump(final_summary, f, ensure_ascii=False, indent=2)
 
-        print(
-            f"\n💾 테스트 결과가 'test_results_integrated_learning_system.json'에 저장되었습니다."
-        )
+        print("\n💾 테스트 결과가 'test_results_integrated_learning_system.json'에 저장되었습니다.")
 
         return True
 

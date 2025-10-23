@@ -6,19 +6,12 @@ DuRi 추론 시스템 - 충돌 감지 모듈
 지식 간 충돌을 자동으로 감지하는 모듈입니다.
 """
 
-import asyncio
-import hashlib
-import json
 import logging
-import re
 import time
-from collections import Counter, defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from dataclasses import dataclass
+from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
-
-import numpy as np
+from typing import Any, Dict, List, Optional
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -65,17 +58,13 @@ class ConflictDetectionSystem:
         self.detection_patterns = {}
         self.conflict_history = []
 
-    async def detect_conflicts(
-        self, knowledge_elements: List[Dict[str, Any]]
-    ) -> List[IntegrationConflict]:
+    async def detect_conflicts(self, knowledge_elements: List[Dict[str, Any]]) -> List[IntegrationConflict]:
         """충돌 감지"""
         conflicts = []
 
         for i in range(len(knowledge_elements)):
             for j in range(i + 1, len(knowledge_elements)):
-                conflict = await self._check_for_integration_conflict(
-                    knowledge_elements[i], knowledge_elements[j]
-                )
+                conflict = await self._check_for_integration_conflict(knowledge_elements[i], knowledge_elements[j])
                 if conflict:
                     conflicts.append(conflict)
 
@@ -85,9 +74,7 @@ class ConflictDetectionSystem:
         self, element1: Dict[str, Any], element2: Dict[str, Any]
     ) -> Optional[IntegrationConflict]:
         """통합 충돌 확인"""
-        conflict_id = (
-            f"conflict_{int(time.time())}_{hash(str(element1))}_{hash(str(element2))}"
-        )
+        conflict_id = f"conflict_{int(time.time())}_{hash(str(element1))}_{hash(str(element2))}"  # noqa: F841
 
         # 값 충돌 확인
         value_conflict = await self._check_value_conflict(element1, element2)
@@ -113,9 +100,7 @@ class ConflictDetectionSystem:
         common_keys = set(element1.keys()) & set(element2.keys())
 
         for key in common_keys:
-            if isinstance(element1[key], (str, int, float)) and isinstance(
-                element2[key], (str, int, float)
-            ):
+            if isinstance(element1[key], (str, int, float)) and isinstance(element2[key], (str, int, float)):
                 if element1[key] != element2[key]:
                     return IntegrationConflict(
                         conflict_id=f"value_conflict_{int(time.time())}",
@@ -138,7 +123,7 @@ class ConflictDetectionSystem:
         common_keys = set(element1.keys()) & set(element2.keys())
 
         for key in common_keys:
-            if type(element1[key]) != type(element2[key]):
+            if type(element1[key]) != type(element2[key]):  # noqa: E721
                 return IntegrationConflict(
                     conflict_id=f"type_conflict_{int(time.time())}",
                     conflict_type=ConflictType.TYPE_CONFLICT,

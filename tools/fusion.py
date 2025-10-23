@@ -10,11 +10,7 @@ def crdt_merge(core_val, rag_candidates):
         return core_val, {"source": "core"}
     if not rag_candidates:
         return None, {"source": "none"}
-    score = (
-        lambda x: 0.6 * x.get("sim", 0)
-        + 0.2 * x.get("recency", 0)
-        + 0.2 * x.get("prov", 0)
-    )
+    score = lambda x: 0.6 * x.get("sim", 0) + 0.2 * x.get("recency", 0) + 0.2 * x.get("prov", 0)  # noqa: E731
     best = max(rag_candidates, key=score)
     return best["val"], {"source": "rag", "score": score(best)}
 
@@ -35,7 +31,7 @@ class MonotoneLogit:
         self.beta_c_min = beta_c_min
 
     def prob(self, x):
-        z = self.theta[0] + sum(t * v for t, v in zip(self.theta[1:], x))
+        z = self.theta[0] + sum(t * v for t, v in zip(self.theta[1:], x))  # noqa: B905
         return 1 / (1 + math.exp(-z))
 
     def update(self, x, y):
@@ -62,11 +58,7 @@ def decide_output(thought, cfg, policy_gate_fn, core_snapshot):
     # 1) 정책/무결성
     payload = {
         "mode": "external",
-        "output": (
-            thought["result"]
-            if isinstance(thought["result"], dict)
-            else {"text": str(thought["result"])}
-        ),
+        "output": (thought["result"] if isinstance(thought["result"], dict) else {"text": str(thought["result"])}),
         "core": core_snapshot,
     }
     if not policy_gate_fn(payload):

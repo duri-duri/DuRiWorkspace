@@ -14,7 +14,7 @@ from pydantic import BaseModel
 # DuRiCore 모듈 임포트를 위한 경로 추가
 sys.path.append(os.path.join(os.path.dirname(__file__), "../../.."))
 
-from DuRiCore.DuRiCore.modules.self_evolution import SelfEvolutionEngine
+from DuRiCore.DuRiCore.modules.self_evolution import SelfEvolutionEngine  # noqa: E402
 
 router = APIRouter()
 
@@ -56,9 +56,7 @@ async def analyze_self_evolution(request: EvolutionRequest):
         )
 
     except Exception as e:
-        raise HTTPException(
-            status_code=500, detail=f"자기 진화 분석 중 오류가 발생했습니다: {str(e)}"
-        )
+        raise HTTPException(status_code=500, detail=f"자기 진화 분석 중 오류가 발생했습니다: {str(e)}")  # noqa: B904
 
 
 @router.get("/stats")
@@ -75,9 +73,7 @@ async def get_evolution_stats():
         }
 
     except Exception as e:
-        raise HTTPException(
-            status_code=500, detail=f"통계 조회 중 오류가 발생했습니다: {str(e)}"
-        )
+        raise HTTPException(status_code=500, detail=f"통계 조회 중 오류가 발생했습니다: {str(e)}")  # noqa: B904
 
 
 @router.post("/improve")
@@ -87,9 +83,7 @@ async def trigger_self_improvement(request: EvolutionRequest):
         evolution_engine = SelfEvolutionEngine()
 
         # 자기 개선 실행
-        improvement_result = evolution_engine.trigger_improvement(
-            context=request.context or {}
-        )
+        improvement_result = evolution_engine.trigger_improvement(context=request.context or {})
 
         return {
             "success": True,
@@ -98,9 +92,7 @@ async def trigger_self_improvement(request: EvolutionRequest):
         }
 
     except Exception as e:
-        raise HTTPException(
-            status_code=500, detail=f"자기 개선 실행 중 오류가 발생했습니다: {str(e)}"
-        )
+        raise HTTPException(status_code=500, detail=f"자기 개선 실행 중 오류가 발생했습니다: {str(e)}")  # noqa: B904
 
 
 @router.get("/improvement-areas")
@@ -117,9 +109,7 @@ async def get_improvement_areas():
         }
 
     except Exception as e:
-        raise HTTPException(
-            status_code=500, detail=f"개선 영역 조회 중 오류가 발생했습니다: {str(e)}"
-        )
+        raise HTTPException(status_code=500, detail=f"개선 영역 조회 중 오류가 발생했습니다: {str(e)}")  # noqa: B904
 
 
 @router.get("/evolution-directions")
@@ -136,9 +126,7 @@ async def get_evolution_directions():
         }
 
     except Exception as e:
-        raise HTTPException(
-            status_code=500, detail=f"진화 방향 조회 중 오류가 발생했습니다: {str(e)}"
-        )
+        raise HTTPException(status_code=500, detail=f"진화 방향 조회 중 오류가 발생했습니다: {str(e)}")  # noqa: B904
 
 
 @router.get("/health")

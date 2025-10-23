@@ -42,9 +42,7 @@ def test_core_imports():
                 except ImportError:
                     pass
             if log_utils is None:
-                print(
-                    "⚠️ log_utils module not found in any expected location - skipping"
-                )
+                print("⚠️ log_utils module not found in any expected location - skipping")
 
         import duri_core.app.api
         import duri_core.app.logic
@@ -54,7 +52,7 @@ def test_core_imports():
 
         # metrics 모듈은 서브모듈 업데이트로 인해 변경될 수 있음
         try:
-            import duri_core.app.metrics
+            import duri_core.app.metrics  # noqa: F401
         except ImportError:
             print("⚠️ metrics module not found - skipping (may be moved or renamed)")
         print("✅ All core modules imported successfully")
@@ -68,7 +66,7 @@ def test_common_imports():
         import duri_common.config
         import duri_common.config.emotion_labels
         import duri_common.config.settings
-        import duri_common.logger
+        import duri_common.logger  # noqa: F401
 
         print("✅ All common modules imported successfully")
     except ImportError as e:
@@ -78,9 +76,7 @@ def test_common_imports():
 def test_emotion_alias_functions():
     """Test that emotion alias functions work correctly"""
     try:
-        from duri_common.config.emotion_labels import (ALL_EMOTIONS,
-                                                       is_valid_emotion,
-                                                       normalize_emotion)
+        from duri_common.config.emotion_labels import ALL_EMOTIONS, is_valid_emotion, normalize_emotion
 
         # Test alias normalization
         assert normalize_emotion("joy") == "happy"
@@ -89,9 +85,9 @@ def test_emotion_alias_functions():
         assert normalize_emotion("sadness") == "sad"
 
         # Test validation
-        assert is_valid_emotion("happy") == True
-        assert is_valid_emotion("sad") == True
-        assert is_valid_emotion("invalid_emotion") == False
+        assert is_valid_emotion("happy") == True  # noqa: E712
+        assert is_valid_emotion("sad") == True  # noqa: E712
+        assert is_valid_emotion("invalid_emotion") == False  # noqa: E712
 
         # Test ALL_EMOTIONS contains expected emotions
         assert "happy" in ALL_EMOTIONS
@@ -128,7 +124,6 @@ def test_settings_loading():
 def test_absolute_imports_regression():
     """Test that all modules use absolute imports (prevents relative import regression)"""
     import importlib
-    import os
 
     # Critical modules that must use absolute imports
     modules = [
@@ -164,9 +159,7 @@ def test_absolute_imports_regression():
 
                 for pattern in problematic_patterns:
                     if pattern in content:
-                        failed_imports.append(
-                            f"{module_name}: Found relative import '{pattern}'"
-                        )
+                        failed_imports.append(f"{module_name}: Found relative import '{pattern}'")
 
         except ImportError as e:
             failed_imports.append(f"{module_name}: Import failed - {e}")
@@ -174,14 +167,13 @@ def test_absolute_imports_regression():
             failed_imports.append(f"{module_name}: Unexpected error - {e}")
 
     if failed_imports:
-        pytest.fail(f"Import regression detected:\n" + "\n".join(failed_imports))
+        pytest.fail("Import regression detected:\n" + "\n".join(failed_imports))
 
     print("✅ All modules use absolute imports (no regression detected)")
 
 
 def test_emotion_normalization_integration():
     """Test emotion normalization at API level (integration test)"""
-    import json
 
     import requests
 
@@ -215,11 +207,10 @@ def test_emotion_normalization_integration():
                     data = response.json()
                     # Should not be fallback (Unknown emotion)
                     assert (
-                        data.get("decision", {}).get("fallback") == False
+                        data.get("decision", {}).get("fallback") == False  # noqa: E712
                     ), f"Emotion '{input_emotion}' should not trigger fallback"
                     assert (
-                        data.get("decision", {}).get("reason")
-                        != f"Unknown emotion: {input_emotion}"
+                        data.get("decision", {}).get("reason") != f"Unknown emotion: {input_emotion}"
                     ), f"Emotion '{input_emotion}' should be normalized, not rejected"
                 else:
                     pytest.fail(
@@ -260,7 +251,7 @@ def test_runtime_module_loading():
             failed_modules.append(f"{module_name}: {e}")
 
     if failed_modules:
-        pytest.fail(f"Critical modules failed to load:\n" + "\n".join(failed_modules))
+        pytest.fail("Critical modules failed to load:\n" + "\n".join(failed_modules))
 
 
 def test_database_manager_skip_mode():

@@ -10,7 +10,7 @@ import os
 import random
 import threading
 import time
-from typing import Any, Callable, Optional
+from typing import Callable, Optional
 
 from .adapter import get_logger
 
@@ -30,9 +30,7 @@ def _parse_rate(default: str = "1.0") -> float:
 def _get_rng(seed: Optional[int], env_seed: Optional[str]) -> random.Random:
     """스레드별 안전한 RNG를 반환합니다."""
     if not hasattr(_tls, "rng"):
-        _tls.rng = random.Random(
-            seed if seed is not None else (int(env_seed) if env_seed else None)
-        )
+        _tls.rng = random.Random(seed if seed is not None else (int(env_seed) if env_seed else None))
     return _tls.rng
 
 
@@ -58,7 +56,7 @@ def log_calls(
     def decorator(func: Callable) -> Callable:
         # --- 핵심 개선: arg 우선권 고정 및 진단용 노출 ---
         effective_sr = sample_rate if sample_rate is not None else _parse_rate()
-        setattr(func, "__log_sample_rate__", effective_sr)
+        func.__log_sample_rate__ = effective_sr
 
         log = get_logger(func.__module__, component)
 
@@ -101,9 +99,7 @@ def log_calls(
                 elapsed_ms = (time.perf_counter() - start_time) * 1000
 
                 # 오류 로그
-                log.error(
-                    f"✗ {func.__name__} 실패 ({elapsed_ms:.1f}ms): {type(e).__name__}: {e}"
-                )
+                log.error(f"✗ {func.__name__} 실패 ({elapsed_ms:.1f}ms): {type(e).__name__}: {e}")
 
                 # 원본 예외 재발생
                 raise
@@ -182,9 +178,7 @@ def log_performance(threshold_ms: float = 100.0, component: Optional[str] = None
             elapsed_ms = (time.perf_counter() - start_time) * 1000
 
             if elapsed_ms > threshold_ms:
-                log.warning(
-                    f"🐌 {func.__name__} 느림: {elapsed_ms:.1f}ms (임계값: {threshold_ms}ms)"
-                )
+                log.warning(f"🐌 {func.__name__} 느림: {elapsed_ms:.1f}ms (임계값: {threshold_ms}ms)")
 
             return result
 

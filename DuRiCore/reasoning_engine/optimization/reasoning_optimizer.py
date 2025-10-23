@@ -5,17 +5,14 @@ Phase 3 리팩토링: logical_reasoning_engine.py에서 분리
 """
 
 import logging
-import statistics
 import time
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Tuple
 
 import numpy as np
 
-from ..core.logical_processor import (InferenceType, LogicalProcessor,
-                                      LogicalStep, PremiseType,
-                                      SemanticPremise)
+from ..core.logical_processor import LogicalProcessor, LogicalStep, SemanticPremise
 
 logger = logging.getLogger(__name__)
 
@@ -99,19 +96,13 @@ class ReasoningOptimizer:
         original_performance = self._measure_performance(premises, steps)
 
         # 최적화 적용
-        optimized_premises, optimized_steps, applied_changes = self._apply_optimization(
-            premises, steps, strategy
-        )
+        optimized_premises, optimized_steps, applied_changes = self._apply_optimization(premises, steps, strategy)
 
         # 최적화된 성능 측정
-        optimized_performance = self._measure_performance(
-            optimized_premises, optimized_steps
-        )
+        optimized_performance = self._measure_performance(optimized_premises, optimized_steps)
 
         # 개선 비율 계산
-        improvement_ratio = self._calculate_improvement_ratio(
-            original_performance, optimized_performance, strategy
-        )
+        improvement_ratio = self._calculate_improvement_ratio(original_performance, optimized_performance, strategy)
 
         optimization_time = time.time() - start_time
 
@@ -131,9 +122,7 @@ class ReasoningOptimizer:
 
         return result
 
-    def _measure_performance(
-        self, premises: List[SemanticPremise], steps: List[LogicalStep]
-    ) -> Dict[str, float]:
+    def _measure_performance(self, premises: List[SemanticPremise], steps: List[LogicalStep]) -> Dict[str, float]:
         """성능 측정"""
         performance = {}
 
@@ -161,9 +150,7 @@ class ReasoningOptimizer:
 
         return performance
 
-    def _simulate_reasoning_process(
-        self, premises: List[SemanticPremise], steps: List[LogicalStep]
-    ):
+    def _simulate_reasoning_process(self, premises: List[SemanticPremise], steps: List[LogicalStep]):
         """추론 과정 시뮬레이션"""
         # 실제 추론 과정을 시뮬레이션하여 성능 측정
         for premise in premises:
@@ -172,13 +159,9 @@ class ReasoningOptimizer:
 
         for step in steps:
             # 논리적 단계 처리 시뮬레이션
-            _ = self.logical_processor.calculate_similarity(
-                step.semantic_vector, np.zeros_like(step.semantic_vector)
-            )
+            _ = self.logical_processor.calculate_similarity(step.semantic_vector, np.zeros_like(step.semantic_vector))
 
-    def _estimate_memory_usage(
-        self, premises: List[SemanticPremise], steps: List[LogicalStep]
-    ) -> float:
+    def _estimate_memory_usage(self, premises: List[SemanticPremise], steps: List[LogicalStep]) -> float:
         """메모리 사용량 추정"""
         total_memory = 0.0
 
@@ -200,9 +183,7 @@ class ReasoningOptimizer:
 
         return total_memory
 
-    def _measure_accuracy(
-        self, premises: List[SemanticPremise], steps: List[LogicalStep]
-    ) -> float:
+    def _measure_accuracy(self, premises: List[SemanticPremise], steps: List[LogicalStep]) -> float:
         """정확도 측정"""
         if not premises or not steps:
             return 0.0
@@ -251,26 +232,18 @@ class ReasoningOptimizer:
         # 평균 유효성 반환
         return sum(validities) / len(validities) if validities else 1.0
 
-    def _measure_confidence(
-        self, premises: List[SemanticPremise], steps: List[LogicalStep]
-    ) -> float:
+    def _measure_confidence(self, premises: List[SemanticPremise], steps: List[LogicalStep]) -> float:
         """신뢰도 측정"""
         if not premises and not steps:
             return 0.0
 
         # 전제들의 신뢰도
         premise_confidences = [premise.confidence for premise in premises]
-        avg_premise_confidence = (
-            sum(premise_confidences) / len(premise_confidences)
-            if premise_confidences
-            else 0.0
-        )
+        avg_premise_confidence = sum(premise_confidences) / len(premise_confidences) if premise_confidences else 0.0
 
         # 논리적 단계들의 신뢰도
         step_confidences = [step.confidence for step in steps]
-        avg_step_confidence = (
-            sum(step_confidences) / len(step_confidences) if step_confidences else 0.0
-        )
+        avg_step_confidence = sum(step_confidences) / len(step_confidences) if step_confidences else 0.0
 
         # 전체 신뢰도 계산
         if premises and steps:
@@ -297,9 +270,7 @@ class ReasoningOptimizer:
             if metric in performance:
                 # 실행 시간과 메모리 사용량은 낮을수록 좋음
                 if metric in ["execution_time", "memory_usage"]:
-                    normalized_value = max(
-                        0.0, 1.0 - performance[metric] / 1000
-                    )  # 정규화
+                    normalized_value = max(0.0, 1.0 - performance[metric] / 1000)  # 정규화
                 else:
                     normalized_value = performance[metric]
 
@@ -319,33 +290,23 @@ class ReasoningOptimizer:
         applied_changes = []
 
         if strategy == OptimizationStrategy.SPEED_OPTIMIZATION:
-            optimized_premises, optimized_steps, changes = (
-                self._apply_speed_optimization(premises, steps)
-            )
+            optimized_premises, optimized_steps, changes = self._apply_speed_optimization(premises, steps)
             applied_changes.extend(changes)
 
         elif strategy == OptimizationStrategy.ACCURACY_OPTIMIZATION:
-            optimized_premises, optimized_steps, changes = (
-                self._apply_accuracy_optimization(premises, steps)
-            )
+            optimized_premises, optimized_steps, changes = self._apply_accuracy_optimization(premises, steps)
             applied_changes.extend(changes)
 
         elif strategy == OptimizationStrategy.MEMORY_OPTIMIZATION:
-            optimized_premises, optimized_steps, changes = (
-                self._apply_memory_optimization(premises, steps)
-            )
+            optimized_premises, optimized_steps, changes = self._apply_memory_optimization(premises, steps)
             applied_changes.extend(changes)
 
         elif strategy == OptimizationStrategy.BALANCED_OPTIMIZATION:
-            optimized_premises, optimized_steps, changes = (
-                self._apply_balanced_optimization(premises, steps)
-            )
+            optimized_premises, optimized_steps, changes = self._apply_balanced_optimization(premises, steps)
             applied_changes.extend(changes)
 
         elif strategy == OptimizationStrategy.ADAPTIVE_OPTIMIZATION:
-            optimized_premises, optimized_steps, changes = (
-                self._apply_adaptive_optimization(premises, steps)
-            )
+            optimized_premises, optimized_steps, changes = self._apply_adaptive_optimization(premises, steps)
             applied_changes.extend(changes)
 
         return optimized_premises, optimized_steps, applied_changes
@@ -359,9 +320,7 @@ class ReasoningOptimizer:
         # 불필요한 전제 제거
         optimized_premises = self._remove_redundant_premises(premises)
         if len(optimized_premises) < len(premises):
-            changes.append(
-                f"중복 전제 {len(premises) - len(optimized_premises)}개 제거"
-            )
+            changes.append(f"중복 전제 {len(premises) - len(optimized_premises)}개 제거")
 
         # 간단한 논리적 단계로 단순화
         optimized_steps = self._simplify_logical_steps(steps)
@@ -409,14 +368,12 @@ class ReasoningOptimizer:
         changes = []
 
         # 속도와 정확도의 균형
-        optimized_premises, optimized_steps, speed_changes = (
-            self._apply_speed_optimization(premises, steps)
-        )
+        optimized_premises, optimized_steps, speed_changes = self._apply_speed_optimization(premises, steps)
         changes.extend(speed_changes)
 
         # 정확도 보완
-        optimized_premises, optimized_steps, accuracy_changes = (
-            self._apply_accuracy_optimization(optimized_premises, optimized_steps)
+        optimized_premises, optimized_steps, accuracy_changes = self._apply_accuracy_optimization(
+            optimized_premises, optimized_steps
         )
         changes.extend(accuracy_changes)
 
@@ -431,24 +388,20 @@ class ReasoningOptimizer:
         # 성능 이력을 기반으로 최적 전략 선택
         if self.performance_history:
             best_strategy = self._select_best_strategy()
-            optimized_premises, optimized_steps, strategy_changes = (
-                self._apply_optimization(premises, steps, best_strategy)
+            optimized_premises, optimized_steps, strategy_changes = self._apply_optimization(
+                premises, steps, best_strategy
             )
             changes.extend(strategy_changes)
             changes.append(f"적응적 전략 적용: {best_strategy.value}")
         else:
             # 이력이 없으면 균형잡힌 최적화 적용
-            optimized_premises, optimized_steps, balanced_changes = (
-                self._apply_balanced_optimization(premises, steps)
-            )
+            optimized_premises, optimized_steps, balanced_changes = self._apply_balanced_optimization(premises, steps)
             changes.extend(balanced_changes)
             changes.append("기본 균형잡힌 최적화 적용")
 
         return optimized_premises, optimized_steps, changes
 
-    def _remove_redundant_premises(
-        self, premises: List[SemanticPremise]
-    ) -> List[SemanticPremise]:
+    def _remove_redundant_premises(self, premises: List[SemanticPremise]) -> List[SemanticPremise]:
         """중복 전제 제거"""
         if len(premises) <= 1:
             return premises
@@ -498,9 +451,7 @@ class ReasoningOptimizer:
 
         return simplified_steps
 
-    def _merge_logical_steps(
-        self, step1: LogicalStep, step2: LogicalStep
-    ) -> LogicalStep:
+    def _merge_logical_steps(self, step1: LogicalStep, step2: LogicalStep) -> LogicalStep:
         """논리적 단계 병합"""
         # 두 단계의 의미 벡터를 평균
         merged_vector = (step1.semantic_vector + step2.semantic_vector) / 2
@@ -523,9 +474,7 @@ class ReasoningOptimizer:
             logical_strength=merged_strength,
         )
 
-    def _enhance_premise_confidence(
-        self, premises: List[SemanticPremise]
-    ) -> List[SemanticPremise]:
+    def _enhance_premise_confidence(self, premises: List[SemanticPremise]) -> List[SemanticPremise]:
         """전제 신뢰도 향상"""
         enhanced_premises = []
 
@@ -555,9 +504,7 @@ class ReasoningOptimizer:
 
         return enhanced_steps
 
-    def _compress_semantic_vectors(
-        self, premises: List[SemanticPremise]
-    ) -> List[SemanticPremise]:
+    def _compress_semantic_vectors(self, premises: List[SemanticPremise]) -> List[SemanticPremise]:
         """의미 벡터 압축"""
         compressed_premises = []
 
@@ -610,13 +557,9 @@ class ReasoningOptimizer:
         # 각 전략별 평균 개선 비율 계산
         strategy_improvements = {}
         for strategy in OptimizationStrategy:
-            strategy_results = [
-                r for r in self.performance_history if r.strategy == strategy
-            ]
+            strategy_results = [r for r in self.performance_history if r.strategy == strategy]
             if strategy_results:
-                avg_improvement = sum(
-                    r.improvement_ratio for r in strategy_results
-                ) / len(strategy_results)
+                avg_improvement = sum(r.improvement_ratio for r in strategy_results) / len(strategy_results)
                 strategy_improvements[strategy] = avg_improvement
 
         # 가장 높은 개선 비율을 가진 전략 선택
@@ -637,29 +580,19 @@ class ReasoningOptimizer:
             # 속도 개선 비율
             original_time = original_performance.get("execution_time", 1.0)
             optimized_time = optimized_performance.get("execution_time", 1.0)
-            improvement = (
-                (original_time - optimized_time) / original_time
-                if original_time > 0
-                else 0.0
-            )
+            improvement = (original_time - optimized_time) / original_time if original_time > 0 else 0.0
 
         elif strategy == OptimizationStrategy.ACCURACY_OPTIMIZATION:
             # 정확도 개선 비율
             original_accuracy = original_performance.get("accuracy", 0.0)
             optimized_accuracy = optimized_performance.get("accuracy", 0.0)
-            improvement = (optimized_accuracy - original_accuracy) / max(
-                original_accuracy, 0.1
-            )
+            improvement = (optimized_accuracy - original_accuracy) / max(original_accuracy, 0.1)
 
         elif strategy == OptimizationStrategy.MEMORY_OPTIMIZATION:
             # 메모리 사용량 개선 비율
             original_memory = original_performance.get("memory_usage", 1.0)
             optimized_memory = optimized_performance.get("memory_usage", 1.0)
-            improvement = (
-                (original_memory - optimized_memory) / original_memory
-                if original_memory > 0
-                else 0.0
-            )
+            improvement = (original_memory - optimized_memory) / original_memory if original_memory > 0 else 0.0
 
         else:
             # 전체 점수 개선 비율

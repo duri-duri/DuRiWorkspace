@@ -7,7 +7,7 @@ DuRi 메모리 관리 시스템
 import json
 import os
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 
 class MemoryManager:

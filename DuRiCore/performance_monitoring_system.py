@@ -11,26 +11,20 @@ DuRi 성능 모니터링 시스템 - Phase 1-3 Week 3 Day 8
 """
 
 import asyncio
-import json
 import logging
-import queue
 import statistics
-import threading
 import time
 import uuid
-import weakref
-from collections import defaultdict, deque
-from dataclasses import asdict, dataclass, field
+from collections import defaultdict
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Set
 
 import numpy as np
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -284,8 +278,7 @@ class PerformanceMonitoringSystem:
         relevant_metrics = [
             metric
             for metric in self.performance_metrics.values()
-            if metric.metric_name == metric_name
-            and start_time <= metric.timestamp <= end_time
+            if metric.metric_name == metric_name and start_time <= metric.timestamp <= end_time
         ]
 
         if not relevant_metrics:
@@ -324,15 +317,11 @@ class PerformanceMonitoringSystem:
 
         # 시간 범위 내 데이터 수집
         relevant_metrics = [
-            metric
-            for metric in self.performance_metrics.values()
-            if start_time <= metric.timestamp <= end_time
+            metric for metric in self.performance_metrics.values() if start_time <= metric.timestamp <= end_time
         ]
 
         relevant_alerts = [
-            alert
-            for alert in self.performance_alerts.values()
-            if start_time <= alert.timestamp <= end_time
+            alert for alert in self.performance_alerts.values() if start_time <= alert.timestamp <= end_time
         ]
 
         relevant_suggestions = [
@@ -435,11 +424,7 @@ class PerformanceMonitoringSystem:
             threshold = thresholds[metric.metric_name]
 
             if metric.value > threshold:
-                alert_level = (
-                    AlertLevel.WARNING
-                    if metric.value < threshold * 1.5
-                    else AlertLevel.ERROR
-                )
+                alert_level = AlertLevel.WARNING if metric.value < threshold * 1.5 else AlertLevel.ERROR
                 alert_message = f"{metric.metric_name}이 임계값({threshold})을 초과했습니다. 현재 값: {metric.value}"
 
                 await self.generate_performance_alert(
@@ -478,9 +463,7 @@ class PerformanceMonitoringSystem:
         else:
             return "stable"
 
-    def _generate_metrics_summary(
-        self, metrics: List[PerformanceMetric]
-    ) -> Dict[str, Any]:
+    def _generate_metrics_summary(self, metrics: List[PerformanceMetric]) -> Dict[str, Any]:
         """메트릭 요약 생성"""
         if not metrics:
             return {}
@@ -502,9 +485,7 @@ class PerformanceMonitoringSystem:
 
         return summary
 
-    def _generate_alerts_summary(
-        self, alerts: List[PerformanceAlert]
-    ) -> Dict[str, Any]:
+    def _generate_alerts_summary(self, alerts: List[PerformanceAlert]) -> Dict[str, Any]:
         """알림 요약 생성"""
         if not alerts:
             return {}
@@ -524,9 +505,7 @@ class PerformanceMonitoringSystem:
 
         return summary
 
-    def _generate_suggestions_summary(
-        self, suggestions: List[OptimizationSuggestion]
-    ) -> Dict[str, Any]:
+    def _generate_suggestions_summary(self, suggestions: List[OptimizationSuggestion]) -> Dict[str, Any]:
         """제안 요약 생성"""
         if not suggestions:
             return {}
@@ -542,9 +521,7 @@ class PerformanceMonitoringSystem:
                 "count": len(type_suggestions),
                 "implemented": len([s for s in type_suggestions if s.implemented]),
                 "pending": len([s for s in type_suggestions if not s.implemented]),
-                "average_improvement": statistics.mean(
-                    [s.expected_improvement for s in type_suggestions]
-                ),
+                "average_improvement": statistics.mean([s.expected_improvement for s in type_suggestions]),
             }
 
         return summary
@@ -609,20 +586,15 @@ class PerformanceMonitoringSystem:
         recent_alerts = [
             alert
             for alert in self.performance_alerts.values()
-            if alert.timestamp >= datetime.now() - timedelta(hours=1)
-            and not alert.resolved
+            if alert.timestamp >= datetime.now() - timedelta(hours=1) and not alert.resolved
         ]
 
         if not recent_alerts:
             return recommendations
 
         # 알림 레벨별 분석
-        critical_alerts = [
-            alert for alert in recent_alerts if alert.alert_level == AlertLevel.CRITICAL
-        ]
-        error_alerts = [
-            alert for alert in recent_alerts if alert.alert_level == AlertLevel.ERROR
-        ]
+        critical_alerts = [alert for alert in recent_alerts if alert.alert_level == AlertLevel.CRITICAL]
+        error_alerts = [alert for alert in recent_alerts if alert.alert_level == AlertLevel.ERROR]
 
         if critical_alerts:
             recommendations.append(

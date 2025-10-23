@@ -31,9 +31,7 @@ def validate_log_file(log_file: str, schema_file: str) -> bool:
                         print(f"❌ JSON decode error at line {line_num}: {e}")
                         return False
                     except jsonschema.ValidationError as e:
-                        print(
-                            f"❌ Schema validation error at line {line_num}: {e.message}"
-                        )
+                        print(f"❌ Schema validation error at line {line_num}: {e.message}")
                         return False
 
         print(f"✅ Schema validation passed for {log_file}")

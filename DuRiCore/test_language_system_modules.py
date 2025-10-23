@@ -8,11 +8,9 @@ DuRi 언어 시스템 모듈 테스트
 
 import asyncio
 import logging
-from typing import Any, Dict
 
 from language_system.core.data_structures import LanguageGenerationType
-from language_system.core.integrated_language_system import \
-    IntegratedLanguageUnderstandingGenerationSystem
+from language_system.core.integrated_language_system import IntegratedLanguageUnderstandingGenerationSystem
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -66,7 +64,7 @@ async def test_language_system_modules():
                 understanding_result = result.understanding_result
                 generation_result = result.generation_result
 
-                logger.info(f"✅ 테스트 성공:")
+                logger.info("✅ 테스트 성공:")
                 logger.info(f"  - 입력 텍스트: {test_case['text']}")
                 logger.info(f"  - 이해 의도: {understanding_result.intent}")
                 logger.info(f"  - 감정 톤: {understanding_result.emotional_tone}")
@@ -79,9 +77,7 @@ async def test_language_system_modules():
                         "description": test_case["description"],
                         "success": True,
                         "integration_score": result.integration_score,
-                        "processing_time": result.system_performance.get(
-                            "processing_time", 0
-                        ),
+                        "processing_time": result.system_performance.get("processing_time", 0),
                     }
                 )
 
@@ -106,21 +102,15 @@ async def test_language_system_modules():
         logger.info(f"실패: {len(failed_tests)}")
 
         if successful_tests:
-            avg_integration_score = sum(
-                r["integration_score"] for r in successful_tests
-            ) / len(successful_tests)
-            avg_processing_time = sum(
-                r["processing_time"] for r in successful_tests
-            ) / len(successful_tests)
+            avg_integration_score = sum(r["integration_score"] for r in successful_tests) / len(successful_tests)
+            avg_processing_time = sum(r["processing_time"] for r in successful_tests) / len(successful_tests)
             logger.info(f"평균 통합 점수: {avg_integration_score:.2f}")
             logger.info(f"평균 처리 시간: {avg_processing_time:.2f}초")
 
         if failed_tests:
             logger.error("실패한 테스트:")
             for test in failed_tests:
-                logger.error(
-                    f"  - 테스트 {test['test_case']}: {test['description']} - {test['error']}"
-                )
+                logger.error(f"  - 테스트 {test['test_case']}: {test['description']} - {test['error']}")
 
         # 시스템 상태 조회
         system_status = await language_system.get_system_status()

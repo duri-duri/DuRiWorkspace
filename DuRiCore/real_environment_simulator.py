@@ -5,16 +5,13 @@ DuRiCore Phase 5 Day 6 - 실제 환경 시뮬레이터
 """
 
 import asyncio
-import json
 import logging
-import math
 import random
-import statistics
 import time
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 
@@ -124,14 +121,10 @@ class RealEnvironmentSimulator:
 
         logger.info("실제 환경 시뮬레이터 초기화 완료")
 
-    async def simulate_real_scenarios(
-        self, scenario_data: List[Dict[str, Any]]
-    ) -> List[SimulationResult]:
+    async def simulate_real_scenarios(self, scenario_data: List[Dict[str, Any]]) -> List[SimulationResult]:
         """실제 시나리오 시뮬레이션"""
         try:
-            logger.info(
-                f"실제 시나리오 시뮬레이션 시작: {len(scenario_data)}개 시나리오"
-            )
+            logger.info(f"실제 시나리오 시뮬레이션 시작: {len(scenario_data)}개 시나리오")
 
             simulation_results = []
 
@@ -150,9 +143,7 @@ class RealEnvironmentSimulator:
             logger.error(f"시뮬레이션 실행 중 오류: {e}")
             return []
 
-    async def test_system_resilience(
-        self, stress_test_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def test_system_resilience(self, stress_test_data: Dict[str, Any]) -> Dict[str, Any]:
         """시스템 복원력 테스트"""
         try:
             logger.info("시스템 복원력 테스트 시작")
@@ -170,14 +161,10 @@ class RealEnvironmentSimulator:
             # 각 스트레스 시나리오 실행
             for scenario in stress_scenarios:
                 result = await self._execute_stress_test(scenario)
-                resilience_metrics = await self._update_resilience_metrics(
-                    resilience_metrics, result
-                )
+                resilience_metrics = await self._update_resilience_metrics(resilience_metrics, result)
 
             # 복원력 분석
-            resilience_analysis = await self._analyze_resilience_metrics(
-                resilience_metrics
-            )
+            resilience_analysis = await self._analyze_resilience_metrics(resilience_metrics)
 
             logger.info("시스템 복원력 테스트 완료")
             return resilience_analysis
@@ -186,9 +173,7 @@ class RealEnvironmentSimulator:
             logger.error(f"복원력 테스트 중 오류: {e}")
             return {"error": str(e)}
 
-    async def validate_integration_stability(
-        self, stability_metrics: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def validate_integration_stability(self, stability_metrics: Dict[str, Any]) -> Dict[str, Any]:
         """통합 안정성 검증"""
         try:
             logger.info("통합 안정성 검증 시작")
@@ -206,21 +191,15 @@ class RealEnvironmentSimulator:
                     stability_analysis["overall_stability"] = metric_value
                 elif metric_name.startswith("component_"):
                     component_name = metric_name.replace("component_", "")
-                    stability_analysis["component_stability"][
-                        component_name
-                    ] = metric_value
+                    stability_analysis["component_stability"][component_name] = metric_value
                 elif metric_name == "integration_stability":
                     stability_analysis["integration_stability"] = metric_value
 
             # 안정성 트렌드 분석
-            stability_analysis["stability_trends"] = (
-                await self._analyze_stability_trends(stability_metrics)
-            )
+            stability_analysis["stability_trends"] = await self._analyze_stability_trends(stability_metrics)
 
             # 안정성 검증
-            validation_result = await self._validate_stability_requirements(
-                stability_analysis
-            )
+            validation_result = await self._validate_stability_requirements(stability_analysis)
 
             logger.info("통합 안정성 검증 완료")
             return validation_result
@@ -229,9 +208,7 @@ class RealEnvironmentSimulator:
             logger.error(f"안정성 검증 중 오류: {e}")
             return {"error": str(e)}
 
-    async def measure_real_world_performance(
-        self, performance_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def measure_real_world_performance(self, performance_data: Dict[str, Any]) -> Dict[str, Any]:
         """실제 환경 성능 측정"""
         try:
             logger.info("실제 환경 성능 측정 시작")
@@ -250,19 +227,13 @@ class RealEnvironmentSimulator:
                     performance_metrics[metric_name] = metric_value
 
             # 성능 지표 계산
-            overall_performance = await self._calculate_overall_performance(
-                performance_metrics
-            )
+            overall_performance = await self._calculate_overall_performance(performance_metrics)
 
             # 성능 분석
-            performance_analysis = await self._analyze_performance_metrics(
-                performance_metrics
-            )
+            performance_analysis = await self._analyze_performance_metrics(performance_metrics)
 
             # 성능 권장사항 생성
-            recommendations = await self._generate_performance_recommendations(
-                performance_analysis
-            )
+            recommendations = await self._generate_performance_recommendations(performance_analysis)
 
             result = {
                 "overall_performance": overall_performance,
@@ -278,17 +249,13 @@ class RealEnvironmentSimulator:
             logger.error(f"성능 측정 중 오류: {e}")
             return {"error": str(e)}
 
-    async def _create_environment_scenario(
-        self, scenario_info: Dict[str, Any]
-    ) -> EnvironmentScenario:
+    async def _create_environment_scenario(self, scenario_info: Dict[str, Any]) -> EnvironmentScenario:
         """환경 시나리오 생성"""
         scenario_id = f"scenario_{int(time.time())}_{random.randint(1000, 9999)}"
 
         return EnvironmentScenario(
             scenario_id=scenario_id,
-            environment_type=EnvironmentType(
-                scenario_info.get("environment_type", "stable")
-            ),
+            environment_type=EnvironmentType(scenario_info.get("environment_type", "stable")),
             scenario_type=ScenarioType(scenario_info.get("scenario_type", "normal")),
             complexity_level=scenario_info.get("complexity_level", 1),
             stress_level=scenario_info.get("stress_level", 0.0),
@@ -297,9 +264,7 @@ class RealEnvironmentSimulator:
             created_at=datetime.now(),
         )
 
-    async def _execute_single_simulation(
-        self, scenario: EnvironmentScenario
-    ) -> SimulationResult:
+    async def _execute_single_simulation(self, scenario: EnvironmentScenario) -> SimulationResult:
         """단일 시뮬레이션 실행"""
         try:
             start_time = time.time()
@@ -308,14 +273,10 @@ class RealEnvironmentSimulator:
             simulation_data = await self._simulate_environment_conditions(scenario)
 
             # 성능 측정
-            performance_metrics = await self._measure_simulation_performance(
-                simulation_data
-            )
+            performance_metrics = await self._measure_simulation_performance(simulation_data)
 
             # 적응 성공 여부 판단
-            adaptation_success = await self._evaluate_adaptation_success(
-                performance_metrics
-            )
+            adaptation_success = await self._evaluate_adaptation_success(performance_metrics)
 
             # 안정성 점수 계산
             stability_score = await self._calculate_stability_score(performance_metrics)
@@ -339,9 +300,7 @@ class RealEnvironmentSimulator:
             logger.error(f"시뮬레이션 실행 중 오류: {e}")
             return await self._create_failed_simulation_result(scenario.scenario_id)
 
-    async def _generate_stress_scenarios(
-        self, stress_test_data: Dict[str, Any]
-    ) -> List[EnvironmentScenario]:
+    async def _generate_stress_scenarios(self, stress_test_data: Dict[str, Any]) -> List[EnvironmentScenario]:
         """스트레스 시나리오 생성"""
         scenarios = []
 
@@ -367,9 +326,7 @@ class RealEnvironmentSimulator:
 
         return scenarios
 
-    async def _execute_stress_test(
-        self, scenario: EnvironmentScenario
-    ) -> Dict[str, Any]:
+    async def _execute_stress_test(self, scenario: EnvironmentScenario) -> Dict[str, Any]:
         """스트레스 테스트 실행"""
         try:
             start_time = time.time()
@@ -397,9 +354,7 @@ class RealEnvironmentSimulator:
             logger.error(f"스트레스 테스트 실행 중 오류: {e}")
             return {"error": str(e)}
 
-    async def _simulate_environment_conditions(
-        self, scenario: EnvironmentScenario
-    ) -> Dict[str, Any]:
+    async def _simulate_environment_conditions(self, scenario: EnvironmentScenario) -> Dict[str, Any]:
         """환경 조건 시뮬레이션"""
         # 실제 환경 조건을 시뮬레이션
         conditions = {
@@ -417,9 +372,7 @@ class RealEnvironmentSimulator:
 
         return conditions
 
-    async def _measure_simulation_performance(
-        self, simulation_data: Dict[str, Any]
-    ) -> Dict[str, float]:
+    async def _measure_simulation_performance(self, simulation_data: Dict[str, Any]) -> Dict[str, float]:
         """시뮬레이션 성능 측정"""
         performance = {
             "response_time": random.uniform(0.1, 2.0),
@@ -436,9 +389,7 @@ class RealEnvironmentSimulator:
 
         return performance
 
-    async def _evaluate_adaptation_success(
-        self, performance_metrics: Dict[str, float]
-    ) -> bool:
+    async def _evaluate_adaptation_success(self, performance_metrics: Dict[str, float]) -> bool:
         """적응 성공 여부 평가"""
         # 성능 지표를 기반으로 적응 성공 여부 판단
         adaptation_score = (
@@ -449,9 +400,7 @@ class RealEnvironmentSimulator:
 
         return adaptation_score >= self.adaptation_threshold
 
-    async def _calculate_stability_score(
-        self, performance_metrics: Dict[str, float]
-    ) -> float:
+    async def _calculate_stability_score(self, performance_metrics: Dict[str, float]) -> float:
         """안정성 점수 계산"""
         stability_score = (
             performance_metrics.get("stability", 0) * 0.5
@@ -461,9 +410,7 @@ class RealEnvironmentSimulator:
 
         return min(stability_score, 1.0)
 
-    async def _simulate_stress_conditions(
-        self, scenario: EnvironmentScenario
-    ) -> Dict[str, Any]:
+    async def _simulate_stress_conditions(self, scenario: EnvironmentScenario) -> Dict[str, Any]:
         """스트레스 조건 시뮬레이션"""
         stress_conditions = {
             "high_load": scenario.stress_level > 0.7,
@@ -474,9 +421,7 @@ class RealEnvironmentSimulator:
 
         return stress_conditions
 
-    async def _measure_system_response(
-        self, stress_conditions: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _measure_system_response(self, stress_conditions: Dict[str, Any]) -> Dict[str, Any]:
         """시스템 반응 측정"""
         response = {
             "load_handling": random.uniform(0.6, 0.95),
@@ -505,9 +450,7 @@ class RealEnvironmentSimulator:
 
         return resilience_score
 
-    async def _analyze_stability_trends(
-        self, stability_metrics: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    async def _analyze_stability_trends(self, stability_metrics: Dict[str, Any]) -> List[Dict[str, Any]]:
         """안정성 트렌드 분석"""
         trends = []
 
@@ -527,19 +470,14 @@ class RealEnvironmentSimulator:
 
         return trends
 
-    async def _validate_stability_requirements(
-        self, stability_analysis: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _validate_stability_requirements(self, stability_analysis: Dict[str, Any]) -> Dict[str, Any]:
         """안정성 요구사항 검증"""
         validation_result = {
-            "overall_stability_met": stability_analysis["overall_stability"]
-            >= self.stability_threshold,
+            "overall_stability_met": stability_analysis["overall_stability"] >= self.stability_threshold,
             "component_stability_met": all(
-                score >= self.stability_threshold
-                for score in stability_analysis["component_stability"].values()
+                score >= self.stability_threshold for score in stability_analysis["component_stability"].values()
             ),
-            "integration_stability_met": stability_analysis["integration_stability"]
-            >= self.stability_threshold,
+            "integration_stability_met": stability_analysis["integration_stability"] >= self.stability_threshold,
             "recommendations": [],
         }
 
@@ -549,32 +487,22 @@ class RealEnvironmentSimulator:
 
         for component, score in stability_analysis["component_stability"].items():
             if score < self.stability_threshold:
-                validation_result["recommendations"].append(
-                    f"{component} 컴포넌트 안정성 개선 필요"
-                )
+                validation_result["recommendations"].append(f"{component} 컴포넌트 안정성 개선 필요")
 
         return validation_result
 
-    async def _calculate_overall_performance(
-        self, performance_metrics: Dict[str, float]
-    ) -> float:
+    async def _calculate_overall_performance(self, performance_metrics: Dict[str, float]) -> float:
         """전체 성능 계산"""
         overall_performance = (
-            performance_metrics.get("response_time", 0)
-            * self.performance_indicators["response_time"]
-            + performance_metrics.get("accuracy", 0)
-            * self.performance_indicators["accuracy"]
-            + performance_metrics.get("adaptability", 0)
-            * self.performance_indicators["adaptability"]
-            + performance_metrics.get("stability", 0)
-            * self.performance_indicators["stability"]
+            performance_metrics.get("response_time", 0) * self.performance_indicators["response_time"]
+            + performance_metrics.get("accuracy", 0) * self.performance_indicators["accuracy"]
+            + performance_metrics.get("adaptability", 0) * self.performance_indicators["adaptability"]
+            + performance_metrics.get("stability", 0) * self.performance_indicators["stability"]
         )
 
         return overall_performance
 
-    async def _analyze_performance_metrics(
-        self, performance_metrics: Dict[str, float]
-    ) -> Dict[str, Any]:
+    async def _analyze_performance_metrics(self, performance_metrics: Dict[str, float]) -> Dict[str, Any]:
         """성능 지표 분석"""
         analysis = {
             "strengths": [],
@@ -592,15 +520,11 @@ class RealEnvironmentSimulator:
                 analysis["improvement_areas"].append(metric_name)
 
         # 성능 점수 계산
-        analysis["performance_score"] = sum(performance_metrics.values()) / len(
-            performance_metrics
-        )
+        analysis["performance_score"] = sum(performance_metrics.values()) / len(performance_metrics)
 
         return analysis
 
-    async def _generate_performance_recommendations(
-        self, performance_analysis: Dict[str, Any]
-    ) -> List[str]:
+    async def _generate_performance_recommendations(self, performance_analysis: Dict[str, Any]) -> List[str]:
         """성능 개선 권장사항 생성"""
         recommendations = []
 
@@ -616,9 +540,7 @@ class RealEnvironmentSimulator:
 
         return recommendations
 
-    async def _create_failed_simulation_result(
-        self, scenario_id: str
-    ) -> SimulationResult:
+    async def _create_failed_simulation_result(self, scenario_id: str) -> SimulationResult:
         """실패한 시뮬레이션 결과 생성"""
         return SimulationResult(
             result_id=f"failed_result_{int(time.time())}",
@@ -699,9 +621,7 @@ async def test_real_environment_simulator():
         "reliability": 0.92,
         "adaptability": 0.78,
     }
-    performance_result = await simulator.measure_real_world_performance(
-        performance_data
-    )
+    performance_result = await simulator.measure_real_world_performance(performance_data)
     print(f"   - 성능 측정 완료: {performance_result}")
 
     print("=== 실제 환경 시뮬레이터 테스트 완료 ===")

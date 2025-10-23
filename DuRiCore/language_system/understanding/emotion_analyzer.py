@@ -11,7 +11,7 @@ DuRi 언어 이해 시스템 - 감정 분석기
 
 import logging
 from dataclasses import dataclass
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 logger = logging.getLogger(__name__)
 
@@ -45,9 +45,7 @@ class EmotionAnalyzer:
         }
         self.logger.info("감정 분석기 초기화 완료")
 
-    async def analyze_emotion(
-        self, text: str, context: Dict[str, Any] = None
-    ) -> Dict[str, Any]:
+    async def analyze_emotion(self, text: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
         """감정 분석"""
         try:
             emotion_scores = {}
@@ -61,19 +59,11 @@ class EmotionAnalyzer:
                 emotion_scores[emotion] = score
 
             # 주요 감정 결정
-            primary_emotion = (
-                max(emotion_scores.items(), key=lambda x: x[1])[0]
-                if emotion_scores
-                else "중립"
-            )
+            primary_emotion = max(emotion_scores.items(), key=lambda x: x[1])[0] if emotion_scores else "중립"
 
             # 감정 강도 계산
             total_emotion_words = sum(emotion_scores.values())
-            emotion_intensity = (
-                min(total_emotion_words / len(text.split()), 1.0)
-                if text.split()
-                else 0.0
-            )
+            emotion_intensity = min(total_emotion_words / len(text.split()), 1.0) if text.split() else 0.0
 
             return {
                 "primary_emotion": primary_emotion,

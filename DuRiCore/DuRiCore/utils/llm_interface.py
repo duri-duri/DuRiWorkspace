@@ -10,11 +10,10 @@ import json
 import logging
 import os
 import time
-from concurrent.futures import ThreadPoolExecutor
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 
 import aiohttp
 
@@ -195,12 +194,8 @@ class AsyncLLMInterface:
                 response.processing_time = processing_time
 
                 # 응답 품질 평가
-                response.quality_score = self._evaluate_response_quality(
-                    response.content, query_type
-                )
-                response.confidence_score = self._calculate_confidence_score(
-                    response.content, query_type
-                )
+                response.quality_score = self._evaluate_response_quality(response.content, query_type)
+                response.confidence_score = self._calculate_confidence_score(response.content, query_type)
 
                 # 캐시에 저장
                 self.response_cache[cache_key] = response
@@ -211,9 +206,7 @@ class AsyncLLMInterface:
                 self.response_history.append(response)
                 self.stats["total_responses"] += 1
 
-                logger.info(
-                    f"LLM 응답 완료: {request_id} (처리시간: {processing_time:.2f}s)"
-                )
+                logger.info(f"LLM 응답 완료: {request_id} (처리시간: {processing_time:.2f}s)")
                 return response
 
         except Exception as e:
@@ -236,9 +229,7 @@ class AsyncLLMInterface:
         else:
             raise ValueError(f"지원하지 않는 LLM 제공자: {request.provider}")
 
-    async def _call_chatgpt(
-        self, request: LLMRequest, config: Dict[str, Any]
-    ) -> LLMResponse:
+    async def _call_chatgpt(self, request: LLMRequest, config: Dict[str, Any]) -> LLMResponse:
         """ChatGPT API 호출"""
         headers = {
             "Authorization": f'Bearer {config["api_key"]}',
@@ -284,9 +275,7 @@ class AsyncLLMInterface:
             else:
                 raise Exception(f"ChatGPT API 오류: {response.status}")
 
-    async def _call_claude(
-        self, request: LLMRequest, config: Dict[str, Any]
-    ) -> LLMResponse:
+    async def _call_claude(self, request: LLMRequest, config: Dict[str, Any]) -> LLMResponse:
         """Claude API 호출"""
         headers = {
             "x-api-key": config["api_key"],
@@ -321,16 +310,12 @@ class AsyncLLMInterface:
                     confidence_score=0.0,
                     quality_score=0.0,
                     timestamp=datetime.now(),
-                    metadata={
-                        "input_tokens": data.get("usage", {}).get("input_tokens", 0)
-                    },
+                    metadata={"input_tokens": data.get("usage", {}).get("input_tokens", 0)},
                 )
             else:
                 raise Exception(f"Claude API 오류: {response.status}")
 
-    async def _call_gemini(
-        self, request: LLMRequest, config: Dict[str, Any]
-    ) -> LLMResponse:
+    async def _call_gemini(self, request: LLMRequest, config: Dict[str, Any]) -> LLMResponse:
         """Gemini API 호출"""
         url = f"{config['api_url']}?key={config['api_key']}"
 
@@ -364,9 +349,7 @@ class AsyncLLMInterface:
             else:
                 raise Exception(f"Gemini API 오류: {response.status}")
 
-    async def _call_local_simulation(
-        self, request: LLMRequest, config: Dict[str, Any]
-    ) -> LLMResponse:
+    async def _call_local_simulation(self, request: LLMRequest, config: Dict[str, Any]) -> LLMResponse:
         """로컬 시뮬레이션 (테스트용)"""
         # 실제 API 호출 대신 시뮬레이션
         await asyncio.sleep(0.1)  # 네트워크 지연 시뮬레이션
@@ -374,7 +357,7 @@ class AsyncLLMInterface:
         # 쿼리 타입별 시뮬레이션 응답
         simulation_responses = {
             QueryType.EMOTION_ANALYSIS: "이 상황에서 감정 상태는 평온함과 약간의 기대감이 섞여 있습니다.",
-            QueryType.LEARNING_QUERY: "이 경험을 통해 새로운 패턴을 학습했습니다. 향후 유사한 상황에 적용할 수 있습니다.",
+            QueryType.LEARNING_QUERY: "이 경험을 통해 새로운 패턴을 학습했습니다. 향후 유사한 상황에 적용할 수 있습니다.",  # noqa: E501
             QueryType.ETHICAL_JUDGMENT: "이 행동은 윤리적으로 적절하며, 타인에게 해를 끼치지 않습니다.",
             QueryType.EVOLUTION_QUERY: "이 경험을 통해 자기 진화의 새로운 단계로 나아갈 수 있습니다.",
             QueryType.GENERAL: "일반적인 질문에 대한 응답입니다.",
@@ -399,7 +382,7 @@ class AsyncLLMInterface:
         """시스템 프롬프트 생성"""
         prompts = {
             QueryType.EMOTION_ANALYSIS: "당신은 감정 분석 전문가입니다. 주어진 상황의 감정 상태를 정확히 분석해주세요.",
-            QueryType.LEARNING_QUERY: "당신은 학습 시스템입니다. 새로운 지식과 경험을 체계적으로 학습하고 정리해주세요.",
+            QueryType.LEARNING_QUERY: "당신은 학습 시스템입니다. 새로운 지식과 경험을 체계적으로 학습하고 정리해주세요.",  # noqa: E501
             QueryType.ETHICAL_JUDGMENT: "당신은 윤리 판단 시스템입니다. 주어진 상황의 윤리적 측면을 분석해주세요.",
             QueryType.EVOLUTION_QUERY: "당신은 자기 진화 시스템입니다. 개인의 성장과 발전을 도모하는 조언을 해주세요.",
             QueryType.GENERAL: "당신은 도움이 되는 AI 어시스턴트입니다.",
@@ -442,24 +425,16 @@ class AsyncLLMInterface:
         if self.stats["total_responses"] > 0:
             current_avg = self.stats["average_response_time"]
             new_count = self.stats["total_responses"]
-            self.stats["average_response_time"] = (
-                current_avg * (new_count - 1) + processing_time
-            ) / new_count
+            self.stats["average_response_time"] = (current_avg * (new_count - 1) + processing_time) / new_count
 
     def get_performance_stats(self) -> Dict[str, Any]:
         """성능 통계 반환"""
         return {
             **self.stats,
-            "cache_hit_rate": self.stats["cache_hits"]
-            / max(self.stats["total_requests"], 1),
-            "error_rate": self.stats["error_count"]
-            / max(self.stats["total_requests"], 1),
+            "cache_hit_rate": self.stats["cache_hits"] / max(self.stats["total_requests"], 1),
+            "error_rate": self.stats["error_count"] / max(self.stats["total_requests"], 1),
             "active_requests": self.semaphore._value,
-            "queue_size": (
-                self.request_queue.qsize()
-                if hasattr(self.request_queue, "qsize")
-                else 0
-            ),
+            "queue_size": (self.request_queue.qsize() if hasattr(self.request_queue, "qsize") else 0),
         }
 
     def clear_cache(self):
@@ -469,11 +444,6 @@ class AsyncLLMInterface:
 
     async def batch_request(self, requests: List[LLMRequest]) -> List[LLMResponse]:
         """배치 요청 처리"""
-        tasks = [
-            self.ask_llm(
-                req.prompt, req.query_type, req.context, req.provider, req.priority
-            )
-            for req in requests
-        ]
+        tasks = [self.ask_llm(req.prompt, req.query_type, req.context, req.provider, req.priority) for req in requests]
 
         return await asyncio.gather(*tasks, return_exceptions=True)

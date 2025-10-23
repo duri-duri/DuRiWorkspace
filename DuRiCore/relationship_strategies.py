@@ -12,8 +12,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any, Dict, List
 
-from social_intelligence_system import (InteractionType, RelationshipType,
-                                        SocialContext, SocialContextType)
+from social_intelligence_system import InteractionType, RelationshipType, SocialContextType
 
 logger = logging.getLogger(__name__)
 
@@ -306,9 +305,7 @@ def get_relationship_strategy(
     return RELATIONSHIP_HANDLERS.get(relationship_type, DefaultStrategy())
 
 
-def handle_relationship(
-    context: RelationshipContext, relationship_type: RelationshipType
-) -> Dict[str, Any]:
+def handle_relationship(context: RelationshipContext, relationship_type: RelationshipType) -> Dict[str, Any]:
     """관계 유형별 처리 실행"""
     strategy = get_relationship_strategy(relationship_type)
     return strategy.handle(context)

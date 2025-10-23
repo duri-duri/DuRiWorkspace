@@ -1,0 +1,21 @@
+name: lint (PR changed files)
+on:
+  pull_request:
+    paths-ignore:
+      - '.github/workflows-archive/**'
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.10'}
+      - name: Install pre-commit
+        run: pipx install pre-commit
+      - name: Lint only changed files
+        run: |
+          pre-commit install-hooks
+          # pre-commit/action 대신 직접: 변경파일만 자동 검출
+          CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
+          if [ -z "$CHANGED" ]; then exit 0; fi
+          echo "$CHANGED" | xargs -r pre-commit run --files

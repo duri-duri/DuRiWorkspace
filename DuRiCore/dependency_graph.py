@@ -178,9 +178,7 @@ class DependencyGraph:
         return {
             "total_modules": total_modules,
             "total_dependencies": total_dependencies,
-            "average_dependencies": (
-                total_dependencies / total_modules if total_modules > 0 else 0
-            ),
+            "average_dependencies": (total_dependencies / total_modules if total_modules > 0 else 0),
             "in_degree_distribution": dict(in_degree_dist),
             "out_degree_distribution": dict(out_degree_dist),
             "has_cycle": self.has_cycle(),

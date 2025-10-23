@@ -6,17 +6,16 @@ DuRiCore - 헬스체크 API 엔드포인트
 
 import os
 import sys
-from typing import Any, Dict
 
 from fastapi import APIRouter
 
 # DuRiCore 모듈 임포트를 위한 경로 추가
 sys.path.append(os.path.join(os.path.dirname(__file__), "../../.."))
 
-from DuRiCore.DuRiCore.modules.emotion_engine import EmotionEngine
-from DuRiCore.DuRiCore.modules.ethical_reasoning import EthicalReasoningEngine
-from DuRiCore.DuRiCore.modules.learning_engine import LearningEngine
-from DuRiCore.DuRiCore.modules.self_evolution import SelfEvolutionEngine
+from DuRiCore.DuRiCore.modules.emotion_engine import EmotionEngine  # noqa: E402
+from DuRiCore.DuRiCore.modules.ethical_reasoning import EthicalReasoningEngine  # noqa: E402
+from DuRiCore.DuRiCore.modules.learning_engine import LearningEngine  # noqa: E402
+from DuRiCore.DuRiCore.modules.self_evolution import SelfEvolutionEngine  # noqa: E402
 
 router = APIRouter()
 
@@ -95,9 +94,7 @@ async def health_check():
             }
 
         # 전체 상태 평가
-        healthy_engines = sum(
-            1 for engine in engines_status.values() if engine["status"] == "healthy"
-        )
+        healthy_engines = sum(1 for engine in engines_status.values() if engine["status"] == "healthy")
         total_engines = len(engines_status)
 
         overall_status = "healthy" if healthy_engines == total_engines else "degraded"

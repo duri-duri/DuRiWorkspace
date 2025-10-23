@@ -3,7 +3,7 @@
 Day 37: PoU 7일차 유지율 테스트
 스모크, 통계, SRM, A/A 테스트 포함
 """
-import json
+
 import os
 import sys
 import tempfile
@@ -14,9 +14,8 @@ import pytest
 # 프로젝트 루트를 Python 경로에 추가
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from ab_test_runner import ABTestRunner
-from tools.pou_day7_extract import (create_synthetic_data,
-                                    extract_retention_data)
+from ab_test_runner import ABTestRunner  # noqa: E402
+from tools.pou_day7_extract import create_synthetic_data, extract_retention_data  # noqa: E402
 
 
 class TestPoUD7:
@@ -105,9 +104,7 @@ class TestPoUD7:
             runner = ABTestRunner(config_path)
 
             # 합성 데이터 생성
-            with tempfile.NamedTemporaryFile(
-                mode="w", suffix=".csv", delete=False
-            ) as f:
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
                 temp_csv = f.name
 
             try:
@@ -170,9 +167,7 @@ B,1,2025-09-23
 B,1,2025-09-23
 B,0,2025-09-23"""
 
-            with tempfile.NamedTemporaryFile(
-                mode="w", suffix=".csv", delete=False
-            ) as f:
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
                 f.write(significant_data)
                 temp_csv = f.name
 
@@ -223,9 +218,7 @@ B,1,2025-09-23
 B,0,2025-09-23
 B,1,2025-09-23"""
 
-            with tempfile.NamedTemporaryFile(
-                mode="w", suffix=".csv", delete=False
-            ) as f:
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
                 f.write(aa_data)
                 temp_csv = f.name
 
@@ -264,9 +257,7 @@ B,1,2025-09-23"""
             runner = ABTestRunner(config_path)
 
             # 합성 데이터 생성
-            with tempfile.NamedTemporaryFile(
-                mode="w", suffix=".csv", delete=False
-            ) as f:
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
                 temp_csv = f.name
 
             try:

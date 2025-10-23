@@ -1,7 +1,6 @@
 import argparse
 import hashlib
 import json
-import os
 import pathlib
 import tarfile
 
@@ -18,7 +17,6 @@ def canonicalize(obj):
 
 def merkle_root(leaves):
     import hashlib
-    import math
 
     L = [bytes.fromhex(h) for h in sorted(leaves)]
     if not L:

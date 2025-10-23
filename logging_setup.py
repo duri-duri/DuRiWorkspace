@@ -61,7 +61,7 @@ class DefaultFieldsFilter(logging.Filter):
 
     def filter(self, record: logging.LogRecord) -> bool:
         if not hasattr(record, "component"):
-            setattr(record, "component", "_")
+            record.component = "_"
         return True
 
 

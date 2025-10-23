@@ -60,9 +60,7 @@ class TestFamilyModeGuard:
                 store = self._create_memory_store(temp_dir)
 
                 # 데이터 저장
-                store.write(
-                    "personal_memory", {"id": "mem1", "content": "private_data"}
-                )
+                store.write("personal_memory", {"id": "mem1", "content": "private_data"})
                 store.write("family_memory", {"id": "mem2", "content": "shared_data"})
 
                 # 데이터 존재 확인
@@ -154,10 +152,7 @@ class TestFamilyModeGuard:
 
                     data = json.loads(file_path.read_text())
                     # 가족 모드에서 프라이버시 레벨이 높은 데이터는 필터링
-                    if (
-                        os.environ.get("FAMILY_MODE") == "true"
-                        and data.get("privacy_level") == "high"
-                    ):
+                    if os.environ.get("FAMILY_MODE") == "true" and data.get("privacy_level") == "high":
                         return []
                     if query.lower() in str(data).lower():
                         return [data]
@@ -240,9 +235,7 @@ class TestFamilyModeIntegration:
         # 위의 SimpleMemoryStore와 유사하지만 프라이버시 필터링 추가
         class FamilyMemoryStore:
             def __init__(self, base_path: str):
-                self.base_path = (
-                    Path(base_path) / f"family_{os.environ.get('USER_ID', 'unknown')}"
-                )
+                self.base_path = Path(base_path) / f"family_{os.environ.get('USER_ID', 'unknown')}"
                 self.base_path.mkdir(parents=True, exist_ok=True)
 
             def write(self, name: str, data: dict):

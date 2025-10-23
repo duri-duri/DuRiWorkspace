@@ -1,5 +1,4 @@
-from .engine import (brevity_prior, coherence_score, novelty_score, rank,
-                     score_candidate)
+from .engine import brevity_prior, coherence_score, novelty_score, rank, score_candidate
 from .pipeline import PromptPipeline
 
 __all__ = [

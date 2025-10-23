@@ -6,11 +6,9 @@ DuRi Core Modules Package
 
 from .evolution import EvolutionStep, SelfEvolutionManager
 from .integrated_learning_system import IntegratedLearningSystem, LearningCycle
-from .judgment_system import (JudgmentTrace, JudgmentTraceLogger,
-                              StrategicLearningEngine)
+from .judgment_system import JudgmentTrace, JudgmentTraceLogger, StrategicLearningEngine
 from .memory import MemoryManager
-from .thought_flow import (DuRiThoughtFlow, ReflectionInsight,
-                           SelfReflectionLoop)
+from .thought_flow import DuRiThoughtFlow, ReflectionInsight, SelfReflectionLoop
 
 __version__ = "2.0.0"
 __author__ = "DuRi"

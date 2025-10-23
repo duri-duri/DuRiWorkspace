@@ -11,9 +11,7 @@ import time
 from duri_orchestrator import DuRiOrchestrator
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -59,34 +57,20 @@ async def test_lida_integration():
         await asyncio.sleep(0.1)
 
     # 결과 분석
-    logger.info(f"📈 테스트 결과:")
+    logger.info("📈 테스트 결과:")
 
     # 성능 메트릭 확인
     performance_metrics = orchestrator.get_performance_metrics()
-    logger.info(f"📊 성능 메트릭:")
-    logger.info(
-        f"   LIDA 주의 시스템: {performance_metrics.get('lida_attention_system', False)}"
-    )
-    logger.info(
-        f"   주의 정확도: {performance_metrics.get('attention_accuracy', 0.0):.1%}"
-    )
-    logger.info(
-        f"   정확도 향상: {performance_metrics.get('accuracy_improvement', 0.0):.1f}%"
-    )
-    logger.info(
-        f"   목표 향상: {performance_metrics.get('target_accuracy_improvement', 15.0):.1f}%"
-    )
-    logger.info(
-        f"   ACT-R 병렬 처리: {performance_metrics.get('act_r_parallel_processing', False)}"
-    )
-    logger.info(
-        f"   성능 향상률: {performance_metrics.get('performance_improvement', 0.0):.1f}%"
-    )
+    logger.info("📊 성능 메트릭:")
+    logger.info(f"   LIDA 주의 시스템: {performance_metrics.get('lida_attention_system', False)}")
+    logger.info(f"   주의 정확도: {performance_metrics.get('attention_accuracy', 0.0):.1%}")
+    logger.info(f"   정확도 향상: {performance_metrics.get('accuracy_improvement', 0.0):.1f}%")
+    logger.info(f"   목표 향상: {performance_metrics.get('target_accuracy_improvement', 15.0):.1f}%")
+    logger.info(f"   ACT-R 병렬 처리: {performance_metrics.get('act_r_parallel_processing', False)}")
+    logger.info(f"   성능 향상률: {performance_metrics.get('performance_improvement', 0.0):.1f}%")
 
     # 목표 달성 여부 확인
-    target_accuracy_improvement = performance_metrics.get(
-        "target_accuracy_improvement", 15.0
-    )
+    target_accuracy_improvement = performance_metrics.get("target_accuracy_improvement", 15.0)
     current_accuracy_improvement = performance_metrics.get("accuracy_improvement", 0.0)
 
     if current_accuracy_improvement >= target_accuracy_improvement:
@@ -123,15 +107,10 @@ async def compare_baseline_vs_lida():
     lida_result = await lida_judgment()
 
     # 결과 분석
-    accuracy_improvement = (
-        (lida_result["accuracy"] - baseline_result["accuracy"])
-        / baseline_result["accuracy"]
-    ) * 100
-    time_improvement = (
-        (baseline_result["time"] - lida_result["time"]) / baseline_result["time"]
-    ) * 100
+    accuracy_improvement = ((lida_result["accuracy"] - baseline_result["accuracy"]) / baseline_result["accuracy"]) * 100
+    time_improvement = ((baseline_result["time"] - lida_result["time"]) / baseline_result["time"]) * 100
 
-    logger.info(f"📊 비교 결과:")
+    logger.info("📊 비교 결과:")
     logger.info(f"   기준 정확도: {baseline_result['accuracy']:.1%}")
     logger.info(f"   LIDA 정확도: {lida_result['accuracy']:.1%}")
     logger.info(f"   정확도 향상: {accuracy_improvement:.1f}%")
@@ -159,18 +138,10 @@ async def main():
 
     # 최종 결과 요약
     logger.info("📋 최종 테스트 결과 요약:")
-    logger.info(
-        f"   통합 테스트 성공: {'✅' if integration_result['target_achieved'] else '❌'}"
-    )
-    logger.info(
-        f"   정확도 향상: {integration_result['performance_metrics']['accuracy_improvement']:.1f}%"
-    )
-    logger.info(
-        f"   성능 향상: {integration_result['performance_metrics']['performance_improvement']:.1f}%"
-    )
-    logger.info(
-        f"   기준 vs LIDA 정확도 향상: {comparison_result['accuracy_improvement']:.1f}%"
-    )
+    logger.info(f"   통합 테스트 성공: {'✅' if integration_result['target_achieved'] else '❌'}")
+    logger.info(f"   정확도 향상: {integration_result['performance_metrics']['accuracy_improvement']:.1f}%")
+    logger.info(f"   성능 향상: {integration_result['performance_metrics']['performance_improvement']:.1f}%")
+    logger.info(f"   기준 vs LIDA 정확도 향상: {comparison_result['accuracy_improvement']:.1f}%")
 
     return {"integration": integration_result, "comparison": comparison_result}
 

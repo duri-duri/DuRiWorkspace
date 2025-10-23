@@ -50,9 +50,7 @@ def calculate_cc_average(metrics: Dict[str, Any]) -> float:
     return mean(cc_values) if cc_values else 1.0
 
 
-def count_high_complexity_functions(
-    metrics: Dict[str, Any], threshold: int = 10
-) -> int:
+def count_high_complexity_functions(metrics: Dict[str, Any], threshold: int = 10) -> int:
     """높은 복잡도 함수 개수 계산"""
     cc_data = metrics.get("cyclomatic_complexity", {})
     if not cc_data:
@@ -67,9 +65,7 @@ def count_high_complexity_functions(
     return high_complexity_count
 
 
-def evaluate_gate(
-    baseline: Optional[Dict[str, Any]], current: Dict[str, Any]
-) -> Dict[str, Any]:
+def evaluate_gate(baseline: Optional[Dict[str, Any]], current: Dict[str, Any]) -> Dict[str, Any]:
     """게이트 평가 수행"""
     # 현재 메트릭 계산
     curr_mi = calculate_mi_average(current)
@@ -79,9 +75,7 @@ def evaluate_gate(
     # 베이스라인 메트릭 계산 (없으면 현재값 사용)
     base_mi = calculate_mi_average(baseline) if baseline else curr_mi
     base_cc = calculate_cc_average(baseline) if baseline else curr_cc
-    base_high_cc = (
-        count_high_complexity_functions(baseline) if baseline else curr_high_cc
-    )
+    base_high_cc = count_high_complexity_functions(baseline) if baseline else curr_high_cc
 
     # 델타 계산
     delta_mi = curr_mi - base_mi
@@ -167,9 +161,7 @@ def main():
         print("🚨 Gate failures:")
         for gate_name, result in evaluation["gate_results"].items():
             if not result["passed"]:
-                print(
-                    f"  - {gate_name}: {result['delta']:+.2f} (threshold: {result['threshold']})"
-                )
+                print(f"  - {gate_name}: {result['delta']:+.2f} (threshold: {result['threshold']})")
 
     # 종료 코드 설정
     sys.exit(0 if evaluation["overall_passed"] else 1)

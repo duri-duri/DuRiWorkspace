@@ -5,14 +5,12 @@ DuRi가 자기 자신의 코드를 분석하고 개선하는 시스템
 """
 
 import ast
-import inspect
 import logging
 import os
 import time
-import traceback
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List
 
 import psutil
 
@@ -68,9 +66,7 @@ class CodeAnalyzer:
             maintainability = self._analyze_maintainability(tree)
 
             # 개선 제안
-            suggestions = self._generate_improvement_suggestions(
-                tree, complexity, performance
-            )
+            suggestions = self._generate_improvement_suggestions(tree, complexity, performance)
 
             result = CodeAnalysisResult(
                 module_name=module_path,
@@ -112,7 +108,7 @@ class CodeAnalyzer:
         """성능 분석"""
         try:
             # 간단한 성능 지표 계산
-            file_size = os.path.getsize(module_path)
+            file_size = os.path.getsize(module_path)  # noqa: F841
             with open(module_path, "r") as f:
                 lines = f.readlines()
 
@@ -132,12 +128,8 @@ class CodeAnalyzer:
         """유지보수성 분석"""
         try:
             # 간단한 유지보수성 지표
-            function_count = len(
-                [n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)]
-            )
-            class_count = len(
-                [n for n in ast.walk(tree) if isinstance(n, ast.ClassDef)]
-            )
+            function_count = len([n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)])
+            class_count = len([n for n in ast.walk(tree) if isinstance(n, ast.ClassDef)])  # noqa: F841
 
             # 함수당 평균 라인 수 계산
             total_lines = 0
@@ -155,9 +147,7 @@ class CodeAnalyzer:
             logger.error(f"유지보수성 분석 실패: {e}")
             return 0.5
 
-    def _generate_improvement_suggestions(
-        self, tree: ast.AST, complexity: float, performance: float
-    ) -> List[str]:
+    def _generate_improvement_suggestions(self, tree: ast.AST, complexity: float, performance: float) -> List[str]:
         """개선 제안 생성"""
         suggestions = []
 
@@ -171,9 +161,7 @@ class CodeAnalyzer:
         for node in ast.walk(tree):
             if isinstance(node, ast.FunctionDef):
                 if len(node.body) > 20:
-                    suggestions.append(
-                        f"함수 '{node.name}'이 너무 깁니다. 분해를 고려하세요."
-                    )
+                    suggestions.append(f"함수 '{node.name}'이 너무 깁니다. 분해를 고려하세요.")
 
         return suggestions
 
@@ -194,7 +182,7 @@ class PerformanceScorer:
             result = func(*args, **kwargs)
             success = True
         except Exception as e:
-            result = None
+            result = None  # noqa: F841
             success = False
             logger.error(f"함수 실행 실패: {e}")
 
@@ -210,9 +198,7 @@ class PerformanceScorer:
         efficiency_score = max(0, 1 - memory_usage / 100)  # 100MB 기준
         resource_score = max(0, 1 - (execution_time + memory_usage / 10) / 20)
 
-        overall_score = (
-            response_time_score + accuracy_score + efficiency_score + resource_score
-        ) / 4
+        overall_score = (response_time_score + accuracy_score + efficiency_score + resource_score) / 4
 
         metrics = PerformanceMetrics(
             response_time=execution_time,
@@ -229,9 +215,7 @@ class PerformanceScorer:
         """평균 성능 점수"""
         if not self.performance_history:
             return 0.0
-        return sum(m.overall_score for m in self.performance_history) / len(
-            self.performance_history
-        )
+        return sum(m.overall_score for m in self.performance_history) / len(self.performance_history)
 
 
 class ImprovementStrategist:
@@ -241,9 +225,7 @@ class ImprovementStrategist:
         self.improvement_history: List[Dict[str, Any]] = []
         logger.info("ImprovementStrategist 초기화 완료")
 
-    def generate_improvement_plan(
-        self, analysis_result: CodeAnalysisResult
-    ) -> Dict[str, Any]:
+    def generate_improvement_plan(self, analysis_result: CodeAnalysisResult) -> Dict[str, Any]:
         """개선 계획 생성"""
         plan = {
             "target_module": analysis_result.module_name,
@@ -264,15 +246,11 @@ class ImprovementStrategist:
 
         # 성능 기반 전략
         if analysis_result.performance_score < 0.6:
-            plan["strategies"].append(
-                {"type": "optimize", "description": "알고리즘 최적화", "impact": 0.4}
-            )
+            plan["strategies"].append({"type": "optimize", "description": "알고리즘 최적화", "impact": 0.4})
 
         # 유지보수성 기반 전략
         if analysis_result.maintainability_score < 0.5:
-            plan["strategies"].append(
-                {"type": "restructure", "description": "코드 구조 개선", "impact": 0.2}
-            )
+            plan["strategies"].append({"type": "restructure", "description": "코드 구조 개선", "impact": 0.2})
 
         # 예상 영향도 계산
         total_impact = sum(strategy["impact"] for strategy in plan["strategies"])
@@ -311,16 +289,12 @@ class MetaLearningLogger:
             },
             "improvement_plan": improvement_plan,
             "success": success,
-            "improvement_rate": (
-                after_metrics.overall_score - before_metrics.overall_score
-            )
+            "improvement_rate": (after_metrics.overall_score - before_metrics.overall_score)
             / max(before_metrics.overall_score, 0.01),
         }
 
         self.growth_log.append(log_entry)
-        logger.info(
-            f"개선 시도 로깅: {module_name}, 성공: {success}, 개선률: {log_entry['improvement_rate']:.2%}"
-        )
+        logger.info(f"개선 시도 로깅: {module_name}, 성공: {success}, 개선률: {log_entry['improvement_rate']:.2%}")
 
     def get_growth_statistics(self) -> Dict[str, Any]:
         """성장 통계"""
@@ -331,18 +305,14 @@ class MetaLearningLogger:
         successful_attempts = sum(1 for log in self.growth_log if log["success"])
         success_rate = successful_attempts / total_attempts
 
-        improvements = [
-            log["improvement_rate"] for log in self.growth_log if log["success"]
-        ]
+        improvements = [log["improvement_rate"] for log in self.growth_log if log["success"]]
         avg_improvement = sum(improvements) / len(improvements) if improvements else 0.0
 
         return {
             "total_attempts": total_attempts,
             "success_rate": success_rate,
             "avg_improvement": avg_improvement,
-            "recent_attempts": (
-                self.growth_log[-5:] if len(self.growth_log) >= 5 else self.growth_log
-            ),
+            "recent_attempts": (self.growth_log[-5:] if len(self.growth_log) >= 5 else self.growth_log),
         }
 
 
@@ -369,27 +339,19 @@ class DuRiSelfGrowthManager:
             time.sleep(0.1)
             return True
 
-        before_metrics = self.performance_scorer.measure_performance(
-            current_performance_test
-        )
+        before_metrics = self.performance_scorer.measure_performance(current_performance_test)
 
         # 3. 개선 계획 수립
-        improvement_plan = self.improvement_strategist.generate_improvement_plan(
-            analysis_result
-        )
+        improvement_plan = self.improvement_strategist.generate_improvement_plan(analysis_result)
 
         # 4. 개선 시도 (실제로는 코드 수정 로직 필요)
         success = self._attempt_improvement(module_path, improvement_plan)
 
         # 5. 개선 후 성능 측정
-        after_metrics = self.performance_scorer.measure_performance(
-            current_performance_test
-        )
+        after_metrics = self.performance_scorer.measure_performance(current_performance_test)
 
         # 6. 결과 로깅
-        self.meta_logger.log_improvement_attempt(
-            module_path, before_metrics, after_metrics, improvement_plan, success
-        )
+        self.meta_logger.log_improvement_attempt(module_path, before_metrics, after_metrics, improvement_plan, success)
 
         return {
             "analysis_result": analysis_result,
@@ -400,9 +362,7 @@ class DuRiSelfGrowthManager:
             "growth_statistics": self.meta_logger.get_growth_statistics(),
         }
 
-    def _attempt_improvement(
-        self, module_path: str, improvement_plan: Dict[str, Any]
-    ) -> bool:
+    def _attempt_improvement(self, module_path: str, improvement_plan: Dict[str, Any]) -> bool:
         """개선 시도 (실제 구현 필요)"""
         try:
             # 실제로는 여기서 코드 수정 로직이 들어가야 함
@@ -418,9 +378,7 @@ class DuRiSelfGrowthManager:
         return {
             "total_analyses": len(self.code_analyzer.analysis_history),
             "total_performance_tests": len(self.performance_scorer.performance_history),
-            "total_improvement_plans": len(
-                self.improvement_strategist.improvement_history
-            ),
+            "total_improvement_plans": len(self.improvement_strategist.improvement_history),
             "growth_statistics": self.meta_logger.get_growth_statistics(),
         }
 

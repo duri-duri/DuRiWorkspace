@@ -10,18 +10,14 @@ import logging
 import statistics
 import time
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 # Phase 9 모듈들 import
 try:
-    from deployment_system import (DeploymentPlatform, EnvironmentType,
-                                   IntegratedDeploymentSystem,
-                                   UserInterfaceType)
+    from deployment_system import DeploymentPlatform, EnvironmentType, IntegratedDeploymentSystem, UserInterfaceType
     from integrated_system_manager import IntegratedSystemManager
-    from real_environment_deployment import (DeploymentStatus,
-                                             RealEnvironmentDeployment)
-    from user_interface import (InterfaceType, LanguageType, ThemeType,
-                                UserInterfaceSystem)
+    from real_environment_deployment import DeploymentStatus, RealEnvironmentDeployment
+    from user_interface import InterfaceType, LanguageType, ThemeType, UserInterfaceSystem
 
     PHASE9_MODULES_AVAILABLE = True
 except ImportError as e:
@@ -129,7 +125,7 @@ class Phase9IntegrationTest:
 
         self.test_results.append(comprehensive_result)
 
-        print(f"\n🎉 Phase 9 종합 테스트 완료!")
+        print("\n🎉 Phase 9 종합 테스트 완료!")
         print(f"📊 전체 점수: {comprehensive_result['overall_score']:.2f}/100")
         print(f"⏱️ 총 테스트 시간: {total_test_time:.2f}초")
 
@@ -217,15 +213,11 @@ class Phase9IntegrationTest:
             if deployment_report.deployment_status == DeploymentStatus.COMPLETED:
                 test_result["details"].append("✅ 로컬 배포 성공")
             else:
-                test_result["errors"].append(
-                    f"❌ 로컬 배포 실패: {deployment_report.deployment_status}"
-                )
+                test_result["errors"].append(f"❌ 로컬 배포 실패: {deployment_report.deployment_status}")
 
             # 성능 분석 확인
             if deployment_report.performance_analysis:
-                performance_score = deployment_report.performance_analysis.get(
-                    "performance_score", 0
-                )
+                performance_score = deployment_report.performance_analysis.get("performance_score", 0)
                 test_result["details"].append(f"✅ 성능 점수: {performance_score:.2f}")
 
             # 적응성 확인
@@ -301,9 +293,7 @@ class Phase9IntegrationTest:
                 feature_requests=["다크 모드", "모바일 최적화"],
                 bug_reports=[],
             )
-            test_result["details"].append(
-                f"✅ 사용자 피드백 수집: {feedback.feedback_id}"
-            )
+            test_result["details"].append(f"✅ 사용자 피드백 수집: {feedback.feedback_id}")
 
             # 인터페이스 분석 테스트
             analytics = self.ui_system.get_interface_analytics(web_ui.ui_id)
@@ -389,11 +379,9 @@ class Phase9IntegrationTest:
             # 응답 시간 테스트
             start_time = time.time()
             if self.ui_system:
-                ui = self.ui_system.create_interface(InterfaceType.WEB_DASHBOARD)
+                ui = self.ui_system.create_interface(InterfaceType.WEB_DASHBOARD)  # noqa: F841
                 response_time = time.time() - start_time
-                test_result["details"].append(
-                    f"✅ UI 생성 응답 시간: {response_time:.3f}초"
-                )
+                test_result["details"].append(f"✅ UI 생성 응답 시간: {response_time:.3f}초")
 
                 if response_time < 1.0:
                     test_result["details"].append("✅ 응답 시간 우수")
@@ -459,9 +447,7 @@ class Phase9IntegrationTest:
             if self.ui_system:
                 for i in range(5):
                     try:
-                        ui = self.ui_system.create_interface(
-                            InterfaceType.WEB_DASHBOARD
-                        )
+                        ui = self.ui_system.create_interface(InterfaceType.WEB_DASHBOARD)  # noqa: F841
                         test_result["details"].append(f"✅ 반복 실행 {i+1}/5 성공")
                     except Exception as e:
                         test_result["errors"].append(f"❌ 반복 실행 {i+1}/5 실패: {e}")
@@ -474,7 +460,7 @@ class Phase9IntegrationTest:
                         test_result["details"].append("✅ 오류 처리 정상")
                     else:
                         test_result["errors"].append("❌ 오류 처리 실패")
-                except Exception as e:
+                except Exception:
                     test_result["details"].append("✅ 예외 처리 정상")
 
             # 메모리 누수 테스트
@@ -494,9 +480,7 @@ class Phase9IntegrationTest:
                 if object_increase < 100:
                     test_result["details"].append("✅ 메모리 누수 없음")
                 else:
-                    test_result["errors"].append(
-                        f"❌ 메모리 누수 의심: {object_increase}개 객체 증가"
-                    )
+                    test_result["errors"].append(f"❌ 메모리 누수 의심: {object_increase}개 객체 증가")
 
             # 점수 계산
             success_count = len([d for d in test_result["details"] if "✅" in d])
@@ -538,17 +522,13 @@ class Phase9IntegrationTest:
                 ThemeType.MINIMAL,
             ]
             for theme in themes:
-                ui = self.ui_system.create_interface(
-                    interface_type=InterfaceType.WEB_DASHBOARD, theme=theme
-                )
+                ui = self.ui_system.create_interface(interface_type=InterfaceType.WEB_DASHBOARD, theme=theme)
                 test_result["details"].append(f"✅ {theme.value} 테마 생성 성공")
 
             # 다양한 언어 테스트
             languages = [LanguageType.KOREAN, LanguageType.ENGLISH]
             for language in languages:
-                ui = self.ui_system.create_interface(
-                    interface_type=InterfaceType.WEB_DASHBOARD, language=language
-                )
+                ui = self.ui_system.create_interface(interface_type=InterfaceType.WEB_DASHBOARD, language=language)
                 test_result["details"].append(f"✅ {language.value} 언어 지원 확인")
 
             # 접근성 기능 테스트
@@ -595,9 +575,7 @@ class Phase9IntegrationTest:
         scores = [result.get("score", 0) for result in test_results]
         return statistics.mean(scores)
 
-    def _generate_test_recommendations(
-        self, test_results: List[Dict[str, Any]]
-    ) -> List[str]:
+    def _generate_test_recommendations(self, test_results: List[Dict[str, Any]]) -> List[str]:
         """테스트 권장사항 생성"""
         recommendations = []
 
@@ -638,9 +616,7 @@ class Phase9IntegrationTest:
         print("=" * 50)
 
         for test_name, result in test_result["test_results"].items():
-            status_emoji = {"passed": "✅", "warning": "⚠️", "failed": "❌"}.get(
-                result["status"], "❓"
-            )
+            status_emoji = {"passed": "✅", "warning": "⚠️", "failed": "❌"}.get(result["status"], "❓")
 
             print(f"{status_emoji} {result['test_name']}: {result['score']:.1f}/100")
 

@@ -6,7 +6,6 @@ DuRi 안전 로깅 설정
 """
 
 import logging
-import os
 import threading
 from typing import Optional
 
@@ -67,15 +66,15 @@ class DefaultFieldsFilter(logging.Filter):
     def filter(self, record: logging.LogRecord) -> bool:
         # 기본 필드 설정
         if not hasattr(record, "component"):
-            setattr(record, "component", "_")
+            record.component = "_"
         if not hasattr(record, "request_id"):
-            setattr(record, "request_id", "-")
+            record.request_id = "-"
         if not hasattr(record, "session_id"):
-            setattr(record, "session_id", "-")
+            record.session_id = "-"
         if not hasattr(record, "learning_session_id"):
-            setattr(record, "learning_session_id", "-")
+            record.learning_session_id = "-"
         if not hasattr(record, "phase"):
-            setattr(record, "phase", "-")
+            record.phase = "-"
 
         # 컨텍스트 변수를 record에 주입
         try:

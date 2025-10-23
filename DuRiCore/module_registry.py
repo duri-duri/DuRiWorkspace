@@ -14,17 +14,12 @@ DuRi 모듈 레지스트리 시스템
 """
 
 import asyncio
-import inspect
 import logging
-import time
 from abc import ABC, ABCMeta, abstractmethod
-from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from pathlib import Path
-from typing import (Any, Callable, Dict, Generic, List, Optional, Protocol,
-                    Set, Type, TypeVar)
+from typing import Any, Callable, Dict, List, Optional, Protocol, Type, TypeVar
 
 # 의존성 그래프 import
 try:
@@ -33,9 +28,7 @@ except ImportError:
     from dependency_graph import DependencyGraph
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 T = TypeVar("T")
@@ -85,7 +78,9 @@ class ModuleProtocol(Protocol):
     """모듈 프로토콜"""
 
     async def initialize(self) -> None: ...
+
     async def execute(self, context: Dict[str, Any]) -> Any: ...
+
     async def cleanup(self) -> None: ...
 
 
@@ -99,12 +94,8 @@ class ABCModuleMeta(ABCMeta):
 
         # BaseModule을 상속받는 클래스인지 확인 (BaseModule 자체는 제외)
         if name != "BaseModule" and (
-            any(
-                issubclass(base, BaseModule) for base in bases if isinstance(base, type)
-            )
-            or BaseModule in bases
+            any(issubclass(base, BaseModule) for base in bases if isinstance(base, type)) or BaseModule in bases
         ):
-
             # 모듈 이름 확인
             module_name = getattr(module_class, "module_name", None)
             if module_name:
@@ -128,18 +119,12 @@ class ABCModuleMeta(ABCMeta):
                     )
 
                     if success:
-                        logger.info(
-                            f"✅ 모듈 자동 등록 완료 (메타클래스): {module_name}"
-                        )
+                        logger.info(f"✅ 모듈 자동 등록 완료 (메타클래스): {module_name}")
                     else:
-                        logger.warning(
-                            f"⚠️ 모듈 자동 등록 실패 (메타클래스): {module_name}"
-                        )
+                        logger.warning(f"⚠️ 모듈 자동 등록 실패 (메타클래스): {module_name}")
 
                 except Exception as e:
-                    logger.error(
-                        f"❌ 모듈 자동 등록 중 오류 발생 (메타클래스): {module_name} - {e}"
-                    )
+                    logger.error(f"❌ 모듈 자동 등록 중 오류 발생 (메타클래스): {module_name} - {e}")
 
         return module_class
 
@@ -431,9 +416,7 @@ class ModuleRegistry:
                 if module_name in self.modules:
                     results[module_name] = await self.load_module(module_name)
 
-            logger.info(
-                f"✅ 모든 모듈 로드 완료: {sum(results.values())}/{len(results)} 성공"
-            )
+            logger.info(f"✅ 모든 모듈 로드 완료: {sum(results.values())}/{len(results)} 성공")
             return results
 
         except Exception as e:
@@ -452,9 +435,7 @@ class ModuleRegistry:
                 if module_name in self.modules:
                     results[module_name] = await self.initialize_module(module_name)
 
-            logger.info(
-                f"✅ 모든 모듈 초기화 완료: {sum(results.values())}/{len(results)} 성공"
-            )
+            logger.info(f"✅ 모든 모듈 초기화 완료: {sum(results.values())}/{len(results)} 성공")
             return results
 
         except Exception as e:
@@ -483,9 +464,7 @@ class ModuleRegistry:
         for name, info in self.modules.items():
             for dep in info.dependencies:
                 if dep not in self.modules:
-                    errors.append(
-                        f"모듈 '{name}'의 의존성 '{dep}'가 등록되지 않았습니다"
-                    )
+                    errors.append(f"모듈 '{name}'의 의존성 '{dep}'가 등록되지 않았습니다")
 
         if self.dependency_graph.has_cycle():
             errors.append("의존성 사이클이 감지되었습니다")
@@ -502,9 +481,7 @@ async def test_module_registry():
     logger.info("🧪 모듈 레지스트리 테스트 시작")
 
     # 테스트용 모듈 클래스 (데코레이터 방식)
-    @register_module(
-        name="test_module", dependencies=[], priority=ModulePriority.NORMAL
-    )
+    @register_module(name="test_module", dependencies=[], priority=ModulePriority.NORMAL)
     class TestModule(BaseModule):
         async def initialize(self):
             self._initialized = True

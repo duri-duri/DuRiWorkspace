@@ -3,19 +3,19 @@
 DuRi 통합 자가 진화 인식 시스템
 모든 자가 진화 인식 기능을 통합하는 메인 시스템
 """
+
 import json
 import logging
 from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
+from datetime import datetime
+from typing import Any, Dict, List
 
 from duri_modules.self_awareness.evolution_analyzer import evolution_analyzer
 from duri_modules.self_awareness.evolution_reporter import evolution_reporter
-from duri_modules.self_awareness.self_assessment_system import \
-    self_assessment_system
+from duri_modules.self_awareness.self_assessment_system import self_assessment_system
+
 # 자가 진화 인식 모듈들 import
-from duri_modules.self_awareness.self_evolution_tracker import \
-    self_evolution_tracker
+from duri_modules.self_awareness.self_evolution_tracker import self_evolution_tracker
 
 logger = logging.getLogger(__name__)
 
@@ -55,10 +55,7 @@ class IntegratedSelfEvolutionSystem:
         try:
             with open(self.integration_data_file, "r", encoding="utf-8") as f:
                 data = json.load(f)
-                self.integration_history = [
-                    IntegratedEvolutionResult(**result)
-                    for result in data.get("history", [])
-                ]
+                self.integration_history = [IntegratedEvolutionResult(**result) for result in data.get("history", [])]
         except FileNotFoundError:
             logger.info("통합 데이터 파일이 없습니다. 새로 시작합니다.")
         except Exception as e:
@@ -76,32 +73,22 @@ class IntegratedSelfEvolutionSystem:
         except Exception as e:
             logger.error(f"통합 데이터 저장 오류: {e}")
 
-    def execute_complete_self_evolution_analysis(
-        self, interaction_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def execute_complete_self_evolution_analysis(self, interaction_data: Dict[str, Any]) -> Dict[str, Any]:
         """완전한 자가 진화 분석 실행"""
         try:
             logger.info("🧠 통합 자가 진화 분석 시작")
 
             # 1단계: 진화 추적
-            evolution_tracking_result = self.evolution_tracker.track_self_evolution(
-                interaction_data
-            )
+            evolution_tracking_result = self.evolution_tracker.track_self_evolution(interaction_data)
 
             # 2단계: 자가 평가
-            self_assessment_result = self.assessment_system.assess_self_evolution(
-                interaction_data
-            )
+            self_assessment_result = self.assessment_system.assess_self_evolution(interaction_data)
 
             # 3단계: 진화 분석
-            evolution_analysis_result = self.analyzer.analyze_evolution(
-                interaction_data
-            )
+            evolution_analysis_result = self.analyzer.analyze_evolution(interaction_data)
 
             # 4단계: 진화 보고서 생성
-            evolution_report_result = self.reporter.generate_evolution_report(
-                evolution_analysis_result
-            )
+            evolution_report_result = self.reporter.generate_evolution_report(evolution_analysis_result)
 
             # 5단계: 통합 결과 생성
             integrated_result = self._integrate_all_results(
@@ -194,9 +181,7 @@ class IntegratedSelfEvolutionSystem:
             report_success = report_result.get("status") == "success"
 
             # 성공한 분석 수
-            successful_analyses = sum(
-                [tracking_success, assessment_success, analysis_success, report_success]
-            )
+            successful_analyses = sum([tracking_success, assessment_success, analysis_success, report_success])
 
             if successful_analyses >= 3:
                 # 진화 점수 확인
@@ -233,26 +218,16 @@ class IntegratedSelfEvolutionSystem:
 
             # 각 분석의 신뢰도 수집
             if tracking_result.get("status") == "success":
-                confidences.append(
-                    tracking_result.get("evolution_analysis", {}).get(
-                        "evolution_confidence", 0.0
-                    )
-                )
+                confidences.append(tracking_result.get("evolution_analysis", {}).get("evolution_confidence", 0.0))
 
             if assessment_result.get("status") == "success":
-                confidences.append(
-                    assessment_result.get("current_assessment", {}).get(
-                        "assessment_confidence", 0.0
-                    )
-                )
+                confidences.append(assessment_result.get("current_assessment", {}).get("assessment_confidence", 0.0))
 
             if analysis_result.get("status") == "success":
                 confidences.append(analysis_result.get("evolution_confidence", 0.0))
 
             if report_result.get("status") == "success":
-                confidences.append(
-                    report_result.get("report_content", {}).get("confidence_level", 0.0)
-                )
+                confidences.append(report_result.get("report_content", {}).get("confidence_level", 0.0))
 
             # 평균 신뢰도 계산
             if confidences:
@@ -295,9 +270,7 @@ class IntegratedSelfEvolutionSystem:
 
             # 진화 보고서 인사이트
             if report_result.get("status") == "success":
-                conclusion = report_result.get("report_content", {}).get(
-                    "conclusion", ""
-                )
+                conclusion = report_result.get("report_content", {}).get("conclusion", "")
                 if conclusion:
                     insights.append(conclusion)
 
@@ -361,9 +334,7 @@ class IntegratedSelfEvolutionSystem:
             logger.error(f"종합 진화 보고서 생성 오류: {e}")
             return {"status": "error", "error": str(e)}
 
-    def _generate_comprehensive_summary(
-        self, latest_result: IntegratedEvolutionResult
-    ) -> Dict[str, Any]:
+    def _generate_comprehensive_summary(self, latest_result: IntegratedEvolutionResult) -> Dict[str, Any]:
         """종합 요약 생성"""
         try:
             summary = {
@@ -401,9 +372,7 @@ class IntegratedSelfEvolutionSystem:
             # 다음 단계 추출
             report_result = latest_result.evolution_report_result
             if report_result.get("status") == "success":
-                next_plan = report_result.get("report_content", {}).get(
-                    "next_evolution_plan", []
-                )
+                next_plan = report_result.get("report_content", {}).get("next_evolution_plan", [])
                 summary["next_steps"] = next_plan[:3]
 
             return summary
@@ -445,9 +414,7 @@ class IntegratedSelfEvolutionSystem:
             }
 
             # 완전한 자가 진화 분석 실행
-            result = self.execute_complete_self_evolution_analysis(
-                test_interaction_data
-            )
+            result = self.execute_complete_self_evolution_analysis(test_interaction_data)
 
             # 테스트 결과 평가
             test_success = result.get("status") == "success"
@@ -461,11 +428,7 @@ class IntegratedSelfEvolutionSystem:
             )
 
             return {
-                "status": (
-                    "success"
-                    if test_success and all_systems_working
-                    else "partial_success"
-                ),
+                "status": ("success" if test_success and all_systems_working else "partial_success"),
                 "test_success": test_success,
                 "all_systems_working": all_systems_working,
                 "test_result": result,

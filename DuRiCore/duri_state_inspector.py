@@ -13,15 +13,12 @@ DuRi의 현재 상태를 심도있게 진단하는 도구
 
 import ast
 import importlib
-import inspect
 import json
-import os
 import sys
-import time
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Dict, List, Optional
 
 
 @dataclass
@@ -103,7 +100,7 @@ class DuriStateInspector:
                     try:
                         with open(file_path, "r", encoding="utf-8") as f:
                             lines = len(f.readlines())
-                    except:
+                    except:  # noqa: E722
                         lines = 0
 
                 # 모듈 정보 생성
@@ -210,9 +207,7 @@ class DuriStateInspector:
                 module_info.can_import = True
                 self.connectivity_status[file_path] = True
 
-                print(
-                    f"✅ {file_path}: import 성공, {len(callable_functions)}개 함수 호출 가능"
-                )
+                print(f"✅ {file_path}: import 성공, {len(callable_functions)}개 함수 호출 가능")
 
             except Exception as e:
                 module_info.can_import = False
@@ -225,9 +220,7 @@ class DuriStateInspector:
         print("🚨 문제점 식별 중...")
 
         # 1. import 실패한 모듈들
-        failed_imports = [
-            path for path, status in self.connectivity_status.items() if not status
-        ]
+        failed_imports = [path for path, status in self.connectivity_status.items() if not status]
         if failed_imports:
             self.problems.append(f"Import 실패 모듈: {len(failed_imports)}개")
             for path in failed_imports[:5]:  # 상위 5개만 표시
@@ -312,7 +305,7 @@ class DuriStateInspector:
         print("🔍 DURI DIAGNOSTIC REPORT")
         print("=" * 60)
 
-        print(f"\n📁 시스템 구조:")
+        print("\n📁 시스템 구조:")
         print(f"  - 총 파일 수: {report.total_files}개")
         print(f"  - Python 파일: {report.python_files}개")
         print(f"  - Markdown 파일: {report.markdown_files}개")
@@ -320,18 +313,14 @@ class DuriStateInspector:
         print(f"  - 총 코드 라인: {report.total_lines:,} lines")
         print(f"  - 총 파일 크기: {report.total_size:,} bytes")
 
-        print(f"\n🔌 연결성 진단:")
-        working_modules = sum(
-            1 for status in report.connectivity_status.values() if status
-        )
+        print("\n🔌 연결성 진단:")
+        working_modules = sum(1 for status in report.connectivity_status.values() if status)
         failed_modules = len(report.connectivity_status) - working_modules
         print(f"  - 호출 가능한 모듈: {working_modules}개")
         print(f"  - 호출 불가 모듈: {failed_modules}개")
-        print(
-            f"  - 연결성 성공률: {working_modules/(working_modules+failed_modules)*100:.1f}%"
-        )
+        print(f"  - 연결성 성공률: {working_modules/(working_modules+failed_modules)*100:.1f}%")
 
-        print(f"\n🚨 발견된 문제점:")
+        print("\n🚨 발견된 문제점:")
         if report.problems:
             for i, problem in enumerate(report.problems, 1):
                 print(f"  {i}. {problem}")

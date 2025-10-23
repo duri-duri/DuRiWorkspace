@@ -11,16 +11,13 @@ DuRiCore Phase 2-3: 학습 통합 시스템 (Learning Integration System)
 """
 
 import asyncio
-import json
 import logging
 import time
 from collections import defaultdict
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
-
-import numpy as np
+from typing import Any, Dict, List, Optional
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -139,9 +136,7 @@ class LearningIntegrationSystem:
                 session.strategies_executed += 1
 
             # 통합 결과 생성
-            integrated_result = await self._create_integrated_result(
-                session_id, strategy_results
-            )
+            integrated_result = await self._create_integrated_result(session_id, strategy_results)
 
             # 세션 완료
             end_time = datetime.now()
@@ -157,18 +152,14 @@ class LearningIntegrationSystem:
             # 성능 메트릭 업데이트
             await self._update_performance_metrics(session, integrated_result)
 
-            logger.info(
-                f"학습 전략 통합 완료: {session_id} (성과: {integrated_result.overall_performance:.2f})"
-            )
+            logger.info(f"학습 전략 통합 완료: {session_id} (성과: {integrated_result.overall_performance:.2f})")
             return session_id
 
         except Exception as e:
             logger.error(f"학습 전략 통합 실패: {e}")
             return ""
 
-    async def _execute_learning_strategy(
-        self, strategy: Dict[str, Any]
-    ) -> LearningStrategyResult:
+    async def _execute_learning_strategy(self, strategy: Dict[str, Any]) -> LearningStrategyResult:
         """학습 전략 실행"""
         strategy_id = strategy.get("strategy_id", f"strategy_{int(time.time())}")
         strategy_name = strategy.get("strategy_name", "Unknown Strategy")
@@ -222,9 +213,7 @@ class LearningIntegrationSystem:
         strategy_type = strategy.get("strategy_type", "general")
 
         if strategy_type == "self_directed":
-            insights.append(
-                "자기 주도적 학습을 통해 독립적인 학습 능력이 향상되었습니다."
-            )
+            insights.append("자기 주도적 학습을 통해 독립적인 학습 능력이 향상되었습니다.")
         elif strategy_type == "adaptive":
             insights.append("적응적 학습을 통해 상황에 맞는 학습 방식을 적용했습니다.")
         elif strategy_type == "meta_cognition":
@@ -244,16 +233,12 @@ class LearningIntegrationSystem:
 
         # 전체 성과 계산
         if strategy_results:
-            overall_performance = sum(
-                r.performance_score for r in strategy_results
-            ) / len(strategy_results)
+            overall_performance = sum(r.performance_score for r in strategy_results) / len(strategy_results)
         else:
             overall_performance = 0.0
 
         # 통합 품질 계산
-        integration_quality = await self._calculate_integration_quality(
-            strategy_results
-        )
+        integration_quality = await self._calculate_integration_quality(strategy_results)
 
         # 학습 통찰 수집
         learning_insights = []
@@ -261,9 +246,7 @@ class LearningIntegrationSystem:
             learning_insights.extend(result.insights)
 
         # 최적화 제안 생성
-        optimization_suggestions = await self._generate_optimization_suggestions(
-            strategy_results
-        )
+        optimization_suggestions = await self._generate_optimization_suggestions(strategy_results)
 
         integrated_result = IntegratedLearningResult(
             result_id=result_id,
@@ -277,55 +260,39 @@ class LearningIntegrationSystem:
 
         return integrated_result
 
-    async def _calculate_integration_quality(
-        self, strategy_results: List[LearningStrategyResult]
-    ) -> float:
+    async def _calculate_integration_quality(self, strategy_results: List[LearningStrategyResult]) -> float:
         """통합 품질 계산"""
         if not strategy_results:
             return 0.0
 
         # 성공률 기반 품질 계산
-        success_rate = sum(1 for r in strategy_results if r.success) / len(
-            strategy_results
-        )
+        success_rate = sum(1 for r in strategy_results if r.success) / len(strategy_results)
 
         # 성과 점수 기반 품질 계산
-        average_performance = sum(r.performance_score for r in strategy_results) / len(
-            strategy_results
-        )
+        average_performance = sum(r.performance_score for r in strategy_results) / len(strategy_results)
 
         # 통합 품질은 성공률과 평균 성과의 조합
         integration_quality = (success_rate * 0.6) + (average_performance * 0.4)
 
         return integration_quality
 
-    async def _generate_optimization_suggestions(
-        self, strategy_results: List[LearningStrategyResult]
-    ) -> List[str]:
+    async def _generate_optimization_suggestions(self, strategy_results: List[LearningStrategyResult]) -> List[str]:
         """최적화 제안 생성"""
         suggestions = []
 
         # 성과가 낮은 전략들에 대한 제안
-        low_performance_strategies = [
-            r for r in strategy_results if r.performance_score < 0.6
-        ]
+        low_performance_strategies = [r for r in strategy_results if r.performance_score < 0.6]
         if low_performance_strategies:
-            suggestions.append(
-                f"{len(low_performance_strategies)}개 전략의 성과 개선이 필요합니다."
-            )
+            suggestions.append(f"{len(low_performance_strategies)}개 전략의 성과 개선이 필요합니다.")
 
         # 실패한 전략들에 대한 제안
         failed_strategies = [r for r in strategy_results if not r.success]
         if failed_strategies:
-            suggestions.append(
-                f"{len(failed_strategies)}개 전략의 재설계가 필요합니다."
-            )
+            suggestions.append(f"{len(failed_strategies)}개 전략의 재설계가 필요합니다.")
 
         # 전반적인 최적화 제안
         if strategy_results:
-            avg_performance = sum(r.performance_score for r in strategy_results) / len(
-                strategy_results
-            )
+            avg_performance = sum(r.performance_score for r in strategy_results) / len(strategy_results)
             if avg_performance < 0.7:
                 suggestions.append("전체적인 학습 전략 최적화가 권장됩니다.")
 
@@ -340,26 +307,18 @@ class LearningIntegrationSystem:
         if session.successful_strategies > 0:
             self.performance_metrics["successful_integration_sessions"] += 1
 
-        self.performance_metrics[
-            "total_strategies_executed"
-        ] += session.strategies_executed
-        self.performance_metrics[
-            "successful_strategies"
-        ] += session.successful_strategies
+        self.performance_metrics["total_strategies_executed"] += session.strategies_executed
+        self.performance_metrics["successful_strategies"] += session.successful_strategies
 
         # 평균 통합 품질 업데이트
         all_qualities = [r.integration_quality for r in self.integrated_results]
         if all_qualities:
-            self.performance_metrics["average_integration_quality"] = sum(
-                all_qualities
-            ) / len(all_qualities)
+            self.performance_metrics["average_integration_quality"] = sum(all_qualities) / len(all_qualities)
 
         # 평균 전체 성과 업데이트
         all_performances = [r.overall_performance for r in self.integrated_results]
         if all_performances:
-            self.performance_metrics["average_overall_performance"] = sum(
-                all_performances
-            ) / len(all_performances)
+            self.performance_metrics["average_overall_performance"] = sum(all_performances) / len(all_performances)
 
     async def get_integration_status(self, session_id: str = None) -> Dict[str, Any]:
         """통합 상태 조회"""
@@ -405,20 +364,14 @@ class LearningIntegrationSystem:
         # 최근 결과 분석
         recent_results = self.integrated_results[-10:]  # 최근 10개 결과
 
-        avg_overall_performance = sum(
-            r.overall_performance for r in recent_results
-        ) / len(recent_results)
-        avg_integration_quality = sum(
-            r.integration_quality for r in recent_results
-        ) / len(recent_results)
+        avg_overall_performance = sum(r.overall_performance for r in recent_results) / len(recent_results)
+        avg_integration_quality = sum(r.integration_quality for r in recent_results) / len(recent_results)
 
         # 전략별 성과 분석
         strategy_performance = defaultdict(list)
         for result in recent_results:
             for strategy_result in result.strategy_results:
-                strategy_performance[strategy_result.strategy_type].append(
-                    strategy_result.performance_score
-                )
+                strategy_performance[strategy_result.strategy_type].append(strategy_result.performance_score)
 
         strategy_avg_performance = {}
         for strategy_type, scores in strategy_performance.items():
@@ -451,9 +404,7 @@ class LearningIntegrationSystem:
         # 최적화 분석
         optimization_analysis = {
             "total_results": len(self.integrated_results),
-            "average_performance": self.performance_metrics[
-                "average_overall_performance"
-            ],
+            "average_performance": self.performance_metrics["average_overall_performance"],
             "average_quality": self.performance_metrics["average_integration_quality"],
             "success_rate": self.performance_metrics["successful_strategies"]
             / max(self.performance_metrics["total_strategies_executed"], 1),

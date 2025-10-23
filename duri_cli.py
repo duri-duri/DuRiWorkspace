@@ -3,7 +3,6 @@
 DuRi CLI - 시스템 헌장 강제 적용 도구
 """
 
-import os
 import subprocess
 import sys
 from pathlib import Path
@@ -46,9 +45,7 @@ def enforce_constitution():
         if startup_file.exists():
             print(f"📋 {node} 헌장 적용 중...")
             try:
-                result = subprocess.run(
-                    [sys.executable, str(startup_file)], capture_output=True, text=True
-                )
+                result = subprocess.run([sys.executable, str(startup_file)], capture_output=True, text=True)
                 if result.returncode == 0:
                     print(f"✅ {node} 헌장 적용 완료")
                 else:

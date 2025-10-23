@@ -10,7 +10,7 @@ DuRi 언어 생성 시스템 - 창의적 생성기
 
 import logging
 from dataclasses import dataclass
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 logger = logging.getLogger(__name__)
 

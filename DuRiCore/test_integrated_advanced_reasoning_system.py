@@ -16,16 +16,17 @@ from typing import Any, Dict, List
 # 테스트 대상 시스템 import
 try:
     from integrated_advanced_reasoning_system import (
-        AdvancedReasoningLevel, Day14PerformanceMetrics,
-        IntegratedAdvancedReasoningSystem, ReasoningContext,
-        SystemIntegrationStatus)
+        AdvancedReasoningLevel,  # noqa: F401
+        Day14PerformanceMetrics,  # noqa: F401
+        IntegratedAdvancedReasoningSystem,
+        ReasoningContext,
+        SystemIntegrationStatus,  # noqa: F401
+    )
 except ImportError as e:
     logging.error(f"시스템 import 실패: {e}")
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -100,9 +101,7 @@ class AdvancedReasoningSystemTester:
 
         self.test_results.append(comprehensive_result)
 
-        logger.info(
-            f"=== Day 14 통합 고급 추론 시스템 종합 테스트 완료 (총 {total_time:.3f}초) ==="
-        )
+        logger.info(f"=== Day 14 통합 고급 추론 시스템 종합 테스트 완료 (총 {total_time:.3f}초) ===")
         return comprehensive_result
 
     async def _test_basic_functionality(self) -> Dict[str, Any]:
@@ -186,35 +185,27 @@ class AdvancedReasoningSystemTester:
                     "context_type": context.value,
                 }
 
-                reasoning_session = await self.system.process_advanced_reasoning(
-                    context, test_input
-                )
+                reasoning_session = await self.system.process_advanced_reasoning(context, test_input)
                 adaptive_results.append(
                     {
                         "context": context.value,
-                        "reasoning_type": reasoning_session.reasoning_results.get(
-                            "adaptive_reasoning", {}
-                        ).get("reasoning_type", "unknown"),
-                        "confidence_score": reasoning_session.reasoning_results.get(
-                            "adaptive_reasoning", {}
-                        ).get("confidence_score", 0.0),
-                        "adaptation_score": reasoning_session.reasoning_results.get(
-                            "adaptive_reasoning", {}
-                        ).get("adaptation_score", 0.0),
+                        "reasoning_type": reasoning_session.reasoning_results.get("adaptive_reasoning", {}).get(
+                            "reasoning_type", "unknown"
+                        ),
+                        "confidence_score": reasoning_session.reasoning_results.get("adaptive_reasoning", {}).get(
+                            "confidence_score", 0.0
+                        ),
+                        "adaptation_score": reasoning_session.reasoning_results.get("adaptive_reasoning", {}).get(
+                            "adaptation_score", 0.0
+                        ),
                     }
                 )
 
             result = {
                 "status": "success",
                 "adaptive_results": adaptive_results,
-                "average_confidence": sum(
-                    r["confidence_score"] for r in adaptive_results
-                )
-                / len(adaptive_results),
-                "average_adaptation": sum(
-                    r["adaptation_score"] for r in adaptive_results
-                )
-                / len(adaptive_results),
+                "average_confidence": sum(r["confidence_score"] for r in adaptive_results) / len(adaptive_results),
+                "average_adaptation": sum(r["adaptation_score"] for r in adaptive_results) / len(adaptive_results),
             }
 
             logger.info("적응적 추론 테스트 완료")
@@ -253,26 +244,16 @@ class AdvancedReasoningSystemTester:
                 ],
             }
 
-            reasoning_session = await self.system.process_advanced_reasoning(
-                ReasoningContext.ANALYSIS, test_input
-            )
+            reasoning_session = await self.system.process_advanced_reasoning(ReasoningContext.ANALYSIS, test_input)
 
-            consistency_result = reasoning_session.reasoning_results.get(
-                "consistency_enhancement", {}
-            )
+            consistency_result = reasoning_session.reasoning_results.get("consistency_enhancement", {})
 
             result = {
                 "status": "success",
-                "original_consistency": consistency_result.get(
-                    "original_consistency", 0.0
-                ),
-                "enhanced_consistency": consistency_result.get(
-                    "enhanced_consistency", 0.0
-                ),
+                "original_consistency": consistency_result.get("original_consistency", 0.0),
+                "enhanced_consistency": consistency_result.get("enhanced_consistency", 0.0),
                 "improvement_score": consistency_result.get("improvement_score", 0.0),
-                "enhancement_methods": consistency_result.get(
-                    "enhancement_methods", []
-                ),
+                "enhancement_methods": consistency_result.get("enhancement_methods", []),
             }
 
             logger.info("일관성 강화 테스트 완료")
@@ -314,13 +295,9 @@ class AdvancedReasoningSystemTester:
                 ]
             }
 
-            reasoning_session = await self.system.process_advanced_reasoning(
-                ReasoningContext.SYNTHESIS, test_input
-            )
+            reasoning_session = await self.system.process_advanced_reasoning(ReasoningContext.SYNTHESIS, test_input)
 
-            integration_result = reasoning_session.reasoning_results.get(
-                "integration_success", {}
-            )
+            integration_result = reasoning_session.reasoning_results.get("integration_success", {})
 
             result = {
                 "status": "success",
@@ -365,22 +342,14 @@ class AdvancedReasoningSystemTester:
                 },
             }
 
-            reasoning_session = await self.system.process_advanced_reasoning(
-                ReasoningContext.EVALUATION, test_input
-            )
+            reasoning_session = await self.system.process_advanced_reasoning(ReasoningContext.EVALUATION, test_input)
 
-            efficiency_result = reasoning_session.reasoning_results.get(
-                "efficiency_optimization", {}
-            )
+            efficiency_result = reasoning_session.reasoning_results.get("efficiency_optimization", {})
 
             result = {
                 "status": "success",
-                "original_efficiency": efficiency_result.get(
-                    "original_efficiency", 0.0
-                ),
-                "optimized_efficiency": efficiency_result.get(
-                    "optimized_efficiency", 0.0
-                ),
+                "original_efficiency": efficiency_result.get("original_efficiency", 0.0),
+                "optimized_efficiency": efficiency_result.get("optimized_efficiency", 0.0),
                 "improvement_score": efficiency_result.get("improvement_score", 0.0),
                 "strategy": efficiency_result.get("strategy", "unknown"),
             }
@@ -453,29 +422,17 @@ class AdvancedReasoningSystemTester:
                 },
             }
 
-            reasoning_session = await self.system.process_advanced_reasoning(
-                ReasoningContext.INTEGRATED, test_input
-            )
+            reasoning_session = await self.system.process_advanced_reasoning(ReasoningContext.INTEGRATED, test_input)
 
-            integration_result = reasoning_session.reasoning_results.get(
-                "integration_result", {}
-            )
+            integration_result = reasoning_session.reasoning_results.get("integration_result", {})
 
             result = {
                 "status": "success",
                 "overall_score": integration_result.get("overall_score", 0.0),
-                "adaptive_reasoning_score": integration_result.get(
-                    "adaptive_reasoning_score", 0.0
-                ),
-                "consistency_enhancement_score": integration_result.get(
-                    "consistency_enhancement_score", 0.0
-                ),
-                "integration_success_score": integration_result.get(
-                    "integration_success_score", 0.0
-                ),
-                "efficiency_optimization_score": integration_result.get(
-                    "efficiency_optimization_score", 0.0
-                ),
+                "adaptive_reasoning_score": integration_result.get("adaptive_reasoning_score", 0.0),
+                "consistency_enhancement_score": integration_result.get("consistency_enhancement_score", 0.0),
+                "integration_success_score": integration_result.get("integration_success_score", 0.0),
+                "efficiency_optimization_score": integration_result.get("efficiency_optimization_score", 0.0),
             }
 
             logger.info("통합 시스템 테스트 완료")
@@ -556,21 +513,19 @@ class AdvancedReasoningSystemTester:
         if not test_results:
             return 0.0
 
-        successful_tests = sum(
-            1 for result in test_results if result.get("status") == "success"
-        )
+        successful_tests = sum(1 for result in test_results if result.get("status") == "success")
         return successful_tests / len(test_results)
 
     async def save_test_results(self, filename: str = None):
         """테스트 결과 저장"""
         if filename is None:
-            filename = f"test_results_integrated_advanced_reasoning_system_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+            filename = (
+                f"test_results_integrated_advanced_reasoning_system_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+            )
 
         try:
             with open(filename, "w", encoding="utf-8") as f:
-                json.dump(
-                    self.test_results, f, indent=2, ensure_ascii=False, default=str
-                )
+                json.dump(self.test_results, f, indent=2, ensure_ascii=False, default=str)
 
             logger.info(f"테스트 결과가 {filename}에 저장되었습니다.")
         except Exception as e:
@@ -603,16 +558,10 @@ async def main():
 
         print("\n=== Day 14 목표 달성도 ===")
         print(f"일관성 점수: {performance_report['consistency_score']:.2%} (목표: 60%)")
-        print(
-            f"통합 성공도: {performance_report['integration_success_score']:.2%} (목표: 60%)"
-        )
+        print(f"통합 성공도: {performance_report['integration_success_score']:.2%} (목표: 60%)")
         print(f"효율성: {performance_report['efficiency_score']:.2%} (목표: 80%)")
-        print(
-            f"추론 적응력: {performance_report['reasoning_adaptation_score']:.2%} (목표: 70%)"
-        )
-        print(
-            f"전체 시스템 안정성: {performance_report['overall_system_stability']:.2%} (목표: 90%)"
-        )
+        print(f"추론 적응력: {performance_report['reasoning_adaptation_score']:.2%} (목표: 70%)")
+        print(f"전체 시스템 안정성: {performance_report['overall_system_stability']:.2%} (목표: 90%)")
 
         print(f"\n전체 달성도: {goals_evaluation['total_achievement_rate']:.2%}")
         print(f"전체 상태: {goals_evaluation['overall_status']}")
@@ -620,7 +569,7 @@ async def main():
     # 테스트 결과 저장
     await tester.save_test_results()
 
-    print(f"\n테스트 완료! 결과가 JSON 파일로 저장되었습니다.")
+    print("\n테스트 완료! 결과가 JSON 파일로 저장되었습니다.")
 
 
 if __name__ == "__main__":

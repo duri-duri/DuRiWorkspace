@@ -11,9 +11,7 @@ import time
 from duri_orchestrator import DuRiOrchestrator
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -58,25 +56,17 @@ async def test_act_r_integration():
     total_time = time.time() - start_time
 
     # 결과 분석
-    logger.info(f"📈 테스트 결과:")
+    logger.info("📈 테스트 결과:")
     logger.info(f"   총 실행 시간: {total_time:.3f}초")
     logger.info(f"   평균 실행 시간: {total_time/5:.3f}초")
 
     # 성능 메트릭 확인
     performance_metrics = orchestrator.get_performance_metrics()
-    logger.info(f"📊 성능 메트릭:")
-    logger.info(
-        f"   ACT-R 병렬 처리: {performance_metrics.get('act_r_parallel_processing', False)}"
-    )
-    logger.info(
-        f"   병렬 효율성: {performance_metrics.get('parallel_efficiency', 0.0):.1f}%"
-    )
-    logger.info(
-        f"   성능 향상률: {performance_metrics.get('performance_improvement', 0.0):.1f}%"
-    )
-    logger.info(
-        f"   목표 향상률: {performance_metrics.get('target_improvement', 23.0):.1f}%"
-    )
+    logger.info("📊 성능 메트릭:")
+    logger.info(f"   ACT-R 병렬 처리: {performance_metrics.get('act_r_parallel_processing', False)}")
+    logger.info(f"   병렬 효율성: {performance_metrics.get('parallel_efficiency', 0.0):.1f}%")
+    logger.info(f"   성능 향상률: {performance_metrics.get('performance_improvement', 0.0):.1f}%")
+    logger.info(f"   목표 향상률: {performance_metrics.get('target_improvement', 23.0):.1f}%")
     logger.info(f"   성공률: {performance_metrics.get('success_rate', 0.0):.1f}%")
 
     # 목표 달성 여부 확인
@@ -86,9 +76,7 @@ async def test_act_r_integration():
     if current_improvement >= target_improvement:
         logger.info("🎉 목표 성능 향상 달성!")
     else:
-        logger.info(
-            f"📈 추가 최적화 필요 (현재: {current_improvement:.1f}%, 목표: {target_improvement:.1f}%)"
-        )
+        logger.info(f"📈 추가 최적화 필요 (현재: {current_improvement:.1f}%, 목표: {target_improvement:.1f}%)")
 
     return {
         "total_time": total_time,
@@ -133,7 +121,7 @@ async def compare_sequential_vs_parallel():
     # 결과 분석
     improvement = ((sequential_time - parallel_time) / sequential_time) * 100
 
-    logger.info(f"📊 비교 결과:")
+    logger.info("📊 비교 결과:")
     logger.info(f"   순차 처리 시간: {sequential_time:.3f}초")
     logger.info(f"   병렬 처리 시간: {parallel_time:.3f}초")
     logger.info(f"   성능 향상률: {improvement:.1f}%")
@@ -157,13 +145,9 @@ async def main():
 
     # 최종 결과 요약
     logger.info("📋 최종 테스트 결과 요약:")
-    logger.info(
-        f"   통합 테스트 성공: {'✅' if integration_result['target_achieved'] else '❌'}"
-    )
+    logger.info(f"   통합 테스트 성공: {'✅' if integration_result['target_achieved'] else '❌'}")
     logger.info(f"   평균 실행 시간: {integration_result['average_time']:.3f}초")
-    logger.info(
-        f"   성능 향상률: {integration_result['performance_metrics']['performance_improvement']:.1f}%"
-    )
+    logger.info(f"   성능 향상률: {integration_result['performance_metrics']['performance_improvement']:.1f}%")
     logger.info(f"   병렬 vs 순차 향상률: {comparison_result['improvement']:.1f}%")
 
     return {"integration": integration_result, "comparison": comparison_result}

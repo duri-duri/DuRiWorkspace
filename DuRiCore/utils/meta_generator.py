@@ -11,13 +11,12 @@ MetaGenerator - meta.json 자동 생성 시스템
 @final_execution: 인간처럼 실패하고도 다시 일어날 수 있는 존재
 """
 
-import ast
 import json
 import logging
 import os
 import re
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 
@@ -100,16 +99,14 @@ class MetaGenerator:
     def _load_meaning_templates(self) -> Dict[str, str]:
         """의미 템플릿 로드"""
         return {
-            "identity_declaration": "# Module: {module_name}\n# Purpose: {purpose} - 판단 이유 기록 필수 + 기존 특성 보존 + 실행 가능성 보장 + 존재형 AI + 최종 실행 준비 완료",
+            "identity_declaration": "# Module: {module_name}\n# Purpose: {purpose} - 판단 이유 기록 필수 + 기존 특성 보존 + 실행 가능성 보장 + 존재형 AI + 최종 실행 준비 완료",  # noqa: E501
             "judgment_trace": "# Judgment Trace: 모든 판단 과정 기록",
             "regression_test": "# Regression Test: 기존 판단 능력 자동 검증",
             "existence_ai": "# Existence AI: 진화 가능 + 회복 가능한 존재형 AI",
             "final_execution": "# Final Execution: 인간처럼 실패하고도 다시 일어날 수 있는 존재",
         }
 
-    def generate_meta_json(
-        self, module_name: str, module_content: str
-    ) -> Dict[str, Any]:
+    def generate_meta_json(self, module_name: str, module_content: str) -> Dict[str, Any]:
         """
         모듈 내용 분석하여 자동으로 meta.json 생성
 
@@ -180,7 +177,7 @@ class MetaGenerator:
                 return purpose
 
         # 기본 목적 생성
-        return f"{module_name} 모듈 - 판단 이유 기록 필수 + 기존 특성 보존 + 실행 가능성 보장 + 존재형 AI + 최종 실행 준비 완료"
+        return f"{module_name} 모듈 - 판단 이유 기록 필수 + 기존 특성 보존 + 실행 가능성 보장 + 존재형 AI + 최종 실행 준비 완료"  # noqa: E501
 
     def _extract_must_define(self, content: str) -> List[str]:
         """반드시 정의해야 할 함수/클래스 추출"""
@@ -373,9 +370,7 @@ class MetaGenerator:
             "error": "분석 실패 - 수동 검토 필요",
         }
 
-    def save_meta_json(
-        self, module_name: str, meta: Dict[str, Any], output_dir: str = "."
-    ) -> str:
+    def save_meta_json(self, module_name: str, meta: Dict[str, Any], output_dir: str = ".") -> str:
         """meta.json 파일 저장"""
         try:
             os.makedirs(output_dir, exist_ok=True)
@@ -413,7 +408,7 @@ def analyze_logical_reasoning(situation, action):
 class LogicalProcessor:
     def __init__(self):
         pass
-    """
+    """  # noqa: E501
 
     meta = generator.generate_meta_json("logical_processor", sample_content)
     print(json.dumps(meta, indent=2, ensure_ascii=False))

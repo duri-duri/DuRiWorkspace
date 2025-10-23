@@ -4,7 +4,6 @@ DuRiCore - 메인 루프
 실제 AI의 핵심 루프: Input → 감정 → 판단 → 실행 → 성찰 → 저장
 """
 
-import asyncio
 import logging
 from dataclasses import dataclass
 from datetime import datetime
@@ -123,16 +122,12 @@ class MainLoop:
             logger.info(f"실행 완료: {execution.success}")
 
             # 4단계: 성찰
-            reflection = await self._reflect_on_cycle(
-                input_data, emotional_analysis, judgment, execution
-            )
+            reflection = await self._reflect_on_cycle(input_data, emotional_analysis, judgment, execution)
             logger.info(f"성찰 완료: {len(reflection.insights)}개 인사이트")
 
             # 5단계: 메모리 저장
-            memory_entry = await self._store_memory(
-                input_data, judgment, execution, reflection
-            )
-            logger.info(f"메모리 저장 완료")
+            memory_entry = await self._store_memory(input_data, judgment, execution, reflection)
+            logger.info("메모리 저장 완료")
 
             # 6단계: 자기 진화 (주기적)
             evolution_result = await self._check_and_evolve()
@@ -165,9 +160,7 @@ class MainLoop:
             # 감정 엔진을 통한 분석
             analysis_input = {"text": input_data.text, "context": input_data.context}
 
-            emotional_analysis = self.emotion_engine.analyze_complex_emotion(
-                analysis_input
-            )
+            emotional_analysis = self.emotion_engine.analyze_complex_emotion(analysis_input)
 
             # 현재 상태 업데이트
             self.current_state["emotional_state"] = emotional_analysis.primary_emotion
@@ -191,18 +184,14 @@ class MainLoop:
                 analysis_timestamp=datetime.now(),
             )
 
-    async def _create_judgment(
-        self, input_data: InputData, emotional_analysis: EmotionalAnalysis
-    ) -> JudgmentResult:
+    async def _create_judgment(self, input_data: InputData, emotional_analysis: EmotionalAnalysis) -> JudgmentResult:
         """판단 생성 단계"""
         try:
             # 감정 상태를 고려한 판단 생성
             emotional_context = {
                 "primary_emotion": emotional_analysis.primary_emotion,
                 "intensity": emotional_analysis.intensity,
-                "balance_type": emotional_analysis.emotion_reason_balance.get(
-                    "balance_type", "balanced"
-                ),
+                "balance_type": emotional_analysis.emotion_reason_balance.get("balance_type", "balanced"),
             }
 
             # 간단한 판단 로직 (실제로는 더 복잡한 LLM 기반 판단)
@@ -221,7 +210,7 @@ class MainLoop:
                 confidence = 0.5
 
             # 판단 근거 생성
-            reasoning = f"감정 상태({emotional_context['primary_emotion']}, 강도: {emotional_context['intensity']:.2f})를 고려하여 {decision}"
+            reasoning = f"감정 상태({emotional_context['primary_emotion']}, 강도: {emotional_context['intensity']:.2f})를 고려하여 {decision}"  # noqa: E501
 
             # 대안 생성
             alternatives = [
@@ -248,18 +237,14 @@ class MainLoop:
                 timestamp=datetime.now(),
             )
 
-    async def _execute_action(
-        self, judgment: JudgmentResult, emotional_analysis: EmotionalAnalysis
-    ) -> ExecutionResult:
+    async def _execute_action(self, judgment: JudgmentResult, emotional_analysis: EmotionalAnalysis) -> ExecutionResult:
         """실행 단계"""
         try:
             # 판단에 따른 실행
             action = judgment.decision
 
             # 실행 성공률 계산 (감정 상태와 판단 신뢰도 기반)
-            success_probability = judgment.confidence * (
-                1 - emotional_analysis.intensity * 0.3
-            )
+            success_probability = judgment.confidence * (1 - emotional_analysis.intensity * 0.3)
             success = success_probability > 0.5
 
             # 피드백 생성
@@ -309,43 +294,31 @@ class MainLoop:
 
             # 1. 감정적 인사이트
             if emotional_analysis.intensity > 0.7:
-                insights.append(
-                    f"강한 감정({emotional_analysis.primary_emotion})이 판단에 영향을 주었습니다."
-                )
+                insights.append(f"강한 감정({emotional_analysis.primary_emotion})이 판단에 영향을 주었습니다.")
 
             # 2. 판단 품질 분석
             if judgment.confidence < 0.6:
                 insights.append("판단에 대한 확신이 낮았습니다.")
-                improvement_suggestions.append(
-                    "더 많은 정보를 수집하여 판단의 정확도를 높이세요."
-                )
+                improvement_suggestions.append("더 많은 정보를 수집하여 판단의 정확도를 높이세요.")
 
             # 3. 실행 결과 분석
             if execution.success:
                 lessons_learned.append("성공적인 실행 패턴을 학습했습니다.")
             else:
                 lessons_learned.append("실패한 실행에서 교훈을 얻었습니다.")
-                improvement_suggestions.append(
-                    "다음에는 다른 접근 방식을 시도해보세요."
-                )
+                improvement_suggestions.append("다음에는 다른 접근 방식을 시도해보세요.")
 
             # 4. 감정-이성 균형 분석
-            balance_type = emotional_analysis.emotion_reason_balance.get(
-                "balance_type", "balanced"
-            )
+            balance_type = emotional_analysis.emotion_reason_balance.get("balance_type", "balanced")
             if balance_type == "emotion_dominant":
                 insights.append("감정이 이성보다 우세했습니다.")
-                improvement_suggestions.append(
-                    "더 객관적인 판단을 위해 이성적 분석을 강화하세요."
-                )
+                improvement_suggestions.append("더 객관적인 판단을 위해 이성적 분석을 강화하세요.")
             elif balance_type == "reason_dominant":
                 insights.append("이성이 감정보다 우세했습니다.")
                 improvement_suggestions.append("감정적 공감 능력을 향상시키세요.")
 
             # 5. 전반적인 학습
-            insights.append(
-                f"이번 경험을 통해 {emotional_analysis.primary_emotion} 상황에 대한 이해가 깊어졌습니다."
-            )
+            insights.append(f"이번 경험을 통해 {emotional_analysis.primary_emotion} 상황에 대한 이해가 깊어졌습니다.")
 
             return ReflectionResult(
                 insights=insights,
@@ -375,9 +348,7 @@ class MainLoop:
         """메모리 저장 단계"""
         try:
             # 중요도 점수 계산
-            importance_score = self._calculate_importance_score(
-                input_data, judgment, execution, reflection
-            )
+            importance_score = self._calculate_importance_score(input_data, judgment, execution, reflection)
 
             # 메모리 엔트리 생성
             memory_entry = MemoryEntry(
@@ -448,20 +419,14 @@ class MainLoop:
             last_evolution = self.current_state.get("last_evolution")
             current_time = datetime.now()
 
-            if (
-                last_evolution is None
-                or (current_time - last_evolution).total_seconds() > 3600
-            ):
-
+            if last_evolution is None or (current_time - last_evolution).total_seconds() > 3600:
                 logger.info("자기 진화 분석 시작")
                 evolution_result = self.self_evolution_engine.analyze_and_evolve()
 
                 # 진화 결과 적용
                 self.current_state["last_evolution"] = current_time
 
-                logger.info(
-                    f"자기 진화 완료: 점수 {evolution_result.evolution_score:.2f}"
-                )
+                logger.info(f"자기 진화 완료: 점수 {evolution_result.evolution_score:.2f}")
                 return evolution_result
 
             return None
@@ -498,9 +463,7 @@ class MainLoop:
 
     def get_memory_summary(self, limit: int = 10) -> List[Dict[str, Any]]:
         """메모리 요약 반환"""
-        recent_memories = sorted(
-            self.memory_store, key=lambda x: x.created_at, reverse=True
-        )[:limit]
+        recent_memories = sorted(self.memory_store, key=lambda x: x.created_at, reverse=True)[:limit]
 
         return [
             {

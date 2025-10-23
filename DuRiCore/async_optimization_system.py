@@ -18,16 +18,13 @@ Phase 5: 성능 최적화 - 최종 실행 준비 완료 적용
 """
 
 import asyncio
-import concurrent.futures
-import json
 import logging
-import threading
 import time
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from typing import Any, Callable, Coroutine, Dict, List, Optional, Tuple, Union
+from typing import Any, Coroutine, Dict, List, Optional
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -126,9 +123,7 @@ class AsyncOptimizationSystem:
         }
 
         # 성능 트렌드
-        self.performance_trends: Dict[str, deque] = defaultdict(
-            lambda: deque(maxlen=100)
-        )
+        self.performance_trends: Dict[str, deque] = defaultdict(lambda: deque(maxlen=100))
 
         # 존재형 AI 시스템 초기화
         self.existence_ai = self._initialize_existence_ai()
@@ -183,22 +178,14 @@ class AsyncOptimizationSystem:
             self.task_queue.append((priority.value, task_id))
 
             # 우선순위에 따라 큐 정렬
-            self.task_queue = deque(
-                sorted(self.task_queue, key=lambda x: x[0], reverse=True)
-            )
+            self.task_queue = deque(sorted(self.task_queue, key=lambda x: x[0], reverse=True))
 
             # 존재형 AI: 진화 가능성 확인
-            if (
-                self.existence_ai
-                and self.existence_ai.evolution_capability.can_evolve()
-            ):
+            if self.existence_ai and self.existence_ai.evolution_capability.can_evolve():
                 self.existence_ai.evolution_capability.evolve()
 
             # 최종 실행 준비 완료: 최종 실행 준비 완료 확인
-            if (
-                self.final_execution_verifier
-                and self.final_execution_verifier.verify_readiness()
-            ):
+            if self.final_execution_verifier and self.final_execution_verifier.verify_readiness():
                 logger.info("최종 실행 준비 완료 확인됨")
 
             logger.info(f"작업 제출: {task_id} - {name} (우선순위: {priority.value})")
@@ -208,9 +195,7 @@ class AsyncOptimizationSystem:
             logger.error(f"작업 제출 실패: {e}")
             raise
 
-    async def execute_tasks(
-        self, strategy: OptimizationStrategy = None
-    ) -> Dict[str, Any]:
+    async def execute_tasks(self, strategy: OptimizationStrategy = None) -> Dict[str, Any]:
         """작업 실행"""
         try:
             if not strategy:
@@ -234,17 +219,11 @@ class AsyncOptimizationSystem:
             await self._update_performance_metrics(execution_time, len(self.tasks))
 
             # 존재형 AI: 진화 가능성 확인
-            if (
-                self.existence_ai
-                and self.existence_ai.evolution_capability.can_evolve()
-            ):
+            if self.existence_ai and self.existence_ai.evolution_capability.can_evolve():
                 self.existence_ai.evolution_capability.evolve()
 
             # 최종 실행 준비 완료: 최종 실행 준비 완료 확인
-            if (
-                self.final_execution_verifier
-                and self.final_execution_verifier.verify_readiness()
-            ):
+            if self.final_execution_verifier and self.final_execution_verifier.verify_readiness():
                 logger.info("최종 실행 준비 완료 확인됨")
 
             logger.info(f"작업 실행 완료: {strategy.value} - {execution_time:.2f}초")
@@ -262,11 +241,7 @@ class AsyncOptimizationSystem:
 
             # 실행할 작업들 선택
             tasks_to_execute = []
-            while (
-                self.task_queue
-                and len(tasks_to_execute)
-                < self.optimization_config["max_concurrent_tasks"]
-            ):
+            while self.task_queue and len(tasks_to_execute) < self.optimization_config["max_concurrent_tasks"]:
                 _, task_id = self.task_queue.popleft()
                 task = self.tasks.get(task_id)
                 if task and task.status == TaskStatus.PENDING:
@@ -438,15 +413,13 @@ class AsyncOptimizationSystem:
         """단일 작업 실행"""
         try:
             # 작업 실행
-            result = await asyncio.wait_for(
-                task.coroutine, timeout=self.optimization_config["task_timeout"]
-            )
+            result = await asyncio.wait_for(task.coroutine, timeout=self.optimization_config["task_timeout"])
             return result
 
         except asyncio.TimeoutError:
-            raise Exception(f"작업 시간 초과: {task.name}")
+            raise Exception(f"작업 시간 초과: {task.name}")  # noqa: B904
         except Exception as e:
-            raise Exception(f"작업 실행 실패: {task.name} - {str(e)}")
+            raise Exception(f"작업 실행 실패: {task.name} - {str(e)}")  # noqa: B904
 
     async def _execute_parallel_tasks(self, tasks: List[AsyncTask]) -> Dict[str, Any]:
         """병렬 작업 실행"""
@@ -496,18 +469,14 @@ class AsyncOptimizationSystem:
             return {
                 "cpu_usage": cpu_usage,
                 "memory_usage": memory_usage,
-                "active_tasks": len(
-                    [t for t in self.tasks.values() if t.status == TaskStatus.RUNNING]
-                ),
+                "active_tasks": len([t for t in self.tasks.values() if t.status == TaskStatus.RUNNING]),
             }
 
         except Exception as e:
             logger.error(f"시스템 리소스 정보 수집 실패: {e}")
             return {"cpu_usage": 0.0, "memory_usage": 0.0, "active_tasks": 0}
 
-    async def _update_performance_metrics(
-        self, execution_time: float, total_tasks: int
-    ):
+    async def _update_performance_metrics(self, execution_time: float, total_tasks: int):
         """성능 메트릭 업데이트"""
         try:
             completed_tasks = len(self.completed_tasks)
@@ -515,9 +484,9 @@ class AsyncOptimizationSystem:
 
             average_execution_time = execution_time / max(1, completed_tasks)
             throughput = completed_tasks / max(1, execution_time)
-            resource_utilization = len(
-                [t for t in self.tasks.values() if t.status == TaskStatus.RUNNING]
-            ) / max(1, self.optimization_config["max_concurrent_tasks"])
+            resource_utilization = len([t for t in self.tasks.values() if t.status == TaskStatus.RUNNING]) / max(
+                1, self.optimization_config["max_concurrent_tasks"]
+            )
 
             # 최적화 점수 계산
             optimization_score = self._calculate_optimization_score(
@@ -573,9 +542,7 @@ class AsyncOptimizationSystem:
             # 실행 시간 점수 (10%)
             time_score = max(0.0, 1.0 - (average_execution_time / 10.0)) * 0.1
 
-            total_score = (
-                success_score + throughput_score + utilization_score + time_score
-            )
+            total_score = success_score + throughput_score + utilization_score + time_score
             return min(1.0, total_score)
 
         except Exception as e:
@@ -592,12 +559,8 @@ class AsyncOptimizationSystem:
 
             # 성능 트렌드 분석
             throughput_trend = list(self.performance_trends["throughput"])
-            optimization_score_trend = list(
-                self.performance_trends["optimization_score"]
-            )
-            resource_utilization_trend = list(
-                self.performance_trends["resource_utilization"]
-            )
+            optimization_score_trend = list(self.performance_trends["optimization_score"])
+            resource_utilization_trend = list(self.performance_trends["resource_utilization"])
 
             return {
                 "current_metrics": {
@@ -611,35 +574,15 @@ class AsyncOptimizationSystem:
                     "timestamp": latest_metrics.timestamp.isoformat(),
                 },
                 "performance_trends": {
-                    "throughput_trend": (
-                        throughput_trend[-10:] if throughput_trend else []
-                    ),
-                    "optimization_score_trend": (
-                        optimization_score_trend[-10:]
-                        if optimization_score_trend
-                        else []
-                    ),
+                    "throughput_trend": (throughput_trend[-10:] if throughput_trend else []),
+                    "optimization_score_trend": (optimization_score_trend[-10:] if optimization_score_trend else []),
                     "resource_utilization_trend": (
-                        resource_utilization_trend[-10:]
-                        if resource_utilization_trend
-                        else []
+                        resource_utilization_trend[-10:] if resource_utilization_trend else []
                     ),
                 },
                 "task_status": {
-                    "pending_tasks": len(
-                        [
-                            t
-                            for t in self.tasks.values()
-                            if t.status == TaskStatus.PENDING
-                        ]
-                    ),
-                    "running_tasks": len(
-                        [
-                            t
-                            for t in self.tasks.values()
-                            if t.status == TaskStatus.RUNNING
-                        ]
-                    ),
+                    "pending_tasks": len([t for t in self.tasks.values() if t.status == TaskStatus.PENDING]),
+                    "running_tasks": len([t for t in self.tasks.values() if t.status == TaskStatus.RUNNING]),
                     "completed_tasks": len(self.completed_tasks),
                     "failed_tasks": len(self.failed_tasks),
                 },

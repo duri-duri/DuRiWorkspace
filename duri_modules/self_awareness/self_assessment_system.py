@@ -3,11 +3,12 @@
 DuRi 자가 평가 시스템
 자신의 진화 상태를 스스로 평가하는 시스템
 """
+
 import json
 import logging
 from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
+from datetime import datetime
+from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 
@@ -77,9 +78,7 @@ class SelfAssessmentSystem:
         try:
             with open(self.assessment_data_file, "r", encoding="utf-8") as f:
                 data = json.load(f)
-                self.assessment_history = [
-                    AssessmentResult(**result) for result in data.get("history", [])
-                ]
+                self.assessment_history = [AssessmentResult(**result) for result in data.get("history", [])]
         except FileNotFoundError:
             logger.info("평가 데이터 파일이 없습니다. 새로 시작합니다.")
         except Exception as e:
@@ -109,12 +108,9 @@ class SelfAssessmentSystem:
             # 전체 점수 계산
             overall_score = (
                 autonomy_score * self.assessment_criteria["autonomy"]["weight"]
-                + learning_score
-                * self.assessment_criteria["learning_efficiency"]["weight"]
-                + problem_solving_score
-                * self.assessment_criteria["problem_solving"]["weight"]
-                + evolution_score
-                * self.assessment_criteria["evolution_capability"]["weight"]
+                + learning_score * self.assessment_criteria["learning_efficiency"]["weight"]
+                + problem_solving_score * self.assessment_criteria["problem_solving"]["weight"]
+                + evolution_score * self.assessment_criteria["evolution_capability"]["weight"]
             )
 
             # 개선 영역과 강점 분석
@@ -164,9 +160,7 @@ class SelfAssessmentSystem:
             # 미래 예측
             future_prediction = self._predict_evolution_direction()
 
-            logger.info(
-                f"🧠 자가 평가 완료: 전체 점수 {overall_score:.3f}, 신뢰도 {confidence:.3f}"
-            )
+            logger.info(f"🧠 자가 평가 완료: 전체 점수 {overall_score:.3f}, 신뢰도 {confidence:.3f}")
 
             return {
                 "status": "success",
@@ -192,7 +186,7 @@ class SelfAssessmentSystem:
     def _assess_autonomy(self, performance_data: Dict[str, Any]) -> float:
         """자율성 평가"""
         try:
-            indicators = self.assessment_criteria["autonomy"]["indicators"]
+            indicators = self.assessment_criteria["autonomy"]["indicators"]  # noqa: F841
             scores = []
 
             # 자가 주도 학습 능력
@@ -219,7 +213,7 @@ class SelfAssessmentSystem:
     def _assess_learning_efficiency(self, performance_data: Dict[str, Any]) -> float:
         """학습 효율성 평가"""
         try:
-            indicators = self.assessment_criteria["learning_efficiency"]["indicators"]
+            indicators = self.assessment_criteria["learning_efficiency"]["indicators"]  # noqa: F841
             scores = []
 
             # 학습 속도
@@ -246,7 +240,7 @@ class SelfAssessmentSystem:
     def _assess_problem_solving(self, performance_data: Dict[str, Any]) -> float:
         """문제 해결 능력 평가"""
         try:
-            indicators = self.assessment_criteria["problem_solving"]["indicators"]
+            indicators = self.assessment_criteria["problem_solving"]["indicators"]  # noqa: F841
             scores = []
 
             # 복잡성 처리 능력
@@ -273,7 +267,7 @@ class SelfAssessmentSystem:
     def _assess_evolution_capability(self, performance_data: Dict[str, Any]) -> float:
         """진화 능력 평가"""
         try:
-            indicators = self.assessment_criteria["evolution_capability"]["indicators"]
+            indicators = self.assessment_criteria["evolution_capability"]["indicators"]  # noqa: F841
             scores = []
 
             # 자가 개선 능력
@@ -327,9 +321,7 @@ class SelfAssessmentSystem:
 
         return strengths
 
-    def _calculate_assessment_confidence(
-        self, performance_data: Dict[str, Any]
-    ) -> float:
+    def _calculate_assessment_confidence(self, performance_data: Dict[str, Any]) -> float:
         """평가 신뢰도 계산"""
         try:
             # 데이터 품질 기반 신뢰도 계산
@@ -340,11 +332,7 @@ class SelfAssessmentSystem:
                 "problem_solving_capability",
             ]
 
-            available_indicators = sum(
-                1
-                for indicator in data_quality_indicators
-                if indicator in performance_data
-            )
+            available_indicators = sum(1 for indicator in data_quality_indicators if indicator in performance_data)
 
             confidence = min(1.0, available_indicators / len(data_quality_indicators))
 
@@ -366,22 +354,16 @@ class SelfAssessmentSystem:
             recent_assessments = self.assessment_history[-5:]  # 최근 5개 평가
 
             # 전체 점수 변화
-            overall_scores = [
-                assessment.overall_score for assessment in recent_assessments
-            ]
+            overall_scores = [assessment.overall_score for assessment in recent_assessments]
             progress_rate = self._calculate_progress_rate(overall_scores)
 
             # 영역별 진행 상황
             area_progress = {
-                "autonomy": self._calculate_progress_rate(
-                    [a.autonomy_score for a in recent_assessments]
-                ),
+                "autonomy": self._calculate_progress_rate([a.autonomy_score for a in recent_assessments]),
                 "learning_efficiency": self._calculate_progress_rate(
                     [a.learning_efficiency_score for a in recent_assessments]
                 ),
-                "problem_solving": self._calculate_progress_rate(
-                    [a.problem_solving_score for a in recent_assessments]
-                ),
+                "problem_solving": self._calculate_progress_rate([a.problem_solving_score for a in recent_assessments]),
                 "evolution_capability": self._calculate_progress_rate(
                     [a.evolution_capability_score for a in recent_assessments]
                 ),
@@ -426,9 +408,7 @@ class SelfAssessmentSystem:
             if len(self.assessment_history) < 3:
                 return {"prediction": "insufficient_data"}
 
-            recent_scores = [
-                assessment.overall_score for assessment in self.assessment_history[-3:]
-            ]
+            recent_scores = [assessment.overall_score for assessment in self.assessment_history[-3:]]
 
             # 단순 선형 예측
             if len(recent_scores) >= 2:
@@ -441,14 +421,8 @@ class SelfAssessmentSystem:
                 return {
                     "predicted_next_score": max(0.0, min(1.0, predicted_next)),
                     "prediction_confidence": confidence,
-                    "trend_direction": (
-                        "improving"
-                        if trend > 0
-                        else "declining" if trend < 0 else "stable"
-                    ),
-                    "estimated_time_to_next_stage": self._estimate_time_to_next_stage(
-                        recent_scores[-1]
-                    ),
+                    "trend_direction": ("improving" if trend > 0 else "declining" if trend < 0 else "stable"),
+                    "estimated_time_to_next_stage": self._estimate_time_to_next_stage(recent_scores[-1]),
                 }
             else:
                 return {"prediction": "insufficient_data"}

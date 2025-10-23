@@ -9,12 +9,11 @@ DuRi 추론 시스템 - 논리 처리 모듈
 - 논리적 추론 체인 분석
 """
 
-import asyncio
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple, Union
+from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 
@@ -114,9 +113,7 @@ class LogicProcessor:
                 }
             )
 
-            self.logger.info(
-                f"논리 처리 완료: {logic_type.value}, 일관성: {analysis.consistency_score:.2f}"
-            )
+            self.logger.info(f"논리 처리 완료: {logic_type.value}, 일관성: {analysis.consistency_score:.2f}")
             return analysis
 
         except Exception as e:
@@ -128,19 +125,13 @@ class LogicProcessor:
                 issues=[f"오류 발생: {str(e)}"],
             )
 
-    def _extract_logical_rules(
-        self, input_data: Dict[str, Any], logic_type: LogicType
-    ) -> List[LogicalRule]:
+    def _extract_logical_rules(self, input_data: Dict[str, Any], logic_type: LogicType) -> List[LogicalRule]:
         """논리적 규칙 추출"""
         rules = []
 
         try:
             for key, value in input_data.items():
-                if (
-                    isinstance(value, dict)
-                    and "premises" in value
-                    and "conclusion" in value
-                ):
+                if isinstance(value, dict) and "premises" in value and "conclusion" in value:
                     rule = LogicalRule(
                         rule_id=f"rule_{len(rules)}",
                         rule_type=logic_type,
@@ -229,9 +220,7 @@ class LogicProcessor:
             self.logger.error(f"규칙 연결 확인 중 오류: {e}")
             return False
 
-    def _analyze_logic(
-        self, chains: List[LogicalChain], logic_type: LogicType
-    ) -> LogicAnalysis:
+    def _analyze_logic(self, chains: List[LogicalChain], logic_type: LogicType) -> LogicAnalysis:
         """논리 분석 수행"""
         try:
             # 일관성 분석
@@ -287,10 +276,7 @@ class LogicProcessor:
             conclusion_consistency = self._check_conclusion_consistency(conclusions)
 
             # 전체 일관성 점수
-            overall_consistency = (
-                sum(consistency_scores) / len(consistency_scores)
-                + conclusion_consistency
-            ) / 2
+            overall_consistency = (sum(consistency_scores) / len(consistency_scores) + conclusion_consistency) / 2
             return min(1.0, overall_consistency)
 
         except Exception as e:
@@ -351,9 +337,7 @@ class LogicProcessor:
                     if self._are_conclusions_consistent(conclusions[i], conclusions[j]):
                         consistency_count += 1
 
-            return (
-                consistency_count / total_comparisons if total_comparisons > 0 else 1.0
-            )
+            return consistency_count / total_comparisons if total_comparisons > 0 else 1.0
 
         except Exception as e:
             self.logger.error(f"결론 일관성 확인 중 오류: {e}")
@@ -377,9 +361,7 @@ class LogicProcessor:
             ]
 
             for pair in opposite_pairs:
-                if (pair[0] in c1_lower and pair[1] in c2_lower) or (
-                    pair[1] in c1_lower and pair[0] in c2_lower
-                ):
+                if (pair[0] in c1_lower and pair[1] in c2_lower) or (pair[1] in c1_lower and pair[0] in c2_lower):
                     return False
 
             return True
@@ -457,13 +439,9 @@ class LogicProcessor:
                 issues.append("논리적 체인이 부족합니다.")
 
             # 신뢰도가 낮은 체인들
-            low_confidence_chains = [
-                chain for chain in chains if chain.confidence < 0.5
-            ]
+            low_confidence_chains = [chain for chain in chains if chain.confidence < 0.5]
             if low_confidence_chains:
-                issues.append(
-                    f"신뢰도가 낮은 체인이 {len(low_confidence_chains)}개 있습니다."
-                )
+                issues.append(f"신뢰도가 낮은 체인이 {len(low_confidence_chains)}개 있습니다.")
 
             # 짧은 체인들
             short_chains = [chain for chain in chains if len(chain.steps) < 2]
@@ -476,9 +454,7 @@ class LogicProcessor:
             self.logger.error(f"문제점 식별 중 오류: {e}")
             return [f"문제점 식별 오류: {str(e)}"]
 
-    def _generate_suggestions(
-        self, chains: List[LogicalChain], logic_type: LogicType
-    ) -> List[str]:
+    def _generate_suggestions(self, chains: List[LogicalChain], logic_type: LogicType) -> List[str]:
         """개선 제안 생성"""
         suggestions = []
 
@@ -488,24 +464,18 @@ class LogicProcessor:
                 suggestions.append("더 많은 논리적 규칙을 추가하여 체인을 확장하세요.")
 
             # 신뢰도가 낮은 체인들
-            low_confidence_chains = [
-                chain for chain in chains if chain.confidence < 0.5
-            ]
+            low_confidence_chains = [chain for chain in chains if chain.confidence < 0.5]
             if low_confidence_chains:
                 suggestions.append("신뢰도가 낮은 규칙들을 개선하거나 대체하세요.")
 
             # 짧은 체인들
             short_chains = [chain for chain in chains if len(chain.steps) < 2]
             if short_chains:
-                suggestions.append(
-                    "단일 규칙 체인들을 연결하여 복합 체인을 구축하세요."
-                )
+                suggestions.append("단일 규칙 체인들을 연결하여 복합 체인을 구축하세요.")
 
             # 논리 유형별 제안
             if logic_type == LogicType.PROPOSITIONAL:
-                suggestions.append(
-                    "명제 논리를 위해 더 명확한 전제-결론 구조를 사용하세요."
-                )
+                suggestions.append("명제 논리를 위해 더 명확한 전제-결론 구조를 사용하세요.")
             elif logic_type == LogicType.PREDICATE:
                 suggestions.append("술어 논리를 위해 변수와 양화사를 활용하세요.")
             elif logic_type == LogicType.MODAL:
@@ -517,9 +487,7 @@ class LogicProcessor:
             self.logger.error(f"개선 제안 생성 중 오류: {e}")
             return [f"제안 생성 오류: {str(e)}"]
 
-    def _update_performance_metrics(
-        self, analysis: LogicAnalysis, processing_time: float
-    ):
+    def _update_performance_metrics(self, analysis: LogicAnalysis, processing_time: float):
         """성능 메트릭 업데이트"""
         self.performance_metrics["total_processings"] += 1
         if analysis.consistency_score > 0.5 and analysis.validity_score > 0.5:

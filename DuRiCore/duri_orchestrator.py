@@ -15,16 +15,14 @@ import importlib
 import json
 import logging
 import sys
-import time
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Dict, List
 
 # 새로운 모듈 레지스트리 시스템 import
 try:
-    from module_registry import (BaseModule, ModulePriority, ModuleRegistry,
-                                 ModuleState)
+    from module_registry import BaseModule, ModulePriority, ModuleRegistry, ModuleState  # noqa: F401
 
     MODULE_REGISTRY_AVAILABLE = True
 except ImportError:
@@ -33,7 +31,7 @@ except ImportError:
 
 # 시스템 어댑터 import
 try:
-    from system_adapters import SystemAdapterFactory, wrap_existing_systems
+    from system_adapters import SystemAdapterFactory, wrap_existing_systems  # noqa: F401
 
     SYSTEM_ADAPTERS_AVAILABLE = True
 except ImportError:
@@ -68,9 +66,7 @@ except ImportError:
     print("⚠️  CoALA 모듈 인터페이스를 찾을 수 없습니다. 기본 모드로 실행됩니다.")
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -211,9 +207,7 @@ class DuRiOrchestrator:
 
             # 래핑된 시스템들로 교체
             for system_name, adapter in wrapped_systems.items():
-                if system_name not in self.systems or isinstance(
-                    self.systems[system_name], BaseModule
-                ):
+                if system_name not in self.systems or isinstance(self.systems[system_name], BaseModule):
                     self.systems[system_name] = adapter
                     logger.info(f"✅ {system_name} 어댑터 적용 완료")
 
@@ -319,9 +313,7 @@ class DuRiOrchestrator:
                 # LIDA 주의 시스템 + ACT-R 병렬 처리 사용
                 judgment_tasks = [
                     lambda: (
-                        self._call_judgment_system()
-                        if "judgment_system" in self.systems
-                        else self._default_judgment()
+                        self._call_judgment_system() if "judgment_system" in self.systems else self._default_judgment()
                     ),
                     lambda: self._analyze_context(),
                     lambda: self._evaluate_priority(),
@@ -329,42 +321,28 @@ class DuRiOrchestrator:
 
                 # LIDA 주의 시스템을 통한 인간적 판단
                 attention_context = {"type": "judgment_phase", "data": "시스템 판단"}
-                lida_judgment = await self.attention_system.make_human_like_judgment(
-                    attention_context
-                )
+                lida_judgment = await self.attention_system.make_human_like_judgment(attention_context)
 
-                judgment_results = (
-                    await self.parallel_processor.execute_judgment_parallel(
-                        judgment_tasks
-                    )
-                )
+                judgment_results = await self.parallel_processor.execute_judgment_parallel(judgment_tasks)
                 judgment_result = judgment_results[0] if judgment_results else None
 
                 # LIDA 판단 결과와 병렬 처리 결과 통합
                 if judgment_result and isinstance(judgment_result, dict):
                     judgment_result["lida_attention"] = lida_judgment
-                    judgment_result["human_like_accuracy"] = lida_judgment.get(
-                        "accuracy", 0.0
-                    )
+                    judgment_result["human_like_accuracy"] = lida_judgment.get("accuracy", 0.0)
 
                 logger.info(f"✅ LIDA + 병렬 판단 결과: {judgment_result}")
             elif self.parallel_processor:
                 # ACT-R 병렬 처리만 사용
                 judgment_tasks = [
                     lambda: (
-                        self._call_judgment_system()
-                        if "judgment_system" in self.systems
-                        else self._default_judgment()
+                        self._call_judgment_system() if "judgment_system" in self.systems else self._default_judgment()
                     ),
                     lambda: self._analyze_context(),
                     lambda: self._evaluate_priority(),
                 ]
 
-                judgment_results = (
-                    await self.parallel_processor.execute_judgment_parallel(
-                        judgment_tasks
-                    )
-                )
+                judgment_results = await self.parallel_processor.execute_judgment_parallel(judgment_tasks)
                 judgment_result = judgment_results[0] if judgment_results else None
                 logger.info(f"✅ 병렬 판단 결과: {judgment_result}")
             else:
@@ -391,18 +369,12 @@ class DuRiOrchestrator:
             if self.parallel_processor:
                 # ACT-R 병렬 처리 사용
                 action_tasks = [
-                    lambda: (
-                        self._call_action_system()
-                        if "action_system" in self.systems
-                        else self._default_action()
-                    ),
+                    lambda: (self._call_action_system() if "action_system" in self.systems else self._default_action()),
                     lambda: self._update_memory(),
                     lambda: self._prepare_response(),
                 ]
 
-                action_results = await self.parallel_processor.execute_action_parallel(
-                    action_tasks
-                )
+                action_results = await self.parallel_processor.execute_action_parallel(action_tasks)
                 action_result = action_results[0] if action_results else None
                 logger.info(f"✅ 병렬 행동 결과: {action_result}")
             else:
@@ -430,19 +402,13 @@ class DuRiOrchestrator:
                 # ACT-R 병렬 처리 사용
                 feedback_tasks = [
                     lambda: (
-                        self._call_feedback_system()
-                        if "feedback_system" in self.systems
-                        else self._default_feedback()
+                        self._call_feedback_system() if "feedback_system" in self.systems else self._default_feedback()
                     ),
                     lambda: self._evaluate_performance(),
                     lambda: self._plan_next_steps(),
                 ]
 
-                feedback_results = (
-                    await self.parallel_processor.execute_feedback_parallel(
-                        feedback_tasks
-                    )
-                )
+                feedback_results = await self.parallel_processor.execute_feedback_parallel(feedback_tasks)
                 feedback_result = feedback_results[0] if feedback_results else None
                 logger.info(f"✅ 병렬 피드백 결과: {feedback_result}")
             else:
@@ -673,9 +639,7 @@ class DuRiOrchestrator:
 
     async def _monitor_performance(self):
         """성능 모니터링 (ACT-R 병렬 처리 포함)"""
-        active_systems = sum(
-            1 for status in self.system_status.values() if status.status == "active"
-        )
+        active_systems = sum(1 for status in self.system_status.values() if status.status == "active")
         total_systems = len(self.system_status)
 
         performance_ratio = active_systems / total_systems if total_systems > 0 else 0
@@ -695,12 +659,8 @@ class DuRiOrchestrator:
                 {
                     "act_r_parallel_processing": True,
                     "parallel_efficiency": parallel_report.get("efficiency", 0.0),
-                    "performance_improvement": parallel_report.get(
-                        "current_improvement", 0.0
-                    ),
-                    "target_improvement": parallel_report.get(
-                        "target_improvement", 23.0
-                    ),
+                    "performance_improvement": parallel_report.get("current_improvement", 0.0),
+                    "target_improvement": parallel_report.get("target_improvement", 23.0),
                     "baseline_time": parallel_report.get("baseline_time", 0.104),
                     "target_time": parallel_report.get("target_time", 0.08),
                     "success_rate": parallel_report.get("success_rate", 0.0),
@@ -726,12 +686,8 @@ class DuRiOrchestrator:
                 {
                     "lida_attention_system": True,
                     "attention_accuracy": attention_report.get("current_accuracy", 0.0),
-                    "accuracy_improvement": attention_report.get(
-                        "accuracy_improvement", 0.0
-                    ),
-                    "target_accuracy_improvement": attention_report.get(
-                        "target_improvement", 15.0
-                    ),
+                    "accuracy_improvement": attention_report.get("accuracy_improvement", 0.0),
+                    "target_accuracy_improvement": attention_report.get("target_improvement", 15.0),
                     "attention_state": attention_report.get("attention_state", {}),
                     "total_attention_tasks": attention_report.get("total_tasks", 0),
                 }
@@ -748,9 +704,7 @@ class DuRiOrchestrator:
                 }
             )
 
-        logger.info(
-            f"📊 성능 지표: {active_systems}/{total_systems} 시스템 활성 ({performance_ratio:.1%})"
-        )
+        logger.info(f"📊 성능 지표: {active_systems}/{total_systems} 시스템 활성 ({performance_ratio:.1%})")
 
     def stop_execution_loop(self):
         """실행 루프 중지"""
@@ -772,13 +726,9 @@ class DuRiOrchestrator:
     def generate_status_report(self) -> Dict[str, Any]:
         """상태 리포트 생성"""
         return {
-            "orchestrator_status": (
-                "active" if self.execution_loop_active else "inactive"
-            ),
+            "orchestrator_status": ("active" if self.execution_loop_active else "inactive"),
             "system_count": len(self.systems),
-            "active_systems": sum(
-                1 for status in self.system_status.values() if status.status == "active"
-            ),
+            "active_systems": sum(1 for status in self.system_status.values() if status.status == "active"),
             "performance_metrics": self.performance_metrics,
             "error_count": len(self.error_log),
             "timestamp": datetime.now().isoformat(),

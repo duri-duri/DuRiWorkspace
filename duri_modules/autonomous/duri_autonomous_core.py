@@ -1,21 +1,18 @@
-import asyncio
 import logging
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
-from duri_brain.app.services.self_evolution_service import SelfEvolutionService
 from duri_brain.learning.auto_retrospector import AutoRetrospector
 from duri_brain.learning.learning_loop_manager import LearningLoopManager
+
 # 기존 시스템들 import
-from duri_modules.autonomous.autonomous_question_generator import \
-    AutonomousQuestionGenerator
+from duri_modules.autonomous.autonomous_question_generator import AutonomousQuestionGenerator
 from duri_modules.autonomous.continuous_learner import AutonomousLearner
 from duri_modules.autonomous.realtime_learner import RealtimeLearner
 from duri_modules.autonomous.result_improver import ResultImprover
 from duri_modules.autonomous.strategy_loop_runner import StrategyLoopRunner
-from duri_modules.autonomous.unified_improvement_system import \
-    UnifiedImprovementSystem
+from duri_modules.autonomous.unified_improvement_system import UnifiedImprovementSystem
 
 logger = logging.getLogger(__name__)
 
@@ -86,9 +83,7 @@ class DuRiAutonomousCore:
             logger.error(f"❌ 자율 학습 중지 오류: {e}")
             return False
 
-    async def execute_autonomous_learning_cycle(
-        self, conversation_context: Dict[str, Any]
-    ) -> AutonomousLearningCycle:
+    async def execute_autonomous_learning_cycle(self, conversation_context: Dict[str, Any]) -> AutonomousLearningCycle:
         """완전한 자율 학습 사이클 실행"""
         try:
             cycle_id = f"cycle_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
@@ -97,28 +92,20 @@ class DuRiAutonomousCore:
             logger.info(f"🔄 자율 학습 사이클 시작: {cycle_id}")
 
             # 1단계: 자율 질문 생성
-            question_result = await self._generate_autonomous_question(
-                conversation_context
-            )
+            question_result = await self._generate_autonomous_question(conversation_context)
 
             # 2단계: 학습 실행
-            learning_result = await self._execute_learning(
-                question_result, conversation_context
-            )
+            learning_result = await self._execute_learning(question_result, conversation_context)
 
             # 3단계: 개선 적용
-            improvement_result = await self._apply_improvements(
-                learning_result, conversation_context
-            )
+            improvement_result = await self._apply_improvements(learning_result, conversation_context)
 
             # 4단계: 메타 학습 업데이트
-            meta_learning_result = await self._update_meta_learning(improvement_result)
+            meta_learning_result = await self._update_meta_learning(improvement_result)  # noqa: F841
 
             # 결과 생성
             end_time = datetime.now().isoformat()
-            overall_score = self._calculate_cycle_score(
-                question_result, learning_result, improvement_result
-            )
+            overall_score = self._calculate_cycle_score(question_result, learning_result, improvement_result)
 
             cycle_result = AutonomousLearningCycle(
                 cycle_id=cycle_id,
@@ -128,20 +115,14 @@ class DuRiAutonomousCore:
                 learning_completed=learning_result.get("success", False),
                 improvement_applied=improvement_result.get("success", False),
                 overall_score=overall_score,
-                insights=self._extract_insights(
-                    question_result, learning_result, improvement_result
-                ),
-                next_actions=self._generate_next_actions(
-                    overall_score, improvement_result
-                ),
+                insights=self._extract_insights(question_result, learning_result, improvement_result),
+                next_actions=self._generate_next_actions(overall_score, improvement_result),
             )
 
             # 히스토리에 저장
             self.learning_history.append(cycle_result)
 
-            logger.info(
-                f"✅ 자율 학습 사이클 완료: {cycle_id} (점수: {overall_score:.3f})"
-            )
+            logger.info(f"✅ 자율 학습 사이클 완료: {cycle_id} (점수: {overall_score:.3f})")
 
             return cycle_result
 
@@ -149,9 +130,7 @@ class DuRiAutonomousCore:
             logger.error(f"❌ 자율 학습 사이클 오류: {e}")
             return None
 
-    async def _generate_autonomous_question(
-        self, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _generate_autonomous_question(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """자율 질문 생성"""
         try:
             # 학습 컨텍스트 준비
@@ -181,9 +160,7 @@ class DuRiAutonomousCore:
             logger.error(f"❌ 자율 질문 생성 오류: {e}")
             return {"success": False, "message": str(e)}
 
-    async def _execute_learning(
-        self, question_result: Dict[str, Any], context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _execute_learning(self, question_result: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
         """학습 실행"""
         try:
             if not question_result.get("success"):
@@ -199,9 +176,7 @@ class DuRiAutonomousCore:
             }
 
             # 자동 학습 실행
-            autonomous_result = self.autonomous_learner.process_learning_question(
-                learning_metrics
-            )
+            autonomous_result = self.autonomous_learner.process_learning_question(learning_metrics)
 
             # 실시간 학습에도 전달
             self.realtime_learner.add_conversation(
@@ -219,9 +194,7 @@ class DuRiAutonomousCore:
             logger.error(f"❌ 학습 실행 오류: {e}")
             return {"success": False, "message": str(e)}
 
-    async def _apply_improvements(
-        self, learning_result: Dict[str, Any], context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _apply_improvements(self, learning_result: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
         """개선 적용"""
         try:
             if not learning_result.get("success"):
@@ -235,14 +208,10 @@ class DuRiAutonomousCore:
             }
 
             # 결과 개선 실행
-            improvement_result = self.result_improver.analyze_and_improve(
-                improvement_context
-            )
+            improvement_result = self.result_improver.analyze_and_improve(improvement_context)
 
             # 전략 루프 실행
-            strategy_result = self.strategy_runner.start_improvement_loop(
-                improvement_context
-            )
+            strategy_result = self.strategy_runner.start_improvement_loop(improvement_context)
 
             # 통합 개선 시스템 실행
             unified_result = self.unified_improver.execute_comprehensive_improvement(
@@ -260,27 +229,19 @@ class DuRiAutonomousCore:
             logger.error(f"❌ 개선 적용 오류: {e}")
             return {"success": False, "message": str(e)}
 
-    async def _update_meta_learning(
-        self, improvement_result: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _update_meta_learning(self, improvement_result: Dict[str, Any]) -> Dict[str, Any]:
         """메타 학습 업데이트"""
         try:
             # 자동 성찰
-            retrospection = self.auto_retrospector.reflect_on_learning_cycle(
-                improvement_result
-            )
+            retrospection = self.auto_retrospector.reflect_on_learning_cycle(improvement_result)
 
             # 학습 루프 관리자 업데이트
-            loop_update = self.learning_loop_manager.update_learning_strategy(
-                retrospection
-            )
+            loop_update = self.learning_loop_manager.update_learning_strategy(retrospection)
 
             # 자기 진화 서비스 업데이트 (선택적)
             evolution_update = None
             if self.self_evolution_service:
-                evolution_update = self.self_evolution_service.evolve_based_on_learning(
-                    improvement_result
-                )
+                evolution_update = self.self_evolution_service.evolve_based_on_learning(improvement_result)
 
             return {
                 "success": True,
@@ -336,9 +297,7 @@ class DuRiAutonomousCore:
 
         return insights
 
-    def _generate_next_actions(
-        self, overall_score: float, improvement_result: Dict[str, Any]
-    ) -> List[str]:
+    def _generate_next_actions(self, overall_score: float, improvement_result: Dict[str, Any]) -> List[str]:
         """다음 액션 생성"""
         actions = []
 
@@ -362,9 +321,7 @@ class DuRiAutonomousCore:
             "realtime_learner_status": self.realtime_learner.get_realtime_status(),
             "question_generator_status": self.question_generator.get_system_status(),
             "recent_insights": (
-                [cycle.insights for cycle in self.learning_history[-3:]]
-                if self.learning_history
-                else []
+                [cycle.insights for cycle in self.learning_history[-3:]] if self.learning_history else []
             ),
         }
 

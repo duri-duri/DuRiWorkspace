@@ -12,7 +12,7 @@ DuRi 언어 이해 시스템 - 다국어 처리기
 import logging
 import re
 from dataclasses import dataclass
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 logger = logging.getLogger(__name__)
 
@@ -40,18 +40,14 @@ class MultilingualProcessor:
         }
         self.logger.info("다국어 처리기 초기화 완료")
 
-    async def process_multilingual(
-        self, text: str, context: Dict[str, Any] = None
-    ) -> Dict[str, Any]:
+    async def process_multilingual(self, text: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
         """다국어 처리"""
         try:
             # 언어 감지
             detected_language = self._detect_language(text)
 
             # 언어별 처리
-            language_specific_analysis = await self._process_language_specific(
-                text, detected_language
-            )
+            language_specific_analysis = await self._process_language_specific(text, detected_language)
 
             return {
                 "detected_language": detected_language,
@@ -109,9 +105,7 @@ class MultilingualProcessor:
             self.logger.error(f"중국어 감지 중 오류: {e}")
             return False
 
-    async def _process_language_specific(
-        self, text: str, language: str
-    ) -> Dict[str, Any]:
+    async def _process_language_specific(self, text: str, language: str) -> Dict[str, Any]:
         """언어별 특화 처리"""
         try:
             if language == "ko":

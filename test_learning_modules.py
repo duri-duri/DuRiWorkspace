@@ -24,9 +24,7 @@ async def test_unified_learning_system():
     print("-" * 40)
 
     try:
-        from DuRiCore.unified_learning_system import (EvolutionType,
-                                                      LearningType,
-                                                      UnifiedLearningSystem)
+        from DuRiCore.unified_learning_system import EvolutionType, LearningType, UnifiedLearningSystem
 
         # 시스템 초기화
         learning_system = UnifiedLearningSystem()
@@ -57,10 +55,8 @@ async def test_autonomous_learning_system():
     print("-" * 40)
 
     try:
-        from duri_modules.autonomous.continuous_learner import \
-            AutonomousLearner
-        from duri_modules.autonomous.duri_autonomous_core import \
-            DuRiAutonomousCore
+        from duri_modules.autonomous.continuous_learner import AutonomousLearner
+        from duri_modules.autonomous.duri_autonomous_core import DuRiAutonomousCore
 
         # 자율 학습 시작
         autonomous_learner = AutonomousLearner()
@@ -89,8 +85,7 @@ async def test_learning_loop_manager():
     print("-" * 40)
 
     try:
-        from duri_brain.learning.learning_loop_manager import \
-            get_learning_loop_manager
+        from duri_brain.learning.learning_loop_manager import get_learning_loop_manager
 
         # 학습 루프 매니저 가져오기
         learning_loop_manager = get_learning_loop_manager()
@@ -126,8 +121,7 @@ async def test_realtime_learner():
     print("-" * 40)
 
     try:
-        from duri_modules.autonomous.continuous_learner import \
-            AutonomousLearner
+        from duri_modules.autonomous.continuous_learner import AutonomousLearner
         from duri_modules.autonomous.realtime_learner import RealtimeLearner
 
         autonomous_learner = AutonomousLearner()
@@ -156,8 +150,7 @@ async def test_memory_sync():
     print("-" * 40)
 
     try:
-        from duri_core.memory.memory_sync import (ExperienceSource, MemoryType,
-                                                  get_memory_sync)
+        from duri_core.memory.memory_sync import ExperienceSource, MemoryType, get_memory_sync
 
         # 메모리 동기화 시스템 가져오기
         memory_sync = get_memory_sync()
@@ -175,9 +168,7 @@ async def test_memory_sync():
         print(f"✅ 테스트 데이터 저장 성공: {memory_id}")
 
         # 데이터 조회
-        experiences = memory_sync.retrieve_experiences(
-            memory_type=MemoryType.LEARNING_EXPERIENCE, limit=1
-        )
+        experiences = memory_sync.retrieve_experiences(memory_type=MemoryType.LEARNING_EXPERIENCE, limit=1)
         print(f"✅ 데이터 조회 성공: {len(experiences)}개")
 
         return True

@@ -19,16 +19,18 @@ import json
 import logging
 import time
 from datetime import datetime
-from typing import Any, Dict, List
 
 # Day 11 시스템 import
 try:
-    from social_intelligence_system import InteractionType, RelationshipType
-    from social_intelligence_system import SocialContext
-    from social_intelligence_system import SocialContext as SocialContextEnum
-    from social_intelligence_system import (SocialIntelligenceResult,
-                                            SocialIntelligenceSystem,
-                                            SocialInteraction)
+    from social_intelligence_system import (
+        InteractionType,  # noqa: F401
+        RelationshipType,  # noqa: F401
+        SocialContext,  # noqa: F401
+        SocialIntelligenceResult,  # noqa: F401
+        SocialIntelligenceSystem,
+        SocialInteraction,  # noqa: F401
+    )
+    from social_intelligence_system import SocialContext as SocialContextEnum  # noqa: F401
 except ImportError as e:
     print(f"❌ Day 11 시스템 import 실패: {e}")
     exit(1)
@@ -102,19 +104,15 @@ class Day11TestRunner:
             total_count = len(test_contexts)
 
             for i, context_data in enumerate(test_contexts, 1):
-                print(
-                    f"  📝 맥락 {i}: {context_data.get('interaction_type', 'unknown')}"
-                )
+                print(f"  📝 맥락 {i}: {context_data.get('interaction_type', 'unknown')}")
 
-                context = await social_intelligence.understand_social_context(
-                    context_data
-                )
+                context = await social_intelligence.understand_social_context(context_data)
 
                 if context and hasattr(context, "context_type"):
                     success_count += 1
                     print(f"    ✅ 성공 - 맥락 유형: {context.context_type.value}")
                 else:
-                    print(f"    ❌ 실패 - 맥락 이해 실패")
+                    print("    ❌ 실패 - 맥락 이해 실패")
 
             success_rate = success_count / total_count * 100
 
@@ -170,18 +168,12 @@ class Day11TestRunner:
                 "urgency": "low",
             }
 
-            optimization_result = await social_intelligence.optimize_human_interaction(
-                context, interaction_data
-            )
+            optimization_result = await social_intelligence.optimize_human_interaction(context, interaction_data)
 
             if optimization_result and "communication_style" in optimization_result:
                 print("✅ 성공 - 인간 상호작용 최적화 완료")
-                print(
-                    f"  📊 의사소통 스타일: {optimization_result['communication_style']}"
-                )
-                print(
-                    f"  💭 감정적 반응: {optimization_result.get('emotional_response', {})}"
-                )
+                print(f"  📊 의사소통 스타일: {optimization_result['communication_style']}")
+                print(f"  💭 감정적 반응: {optimization_result.get('emotional_response', {})}")
                 self.test_results.append(
                     {
                         "test_name": "인간 상호작용 최적화",
@@ -233,16 +225,12 @@ class Day11TestRunner:
                 "topic": "hobbies",
             }
 
-            adaptation_result = await social_intelligence.adapt_to_social_situation(
-                context, situation_data
-            )
+            adaptation_result = await social_intelligence.adapt_to_social_situation(context, situation_data)
 
             if adaptation_result and "adaptation_strategy" in adaptation_result:
                 print("✅ 성공 - 사회적 적응 능력 확인")
                 print(f"  📊 적응 전략: {adaptation_result['adaptation_strategy']}")
-                print(
-                    f"  🎯 행동 조정: {adaptation_result.get('behavior_adjustment', {})}"
-                )
+                print(f"  🎯 행동 조정: {adaptation_result.get('behavior_adjustment', {})}")
                 self.test_results.append(
                     {
                         "test_name": "사회적 적응 능력",
@@ -294,21 +282,12 @@ class Day11TestRunner:
                 "goals": ["code_review", "bug_fixing", "feature_development"],
             }
 
-            collaboration_result = await social_intelligence.collaborate_effectively(
-                context, collaboration_data
-            )
+            collaboration_result = await social_intelligence.collaborate_effectively(context, collaboration_data)
 
-            if (
-                collaboration_result
-                and "collaboration_strategy" in collaboration_result
-            ):
+            if collaboration_result and "collaboration_strategy" in collaboration_result:
                 print("✅ 성공 - 협력 및 협업 능력 확인")
-                print(
-                    f"  📊 협업 전략: {collaboration_result['collaboration_strategy']}"
-                )
-                print(
-                    f"  🎭 역할 최적화: {collaboration_result.get('role_optimization', {})}"
-                )
+                print(f"  📊 협업 전략: {collaboration_result['collaboration_strategy']}")
+                print(f"  🎭 역할 최적화: {collaboration_result.get('role_optimization', {})}")
                 self.test_results.append(
                     {
                         "test_name": "협력 및 협업 능력",
@@ -375,7 +354,7 @@ class Day11TestRunner:
 
             for i, test_interaction in enumerate(test_interactions):
                 start_time = time.time()
-                result = await social_intelligence.process_social_interaction(
+                result = await social_intelligence.process_social_interaction(  # noqa: F841
                     interaction_data=test_interaction,
                     context_data=test_interaction.get("context_data", {}),
                 )
@@ -389,7 +368,7 @@ class Day11TestRunner:
             # 성능 메트릭 계산
             avg_response_time = sum(response_times) / len(response_times)
             max_response_time = max(response_times)
-            min_response_time = min(response_times)
+            min_response_time = min(response_times)  # noqa: F841
 
             # 성능 기준 평가
             if avg_response_time < 2.0 and max_response_time < 5.0:
@@ -398,7 +377,7 @@ class Day11TestRunner:
                     {
                         "test_name": "성능 테스트",
                         "status": "성공",
-                        "message": f"평균 응답 시간: {avg_response_time:.3f}초, 최대 응답 시간: {max_response_time:.3f}초",
+                        "message": f"평균 응답 시간: {avg_response_time:.3f}초, 최대 응답 시간: {max_response_time:.3f}초",  # noqa: E501
                     }
                 )
             else:
@@ -407,7 +386,7 @@ class Day11TestRunner:
                     {
                         "test_name": "성능 테스트",
                         "status": "부분 성공",
-                        "message": f"평균 응답 시간: {avg_response_time:.3f}초, 최대 응답 시간: {max_response_time:.3f}초",
+                        "message": f"평균 응답 시간: {avg_response_time:.3f}초, 최대 응답 시간: {max_response_time:.3f}초",  # noqa: E501
                     }
                 )
 
@@ -461,7 +440,7 @@ class Day11TestRunner:
                     {
                         "test_name": "통합 테스트",
                         "status": "성공",
-                        "message": f"통합 점수: {(result.context_understanding + result.interaction_optimization + result.social_adaptation + result.collaboration_effectiveness) / 4:.2f}",
+                        "message": f"통합 점수: {(result.context_understanding + result.interaction_optimization + result.social_adaptation + result.collaboration_effectiveness) / 4:.2f}",  # noqa: E501
                     }
                 )
             else:
@@ -492,19 +471,11 @@ class Day11TestRunner:
 
         # 결과 통계
         total_tests = len(self.test_results)
-        successful_tests = sum(
-            1 for result in self.test_results if result["status"] == "성공"
-        )
-        partial_success_tests = sum(
-            1 for result in self.test_results if result["status"] == "부분 성공"
-        )
-        failed_tests = sum(
-            1 for result in self.test_results if result["status"] in ["실패", "오류"]
-        )
+        successful_tests = sum(1 for result in self.test_results if result["status"] == "성공")
+        partial_success_tests = sum(1 for result in self.test_results if result["status"] == "부분 성공")
+        failed_tests = sum(1 for result in self.test_results if result["status"] in ["실패", "오류"])
 
-        success_rate = (
-            (successful_tests + partial_success_tests * 0.5) / total_tests * 100
-        )
+        success_rate = (successful_tests + partial_success_tests * 0.5) / total_tests * 100
 
         print(f"📈 전체 테스트 수: {total_tests}")
         print(f"✅ 성공: {successful_tests}")
@@ -551,9 +522,7 @@ class Day11TestRunner:
 
         # 최종 평가
         if success_rate >= 80:
-            print(
-                "\n🎉 Day 11 테스트 성공! 사회적 지능 시스템이 정상적으로 작동합니다."
-            )
+            print("\n🎉 Day 11 테스트 성공! 사회적 지능 시스템이 정상적으로 작동합니다.")
         elif success_rate >= 60:
             print("\n⚠️ Day 11 테스트 부분 성공! 일부 기능에 개선이 필요합니다.")
         else:

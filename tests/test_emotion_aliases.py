@@ -5,10 +5,8 @@ Emotion Alias Pipeline Tests for DuRi Core
 These tests verify that emotion aliases work correctly in the API pipeline.
 """
 
-import json
 import os
 import sys
-from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -19,12 +17,10 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "duri_core"))
 def test_emotion_alias_pipeline():
     """Test that emotion aliases work correctly in the API pipeline"""
     try:
-        from duri_common.config.emotion_labels import (is_valid_emotion,
-                                                       normalize_emotion)
-        from duri_core.app.api import receive_emotion
+        from duri_common.config.emotion_labels import is_valid_emotion, normalize_emotion
 
         # Test data
-        test_data = {
+        test_data = {  # noqa: F841
             "emotion": "joy",
             "timestamp": "2025-10-22T00:00:00",
             "data": {"text": "test", "source": "test"},
@@ -36,7 +32,7 @@ def test_emotion_alias_pipeline():
         assert normalized == "happy"
 
         # Test validation
-        assert is_valid_emotion(normalized) == True
+        assert is_valid_emotion(normalized) == True  # noqa: E712
 
         print("✅ Emotion alias pipeline works correctly")
     except Exception as e:
@@ -46,15 +42,12 @@ def test_emotion_alias_pipeline():
 def test_emotion_alias_mapping():
     """Test comprehensive emotion alias mapping"""
     try:
-        from duri_common.config.emotion_labels import (EMOTION_ALIASES,
-                                                       normalize_emotion)
+        from duri_common.config.emotion_labels import EMOTION_ALIASES, normalize_emotion
 
         # Test all defined aliases
         for alias, expected in EMOTION_ALIASES.items():
             result = normalize_emotion(alias)
-            assert (
-                result == expected
-            ), f"Alias '{alias}' should map to '{expected}', got '{result}'"
+            assert result == expected, f"Alias '{alias}' should map to '{expected}', got '{result}'"
 
         print("✅ All emotion aliases map correctly")
     except Exception as e:
@@ -64,8 +57,7 @@ def test_emotion_alias_mapping():
 def test_invalid_emotion_handling():
     """Test that invalid emotions are handled correctly"""
     try:
-        from duri_common.config.emotion_labels import (is_valid_emotion,
-                                                       normalize_emotion)
+        from duri_common.config.emotion_labels import is_valid_emotion, normalize_emotion
 
         # Test invalid emotions
         invalid_emotions = ["ecstasy", "bliss", "euphoria", "invalid_emotion"]
@@ -73,7 +65,7 @@ def test_invalid_emotion_handling():
         for emotion in invalid_emotions:
             normalized = normalize_emotion(emotion)
             is_valid = is_valid_emotion(normalized)
-            assert is_valid == False, f"Invalid emotion '{emotion}' should not be valid"
+            assert is_valid == False, f"Invalid emotion '{emotion}' should not be valid"  # noqa: E712
 
         print("✅ Invalid emotions handled correctly")
     except Exception as e:
@@ -83,8 +75,7 @@ def test_invalid_emotion_handling():
 def test_case_insensitive_emotions():
     """Test that emotion handling is case insensitive"""
     try:
-        from duri_common.config.emotion_labels import (is_valid_emotion,
-                                                       normalize_emotion)
+        from duri_common.config.emotion_labels import normalize_emotion
 
         # Test case variations
         test_cases = [
@@ -98,9 +89,7 @@ def test_case_insensitive_emotions():
 
         for input_emotion, expected in test_cases:
             result = normalize_emotion(input_emotion)
-            assert (
-                result == expected
-            ), f"Case insensitive '{input_emotion}' should map to '{expected}', got '{result}'"
+            assert result == expected, f"Case insensitive '{input_emotion}' should map to '{expected}', got '{result}'"
 
         print("✅ Case insensitive emotion handling works")
     except Exception as e:

@@ -4,7 +4,6 @@ DuRiCore Phase 5 Day 2 - 기억 연관 시스템
 의미적, 시간적, 감정적 연관성 분석 및 강화 시스템
 """
 
-import json
 import logging
 import math
 from collections import Counter, defaultdict
@@ -103,9 +102,7 @@ class MemoryAssociationSystem:
             associations.extend(semantic_associations)
 
             # 2. 시간적 연관성 분석
-            temporal_associations = await self._analyze_temporal_associations(
-                memory_id, memory_context, all_memories
-            )
+            temporal_associations = await self._analyze_temporal_associations(memory_id, memory_context, all_memories)
             associations.extend(temporal_associations)
 
             # 3. 감정적 연관성 분석
@@ -121,17 +118,13 @@ class MemoryAssociationSystem:
             associations.extend(contextual_associations)
 
             # 5. 주제적 연관성 분석
-            thematic_associations = await self._analyze_thematic_associations(
-                memory_id, memory_content, all_memories
-            )
+            thematic_associations = await self._analyze_thematic_associations(memory_id, memory_content, all_memories)
             associations.extend(thematic_associations)
 
             # 연관성 저장 및 그래프 업데이트
             await self._store_associations(associations)
 
-            logger.info(
-                f"연관성 분석 완료: {memory_id} -> {len(associations)}개 연관성"
-            )
+            logger.info(f"연관성 분석 완료: {memory_id} -> {len(associations)}개 연관성")
             return associations
 
         except Exception as e:
@@ -150,18 +143,12 @@ class MemoryAssociationSystem:
             related_memories = []
 
             # 캐시 확인
-            cache_key = (
-                f"{memory_id}_{association_type.value if association_type else 'all'}"
-            )
+            cache_key = f"{memory_id}_{association_type.value if association_type else 'all'}"
             if cache_key in self.association_cache:
                 cached_associations = self.association_cache[cache_key]
                 for link in cached_associations:
                     if link.strength >= min_strength:
-                        target_id = (
-                            link.target_id
-                            if link.source_id == memory_id
-                            else link.source_id
-                        )
+                        target_id = link.target_id if link.source_id == memory_id else link.source_id
                         related_memories.append((target_id, link.strength))
 
                 # 강도 순으로 정렬
@@ -176,8 +163,7 @@ class MemoryAssociationSystem:
                         link = self.associations[link_key]
 
                         if (
-                            association_type is None
-                            or link.association_type == association_type
+                            association_type is None or link.association_type == association_type
                         ) and link.strength >= min_strength:
                             related_memories.append((related_id, link.strength))
 
@@ -222,9 +208,7 @@ class MemoryAssociationSystem:
                 type_distribution[link.association_type] += 1
 
             # 가장 강한/약한 연관성
-            strongest_associations = sorted(
-                associations, key=lambda x: x.strength, reverse=True
-            )[:5]
+            strongest_associations = sorted(associations, key=lambda x: x.strength, reverse=True)[:5]
             weakest_associations = sorted(associations, key=lambda x: x.strength)[:5]
 
             return AssociationAnalysis(
@@ -268,16 +252,12 @@ class MemoryAssociationSystem:
 
                 # 강도 재계산
                 new_strength = self._recalculate_strength(link, additional_evidence)
-                link.strength = min(
-                    1.0, link.strength + (new_strength - link.strength) * 0.3
-                )
+                link.strength = min(1.0, link.strength + (new_strength - link.strength) * 0.3)
 
                 # 신뢰도 업데이트
                 link.confidence = min(1.0, link.confidence + 0.1)
 
-                logger.info(
-                    f"연관성 강화 완료: {source_id} -> {target_id} (새 강도: {link.strength:.3f})"
-                )
+                logger.info(f"연관성 강화 완료: {source_id} -> {target_id} (새 강도: {link.strength:.3f})")
                 return True
 
             return False
@@ -335,14 +315,12 @@ class MemoryAssociationSystem:
 
                 # 벡터 유사도 계산
                 if hasattr(other_memory, "vector_data"):
-                    similarity = self._cosine_similarity(
-                        memory_vector, other_memory.vector_data
-                    )
+                    similarity = self._cosine_similarity(memory_vector, other_memory.vector_data)
 
                     if similarity > self.semantic_threshold:
                         evidence = [
                             f"벡터 유사도: {similarity:.3f}",
-                            f"내용 유사성: 높음",
+                            "내용 유사성: 높음",
                         ]
 
                         association = AssociationLink(
@@ -381,20 +359,16 @@ class MemoryAssociationSystem:
 
                 # 시간 차이 계산
                 if hasattr(other_memory, "created_at"):
-                    time_diff = abs(
-                        (current_time - other_memory.created_at).total_seconds()
-                    )
+                    time_diff = abs((current_time - other_memory.created_at).total_seconds())
 
                     if time_diff < self.temporal_window_hours * 3600:  # 시간 윈도우 내
                         # 시간적 강도 계산 (가까울수록 강함)
-                        temporal_strength = max(
-                            0, 1 - (time_diff / (self.temporal_window_hours * 3600))
-                        )
+                        temporal_strength = max(0, 1 - (time_diff / (self.temporal_window_hours * 3600)))
 
                         if temporal_strength > self.temporal_threshold:
                             evidence = [
                                 f"시간 차이: {time_diff/3600:.1f}시간",
-                                f"시간적 근접성: 높음",
+                                "시간적 근접성: 높음",
                             ]
 
                             association = AssociationLink(
@@ -441,9 +415,7 @@ class MemoryAssociationSystem:
                     )
 
                     # 감정 유사도 계산
-                    emotion_similarity = self._calculate_emotion_similarity(
-                        current_emotion, other_emotion
-                    )
+                    emotion_similarity = self._calculate_emotion_similarity(current_emotion, other_emotion)
 
                     if emotion_similarity > self.emotional_threshold:
                         evidence = [
@@ -490,14 +462,12 @@ class MemoryAssociationSystem:
 
                 # 컨텍스트 유사도 계산
                 if hasattr(other_memory, "context_info"):
-                    context_similarity = self._calculate_context_similarity(
-                        memory_context, other_memory.context_info
-                    )
+                    context_similarity = self._calculate_context_similarity(memory_context, other_memory.context_info)
 
                     if context_similarity > self.contextual_threshold:
                         evidence = [
                             f"맥락 유사도: {context_similarity:.3f}",
-                            f"공통 컨텍스트 요소 발견",
+                            "공통 컨텍스트 요소 발견",
                         ]
 
                         association = AssociationLink(
@@ -538,9 +508,7 @@ class MemoryAssociationSystem:
                     other_themes = self._extract_themes(other_memory.content)
 
                     # 주제 유사도 계산
-                    theme_similarity = self._calculate_theme_similarity(
-                        current_themes, other_themes
-                    )
+                    theme_similarity = self._calculate_theme_similarity(current_themes, other_themes)
 
                     if theme_similarity > 0.5:  # 주제 임계값
                         evidence = [
@@ -574,9 +542,7 @@ class MemoryAssociationSystem:
         """연관성 저장"""
         try:
             for association in associations:
-                link_key = self._get_link_key(
-                    association.source_id, association.target_id
-                )
+                link_key = self._get_link_key(association.source_id, association.target_id)
                 self.associations[link_key] = association
 
                 # 그래프 업데이트
@@ -599,7 +565,7 @@ class MemoryAssociationSystem:
             if len(vec1) != len(vec2):
                 return 0.0
 
-            dot_product = sum(a * b for a, b in zip(vec1, vec2))
+            dot_product = sum(a * b for a, b in zip(vec1, vec2))  # noqa: B905
             norm1 = math.sqrt(sum(a * a for a in vec1))
             norm2 = math.sqrt(sum(a * a for a in vec2))
 
@@ -672,9 +638,7 @@ class MemoryAssociationSystem:
             logger.error(f"감정 유사도 계산 오류: {e}")
             return 0.0
 
-    def _calculate_context_similarity(
-        self, context1: Dict[str, Any], context2: Dict[str, Any]
-    ) -> float:
+    def _calculate_context_similarity(self, context1: Dict[str, Any], context2: Dict[str, Any]) -> float:
         """컨텍스트 유사도 계산"""
         try:
             if not context1 or not context2:
@@ -734,9 +698,7 @@ class MemoryAssociationSystem:
             logger.error(f"주제 추출 오류: {e}")
             return []
 
-    def _calculate_theme_similarity(
-        self, themes1: List[str], themes2: List[str]
-    ) -> float:
+    def _calculate_theme_similarity(self, themes1: List[str], themes2: List[str]) -> float:
         """주제 유사도 계산"""
         try:
             if not themes1 or not themes2:
@@ -764,9 +726,7 @@ class MemoryAssociationSystem:
         else:
             return AssociationStrength.STRONG
 
-    def _recalculate_strength(
-        self, link: AssociationLink, additional_evidence: List[str]
-    ) -> float:
+    def _recalculate_strength(self, link: AssociationLink, additional_evidence: List[str]) -> float:
         """강도 재계산"""
         try:
             # 기본 강도
@@ -865,9 +825,7 @@ async def test_memory_association():
     # 연관 메모리 검색 테스트
     print("\n2. 연관 메모리 검색 테스트")
     for memory_id in test_memories.keys():
-        related_memories = await association_system.find_related_memories(
-            memory_id, limit=3
-        )
+        related_memories = await association_system.find_related_memories(memory_id, limit=3)
         print(f"메모리 {memory_id}의 연관 메모리: {len(related_memories)}개")
         for related_id, strength in related_memories:
             print(f"  - {related_id} (강도: {strength:.3f})")

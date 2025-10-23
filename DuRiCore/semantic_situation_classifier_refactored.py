@@ -5,13 +5,10 @@ DuRi 의미 기반 상황 분류 시스템 (Phase 1-1 Day 1 리팩토링)
 """
 
 import asyncio
-import json
 import logging
-import re
-from dataclasses import asdict, dataclass
-from datetime import datetime
+from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 # 새로운 의미 벡터 엔진 import
 from semantic_vector_engine import SemanticFrame, SemanticVectorEngine
@@ -242,46 +239,30 @@ class SemanticSituationClassifier:
         semantic_result = self.semantic_engine.analyze_situation(situation)
 
         # 2. 의미 프레임을 상황 유형으로 변환
-        situation_type = self._convert_frame_to_situation_type(
-            semantic_result["matched_frame"]
-        )
+        situation_type = self._convert_frame_to_situation_type(semantic_result["matched_frame"])
 
         # 3. 의도 분석 (기존 로직 유지, 향후 개선 예정)
-        intent = self._analyze_intent_enhanced(
-            situation, semantic_result["context_elements"]
-        )
+        intent = self._analyze_intent_enhanced(situation, semantic_result["context_elements"])
 
         # 4. 이해관계자 분석 (의미 벡터 결과 활용)
-        stakeholders = self._identify_stakeholders_enhanced(
-            situation, semantic_result["context_elements"]
-        )
+        stakeholders = self._identify_stakeholders_enhanced(situation, semantic_result["context_elements"])
 
         # 5. 가치 충돌 분석 (의미 벡터 결과 활용)
-        value_conflicts = self._analyze_value_conflicts_enhanced(
-            situation, intent, semantic_result
-        )
+        value_conflicts = self._analyze_value_conflicts_enhanced(situation, intent, semantic_result)
 
         # 6. 결과 분석
-        consequences = self._analyze_consequences_enhanced(
-            situation, intent, value_conflicts
-        )
+        consequences = self._analyze_consequences_enhanced(situation, intent, value_conflicts)
 
         # 7. 복잡성 및 긴급성 평가 (의미 벡터 결과 활용)
-        complexity_level = self._assess_complexity_enhanced(
-            situation, value_conflicts, semantic_result
-        )
-        urgency_level = self._assess_urgency_enhanced(
-            situation, semantic_result["context_elements"]
-        )
+        complexity_level = self._assess_complexity_enhanced(situation, value_conflicts, semantic_result)
+        urgency_level = self._assess_urgency_enhanced(situation, semantic_result["context_elements"])
 
         # 8. 신뢰도 계산 (의미 벡터 결과 활용)
         confidence_score = semantic_result["confidence"]
 
         # 9. 추가 분석 (기존 로직 유지)
-        contextual_analysis = await self._analyze_contextual_factors(situation)
-        value_conflict_analysis = await self._analyze_value_conflicts_detailed(
-            situation, value_conflicts
-        )
+        contextual_analysis = await self._analyze_contextual_factors(situation)  # noqa: F841
+        value_conflict_analysis = await self._analyze_value_conflicts_detailed(situation, value_conflicts)  # noqa: F841
 
         semantic_context = SemanticContext(
             situation_type=situation_type,
@@ -295,9 +276,7 @@ class SemanticSituationClassifier:
             confidence_score=confidence_score,
         )
 
-        logger.info(
-            f"의미적 맥락 분석 완료: {situation_type.value}, 신뢰도: {confidence_score:.2f}"
-        )
+        logger.info(f"의미적 맥락 분석 완료: {situation_type.value}, 신뢰도: {confidence_score:.2f}")
         return semantic_context
 
     def _convert_frame_to_situation_type(self, frame: SemanticFrame) -> SituationType:
@@ -311,9 +290,7 @@ class SemanticSituationClassifier:
         }
         return frame_to_situation.get(frame, SituationType.GENERAL_SITUATION)
 
-    def _analyze_intent_enhanced(
-        self, situation: str, context_elements: Dict[str, Any]
-    ) -> IntentType:
+    def _analyze_intent_enhanced(self, situation: str, context_elements: Dict[str, Any]) -> IntentType:
         """향상된 의도 분석 (의미 벡터 결과 활용)"""
         intent_scores = {
             IntentType.DECEPTION: 0.0,
@@ -347,9 +324,7 @@ class SemanticSituationClassifier:
         best_intent = max(intent_scores.items(), key=lambda x: x[1])
         return best_intent[0] if best_intent[1] > 0 else IntentType.UNKNOWN
 
-    def _identify_stakeholders_enhanced(
-        self, situation: str, context_elements: Dict[str, Any]
-    ) -> List[str]:
+    def _identify_stakeholders_enhanced(self, situation: str, context_elements: Dict[str, Any]) -> List[str]:
         """향상된 이해관계자 식별 (의미 벡터 결과 활용)"""
         stakeholders = []
 
@@ -410,9 +385,7 @@ class SemanticSituationClassifier:
         if len(detected_values) >= 2:
             for i in range(len(detected_values)):
                 for j in range(i + 1, len(detected_values)):
-                    conflict = self._create_value_conflict(
-                        detected_values[i], detected_values[j]
-                    )
+                    conflict = self._create_value_conflict(detected_values[i], detected_values[j])
                     if conflict:
                         conflicts.append(conflict)
 
@@ -424,9 +397,7 @@ class SemanticSituationClassifier:
 
         return conflicts
 
-    def _create_value_conflict(
-        self, value1: str, value2: str
-    ) -> Optional[ValueConflict]:
+    def _create_value_conflict(self, value1: str, value2: str) -> Optional[ValueConflict]:
         """가치 충돌 생성"""
         conflict_mapping = {
             ("honesty", "harm_prevention"): ValueConflict.HONESTY_VS_HARM_PREVENTION,
@@ -438,9 +409,7 @@ class SemanticSituationClassifier:
             ("individual", "collective"): ValueConflict.INDIVIDUAL_VS_COLLECTIVE,
         }
 
-        return conflict_mapping.get((value1, value2)) or conflict_mapping.get(
-            (value2, value1)
-        )
+        return conflict_mapping.get((value1, value2)) or conflict_mapping.get((value2, value1))
 
     def _analyze_consequences_enhanced(
         self, situation: str, intent: IntentType, value_conflicts: List[ValueConflict]
@@ -485,16 +454,12 @@ class SemanticSituationClassifier:
             complexity += 0.3  # 높은 의미적 유사도는 복잡성을 시사
 
         # 이해관계자 수에 따른 복잡성
-        stakeholders_count = len(
-            semantic_result.get("context_elements", {}).get("actors", [])
-        )
+        stakeholders_count = len(semantic_result.get("context_elements", {}).get("actors", []))
         complexity += min(stakeholders_count * 0.1, 0.3)
 
         return min(max(complexity, 0.0), 1.0)
 
-    def _assess_urgency_enhanced(
-        self, situation: str, context_elements: Dict[str, Any]
-    ) -> float:
+    def _assess_urgency_enhanced(self, situation: str, context_elements: Dict[str, Any]) -> float:
         """향상된 긴급성 평가"""
         urgency = 0.0
 
@@ -561,7 +526,7 @@ async def test_semantic_situation_classifier_refactored():
 
     # 테스트 상황들
     test_situations = [
-        "회사의 AI 시스템이 고객 데이터를 분석하여 개인화된 서비스를 제공하지만, 개인정보 보호에 대한 우려가 제기되고 있습니다.",
+        "회사의 AI 시스템이 고객 데이터를 분석하여 개인화된 서비스를 제공하지만, 개인정보 보호에 대한 우려가 제기되고 있습니다.",  # noqa: E501
         "직원이 회사의 비밀을 외부에 유출하려고 할 때, 이를 막아야 하는지 고민하는 상황입니다.",
         "효율성을 위해 일부 직원을 해고해야 하는 상황에서, 공정성과 효율성 사이에서 선택해야 합니다.",
     ]

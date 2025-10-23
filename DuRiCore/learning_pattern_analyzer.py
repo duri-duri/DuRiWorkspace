@@ -5,9 +5,7 @@ DuRiCore Phase 5 Day 5 - 학습 패턴 분석 시스템
 """
 
 import asyncio
-import json
 import logging
-import math
 import statistics
 import time
 from dataclasses import dataclass
@@ -101,9 +99,7 @@ class LearningPatternAnalyzer:
 
         logger.info("학습 패턴 분석 시스템 초기화 완료")
 
-    async def analyze_success_patterns(
-        self, behavior_traces: List[Dict[str, Any]]
-    ) -> List[LearningPattern]:
+    async def analyze_success_patterns(self, behavior_traces: List[Dict[str, Any]]) -> List[LearningPattern]:
         """성공 패턴 분석"""
         try:
             success_patterns = []
@@ -112,8 +108,7 @@ class LearningPatternAnalyzer:
             successful_behaviors = [
                 trace
                 for trace in behavior_traces
-                if trace.get("success", False)
-                and trace.get("effectiveness_score", 0.0) > 0.7
+                if trace.get("success", False) and trace.get("effectiveness_score", 0.0) > 0.7
             ]
 
             if not successful_behaviors:
@@ -125,9 +120,7 @@ class LearningPatternAnalyzer:
 
             # 각 그룹에서 패턴 추출
             for group_id, behaviors in pattern_groups.items():
-                pattern = await self._extract_pattern_from_group(
-                    group_id, behaviors, PatternType.SUCCESS
-                )
+                pattern = await self._extract_pattern_from_group(group_id, behaviors, PatternType.SUCCESS)
                 if pattern and pattern.confidence >= self.min_confidence_threshold:
                     success_patterns.append(pattern)
                     self.pattern_database[pattern.pattern_id] = pattern
@@ -139,9 +132,7 @@ class LearningPatternAnalyzer:
             logger.error(f"성공 패턴 분석 실패: {e}")
             raise
 
-    async def analyze_failure_patterns(
-        self, behavior_traces: List[Dict[str, Any]]
-    ) -> List[LearningPattern]:
+    async def analyze_failure_patterns(self, behavior_traces: List[Dict[str, Any]]) -> List[LearningPattern]:
         """실패 패턴 분석"""
         try:
             failure_patterns = []
@@ -150,8 +141,7 @@ class LearningPatternAnalyzer:
             failed_behaviors = [
                 trace
                 for trace in behavior_traces
-                if not trace.get("success", True)
-                or trace.get("effectiveness_score", 0.0) < 0.5
+                if not trace.get("success", True) or trace.get("effectiveness_score", 0.0) < 0.5
             ]
 
             if not failed_behaviors:
@@ -163,9 +153,7 @@ class LearningPatternAnalyzer:
 
             # 각 그룹에서 패턴 추출
             for group_id, behaviors in pattern_groups.items():
-                pattern = await self._extract_pattern_from_group(
-                    group_id, behaviors, PatternType.FAILURE
-                )
+                pattern = await self._extract_pattern_from_group(group_id, behaviors, PatternType.FAILURE)
                 if pattern and pattern.confidence >= self.min_confidence_threshold:
                     failure_patterns.append(pattern)
                     self.pattern_database[pattern.pattern_id] = pattern
@@ -186,18 +174,12 @@ class LearningPatternAnalyzer:
                 return await self._create_empty_effectiveness_report()
 
             # 성능 트렌드 분석
-            effectiveness_score = await self._calculate_effectiveness_score(
-                performance_history
-            )
-            improvement_rate = await self._calculate_improvement_rate(
-                performance_history
-            )
+            effectiveness_score = await self._calculate_effectiveness_score(performance_history)
+            improvement_rate = await self._calculate_improvement_rate(performance_history)
             stability_score = await self._calculate_stability_score(performance_history)
 
             # 학습 효과성 등급 결정
-            overall_effectiveness = await self._determine_effectiveness_level(
-                effectiveness_score
-            )
+            overall_effectiveness = await self._determine_effectiveness_level(effectiveness_score)
 
             # 주요 인사이트 추출
             key_insights = await self._extract_key_insights(performance_history)
@@ -229,22 +211,15 @@ class LearningPatternAnalyzer:
             logger.error(f"학습 효과성 식별 실패: {e}")
             raise
 
-    async def generate_pattern_recommendations(
-        self, patterns: List[LearningPattern]
-    ) -> List[Dict[str, Any]]:
+    async def generate_pattern_recommendations(self, patterns: List[LearningPattern]) -> List[Dict[str, Any]]:
         """패턴 기반 권장사항 생성"""
         try:
             recommendations = []
 
             # 성공 패턴 기반 권장사항
-            success_patterns = [
-                p for p in patterns if p.pattern_type == PatternType.SUCCESS
-            ]
+            success_patterns = [p for p in patterns if p.pattern_type == PatternType.SUCCESS]
             for pattern in success_patterns:
-                if (
-                    pattern.success_rate > 0.8
-                    and pattern.frequency > self.min_pattern_frequency
-                ):
+                if pattern.success_rate > 0.8 and pattern.frequency > self.min_pattern_frequency:
                     recommendations.append(
                         {
                             "type": "success_pattern_replication",
@@ -257,9 +232,7 @@ class LearningPatternAnalyzer:
                     )
 
             # 실패 패턴 기반 권장사항
-            failure_patterns = [
-                p for p in patterns if p.pattern_type == PatternType.FAILURE
-            ]
+            failure_patterns = [p for p in patterns if p.pattern_type == PatternType.FAILURE]
             for pattern in failure_patterns:
                 if pattern.frequency > self.min_pattern_frequency:
                     recommendations.append(
@@ -274,9 +247,7 @@ class LearningPatternAnalyzer:
                     )
 
             # 개선 패턴 기반 권장사항
-            improvement_patterns = [
-                p for p in patterns if p.pattern_type == PatternType.IMPROVEMENT
-            ]
+            improvement_patterns = [p for p in patterns if p.pattern_type == PatternType.IMPROVEMENT]
             for pattern in improvement_patterns:
                 recommendations.append(
                     {
@@ -295,9 +266,7 @@ class LearningPatternAnalyzer:
             logger.error(f"패턴 권장사항 생성 실패: {e}")
             raise
 
-    async def _group_similar_behaviors(
-        self, behaviors: List[Dict[str, Any]]
-    ) -> Dict[str, List[Dict[str, Any]]]:
+    async def _group_similar_behaviors(self, behaviors: List[Dict[str, Any]]) -> Dict[str, List[Dict[str, Any]]]:
         """유사한 행동 그룹화"""
         try:
             groups = {}
@@ -329,17 +298,11 @@ class LearningPatternAnalyzer:
 
             # 기본 통계 계산
             success_rates = [b.get("success", False) for b in behaviors]
-            effectiveness_scores = [
-                b.get("effectiveness_score", 0.0) for b in behaviors
-            ]
-            efficiency_scores = [b.get("efficiency_score", 0.0) for b in behaviors]
+            effectiveness_scores = [b.get("effectiveness_score", 0.0) for b in behaviors]
+            efficiency_scores = [b.get("efficiency_score", 0.0) for b in behaviors]  # noqa: F841
 
             # 패턴 특성 계산
-            frequency = (
-                len(behaviors) / len(self.pattern_database)
-                if self.pattern_database
-                else 1.0
-            )
+            frequency = len(behaviors) / len(self.pattern_database) if self.pattern_database else 1.0
             success_rate = sum(success_rates) / len(success_rates)
             average_performance = statistics.mean(effectiveness_scores)
 
@@ -380,23 +343,17 @@ class LearningPatternAnalyzer:
                 # 행동 타입
                 behavior_type = behavior.get("behavior_type", "")
                 if behavior_type:
-                    common_characteristics["behavior_type"] = (
-                        common_characteristics.get("behavior_type", 0) + 1
-                    )
+                    common_characteristics["behavior_type"] = common_characteristics.get("behavior_type", 0) + 1
 
                 # 전략
                 strategy = behavior.get("strategy", "")
                 if strategy:
-                    common_characteristics["strategy"] = (
-                        common_characteristics.get("strategy", 0) + 1
-                    )
+                    common_characteristics["strategy"] = common_characteristics.get("strategy", 0) + 1
 
                 # 우선순위
                 priority = behavior.get("priority", 0.0)
                 if priority > 0.7:
-                    common_characteristics["high_priority"] = (
-                        common_characteristics.get("high_priority", 0) + 1
-                    )
+                    common_characteristics["high_priority"] = common_characteristics.get("high_priority", 0) + 1
 
             # 주요 요소 선별
             for factor, count in common_characteristics.items():
@@ -422,9 +379,7 @@ class LearningPatternAnalyzer:
             size_confidence = min(sample_size / 10.0, 1.0)
 
             # 성공률 기반 신뢰도
-            success_confidence = (
-                success_rate if success_rate > 0.5 else 1.0 - success_rate
-            )
+            success_confidence = success_rate if success_rate > 0.5 else 1.0 - success_rate
 
             # 성능 기반 신뢰도
             performance_confidence = average_performance
@@ -446,34 +401,21 @@ class LearningPatternAnalyzer:
             logger.error(f"패턴 신뢰도 계산 실패: {e}")
             return 0.0
 
-    async def _calculate_effectiveness_score(
-        self, performance_history: List[Dict[str, Any]]
-    ) -> float:
+    async def _calculate_effectiveness_score(self, performance_history: List[Dict[str, Any]]) -> float:
         """효과성 점수 계산"""
         try:
             if not performance_history:
                 return 0.0
 
             # 최근 성능 데이터 추출
-            recent_performance = (
-                performance_history[-10:]
-                if len(performance_history) >= 10
-                else performance_history
-            )
+            recent_performance = performance_history[-10:] if len(performance_history) >= 10 else performance_history
 
             # 성공률과 효과성 점수 평균
             success_rates = [p.get("success", False) for p in recent_performance]
-            effectiveness_scores = [
-                p.get("metrics", {}).get("action_effectiveness", 0.0)
-                for p in recent_performance
-            ]
+            effectiveness_scores = [p.get("metrics", {}).get("action_effectiveness", 0.0) for p in recent_performance]
 
-            avg_success_rate = (
-                sum(success_rates) / len(success_rates) if success_rates else 0.0
-            )
-            avg_effectiveness = (
-                statistics.mean(effectiveness_scores) if effectiveness_scores else 0.0
-            )
+            avg_success_rate = sum(success_rates) / len(success_rates) if success_rates else 0.0
+            avg_effectiveness = statistics.mean(effectiveness_scores) if effectiveness_scores else 0.0
 
             # 가중 평균
             effectiveness_score = avg_success_rate * 0.6 + avg_effectiveness * 0.4
@@ -484,39 +426,24 @@ class LearningPatternAnalyzer:
             logger.error(f"효과성 점수 계산 실패: {e}")
             return 0.0
 
-    async def _calculate_improvement_rate(
-        self, performance_history: List[Dict[str, Any]]
-    ) -> float:
+    async def _calculate_improvement_rate(self, performance_history: List[Dict[str, Any]]) -> float:
         """개선률 계산"""
         try:
             if len(performance_history) < 2:
                 return 0.0
 
             # 최근 10개와 이전 10개 비교
-            recent = (
-                performance_history[-10:]
-                if len(performance_history) >= 10
-                else performance_history
-            )
+            recent = performance_history[-10:] if len(performance_history) >= 10 else performance_history
             previous = (
-                performance_history[-20:-10]
-                if len(performance_history) >= 20
-                else performance_history[: -len(recent)]
+                performance_history[-20:-10] if len(performance_history) >= 20 else performance_history[: -len(recent)]
             )
 
             if not previous:
                 return 0.0
 
             # 평균 성능 비교
-            recent_avg = statistics.mean(
-                [p.get("metrics", {}).get("action_effectiveness", 0.0) for p in recent]
-            )
-            previous_avg = statistics.mean(
-                [
-                    p.get("metrics", {}).get("action_effectiveness", 0.0)
-                    for p in previous
-                ]
-            )
+            recent_avg = statistics.mean([p.get("metrics", {}).get("action_effectiveness", 0.0) for p in recent])
+            previous_avg = statistics.mean([p.get("metrics", {}).get("action_effectiveness", 0.0) for p in previous])
 
             if previous_avg == 0:
                 return 0.0
@@ -529,24 +456,15 @@ class LearningPatternAnalyzer:
             logger.error(f"개선률 계산 실패: {e}")
             return 0.0
 
-    async def _calculate_stability_score(
-        self, performance_history: List[Dict[str, Any]]
-    ) -> float:
+    async def _calculate_stability_score(self, performance_history: List[Dict[str, Any]]) -> float:
         """안정성 점수 계산"""
         try:
             if len(performance_history) < 3:
                 return 1.0
 
             # 최근 성능 데이터의 표준편차 계산
-            recent_performance = (
-                performance_history[-10:]
-                if len(performance_history) >= 10
-                else performance_history
-            )
-            effectiveness_scores = [
-                p.get("metrics", {}).get("action_effectiveness", 0.0)
-                for p in recent_performance
-            ]
+            recent_performance = performance_history[-10:] if len(performance_history) >= 10 else performance_history
+            effectiveness_scores = [p.get("metrics", {}).get("action_effectiveness", 0.0) for p in recent_performance]
 
             if not effectiveness_scores:
                 return 1.0
@@ -556,11 +474,7 @@ class LearningPatternAnalyzer:
             if mean_score == 0:
                 return 1.0
 
-            std_score = (
-                statistics.stdev(effectiveness_scores)
-                if len(effectiveness_scores) > 1
-                else 0.0
-            )
+            std_score = statistics.stdev(effectiveness_scores) if len(effectiveness_scores) > 1 else 0.0
             coefficient_of_variation = std_score / mean_score
 
             # 안정성 점수 (변동계수가 낮을수록 안정적)
@@ -572,9 +486,7 @@ class LearningPatternAnalyzer:
             logger.error(f"안정성 점수 계산 실패: {e}")
             return 1.0
 
-    async def _determine_effectiveness_level(
-        self, effectiveness_score: float
-    ) -> LearningEffectiveness:
+    async def _determine_effectiveness_level(self, effectiveness_score: float) -> LearningEffectiveness:
         """학습 효과성 등급 결정"""
         if effectiveness_score >= 0.8:
             return LearningEffectiveness.HIGH
@@ -583,9 +495,7 @@ class LearningPatternAnalyzer:
         else:
             return LearningEffectiveness.LOW
 
-    async def _extract_key_insights(
-        self, performance_history: List[Dict[str, Any]]
-    ) -> List[str]:
+    async def _extract_key_insights(self, performance_history: List[Dict[str, Any]]) -> List[str]:
         """주요 인사이트 추출"""
         try:
             insights = []
@@ -594,15 +504,8 @@ class LearningPatternAnalyzer:
                 return insights
 
             # 성능 트렌드 분석
-            recent_performance = (
-                performance_history[-5:]
-                if len(performance_history) >= 5
-                else performance_history
-            )
-            effectiveness_trend = [
-                p.get("metrics", {}).get("action_effectiveness", 0.0)
-                for p in recent_performance
-            ]
+            recent_performance = performance_history[-5:] if len(performance_history) >= 5 else performance_history
+            effectiveness_trend = [p.get("metrics", {}).get("action_effectiveness", 0.0) for p in recent_performance]
 
             if len(effectiveness_trend) >= 2:
                 if effectiveness_trend[-1] > effectiveness_trend[0]:
@@ -613,9 +516,7 @@ class LearningPatternAnalyzer:
                     insights.append("행동 효과성이 안정적으로 유지되고 있습니다.")
 
             # 성공률 분석
-            success_count = sum(
-                1 for p in recent_performance if p.get("success", False)
-            )
+            success_count = sum(1 for p in recent_performance if p.get("success", False))
             success_rate = success_count / len(recent_performance)
 
             if success_rate > 0.8:
@@ -641,25 +542,17 @@ class LearningPatternAnalyzer:
 
             # 효과성 기반 권장사항
             if effectiveness_score < 0.7:
-                recommendations.append(
-                    "전반적인 학습 효과성 향상을 위한 시스템 개선이 필요합니다."
-                )
+                recommendations.append("전반적인 학습 효과성 향상을 위한 시스템 개선이 필요합니다.")
 
             # 개선률 기반 권장사항
             if improvement_rate < 0.05:
-                recommendations.append(
-                    "성능 개선을 위한 새로운 학습 전략 도입을 고려해보세요."
-                )
+                recommendations.append("성능 개선을 위한 새로운 학습 전략 도입을 고려해보세요.")
             elif improvement_rate > 0.2:
-                recommendations.append(
-                    "현재의 긍정적인 개선 추세를 유지하기 위한 안정화가 필요합니다."
-                )
+                recommendations.append("현재의 긍정적인 개선 추세를 유지하기 위한 안정화가 필요합니다.")
 
             # 안정성 기반 권장사항
             if stability_score < 0.8:
-                recommendations.append(
-                    "성능 안정성 향상을 위한 일관성 있는 학습 패턴 확립이 필요합니다."
-                )
+                recommendations.append("성능 안정성 향상을 위한 일관성 있는 학습 패턴 확립이 필요합니다.")
 
             return recommendations
 
@@ -801,11 +694,9 @@ async def test_learning_pattern_analyzer():
 
     # 3. 학습 효과성 분석 테스트
     print("\n3. 학습 효과성 분석 테스트")
-    effectiveness_report = await analyzer.identify_learning_effectiveness(
-        test_performance_history
-    )
+    effectiveness_report = await analyzer.identify_learning_effectiveness(test_performance_history)
 
-    print(f"학습 효과성 분석 결과:")
+    print("학습 효과성 분석 결과:")
     print(f"- 전체 효과성: {effectiveness_report.overall_effectiveness.value}")
     print(f"- 효과성 점수: {effectiveness_report.effectiveness_score:.3f}")
     print(f"- 개선률: {effectiveness_report.improvement_rate:.3f}")

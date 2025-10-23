@@ -11,15 +11,12 @@ DuRi Phase 1-3 Week 3 Day 9 - 자동화 및 최적화 시스템
 """
 
 import asyncio
-import json
 import logging
-import os
-import threading
 import time
-from collections import defaultdict, deque
+from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 import numpy as np
 import psutil
@@ -229,9 +226,7 @@ class WorkflowAutomation:
         # 기본 단계 실행
         step.parameters["result"] = f"일반 단계 완료: {step.name}"
 
-    def calculate_execution_metrics(
-        self, execution: WorkflowExecution
-    ) -> Dict[str, Any]:
+    def calculate_execution_metrics(self, execution: WorkflowExecution) -> Dict[str, Any]:
         """실행 메트릭 계산"""
         if not execution.end_time:
             return {}
@@ -245,9 +240,7 @@ class WorkflowAutomation:
             "completed_steps": completed_steps,
             "total_steps": total_steps,
             "success_rate": completed_steps / total_steps if total_steps > 0 else 0.0,
-            "average_step_duration": (
-                total_duration / total_steps if total_steps > 0 else 0.0
-            ),
+            "average_step_duration": (total_duration / total_steps if total_steps > 0 else 0.0),
         }
 
 
@@ -286,9 +279,7 @@ class PerformanceOptimizer:
         """성능 분석"""
         current_time = datetime.now()
         recent_metrics = [
-            m
-            for m in self.performance_metrics
-            if (current_time - m.timestamp).total_seconds() <= time_window
+            m for m in self.performance_metrics if (current_time - m.timestamp).total_seconds() <= time_window
         ]
 
         if not recent_metrics:
@@ -343,17 +334,11 @@ class PerformanceOptimizer:
         for metric_name in target_metrics:
             if metric_name in current_analysis:
                 current_value = current_analysis[metric_name]["mean"]
-                optimized_value = self.apply_optimization_strategy(
-                    metric_name, current_value
-                )
+                optimized_value = self.apply_optimization_strategy(metric_name, current_value)
                 optimized_metrics[metric_name] = optimized_value
 
                 # 개선률 계산
-                improvement = (
-                    (optimized_value - current_value) / current_value
-                    if current_value != 0
-                    else 0
-                )
+                improvement = (optimized_value - current_value) / current_value if current_value != 0 else 0
                 recommendations.append(f"{metric_name}: {improvement:.2%} 개선 가능")
 
         # 최적화 결과 생성
@@ -362,18 +347,14 @@ class PerformanceOptimizer:
             optimization_type="performance",
             original_metrics=current_analysis,
             optimized_metrics=optimized_metrics,
-            improvement_rate=self.calculate_improvement_rate(
-                current_analysis, optimized_metrics
-            ),
+            improvement_rate=self.calculate_improvement_rate(current_analysis, optimized_metrics),
             recommendations=recommendations,
         )
 
         self.optimization_history.append(optimization_result)
         return optimization_result
 
-    def apply_optimization_strategy(
-        self, metric_name: str, current_value: float
-    ) -> float:
+    def apply_optimization_strategy(self, metric_name: str, current_value: float) -> float:
         """최적화 전략 적용"""
         # 간단한 최적화 전략
         if metric_name == "response_time":
@@ -385,9 +366,7 @@ class PerformanceOptimizer:
         else:
             return current_value * 1.1  # 기본 10% 개선
 
-    def calculate_improvement_rate(
-        self, original_metrics: Dict[str, Any], optimized_metrics: Dict[str, Any]
-    ) -> float:
+    def calculate_improvement_rate(self, original_metrics: Dict[str, Any], optimized_metrics: Dict[str, Any]) -> float:
         """개선률 계산"""
         if not original_metrics or not optimized_metrics:
             return 0.0
@@ -466,14 +445,10 @@ class ResourceManager:
 
         for resource_id, required_amount in requirements.items():
             # 현재 리소스 상태 확인
-            current_resource = next(
-                (r for r in current_resources if r.resource_id == resource_id), None
-            )
+            current_resource = next((r for r in current_resources if r.resource_id == resource_id), None)
 
             if current_resource:
-                available_capacity = (
-                    current_resource.max_capacity - current_resource.current_usage
-                )
+                available_capacity = current_resource.max_capacity - current_resource.current_usage
 
                 if available_capacity >= required_amount:
                     allocation_result[resource_id] = {
@@ -504,12 +479,12 @@ class ResourceManager:
         for resource in current_resources:
             if resource.utilization_rate > 0.8:
                 recommendations.append(
-                    f"{resource.resource_type} 사용량이 높습니다 ({resource.utilization_rate:.1%}). 최적화가 필요합니다."
+                    f"{resource.resource_type} 사용량이 높습니다 ({resource.utilization_rate:.1%}). 최적화가 필요합니다."  # noqa: E501
                 )
 
             if resource.utilization_rate < 0.2:
                 recommendations.append(
-                    f"{resource.resource_type} 사용량이 낮습니다 ({resource.utilization_rate:.1%}). 리소스 활용도를 높일 수 있습니다."
+                    f"{resource.resource_type} 사용량이 낮습니다 ({resource.utilization_rate:.1%}). 리소스 활용도를 높일 수 있습니다."  # noqa: E501
                 )
 
         return recommendations
@@ -524,9 +499,7 @@ class AutoTuner:
         self.optimization_algorithms = {}
         self.performance_targets = {}
 
-    def tune_parameters(
-        self, parameters: Dict[str, Any], target_metric: str, target_value: float
-    ) -> Dict[str, Any]:
+    def tune_parameters(self, parameters: Dict[str, Any], target_metric: str, target_value: float) -> Dict[str, Any]:
         """매개변수 자동 튜닝"""
         tuning_id = f"tuning_{int(time.time())}"
 
@@ -534,9 +507,7 @@ class AutoTuner:
         original_parameters = parameters.copy()
 
         # 튜닝 알고리즘 적용
-        tuned_parameters = self.apply_tuning_algorithm(
-            parameters, target_metric, target_value
-        )
+        tuned_parameters = self.apply_tuning_algorithm(parameters, target_metric, target_value)
 
         # 튜닝 결과 기록
         tuning_result = {
@@ -545,9 +516,7 @@ class AutoTuner:
             "tuned_parameters": tuned_parameters,
             "target_metric": target_metric,
             "target_value": target_value,
-            "improvement": self.calculate_tuning_improvement(
-                original_parameters, tuned_parameters
-            ),
+            "improvement": self.calculate_tuning_improvement(original_parameters, tuned_parameters),
             "timestamp": datetime.now(),
         }
 
@@ -590,9 +559,7 @@ class AutoTuner:
                 original_value = original_parameters[param_name]
                 tuned_value = tuned_parameters[param_name]
 
-                if isinstance(original_value, (int, float)) and isinstance(
-                    tuned_value, (int, float)
-                ):
+                if isinstance(original_value, (int, float)) and isinstance(tuned_value, (int, float)):
                     if original_value != 0:
                         improvement = (tuned_value - original_value) / original_value
                         improvements.append(improvement)
@@ -644,9 +611,7 @@ class AutomationOptimizationSystem:
             workflow_id = self.workflow_automation.create_workflow(workflow_name, steps)
 
             # 워크플로우 실행
-            execution_result = await self.workflow_automation.execute_workflow(
-                workflow_id
-            )
+            execution_result = await self.workflow_automation.execute_workflow(workflow_id)
 
             result = {
                 "type": "workflow_automation",
@@ -661,9 +626,7 @@ class AutomationOptimizationSystem:
         result["processing_time"] = time.time() - start_time
         return result
 
-    async def optimize_performance(
-        self, optimization_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def optimize_performance(self, optimization_data: Dict[str, Any]) -> Dict[str, Any]:
         """성능 최적화"""
         start_time = time.time()
 
@@ -671,9 +634,7 @@ class AutomationOptimizationSystem:
             target_metrics = optimization_data.get("target_metrics", [])
 
             # 성능 최적화 실행
-            optimization_result = self.performance_optimizer.optimize_performance(
-                target_metrics
-            )
+            optimization_result = self.performance_optimizer.optimize_performance(target_metrics)
 
             result = {
                 "type": "performance_optimization",
@@ -708,9 +669,7 @@ class AutomationOptimizationSystem:
                 }
             elif action == "allocate":
                 requirements = resource_data.get("requirements", {})
-                allocation_result = self.resource_manager.allocate_resources(
-                    requirements
-                )
+                allocation_result = self.resource_manager.allocate_resources(requirements)
                 result = {
                     "type": "resource_management",
                     "action": "allocate",
@@ -748,9 +707,7 @@ class AutomationOptimizationSystem:
             target_value = tuning_data.get("target_value", 1.0)
 
             # 자동 튜닝 실행
-            tuned_parameters = self.auto_tuner.tune_parameters(
-                parameters, target_metric, target_value
-            )
+            tuned_parameters = self.auto_tuner.tune_parameters(parameters, target_metric, target_value)
 
             result = {
                 "type": "auto_tuning",

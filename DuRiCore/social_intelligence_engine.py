@@ -5,26 +5,20 @@ DuRiCore Phase 10 - 고급 사회적 지능 엔진
 """
 
 import asyncio
-import json
 import logging
-import math
 import random
-import statistics
 import time
-from collections import defaultdict, deque
-from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
+from dataclasses import dataclass
+from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List
 
-from advanced_cognitive_system import (AbstractionType,
-                                       AdvancedCognitiveSystem, CognitiveLevel)
+from advanced_cognitive_system import AdvancedCognitiveSystem
 from emotion_weight_system import EmotionWeightSystem
 from lida_attention_system import LIDAAttentionSystem
+
 # 기존 시스템들 import
-from social_intelligence_system import (ContextComplexity,
-                                        SocialIntelligenceSystem,
-                                        SocialIntelligenceType)
+from social_intelligence_system import SocialIntelligenceSystem
 
 logger = logging.getLogger(__name__)
 
@@ -197,9 +191,7 @@ class SocialIntelligenceEngine:
     ) -> List[EmotionAnalysis]:
         """감정 인식"""
         try:
-            logger.info(
-                f"감정 인식 시작: 타입 {len(emotion_types) if emotion_types else '전체'}"
-            )
+            logger.info(f"감정 인식 시작: 타입 {len(emotion_types) if emotion_types else '전체'}")
 
             # 컨텍스트 전처리
             processed_context = await self._preprocess_emotion_context(context)
@@ -212,14 +204,10 @@ class SocialIntelligenceEngine:
                 emotion_types = list(EmotionType)
 
             # 감정 분석 수행
-            emotion_analyses = await self._perform_emotion_analysis(
-                emotional_signals, emotion_types
-            )
+            emotion_analyses = await self._perform_emotion_analysis(emotional_signals, emotion_types)
 
             # 감정 신뢰도 평가
-            evaluated_emotions = await self._evaluate_emotion_confidence(
-                emotion_analyses
-            )
+            evaluated_emotions = await self._evaluate_emotion_confidence(emotion_analyses)
 
             # 결과 저장
             self.emotion_analyses.extend(evaluated_emotions)
@@ -236,9 +224,7 @@ class SocialIntelligenceEngine:
     ) -> SocialContext:
         """사회적 맥락 이해"""
         try:
-            logger.info(
-                f"사회적 맥락 이해 시작: 타입 {context_type.value if context_type else '자동'}"
-            )
+            logger.info(f"사회적 맥락 이해 시작: 타입 {context_type.value if context_type else '자동'}")
 
             # 맥락 정보 분석
             context_analysis = await self._analyze_social_context(context)
@@ -248,9 +234,7 @@ class SocialIntelligenceEngine:
                 context_type = await self._determine_context_type(context_analysis)
 
             # 참여자 관계 분석
-            relationships = await self._analyze_participant_relationships(
-                context_analysis
-            )
+            relationships = await self._analyze_participant_relationships(context_analysis)
 
             # 권력 역학 분석
             power_dynamics = await self._analyze_power_dynamics(context_analysis)
@@ -287,14 +271,10 @@ class SocialIntelligenceEngine:
             logger.info(f"인간 상호작용 최적화 시작: 수준 {social_level.value}")
 
             # 상호작용 컨텍스트 분석
-            interaction_analysis = await self._analyze_interaction_context(
-                interaction_context
-            )
+            interaction_analysis = await self._analyze_interaction_context(interaction_context)
 
             # 참여자 감정 상태 분석
-            emotional_states = await self._analyze_participant_emotions(
-                interaction_analysis
-            )
+            emotional_states = await self._analyze_participant_emotions(interaction_analysis)
 
             # 사회적 역학 분석
             social_dynamics = await self._analyze_social_dynamics(interaction_analysis)
@@ -305,9 +285,7 @@ class SocialIntelligenceEngine:
             )
 
             # 최적화 제안 생성
-            optimization_suggestions = await self._generate_optimization_suggestions(
-                interaction_quality, social_level
-            )
+            optimization_suggestions = await self._generate_optimization_suggestions(interaction_quality, social_level)
 
             # 상호작용 결과 생성
             interaction = await self._create_human_interaction(
@@ -321,49 +299,35 @@ class SocialIntelligenceEngine:
             # 결과 저장
             self.human_interactions.append(interaction)
 
-            logger.info(
-                f"인간 상호작용 최적화 완료: 품질 점수 {interaction.interaction_quality:.2f}"
-            )
+            logger.info(f"인간 상호작용 최적화 완료: 품질 점수 {interaction.interaction_quality:.2f}")
             return interaction
 
         except Exception as e:
             logger.error(f"인간 상호작용 최적화 실패: {str(e)}")
             return None
 
-    async def assess_social_intelligence(
-        self, subject: str, context: Dict[str, Any]
-    ) -> SocialAssessment:
+    async def assess_social_intelligence(self, subject: str, context: Dict[str, Any]) -> SocialAssessment:
         """사회적 지능 평가"""
         try:
             logger.info(f"사회적 지능 평가 시작: 주제 {subject}")
 
             # 사회적 지능 차원 분석
-            social_dimensions = await self._analyze_social_intelligence_dimensions(
-                subject, context
-            )
+            social_dimensions = await self._analyze_social_intelligence_dimensions(subject, context)
 
             # 감정 지능 평가
-            emotional_intelligence = await self._assess_emotional_intelligence(
-                social_dimensions
-            )
+            emotional_intelligence = await self._assess_emotional_intelligence(social_dimensions)
 
             # 사회적 기술 평가
             social_skills = await self._assess_social_skills(social_dimensions)
 
             # 의사소통 효과성 평가
-            communication_effectiveness = (
-                await self._assess_communication_effectiveness(social_dimensions)
-            )
+            communication_effectiveness = await self._assess_communication_effectiveness(social_dimensions)
 
             # 관계 관리 평가
-            relationship_management = await self._assess_relationship_management(
-                social_dimensions
-            )
+            relationship_management = await self._assess_relationship_management(social_dimensions)
 
             # 문화적 민감성 평가
-            cultural_sensitivity = await self._assess_cultural_sensitivity(
-                social_dimensions
-            )
+            cultural_sensitivity = await self._assess_cultural_sensitivity(social_dimensions)
 
             # 전반적 사회적 지능 점수 계산
             overall_score = await self._calculate_overall_social_score(
@@ -376,14 +340,10 @@ class SocialIntelligenceEngine:
 
             # 강점 및 개선 영역 식별
             strengths = await self._identify_social_strengths(social_dimensions)
-            improvement_areas = await self._identify_social_improvement_areas(
-                social_dimensions
-            )
+            improvement_areas = await self._identify_social_improvement_areas(social_dimensions)
 
             # 권장사항 생성
-            recommendations = await self._generate_social_recommendations(
-                strengths, improvement_areas
-            )
+            recommendations = await self._generate_social_recommendations(strengths, improvement_areas)
 
             # 평가 결과 생성
             assessment = SocialAssessment(
@@ -412,9 +372,7 @@ class SocialIntelligenceEngine:
             logger.error(f"사회적 지능 평가 실패: {str(e)}")
             return None
 
-    async def _preprocess_emotion_context(
-        self, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _preprocess_emotion_context(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """감정 컨텍스트 전처리"""
         processed_context = context.copy()
 
@@ -428,9 +386,7 @@ class SocialIntelligenceEngine:
 
         return processed_context
 
-    async def _analyze_emotional_signals(
-        self, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _analyze_emotional_signals(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """감정 신호 분석"""
         signals = {
             "facial_expressions": context.get("facial_expressions", []),
@@ -471,9 +427,7 @@ class SocialIntelligenceEngine:
 
         return analyses
 
-    async def _evaluate_emotion_confidence(
-        self, analyses: List[EmotionAnalysis]
-    ) -> List[EmotionAnalysis]:
+    async def _evaluate_emotion_confidence(self, analyses: List[EmotionAnalysis]) -> List[EmotionAnalysis]:
         """감정 신뢰도 평가"""
         evaluated_analyses = []
 
@@ -497,9 +451,7 @@ class SocialIntelligenceEngine:
 
         return analysis
 
-    async def _determine_context_type(
-        self, analysis: Dict[str, Any]
-    ) -> SocialContextType:
+    async def _determine_context_type(self, analysis: Dict[str, Any]) -> SocialContextType:
         """맥락 타입 결정"""
         # 맥락 분석을 기반으로 타입 결정
         setting = analysis.get("setting", "").lower()
@@ -516,9 +468,7 @@ class SocialIntelligenceEngine:
         else:
             return SocialContextType.INFORMAL
 
-    async def _analyze_participant_relationships(
-        self, analysis: Dict[str, Any]
-    ) -> Dict[str, str]:
+    async def _analyze_participant_relationships(self, analysis: Dict[str, Any]) -> Dict[str, str]:
         """참여자 관계 분석"""
         relationships = {}
         participants = analysis.get("participants", [])
@@ -529,9 +479,7 @@ class SocialIntelligenceEngine:
 
         return relationships
 
-    async def _analyze_power_dynamics(
-        self, analysis: Dict[str, Any]
-    ) -> Dict[str, float]:
+    async def _analyze_power_dynamics(self, analysis: Dict[str, Any]) -> Dict[str, float]:
         """권력 역학 분석"""
         power_dynamics = {}
         participants = analysis.get("participants", [])
@@ -574,9 +522,7 @@ class SocialIntelligenceEngine:
 
         return context
 
-    async def _analyze_interaction_context(
-        self, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _analyze_interaction_context(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """상호작용 컨텍스트 분석"""
         analysis = {
             "interaction_type": context.get("interaction_type", "일반"),
@@ -588,9 +534,7 @@ class SocialIntelligenceEngine:
 
         return analysis
 
-    async def _analyze_participant_emotions(
-        self, analysis: Dict[str, Any]
-    ) -> Dict[str, EmotionType]:
+    async def _analyze_participant_emotions(self, analysis: Dict[str, Any]) -> Dict[str, EmotionType]:
         """참여자 감정 상태 분석"""
         emotional_states = {}
         participants = analysis.get("participants", [])
@@ -602,9 +546,7 @@ class SocialIntelligenceEngine:
 
         return emotional_states
 
-    async def _analyze_social_dynamics(
-        self, analysis: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _analyze_social_dynamics(self, analysis: Dict[str, Any]) -> Dict[str, Any]:
         """사회적 역학 분석"""
         dynamics = {
             "power_distribution": random.uniform(0.2, 0.8),
@@ -629,18 +571,12 @@ class SocialIntelligenceEngine:
 
         # 감정 상태 고려
         positive_emotions = sum(
-            1
-            for emotion in emotional_states.values()
-            if emotion in [EmotionType.JOY, EmotionType.NEUTRAL]
+            1 for emotion in emotional_states.values() if emotion in [EmotionType.JOY, EmotionType.NEUTRAL]
         )
-        emotion_score = (
-            positive_emotions / len(emotional_states) if emotional_states else 0.5
-        )
+        emotion_score = positive_emotions / len(emotional_states) if emotional_states else 0.5
 
         # 종합 점수 계산
-        quality_score = (
-            communication_score + cohesion_score + conflict_score + emotion_score
-        ) / 4
+        quality_score = (communication_score + cohesion_score + conflict_score + emotion_score) / 4
 
         return quality_score
 
@@ -659,9 +595,7 @@ class SocialIntelligenceEngine:
                 ]
             )
         elif interaction_quality < 0.8:
-            suggestions.extend(
-                ["세밀한 감정 인식", "문화적 민감성 향상", "관계 관리 기술 개선"]
-            )
+            suggestions.extend(["세밀한 감정 인식", "문화적 민감성 향상", "관계 관리 기술 개선"])
         else:
             suggestions.extend(["고급 사회적 기술 개발", "전문적 상호작용 능력 향상"])
 
@@ -691,9 +625,7 @@ class SocialIntelligenceEngine:
 
         return interaction
 
-    async def _analyze_social_intelligence_dimensions(
-        self, subject: str, context: Dict[str, Any]
-    ) -> Dict[str, float]:
+    async def _analyze_social_intelligence_dimensions(self, subject: str, context: Dict[str, Any]) -> Dict[str, float]:
         """사회적 지능 차원 분석"""
         dimensions = {
             "감정 인식": random.uniform(0.6, 0.9),
@@ -708,35 +640,25 @@ class SocialIntelligenceEngine:
 
         return dimensions
 
-    async def _assess_emotional_intelligence(
-        self, dimensions: Dict[str, float]
-    ) -> float:
+    async def _assess_emotional_intelligence(self, dimensions: Dict[str, float]) -> float:
         """감정 지능 평가"""
         emotional_dimensions = ["감정 인식", "감정 표현", "감정 조절"]
 
-        emotional_score = sum(dimensions[dim] for dim in emotional_dimensions) / len(
-            emotional_dimensions
-        )
+        emotional_score = sum(dimensions[dim] for dim in emotional_dimensions) / len(emotional_dimensions)
         return emotional_score
 
     async def _assess_social_skills(self, dimensions: Dict[str, float]) -> float:
         """사회적 기술 평가"""
         social_dimensions = ["사회적 인식", "관계 관리", "갈등 해결"]
 
-        social_score = sum(dimensions[dim] for dim in social_dimensions) / len(
-            social_dimensions
-        )
+        social_score = sum(dimensions[dim] for dim in social_dimensions) / len(social_dimensions)
         return social_score
 
-    async def _assess_communication_effectiveness(
-        self, dimensions: Dict[str, float]
-    ) -> float:
+    async def _assess_communication_effectiveness(self, dimensions: Dict[str, float]) -> float:
         """의사소통 효과성 평가"""
         return dimensions.get("의사소통", 0.7)
 
-    async def _assess_relationship_management(
-        self, dimensions: Dict[str, float]
-    ) -> float:
+    async def _assess_relationship_management(self, dimensions: Dict[str, float]) -> float:
         """관계 관리 평가"""
         return dimensions.get("관계 관리", 0.7)
 
@@ -763,9 +685,7 @@ class SocialIntelligenceEngine:
 
         return overall_score
 
-    async def _identify_social_strengths(
-        self, dimensions: Dict[str, float]
-    ) -> List[str]:
+    async def _identify_social_strengths(self, dimensions: Dict[str, float]) -> List[str]:
         """사회적 강점 식별"""
         strengths = []
         threshold = 0.7
@@ -776,9 +696,7 @@ class SocialIntelligenceEngine:
 
         return strengths
 
-    async def _identify_social_improvement_areas(
-        self, dimensions: Dict[str, float]
-    ) -> List[str]:
+    async def _identify_social_improvement_areas(self, dimensions: Dict[str, float]) -> List[str]:
         """사회적 개선 영역 식별"""
         improvement_areas = []
         threshold = 0.6
@@ -789,9 +707,7 @@ class SocialIntelligenceEngine:
 
         return improvement_areas
 
-    async def _generate_social_recommendations(
-        self, strengths: List[str], improvement_areas: List[str]
-    ) -> List[str]:
+    async def _generate_social_recommendations(self, strengths: List[str], improvement_areas: List[str]) -> List[str]:
         """사회적 권장사항 생성"""
         recommendations = []
 

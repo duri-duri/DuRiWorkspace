@@ -6,18 +6,15 @@ DuRi 실세계 시나리오 테스트 시스템
 """
 
 import asyncio
-import json
 import logging
 import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -258,15 +255,15 @@ class RealWorldScenarioTest:
 
         if scenario.emotional_state == EmotionType.ANXIETY:
             if empathy_level > 0.8:
-                return f"김영희님, 지금 많이 걱정되시겠어요. 하지만 걱정하지 마세요. 우리가 함께 해결해나갈 수 있습니다. 먼저 진단 결과에 대해 자세히 설명드리겠습니다."
+                return "김영희님, 지금 많이 걱정되시겠어요. 하지만 걱정하지 마세요. 우리가 함께 해결해나갈 수 있습니다. 먼저 진단 결과에 대해 자세히 설명드리겠습니다."  # noqa: E501
             else:
-                return f"진단 결과를 말씀드리겠습니다. 유방암 2기로 확인되었습니다. 치료가 가능한 단계입니다."
+                return "진단 결과를 말씀드리겠습니다. 유방암 2기로 확인되었습니다. 치료가 가능한 단계입니다."
 
         elif scenario.emotional_state == EmotionType.ANGER:
             if trust_level > 0.7:
-                return f"박철수님, 지금 많이 화가 나시는 것 같습니다. 하지만 당뇨병 합병증은 정말 위험합니다. 다른 방법도 함께 찾아보겠지만, 우선은 기본 치료가 필요합니다."
+                return "박철수님, 지금 많이 화가 나시는 것 같습니다. 하지만 당뇨병 합병증은 정말 위험합니다. 다른 방법도 함께 찾아보겠지만, 우선은 기본 치료가 필요합니다."  # noqa: E501
             else:
-                return f"치료를 거부하시는 이유를 이해합니다. 하지만 의학적으로는 치료가 필요합니다."
+                return "치료를 거부하시는 이유를 이해합니다. 하지만 의학적으로는 치료가 필요합니다."
 
         else:
             return f"{scenario.patient_name}님, {scenario.current_situation}에 대해 이야기해보겠습니다."
@@ -287,25 +284,19 @@ class RealWorldScenarioTest:
             return "; ".join(insights[:2])
         return "DuRi의 사회적 지능 분석을 바탕으로 한 판단"
 
-    def _evaluate_response(
-        self, response: DuRiResponse, scenario: PatientScenario
-    ) -> Dict[str, float]:
+    def _evaluate_response(self, response: DuRiResponse, scenario: PatientScenario) -> Dict[str, float]:
         """응답 평가"""
         # 실제 의사 관점에서 평가
         empathy_score = response.empathy_level
         trust_score = response.confidence_score
         communication_score = (
-            response.communication_style
-            if isinstance(response.communication_style, (int, float))
-            else 0.7
+            response.communication_style if isinstance(response.communication_style, (int, float)) else 0.7
         )
 
         # 시나리오별 특화 평가
         scenario_specific_score = self._evaluate_scenario_specific(response, scenario)
 
-        overall_score = (
-            empathy_score + trust_score + communication_score + scenario_specific_score
-        ) / 4
+        overall_score = (empathy_score + trust_score + communication_score + scenario_specific_score) / 4
 
         return {
             "empathy_score": empathy_score,
@@ -316,33 +307,19 @@ class RealWorldScenarioTest:
             "processing_time": response.processing_time,
         }
 
-    def _evaluate_scenario_specific(
-        self, response: DuRiResponse, scenario: PatientScenario
-    ) -> float:
+    def _evaluate_scenario_specific(self, response: DuRiResponse, scenario: PatientScenario) -> float:
         """시나리오별 특화 평가"""
         if scenario.emotional_state == EmotionType.ANXIETY:
             # 불안한 환자에게는 공감과 안정감 제공이 중요
-            return (
-                0.9
-                if "걱정" in response.response_text and "함께" in response.response_text
-                else 0.6
-            )
+            return 0.9 if "걱정" in response.response_text and "함께" in response.response_text else 0.6
 
         elif scenario.emotional_state == EmotionType.ANGER:
             # 화난 환자에게는 이해와 대안 제시가 중요
-            return (
-                0.9
-                if "이해" in response.response_text and "대안" in response.response_text
-                else 0.6
-            )
+            return 0.9 if "이해" in response.response_text and "대안" in response.response_text else 0.6
 
         elif scenario.emotional_state == EmotionType.FEAR:
             # 두려운 환자에게는 안심과 설명이 중요
-            return (
-                0.9
-                if "안심" in response.response_text or "설명" in response.response_text
-                else 0.6
-            )
+            return 0.9 if "안심" in response.response_text or "설명" in response.response_text else 0.6
 
         else:
             return 0.7
@@ -378,16 +355,9 @@ class RealWorldScenarioTest:
 
         total_tests = len(self.test_results)
         successful_tests = sum(1 for r in self.test_results if r.success)
-        avg_overall_score = (
-            sum(r.evaluation_metrics.get("overall_score", 0) for r in self.test_results)
-            / total_tests
-        )
+        avg_overall_score = sum(r.evaluation_metrics.get("overall_score", 0) for r in self.test_results) / total_tests
         avg_processing_time = (
-            sum(
-                r.evaluation_metrics.get("processing_time", 0)
-                for r in self.test_results
-            )
-            / total_tests
+            sum(r.evaluation_metrics.get("processing_time", 0) for r in self.test_results) / total_tests
         )
 
         return {
@@ -405,9 +375,7 @@ class RealWorldScenarioTest:
                     "overall_score": r.evaluation_metrics.get("overall_score", 0),
                     "empathy_score": r.evaluation_metrics.get("empathy_score", 0),
                     "trust_score": r.evaluation_metrics.get("trust_score", 0),
-                    "communication_score": r.evaluation_metrics.get(
-                        "communication_score", 0
-                    ),
+                    "communication_score": r.evaluation_metrics.get("communication_score", 0),
                     "processing_time": r.evaluation_metrics.get("processing_time", 0),
                     "feedback": r.feedback,
                 }
@@ -420,12 +388,10 @@ class RealWorldScenarioTest:
         """개선 권장사항 생성"""
         recommendations = []
 
-        avg_empathy = sum(
-            r.evaluation_metrics.get("empathy_score", 0) for r in self.test_results
-        ) / len(self.test_results)
-        avg_trust = sum(
-            r.evaluation_metrics.get("trust_score", 0) for r in self.test_results
-        ) / len(self.test_results)
+        avg_empathy = sum(r.evaluation_metrics.get("empathy_score", 0) for r in self.test_results) / len(
+            self.test_results
+        )
+        avg_trust = sum(r.evaluation_metrics.get("trust_score", 0) for r in self.test_results) / len(self.test_results)
 
         if avg_empathy < 0.8:
             recommendations.append("공감 능력을 더욱 강화해야 합니다.")
@@ -454,7 +420,7 @@ async def main():
     test_system.load_doctor_patient_scenarios()
 
     # 모든 시나리오 테스트 실행
-    results = await test_system.run_all_scenarios()
+    results = await test_system.run_all_scenarios()  # noqa: F841
 
     # 리포트 생성
     report = test_system.generate_test_report()

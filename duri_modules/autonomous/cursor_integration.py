@@ -8,10 +8,9 @@ import asyncio
 import json
 import logging
 import os
-import time
 from dataclasses import asdict, dataclass
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 
@@ -87,9 +86,7 @@ class CursorIntegration:
         try:
             # 피드백 분석
             learning_insights = self._extract_learning_insights(cursor_evaluation)
-            improvement_suggestions = self._generate_improvement_suggestions(
-                cursor_evaluation
-            )
+            improvement_suggestions = self._generate_improvement_suggestions(cursor_evaluation)
             confidence_score = self._calculate_confidence_score(cursor_evaluation)
 
             # 피드백 객체 생성
@@ -106,12 +103,8 @@ class CursorIntegration:
             # 세션에 추가
             if session_id in self.active_sessions:
                 self.active_sessions[session_id]["exchanges"].append(feedback)
-                self.active_sessions[session_id]["learning_insights"].extend(
-                    learning_insights
-                )
-                self.active_sessions[session_id]["improvement_suggestions"].extend(
-                    improvement_suggestions
-                )
+                self.active_sessions[session_id]["learning_insights"].extend(learning_insights)
+                self.active_sessions[session_id]["improvement_suggestions"].extend(improvement_suggestions)
 
             # 히스토리에 저장
             self.cursor_feedback_history.append(feedback)
@@ -120,7 +113,7 @@ class CursorIntegration:
             await self._apply_real_time_learning(feedback)
 
             logger.info(
-                f"✅ Cursor 피드백 처리 완료: {len(learning_insights)}개 인사이트, {len(improvement_suggestions)}개 제안"
+                f"✅ Cursor 피드백 처리 완료: {len(learning_insights)}개 인사이트, {len(improvement_suggestions)}개 제안"  # noqa: E501
             )
 
             return feedback
@@ -149,9 +142,7 @@ class CursorIntegration:
         # 세션 종료
         del self.active_sessions[session_id]
 
-        logger.info(
-            f"🏁 학습 세션 종료: {session_id} - 효율성 {learning_session.learning_efficiency:.3f}"
-        )
+        logger.info(f"🏁 학습 세션 종료: {session_id} - 효율성 {learning_session.learning_efficiency:.3f}")
 
         return learning_session
 
@@ -159,25 +150,18 @@ class CursorIntegration:
         """학습 인사이트 반환"""
         try:
             total_sessions = len(self.learning_history)
-            total_exchanges = sum(
-                session.total_exchanges for session in self.learning_history
-            )
+            total_exchanges = sum(session.total_exchanges for session in self.learning_history)
 
             if total_sessions == 0:
                 return {"status": "no_data"}
 
             # 평균 지표 계산
             avg_learning_efficiency = (
-                sum(session.learning_efficiency for session in self.learning_history)
-                / total_sessions
+                sum(session.learning_efficiency for session in self.learning_history) / total_sessions
             )
-            avg_improvement_rate = (
-                sum(session.improvement_rate for session in self.learning_history)
-                / total_sessions
-            )
+            avg_improvement_rate = sum(session.improvement_rate for session in self.learning_history) / total_sessions
             avg_cursor_satisfaction = (
-                sum(session.cursor_satisfaction for session in self.learning_history)
-                / total_sessions
+                sum(session.cursor_satisfaction for session in self.learning_history) / total_sessions
             )
 
             # 학습 트렌드 분석
@@ -201,9 +185,7 @@ class CursorIntegration:
             logger.error(f"학습 인사이트 조회 오류: {e}")
             return {"status": "error", "error": str(e)}
 
-    async def apply_improvements(
-        self, improvement_suggestions: List[str]
-    ) -> Dict[str, Any]:
+    async def apply_improvements(self, improvement_suggestions: List[str]) -> Dict[str, Any]:
         """개선 사항 적용"""
         try:
             applied_improvements = []
@@ -212,9 +194,7 @@ class CursorIntegration:
             for suggestion in improvement_suggestions:
                 try:
                     # 개선 적용 로직
-                    improvement_result = await self._apply_single_improvement(
-                        suggestion
-                    )
+                    improvement_result = await self._apply_single_improvement(suggestion)
                     applied_improvements.append(
                         {
                             "suggestion": suggestion,
@@ -243,9 +223,7 @@ class CursorIntegration:
                 "failed_improvements": len(failed_improvements),
                 "total_suggestions": len(improvement_suggestions),
                 "success_rate": (
-                    len(applied_improvements) / len(improvement_suggestions)
-                    if improvement_suggestions
-                    else 0.0
+                    len(applied_improvements) / len(improvement_suggestions) if improvement_suggestions else 0.0
                 ),
             }
 
@@ -253,9 +231,7 @@ class CursorIntegration:
             logger.error(f"개선 적용 오류: {e}")
             return {"status": "error", "error": str(e)}
 
-    def _extract_learning_insights(
-        self, cursor_evaluation: Dict[str, Any]
-    ) -> List[str]:
+    def _extract_learning_insights(self, cursor_evaluation: Dict[str, Any]) -> List[str]:
         """학습 인사이트 추출"""
         insights = []
 
@@ -288,9 +264,7 @@ class CursorIntegration:
 
         return insights
 
-    def _generate_improvement_suggestions(
-        self, cursor_evaluation: Dict[str, Any]
-    ) -> List[str]:
+    def _generate_improvement_suggestions(self, cursor_evaluation: Dict[str, Any]) -> List[str]:
         """개선 제안 생성"""
         suggestions = []
 
@@ -306,9 +280,7 @@ class CursorIntegration:
 
         relevance = cursor_evaluation.get("relevance", 0)
         if relevance < 0.6:
-            suggestions.append(
-                "관련성 향상을 위해 사용자 의도를 더 정확히 파악해야 합니다"
-            )
+            suggestions.append("관련성 향상을 위해 사용자 의도를 더 정확히 파악해야 합니다")
 
         depth = cursor_evaluation.get("depth", 0)
         if depth < 0.6:
@@ -316,9 +288,7 @@ class CursorIntegration:
 
         clarity = cursor_evaluation.get("clarity", 0)
         if clarity < 0.6:
-            suggestions.append(
-                "명확성 향상을 위해 더 간결하고 이해하기 쉬운 설명이 필요합니다"
-            )
+            suggestions.append("명확성 향상을 위해 더 간결하고 이해하기 쉬운 설명이 필요합니다")
 
         return suggestions
 
@@ -371,9 +341,7 @@ class CursorIntegration:
                     # 일반 개선
                     await self._prioritize_improvement(suggestion, "medium")
 
-            logger.info(
-                f"🔄 실시간 학습 적용: {len(feedback.learning_insights)}개 인사이트"
-            )
+            logger.info(f"🔄 실시간 학습 적용: {len(feedback.learning_insights)}개 인사이트")
 
         except Exception as e:
             logger.error(f"실시간 학습 적용 오류: {e}")
@@ -406,29 +374,21 @@ class CursorIntegration:
         # 다음 학습 세션에서 적용할 개선 사항
         logger.info(f"📅 개선 스케줄링: {suggestion}")
 
-    def _create_learning_session_summary(
-        self, session_data: Dict[str, Any]
-    ) -> LearningSession:
+    def _create_learning_session_summary(self, session_data: Dict[str, Any]) -> LearningSession:
         """학습 세션 요약 생성"""
         exchanges = session_data["exchanges"]
 
         # 학습 효율성 계산
         total_insights = len(session_data["learning_insights"])
-        learning_efficiency = (
-            min(1.0, total_insights / len(exchanges)) if exchanges else 0.0
-        )
+        learning_efficiency = min(1.0, total_insights / len(exchanges)) if exchanges else 0.0
 
         # 개선율 계산
         total_suggestions = len(session_data["improvement_suggestions"])
-        improvement_rate = (
-            min(1.0, total_suggestions / len(exchanges)) if exchanges else 0.0
-        )
+        improvement_rate = min(1.0, total_suggestions / len(exchanges)) if exchanges else 0.0
 
         # Cursor 만족도 계산
         if exchanges:
-            avg_confidence = sum(
-                exchange.confidence_score for exchange in exchanges
-            ) / len(exchanges)
+            avg_confidence = sum(exchange.confidence_score for exchange in exchanges) / len(exchanges)
         else:
             avg_confidence = 0.5
 
@@ -486,23 +446,17 @@ class CursorIntegration:
             recent_sessions = self.learning_history[-3:]  # 최근 3개 세션
 
             # 낮은 학습 효율성
-            avg_efficiency = sum(
-                session.learning_efficiency for session in recent_sessions
-            ) / len(recent_sessions)
+            avg_efficiency = sum(session.learning_efficiency for session in recent_sessions) / len(recent_sessions)
             if avg_efficiency < 0.6:
                 improvement_areas.append("학습 효율성 향상 필요")
 
             # 낮은 개선율
-            avg_improvement = sum(
-                session.improvement_rate for session in recent_sessions
-            ) / len(recent_sessions)
+            avg_improvement = sum(session.improvement_rate for session in recent_sessions) / len(recent_sessions)
             if avg_improvement < 0.5:
                 improvement_areas.append("개선 제안 적용률 향상 필요")
 
             # 낮은 Cursor 만족도
-            avg_satisfaction = sum(
-                session.cursor_satisfaction for session in recent_sessions
-            ) / len(recent_sessions)
+            avg_satisfaction = sum(session.cursor_satisfaction for session in recent_sessions) / len(recent_sessions)
             if avg_satisfaction < 0.7:
                 improvement_areas.append("Cursor 만족도 향상 필요")
 

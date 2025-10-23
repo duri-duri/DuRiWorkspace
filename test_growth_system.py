@@ -5,9 +5,6 @@ ChatGPT 제안을 바탕으로 한 감정 기반 자기주도적 성장 시스�
 """
 
 import asyncio
-import json
-import time
-from datetime import datetime
 
 import aiohttp
 
@@ -35,21 +32,13 @@ async def test_growth_system():
                     print(f"   🏷️  단계: {level_info.get('name', 'N/A')}")
                     print(f"   📅 연령대: {level_info.get('age_range', 'N/A')}")
                     print(f"   🎯 중점: {level_info.get('focus', 'N/A')}")
-                    print(
-                        f"   🧠 고차원 사고 비중: {level_info.get('high_order_thinking', 0):.1%}"
-                    )
-                    print(
-                        f"   📚 학습 활성화: {'✅' if level_info.get('learning_enabled', False) else '❌'}"
-                    )
+                    print(f"   🧠 고차원 사고 비중: {level_info.get('high_order_thinking', 0):.1%}")
+                    print(f"   📚 학습 활성화: {'✅' if level_info.get('learning_enabled', False) else '❌'}")
 
                     metrics = growth_status.get("metrics", {})
                     print(f"   📈 경험치: {metrics.get('experience_points', 0)}")
-                    print(
-                        f"   🎭 감정적 성숙도: {metrics.get('emotional_maturity', 0):.3f}"
-                    )
-                    print(
-                        f"   🧩 인지 발달: {metrics.get('cognitive_development', 0):.3f}"
-                    )
+                    print(f"   🎭 감정적 성숙도: {metrics.get('emotional_maturity', 0):.3f}")
+                    print(f"   🧩 인지 발달: {metrics.get('cognitive_development', 0):.3f}")
                     print(f"   🤝 사회적 기술: {metrics.get('social_skills', 0):.3f}")
                     print(f"   💪 자기 동기: {metrics.get('self_motivation', 0):.3f}")
                 else:
@@ -71,15 +60,11 @@ async def test_growth_system():
                     if data.get("status") == "success":
                         growth_result = data.get("growth_result", {})
                         level_response = growth_result.get("response", "")
-                        learning_triggered = growth_result.get(
-                            "learning_triggered", False
-                        )
+                        learning_triggered = growth_result.get("learning_triggered", False)
 
                         print(f"   {i}. 자극: '{stimulus}'")
                         print(f"      반응: {level_response}")
-                        print(
-                            f"      학습 전이: {'✅' if learning_triggered else '❌'}"
-                        )
+                        print(f"      학습 전이: {'✅' if learning_triggered else '❌'}")
 
                         # 진화 확인
                         evolution = growth_result.get("evolution")
@@ -112,15 +97,11 @@ async def test_growth_system():
                     if data.get("status") == "success":
                         growth_result = data.get("growth_result", {})
                         level_response = growth_result.get("response", "")
-                        learning_triggered = growth_result.get(
-                            "learning_triggered", False
-                        )
+                        learning_triggered = growth_result.get("learning_triggered", False)
 
                         print(f"   {i}. 자극: '{stimulus}'")
                         print(f"      반응: {level_response}")
-                        print(
-                            f"      학습 전이: {'✅' if learning_triggered else '❌'}"
-                        )
+                        print(f"      학습 전이: {'✅' if learning_triggered else '❌'}")
 
                         # 진화 확인
                         evolution = growth_result.get("evolution")
@@ -153,15 +134,11 @@ async def test_growth_system():
                     if data.get("status") == "success":
                         growth_result = data.get("growth_result", {})
                         level_response = growth_result.get("response", "")
-                        learning_triggered = growth_result.get(
-                            "learning_triggered", False
-                        )
+                        learning_triggered = growth_result.get("learning_triggered", False)
 
                         print(f"   {i}. 자극: '{stimulus}'")
                         print(f"      반응: {level_response}")
-                        print(
-                            f"      학습 전이: {'✅' if learning_triggered else '❌'}"
-                        )
+                        print(f"      학습 전이: {'✅' if learning_triggered else '❌'}")
 
                         # 진화 확인
                         evolution = growth_result.get("evolution")
@@ -194,15 +171,11 @@ async def test_growth_system():
                     if data.get("status") == "success":
                         growth_result = data.get("growth_result", {})
                         level_response = growth_result.get("response", "")
-                        learning_triggered = growth_result.get(
-                            "learning_triggered", False
-                        )
+                        learning_triggered = growth_result.get("learning_triggered", False)
 
                         print(f"   {i}. 자극: '{stimulus}'")
                         print(f"      반응: {level_response}")
-                        print(
-                            f"      학습 전이: {'✅' if learning_triggered else '❌'}"
-                        )
+                        print(f"      학습 전이: {'✅' if learning_triggered else '❌'}")
 
                         # 진화 확인
                         evolution = growth_result.get("evolution")
@@ -235,15 +208,11 @@ async def test_growth_system():
                     if data.get("status") == "success":
                         growth_result = data.get("growth_result", {})
                         level_response = growth_result.get("response", "")
-                        learning_triggered = growth_result.get(
-                            "learning_triggered", False
-                        )
+                        learning_triggered = growth_result.get("learning_triggered", False)
 
                         print(f"   {i}. 자극: '{stimulus}'")
                         print(f"      반응: {level_response}")
-                        print(
-                            f"      학습 전이: {'✅' if learning_triggered else '❌'}"
-                        )
+                        print(f"      학습 전이: {'✅' if learning_triggered else '❌'}")
 
                         # 진화 확인
                         evolution = growth_result.get("evolution")
@@ -276,15 +245,11 @@ async def test_growth_system():
                     if data.get("status") == "success":
                         growth_result = data.get("growth_result", {})
                         level_response = growth_result.get("response", "")
-                        learning_triggered = growth_result.get(
-                            "learning_triggered", False
-                        )
+                        learning_triggered = growth_result.get("learning_triggered", False)
 
                         print(f"   {i}. 자극: '{stimulus}'")
                         print(f"      반응: {level_response}")
-                        print(
-                            f"      학습 전이: {'✅' if learning_triggered else '❌'}"
-                        )
+                        print(f"      학습 전이: {'✅' if learning_triggered else '❌'}")
 
                         # 진화 확인
                         evolution = growth_result.get("evolution")
@@ -317,15 +282,11 @@ async def test_growth_system():
                     if data.get("status") == "success":
                         growth_result = data.get("growth_result", {})
                         level_response = growth_result.get("response", "")
-                        learning_triggered = growth_result.get(
-                            "learning_triggered", False
-                        )
+                        learning_triggered = growth_result.get("learning_triggered", False)
 
                         print(f"   {i}. 자극: '{stimulus}'")
                         print(f"      반응: {level_response}")
-                        print(
-                            f"      학습 전이: {'✅' if learning_triggered else '❌'}"
-                        )
+                        print(f"      학습 전이: {'✅' if learning_triggered else '❌'}")
 
                         # 진화 확인
                         evolution = growth_result.get("evolution")
@@ -349,30 +310,18 @@ async def test_growth_system():
 
                     print(f"   📊 최종 레벨: {growth_status.get('current_level', 1)}")
                     print(f"   🏷️  단계: {level_info.get('name', 'N/A')}")
-                    print(
-                        f"   🧠 고차원 사고 비중: {level_info.get('high_order_thinking', 0):.1%}"
-                    )
-                    print(
-                        f"   📚 학습 활성화: {'✅' if level_info.get('learning_enabled', False) else '❌'}"
-                    )
+                    print(f"   🧠 고차원 사고 비중: {level_info.get('high_order_thinking', 0):.1%}")
+                    print(f"   📚 학습 활성화: {'✅' if level_info.get('learning_enabled', False) else '❌'}")
 
                     metrics = growth_status.get("metrics", {})
                     print(f"   📈 총 경험치: {metrics.get('experience_points', 0)}")
-                    print(
-                        f"   🎭 감정적 성숙도: {metrics.get('emotional_maturity', 0):.3f}"
-                    )
-                    print(
-                        f"   🧩 인지 발달: {metrics.get('cognitive_development', 0):.3f}"
-                    )
+                    print(f"   🎭 감정적 성숙도: {metrics.get('emotional_maturity', 0):.3f}")
+                    print(f"   🧩 인지 발달: {metrics.get('cognitive_development', 0):.3f}")
                     print(f"   🤝 사회적 기술: {metrics.get('social_skills', 0):.3f}")
                     print(f"   💪 자기 동기: {metrics.get('self_motivation', 0):.3f}")
 
-                    print(
-                        f"   📊 총 자극 수: {growth_status.get('total_stimulus_count', 0)}"
-                    )
-                    print(
-                        f"   🎯 최근 자극: {growth_status.get('recent_stimulus', [])}"
-                    )
+                    print(f"   📊 총 자극 수: {growth_status.get('total_stimulus_count', 0)}")
+                    print(f"   🎯 최근 자극: {growth_status.get('recent_stimulus', [])}")
                 else:
                     print(f"   ❌ 최종 성장 상태 조회 실패: {data}")
         except Exception as e:
@@ -406,14 +355,10 @@ async def test_emotion_based_learning():
                     data = await response.json()
                     if data.get("status") == "success":
                         growth_result = data.get("growth_result", {})
-                        learning_triggered = growth_result.get(
-                            "learning_triggered", False
-                        )
+                        learning_triggered = growth_result.get("learning_triggered", False)
 
                         print(f"   {i}. 자극: '{stimulus}'")
-                        print(
-                            f"      학습 전이: {'✅' if learning_triggered else '❌'}"
-                        )
+                        print(f"      학습 전이: {'✅' if learning_triggered else '❌'}")
                     else:
                         print(f"   {i}. ❌ 자극 처리 실패: {data}")
             except Exception as e:
@@ -440,14 +385,10 @@ async def test_emotion_based_learning():
                     data = await response.json()
                     if data.get("status") == "success":
                         growth_result = data.get("growth_result", {})
-                        learning_triggered = growth_result.get(
-                            "learning_triggered", False
-                        )
+                        learning_triggered = growth_result.get("learning_triggered", False)
 
                         print(f"   {i}. 자극: '{stimulus}'")
-                        print(
-                            f"      학습 전이: {'✅' if learning_triggered else '❌'}"
-                        )
+                        print(f"      학습 전이: {'✅' if learning_triggered else '❌'}")
                     else:
                         print(f"   {i}. ❌ 자극 처리 실패: {data}")
             except Exception as e:

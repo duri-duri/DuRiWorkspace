@@ -8,18 +8,16 @@ import asyncio
 import json
 import logging
 from datetime import datetime
-from typing import Any, Dict
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
-from action_system import ActionSystem
-from feedback_system import FeedbackSystem
+from action_system import ActionSystem  # noqa: E402
+from feedback_system import FeedbackSystem  # noqa: E402
+
 # 시스템 import
-from judgment_system import JudgmentSystem
+from judgment_system import JudgmentSystem  # noqa: E402
 
 
 async def test_judgment_system():
@@ -152,9 +150,7 @@ async def test_complete_loop():
         }
 
         logger.info("✅ 전체 루프 테스트 완료")
-        logger.info(
-            f"전체 결과: {json.dumps(complete_result, indent=2, ensure_ascii=False)}"
-        )
+        logger.info(f"전체 결과: {json.dumps(complete_result, indent=2, ensure_ascii=False)}")
 
         return complete_result
 

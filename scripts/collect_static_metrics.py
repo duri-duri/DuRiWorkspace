@@ -129,7 +129,7 @@ if __name__ == "__main__":
         cc_count = len(metrics.get("cyclomatic_complexity", {}))
         mi_count = len(metrics.get("maintainability_index", {}))
 
-        print(f"📈 Collected metrics:")
+        print("📈 Collected metrics:")
         print(f"  - Cyclomatic complexity: {cc_count} files")
         print(f"  - Maintainability index: {mi_count} files")
         print(f"  - Collection status: {metrics['collection_status']}")

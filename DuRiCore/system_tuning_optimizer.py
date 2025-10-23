@@ -5,16 +5,13 @@ DuRiCore Phase 5 Day 7 - 시스템 튜닝 최적화기
 """
 
 import asyncio
-import json
 import logging
-import math
 import random
-import statistics
 import time
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -138,9 +135,7 @@ class SystemTuningOptimizer:
 
         logger.info("SystemTuningOptimizer 초기화 완료")
 
-    async def analyze_system_bottlenecks(
-        self, performance_data: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    async def analyze_system_bottlenecks(self, performance_data: Dict[str, Any]) -> List[Dict[str, Any]]:
         """시스템 병목 현상 분석"""
         try:
             logger.info("시스템 병목 현상 분석 시작")
@@ -152,9 +147,7 @@ class SystemTuningOptimizer:
                 bottlenecks.append(
                     {
                         "type": "cpu",
-                        "severity": (
-                            "high" if performance_data["cpu_usage"] > 0.9 else "medium"
-                        ),
+                        "severity": ("high" if performance_data["cpu_usage"] > 0.9 else "medium"),
                         "current_value": performance_data["cpu_usage"],
                         "threshold": 0.8,
                         "recommendation": "CPU 리소스 증가 또는 작업 분산",
@@ -166,11 +159,7 @@ class SystemTuningOptimizer:
                 bottlenecks.append(
                     {
                         "type": "memory",
-                        "severity": (
-                            "high"
-                            if performance_data["memory_usage"] > 0.95
-                            else "medium"
-                        ),
+                        "severity": ("high" if performance_data["memory_usage"] > 0.95 else "medium"),
                         "current_value": performance_data["memory_usage"],
                         "threshold": 0.85,
                         "recommendation": "메모리 증가 또는 메모리 최적화",
@@ -182,11 +171,7 @@ class SystemTuningOptimizer:
                 bottlenecks.append(
                     {
                         "type": "response_time",
-                        "severity": (
-                            "high"
-                            if performance_data["response_time"] > 2.0
-                            else "medium"
-                        ),
+                        "severity": ("high" if performance_data["response_time"] > 2.0 else "medium"),
                         "current_value": performance_data["response_time"],
                         "threshold": 1.0,
                         "recommendation": "응답 시간 최적화 또는 캐싱 개선",
@@ -198,11 +183,7 @@ class SystemTuningOptimizer:
                 bottlenecks.append(
                     {
                         "type": "throughput",
-                        "severity": (
-                            "high"
-                            if performance_data["throughput"] < 30.0
-                            else "medium"
-                        ),
+                        "severity": ("high" if performance_data["throughput"] < 30.0 else "medium"),
                         "current_value": performance_data["throughput"],
                         "threshold": 50.0,
                         "recommendation": "처리량 향상을 위한 병렬화 또는 최적화",
@@ -216,9 +197,7 @@ class SystemTuningOptimizer:
             logger.error(f"병목 현상 분석 중 오류: {e}")
             return []
 
-    async def apply_automatic_tuning(
-        self, tuning_parameters: Dict[str, Any]
-    ) -> OptimizationResult:
+    async def apply_automatic_tuning(self, tuning_parameters: Dict[str, Any]) -> OptimizationResult:
         """자동 튜닝 적용"""
         try:
             logger.info("자동 튜닝 적용 시작")
@@ -241,9 +220,7 @@ class SystemTuningOptimizer:
                             min_value=param_range["min"],
                             max_value=param_range["max"],
                             tuning_strategy=TuningStrategy.ADAPTIVE,
-                            impact_score=await self._calculate_parameter_impact(
-                                param_name, param_value
-                            ),
+                            impact_score=await self._calculate_parameter_impact(param_name, param_value),
                             created_at=datetime.now(),
                         )
                         applied_parameters.append(tuning_param)
@@ -256,9 +233,7 @@ class SystemTuningOptimizer:
             after_performance = await self._measure_current_performance()
 
             # 개선률 계산
-            improvement_percentage = (
-                (after_performance - before_performance) / before_performance
-            ) * 100
+            improvement_percentage = ((after_performance - before_performance) / before_performance) * 100
 
             # 최적화 결과 생성
             optimization_result = OptimizationResult(
@@ -268,9 +243,7 @@ class SystemTuningOptimizer:
                 after_performance=after_performance,
                 improvement_percentage=improvement_percentage,
                 tuning_parameters=applied_parameters,
-                validation_confidence=await self._calculate_validation_confidence(
-                    improvement_percentage
-                ),
+                validation_confidence=await self._calculate_validation_confidence(improvement_percentage),
                 created_at=datetime.now(),
             )
 
@@ -283,9 +256,7 @@ class SystemTuningOptimizer:
             logger.error(f"자동 튜닝 중 오류: {e}")
             return None
 
-    async def validate_tuning_effects(
-        self, tuning_results: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def validate_tuning_effects(self, tuning_results: Dict[str, Any]) -> Dict[str, Any]:
         """튜닝 효과 검증"""
         try:
             logger.info("튜닝 효과 검증 시작")
@@ -305,13 +276,9 @@ class SystemTuningOptimizer:
 
                 if improvement > self.improvement_threshold:
                     validation_results["overall_success"] = True
-                    validation_results["recommendations"].append(
-                        "튜닝 효과가 목표치를 초과했습니다"
-                    )
+                    validation_results["recommendations"].append("튜닝 효과가 목표치를 초과했습니다")
                 else:
-                    validation_results["recommendations"].append(
-                        "튜닝 효과가 부족합니다. 추가 최적화가 필요합니다"
-                    )
+                    validation_results["recommendations"].append("튜닝 효과가 부족합니다. 추가 최적화가 필요합니다")
 
             # 안정성 검증
             stability_score = await self._assess_system_stability()
@@ -328,18 +295,14 @@ class SystemTuningOptimizer:
             )
             validation_results["validation_confidence"] = validation_confidence
 
-            logger.info(
-                f"튜닝 효과 검증 완료: 성공률 {validation_results['overall_success']}"
-            )
+            logger.info(f"튜닝 효과 검증 완료: 성공률 {validation_results['overall_success']}")
             return validation_results
 
         except Exception as e:
             logger.error(f"튜닝 효과 검증 중 오류: {e}")
             return {"overall_success": False, "error": str(e)}
 
-    async def optimize_system_parameters(
-        self, optimization_data: Dict[str, Any]
-    ) -> TuningReport:
+    async def optimize_system_parameters(self, optimization_data: Dict[str, Any]) -> TuningReport:
         """시스템 파라미터 최적화"""
         try:
             logger.info("시스템 파라미터 최적화 시작")
@@ -350,9 +313,7 @@ class SystemTuningOptimizer:
             current_performance = await self._analyze_current_performance()
 
             # 최적화 타겟 결정
-            optimization_targets = await self._identify_optimization_targets(
-                current_performance
-            )
+            optimization_targets = await self._identify_optimization_targets(current_performance)
 
             # 최적화 실행
             optimization_results = []
@@ -362,9 +323,7 @@ class SystemTuningOptimizer:
                     optimization_results.append(result)
 
             # 전체 개선률 계산
-            overall_improvement = await self._calculate_overall_improvement(
-                optimization_results
-            )
+            overall_improvement = await self._calculate_overall_improvement(optimization_results)
 
             # 튜닝 보고서 생성
             tuning_report = TuningReport(
@@ -372,9 +331,7 @@ class SystemTuningOptimizer:
                 tuning_status=TuningStatus.COMPLETED,
                 optimization_results=optimization_results,
                 overall_improvement=overall_improvement,
-                recommendations=await self._generate_optimization_recommendations(
-                    optimization_results
-                ),
+                recommendations=await self._generate_optimization_recommendations(optimization_results),
                 created_at=datetime.now(),
             )
 
@@ -411,9 +368,7 @@ class SystemTuningOptimizer:
             logger.error(f"성능 측정 중 오류: {e}")
             return 0.5
 
-    async def _calculate_parameter_impact(
-        self, param_name: str, param_value: float
-    ) -> float:
+    async def _calculate_parameter_impact(self, param_name: str, param_value: float) -> float:
         """파라미터 영향도 계산"""
         try:
             # 파라미터별 영향도 계산 (실제 구현에서는 더 정교한 모델 사용)
@@ -460,9 +415,7 @@ class SystemTuningOptimizer:
         except Exception as e:
             logger.error(f"파라미터 값 업데이트 중 오류: {e}")
 
-    async def _calculate_validation_confidence(
-        self, improvement_percentage: float
-    ) -> float:
+    async def _calculate_validation_confidence(self, improvement_percentage: float) -> float:
         """검증 신뢰도 계산"""
         try:
             # 개선률에 따른 신뢰도 계산
@@ -508,9 +461,7 @@ class SystemTuningOptimizer:
             logger.error(f"현재 성능 분석 중 오류: {e}")
             return {}
 
-    async def _identify_optimization_targets(
-        self, current_performance: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    async def _identify_optimization_targets(self, current_performance: Dict[str, Any]) -> List[Dict[str, Any]]:
         """최적화 타겟 식별"""
         try:
             targets = []
@@ -554,9 +505,7 @@ class SystemTuningOptimizer:
             logger.error(f"최적화 타겟 식별 중 오류: {e}")
             return []
 
-    async def _optimize_specific_target(
-        self, target: Dict[str, Any]
-    ) -> Optional[OptimizationResult]:
+    async def _optimize_specific_target(self, target: Dict[str, Any]) -> Optional[OptimizationResult]:
         """특정 타겟 최적화"""
         try:
             # 가상 최적화 실행
@@ -580,43 +529,31 @@ class SystemTuningOptimizer:
             logger.error(f"특정 타겟 최적화 중 오류: {e}")
             return None
 
-    async def _calculate_overall_improvement(
-        self, optimization_results: List[OptimizationResult]
-    ) -> float:
+    async def _calculate_overall_improvement(self, optimization_results: List[OptimizationResult]) -> float:
         """전체 개선률 계산"""
         try:
             if not optimization_results:
                 return 0.0
 
-            total_improvement = sum(
-                result.improvement_percentage for result in optimization_results
-            )
+            total_improvement = sum(result.improvement_percentage for result in optimization_results)
             return total_improvement / len(optimization_results)
 
         except Exception as e:
             logger.error(f"전체 개선률 계산 중 오류: {e}")
             return 0.0
 
-    async def _generate_optimization_recommendations(
-        self, optimization_results: List[OptimizationResult]
-    ) -> List[str]:
+    async def _generate_optimization_recommendations(self, optimization_results: List[OptimizationResult]) -> List[str]:
         """최적화 권장사항 생성"""
         try:
             recommendations = []
 
             for result in optimization_results:
                 if result.improvement_percentage > 10:
-                    recommendations.append(
-                        f"{result.optimization_type.value} 최적화가 매우 효과적입니다"
-                    )
+                    recommendations.append(f"{result.optimization_type.value} 최적화가 매우 효과적입니다")
                 elif result.improvement_percentage > 5:
-                    recommendations.append(
-                        f"{result.optimization_type.value} 최적화가 효과적입니다"
-                    )
+                    recommendations.append(f"{result.optimization_type.value} 최적화가 효과적입니다")
                 else:
-                    recommendations.append(
-                        f"{result.optimization_type.value} 최적화가 필요합니다"
-                    )
+                    recommendations.append(f"{result.optimization_type.value} 최적화가 필요합니다")
 
             if not recommendations:
                 recommendations.append("현재 시스템이 최적 상태입니다")
@@ -655,9 +592,7 @@ async def test_system_tuning_optimizer():
 
         optimization_result = await optimizer.apply_automatic_tuning(tuning_parameters)
         if optimization_result:
-            logger.info(
-                f"튜닝 결과: {optimization_result.improvement_percentage:.2f}% 개선"
-            )
+            logger.info(f"튜닝 결과: {optimization_result.improvement_percentage:.2f}% 개선")
 
         # 3. 튜닝 효과 검증 테스트
         logger.info("3. 튜닝 효과 검증 테스트")

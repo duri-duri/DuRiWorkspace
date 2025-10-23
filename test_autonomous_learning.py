@@ -2,9 +2,9 @@
 """
 DuRi 24/7 자동 학습 시스템 테스트
 """
+
 import json
 import time
-from datetime import datetime
 
 import requests
 
@@ -72,9 +72,7 @@ def test_autonomous_learning_system():
                 problems = autonomous_data.get("total_problems_detected", 0)
                 decisions = autonomous_data.get("total_decisions_made", 0)
 
-                print(
-                    f"   ⏱️  {i*5+5}초: 사이클={cycles}, 문제={problems}, 결정={decisions}"
-                )
+                print(f"   ⏱️  {i*5+5}초: 사이클={cycles}, 문제={problems}, 결정={decisions}")
             else:
                 print(f"   ❌ {i*5+5}초: 상태 확인 실패")
 
@@ -158,23 +156,21 @@ def test_autonomous_learning_integration():
     test_conversations = [
         {
             "user_input": "자동 학습 시스템이 어떻게 작동하나요?",
-            "duri_response": "DuRi의 24/7 자동 학습 시스템은 백그라운드에서 지속적으로 학습하며, 문제가 발생하거나 결정이 필요할 때만 사용자에게 보고합니다.",
+            "duri_response": "DuRi의 24/7 자동 학습 시스템은 백그라운드에서 지속적으로 학습하며, 문제가 발생하거나 결정이 필요할 때만 사용자에게 보고합니다.",  # noqa: E501
         },
         {
             "user_input": "문제 감지 기능은 어떻게 작동하나요?",
-            "duri_response": "시스템은 오류율, 응답 시간, 메모리 사용량, CPU 사용량, 학습 진전 등을 모니터링하여 임계값을 초과하면 문제로 감지합니다.",
+            "duri_response": "시스템은 오류율, 응답 시간, 메모리 사용량, CPU 사용량, 학습 진전 등을 모니터링하여 임계값을 초과하면 문제로 감지합니다.",  # noqa: E501
         },
         {
             "user_input": "자동 결정은 어떤 것들이 있나요?",
-            "duri_response": "서비스 재시작, 메모리 최적화, 학습률 조정, 데이터 백업 등의 자동 결정을 수행할 수 있습니다.",
+            "duri_response": "서비스 재시작, 메모리 최적화, 학습률 조정, 데이터 백업 등의 자동 결정을 수행할 수 있습니다.",  # noqa: E501
         },
     ]
 
     for i, conversation in enumerate(test_conversations, 1):
         try:
-            response = requests.post(
-                f"{base_url}/capture-conversation", json=conversation
-            )
+            response = requests.post(f"{base_url}/capture-conversation", json=conversation)
             result = response.json()
             print(f"   대화 {i}: {result.get('status', 'unknown')}")
         except Exception as e:

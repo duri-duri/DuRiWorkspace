@@ -2,8 +2,8 @@
 """
 DuRi 자동화 파이프라인 테스트
 """
+
 import asyncio
-import json
 import time
 from datetime import datetime
 
@@ -39,9 +39,7 @@ async def test_automation_pipeline():
         }
 
         try:
-            async with session.post(
-                f"{base_url}/automation/trigger", json=trigger_data
-            ) as response:
+            async with session.post(f"{base_url}/automation/trigger", json=trigger_data) as response:
                 data = await response.json()
                 print(f"   ✅ 트리거 실행: {data.get('message', '성공')}")
         except Exception as e:
@@ -56,33 +54,17 @@ async def test_automation_pipeline():
                     automation_stats = data.get("automation_stats", {})
                     learning_stats = data.get("learning_stats", {})
 
-                    print(f"   📊 자동화 통계:")
-                    print(
-                        f"      - 총 트리거 수: {automation_stats.get('total_triggers', 0)}"
-                    )
-                    print(
-                        f"      - 성공한 학습 사이클: {automation_stats.get('successful_learning_cycles', 0)}"
-                    )
-                    print(
-                        f"      - 평균 학습 점수: {automation_stats.get('average_learning_score', 0):.3f}"
-                    )
-                    print(
-                        f"      - 마지막 실행: {automation_stats.get('last_automation_run', 'N/A')}"
-                    )
+                    print("   📊 자동화 통계:")
+                    print(f"      - 총 트리거 수: {automation_stats.get('total_triggers', 0)}")
+                    print(f"      - 성공한 학습 사이클: {automation_stats.get('successful_learning_cycles', 0)}")
+                    print(f"      - 평균 학습 점수: {automation_stats.get('average_learning_score', 0):.3f}")
+                    print(f"      - 마지막 실행: {automation_stats.get('last_automation_run', 'N/A')}")
 
-                    print(f"   📈 학습 통계:")
-                    print(
-                        f"      - 총 학습 결과: {learning_stats.get('total_results', 0)}"
-                    )
-                    print(
-                        f"      - 성공률: {learning_stats.get('success_rate', 0):.1%}"
-                    )
-                    print(
-                        f"      - 평균 점수: {learning_stats.get('average_score', 0):.3f}"
-                    )
-                    print(
-                        f"      - 평균 응답 시간: {learning_stats.get('average_duration', 0):.3f}초"
-                    )
+                    print("   📈 학습 통계:")
+                    print(f"      - 총 학습 결과: {learning_stats.get('total_results', 0)}")
+                    print(f"      - 성공률: {learning_stats.get('success_rate', 0):.1%}")
+                    print(f"      - 평균 점수: {learning_stats.get('average_score', 0):.3f}")
+                    print(f"      - 평균 응답 시간: {learning_stats.get('average_duration', 0):.3f}초")
                 else:
                     print(f"   ❌ 통계 조회 실패: {data}")
         except Exception as e:
@@ -97,21 +79,15 @@ async def test_automation_pipeline():
                     perf_metrics = data.get("performance_metrics", {})
                     cache_stats = data.get("cache_stats", {})
 
-                    print(f"   ⚡ 성능 메트릭:")
-                    print(
-                        f"      - 총 요청 수: {perf_metrics.get('total_requests', 0)}"
-                    )
+                    print("   ⚡ 성능 메트릭:")
+                    print(f"      - 총 요청 수: {perf_metrics.get('total_requests', 0)}")
                     print(f"      - 캐시 히트: {perf_metrics.get('cache_hits', 0)}")
                     print(f"      - 캐시 미스: {perf_metrics.get('cache_misses', 0)}")
-                    print(
-                        f"      - 평균 응답 시간: {perf_metrics.get('average_response_time', 0):.3f}초"
-                    )
-                    print(
-                        f"      - 병렬 요청 수: {perf_metrics.get('parallel_requests', 0)}"
-                    )
+                    print(f"      - 평균 응답 시간: {perf_metrics.get('average_response_time', 0):.3f}초")
+                    print(f"      - 병렬 요청 수: {perf_metrics.get('parallel_requests', 0)}")
                     print(f"      - 오류 수: {perf_metrics.get('error_count', 0)}")
 
-                    print(f"   💾 캐시 통계:")
+                    print("   💾 캐시 통계:")
                     print(f"      - 캐시 크기: {cache_stats.get('cache_size', 0)}")
                     print(f"      - 캐시 히트율: {cache_stats.get('hit_rate', 0):.1%}")
                 else:
@@ -131,12 +107,10 @@ async def test_automation_pipeline():
         }
 
         try:
-            async with session.post(
-                f"{base_url}/conversation/process", json=conversation_data
-            ) as response:
+            async with session.post(f"{base_url}/conversation/process", json=conversation_data) as response:
                 data = await response.json()
                 if data.get("status") == "success":
-                    print(f"   ✅ 대화 처리 성공:")
+                    print("   ✅ 대화 처리 성공:")
                     print(f"      - 통합 점수: {data.get('integrated_score', 0):.3f}")
                     print(f"      - 대화 ID: {data.get('conversation_id', 'N/A')}")
                     print(f"      - 처리 시간: {data.get('processing_time', 0):.3f}초")
@@ -206,9 +180,7 @@ async def test_learning_phases():
             print(f"\n{i}. {scenario['name']} 테스트...")
 
             try:
-                async with session.post(
-                    f"{base_url}/automation/trigger", json=scenario
-                ) as response:
+                async with session.post(f"{base_url}/automation/trigger", json=scenario) as response:
                     data = await response.json()
                     if data.get("status") == "success":
                         print(f"   ✅ {scenario['name']} 성공")
@@ -243,10 +215,7 @@ async def test_performance_optimization():
 
         # 병렬 요청 테스트
         print("\n2. 병렬 요청 테스트...")
-        test_requests = [
-            {"user_input": f"병렬 테스트 {i}", "duri_response": f"응답 {i}"}
-            for i in range(5)
-        ]
+        test_requests = [{"user_input": f"병렬 테스트 {i}", "duri_response": f"응답 {i}"} for i in range(5)]
 
         start_time = time.time()
         tasks = []

@@ -1,7 +1,5 @@
 import json
-import math
 import pathlib
-import sys
 
 path = pathlib.Path("var/reports/mirror/samples.jsonl")
 n = agree = 0

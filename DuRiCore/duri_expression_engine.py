@@ -13,16 +13,13 @@ DuRi Expression Engine - DuRi의 판단 결과를 자연어로 변환하는 엔�
 - DuRi 명의 출력
 """
 
-import asyncio
-import json
 import logging
-import random
 import re
 import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Union
 
 # 모듈 레지스트리 시스템 import
 try:
@@ -62,9 +59,7 @@ except ImportError:
 
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -252,17 +247,13 @@ class DuRiExpressionEngine(BaseModule):
                 )
 
             # 핵심 판단 포인트 추출
-            key_points = await self._extract_key_points(
-                judgment_data, thought_flow, decision_tree
-            )
+            key_points = await self._extract_key_points(judgment_data, thought_flow, decision_tree)
 
             # 자연어 템플릿 선택
             template = self._select_template(context.expression_type, context.style)
 
             # 문장 구성
-            expression_text = await self._construct_expression(
-                key_points, template, context
-            )
+            expression_text = await self._construct_expression(key_points, template, context)
 
             # DuRi 명의로 출력 형식 지정
             final_expression = f"DuRi: {expression_text}"
@@ -292,9 +283,7 @@ class DuRiExpressionEngine(BaseModule):
                 expression_text="DuRi: 죄송해요, 지금은 제대로 생각을 정리하지 못했어요.",
                 confidence=0.0,
                 style=context.style if context else self.default_style,
-                expression_type=(
-                    context.expression_type if context else ExpressionType.INTEGRATED
-                ),
+                expression_type=(context.expression_type if context else ExpressionType.INTEGRATED),
                 processing_time=processing_time,
                 success=False,
                 error_message=str(e),
@@ -329,9 +318,7 @@ class DuRiExpressionEngine(BaseModule):
             if "final_decision" in thought_flow:
                 key_points["decision"] = thought_flow["final_decision"]
             if "thought_process" in thought_flow:
-                key_points["reasoning"] = self._extract_reasoning_from_thought_flow(
-                    thought_flow["thought_process"]
-                )
+                key_points["reasoning"] = self._extract_reasoning_from_thought_flow(thought_flow["thought_process"])
             if "reflection_result" in thought_flow:
                 key_points["insights"].append(thought_flow["reflection_result"])
 
@@ -344,9 +331,7 @@ class DuRiExpressionEngine(BaseModule):
 
         return key_points
 
-    def _extract_reasoning_from_thought_flow(
-        self, thought_process: List[Dict[str, Any]]
-    ) -> str:
+    def _extract_reasoning_from_thought_flow(self, thought_process: List[Dict[str, Any]]) -> str:
         """사고 흐름에서 추론 과정 추출"""
         reasoning_parts = []
 
@@ -369,9 +354,7 @@ class DuRiExpressionEngine(BaseModule):
         else:
             return ExpressionType.INTEGRATED
 
-    def _select_template(
-        self, expression_type: ExpressionType, style: ExpressionStyle
-    ) -> Dict[str, str]:
+    def _select_template(self, expression_type: ExpressionType, style: ExpressionStyle) -> Dict[str, str]:
         """자연어 템플릿 선택"""
         templates = self.expression_templates.get(expression_type, {})
         return templates.get(style, templates.get(ExpressionStyle.CASUAL, {}))
@@ -388,18 +371,12 @@ class DuRiExpressionEngine(BaseModule):
             base_template = template.get("base", "나는 {decision}라고 생각해요.")
 
             # 신뢰도에 따른 표현 조정
-            confidence_expression = self._get_confidence_expression(
-                key_points["confidence"]
-            )
+            confidence_expression = self._get_confidence_expression(key_points["confidence"])
 
             # 추론 과정 포함 여부 결정
             if key_points["reasoning"] and len(key_points["reasoning"]) > 10:
-                reasoning_template = template.get(
-                    "with_reasoning", "왜냐하면 {reasoning}이기 때문이에요."
-                )
-                reasoning_part = reasoning_template.format(
-                    reasoning=key_points["reasoning"]
-                )
+                reasoning_template = template.get("with_reasoning", "왜냐하면 {reasoning}이기 때문이에요.")
+                reasoning_part = reasoning_template.format(reasoning=key_points["reasoning"])
             else:
                 reasoning_part = ""
 
@@ -410,12 +387,8 @@ class DuRiExpressionEngine(BaseModule):
                     "with_alternatives",
                     "다른 방법도 고려했지만, {alternatives}보다는 이 방법이 더 적절하다고 판단했어요.",
                 )
-                alternatives_text = ", ".join(
-                    key_points["alternatives"][:2]
-                )  # 최대 2개만
-                alternatives_part = alternatives_template.format(
-                    alternatives=alternatives_text
-                )
+                alternatives_text = ", ".join(key_points["alternatives"][:2])  # 최대 2개만
+                alternatives_part = alternatives_template.format(alternatives=alternatives_text)
 
             # 최종 문장 구성
             expression_parts = []
@@ -481,17 +454,17 @@ class DuRiExpressionEngine(BaseModule):
                 ExpressionStyle.CASUAL: {
                     "base": "나는 {decision}라고 생각해요.",
                     "with_reasoning": "왜냐하면 {reasoning}이기 때문이에요.",
-                    "with_alternatives": "다른 방법도 고려했지만, {alternatives}보다는 이 방법이 더 적절하다고 판단했어요.",
+                    "with_alternatives": "다른 방법도 고려했지만, {alternatives}보다는 이 방법이 더 적절하다고 판단했어요.",  # noqa: E501
                 },
                 ExpressionStyle.FORMAL: {
                     "base": "제 분석 결과, {decision}입니다.",
                     "with_reasoning": "이는 {reasoning} 때문입니다.",
-                    "with_alternatives": "다른 대안들({alternatives})도 검토했으나, 현재 방법이 가장 적절하다고 판단됩니다.",
+                    "with_alternatives": "다른 대안들({alternatives})도 검토했으나, 현재 방법이 가장 적절하다고 판단됩니다.",  # noqa: E501
                 },
                 ExpressionStyle.EMPATHETIC: {
                     "base": "이 상황을 보니 {decision}라고 느껴요.",
                     "with_reasoning": "그런 생각이 드는 이유는 {reasoning}이거든요.",
-                    "with_alternatives": "다른 방법들도 생각해봤지만, {alternatives}보다는 이 방법이 더 나을 것 같아요.",
+                    "with_alternatives": "다른 방법들도 생각해봤지만, {alternatives}보다는 이 방법이 더 나을 것 같아요.",  # noqa: E501
                 },
             },
             ExpressionType.THOUGHT_FLOW: {
@@ -522,9 +495,7 @@ class DuRiExpressionEngine(BaseModule):
         for expression_type, styles in self.expression_templates.items():
             for style, templates in styles.items():
                 if "base" not in templates:
-                    logger.warning(
-                        f"템플릿에 'base' 키가 없음: {expression_type}.{style}"
-                    )
+                    logger.warning(f"템플릿에 'base' 키가 없음: {expression_type}.{style}")
 
     def _initialize_expression_styles(self):
         """표현 스타일 초기화"""

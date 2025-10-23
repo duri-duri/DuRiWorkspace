@@ -11,26 +11,19 @@ DuRi 실시간 학습 및 적응 시스템 - Phase 1-3 Week 3 Day 8
 """
 
 import asyncio
-import json
 import logging
-import queue
 import statistics
-import threading
 import time
 import uuid
-import weakref
-from collections import defaultdict, deque
-from dataclasses import asdict, dataclass, field
-from datetime import datetime, timedelta
+from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Set
 
 import numpy as np
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -208,23 +201,17 @@ class AdaptiveLearningSystem:
 
         return data_id
 
-    async def create_learning_model(
-        self, model_type: str, parameters: Dict[str, Any] = None
-    ) -> str:
+    async def create_learning_model(self, model_type: str, parameters: Dict[str, Any] = None) -> str:
         """학습 모델 생성"""
         model_id = f"model_{int(time.time())}_{uuid.uuid4().hex[:8]}"
 
-        learning_model = LearningModel(
-            model_id=model_id, model_type=model_type, parameters=parameters or {}
-        )
+        learning_model = LearningModel(model_id=model_id, model_type=model_type, parameters=parameters or {})
 
         self.learning_models[model_id] = learning_model
         logger.info(f"학습 모델 생성: {model_id} ({model_type})")
         return model_id
 
-    async def train_model(
-        self, model_id: str, learning_type: LearningType, data_ids: List[str] = None
-    ) -> str:
+    async def train_model(self, model_id: str, learning_type: LearningType, data_ids: List[str] = None) -> str:
         """모델 학습"""
         if model_id not in self.learning_models:
             raise ValueError(f"모델을 찾을 수 없음: {model_id}")
@@ -243,19 +230,13 @@ class AdaptiveLearningSystem:
                 training_data = list(self.learning_data.values())
             else:
                 # 지정된 데이터만 사용
-                training_data = [
-                    self.learning_data[data_id]
-                    for data_id in data_ids
-                    if data_id in self.learning_data
-                ]
+                training_data = [self.learning_data[data_id] for data_id in data_ids if data_id in self.learning_data]
 
             if not training_data:
                 raise ValueError("학습 데이터가 없습니다")
 
             # 모델 학습 실행
-            learning_result = await self._execute_learning(
-                model_id, learning_type, training_data
-            )
+            learning_result = await self._execute_learning(model_id, learning_type, training_data)
 
             # 학습 결과 저장
             learning_result.result_id = result_id
@@ -270,9 +251,7 @@ class AdaptiveLearningSystem:
             # 메트릭 업데이트
             self._update_learning_metrics(True, learning_result.duration)
 
-            logger.info(
-                f"모델 학습 완료: {model_id} ({learning_result.duration:.2f}초)"
-            )
+            logger.info(f"모델 학습 완료: {model_id} ({learning_result.duration:.2f}초)")
             return result_id
 
         except Exception as e:
@@ -313,9 +292,7 @@ class AdaptiveLearningSystem:
             logger.info(f"시스템 적응 시작: {system_name} ({adaptation_type.value})")
 
             # 시스템 적응 실행
-            adaptation_result = await self._execute_adaptation(
-                system_name, adaptation_type, adaptation_data
-            )
+            adaptation_result = await self._execute_adaptation(system_name, adaptation_type, adaptation_data)
 
             # 적응 결과 저장
             adaptation_result.adaptation_id = adaptation_id
@@ -325,9 +302,7 @@ class AdaptiveLearningSystem:
             # 메트릭 업데이트
             self._update_adaptation_metrics(True, adaptation_result.duration)
 
-            logger.info(
-                f"시스템 적응 완료: {system_name} ({adaptation_result.duration:.2f}초)"
-            )
+            logger.info(f"시스템 적응 완료: {system_name} ({adaptation_result.duration:.2f}초)")
             return adaptation_id
 
         except Exception as e:
@@ -373,9 +348,7 @@ class AdaptiveLearningSystem:
         logger.info(f"학습 성과 평가 완료: {model_id}")
         return performance_metrics
 
-    async def get_learning_recommendations(
-        self, system_name: str = None
-    ) -> List[Dict[str, Any]]:
+    async def get_learning_recommendations(self, system_name: str = None) -> List[Dict[str, Any]]:
         """학습 권장사항 생성"""
         recommendations = []
 
@@ -389,9 +362,7 @@ class AdaptiveLearningSystem:
 
         # 시스템 적응 기반 권장사항
         if system_name:
-            system_adaptation_recommendations = await self._analyze_system_adaptation(
-                system_name
-            )
+            system_adaptation_recommendations = await self._analyze_system_adaptation(system_name)
             recommendations.extend(system_adaptation_recommendations)
 
         return recommendations
@@ -407,32 +378,20 @@ class AdaptiveLearningSystem:
 
         # 학습 유형에 따른 학습 실행
         if learning_type == LearningType.SUPERVISED:
-            performance_metrics = await self._execute_supervised_learning(
-                model, training_data
-            )
+            performance_metrics = await self._execute_supervised_learning(model, training_data)
         elif learning_type == LearningType.UNSUPERVISED:
-            performance_metrics = await self._execute_unsupervised_learning(
-                model, training_data
-            )
+            performance_metrics = await self._execute_unsupervised_learning(model, training_data)
         elif learning_type == LearningType.REINFORCEMENT:
-            performance_metrics = await self._execute_reinforcement_learning(
-                model, training_data
-            )
+            performance_metrics = await self._execute_reinforcement_learning(model, training_data)
         elif learning_type == LearningType.TRANSFER:
-            performance_metrics = await self._execute_transfer_learning(
-                model, training_data
-            )
+            performance_metrics = await self._execute_transfer_learning(model, training_data)
         elif learning_type == LearningType.META:
-            performance_metrics = await self._execute_meta_learning(
-                model, training_data
-            )
+            performance_metrics = await self._execute_meta_learning(model, training_data)
         else:
             raise ValueError(f"지원하지 않는 학습 유형: {learning_type}")
 
         # 적응 메트릭 계산
-        adaptation_metrics = await self._calculate_adaptation_metrics(
-            model, training_data
-        )
+        adaptation_metrics = await self._calculate_adaptation_metrics(model, training_data)
 
         return LearningResult(
             result_id="",
@@ -453,28 +412,18 @@ class AdaptiveLearningSystem:
 
         # 적응 유형에 따른 적응 실행
         if adaptation_type == AdaptationType.INCREMENTAL:
-            changes = await self._execute_incremental_adaptation(
-                system_instance, adaptation_data
-            )
+            changes = await self._execute_incremental_adaptation(system_instance, adaptation_data)
         elif adaptation_type == AdaptationType.BATCH:
-            changes = await self._execute_batch_adaptation(
-                system_instance, adaptation_data
-            )
+            changes = await self._execute_batch_adaptation(system_instance, adaptation_data)
         elif adaptation_type == AdaptationType.ONLINE:
-            changes = await self._execute_online_adaptation(
-                system_instance, adaptation_data
-            )
+            changes = await self._execute_online_adaptation(system_instance, adaptation_data)
         elif adaptation_type == AdaptationType.ACTIVE:
-            changes = await self._execute_active_adaptation(
-                system_instance, adaptation_data
-            )
+            changes = await self._execute_active_adaptation(system_instance, adaptation_data)
         else:
             raise ValueError(f"지원하지 않는 적응 유형: {adaptation_type}")
 
         # 성능 개선 계산
-        performance_improvement = await self._calculate_performance_improvement(
-            system_name, changes
-        )
+        performance_improvement = await self._calculate_performance_improvement(system_name, changes)
 
         return AdaptationResult(
             adaptation_id="",
@@ -492,11 +441,7 @@ class AdaptiveLearningSystem:
         accuracy = np.random.uniform(0.7, 0.95)
         precision = np.random.uniform(0.6, 0.9)
         recall = np.random.uniform(0.6, 0.9)
-        f1_score = (
-            2 * (precision * recall) / (precision + recall)
-            if (precision + recall) > 0
-            else 0
-        )
+        f1_score = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
 
         return {
             "accuracy": accuracy,
@@ -548,9 +493,7 @@ class AdaptiveLearningSystem:
             "learning_efficiency": np.random.uniform(0.7, 0.9),
         }
 
-    async def _execute_meta_learning(
-        self, model: LearningModel, training_data: List[LearningData]
-    ) -> Dict[str, float]:
+    async def _execute_meta_learning(self, model: LearningModel, training_data: List[LearningData]) -> Dict[str, float]:
         """메타 학습 실행"""
         # 메타 학습 시뮬레이션
         meta_learning_score = np.random.uniform(0.6, 0.9)
@@ -574,9 +517,7 @@ class AdaptiveLearningSystem:
         }
         return changes
 
-    async def _execute_batch_adaptation(
-        self, system_instance: Any, adaptation_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _execute_batch_adaptation(self, system_instance: Any, adaptation_data: Dict[str, Any]) -> Dict[str, Any]:
         """배치 적응 실행"""
         # 배치 적응 시뮬레이션
         changes = {
@@ -586,9 +527,7 @@ class AdaptiveLearningSystem:
         }
         return changes
 
-    async def _execute_online_adaptation(
-        self, system_instance: Any, adaptation_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _execute_online_adaptation(self, system_instance: Any, adaptation_data: Dict[str, Any]) -> Dict[str, Any]:
         """온라인 적응 실행"""
         # 온라인 적응 시뮬레이션
         changes = {
@@ -598,9 +537,7 @@ class AdaptiveLearningSystem:
         }
         return changes
 
-    async def _execute_active_adaptation(
-        self, system_instance: Any, adaptation_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _execute_active_adaptation(self, system_instance: Any, adaptation_data: Dict[str, Any]) -> Dict[str, Any]:
         """능동적 적응 실행"""
         # 능동적 적응 시뮬레이션
         changes = {
@@ -620,9 +557,7 @@ class AdaptiveLearningSystem:
             "adaptation_stability": np.random.uniform(0.5, 0.85),
         }
 
-    async def _calculate_performance_improvement(
-        self, system_name: str, changes: Dict[str, Any]
-    ) -> float:
+    async def _calculate_performance_improvement(self, system_name: str, changes: Dict[str, Any]) -> float:
         """성능 개선 계산"""
         # 성능 개선 시뮬레이션
         base_improvement = changes.get("performance_improvement", 0.0)
@@ -648,23 +583,15 @@ class AdaptiveLearningSystem:
         """F1 점수 계산"""
         precision = self._calculate_precision(model)
         recall = self._calculate_recall(model)
-        return (
-            2 * (precision * recall) / (precision + recall)
-            if (precision + recall) > 0
-            else 0
-        )
+        return 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
 
     def _calculate_learning_efficiency(self, model: LearningModel) -> float:
         """학습 효율성 계산"""
-        return model.performance_metrics.get(
-            "learning_efficiency", np.random.uniform(0.6, 0.9)
-        )
+        return model.performance_metrics.get("learning_efficiency", np.random.uniform(0.6, 0.9))
 
     def _calculate_adaptation_speed(self, model: LearningModel) -> float:
         """적응 속도 계산"""
-        return model.performance_metrics.get(
-            "adaptation_speed", np.random.uniform(0.4, 0.8)
-        )
+        return model.performance_metrics.get("adaptation_speed", np.random.uniform(0.4, 0.8))
 
     def _analyze_data_quality(self) -> List[Dict[str, Any]]:
         """데이터 품질 분석"""
@@ -728,17 +655,13 @@ class AdaptiveLearningSystem:
 
         return recommendations
 
-    async def _analyze_system_adaptation(
-        self, system_name: str
-    ) -> List[Dict[str, Any]]:
+    async def _analyze_system_adaptation(self, system_name: str) -> List[Dict[str, Any]]:
         """시스템 적응 분석"""
         recommendations = []
 
         # 시스템 적응 이력 분석
         system_adaptations = [
-            result
-            for result in self.adaptation_results.values()
-            if result.system_name == system_name
+            result for result in self.adaptation_results.values() if result.system_name == system_name
         ]
 
         if not system_adaptations:
@@ -753,19 +676,15 @@ class AdaptiveLearningSystem:
             )
         else:
             # 최근 적응 성과 분석
-            recent_adaptations = sorted(
-                system_adaptations, key=lambda x: x.timestamp, reverse=True
-            )[:5]
-            avg_improvement = statistics.mean(
-                [a.performance_improvement for a in recent_adaptations]
-            )
+            recent_adaptations = sorted(system_adaptations, key=lambda x: x.timestamp, reverse=True)[:5]
+            avg_improvement = statistics.mean([a.performance_improvement for a in recent_adaptations])
 
             if avg_improvement < 0.1:
                 recommendations.append(
                     {
                         "type": "system_adaptation",
                         "priority": "medium",
-                        "message": f"시스템 {system_name}의 최근 적응 성과가 낮습니다 ({avg_improvement:.2f}). 적응 전략을 개선하세요.",
+                        "message": f"시스템 {system_name}의 최근 적응 성과가 낮습니다 ({avg_improvement:.2f}). 적응 전략을 개선하세요.",  # noqa: E501
                         "action": "improve_adaptation_strategy",
                         "system_name": system_name,
                     }
@@ -785,9 +704,7 @@ class AdaptiveLearningSystem:
         # 평균 학습 시간 업데이트
         total = self.learning_metrics["total_learning_sessions"]
         current_avg = self.learning_metrics["average_learning_time"]
-        self.learning_metrics["average_learning_time"] = (
-            current_avg * (total - 1) + duration
-        ) / total
+        self.learning_metrics["average_learning_time"] = (current_avg * (total - 1) + duration) / total
 
     def _update_adaptation_metrics(self, success: bool, duration: float):
         """적응 메트릭 업데이트"""
@@ -801,9 +718,7 @@ class AdaptiveLearningSystem:
         # 평균 적응 시간 업데이트
         total = self.learning_metrics["total_adaptations"]
         current_avg = self.learning_metrics["average_adaptation_time"]
-        self.learning_metrics["average_adaptation_time"] = (
-            current_avg * (total - 1) + duration
-        ) / total
+        self.learning_metrics["average_adaptation_time"] = (current_avg * (total - 1) + duration) / total
 
     def get_learning_metrics(self) -> Dict[str, Any]:
         """학습 메트릭 반환"""
@@ -871,9 +786,7 @@ async def test_adaptive_learning_system():
 
     # 3. 모델 학습 테스트
     print("\n3. 모델 학습 테스트")
-    result_id = await learning_system.train_model(
-        model_id, LearningType.SUPERVISED, data_ids
-    )
+    result_id = await learning_system.train_model(model_id, LearningType.SUPERVISED, data_ids)
 
     print(f"학습 결과: {result_id}")
 
@@ -894,9 +807,7 @@ async def test_adaptive_learning_system():
 
     # 6. 학습 권장사항 테스트
     print("\n6. 학습 권장사항 테스트")
-    recommendations = await learning_system.get_learning_recommendations(
-        "lida_attention"
-    )
+    recommendations = await learning_system.get_learning_recommendations("lida_attention")
     print(f"권장사항 수: {len(recommendations)}")
 
     # 7. 메트릭 확인

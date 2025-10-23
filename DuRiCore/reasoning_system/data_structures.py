@@ -6,19 +6,11 @@ DuRi 추론 시스템 - 공통 데이터 구조
 추론 시스템에서 사용하는 공통 데이터 구조들을 정의합니다.
 """
 
-import asyncio
-import hashlib
-import json
 import logging
-import re
-import time
-from collections import Counter, defaultdict
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
-
-import numpy as np
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 

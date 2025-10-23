@@ -9,12 +9,11 @@ DuRi 추론 시스템 - 연역적 추론 모듈
 - 연역적 추론 체인 구축
 """
 
-import asyncio
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple, Union
+from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 
@@ -126,9 +125,7 @@ class DeductiveReasoning:
                 }
             )
 
-            self.logger.info(
-                f"연역적 추론 완료: {rule_type.value}, 유효성: {analysis.validity_score:.2f}"
-            )
+            self.logger.info(f"연역적 추론 완료: {rule_type.value}, 유효성: {analysis.validity_score:.2f}")
             return analysis
 
         except Exception as e:
@@ -140,9 +137,7 @@ class DeductiveReasoning:
                 issues=[f"오류 발생: {str(e)}"],
             )
 
-    def _create_deductive_rule(
-        self, premises: List[DeductivePremise], rule_type: DeductiveRuleType
-    ) -> DeductiveRule:
+    def _create_deductive_rule(self, premises: List[DeductivePremise], rule_type: DeductiveRuleType) -> DeductiveRule:
         """연역적 규칙 생성"""
         try:
             # 규칙 유형에 따른 결론 생성
@@ -163,9 +158,7 @@ class DeductiveReasoning:
                 rule_id="error",
                 rule_type=rule_type,
                 premises=premises,
-                conclusion=DeductiveConclusion(
-                    conclusion_id="error", content="오류 발생"
-                ),
+                conclusion=DeductiveConclusion(conclusion_id="error", content="오류 발생"),
             )
 
     def _generate_conclusion(
@@ -192,9 +185,7 @@ class DeductiveReasoning:
             self.logger.error(f"결론 생성 중 오류: {e}")
             return DeductiveConclusion(conclusion_id="error", content="결론 생성 오류")
 
-    def _modus_ponens_conclusion(
-        self, premises: List[DeductivePremise]
-    ) -> DeductiveConclusion:
+    def _modus_ponens_conclusion(self, premises: List[DeductivePremise]) -> DeductiveConclusion:
         """긍정 논법 결론"""
         try:
             if len(premises) >= 2:
@@ -226,17 +217,13 @@ class DeductiveReasoning:
             self.logger.error(f"긍정 논법 결론 생성 중 오류: {e}")
             return DeductiveConclusion(conclusion_id="error", content="긍정 논법 오류")
 
-    def _modus_tollens_conclusion(
-        self, premises: List[DeductivePremise]
-    ) -> DeductiveConclusion:
+    def _modus_tollens_conclusion(self, premises: List[DeductivePremise]) -> DeductiveConclusion:
         """부정 논법 결론"""
         try:
             if len(premises) >= 2:
                 # P → Q, ¬Q ⊢ ¬P
                 antecedent = premises[0].content
-                negated_consequent = (
-                    premises[1].content if len(premises) > 1 else "부정된 결론"
-                )
+                negated_consequent = premises[1].content if len(premises) > 1 else "부정된 결론"
 
                 conclusion_content = f"만약 {antecedent}라면 {negated_consequent}이므로, {antecedent}는 거짓이다."
                 confidence = min(
@@ -262,9 +249,7 @@ class DeductiveReasoning:
             self.logger.error(f"부정 논법 결론 생성 중 오류: {e}")
             return DeductiveConclusion(conclusion_id="error", content="부정 논법 오류")
 
-    def _hypothetical_syllogism_conclusion(
-        self, premises: List[DeductivePremise]
-    ) -> DeductiveConclusion:
+    def _hypothetical_syllogism_conclusion(self, premises: List[DeductivePremise]) -> DeductiveConclusion:
         """가설적 삼단논법 결론"""
         try:
             if len(premises) >= 3:
@@ -273,7 +258,7 @@ class DeductiveReasoning:
                 second_antecedent = premises[1].content
                 third_antecedent = premises[2].content
 
-                conclusion_content = f"만약 {first_antecedent}라면 {second_antecedent}이고, {second_antecedent}라면 {third_antecedent}이므로, {first_antecedent}라면 {third_antecedent}이다."
+                conclusion_content = f"만약 {first_antecedent}라면 {second_antecedent}이고, {second_antecedent}라면 {third_antecedent}이므로, {first_antecedent}라면 {third_antecedent}이다."  # noqa: E501
                 confidence = min(premise.confidence for premise in premises[:3])
 
                 return DeductiveConclusion(
@@ -292,23 +277,17 @@ class DeductiveReasoning:
 
         except Exception as e:
             self.logger.error(f"가설적 삼단논법 결론 생성 중 오류: {e}")
-            return DeductiveConclusion(
-                conclusion_id="error", content="가설적 삼단논법 오류"
-            )
+            return DeductiveConclusion(conclusion_id="error", content="가설적 삼단논법 오류")
 
-    def _disjunctive_syllogism_conclusion(
-        self, premises: List[DeductivePremise]
-    ) -> DeductiveConclusion:
+    def _disjunctive_syllogism_conclusion(self, premises: List[DeductivePremise]) -> DeductiveConclusion:
         """선언적 삼단논법 결론"""
         try:
             if len(premises) >= 2:
                 # P ∨ Q, ¬P ⊢ Q
                 first_disjunct = premises[0].content
-                negated_disjunct = (
-                    premises[1].content if len(premises) > 1 else "부정된 선언"
-                )
+                negated_disjunct = premises[1].content if len(premises) > 1 else "부정된 선언"
 
-                conclusion_content = f"{first_disjunct} 또는 {negated_disjunct}이고, {negated_disjunct}가 거짓이므로 {first_disjunct}이다."
+                conclusion_content = f"{first_disjunct} 또는 {negated_disjunct}이고, {negated_disjunct}가 거짓이므로 {first_disjunct}이다."  # noqa: E501
                 confidence = min(
                     premises[0].confidence,
                     premises[1].confidence if len(premises) > 1 else 1.0,
@@ -330,13 +309,9 @@ class DeductiveReasoning:
 
         except Exception as e:
             self.logger.error(f"선언적 삼단논법 결론 생성 중 오류: {e}")
-            return DeductiveConclusion(
-                conclusion_id="error", content="선언적 삼단논법 오류"
-            )
+            return DeductiveConclusion(conclusion_id="error", content="선언적 삼단논법 오류")
 
-    def _constructive_dilemma_conclusion(
-        self, premises: List[DeductivePremise]
-    ) -> DeductiveConclusion:
+    def _constructive_dilemma_conclusion(self, premises: List[DeductivePremise]) -> DeductiveConclusion:
         """구성적 딜레마 결론"""
         try:
             if len(premises) >= 3:
@@ -345,7 +320,7 @@ class DeductiveReasoning:
                 second_implication = premises[1].content
                 disjunction = premises[2].content
 
-                conclusion_content = f"만약 {first_implication}이고 {second_implication}이며, {disjunction}이므로, 첫 번째 또는 두 번째 결과가 성립한다."
+                conclusion_content = f"만약 {first_implication}이고 {second_implication}이며, {disjunction}이므로, 첫 번째 또는 두 번째 결과가 성립한다."  # noqa: E501
                 confidence = min(premise.confidence for premise in premises[:3])
 
                 return DeductiveConclusion(
@@ -364,13 +339,9 @@ class DeductiveReasoning:
 
         except Exception as e:
             self.logger.error(f"구성적 딜레마 결론 생성 중 오류: {e}")
-            return DeductiveConclusion(
-                conclusion_id="error", content="구성적 딜레마 오류"
-            )
+            return DeductiveConclusion(conclusion_id="error", content="구성적 딜레마 오류")
 
-    def _destructive_dilemma_conclusion(
-        self, premises: List[DeductivePremise]
-    ) -> DeductiveConclusion:
+    def _destructive_dilemma_conclusion(self, premises: List[DeductivePremise]) -> DeductiveConclusion:
         """파괴적 딜레마 결론"""
         try:
             if len(premises) >= 3:
@@ -379,7 +350,7 @@ class DeductiveReasoning:
                 second_implication = premises[1].content
                 negated_disjunction = premises[2].content
 
-                conclusion_content = f"만약 {first_implication}이고 {second_implication}이며, {negated_disjunction}이므로, 첫 번째 또는 두 번째 전제가 거짓이다."
+                conclusion_content = f"만약 {first_implication}이고 {second_implication}이며, {negated_disjunction}이므로, 첫 번째 또는 두 번째 전제가 거짓이다."  # noqa: E501
                 confidence = min(premise.confidence for premise in premises[:3])
 
                 return DeductiveConclusion(
@@ -398,19 +369,13 @@ class DeductiveReasoning:
 
         except Exception as e:
             self.logger.error(f"파괴적 딜레마 결론 생성 중 오류: {e}")
-            return DeductiveConclusion(
-                conclusion_id="error", content="파괴적 딜레마 오류"
-            )
+            return DeductiveConclusion(conclusion_id="error", content="파괴적 딜레마 오류")
 
-    def _default_conclusion(
-        self, premises: List[DeductivePremise]
-    ) -> DeductiveConclusion:
+    def _default_conclusion(self, premises: List[DeductivePremise]) -> DeductiveConclusion:
         """기본 결론"""
         try:
             if premises:
-                conclusion_content = (
-                    f"주어진 전제들로부터 결론을 도출합니다: {premises[0].content}"
-                )
+                conclusion_content = f"주어진 전제들로부터 결론을 도출합니다: {premises[0].content}"
                 confidence = min(premise.confidence for premise in premises)
 
                 return DeductiveConclusion(
@@ -445,13 +410,9 @@ class DeductiveReasoning:
             # 상세 추론 체인
             detailed_chain = []
             for i, premise in enumerate(rule.premises):
-                detailed_chain.append(
-                    f"전제 {i+1}: {premise.content} (신뢰도: {premise.confidence:.2f})"
-                )
+                detailed_chain.append(f"전제 {i+1}: {premise.content} (신뢰도: {premise.confidence:.2f})")
             detailed_chain.append(f"적용된 규칙: {rule.rule_type.value}")
-            detailed_chain.append(
-                f"도출된 결론: {rule.conclusion.content} (신뢰도: {rule.conclusion.confidence:.2f})"
-            )
+            detailed_chain.append(f"도출된 결론: {rule.conclusion.content} (신뢰도: {rule.conclusion.confidence:.2f})")
             chains.append(detailed_chain)
 
             return chains
@@ -460,9 +421,7 @@ class DeductiveReasoning:
             self.logger.error(f"추론 체인 구축 중 오류: {e}")
             return [["추론 체인 구축 오류"]]
 
-    def _analyze_deductive_reasoning(
-        self, rule: DeductiveRule, reasoning_chains: List[List[str]]
-    ) -> DeductiveAnalysis:
+    def _analyze_deductive_reasoning(self, rule: DeductiveRule, reasoning_chains: List[List[str]]) -> DeductiveAnalysis:
         """연역적 추론 분석"""
         try:
             # 유효성 분석
@@ -554,9 +513,7 @@ class DeductiveReasoning:
             conclusion_complexity = len(rule.conclusion.content)
 
             # 완전성 점수 계산
-            completeness_score = min(
-                1.0, (premise_count + conclusion_complexity / 50) / 5.0
-            )
+            completeness_score = min(1.0, (premise_count + conclusion_complexity / 50) / 5.0)
 
             return completeness_score
 
@@ -578,9 +535,7 @@ class DeductiveReasoning:
             ]
 
             for pair in opposite_pairs:
-                if (pair[0] in content1 and pair[1] in content2) or (
-                    pair[1] in content1 and pair[0] in content2
-                ):
+                if (pair[0] in content1 and pair[1] in content2) or (pair[1] in content1 and pair[0] in content2):
                     return True
 
             return False
@@ -617,13 +572,9 @@ class DeductiveReasoning:
                 issues.append("전제가 부족합니다.")
 
             # 신뢰도가 낮은 전제들
-            low_confidence_premises = [
-                premise for premise in rule.premises if premise.confidence < 0.5
-            ]
+            low_confidence_premises = [premise for premise in rule.premises if premise.confidence < 0.5]
             if low_confidence_premises:
-                issues.append(
-                    f"신뢰도가 낮은 전제가 {len(low_confidence_premises)}개 있습니다."
-                )
+                issues.append(f"신뢰도가 낮은 전제가 {len(low_confidence_premises)}개 있습니다.")
 
             # 결론의 신뢰도가 낮은 경우
             if rule.conclusion.confidence < 0.5:
@@ -645,9 +596,7 @@ class DeductiveReasoning:
                 suggestions.append("더 많은 전제를 추가하여 추론을 강화하세요.")
 
             # 신뢰도가 낮은 전제들
-            low_confidence_premises = [
-                premise for premise in rule.premises if premise.confidence < 0.5
-            ]
+            low_confidence_premises = [premise for premise in rule.premises if premise.confidence < 0.5]
             if low_confidence_premises:
                 suggestions.append("신뢰도가 낮은 전제들을 개선하거나 대체하세요.")
 
@@ -669,9 +618,7 @@ class DeductiveReasoning:
             self.logger.error(f"개선 제안 생성 중 오류: {e}")
             return [f"제안 생성 오류: {str(e)}"]
 
-    def _update_performance_metrics(
-        self, analysis: DeductiveAnalysis, processing_time: float
-    ):
+    def _update_performance_metrics(self, analysis: DeductiveAnalysis, processing_time: float):
         """성능 메트릭 업데이트"""
         self.performance_metrics["total_reasonings"] += 1
         if analysis.validity_score > 0.5 and analysis.soundness_score > 0.5:

@@ -3,6 +3,7 @@
 A/B 테스트 러너 - 기존 시스템과의 퍼사드 통합
 기존 src/ab/* 코드를 100% 보존하면서 새로운 CSV/JSONL 기능 추가
 """
+
 import argparse
 import json
 import os
@@ -26,17 +27,14 @@ except ImportError:
     import importlib.util
 
     starter_path = "DuRi_Day11_15_starter"
-    spec = importlib.util.spec_from_file_location(
-        "core_runner", os.path.join(starter_path, "src/ab/core_runner.py")
-    )
+    spec = importlib.util.spec_from_file_location("core_runner", os.path.join(starter_path, "src/ab/core_runner.py"))
     core_runner = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(core_runner)
     run_ab_with_gate = core_runner.run_ab_with_gate
     run_ab = core_runner.run_ab
     welch_t_test = core_runner.welch_t_test
 
-from src.ab.metrics import aggregate
-from src.ab.variants import VariantConfig, get_variant_config
+from src.ab.variants import VariantConfig  # noqa: E402
 
 
 def csv_to_variants(rows, metric, group_col="variant", a="A", b="B"):
@@ -83,15 +81,11 @@ class ABTestRunner:
         group_b = df[df[group_col] == b_label][metric_col].dropna().tolist()
 
         if len(group_a) < 2 or len(group_b) < 2:
-            raise ValueError(
-                f"Need ≥2 samples per variant. A: {len(group_a)}, B: {len(group_b)}"
-            )
+            raise ValueError(f"Need ≥2 samples per variant. A: {len(group_a)}, B: {len(group_b)}")
 
         return group_a, group_b
 
-    def run_legacy_mode(
-        self, day: int, variant: str, seed: int, gate_policy_path: str = None
-    ) -> Dict[str, Any]:
+    def run_legacy_mode(self, day: int, variant: str, seed: int, gate_policy_path: str = None) -> Dict[str, Any]:
         """
         기존 파이프라인과 100% 호환
         기존 run_ab_with_gate 함수 직접 호출
@@ -124,10 +118,8 @@ class ABTestRunner:
 
         # 효과 크기 계산 (Cohen's d)
         pooled_std = (
-            (len(group_a) - 1)
-            * (sum((x - mean_a) ** 2 for x in group_a) / (len(group_a) - 1))
-            + (len(group_b) - 1)
-            * (sum((x - mean_b) ** 2 for x in group_b) / (len(group_b) - 1))
+            (len(group_a) - 1) * (sum((x - mean_a) ** 2 for x in group_a) / (len(group_a) - 1))
+            + (len(group_b) - 1) * (sum((x - mean_b) ** 2 for x in group_b) / (len(group_b) - 1))
         ) / (len(group_a) + len(group_b) - 2)
         pooled_std = pooled_std**0.5
         cohens_d = (mean_a - mean_b) / pooled_std if pooled_std > 0 else 0
@@ -155,7 +147,6 @@ class ABTestRunner:
         }
 
         # ---- enrich metadata ----
-        import hashlib
         import time
 
         ts = time.strftime("%Y%m%d-%H%M%S", time.gmtime())
@@ -195,10 +186,8 @@ class ABTestRunner:
 
         # 효과 크기 계산 (Cohen's d)
         pooled_std = (
-            (len(group_a) - 1)
-            * (sum((x - mean_a) ** 2 for x in group_a) / (len(group_a) - 1))
-            + (len(group_b) - 1)
-            * (sum((x - mean_b) ** 2 for x in group_b) / (len(group_b) - 1))
+            (len(group_a) - 1) * (sum((x - mean_a) ** 2 for x in group_a) / (len(group_a) - 1))
+            + (len(group_b) - 1) * (sum((x - mean_b) ** 2 for x in group_b) / (len(group_b) - 1))
         ) / (len(group_a) + len(group_b) - 2)
         pooled_std = pooled_std**0.5
         cohens_d = (mean_a - mean_b) / pooled_std if pooled_std > 0 else 0
@@ -289,9 +278,7 @@ def main():
 
     # Legacy 모드 옵션
     parser.add_argument("--day", type=int, default=36, help="Day 번호 (legacy 모드)")
-    parser.add_argument(
-        "--variant", choices=["A", "B"], default="A", help="변형 (legacy 모드)"
-    )
+    parser.add_argument("--variant", choices=["A", "B"], default="A", help="변형 (legacy 모드)")
     parser.add_argument("--seed", type=int, default=42, help="시드 (legacy 모드)")
     parser.add_argument("--gate-policy", help="게이트 정책 파일 경로")
 

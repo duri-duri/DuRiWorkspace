@@ -2,28 +2,20 @@ import argparse
 import json
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import List
 
 from .engine import rank, score_candidate
-from .league import (evaluate_league, load_sampleset, regress, regression_md,
-                     save_md_table)
-from .metrics import (bleu_like, brevity_prior, composite, distinct_n,
-                      evaluate_candidates, evaluate_text, repeat_penalty)
+from .league import evaluate_league, load_sampleset, regress, regression_md, save_md_table
+from .metrics import evaluate_candidates, evaluate_text
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Insight Engine CLI for prompt evaluation and ranking."
-    )
+    parser = argparse.ArgumentParser(description="Insight Engine CLI for prompt evaluation and ranking.")
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
     # Rank command
-    rank_parser = subparsers.add_parser(
-        "rank", help="Rank candidate prompts based on novelty, coherence, and brevity."
-    )
-    rank_parser.add_argument(
-        "--prompt", type=str, required=True, help="The original prompt text."
-    )
+    rank_parser = subparsers.add_parser("rank", help="Rank candidate prompts based on novelty, coherence, and brevity.")
+    rank_parser.add_argument("--prompt", type=str, required=True, help="The original prompt text.")
     rank_parser.add_argument(
         "--candidates",
         type=str,
@@ -31,9 +23,7 @@ def main():
         required=True,
         help="List of candidate prompts to rank.",
     )
-    rank_parser.add_argument(
-        "--k", type=int, default=1, help="Number of top candidates to return."
-    )
+    rank_parser.add_argument("--k", type=int, default=1, help="Number of top candidates to return.")
     rank_parser.add_argument(
         "--weights",
         type=json.loads,
@@ -42,20 +32,12 @@ def main():
     )
 
     # Score command
-    score_parser = subparsers.add_parser(
-        "score", help="Score a single candidate prompt."
-    )
-    score_parser.add_argument(
-        "--prompt", type=str, required=True, help="The original prompt text."
-    )
-    score_parser.add_argument(
-        "--candidate", type=str, required=True, help="The candidate prompt to score."
-    )
+    score_parser = subparsers.add_parser("score", help="Score a single candidate prompt.")
+    score_parser.add_argument("--prompt", type=str, required=True, help="The original prompt text.")
+    score_parser.add_argument("--candidate", type=str, required=True, help="The candidate prompt to score.")
 
     # Evaluate command (for new metrics)
-    eval_parser = subparsers.add_parser(
-        "eval", help="Evaluate text or candidates using quantitative metrics."
-    )
+    eval_parser = subparsers.add_parser("eval", help="Evaluate text or candidates using quantitative metrics.")
     eval_parser.add_argument("--text", type=str, help="Single text to evaluate.")
     eval_parser.add_argument(
         "--references",
@@ -69,9 +51,7 @@ def main():
         type=str,
         help="Path to a file containing candidate texts (one per line).",
     )
-    eval_parser.add_argument(
-        "--eval-json", type=str, help="Path to a JSON file with a list of candidates."
-    )
+    eval_parser.add_argument("--eval-json", type=str, help="Path to a JSON file with a list of candidates.")
     eval_parser.add_argument(
         "--weights",
         type=json.loads,
@@ -83,14 +63,10 @@ def main():
         action="store_true",
         help="Output detailed scores for each metric.",
     )
-    eval_parser.add_argument(
-        "--output", type=str, help="Output file path for results (JSON)."
-    )
+    eval_parser.add_argument("--output", type=str, help="Output file path for results (JSON).")
 
     # League command
-    league_parser = subparsers.add_parser(
-        "league", help="Evaluate a sample set and produce a league table"
-    )
+    league_parser = subparsers.add_parser("league", help="Evaluate a sample set and produce a league table")
     league_parser.add_argument("--set", required=True, help="Path to sampleset yaml")
     league_parser.add_argument("--outputs", help="JSONL of model outputs (id,text,tag)")
     league_parser.add_argument("--run-name", default="current")
@@ -98,17 +74,11 @@ def main():
     league_parser.add_argument("--out-md", default="league.md")
 
     # Regress command
-    regress_parser = subparsers.add_parser(
-        "regress", help="Compare current league result with baseline"
-    )
-    regress_parser.add_argument(
-        "--baseline", required=True, help="Baseline league.json"
-    )
+    regress_parser = subparsers.add_parser("regress", help="Compare current league result with baseline")
+    regress_parser.add_argument("--baseline", required=True, help="Baseline league.json")
     regress_parser.add_argument("--current", required=True, help="Current league.json")
     regress_parser.add_argument("--out-md", default="regression.md")
-    regress_parser.add_argument(
-        "--out-json", help="Output JSON summary for badge generation"
-    )
+    regress_parser.add_argument("--out-json", help="Output JSON summary for badge generation")
     regress_parser.add_argument("--threshold-overall", type=float, default=0.005)
     regress_parser.add_argument("--threshold-group", type=float, default=0.010)
     regress_parser.add_argument("--fail-on-drop", action="store_true")
@@ -141,22 +111,16 @@ def main():
                     sys.exit(1)
 
         if not candidates_to_eval:
-            print(
-                "Error: No text or candidates provided for evaluation.", file=sys.stderr
-            )
+            print("Error: No text or candidates provided for evaluation.", file=sys.stderr)
             sys.exit(1)
 
         if len(candidates_to_eval) == 1 and not args.eval_file and not args.eval_json:
             # Single text evaluation
-            result = evaluate_text(
-                candidates_to_eval[0], args.references, args.weights, args.detailed
-            )
+            result = evaluate_text(candidates_to_eval[0], args.references, args.weights, args.detailed)
             print(json.dumps(result, ensure_ascii=False, indent=2))
         else:
             # Multiple candidates evaluation (ranking)
-            results = evaluate_candidates(
-                candidates_to_eval, args.references, args.weights, args.detailed
-            )
+            results = evaluate_candidates(candidates_to_eval, args.references, args.weights, args.detailed)
             if args.output:
                 with open(args.output, "w", encoding="utf-8") as f:
                     json.dump(results, f, ensure_ascii=False, indent=2)
@@ -165,12 +129,8 @@ def main():
                 print(json.dumps(results, ensure_ascii=False, indent=2))
     elif args.command == "league":
         ss = load_sampleset(Path(args.set))
-        rep = evaluate_league(
-            ss, Path(args.outputs) if args.outputs else None, run_name=args.run_name
-        )
-        Path(args.out_json).write_text(
-            json.dumps(rep, ensure_ascii=False, indent=2), encoding="utf-8"
-        )
+        rep = evaluate_league(ss, Path(args.outputs) if args.outputs else None, run_name=args.run_name)
+        Path(args.out_json).write_text(json.dumps(rep, ensure_ascii=False, indent=2), encoding="utf-8")
         Path(args.out_md).write_text(save_md_table(rep), encoding="utf-8")
         print(f"[league] wrote {args.out_json}, {args.out_md}")
     elif args.command == "regress":

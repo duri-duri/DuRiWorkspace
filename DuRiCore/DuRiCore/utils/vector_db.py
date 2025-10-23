@@ -7,7 +7,6 @@ FAISS 기반 벡터 데이터베이스 구현
 import json
 import logging
 import os
-import pickle
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -47,17 +46,13 @@ class VectorDatabase:
             if self.index_type == "l2":
                 self.index = faiss.IndexFlatL2(self.dimension)
             elif self.index_type == "cosine":
-                self.index = faiss.IndexFlatIP(
-                    self.dimension
-                )  # Inner Product for cosine
+                self.index = faiss.IndexFlatIP(self.dimension)  # Inner Product for cosine
             elif self.index_type == "ip":
                 self.index = faiss.IndexFlatIP(self.dimension)
             else:
                 raise ValueError(f"지원하지 않는 인덱스 타입: {self.index_type}")
 
-            logger.info(
-                f"FAISS 인덱스 초기화 완료: {self.index_type}, 차원: {self.dimension}"
-            )
+            logger.info(f"FAISS 인덱스 초기화 완료: {self.index_type}, 차원: {self.dimension}")
 
         except Exception as e:
             logger.error(f"FAISS 인덱스 초기화 실패: {e}")
@@ -92,18 +87,14 @@ class VectorDatabase:
                 self.metadata.append(meta)
                 self.vector_count += 1
 
-            logger.info(
-                f"{len(vectors)}개의 벡터가 추가되었습니다. 총 벡터: {self.vector_count}"
-            )
+            logger.info(f"{len(vectors)}개의 벡터가 추가되었습니다. 총 벡터: {self.vector_count}")
             return True
 
         except Exception as e:
             logger.error(f"벡터 추가 실패: {e}")
             return False
 
-    def search(
-        self, query_vector: np.ndarray, k: int = 5
-    ) -> Tuple[np.ndarray, np.ndarray, List[Dict[str, Any]]]:
+    def search(self, query_vector: np.ndarray, k: int = 5) -> Tuple[np.ndarray, np.ndarray, List[Dict[str, Any]]]:
         """
         유사한 벡터 검색
 
@@ -249,17 +240,13 @@ class VectorDatabase:
             # 메타데이터 로드
             metadata_path = os.path.join(self.save_dir, f"{filename}.json")
             if not os.path.exists(metadata_path):
-                raise FileNotFoundError(
-                    f"메타데이터 파일을 찾을 수 없습니다: {metadata_path}"
-                )
+                raise FileNotFoundError(f"메타데이터 파일을 찾을 수 없습니다: {metadata_path}")
 
             with open(metadata_path, "r", encoding="utf-8") as f:
                 self.metadata = json.load(f)
 
             self.vector_count = len(self.metadata)
-            logger.info(
-                f"벡터 데이터베이스 로드 완료: {filename}, 벡터 수: {self.vector_count}"
-            )
+            logger.info(f"벡터 데이터베이스 로드 완료: {filename}, 벡터 수: {self.vector_count}")
             return True
 
         except Exception as e:
@@ -296,9 +283,7 @@ class VectorDatabase:
 
             # 인덱스 재구성 (실제로는 새로 생성)
             # 주의: FAISS는 개별 벡터 삭제를 지원하지 않음
-            logger.warning(
-                "FAISS는 개별 벡터 삭제를 지원하지 않습니다. 전체 재구성이 필요합니다."
-            )
+            logger.warning("FAISS는 개별 벡터 삭제를 지원하지 않습니다. 전체 재구성이 필요합니다.")
             return False
 
         except Exception as e:

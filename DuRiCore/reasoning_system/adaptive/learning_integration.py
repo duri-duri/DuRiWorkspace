@@ -11,9 +11,7 @@ DuRi 추론 시스템 - 학습 연동 인터페이스
 
 import logging
 import time
-from dataclasses import dataclass
-from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from ..data_structures import ReasoningSession
 
@@ -29,9 +27,7 @@ class LearningIntegrationInterface:
         self.integration_history = []
         self.logger.info("학습 연동 인터페이스 초기화 완료")
 
-    async def integrate_learning_with_reasoning(
-        self, reasoning_session: ReasoningSession
-    ) -> Dict[str, Any]:
+    async def integrate_learning_with_reasoning(self, reasoning_session: ReasoningSession) -> Dict[str, Any]:
         """추론과 학습의 실시간 연동"""
         try:
             integration_result = {
@@ -43,21 +39,15 @@ class LearningIntegrationInterface:
             }
 
             # 학습 시스템에서 관련 지식 검색
-            relevant_knowledge = await self._search_relevant_knowledge(
-                reasoning_session
-            )
+            relevant_knowledge = await self._search_relevant_knowledge(reasoning_session)
             integration_result["knowledge_applied"] = relevant_knowledge
 
             # 추론 과정에서 학습 인사이트 생성
-            learning_insights = await self._generate_learning_insights(
-                reasoning_session
-            )
+            learning_insights = await self._generate_learning_insights(reasoning_session)
             integration_result["learning_insights"] = learning_insights
 
             # 적응 제안 생성
-            adaptation_suggestions = await self._generate_adaptation_suggestions(
-                reasoning_session
-            )
+            adaptation_suggestions = await self._generate_adaptation_suggestions(reasoning_session)
             integration_result["adaptation_suggestions"] = adaptation_suggestions
 
             return integration_result
@@ -65,13 +55,11 @@ class LearningIntegrationInterface:
             self.logger.error(f"학습 연동 중 오류 발생: {e}")
             return self._create_fallback_integration_result(reasoning_session)
 
-    async def _search_relevant_knowledge(
-        self, reasoning_session: ReasoningSession
-    ) -> List[Dict[str, Any]]:
+    async def _search_relevant_knowledge(self, reasoning_session: ReasoningSession) -> List[Dict[str, Any]]:
         """관련 지식 검색"""
         try:
             # 추론 컨텍스트와 유형에 따른 지식 검색
-            search_criteria = {
+            search_criteria = {  # noqa: F841
                 "context": reasoning_session.context.value,
                 "reasoning_type": reasoning_session.reasoning_type.value,
                 "input_data": reasoning_session.input_data,
@@ -92,18 +80,14 @@ class LearningIntegrationInterface:
             self.logger.error(f"관련 지식 검색 중 오류: {e}")
             return []
 
-    async def _generate_learning_insights(
-        self, reasoning_session: ReasoningSession
-    ) -> List[str]:
+    async def _generate_learning_insights(self, reasoning_session: ReasoningSession) -> List[str]:
         """학습 인사이트 생성"""
         try:
             insights = []
 
             # 추론 과정 분석
             if reasoning_session.reasoning_steps:
-                insights.append(
-                    f"추론 단계 수: {len(reasoning_session.reasoning_steps)}"
-                )
+                insights.append(f"추론 단계 수: {len(reasoning_session.reasoning_steps)}")
                 insights.append(f"추론 유형: {reasoning_session.reasoning_type.value}")
                 insights.append(f"추론 컨텍스트: {reasoning_session.context.value}")
 
@@ -118,9 +102,7 @@ class LearningIntegrationInterface:
             self.logger.error(f"학습 인사이트 생성 중 오류: {e}")
             return []
 
-    async def _generate_adaptation_suggestions(
-        self, reasoning_session: ReasoningSession
-    ) -> List[str]:
+    async def _generate_adaptation_suggestions(self, reasoning_session: ReasoningSession) -> List[str]:
         """적응 제안 생성"""
         try:
             suggestions = []
@@ -145,9 +127,7 @@ class LearningIntegrationInterface:
             self.logger.error(f"적응 제안 생성 중 오류: {e}")
             return []
 
-    def _create_fallback_integration_result(
-        self, reasoning_session: ReasoningSession
-    ) -> Dict[str, Any]:
+    def _create_fallback_integration_result(self, reasoning_session: ReasoningSession) -> Dict[str, Any]:
         """폴백 연동 결과 생성"""
         return {
             "integration_id": f"fallback_{int(time.time())}",

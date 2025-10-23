@@ -11,26 +11,16 @@ DuRi 사용자 인터페이스 시스템 - Phase 1-3 Week 3 Day 8
 """
 
 import asyncio
-import json
 import logging
-import queue
-import statistics
-import threading
 import time
 import uuid
-import weakref
-from collections import defaultdict, deque
-from dataclasses import asdict, dataclass, field
-from datetime import datetime, timedelta
+from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional, Set, Tuple
-
-import numpy as np
+from typing import Any, Dict, Set
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -228,9 +218,7 @@ class UserInterfaceSystem:
         logger.info(f"시스템 출력 생성: {output_id} ({output_type.value})")
         return output_id
 
-    async def collect_user_feedback(
-        self, user_id: str, session_id: str, rating: float, comment: str = ""
-    ) -> str:
+    async def collect_user_feedback(self, user_id: str, session_id: str, rating: float, comment: str = "") -> str:
         """사용자 피드백 수집"""
         feedback_id = f"feedback_{int(time.time())}_{uuid.uuid4().hex[:8]}"
 
@@ -253,9 +241,7 @@ class UserInterfaceSystem:
         logger.info(f"사용자 피드백 수집: {feedback_id} (평점: {rating})")
         return feedback_id
 
-    async def create_interface_session(
-        self, user_id: str, mode: InterfaceMode = None
-    ) -> str:
+    async def create_interface_session(self, user_id: str, mode: InterfaceMode = None) -> str:
         """인터페이스 세션 생성"""
         session_id = f"session_{int(time.time())}_{uuid.uuid4().hex[:8]}"
 
@@ -269,14 +255,10 @@ class UserInterfaceSystem:
         self.interface_states[session_id] = interface_state
         self.active_sessions.add(session_id)
 
-        logger.info(
-            f"인터페이스 세션 생성: {session_id} ({mode.value if mode else 'default'})"
-        )
+        logger.info(f"인터페이스 세션 생성: {session_id} ({mode.value if mode else 'default'})")
         return session_id
 
-    async def update_interface_state(
-        self, session_id: str, updates: Dict[str, Any]
-    ) -> bool:
+    async def update_interface_state(self, session_id: str, updates: Dict[str, Any]) -> bool:
         """인터페이스 상태 업데이트"""
         if session_id not in self.interface_states:
             return False
@@ -310,9 +292,7 @@ class UserInterfaceSystem:
                 try:
                     system_status = (
                         await system_instance.get_system_status()
-                        if asyncio.iscoroutinefunction(
-                            system_instance.get_system_status
-                        )
+                        if asyncio.iscoroutinefunction(system_instance.get_system_status)
                         else system_instance.get_system_status()
                     )
                     status_data[f"system_{system_name}"] = system_status
@@ -330,9 +310,7 @@ class UserInterfaceSystem:
 
         return status_data
 
-    async def visualize_results(
-        self, data: Any, visualization_type: str = "default"
-    ) -> Dict[str, Any]:
+    async def visualize_results(self, data: Any, visualization_type: str = "default") -> Dict[str, Any]:
         """결과 시각화"""
         visualization_id = f"viz_{int(time.time())}_{uuid.uuid4().hex[:8]}"
 
@@ -369,25 +347,15 @@ class UserInterfaceSystem:
         try:
             # 상호작용 유형에 따른 처리
             if interaction_type == "command":
-                result = await self._handle_command_interaction(
-                    interaction_data, session_id
-                )
+                result = await self._handle_command_interaction(interaction_data, session_id)
             elif interaction_type == "query":
-                result = await self._handle_query_interaction(
-                    interaction_data, session_id
-                )
+                result = await self._handle_query_interaction(interaction_data, session_id)
             elif interaction_type == "configuration":
-                result = await self._handle_configuration_interaction(
-                    interaction_data, session_id
-                )
+                result = await self._handle_configuration_interaction(interaction_data, session_id)
             elif interaction_type == "navigation":
-                result = await self._handle_navigation_interaction(
-                    interaction_data, session_id
-                )
+                result = await self._handle_navigation_interaction(interaction_data, session_id)
             else:
-                result = await self._handle_general_interaction(
-                    interaction_data, session_id
-                )
+                result = await self._handle_general_interaction(interaction_data, session_id)
 
             # 응답 시간 계산
             response_time = time.time() - start_time
@@ -408,12 +376,10 @@ class UserInterfaceSystem:
                 "response_time": time.time() - start_time,
             }
 
-    async def _handle_command_interaction(
-        self, interaction_data: Dict[str, Any], session_id: str
-    ) -> Dict[str, Any]:
+    async def _handle_command_interaction(self, interaction_data: Dict[str, Any], session_id: str) -> Dict[str, Any]:
         """명령 상호작용 처리"""
         command = interaction_data.get("command", "")
-        parameters = interaction_data.get("parameters", {})
+        parameters = interaction_data.get("parameters", {})  # noqa: F841
 
         # 명령 처리
         if command == "status":
@@ -425,9 +391,7 @@ class UserInterfaceSystem:
         else:
             return {"type": "unknown_command", "content": f"알 수 없는 명령: {command}"}
 
-    async def _handle_query_interaction(
-        self, interaction_data: Dict[str, Any], session_id: str
-    ) -> Dict[str, Any]:
+    async def _handle_query_interaction(self, interaction_data: Dict[str, Any], session_id: str) -> Dict[str, Any]:
         """쿼리 상호작용 처리"""
         query = interaction_data.get("query", "")
         query_type = interaction_data.get("type", "general")
@@ -455,15 +419,11 @@ class UserInterfaceSystem:
 
         # 세션 상태 업데이트
         if session_id in self.interface_states:
-            await self.update_interface_state(
-                session_id, {"user_preferences": self.user_preferences.copy()}
-            )
+            await self.update_interface_state(session_id, {"user_preferences": self.user_preferences.copy()})
 
         return {"type": "configuration", "content": "설정이 업데이트되었습니다."}
 
-    async def _handle_navigation_interaction(
-        self, interaction_data: Dict[str, Any], session_id: str
-    ) -> Dict[str, Any]:
+    async def _handle_navigation_interaction(self, interaction_data: Dict[str, Any], session_id: str) -> Dict[str, Any]:
         """네비게이션 상호작용 처리"""
         navigation_target = interaction_data.get("target", "")
         navigation_type = interaction_data.get("type", "page")
@@ -479,9 +439,7 @@ class UserInterfaceSystem:
         else:
             return {"type": "navigation", "content": f"네비게이션: {navigation_target}"}
 
-    async def _handle_general_interaction(
-        self, interaction_data: Dict[str, Any], session_id: str
-    ) -> Dict[str, Any]:
+    async def _handle_general_interaction(self, interaction_data: Dict[str, Any], session_id: str) -> Dict[str, Any]:
         """일반 상호작용 처리"""
         interaction_type = interaction_data.get("type", "general")
         content = interaction_data.get("content", "")
@@ -593,10 +551,7 @@ class UserInterfaceSystem:
 
     def _update_response_time(self, response_time: float):
         """응답 시간 업데이트"""
-        total_interactions = (
-            self.interface_metrics["total_inputs"]
-            + self.interface_metrics["total_outputs"]
-        )
+        total_interactions = self.interface_metrics["total_inputs"] + self.interface_metrics["total_outputs"]
         current_avg = self.interface_metrics["average_response_time"]
 
         if total_interactions > 0:
@@ -647,16 +602,12 @@ async def test_user_interface_system():
 
     # 1. 인터페이스 세션 생성 테스트
     print("\n1. 인터페이스 세션 생성 테스트")
-    session_id = await ui_system.create_interface_session(
-        "user_001", InterfaceMode.CONSOLE
-    )
+    session_id = await ui_system.create_interface_session("user_001", InterfaceMode.CONSOLE)
     print(f"생성된 세션: {session_id}")
 
     # 2. 사용자 입력 처리 테스트
     print("\n2. 사용자 입력 처리 테스트")
-    input_id = await ui_system.process_user_input(
-        InputType.TEXT, "시스템 상태 확인", "user_001", session_id
-    )
+    input_id = await ui_system.process_user_input(InputType.TEXT, "시스템 상태 확인", "user_001", session_id)
     print(f"처리된 입력: {input_id}")
 
     # 3. 시스템 출력 생성 테스트
@@ -679,9 +630,7 @@ async def test_user_interface_system():
 
     # 6. 사용자 상호작용 처리 테스트
     print("\n6. 사용자 상호작용 처리 테스트")
-    interaction_result = await ui_system.handle_user_interaction(
-        "command", {"command": "status"}, session_id
-    )
+    interaction_result = await ui_system.handle_user_interaction("command", {"command": "status"}, session_id)
     print(f"상호작용 결과: {interaction_result}")
 
     # 7. 사용자 피드백 수집 테스트

@@ -5,7 +5,6 @@ Configuration management for DuRi Emotion Processing System
 
 import os
 from pathlib import Path
-from typing import Optional
 
 from dotenv import load_dotenv
 
@@ -53,9 +52,7 @@ class Config:
     @staticmethod
     def get_update_script_path() -> str:
         """업데이트 스크립트 경로"""
-        return os.getenv(
-            "UPDATE_SCRIPT_PATH", "/tmp/../scripts/update_cur_from_delta.py"
-        )
+        return os.getenv("UPDATE_SCRIPT_PATH", "/tmp/../scripts/update_cur_from_delta.py")
 
     @staticmethod
     def get_evolution_log() -> str:

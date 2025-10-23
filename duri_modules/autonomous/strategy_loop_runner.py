@@ -1,6 +1,5 @@
 import json
 import logging
-import time
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Dict, List, Optional
@@ -31,18 +30,14 @@ class StrategyLoopRunner:
 
         logger.info("🔄 DuRi 전략 루프 러너 초기화 완료")
 
-    def start_improvement_loop(
-        self, evaluation_result: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def start_improvement_loop(self, evaluation_result: Dict[str, Any]) -> Dict[str, Any]:
         """개선 루프 시작"""
         try:
             self.is_running = True
             logger.info("🚀 개선 전략 루프 시작")
 
             # 1. 개선 제안 분석
-            actions = self.result_improver.analyze_improvement_suggestions(
-                evaluation_result
-            )
+            actions = self.result_improver.analyze_improvement_suggestions(evaluation_result)
 
             if not actions:
                 logger.warning("⚠️ 실행 가능한 개선 액션이 없습니다")
@@ -52,17 +47,13 @@ class StrategyLoopRunner:
                 }
 
             # 2. 전략 실행
-            execution_results = self._execute_improvement_strategy(
-                actions, evaluation_result
-            )
+            execution_results = self._execute_improvement_strategy(actions, evaluation_result)
 
             # 3. 결과 요약
             summary = self._generate_execution_summary(execution_results)
 
             self.is_running = False
-            logger.info(
-                f"✅ 개선 전략 루프 완료: {summary['success_count']}/{summary['total_count']} 성공"
-            )
+            logger.info(f"✅ 개선 전략 루프 완료: {summary['success_count']}/{summary['total_count']} 성공")
 
             return {
                 "status": "completed",
@@ -96,15 +87,11 @@ class StrategyLoopRunner:
             )
 
             try:
-                logger.info(
-                    f"🔧 전략 실행: {action.action_type} - {action.description}"
-                )
+                logger.info(f"🔧 전략 실행: {action.action_type} - {action.description}")
                 execution.status = "running"
 
                 # 액션 실행
-                success = self.result_improver.execute_improvement_action(
-                    action, context
-                )
+                success = self.result_improver.execute_improvement_action(action, context)
 
                 execution.status = "completed" if success else "failed"
                 execution.end_time = datetime.now()
@@ -126,9 +113,7 @@ class StrategyLoopRunner:
                         "action_type": action.action_type,
                         "description": action.description,
                         "success": success,
-                        "execution_time": (
-                            execution.end_time - execution.start_time
-                        ).total_seconds(),
+                        "execution_time": (execution.end_time - execution.start_time).total_seconds(),
                     }
                 )
 
@@ -159,9 +144,7 @@ class StrategyLoopRunner:
 
         return execution_results
 
-    def _post_process_successful_action(
-        self, action: ImprovementAction, context: Dict[str, Any]
-    ):
+    def _post_process_successful_action(self, action: ImprovementAction, context: Dict[str, Any]):
         """성공한 액션 후처리"""
         try:
             # 개선 결과를 메모리에 저장
@@ -178,9 +161,7 @@ class StrategyLoopRunner:
         except Exception as e:
             logger.error(f"❌ 후처리 오류: {e}")
 
-    def _update_learning_patterns(
-        self, action: ImprovementAction, summary: Dict[str, Any]
-    ):
+    def _update_learning_patterns(self, action: ImprovementAction, summary: Dict[str, Any]):
         """학습 패턴 업데이트"""
         try:
             # 성공률 기반 패턴 학습
@@ -214,15 +195,11 @@ class StrategyLoopRunner:
         except Exception as e:
             logger.error(f"❌ 전략 기록 오류: {e}")
 
-    def _generate_execution_summary(
-        self, execution_results: List[Dict[str, Any]]
-    ) -> Dict[str, Any]:
+    def _generate_execution_summary(self, execution_results: List[Dict[str, Any]]) -> Dict[str, Any]:
         """실행 결과 요약 생성"""
         try:
             total_count = len(execution_results)
-            success_count = sum(
-                1 for result in execution_results if result.get("success", False)
-            )
+            success_count = sum(1 for result in execution_results if result.get("success", False))
             failed_count = total_count - success_count
 
             # 액션 타입별 성공률
@@ -240,21 +217,15 @@ class StrategyLoopRunner:
             for action_type in action_type_stats:
                 total = action_type_stats[action_type]["total"]
                 success = action_type_stats[action_type]["success"]
-                action_type_stats[action_type]["success_rate"] = (
-                    success / total if total > 0 else 0
-                )
+                action_type_stats[action_type]["success_rate"] = success / total if total > 0 else 0
 
             return {
                 "total_count": total_count,
                 "success_count": success_count,
                 "failed_count": failed_count,
-                "overall_success_rate": (
-                    success_count / total_count if total_count > 0 else 0
-                ),
+                "overall_success_rate": (success_count / total_count if total_count > 0 else 0),
                 "action_type_stats": action_type_stats,
-                "execution_time": sum(
-                    result.get("execution_time", 0) for result in execution_results
-                ),
+                "execution_time": sum(result.get("execution_time", 0) for result in execution_results),
                 "timestamp": datetime.now().isoformat(),
             }
 
@@ -302,34 +273,24 @@ class StrategyLoopRunner:
             # 가장 효과적인 액션 분석
             if summary.get("recent_improvements"):
                 high_confidence_improvements = [
-                    imp
-                    for imp in summary["recent_improvements"]
-                    if imp.get("confidence", 0) > 0.7
+                    imp for imp in summary["recent_improvements"] if imp.get("confidence", 0) > 0.7
                 ]
                 insights["most_effective_actions"] = high_confidence_improvements
 
             # 학습 패턴 분석
             if strategy_status.get("recent_executions"):
                 successful_executions = [
-                    exec
-                    for exec in strategy_status["recent_executions"]
-                    if exec.get("status") == "completed"
+                    exec for exec in strategy_status["recent_executions"] if exec.get("status") == "completed"
                 ]
                 insights["learning_patterns"] = successful_executions
 
             # 권장사항 생성
             if insights["success_rate"] > 0.8:
-                insights["recommendations"].append(
-                    "높은 성공률을 유지하고 있습니다. 더 복잡한 개선에 도전해보세요."
-                )
+                insights["recommendations"].append("높은 성공률을 유지하고 있습니다. 더 복잡한 개선에 도전해보세요.")
             elif insights["success_rate"] < 0.5:
-                insights["recommendations"].append(
-                    "성공률이 낮습니다. 기본적인 개선부터 시작해보세요."
-                )
+                insights["recommendations"].append("성공률이 낮습니다. 기본적인 개선부터 시작해보세요.")
             else:
-                insights["recommendations"].append(
-                    "안정적인 성과를 보이고 있습니다. 점진적 개선을 계속하세요."
-                )
+                insights["recommendations"].append("안정적인 성과를 보이고 있습니다. 점진적 개선을 계속하세요.")
 
             return insights
 

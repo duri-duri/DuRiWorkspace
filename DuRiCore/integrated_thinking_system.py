@@ -15,39 +15,30 @@ DuRi 30일 진화 계획 - Day 8: 통합 사고 시스템
 """
 
 import asyncio
-import json
 import logging
 import random
 import time
-from collections import defaultdict, deque
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
-
-import numpy as np
+from typing import Any, Dict, List, Optional, Tuple
 
 # 기존 시스템들 import
 try:
     from creative_problem_solving_system import CreativeProblemSolvingSystem
-    from creative_thinking_system import (CreativeIdea, CreativeThinkingSystem,
-                                          CreativityLevel)
+    from creative_thinking_system import CreativeIdea, CreativeThinkingSystem, CreativityLevel  # noqa: F401
     from duri_thought_flow import DuRiThoughtFlow
-    from emotional_thinking_system import (EmotionalState,
-                                           EmotionalThinkingSystem)
-    from inner_thinking_system import InnerThinkingSystem, ThoughtDepth
-    from intuitive_thinking_system import (IntuitivePattern,
-                                           IntuitiveThinkingSystem)
-    from meta_cognition_system import MetaCognitionLevel, MetaCognitionSystem
+    from emotional_thinking_system import EmotionalState, EmotionalThinkingSystem  # noqa: F401
+    from inner_thinking_system import InnerThinkingSystem, ThoughtDepth  # noqa: F401
+    from intuitive_thinking_system import IntuitivePattern, IntuitiveThinkingSystem  # noqa: F401
+    from meta_cognition_system import MetaCognitionLevel, MetaCognitionSystem  # noqa: F401
     from phase_omega_integration import DuRiPhaseOmega
     from self_directed_learning_system import SelfDirectedLearningSystem
 except ImportError as e:
     logging.warning(f"일부 기존 시스템 import 실패: {e}")
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -200,9 +191,7 @@ class IntegratedThinkingSystem:
 
         logger.info("통합 사고 시스템 초기화 완료")
 
-    async def think_integrated(
-        self, context: Dict[str, Any] = None
-    ) -> IntegratedThinkingResult:
+    async def think_integrated(self, context: Dict[str, Any] = None) -> IntegratedThinkingResult:
         """통합 사고 실행"""
         if context is None:
             context = {}
@@ -220,9 +209,7 @@ class IntegratedThinkingSystem:
             system_harmonies = await self._harmonize_thinking_systems(context)
 
             # 3. 통합적 판단 능력
-            judgments = await self._make_integrated_judgments(
-                integrated_thoughts, context
-            )
+            judgments = await self._make_integrated_judgments(integrated_thoughts, context)
 
             # 4. 조화로운 사고 패턴
             harmonious_patterns = await self._discover_harmonious_patterns(
@@ -261,9 +248,7 @@ class IntegratedThinkingSystem:
                 error_message=str(e),
             )
 
-    async def _integrate_thinking_systems(
-        self, context: Dict[str, Any]
-    ) -> List[IntegratedThought]:
+    async def _integrate_thinking_systems(self, context: Dict[str, Any]) -> List[IntegratedThought]:
         """다중 사고 시스템 통합"""
         integrated_thoughts = []
 
@@ -281,17 +266,13 @@ class IntegratedThinkingSystem:
             system_combinations = await self._get_system_combinations_for_mode(mode)
 
             for systems in system_combinations:
-                integrated_thought = await self._create_integrated_thought(
-                    systems, mode, context
-                )
+                integrated_thought = await self._create_integrated_thought(systems, mode, context)
                 integrated_thoughts.append(integrated_thought)
 
         logger.info(f"통합 사고 {len(integrated_thoughts)}개 생성 완료")
         return integrated_thoughts
 
-    async def _get_system_combinations_for_mode(
-        self, mode: IntegrationMode
-    ) -> List[List[ThinkingSystemType]]:
+    async def _get_system_combinations_for_mode(self, mode: IntegrationMode) -> List[List[ThinkingSystemType]]:
         """통합 모드별 시스템 조합 생성"""
         all_systems = list(ThinkingSystemType)
 
@@ -374,9 +355,7 @@ class IntegratedThinkingSystem:
 
         return integrated_thought
 
-    async def _generate_system_thought(
-        self, system: ThinkingSystemType, context: Dict[str, Any]
-    ) -> str:
+    async def _generate_system_thought(self, system: ThinkingSystemType, context: Dict[str, Any]) -> str:
         """시스템별 사고 내용 생성"""
         thought_templates = {
             ThinkingSystemType.INNER: [
@@ -416,14 +395,10 @@ class IntegratedThinkingSystem:
             ],
         }
 
-        templates = thought_templates.get(
-            system, ["통합적 사고를 통해 문제를 분석했다."]
-        )
+        templates = thought_templates.get(system, ["통합적 사고를 통해 문제를 분석했다."])
         return random.choice(templates)
 
-    async def _synthesize_thoughts(
-        self, system_thoughts: List[str], mode: IntegrationMode
-    ) -> str:
+    async def _synthesize_thoughts(self, system_thoughts: List[str], mode: IntegrationMode) -> str:
         """사고 내용 종합"""
         if mode == IntegrationMode.SEQUENTIAL:
             return " → ".join(system_thoughts)
@@ -464,9 +439,7 @@ class IntegratedThinkingSystem:
                 pair = (systems[i], systems[j])
                 reverse_pair = (systems[j], systems[i])
 
-                score = compatibility_scores.get(
-                    pair, compatibility_scores.get(reverse_pair, 0.5)
-                )
+                score = compatibility_scores.get(pair, compatibility_scores.get(reverse_pair, 0.5))
                 total_score += score
                 pair_count += 1
 
@@ -496,9 +469,7 @@ class IntegratedThinkingSystem:
         else:
             return ThinkingHarmony.DISCORDANT
 
-    async def _calculate_confidence_score(
-        self, systems: List[ThinkingSystemType], mode: IntegrationMode
-    ) -> float:
+    async def _calculate_confidence_score(self, systems: List[ThinkingSystemType], mode: IntegrationMode) -> float:
         """신뢰도 계산"""
         # 시스템별 기본 신뢰도
         system_confidences = {
@@ -512,9 +483,7 @@ class IntegratedThinkingSystem:
         }
 
         # 평균 신뢰도 계산
-        total_confidence = sum(
-            system_confidences.get(system, 0.5) for system in systems
-        )
+        total_confidence = sum(system_confidences.get(system, 0.5) for system in systems)
         average_confidence = total_confidence / len(systems)
 
         # 모드별 가중치 적용
@@ -529,9 +498,7 @@ class IntegratedThinkingSystem:
         weighted_confidence = average_confidence * mode_weights.get(mode, 0.8)
         return min(1.0, weighted_confidence)
 
-    async def _harmonize_thinking_systems(
-        self, context: Dict[str, Any]
-    ) -> List[SystemHarmony]:
+    async def _harmonize_thinking_systems(self, context: Dict[str, Any]) -> List[SystemHarmony]:
         """사고 시스템 간 조화"""
         harmonies = []
 
@@ -550,9 +517,7 @@ class IntegratedThinkingSystem:
 
         for system1, system2 in system_pairs:
             harmony_score = await self._calculate_pair_harmony(system1, system2)
-            interaction_pattern = await self._identify_interaction_pattern(
-                system1, system2
-            )
+            interaction_pattern = await self._identify_interaction_pattern(system1, system2)
             synergy_level = await self._calculate_synergy_level(system1, system2)
 
             harmony = SystemHarmony(
@@ -568,9 +533,7 @@ class IntegratedThinkingSystem:
         logger.info(f"시스템 조화 {len(harmonies)}개 분석 완료")
         return harmonies
 
-    async def _calculate_pair_harmony(
-        self, system1: ThinkingSystemType, system2: ThinkingSystemType
-    ) -> float:
+    async def _calculate_pair_harmony(self, system1: ThinkingSystemType, system2: ThinkingSystemType) -> float:
         """시스템 쌍 조화 점수 계산"""
         harmony_matrix = {
             (ThinkingSystemType.INNER, ThinkingSystemType.EMOTIONAL): 0.8,
@@ -594,9 +557,7 @@ class IntegratedThinkingSystem:
         final_score = base_score + random.uniform(-0.1, 0.1)
         return max(0.0, min(1.0, final_score))
 
-    async def _identify_interaction_pattern(
-        self, system1: ThinkingSystemType, system2: ThinkingSystemType
-    ) -> str:
+    async def _identify_interaction_pattern(self, system1: ThinkingSystemType, system2: ThinkingSystemType) -> str:
         """상호작용 패턴 식별"""
         pattern_templates = {
             (
@@ -628,13 +589,9 @@ class IntegratedThinkingSystem:
         pair = (system1, system2)
         reverse_pair = (system2, system1)
 
-        return pattern_templates.get(
-            pair, pattern_templates.get(reverse_pair, "일반적 조화")
-        )
+        return pattern_templates.get(pair, pattern_templates.get(reverse_pair, "일반적 조화"))
 
-    async def _calculate_synergy_level(
-        self, system1: ThinkingSystemType, system2: ThinkingSystemType
-    ) -> float:
+    async def _calculate_synergy_level(self, system1: ThinkingSystemType, system2: ThinkingSystemType) -> float:
         """시너지 수준 계산"""
         synergy_matrix = {
             (ThinkingSystemType.INNER, ThinkingSystemType.EMOTIONAL): 0.8,
@@ -673,9 +630,7 @@ class IntegratedThinkingSystem:
         ]
 
         for question in judgment_questions:
-            judgment = await self._create_integrated_judgment(
-                question, integrated_thoughts, context
-            )
+            judgment = await self._create_integrated_judgment(question, integrated_thoughts, context)
             judgments.append(judgment)
 
         logger.info(f"통합적 판단 {len(judgments)}개 생성 완료")
@@ -689,22 +644,16 @@ class IntegratedThinkingSystem:
     ) -> IntegratedJudgment:
         """통합적 판단 생성"""
         # 관련 통합 사고 선택
-        relevant_thoughts = random.sample(
-            integrated_thoughts, min(3, len(integrated_thoughts))
-        )
+        relevant_thoughts = random.sample(integrated_thoughts, min(3, len(integrated_thoughts)))
 
         # 최종 결정 생성
-        final_decision = await self._generate_final_decision(
-            question, relevant_thoughts
-        )
+        final_decision = await self._generate_final_decision(question, relevant_thoughts)
 
         # 추론 과정 생성
         reasoning = await self._generate_reasoning(question, relevant_thoughts)
 
         # 신뢰도 계산
-        confidence = sum(
-            thought.confidence_score for thought in relevant_thoughts
-        ) / len(relevant_thoughts)
+        confidence = sum(thought.confidence_score for thought in relevant_thoughts) / len(relevant_thoughts)
 
         # 품질 결정
         if confidence >= 0.8:
@@ -729,9 +678,7 @@ class IntegratedThinkingSystem:
 
         return judgment
 
-    async def _generate_final_decision(
-        self, question: str, thoughts: List[IntegratedThought]
-    ) -> str:
+    async def _generate_final_decision(self, question: str, thoughts: List[IntegratedThought]) -> str:
         """최종 결정 생성"""
         decision_templates = [
             "통합적 사고를 통해 문제의 핵심을 파악하고 혁신적인 해결책을 제시할 수 있다.",
@@ -742,9 +689,7 @@ class IntegratedThinkingSystem:
 
         return random.choice(decision_templates)
 
-    async def _generate_reasoning(
-        self, question: str, thoughts: List[IntegratedThought]
-    ) -> str:
+    async def _generate_reasoning(self, question: str, thoughts: List[IntegratedThought]) -> str:
         """추론 과정 생성"""
         reasoning_parts = []
 
@@ -766,17 +711,14 @@ class IntegratedThinkingSystem:
 
         # 조화 수준이 높은 패턴 발견
         harmonious_thoughts = [
-            t
-            for t in integrated_thoughts
-            if t.harmony_level
-            in [ThinkingHarmony.HARMONIOUS, ThinkingHarmony.SYMPHONIC]
+            t for t in integrated_thoughts if t.harmony_level in [ThinkingHarmony.HARMONIOUS, ThinkingHarmony.SYMPHONIC]
         ]
 
         for thought in harmonious_thoughts:
             pattern = HarmoniousPattern(
                 pattern_id=f"pattern_{thought.thought_id}_{int(time.time())}",
                 pattern_name=f"{thought.integration_mode.value} 조화 패턴",
-                pattern_description=f"{', '.join([s.value for s in thought.thinking_systems])} 시스템의 조화로운 통합 패턴",
+                pattern_description=f"{', '.join([s.value for s in thought.thinking_systems])} 시스템의 조화로운 통합 패턴",  # noqa: E501
                 involved_systems=thought.thinking_systems,
                 harmony_score=thought.confidence_score,
                 context=context,
@@ -800,9 +742,7 @@ class IntegratedThinkingSystem:
 
         # 평균 조화 점수 계산
         if integrated_thoughts:
-            average_harmony_score = sum(
-                t.confidence_score for t in integrated_thoughts
-            ) / len(integrated_thoughts)
+            average_harmony_score = sum(t.confidence_score for t in integrated_thoughts) / len(integrated_thoughts)
         else:
             average_harmony_score = 0.0
 
@@ -858,8 +798,7 @@ class IntegratedThinkingSystem:
         # 통계 업데이트
         self.total_integrated_thoughts += len(result.integrated_thoughts)
         self.average_harmony_score = (
-            self.average_harmony_score
-            * (self.total_integrated_thoughts - len(result.integrated_thoughts))
+            self.average_harmony_score * (self.total_integrated_thoughts - len(result.integrated_thoughts))
             + sum(t.confidence_score for t in result.integrated_thoughts)
         ) / self.total_integrated_thoughts
         self.average_confidence = (
@@ -885,10 +824,7 @@ class IntegratedThinkingSystem:
                 }
                 for t in self.integrated_thoughts[-5:]  # 최근 5개 통합 사고
             ],
-            "pattern_usage": {
-                pattern.pattern_name: pattern.frequency
-                for pattern in self.harmonious_patterns.values()
-            },
+            "pattern_usage": {pattern.pattern_name: pattern.frequency for pattern in self.harmonious_patterns.values()},
         }
 
 
@@ -909,7 +845,7 @@ async def test_integrated_thinking_system():
     result = await integrated_system.think_integrated(context)
 
     # 결과 출력
-    print(f"\n=== 통합 사고 결과 ===")
+    print("\n=== 통합 사고 결과 ===")
     print(f"프로세스 ID: {result.process_id}")
     print(f"성공 여부: {result.success}")
     print(f"사고 시간: {result.thinking_duration:.2f}초")
@@ -919,17 +855,13 @@ async def test_integrated_thinking_system():
     for thought in result.integrated_thoughts[:3]:  # 처음 3개만 출력
         systems_str = ", ".join([s.value for s in thought.thinking_systems])
         print(
-            f"- {thought.integration_mode.value}: {systems_str} (조화: {thought.harmony_level.value}, 신뢰도: {thought.confidence_score:.2f})"
+            f"- {thought.integration_mode.value}: {systems_str} (조화: {thought.harmony_level.value}, 신뢰도: {thought.confidence_score:.2f})"  # noqa: E501
         )
 
     print(f"\n=== 시스템 조화 ({len(result.system_harmonies)}개) ===")
     for harmony in result.system_harmonies[:3]:  # 처음 3개만 출력
-        pair_str = (
-            f"{harmony.system_pairs[0][0].value}-{harmony.system_pairs[0][1].value}"
-        )
-        print(
-            f"- {pair_str}: {harmony.harmony_score:.2f} (시너지: {harmony.synergy_level:.2f})"
-        )
+        pair_str = f"{harmony.system_pairs[0][0].value}-{harmony.system_pairs[0][1].value}"
+        print(f"- {pair_str}: {harmony.harmony_score:.2f} (시너지: {harmony.synergy_level:.2f})")
 
     print(f"\n=== 통합적 판단 ({len(result.judgments)}개) ===")
     for judgment in result.judgments[:3]:  # 처음 3개만 출력
@@ -940,17 +872,15 @@ async def test_integrated_thinking_system():
     print(f"\n=== 조화로운 패턴 ({len(result.harmonious_patterns)}개) ===")
     for pattern in result.harmonious_patterns[:3]:  # 처음 3개만 출력
         systems_str = ", ".join([s.value for s in pattern.involved_systems])
-        print(
-            f"- {pattern.pattern_name}: {systems_str} (조화 점수: {pattern.harmony_score:.2f})"
-        )
+        print(f"- {pattern.pattern_name}: {systems_str} (조화 점수: {pattern.harmony_score:.2f})")
 
-    print(f"\n=== 성과 지표 ===")
+    print("\n=== 성과 지표 ===")
     print(f"평균 조화 점수: {result.average_harmony_score:.3f}")
     print(f"평균 신뢰도: {result.average_confidence:.3f}")
 
     # 시스템 요약 정보
     summary = await integrated_system.get_integrated_thinking_summary()
-    print(f"\n=== 시스템 요약 ===")
+    print("\n=== 시스템 요약 ===")
     print(f"총 통합 사고: {summary['total_integrated_thoughts']}")
     print(f"평균 조화 점수: {summary['average_harmony_score']}")
     print(f"평균 신뢰도: {summary['average_confidence']}")

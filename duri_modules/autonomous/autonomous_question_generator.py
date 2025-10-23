@@ -88,9 +88,7 @@ class AutonomousQuestionGenerator:
             available_topics = self._extract_learning_topics(learning_context)
 
             for i in range(num_questions):
-                question = self._generate_single_question(
-                    learning_context, available_topics, i
-                )
+                question = self._generate_single_question(learning_context, available_topics, i)
                 if question:
                     questions.append(question)
 
@@ -124,9 +122,7 @@ class AutonomousQuestionGenerator:
             self_reflection = evaluation.get("self_reflection", {})
             if self_reflection:
                 improvement_proposal = self_reflection.get("improvement_proposal", {})
-                specific_improvements = improvement_proposal.get(
-                    "specific_improvements", []
-                )
+                specific_improvements = improvement_proposal.get("specific_improvements", [])
                 for improvement in specific_improvements:
                     if "코드" in improvement or "구현" in improvement:
                         topics.append("코딩")
@@ -177,9 +173,7 @@ class AutonomousQuestionGenerator:
                 elif template.count("{}") == 2:
                     # 두 개의 주제가 필요한 경우
                     if len(available_topics) >= 2:
-                        topic2 = random.choice(
-                            [t for t in available_topics if t != topic]
-                        )
+                        topic2 = random.choice([t for t in available_topics if t != topic])
                         question_text = template.format(topic, topic2)
                     else:
                         # 두 번째 주제가 없으면 기본값 사용
@@ -190,9 +184,7 @@ class AutonomousQuestionGenerator:
                 question_text = f"{topic}에 대해 더 자세히 설명해주세요."
 
             # 예상 학습 가치 계산
-            expected_learning_value = self._calculate_learning_value(
-                category, difficulty
-            )
+            expected_learning_value = self._calculate_learning_value(category, difficulty)
 
             # 우선순위 결정
             priority = self._determine_priority(learning_context, question_index)
@@ -214,9 +206,7 @@ class AutonomousQuestionGenerator:
             logger.error(f"❌ 단일 질문 생성 오류: {e}")
             return None
 
-    def _determine_difficulty(
-        self, learning_context: Dict[str, Any], question_index: int
-    ) -> str:
+    def _determine_difficulty(self, learning_context: Dict[str, Any], question_index: int) -> str:
         """난이도 결정"""
         # 학습 히스토리 기반 난이도 조정
         if len(self.learning_history) < 3:
@@ -242,9 +232,7 @@ class AutonomousQuestionGenerator:
 
         return round(base_value * multiplier, 3)
 
-    def _determine_priority(
-        self, learning_context: Dict[str, Any], question_index: int
-    ) -> str:
+    def _determine_priority(self, learning_context: Dict[str, Any], question_index: int) -> str:
         """우선순위 결정"""
         # 첫 번째 질문은 높은 우선순위
         if question_index == 0:
@@ -255,18 +243,14 @@ class AutonomousQuestionGenerator:
         else:
             return "medium"
 
-    def start_learning_session(
-        self, learning_context: Dict[str, Any]
-    ) -> LearningSession:
+    def start_learning_session(self, learning_context: Dict[str, Any]) -> LearningSession:
         """학습 세션 시작"""
         try:
             self.session_counter += 1
             session_id = f"session_{self.session_counter}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
 
             # 질문 생성
-            questions = self.generate_learning_questions(
-                learning_context, num_questions=5
-            )
+            questions = self.generate_learning_questions(learning_context, num_questions=5)
 
             session = LearningSession(
                 session_id=session_id,
@@ -292,9 +276,7 @@ class AutonomousQuestionGenerator:
                 session.current_question_index += 1
 
                 # 진행도 업데이트
-                session.learning_progress = session.current_question_index / len(
-                    session.questions
-                )
+                session.learning_progress = session.current_question_index / len(session.questions)
 
                 logger.info(f"📝 다음 질문: {question.question_text[:50]}...")
                 return question
@@ -309,9 +291,7 @@ class AutonomousQuestionGenerator:
             logger.error(f"❌ 다음 질문 가져오기 오류: {e}")
             return None
 
-    def update_learning_patterns(
-        self, session: LearningSession, question_result: Dict[str, Any]
-    ):
+    def update_learning_patterns(self, session: LearningSession, question_result: Dict[str, Any]):
         """학습 패턴 업데이트"""
         try:
             # 질문 결과 분석
@@ -332,9 +312,7 @@ class AutonomousQuestionGenerator:
 
             self.learning_patterns[session.session_id].append(pattern)
 
-            logger.info(
-                f"📊 학습 패턴 업데이트: {session.session_id} - 성공: {success}, 가치: {learning_value}"
-            )
+            logger.info(f"📊 학습 패턴 업데이트: {session.session_id} - 성공: {success}, 가치: {learning_value}")
 
         except Exception as e:
             logger.error(f"❌ 학습 패턴 업데이트 오류: {e}")
@@ -343,9 +321,7 @@ class AutonomousQuestionGenerator:
         """학습 인사이트 생성"""
         try:
             total_sessions = len(self.learning_patterns)
-            total_questions = sum(
-                len(patterns) for patterns in self.learning_patterns.values()
-            )
+            total_questions = sum(len(patterns) for patterns in self.learning_patterns.values())
 
             if total_questions == 0:
                 return {"message": "아직 학습 데이터가 없습니다"}
@@ -394,10 +370,7 @@ class AutonomousQuestionGenerator:
             "status": "running",
             "timestamp": datetime.now().isoformat(),
             "total_sessions": len(self.learning_patterns),
-            "question_templates": {
-                category: len(templates)
-                for category, templates in self.question_templates.items()
-            },
+            "question_templates": {category: len(templates) for category, templates in self.question_templates.items()},
             "learning_insights": self.get_learning_insights(),
         }
 

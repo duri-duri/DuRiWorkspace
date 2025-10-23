@@ -70,9 +70,7 @@ def parse_prom_text(text: str) -> List[Tuple[str, Dict[str, str], float]]:
     return out
 
 
-def pick_value(
-    samples: List[Tuple[str, Dict[str, str], float]], name: str, must: Dict[str, str]
-) -> Optional[float]:
+def pick_value(samples: List[Tuple[str, Dict[str, str], float]], name: str, must: Dict[str, str]) -> Optional[float]:
     for n, lbl, v in samples:
         if n != name:
             continue
@@ -87,9 +85,7 @@ def pick_value(
 
 
 def export_prom(tsv_path: str) -> str:
-    cp = subprocess.run(
-        ["bash", PROM_EXPORT, tsv_path], check=True, text=True, capture_output=True
-    )
+    cp = subprocess.run(["bash", PROM_EXPORT, tsv_path], check=True, text=True, capture_output=True)
     return cp.stdout
 
 
@@ -155,9 +151,7 @@ def main():
         when = dt.datetime.utcfromtimestamp(epoch)
         date = when.date().isoformat()
 
-        ndcg = pick_value(
-            samples, "duri_ndcg_at_k", {"k": args.k, "scope": "all", "domain": "ALL"}
-        )
+        ndcg = pick_value(samples, "duri_ndcg_at_k", {"k": args.k, "scope": "all", "domain": "ALL"})
         mrr = pick_value(samples, "duri_mrr", {"scope": "all", "domain": "ALL"})
         recall = pick_value(
             samples,
@@ -192,7 +186,7 @@ def main():
     ma_mrr = rolling(mrr_series, args.period)
     sd_mrr = rolling_std(mrr_series, args.period)
 
-    for r, ma_n, sd_n, ma_m, sd_m in zip(rows, ma_ndcg, sd_ndcg, ma_mrr, sd_mrr):
+    for r, ma_n, sd_n, ma_m, sd_m in zip(rows, ma_ndcg, sd_ndcg, ma_mrr, sd_mrr):  # noqa: B905
         r["ndcg_ma"] = ma_n
         r["ndcg_std"] = sd_n
         r["mrr_ma"] = ma_m
@@ -208,9 +202,7 @@ def main():
         rows[-1]["ndcg_dod"] = delta(rows[-1]["ndcg_k"], rows[-2]["ndcg_k"])
         rows[-1]["mrr_dod"] = delta(rows[-1]["mrr"], rows[-2]["mrr"])
     if len(rows) > args.period:
-        rows[-1]["ndcg_wow"] = delta(
-            rows[-1]["ndcg_k"], rows[-1 - args.period]["ndcg_k"]
-        )
+        rows[-1]["ndcg_wow"] = delta(rows[-1]["ndcg_k"], rows[-1 - args.period]["ndcg_k"])
         rows[-1]["mrr_wow"] = delta(rows[-1]["mrr"], rows[-1 - args.period]["mrr"])
         # WoW % 변화율 (분모 0/None 방지)
         base_n = rows[-1 - args.period]["ndcg_k"]
@@ -225,11 +217,7 @@ def main():
         ("ndcg_k", "ndcg_ma", "ndcg_std", "ndcg_z"),
         ("mrr", "mrr_ma", "mrr_std", "mrr_z"),
     ]:
-        if (
-            rows[-1].get(ma_key) is not None
-            and rows[-1].get(sd_key) not in (None, 0)
-            and rows[-1].get(key) is not None
-        ):
+        if rows[-1].get(ma_key) is not None and rows[-1].get(sd_key) not in (None, 0) and rows[-1].get(key) is not None:
             rows[-1][z_key] = (rows[-1][key] - rows[-1][ma_key]) / rows[-1][sd_key]
 
     # write CSV
@@ -299,23 +287,19 @@ def main():
         f.write(f"- Period: last {len(recent)} days (target={args.period})\n")
         f.write(f"- Latest date: **{latest['date']}**\n")
         f.write(
-            f"- nDCG: {rfmt(latest['ndcg_k'])} | MA{args.period}: {rfmt(latest.get('ndcg_ma'))} | STD{args.period}: {rfmt(latest.get('ndcg_std'))}\n"
+            f"- nDCG: {rfmt(latest['ndcg_k'])} | MA{args.period}: {rfmt(latest.get('ndcg_ma'))} | STD{args.period}: {rfmt(latest.get('ndcg_std'))}\n"  # noqa: E501
         )
         f.write(
-            f"- MRR: {rfmt(latest['mrr'])} | MA{args.period}: {rfmt(latest.get('mrr_ma'))} | STD{args.period}: {rfmt(latest.get('mrr_std'))}\n"
+            f"- MRR: {rfmt(latest['mrr'])} | MA{args.period}: {rfmt(latest.get('mrr_ma'))} | STD{args.period}: {rfmt(latest.get('mrr_std'))}\n"  # noqa: E501
         )
-        f.write(
-            f"- DoD Δ (nDCG/MRR): {rfmt(latest.get('ndcg_dod'))} / {rfmt(latest.get('mrr_dod'))}\n"
-        )
-        f.write(
-            f"- WoW Δ (nDCG/MRR): {rfmt(latest.get('ndcg_wow'))} / {rfmt(latest.get('mrr_wow'))}\n"
-        )
+        f.write(f"- DoD Δ (nDCG/MRR): {rfmt(latest.get('ndcg_dod'))} / {rfmt(latest.get('mrr_dod'))}\n")
+        f.write(f"- WoW Δ (nDCG/MRR): {rfmt(latest.get('ndcg_wow'))} / {rfmt(latest.get('mrr_wow'))}\n")
         f.write("\n## Last days\n\n")
         f.write("| date | nDCG | MRR | recall | nDCG_MA | nDCG_STD |\n")
         f.write("|---|---:|---:|---:|---:|---:|\n")
         for r in recent:
             f.write(
-                f"| {r['date']} | {rfmt(r['ndcg_k'])} | {rfmt(r['mrr'])} | {rfmt(r['recall_k'])} | {rfmt(r.get('ndcg_ma'))} | {rfmt(r.get('ndcg_std'))} |\n"
+                f"| {r['date']} | {rfmt(r['ndcg_k'])} | {rfmt(r['mrr'])} | {rfmt(r['recall_k'])} | {rfmt(r.get('ndcg_ma'))} | {rfmt(r.get('ndcg_std'))} |\n"  # noqa: E501
             )
 
     print(f"✓ CSV: {csv_path}")

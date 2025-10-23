@@ -12,14 +12,11 @@ DuRi 동적 추론 그래프 시스템 - Phase 1-3 Week 3 Day 1
 """
 
 import asyncio
-import json
 import logging
-import re
-from collections import defaultdict
-from dataclasses import asdict, dataclass, field
+from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional
 
 import numpy as np
 
@@ -169,9 +166,7 @@ class SemanticVectorEngine:
         vector2 = self.encode_semantics(text2)
 
         # 코사인 유사도 계산
-        similarity = np.dot(vector1, vector2) / (
-            np.linalg.norm(vector1) * np.linalg.norm(vector2) + 1e-8
-        )
+        similarity = np.dot(vector1, vector2) / (np.linalg.norm(vector1) * np.linalg.norm(vector2) + 1e-8)
 
         # 캐시에 저장
         if len(self.similarity_cache) < self.max_cache_size:
@@ -327,9 +322,7 @@ class DynamicEdgeGenerator:
             EdgeType.EVIDENCES: f"{source_node.content}이 {target_node.content}의 증거가 됨",
         }
 
-        return reasoning_templates.get(
-            edge_type, f"{source_node.content}과 {target_node.content} 간의 관계"
-        )
+        return reasoning_templates.get(edge_type, f"{source_node.content}과 {target_node.content} 간의 관계")
 
 
 class DynamicReasoningGraphBuilder:
@@ -357,41 +350,27 @@ class DynamicReasoningGraphBuilder:
         graph = DynamicReasoningGraph(graph_id=graph_id)
 
         # 1. 동적 상황 노드 생성
-        situation_nodes = await self._create_dynamic_situation_nodes(
-            situation, semantic_context
-        )
+        situation_nodes = await self._create_dynamic_situation_nodes(situation, semantic_context)
         graph.nodes.update(situation_nodes)
         graph.root_nodes.extend(situation_nodes.keys())
 
         # 2. 동적 철학적 노드 생성
-        philosophical_nodes = await self._create_dynamic_philosophical_nodes(
-            philosophical_arguments
-        )
+        philosophical_nodes = await self._create_dynamic_philosophical_nodes(philosophical_arguments)
         graph.nodes.update(philosophical_nodes)
 
         # 3. 동적 추론 엣지 생성
-        reasoning_edges = await self._create_dynamic_reasoning_edges(
-            graph.nodes, situation, philosophical_arguments
-        )
+        reasoning_edges = await self._create_dynamic_reasoning_edges(graph.nodes, situation, philosophical_arguments)
         graph.edges.update(reasoning_edges)
 
         # 4. 동적 결론 노드 생성
-        conclusion_nodes = await self._create_dynamic_conclusion_nodes(
-            graph.nodes, graph.edges
-        )
+        conclusion_nodes = await self._create_dynamic_conclusion_nodes(graph.nodes, graph.edges)
         graph.nodes.update(conclusion_nodes)
         graph.leaf_nodes.extend(conclusion_nodes.keys())
 
         # 5. 그래프 메트릭 계산
-        graph.confidence_score = self._calculate_dynamic_graph_confidence(
-            graph.nodes, graph.edges
-        )
-        graph.complexity_score = self._calculate_dynamic_graph_complexity(
-            graph.nodes, graph.edges
-        )
-        graph.coherence_score = self._calculate_dynamic_graph_coherence(
-            graph.nodes, graph.edges
-        )
+        graph.confidence_score = self._calculate_dynamic_graph_confidence(graph.nodes, graph.edges)
+        graph.complexity_score = self._calculate_dynamic_graph_complexity(graph.nodes, graph.edges)
+        graph.coherence_score = self._calculate_dynamic_graph_coherence(graph.nodes, graph.edges)
 
         # 6. 진화 히스토리 기록
         graph.evolution_history.append(
@@ -403,9 +382,7 @@ class DynamicReasoningGraphBuilder:
             }
         )
 
-        logger.info(
-            f"동적 추론 그래프 구축 완료: {len(graph.nodes)} 노드, {len(graph.edges)} 엣지"
-        )
+        logger.info(f"동적 추론 그래프 구축 완료: {len(graph.nodes)} 노드, {len(graph.edges)} 엣지")
         return graph
 
     async def _create_dynamic_situation_nodes(
@@ -425,9 +402,7 @@ class DynamicReasoningGraphBuilder:
         # 의도 노드
         intent = semantic_context.get("intent", "unknown")
         intent_content = f"의도: {intent}"
-        intent_node = self.node_generator.generate_dynamic_node(
-            intent_content, NodeType.PREMISE, {"intent": intent}
-        )
+        intent_node = self.node_generator.generate_dynamic_node(intent_content, NodeType.PREMISE, {"intent": intent})
         nodes[intent_node.node_id] = intent_node
 
         # 가치 충돌 노드들
@@ -450,9 +425,7 @@ class DynamicReasoningGraphBuilder:
         # 칸트적 분석 노드
         if "kantian" in philosophical_arguments:
             kantian = philosophical_arguments["kantian"]
-            kantian_content = (
-                f"칸트적 분석: {kantian.get('final_conclusion', '분석 없음')}"
-            )
+            kantian_content = f"칸트적 분석: {kantian.get('final_conclusion', '분석 없음')}"
             kantian_node = self.node_generator.generate_dynamic_node(
                 kantian_content, NodeType.INFERENCE, {"reasoning_type": "kantian"}
             )
@@ -461,9 +434,7 @@ class DynamicReasoningGraphBuilder:
         # 공리주의 분석 노드
         if "utilitarian" in philosophical_arguments:
             utilitarian = philosophical_arguments["utilitarian"]
-            utilitarian_content = (
-                f"공리주의 분석: {utilitarian.get('final_conclusion', '분석 없음')}"
-            )
+            utilitarian_content = f"공리주의 분석: {utilitarian.get('final_conclusion', '분석 없음')}"
             utilitarian_node = self.node_generator.generate_dynamic_node(
                 utilitarian_content,
                 NodeType.INFERENCE,
@@ -474,9 +445,7 @@ class DynamicReasoningGraphBuilder:
         # 통합 분석 노드
         if "integrated" in philosophical_arguments:
             integrated = philosophical_arguments["integrated"]
-            integrated_content = (
-                f"통합 분석: {integrated.get('recommendation', '분석 없음')}"
-            )
+            integrated_content = f"통합 분석: {integrated.get('recommendation', '분석 없음')}"
             integrated_node = self.node_generator.generate_dynamic_node(
                 integrated_content,
                 NodeType.INTEGRATION,
@@ -497,11 +466,7 @@ class DynamicReasoningGraphBuilder:
 
         # 상황 분석 → 철학적 분석 연결
         situation_nodes = [n for n in nodes.values() if n.node_type == NodeType.PREMISE]
-        philosophical_nodes = [
-            n
-            for n in nodes.values()
-            if n.node_type in [NodeType.INFERENCE, NodeType.INTEGRATION]
-        ]
+        philosophical_nodes = [n for n in nodes.values() if n.node_type in [NodeType.INFERENCE, NodeType.INTEGRATION]]
 
         for situation_node in situation_nodes:
             for philosophical_node in philosophical_nodes:
@@ -520,17 +485,11 @@ class DynamicReasoningGraphBuilder:
         if len(philosophical_nodes) > 1:
             for i, node1 in enumerate(philosophical_nodes):
                 for node2 in philosophical_nodes[i + 1 :]:
-                    similarity = self.semantic_engine.calculate_semantic_similarity(
-                        node1.content, node2.content
-                    )
+                    similarity = self.semantic_engine.calculate_semantic_similarity(node1.content, node2.content)
 
                     if similarity > 0.2:
-                        edge_type = (
-                            EdgeType.INFERS if similarity > 0.5 else EdgeType.INTEGRATES
-                        )
-                        edge = self.edge_generator.generate_dynamic_edge(
-                            node1, node2, edge_type
-                        )
+                        edge_type = EdgeType.INFERS if similarity > 0.5 else EdgeType.INTEGRATES
+                        edge = self.edge_generator.generate_dynamic_edge(node1, node2, edge_type)
                         edges[edge.edge_id] = edge
 
         return edges
@@ -581,9 +540,7 @@ class DynamicReasoningGraphBuilder:
             weighted_confidence += node.confidence * weight
             total_weight += weight
 
-        avg_node_confidence = (
-            weighted_confidence / total_weight if total_weight > 0 else 0.0
-        )
+        avg_node_confidence = weighted_confidence / total_weight if total_weight > 0 else 0.0
 
         # 엣지 강도의 평균
         if edges:
@@ -628,15 +585,11 @@ class DynamicReasoningGraphBuilder:
             node_list = list(nodes.values())
             for i, node1 in enumerate(node_list):
                 for node2 in node_list[i + 1 :]:
-                    distance = 1.0 - self.semantic_engine.calculate_semantic_similarity(
-                        node1.content, node2.content
-                    )
+                    distance = 1.0 - self.semantic_engine.calculate_semantic_similarity(node1.content, node2.content)
                     semantic_distances.append(distance)
 
             if semantic_distances:
-                avg_semantic_distance = sum(semantic_distances) / len(
-                    semantic_distances
-                )
+                avg_semantic_distance = sum(semantic_distances) / len(semantic_distances)
                 complexity += avg_semantic_distance * 0.1
 
         return min(complexity, 1.0)
@@ -661,18 +614,12 @@ class DynamicReasoningGraphBuilder:
             target_node = nodes.get(edge.target_node)
 
             if source_node and target_node:
-                semantic_similarity = (
-                    self.semantic_engine.calculate_semantic_similarity(
-                        source_node.content, target_node.content
-                    )
+                semantic_similarity = self.semantic_engine.calculate_semantic_similarity(
+                    source_node.content, target_node.content
                 )
                 semantic_coherences.append(semantic_similarity)
 
-        avg_semantic_coherence = (
-            sum(semantic_coherences) / len(semantic_coherences)
-            if semantic_coherences
-            else 0.0
-        )
+        avg_semantic_coherence = sum(semantic_coherences) / len(semantic_coherences) if semantic_coherences else 0.0
 
         # 종합 일관성 (엣지 유효성 60%, 의미적 일관성 40%)
         overall_coherence = avg_edge_validity * 0.6 + avg_semantic_coherence * 0.4
@@ -707,9 +654,7 @@ class DynamicReasoningGraphAnalyzer:
         quality_assessment = self._assess_dynamic_reasoning_quality(reasoning_graph)
 
         # 4. 불일치 탐지 및 해결
-        inconsistency_analysis = self._detect_and_resolve_inconsistencies(
-            reasoning_graph
-        )
+        inconsistency_analysis = self._detect_and_resolve_inconsistencies(reasoning_graph)
 
         return {
             "reasoning_graph": reasoning_graph,
@@ -718,9 +663,7 @@ class DynamicReasoningGraphAnalyzer:
             "inconsistency_analysis": inconsistency_analysis,
         }
 
-    def _analyze_dynamic_graph_structure(
-        self, graph: DynamicReasoningGraph
-    ) -> Dict[str, Any]:
+    def _analyze_dynamic_graph_structure(self, graph: DynamicReasoningGraph) -> Dict[str, Any]:
         """동적 그래프 구조 분석"""
         analysis = {
             "node_count": len(graph.nodes),
@@ -736,40 +679,28 @@ class DynamicReasoningGraphAnalyzer:
         # 노드 유형 분포
         for node in graph.nodes.values():
             node_type = node.node_type.value
-            analysis["node_types"][node_type] = (
-                analysis["node_types"].get(node_type, 0) + 1
-            )
+            analysis["node_types"][node_type] = analysis["node_types"].get(node_type, 0) + 1
 
         # 엣지 유형 분포
         for edge in graph.edges.values():
             edge_type = edge.edge_type.value
-            analysis["edge_types"][edge_type] = (
-                analysis["edge_types"].get(edge_type, 0) + 1
-            )
+            analysis["edge_types"][edge_type] = analysis["edge_types"].get(edge_type, 0) + 1
 
         # 연결성 계산
         if len(graph.nodes) > 1:
-            analysis["connectivity"] = len(graph.edges) / (
-                len(graph.nodes) * (len(graph.nodes) - 1)
-            )
+            analysis["connectivity"] = len(graph.edges) / (len(graph.nodes) * (len(graph.nodes) - 1))
 
         # 깊이 계산 (간단한 추정)
         analysis["depth"] = min(len(graph.nodes) // 3, 5)
 
         # 의미적 일관성 계산
         if graph.edges:
-            semantic_similarities = [
-                edge.semantic_similarity for edge in graph.edges.values()
-            ]
-            analysis["semantic_coherence"] = sum(semantic_similarities) / len(
-                semantic_similarities
-            )
+            semantic_similarities = [edge.semantic_similarity for edge in graph.edges.values()]
+            analysis["semantic_coherence"] = sum(semantic_similarities) / len(semantic_similarities)
 
         return analysis
 
-    def _assess_dynamic_reasoning_quality(
-        self, graph: DynamicReasoningGraph
-    ) -> Dict[str, Any]:
+    def _assess_dynamic_reasoning_quality(self, graph: DynamicReasoningGraph) -> Dict[str, Any]:
         """동적 추론 품질 평가"""
         quality = {
             "overall_quality": 0.0,
@@ -818,9 +749,7 @@ class DynamicReasoningGraphAnalyzer:
 
         return quality
 
-    def _detect_and_resolve_inconsistencies(
-        self, graph: DynamicReasoningGraph
-    ) -> Dict[str, Any]:
+    def _detect_and_resolve_inconsistencies(self, graph: DynamicReasoningGraph) -> Dict[str, Any]:
         """불일치 탐지 및 해결"""
         inconsistencies = {
             "detected_inconsistencies": [],
@@ -838,14 +767,8 @@ class DynamicReasoningGraphAnalyzer:
         contradictory_nodes = []
         for i, node1 in enumerate(list(graph.nodes.values())):
             for node2 in list(graph.nodes.values())[i + 1 :]:
-                similarity = self.semantic_engine.calculate_semantic_similarity(
-                    node1.content, node2.content
-                )
-                if (
-                    similarity > 0.8
-                    and node1.confidence > 0.7
-                    and node2.confidence > 0.7
-                ):
+                similarity = self.semantic_engine.calculate_semantic_similarity(node1.content, node2.content)
+                if similarity > 0.8 and node1.confidence > 0.7 and node2.confidence > 0.7:
                     # 높은 유사도와 신뢰도를 가진 노드들이 모순될 가능성
                     contradictory_nodes.append((node1, node2))
 
@@ -856,8 +779,7 @@ class DynamicReasoningGraphAnalyzer:
         inconsistencies.update(
             {
                 "detected_inconsistencies": [
-                    {"type": "contradiction_edge", "edge_id": edge.edge_id}
-                    for edge in contradiction_edges
+                    {"type": "contradiction_edge", "edge_id": edge.edge_id} for edge in contradiction_edges
                 ]
                 + [
                     {
@@ -914,7 +836,7 @@ async def test_dynamic_reasoning_graph_system():
     quality_assessment = analysis_result["quality_assessment"]
     inconsistency_analysis = analysis_result["inconsistency_analysis"]
 
-    print(f"\n📊 동적 추론 그래프 분석:")
+    print("\n📊 동적 추론 그래프 분석:")
     print(f"  • 노드 수: {graph_analysis['node_count']}")
     print(f"  • 엣지 수: {graph_analysis['edge_count']}")
     print(f"  • 노드 유형: {graph_analysis['node_types']}")
@@ -924,7 +846,7 @@ async def test_dynamic_reasoning_graph_system():
     print(f"  • 의미적 일관성: {graph_analysis['semantic_coherence']:.2f}")
     print(f"  • 진화 단계: {graph_analysis['evolution_steps']}")
 
-    print(f"\n🎯 동적 추론 품질 평가:")
+    print("\n🎯 동적 추론 품질 평가:")
     print(f"  • 종합 품질: {quality_assessment['overall_quality']:.2f}")
     print(f"  • 논리적 일관성: {quality_assessment['logical_consistency']:.2f}")
     print(f"  • 완전성: {quality_assessment['completeness']:.2f}")
@@ -933,22 +855,18 @@ async def test_dynamic_reasoning_graph_system():
     print(f"  • 일관성: {quality_assessment['coherence']:.2f}")
     print(f"  • 동적성: {quality_assessment['dynamism']:.2f}")
 
-    print(f"\n🔍 불일치 분석:")
+    print("\n🔍 불일치 분석:")
     print(f"  • 불일치 점수: {inconsistency_analysis['inconsistency_score']:.2f}")
-    print(
-        f"  • 탐지된 불일치: {len(inconsistency_analysis['detected_inconsistencies'])}"
-    )
+    print(f"  • 탐지된 불일치: {len(inconsistency_analysis['detected_inconsistencies'])}")
 
-    print(f"\n🔍 동적 추론 노드 상세:")
+    print("\n🔍 동적 추론 노드 상세:")
     for node_id, node in reasoning_graph.nodes.items():
-        print(
-            f"  • {node_id}: {node.content} (신뢰도: {node.confidence:.2f}, 중요도: {node.importance_score:.2f})"
-        )
+        print(f"  • {node_id}: {node.content} (신뢰도: {node.confidence:.2f}, 중요도: {node.importance_score:.2f})")
 
-    print(f"\n🔗 동적 추론 엣지 상세:")
+    print("\n🔗 동적 추론 엣지 상세:")
     for edge_id, edge in reasoning_graph.edges.items():
         print(
-            f"  • {edge_id}: {edge.source_node} → {edge.target_node} (강도: {edge.strength:.2f}, 유사도: {edge.semantic_similarity:.2f})"
+            f"  • {edge_id}: {edge.source_node} → {edge.target_node} (강도: {edge.strength:.2f}, 유사도: {edge.semantic_similarity:.2f})"  # noqa: E501
         )
 
     print(f"\n{'='*70}")

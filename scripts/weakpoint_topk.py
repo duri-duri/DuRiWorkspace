@@ -7,9 +7,8 @@
 import json
 import pathlib
 import subprocess
-import sys
 from collections import Counter, defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Any, Dict, List, Tuple
 
 
@@ -98,9 +97,7 @@ def calculate_weakpoint_scores(error_counts: Dict[str, int]) -> List[Tuple[str, 
     return sorted(weakpoint_scores, key=lambda x: x[1], reverse=True)
 
 
-def generate_weakpoint_report(
-    error_counts: Dict[str, int], top_k: int = 10
-) -> Dict[str, Any]:
+def generate_weakpoint_report(error_counts: Dict[str, int], top_k: int = 10) -> Dict[str, Any]:
     """약점 보고서 생성"""
     weakpoint_scores = calculate_weakpoint_scores(error_counts)
 
@@ -126,9 +123,7 @@ def generate_weakpoint_report(
                 "error_code": error_code,
                 "frequency": error_counts.get(error_code, 0),
                 "score": score,
-                "category": (
-                    error_code.split("-")[1] if "-" in error_code else "UNKNOWN"
-                ),
+                "category": (error_code.split("-")[1] if "-" in error_code else "UNKNOWN"),
             }
             for error_code, score in top_weakpoints
         ],
@@ -166,9 +161,7 @@ def save_weakpoint_report(report: Dict[str, Any], output_dir: pathlib.Path):
     output_dir.mkdir(exist_ok=True)
 
     # JSON 보고서 저장
-    report_file = (
-        output_dir / f"weakpoint_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-    )
+    report_file = output_dir / f"weakpoint_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
     report_file.write_text(json.dumps(report, indent=2, ensure_ascii=False))
 
     # 요약 텍스트 보고서 저장
@@ -183,9 +176,7 @@ def save_weakpoint_report(report: Dict[str, Any], output_dir: pathlib.Path):
         f.write("Top Weakpoints:\n")
         f.write("-" * 20 + "\n")
         for i, wp in enumerate(report["top_weakpoints"], 1):
-            f.write(
-                f"{i}. {wp['error_code']} (freq: {wp['frequency']}, score: {wp['score']:.1f})\n"
-            )
+            f.write(f"{i}. {wp['error_code']} (freq: {wp['frequency']}, score: {wp['score']:.1f})\n")
 
         f.write("\nRecommendations:\n")
         f.write("-" * 20 + "\n")
@@ -241,9 +232,7 @@ def main():
     print(f"  Unique Types: {report['unique_error_types']}")
     print("\nTop 5 Weakpoints:")
     for i, wp in enumerate(report["top_weakpoints"][:5], 1):
-        print(
-            f"  {i}. {wp['error_code']} (freq: {wp['frequency']}, score: {wp['score']:.1f})"
-        )
+        print(f"  {i}. {wp['error_code']} (freq: {wp['frequency']}, score: {wp['score']:.1f})")
 
     print("\nRecommendations:")
     for rec in report["recommendations"]:

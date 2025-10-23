@@ -84,12 +84,10 @@ def evaluate(results: Dict[str, Any], policy: Dict[str, Any]) -> Tuple[bool, Lis
         thr = as_decimal(policy["mes"].get("value"))
         op = policy["mes"].get("op", "ge")
         if delta_val is None or thr is None or op not in OPS:
-            checks.append((False, f"mes invalid"))
+            checks.append((False, "mes invalid"))
         else:
             ok = OPS[op](abs(delta_val), thr)
-            checks.append(
-                (ok, "mes ok" if ok else f"mes fail: |{delta_val}| !{op} {thr}")
-            )
+            checks.append((ok, "mes ok" if ok else f"mes fail: |{delta_val}| !{op} {thr}"))
 
     # CI 폭(ci_high - ci_low)
     if "ci_width" in policy:

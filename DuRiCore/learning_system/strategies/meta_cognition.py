@@ -11,16 +11,12 @@ DuRiCore Phase 2-3: 메타 인식 학습 전략 (Meta-Cognition Learning Strateg
 """
 
 import asyncio
-import json
 import logging
 import time
-from collections import defaultdict
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
-
-import numpy as np
+from typing import Any, Dict, List, Optional
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -151,9 +147,7 @@ class MetaCognitionStrategy:
 
         logger.info("메타 인식 학습 전략 초기화 완료")
 
-    async def think_with_meta_cognition(
-        self, context: Dict[str, Any]
-    ) -> MetaCognitionResult:
+    async def think_with_meta_cognition(self, context: Dict[str, Any]) -> MetaCognitionResult:
         """메타 인식을 통한 사고"""
         process_id = f"meta_cognition_process_{int(time.time())}"
         start_time = datetime.now()
@@ -163,14 +157,10 @@ class MetaCognitionStrategy:
             thinking_processes = await self._monitor_thinking_processes(context)
 
             # 2. 자기 성찰 수행
-            self_reflections = await self._perform_self_reflection(
-                context, thinking_processes
-            )
+            self_reflections = await self._perform_self_reflection(context, thinking_processes)
 
             # 3. 사고 품질 평가
-            quality_assessments = await self._assess_thinking_quality(
-                thinking_processes
-            )
+            quality_assessments = await self._assess_thinking_quality(thinking_processes)
 
             # 4. 메타 인식 통찰 발견
             insights_discovered = await self._discover_meta_cognition_insights(
@@ -190,9 +180,7 @@ class MetaCognitionStrategy:
                 thinking_duration,
             )
 
-            logger.info(
-                f"메타 인식 사고 완료: {process_id} (지속시간: {thinking_duration:.2f}초)"
-            )
+            logger.info(f"메타 인식 사고 완료: {process_id} (지속시간: {thinking_duration:.2f}초)")
             return result
 
         except Exception as e:
@@ -210,9 +198,7 @@ class MetaCognitionStrategy:
                 error_message=str(e),
             )
 
-    async def _monitor_thinking_processes(
-        self, context: Dict[str, Any]
-    ) -> List[ThinkingProcess]:
+    async def _monitor_thinking_processes(self, context: Dict[str, Any]) -> List[ThinkingProcess]:
         """사고 과정 모니터링"""
         processes = []
 
@@ -248,9 +234,7 @@ class MetaCognitionStrategy:
 
         # 다양한 성찰 유형 수행
         for reflection_type in ReflectionType:
-            reflection = await self._create_reflection(
-                reflection_type, context, thinking_processes
-            )
+            reflection = await self._create_reflection(reflection_type, context, thinking_processes)
             reflections.append(reflection)
 
         self.self_reflections.extend(reflections)
@@ -309,9 +293,7 @@ class MetaCognitionStrategy:
         logger.info(f"사고 품질 평가 {len(assessments)}개 완료")
         return assessments
 
-    async def _create_quality_assessment(
-        self, process: ThinkingProcess
-    ) -> ThinkingQualityAssessment:
+    async def _create_quality_assessment(self, process: ThinkingProcess) -> ThinkingQualityAssessment:
         """품질 평가 생성"""
         assessment_id = f"assessment_{int(time.time())}_{process.process_id}"
 
@@ -322,13 +304,7 @@ class MetaCognitionStrategy:
         efficiency_score = 0.85
         depth_score = 0.8
 
-        overall_quality_score = (
-            clarity_score
-            + logic_score
-            + creativity_score
-            + efficiency_score
-            + depth_score
-        ) / 5.0
+        overall_quality_score = (clarity_score + logic_score + creativity_score + efficiency_score + depth_score) / 5.0
 
         if overall_quality_score >= 0.8:
             overall_quality = ThinkingQuality.EXCELLENT
@@ -364,21 +340,15 @@ class MetaCognitionStrategy:
         insights = []
 
         # 사고 과정에서 통찰 추출
-        process_insights = await self._extract_insights_from_processes(
-            thinking_processes
-        )
+        process_insights = await self._extract_insights_from_processes(thinking_processes)
         insights.extend(process_insights)
 
         # 성찰에서 통찰 추출
-        reflection_insights = await self._extract_insights_from_reflections(
-            self_reflections
-        )
+        reflection_insights = await self._extract_insights_from_reflections(self_reflections)
         insights.extend(reflection_insights)
 
         # 평가에서 통찰 추출
-        assessment_insights = await self._extract_insights_from_assessments(
-            quality_assessments
-        )
+        assessment_insights = await self._extract_insights_from_assessments(quality_assessments)
         insights.extend(assessment_insights)
 
         # 종합적 메타 통찰 생성
@@ -438,7 +408,7 @@ class MetaCognitionStrategy:
         for assessment in quality_assessments:
             insight = MetaCognitionInsight(
                 insight_id=f"insight_{int(time.time())}_assessment_{assessment.assessment_id}",
-                insight=f"사고 품질 평가를 통해 개선 영역을 식별했습니다.",
+                insight="사고 품질 평가를 통해 개선 영역을 식별했습니다.",
                 meta_cognition_level=MetaCognitionLevel.ADVANCED,
                 applicability=0.85,
                 novelty_score=0.5,
@@ -481,16 +451,12 @@ class MetaCognitionStrategy:
     ) -> MetaCognitionResult:
         """메타 인식 결과 컴파일"""
         # 평균 메타 인식 수준 계산
-        average_meta_cognition_level = (
-            await self._calculate_average_meta_cognition_level(
-                thinking_processes, self_reflections, insights_discovered
-            )
+        average_meta_cognition_level = await self._calculate_average_meta_cognition_level(
+            thinking_processes, self_reflections, insights_discovered
         )
 
         # 전체 사고 품질 계산
-        overall_thinking_quality = await self._calculate_overall_thinking_quality(
-            quality_assessments
-        )
+        overall_thinking_quality = await self._calculate_overall_thinking_quality(quality_assessments)
 
         result = MetaCognitionResult(
             process_id=process_id,
@@ -517,36 +483,22 @@ class MetaCognitionStrategy:
 
         # 사고 과정의 메타 인식 수준
         for process in thinking_processes:
-            all_levels.append(
-                self._convert_meta_cognition_level_to_float(
-                    process.meta_cognition_level
-                )
-            )
+            all_levels.append(self._convert_meta_cognition_level_to_float(process.meta_cognition_level))
 
         # 성찰의 메타 인식 수준
         for reflection in self_reflections:
-            all_levels.append(
-                self._convert_meta_cognition_level_to_float(
-                    reflection.meta_cognition_level
-                )
-            )
+            all_levels.append(self._convert_meta_cognition_level_to_float(reflection.meta_cognition_level))
 
         # 통찰의 메타 인식 수준
         for insight in meta_insights:
-            all_levels.append(
-                self._convert_meta_cognition_level_to_float(
-                    insight.meta_cognition_level
-                )
-            )
+            all_levels.append(self._convert_meta_cognition_level_to_float(insight.meta_cognition_level))
 
         if all_levels:
             return sum(all_levels) / len(all_levels)
         else:
             return 0.0
 
-    def _convert_meta_cognition_level_to_float(
-        self, meta_cognition_level: MetaCognitionLevel
-    ) -> float:
+    def _convert_meta_cognition_level_to_float(self, meta_cognition_level: MetaCognitionLevel) -> float:
         """메타 인식 수준을 float로 변환"""
         level_map = {
             MetaCognitionLevel.BASIC: 0.25,
@@ -556,25 +508,19 @@ class MetaCognitionStrategy:
         }
         return level_map.get(meta_cognition_level, 0.5)
 
-    async def _calculate_overall_thinking_quality(
-        self, quality_assessments: List[ThinkingQualityAssessment]
-    ) -> float:
+    async def _calculate_overall_thinking_quality(self, quality_assessments: List[ThinkingQualityAssessment]) -> float:
         """전체 사고 품질 계산"""
         if not quality_assessments:
             return 0.0
 
         quality_scores = []
         for assessment in quality_assessments:
-            quality_score = self._convert_thinking_quality_to_float(
-                assessment.overall_quality
-            )
+            quality_score = self._convert_thinking_quality_to_float(assessment.overall_quality)
             quality_scores.append(quality_score)
 
         return sum(quality_scores) / len(quality_scores)
 
-    def _convert_thinking_quality_to_float(
-        self, thinking_quality: ThinkingQuality
-    ) -> float:
+    def _convert_thinking_quality_to_float(self, thinking_quality: ThinkingQuality) -> float:
         """사고 품질을 float로 변환"""
         quality_map = {
             ThinkingQuality.POOR: 0.25,
@@ -601,9 +547,7 @@ class MetaCognitionStrategy:
         )
 
         # 평균 사고 품질
-        avg_thinking_quality = await self._calculate_overall_thinking_quality(
-            self.quality_assessments
-        )
+        avg_thinking_quality = await self._calculate_overall_thinking_quality(self.quality_assessments)
 
         return {
             "total_thinking_processes": total_processes,

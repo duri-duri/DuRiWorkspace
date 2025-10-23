@@ -63,7 +63,7 @@ if not has_signal:
     sys.exit(0)
 
 # 점수 계산 및 tie-break: 기존 rank(또는 인덱스) 보존
-for d, sc in zip(items, scores):
+for d, sc in zip(items, scores):  # noqa: B905
     d["combined_score"] = float(sc if sc is not None else 0.0)
 for idx, d in enumerate(items):
     d.setdefault("rank", idx)

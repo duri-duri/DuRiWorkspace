@@ -15,36 +15,29 @@ DuRi 30일 진화 계획 - Day 7: 창의적 문제 해결 시스템
 """
 
 import asyncio
-import json
 import logging
 import random
 import time
-from collections import defaultdict, deque
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
-
-import numpy as np
+from typing import Any, Dict, List, Optional, Tuple
 
 # 기존 시스템들 import
 try:
-    from creative_thinking_system import (CreativeIdea, CreativeThinkingSystem,
-                                          CreativityLevel)
+    from creative_thinking_system import CreativeIdea, CreativeThinkingSystem, CreativityLevel  # noqa: F401
     from duri_thought_flow import DuRiThoughtFlow
     from emotional_thinking_system import EmotionalThinkingSystem
     from inner_thinking_system import InnerThinkingSystem
     from intuitive_thinking_system import IntuitiveThinkingSystem
-    from meta_cognition_system import MetaCognitionLevel, MetaCognitionSystem
+    from meta_cognition_system import MetaCognitionLevel, MetaCognitionSystem  # noqa: F401
     from phase_omega_integration import DuRiPhaseOmega
     from self_directed_learning_system import SelfDirectedLearningSystem
 except ImportError as e:
     logging.warning(f"일부 기존 시스템 import 실패: {e}")
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -138,9 +131,7 @@ class CreativeSolution:
     @property
     def overall_score(self) -> float:
         """전체 점수"""
-        return (
-            self.innovation_score + self.feasibility_score + self.impact_score
-        ) / 3.0
+        return (self.innovation_score + self.feasibility_score + self.impact_score) / 3.0
 
 
 @dataclass
@@ -245,9 +236,7 @@ class CreativeProblemSolvingSystem:
             problem_reframes = await self._reframe_problem(problem, context)
 
             # 3. 혁신적 해결책 생성
-            solutions = await self._generate_innovative_solutions(
-                problem, problem_reframes, context
-            )
+            solutions = await self._generate_innovative_solutions(problem, problem_reframes, context)
 
             # 4. 창의적 검증 및 평가
             validations = await self._validate_creative_solutions(solutions, context)
@@ -341,9 +330,7 @@ class CreativeProblemSolvingSystem:
         logger.info(f"창의적 패턴 {len(patterns)}개 인식 완료")
         return patterns
 
-    async def _reframe_problem(
-        self, problem: CreativeProblem, context: Dict[str, Any]
-    ) -> List[ProblemReframe]:
+    async def _reframe_problem(self, problem: CreativeProblem, context: Dict[str, Any]) -> List[ProblemReframe]:
         """문제 재정의 및 프레이밍"""
         reframes = []
 
@@ -357,9 +344,7 @@ class CreativeProblemSolvingSystem:
 
         for approach in reframe_approaches:
             # 접근법별 문제 재정의
-            reframed_title, reframed_description = await self._apply_reframe_approach(
-                problem, approach, context
-            )
+            reframed_title, reframed_description = await self._apply_reframe_approach(problem, approach, context)
 
             # 재정의 품질 평가
             novelty_score = random.uniform(0.5, 0.9)
@@ -390,11 +375,11 @@ class CreativeProblemSolvingSystem:
         reframe_templates = {
             CreativeApproach.DIVERGENT_THINKING: {
                 "title": f"{problem.title}의 다양한 관점에서 접근",
-                "description": f"{problem.description}을 여러 가지 다른 관점에서 바라보고, 다양한 가능성을 탐구하는 방식으로 재정의",
+                "description": f"{problem.description}을 여러 가지 다른 관점에서 바라보고, 다양한 가능성을 탐구하는 방식으로 재정의",  # noqa: E501
             },
             CreativeApproach.LATERAL_THINKING: {
                 "title": f"{problem.title}의 측면적 접근",
-                "description": f"{problem.description}을 기존의 직선적 사고를 넘어서 측면적이고 창의적인 관점에서 재정의",
+                "description": f"{problem.description}을 기존의 직선적 사고를 넘어서 측면적이고 창의적인 관점에서 재정의",  # noqa: E501
             },
             CreativeApproach.ANALOGICAL_THINKING: {
                 "title": f"{problem.title}의 유추적 접근",
@@ -427,15 +412,11 @@ class CreativeProblemSolvingSystem:
 
         # 각 문제 재정의에 대한 해결책 생성
         for reframe in problem_reframes:
-            reframe_solutions = await self._generate_solutions_for_reframe(
-                problem, reframe, context
-            )
+            reframe_solutions = await self._generate_solutions_for_reframe(problem, reframe, context)
             solutions.extend(reframe_solutions)
 
         # 추가적인 혁신적 해결책 생성
-        additional_solutions = await self._generate_additional_innovative_solutions(
-            problem, context
-        )
+        additional_solutions = await self._generate_additional_innovative_solutions(problem, context)
         solutions.extend(additional_solutions)
 
         logger.info(f"혁신적 해결책 {len(solutions)}개 생성 완료")
@@ -471,9 +452,7 @@ class CreativeProblemSolvingSystem:
             ],
         }
 
-        templates = solution_templates.get(
-            reframe.reframe_approach, [f"{reframe.reframed_title}의 창의적 해결책"]
-        )
+        templates = solution_templates.get(reframe.reframe_approach, [f"{reframe.reframed_title}의 창의적 해결책"])
 
         for i, template in enumerate(templates):
             # 해결책 품질 평가
@@ -586,12 +565,8 @@ class CreativeProblemSolvingSystem:
                 validation_score = await self._apply_validation_method(solution, method)
 
                 # 피드백 및 개선사항 생성
-                feedback = await self._generate_validation_feedback(
-                    solution, method, validation_score
-                )
-                improvements = await self._generate_improvement_suggestions(
-                    solution, method, validation_score
-                )
+                feedback = await self._generate_validation_feedback(solution, method, validation_score)
+                improvements = await self._generate_improvement_suggestions(solution, method, validation_score)
 
                 validation = CreativeValidation(
                     validation_id=f"validation_{solution.solution_id}_{method}_{int(time.time())}",
@@ -607,9 +582,7 @@ class CreativeProblemSolvingSystem:
         logger.info(f"창의적 검증 {len(validations)}개 완료")
         return validations
 
-    async def _apply_validation_method(
-        self, solution: CreativeSolution, method: str
-    ) -> float:
+    async def _apply_validation_method(self, solution: CreativeSolution, method: str) -> float:
         """특정 검증 방법 적용"""
         base_score = solution.overall_score
 
@@ -628,9 +601,7 @@ class CreativeProblemSolvingSystem:
         final_score = adjusted_score + random.uniform(-0.1, 0.1)
         return max(0.0, min(1.0, final_score))
 
-    async def _generate_validation_feedback(
-        self, solution: CreativeSolution, method: str, score: float
-    ) -> List[str]:
+    async def _generate_validation_feedback(self, solution: CreativeSolution, method: str, score: float) -> List[str]:
         """검증 피드백 생성"""
         feedback = []
 
@@ -684,24 +655,16 @@ class CreativeProblemSolvingSystem:
 
         # 평균 점수 계산
         if solutions:
-            average_innovation_score = sum(s.innovation_score for s in solutions) / len(
-                solutions
-            )
-            average_feasibility_score = sum(
-                s.feasibility_score for s in solutions
-            ) / len(solutions)
-            average_impact_score = sum(s.impact_score for s in solutions) / len(
-                solutions
-            )
+            average_innovation_score = sum(s.innovation_score for s in solutions) / len(solutions)
+            average_feasibility_score = sum(s.feasibility_score for s in solutions) / len(solutions)
+            average_impact_score = sum(s.impact_score for s in solutions) / len(solutions)
         else:
             average_innovation_score = 0.0
             average_feasibility_score = 0.0
             average_impact_score = 0.0
 
         # 전체 품질 결정
-        overall_score = (
-            average_innovation_score + average_feasibility_score + average_impact_score
-        ) / 3.0
+        overall_score = (average_innovation_score + average_feasibility_score + average_impact_score) / 3.0
         if overall_score >= 0.8:
             overall_quality = SolutionQuality.EXCELLENT
         elif overall_score >= 0.6:
@@ -749,15 +712,12 @@ class CreativeProblemSolvingSystem:
         # 통계 업데이트
         self.total_problems_solved += 1
         self.average_solving_time = (
-            self.average_solving_time * (self.total_problems_solved - 1)
-            + result.solving_duration
+            self.average_solving_time * (self.total_problems_solved - 1) + result.solving_duration
         ) / self.total_problems_solved
 
         # 성공률 계산
         successful_solutions = sum(
-            1
-            for s in result.solutions
-            if s.quality in [SolutionQuality.GOOD, SolutionQuality.EXCELLENT]
+            1 for s in result.solutions if s.quality in [SolutionQuality.GOOD, SolutionQuality.EXCELLENT]
         )
         if result.solutions:
             success_rate = successful_solutions / len(result.solutions)
@@ -783,10 +743,7 @@ class CreativeProblemSolvingSystem:
                 }
                 for s in self.solution_history[-5:]  # 최근 5개 해결책
             ],
-            "pattern_usage": {
-                pattern.pattern_name: pattern.frequency
-                for pattern in self.creative_patterns.values()
-            },
+            "pattern_usage": {pattern.pattern_name: pattern.frequency for pattern in self.creative_patterns.values()},
         }
 
 
@@ -801,7 +758,7 @@ async def test_creative_problem_solving_system():
     test_problem = CreativeProblem(
         problem_id="test_problem_001",
         title="지속가능한 도시 교통 시스템 설계",
-        description="기존의 자동차 중심 교통 시스템을 환경 친화적이고 효율적인 지속가능한 교통 시스템으로 전환하는 방안을 설계해야 합니다.",
+        description="기존의 자동차 중심 교통 시스템을 환경 친화적이고 효율적인 지속가능한 교통 시스템으로 전환하는 방안을 설계해야 합니다.",  # noqa: E501
         problem_type=ProblemType.SYSTEMIC,
         complexity=ProblemComplexity.COMPLEX,
         constraints=["예산 제한", "기존 인프라 활용", "시민 수용성"],
@@ -818,7 +775,7 @@ async def test_creative_problem_solving_system():
     result = await solving_system.solve_creative_problem(test_problem, context)
 
     # 결과 출력
-    print(f"\n=== 창의적 문제 해결 결과 ===")
+    print("\n=== 창의적 문제 해결 결과 ===")
     print(f"프로세스 ID: {result.process_id}")
     print(f"문제: {result.problem.title}")
     print(f"성공 여부: {result.success}")
@@ -831,9 +788,7 @@ async def test_creative_problem_solving_system():
 
     print(f"\n=== 창의적 해결책 ({len(result.solutions)}개) ===")
     for solution in result.solutions[:3]:  # 처음 3개만 출력
-        print(
-            f"- {solution.title} (품질: {solution.quality.value}, 점수: {solution.overall_score:.2f})"
-        )
+        print(f"- {solution.title} (품질: {solution.quality.value}, 점수: {solution.overall_score:.2f})")
 
     print(f"\n=== 창의적 패턴 ({len(result.patterns_used)}개) ===")
     for pattern in result.patterns_used:
@@ -843,14 +798,14 @@ async def test_creative_problem_solving_system():
     for validation in result.validations[:3]:  # 처음 3개만 출력
         print(f"- {validation.validation_method}: {validation.validation_score:.2f}")
 
-    print(f"\n=== 성과 지표 ===")
+    print("\n=== 성과 지표 ===")
     print(f"평균 혁신성 점수: {result.average_innovation_score:.3f}")
     print(f"평균 실행 가능성 점수: {result.average_feasibility_score:.3f}")
     print(f"평균 영향도 점수: {result.average_impact_score:.3f}")
 
     # 시스템 요약 정보
     summary = await solving_system.get_creative_problem_solving_summary()
-    print(f"\n=== 시스템 요약 ===")
+    print("\n=== 시스템 요약 ===")
     print(f"총 해결된 문제: {summary['total_problems_solved']}")
     print(f"평균 해결 시간: {summary['average_solving_time']}초")
     print(f"성공률: {summary['success_rate']}")

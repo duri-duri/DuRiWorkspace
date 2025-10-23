@@ -6,19 +6,11 @@ DuRi 추론 시스템 - 성공도 모니터링 모듈
 통합 성공도를 실시간으로 모니터링하는 모듈입니다.
 """
 
-import asyncio
-import hashlib
-import json
 import logging
-import re
 import time
-from collections import Counter, defaultdict
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
-
-import numpy as np
+from datetime import datetime
+from typing import Any, Dict, List
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -57,9 +49,7 @@ class SuccessMonitoringSystem:
         self.monitoring_history = []
         self.success_metrics = {}
 
-    async def monitor_integration_success(
-        self, integration_session: Dict[str, Any]
-    ) -> IntegrationSuccess:
+    async def monitor_integration_success(self, integration_session: Dict[str, Any]) -> IntegrationSuccess:
         """통합 성공도 모니터링"""
         success_id = f"success_{int(time.time())}"
         session_id = str(integration_session.get("session_id", "unknown"))
@@ -74,9 +64,7 @@ class SuccessMonitoringSystem:
         failure_factors = await self._analyze_failure_factors(integration_session)
 
         # 개선 제안 생성
-        improvement_suggestions = await self._generate_improvement_suggestions(
-            integration_session
-        )
+        improvement_suggestions = await self._generate_improvement_suggestions(integration_session)
 
         success = IntegrationSuccess(
             success_id=success_id,
@@ -90,9 +78,7 @@ class SuccessMonitoringSystem:
         self.monitoring_history.append(success)
         return success
 
-    async def _calculate_success_score(
-        self, integration_session: Dict[str, Any]
-    ) -> float:
+    async def _calculate_success_score(self, integration_session: Dict[str, Any]) -> float:
         """성공 점수 계산"""
         score = 0.0
 
@@ -101,9 +87,7 @@ class SuccessMonitoringSystem:
         score += completion_rate * 0.3
 
         # 충돌 해결률
-        conflict_resolution_rate = integration_session.get(
-            "conflict_resolution_rate", 0.5
-        )
+        conflict_resolution_rate = integration_session.get("conflict_resolution_rate", 0.5)
         score += conflict_resolution_rate * 0.3
 
         # 일관성 점수
@@ -116,9 +100,7 @@ class SuccessMonitoringSystem:
 
         return min(1.0, score)
 
-    async def _analyze_success_factors(
-        self, integration_session: Dict[str, Any]
-    ) -> List[str]:
+    async def _analyze_success_factors(self, integration_session: Dict[str, Any]) -> List[str]:
         """성공 요인 분석"""
         factors = []
 
@@ -130,9 +112,7 @@ class SuccessMonitoringSystem:
             factors.append("중간 완성도")
 
         # 충돌 해결 요인
-        conflict_resolution_rate = integration_session.get(
-            "conflict_resolution_rate", 0.0
-        )
+        conflict_resolution_rate = integration_session.get("conflict_resolution_rate", 0.0)
         if conflict_resolution_rate >= 0.8:
             factors.append("효과적인 충돌 해결")
         elif conflict_resolution_rate >= 0.6:
@@ -147,9 +127,7 @@ class SuccessMonitoringSystem:
 
         return factors
 
-    async def _analyze_failure_factors(
-        self, integration_session: Dict[str, Any]
-    ) -> List[str]:
+    async def _analyze_failure_factors(self, integration_session: Dict[str, Any]) -> List[str]:
         """실패 요인 분석"""
         factors = []
 
@@ -159,9 +137,7 @@ class SuccessMonitoringSystem:
             factors.append("낮은 완성도")
 
         # 충돌 해결 요인
-        conflict_resolution_rate = integration_session.get(
-            "conflict_resolution_rate", 1.0
-        )
+        conflict_resolution_rate = integration_session.get("conflict_resolution_rate", 1.0)
         if conflict_resolution_rate < 0.6:
             factors.append("충돌 해결 실패")
 
@@ -172,9 +148,7 @@ class SuccessMonitoringSystem:
 
         return factors
 
-    async def _generate_improvement_suggestions(
-        self, integration_session: Dict[str, Any]
-    ) -> List[str]:
+    async def _generate_improvement_suggestions(self, integration_session: Dict[str, Any]) -> List[str]:
         """개선 제안 생성"""
         suggestions = []
 
@@ -184,9 +158,7 @@ class SuccessMonitoringSystem:
             suggestions.append("완성도 향상을 위한 추가 데이터 수집 필요")
 
         # 충돌 해결 개선 제안
-        conflict_resolution_rate = integration_session.get(
-            "conflict_resolution_rate", 0.5
-        )
+        conflict_resolution_rate = integration_session.get("conflict_resolution_rate", 0.5)
         if conflict_resolution_rate < 0.8:
             suggestions.append("충돌 해결 알고리즘 개선 필요")
 

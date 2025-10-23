@@ -8,11 +8,12 @@ import asyncio
 import json
 import logging
 import os
+
 # DuRiCore 모듈 import
 import sys
 import time
 from datetime import datetime
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 import psutil
 
@@ -23,28 +24,22 @@ sys.path.insert(0, os.path.join(current_dir, "DuRiCore"))
 
 try:
     from DuRiCore.memory.vector_store import VectorMemoryStore
-    from DuRiCore.utils.llm_interface import (AsyncLLMInterface, LLMProvider,
-                                              QueryType)
+    from DuRiCore.utils.llm_interface import AsyncLLMInterface, LLMProvider, QueryType
     from DuRiCore.utils.memory_manager import MemoryManager, MemoryQuery
 except ImportError:
     try:
         # 대체 import 경로
         from memory.vector_store import VectorMemoryStore
-
-        from utils.llm_interface import (AsyncLLMInterface, LLMProvider,
-                                         QueryType)
+        from utils.llm_interface import AsyncLLMInterface, LLMProvider, QueryType
         from utils.memory_manager import MemoryManager, MemoryQuery
     except ImportError:
         # 직접 import
         from DuRiCore.memory.vector_store import VectorMemoryStore
-        from DuRiCore.utils.llm_interface import (AsyncLLMInterface,
-                                                  LLMProvider, QueryType)
+        from DuRiCore.utils.llm_interface import AsyncLLMInterface, LLMProvider, QueryType
         from DuRiCore.utils.memory_manager import MemoryManager, MemoryQuery
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -123,9 +118,7 @@ class Phase4PerformanceTester:
         # 단일 요청 테스트
         for prompt, query_type in test_prompts:
             try:
-                response = await self.llm_interface.ask_llm(
-                    prompt, query_type, provider=LLMProvider.LOCAL
-                )
+                response = await self.llm_interface.ask_llm(prompt, query_type, provider=LLMProvider.LOCAL)
                 results["successful_requests"] += 1
                 results["total_tokens"] += response.token_count
                 logger.info(f"LLM 응답: {response.content[:50]}...")
@@ -150,9 +143,7 @@ class Phase4PerformanceTester:
         try:
             batch_responses = await asyncio.gather(
                 *[
-                    self.llm_interface.ask_llm(
-                        req["prompt"], req["query_type"], provider=req["provider"]
-                    )
+                    self.llm_interface.ask_llm(req["prompt"], req["query_type"], provider=req["provider"])
                     for req in batch_requests
                 ]
             )
@@ -199,9 +190,7 @@ class Phase4PerformanceTester:
         # 메모리 저장 테스트
         for content, memory_type, importance, tags in test_memories:
             try:
-                memory_id = await self.memory_manager.store_memory(
-                    content, memory_type, importance, tags
-                )
+                memory_id = await self.memory_manager.store_memory(content, memory_type, importance, tags)
                 results["total_stored"] += 1
                 logger.info(f"메모리 저장: {memory_id}")
 
@@ -227,15 +216,11 @@ class Phase4PerformanceTester:
                 logger.error(f"메모리 검색 실패: {e}")
 
         total_time = time.time() - start_time
-        results["average_query_time"] = (
-            total_time / results["total_queries"] if results["total_queries"] > 0 else 0
-        )
+        results["average_query_time"] = total_time / results["total_queries"] if results["total_queries"] > 0 else 0
 
         # 메모리 통계 조회
         memory_stats = await self.memory_manager.get_memory_statistics()
-        results["cache_hit_rate"] = memory_stats.get("cache_hits", 0) / max(
-            memory_stats.get("total_queries", 1), 1
-        )
+        results["cache_hit_rate"] = memory_stats.get("cache_hits", 0) / max(memory_stats.get("total_queries", 1), 1)
 
         self.test_results["memory_manager"] = results
         logger.info(f"메모리 매니저 테스트 완료: {results}")
@@ -280,9 +265,7 @@ class Phase4PerformanceTester:
         # 벡터 메모리 저장 테스트
         for content, emotion_data, context_data in test_data:
             try:
-                memory_id = self.vector_store.store_memory(
-                    content, emotion_data, context_data, importance=0.7
-                )
+                memory_id = self.vector_store.store_memory(content, emotion_data, context_data, importance=0.7)
                 results["total_stored"] += 1
                 logger.info(f"벡터 메모리 저장: {memory_id}")
 
@@ -294,9 +277,7 @@ class Phase4PerformanceTester:
 
         for query in search_queries:
             try:
-                similar_memories = self.vector_store.search_similar_memories(
-                    query, limit=3
-                )
+                similar_memories = self.vector_store.search_similar_memories(query, limit=3)
                 results["total_searches"] += 1
                 logger.info(f"벡터 검색 결과: {len(similar_memories)}개")
 
@@ -304,11 +285,7 @@ class Phase4PerformanceTester:
                 logger.error(f"벡터 검색 실패: {e}")
 
         total_time = time.time() - start_time
-        results["average_search_time"] = (
-            total_time / results["total_searches"]
-            if results["total_searches"] > 0
-            else 0
-        )
+        results["average_search_time"] = total_time / results["total_searches"] if results["total_searches"] > 0 else 0
 
         self.test_results["vector_store"] = results
         logger.info(f"벡터 스토어 테스트 완료: {results}")
@@ -359,9 +336,7 @@ class Phase4PerformanceTester:
                 }
             )
 
-            logger.info(
-                f"배치 {i//100}: 메모리 사용량 = {current_memory['rss_mb']:.2f}MB"
-            )
+            logger.info(f"배치 {i//100}: 메모리 사용량 = {current_memory['rss_mb']:.2f}MB")
 
         final_memory = self.get_memory_usage()
 
@@ -399,7 +374,7 @@ class Phase4PerformanceTester:
                 )
 
                 # 2. 메모리 저장
-                memory_id = await self.memory_manager.store_memory(
+                memory_id = await self.memory_manager.store_memory(  # noqa: F841
                     llm_response.content,
                     "integrated_test",
                     importance=0.7,
@@ -407,7 +382,7 @@ class Phase4PerformanceTester:
                 )
 
                 # 3. 벡터 저장
-                vector_id = self.vector_store.store_memory(
+                vector_id = self.vector_store.store_memory(  # noqa: F841
                     llm_response.content,
                     {"emotion": "neutral", "intensity": 0.5},
                     {"context": "integrated_test"},
@@ -415,7 +390,7 @@ class Phase4PerformanceTester:
 
                 # 4. 메모리 검색
                 search_query = MemoryQuery("통합", memory_type="integrated_test")
-                memories = await self.memory_manager.search_memories(search_query)
+                memories = await self.memory_manager.search_memories(search_query)  # noqa: F841
 
                 results["successful_operations"] += 1
                 logger.info(f"통합 작업 {i} 완료")
@@ -500,12 +475,8 @@ class Phase4PerformanceTester:
             total = llm_results["total_requests"]
             successful = llm_results["successful_requests"]
 
-            summary["llm_interface"]["success_rate"] = (
-                successful / total if total > 0 else 0
-            )
-            summary["llm_interface"]["average_response_time"] = llm_results[
-                "average_response_time"
-            ]
+            summary["llm_interface"]["success_rate"] = successful / total if total > 0 else 0
+            summary["llm_interface"]["average_response_time"] = llm_results["average_response_time"]
             summary["llm_interface"]["cache_hit_rate"] = llm_results["cache_hit_rate"]
 
         # 메모리 매니저 요약
@@ -513,12 +484,8 @@ class Phase4PerformanceTester:
             mm_results = self.test_results["memory_manager"]
             total = mm_results["total_queries"]
 
-            summary["memory_manager"][
-                "success_rate"
-            ] = 1.0  # 모든 쿼리가 성공했다고 가정
-            summary["memory_manager"]["average_query_time"] = mm_results[
-                "average_query_time"
-            ]
+            summary["memory_manager"]["success_rate"] = 1.0  # 모든 쿼리가 성공했다고 가정
+            summary["memory_manager"]["average_query_time"] = mm_results["average_query_time"]
             summary["memory_manager"]["cache_hit_rate"] = mm_results["cache_hit_rate"]
 
         # 벡터 스토어 요약
@@ -527,31 +494,21 @@ class Phase4PerformanceTester:
             total = vs_results["total_searches"]
 
             summary["vector_store"]["success_rate"] = 1.0  # 모든 검색이 성공했다고 가정
-            summary["vector_store"]["average_search_time"] = vs_results[
-                "average_search_time"
-            ]
+            summary["vector_store"]["average_search_time"] = vs_results["average_search_time"]
 
         # 메모리 사용량 요약
         if "memory_usage" in self.test_results:
             mu_results = self.test_results["memory_usage"]
-            summary["memory_usage"]["memory_increase_mb"] = mu_results[
-                "memory_increase_mb"
-            ]
+            summary["memory_usage"]["memory_increase_mb"] = mu_results["memory_increase_mb"]
 
             # 최대 메모리 사용량 계산
-            peak_memory = max(
-                sample["memory"]["rss_mb"] for sample in mu_results["memory_samples"]
-            )
+            peak_memory = max(sample["memory"]["rss_mb"] for sample in mu_results["memory_samples"])
             summary["memory_usage"]["peak_memory_mb"] = peak_memory
 
         # 전체 요약
         summary["overall"]["total_tests"] = len(self.test_results)
-        summary["overall"]["successful_tests"] = len(
-            [r for r in self.test_results.values() if "successful" in r]
-        )
-        summary["overall"]["failed_tests"] = len(
-            [r for r in self.test_results.values() if "failed" in r]
-        )
+        summary["overall"]["successful_tests"] = len([r for r in self.test_results.values() if "successful" in r])
+        summary["overall"]["failed_tests"] = len([r for r in self.test_results.values() if "failed" in r])
 
         return summary
 

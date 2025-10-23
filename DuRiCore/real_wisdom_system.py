@@ -5,13 +5,12 @@ DuRi 진짜 지혜 판단 시스템
 """
 
 import asyncio
-import json
 import logging
 import time
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -125,9 +124,7 @@ class RealWisdomSystem:
             },
         }
 
-    async def generate_real_judgment(
-        self, situation: str, context: Dict[str, Any] = None
-    ) -> RealWisdomJudgment:
+    async def generate_real_judgment(self, situation: str, context: Dict[str, Any] = None) -> RealWisdomJudgment:
         """진짜 지혜 판단 생성"""
         judgment_id = f"judgment_{int(time.time() * 1000)}"
 
@@ -138,14 +135,10 @@ class RealWisdomSystem:
         ethical_judgment = self._make_ethical_judgment(situation, situation_analysis)
 
         # 3. 실용적 판단
-        practical_judgment = self._make_practical_judgment(
-            situation, situation_analysis
-        )
+        practical_judgment = self._make_practical_judgment(situation, situation_analysis)
 
         # 4. 통합 판단
-        integrated_judgment = self._integrate_judgments(
-            ethical_judgment, practical_judgment
-        )
+        integrated_judgment = self._integrate_judgments(ethical_judgment, practical_judgment)
 
         # 5. 대안 고려
         alternatives = self._consider_alternatives(situation, integrated_judgment)
@@ -154,9 +147,7 @@ class RealWisdomSystem:
         moral_implications = self._analyze_moral_implications(integrated_judgment)
 
         # 7. 실용적 고려사항
-        practical_considerations = self._analyze_practical_considerations(
-            integrated_judgment, context
-        )
+        practical_considerations = self._analyze_practical_considerations(integrated_judgment, context)
 
         judgment = RealWisdomJudgment(
             judgment_id=judgment_id,
@@ -200,9 +191,7 @@ class RealWisdomSystem:
 
         return analysis
 
-    def _make_ethical_judgment(
-        self, situation: str, analysis: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _make_ethical_judgment(self, situation: str, analysis: Dict[str, Any]) -> Dict[str, Any]:
         """윤리적 판단"""
         ethical_issues = analysis.get("ethical_issues", [])
 
@@ -245,11 +234,9 @@ class RealWisdomSystem:
             "confidence": 0.3,
         }
 
-    def _make_practical_judgment(
-        self, situation: str, analysis: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _make_practical_judgment(self, situation: str, analysis: Dict[str, Any]) -> Dict[str, Any]:
         """실용적 판단"""
-        key_elements = analysis.get("key_elements", [])
+        key_elements = analysis.get("key_elements", [])  # noqa: F841
 
         if "resource_allocation" in situation or "자원" in situation:
             return {
@@ -280,9 +267,7 @@ class RealWisdomSystem:
             "confidence": 0.5,
         }
 
-    def _integrate_judgments(
-        self, ethical: Dict[str, Any], practical: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _integrate_judgments(self, ethical: Dict[str, Any], practical: Dict[str, Any]) -> Dict[str, Any]:
         """판단 통합"""
         # 윤리적 판단이 더 높은 신뢰도를 가질 때
         if ethical.get("confidence", 0) > practical.get("confidence", 0):
@@ -290,7 +275,7 @@ class RealWisdomSystem:
                 "type": JudgmentType.ETHICAL,
                 "framework": ethical.get("framework", EthicalFramework.UTILITARIANISM),
                 "reasoning": ethical.get("reasoning", ""),
-                "justification": f"윤리적 고려사항이 실용적 고려사항보다 중요함",
+                "justification": "윤리적 고려사항이 실용적 고려사항보다 중요함",
                 "confidence": ethical.get("confidence", 0.5),
             }
         else:
@@ -298,13 +283,11 @@ class RealWisdomSystem:
                 "type": JudgmentType.PRACTICAL,
                 "framework": EthicalFramework.UTILITARIANISM,
                 "reasoning": practical.get("reasoning", ""),
-                "justification": f"실용적 고려사항이 우선됨",
+                "justification": "실용적 고려사항이 우선됨",
                 "confidence": practical.get("confidence", 0.5),
             }
 
-    def _consider_alternatives(
-        self, situation: str, judgment: Dict[str, Any]
-    ) -> List[str]:
+    def _consider_alternatives(self, situation: str, judgment: Dict[str, Any]) -> List[str]:
         """대안 고려"""
         alternatives = []
 
@@ -336,9 +319,7 @@ class RealWisdomSystem:
 
         return implications
 
-    def _analyze_practical_considerations(
-        self, judgment: Dict[str, Any], context: Dict[str, Any] = None
-    ) -> List[str]:
+    def _analyze_practical_considerations(self, judgment: Dict[str, Any], context: Dict[str, Any] = None) -> List[str]:
         """실용적 고려사항 분석"""
         considerations = []
 

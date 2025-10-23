@@ -13,9 +13,7 @@ class StrategicLearningEngine:
         """
         판단 결과를 입력받아 전략적 학습을 위한 기록을 남깁니다.
         """
-        self.history.append(
-            {"situation": situation, "action": action, "reasoning": reasoning}
-        )
+        self.history.append({"situation": situation, "action": action, "reasoning": reasoning})
 
     def generate_strategic_insight(self):
         """

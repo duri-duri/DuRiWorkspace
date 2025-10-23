@@ -4,15 +4,13 @@ DuRi 고급 메타-학습 시스템
 ChatGPT가 제안한 핵심 병목 제거 시스템
 """
 
-import json
 import logging
 import math
 import random
-import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -131,9 +129,7 @@ class LearningTargetManager:
 
     def _check_overall_completion(self):
         """전체 목표 달성 확인"""
-        achieved_count = sum(
-            1 for target in self.targets.values() if target.is_achieved
-        )
+        achieved_count = sum(1 for target in self.targets.values() if target.is_achieved)
         total_count = len(self.targets)
 
         if achieved_count >= total_count * 0.8:  # 80% 달성 시 완료
@@ -165,9 +161,7 @@ class LearningTargetManager:
         """우선순위가 높은 목표 반환"""
         for target_type, target in self.targets.items():
             if not target.is_achieved:
-                progress = (
-                    target.current_value - target.target_value
-                ) / target.target_value
+                progress = (target.current_value - target.target_value) / target.target_value
                 if progress < 0.5:  # 50% 미만 달성
                     return target_type
         return None
@@ -202,7 +196,8 @@ class ImprovementSelector:
         """전략 초기화"""
         for strategy in StrategyType:
             self.strategies[strategy] = StrategyPerformance(
-                strategy_type=strategy, confidence=0.5  # 초기 신뢰도
+                strategy_type=strategy,
+                confidence=0.5,  # 초기 신뢰도
             )
 
     def select_strategy(self, context: Dict[str, Any]) -> StrategyType:
@@ -217,9 +212,7 @@ class ImprovementSelector:
         """새로운 전략 탐험"""
         # 사용 빈도가 낮은 전략 우선 선택
         unused_strategies = [
-            strategy
-            for strategy, perf in self.strategies.items()
-            if perf.success_count + perf.failure_count < 3
+            strategy for strategy, perf in self.strategies.items() if perf.success_count + perf.failure_count < 3
         ]
 
         if unused_strategies:
@@ -227,15 +220,9 @@ class ImprovementSelector:
         else:
             # 신뢰도가 낮은 전략 선택
             low_confidence = [
-                strategy
-                for strategy, perf in self.strategies.items()
-                if perf.confidence < self.confidence_threshold
+                strategy for strategy, perf in self.strategies.items() if perf.confidence < self.confidence_threshold
             ]
-            return (
-                random.choice(low_confidence)
-                if low_confidence
-                else random.choice(list(self.strategies.keys()))
-            )
+            return random.choice(low_confidence) if low_confidence else random.choice(list(self.strategies.keys()))
 
     def _exploit_best_strategy(self) -> StrategyType:
         """최고 성능 전략 활용"""
@@ -249,32 +236,20 @@ class ImprovementSelector:
 
             # UCB1 점수 계산
             exploitation = perf.average_improvement
-            exploration = math.sqrt(
-                2
-                * math.log(self._get_total_trials())
-                / (perf.success_count + perf.failure_count)
-            )
+            exploration = math.sqrt(2 * math.log(self._get_total_trials()) / (perf.success_count + perf.failure_count))
             ucb_score = exploitation + exploration
 
             if ucb_score > best_score:
                 best_score = ucb_score
                 best_strategy = strategy
 
-        return (
-            best_strategy
-            if best_strategy
-            else random.choice(list(self.strategies.keys()))
-        )
+        return best_strategy if best_strategy else random.choice(list(self.strategies.keys()))
 
     def _get_total_trials(self) -> int:
         """총 시도 횟수"""
-        return sum(
-            perf.success_count + perf.failure_count for perf in self.strategies.values()
-        )
+        return sum(perf.success_count + perf.failure_count for perf in self.strategies.values())
 
-    def update_strategy_performance(
-        self, strategy: StrategyType, success: bool, improvement: float
-    ):
+    def update_strategy_performance(self, strategy: StrategyType, success: bool, improvement: float):
         """전략 성능 업데이트"""
         if strategy not in self.strategies:
             return
@@ -290,32 +265,22 @@ class ImprovementSelector:
         # 평균 개선률 계산
         total_attempts = perf.success_count + perf.failure_count
         if total_attempts > 0:
-            perf.average_improvement = (
-                perf.total_improvement / perf.success_count
-                if perf.success_count > 0
-                else 0
-            )
+            perf.average_improvement = perf.total_improvement / perf.success_count if perf.success_count > 0 else 0
 
         # 신뢰도 계산 (Thompson Sampling 기반)
-        success_rate = (
-            perf.success_count / total_attempts if total_attempts > 0 else 0.5
-        )
+        success_rate = perf.success_count / total_attempts if total_attempts > 0 else 0.5
         perf.confidence = success_rate
 
         perf.last_used = datetime.now()
 
-        logger.info(
-            f"전략 성능 업데이트: {strategy.value}, 성공: {success}, 개선률: {improvement:.3f}"
-        )
+        logger.info(f"전략 성능 업데이트: {strategy.value}, 성공: {success}, 개선률: {improvement:.3f}")
 
     def get_strategy_recommendations(self) -> List[Tuple[StrategyType, float]]:
         """전략 추천 목록"""
         recommendations = []
 
         for strategy, perf in self.strategies.items():
-            if (
-                perf.success_count + perf.failure_count >= 3
-            ):  # 충분한 데이터가 있는 전략만
+            if perf.success_count + perf.failure_count >= 3:  # 충분한 데이터가 있는 전략만
                 score = perf.average_improvement * perf.confidence
                 recommendations.append((strategy, score))
 
@@ -391,9 +356,7 @@ class FailurePatternClassifier:
         matched_patterns = self._match_failure_patterns(metric_changes, error_message)
 
         # 3. 루트 원인 분석
-        root_cause = self._analyze_root_cause(
-            matched_patterns, strategy_used, code_context
-        )
+        root_cause = self._analyze_root_cause(matched_patterns, strategy_used, code_context)
 
         # 4. 신뢰도 계산
         confidence = self._calculate_confidence(matched_patterns, metric_changes)
@@ -406,9 +369,7 @@ class FailurePatternClassifier:
 
         # 가장 가능성 높은 패턴 선택
         primary_pattern = (
-            max(matched_patterns, key=lambda x: x[1])[0]
-            if matched_patterns
-            else FailurePattern.UNEXPECTED_BEHAVIOR
+            max(matched_patterns, key=lambda x: x[1])[0] if matched_patterns else FailurePattern.UNEXPECTED_BEHAVIOR
         )
 
         analysis = FailureAnalysis(
@@ -424,22 +385,16 @@ class FailurePatternClassifier:
         # 데이터베이스에 저장
         self.pattern_database.append(analysis)
 
-        logger.info(
-            f"실패 패턴 분류: {primary_pattern.value}, 신뢰도: {confidence:.2f}"
-        )
+        logger.info(f"실패 패턴 분류: {primary_pattern.value}, 신뢰도: {confidence:.2f}")
 
         return analysis
 
-    def _analyze_metric_changes(
-        self, before: Dict[str, float], after: Dict[str, float]
-    ) -> Dict[str, float]:
+    def _analyze_metric_changes(self, before: Dict[str, float], after: Dict[str, float]) -> Dict[str, float]:
         """메트릭 변화 분석"""
         changes = {}
         for metric in before:
             if metric in after:
-                changes[metric] = (after[metric] - before[metric]) / max(
-                    before[metric], 0.01
-                )
+                changes[metric] = (after[metric] - before[metric]) / max(before[metric], 0.01)
         return changes
 
     def _match_failure_patterns(
@@ -511,9 +466,7 @@ class FailurePatternClassifier:
 
         return root_causes.get(primary_pattern, "알 수 없는 실패 원인")
 
-    def _calculate_confidence(
-        self, matches: List[Tuple[FailurePattern, float]], changes: Dict[str, float]
-    ) -> float:
+    def _calculate_confidence(self, matches: List[Tuple[FailurePattern, float]], changes: Dict[str, float]) -> float:
         """신뢰도 계산"""
         if not matches:
             return 0.1
@@ -527,9 +480,7 @@ class FailurePatternClassifier:
         # 메트릭 변화의 명확성
         change_clarity = sum(1 for change in changes.values() if abs(change) > 0.1)
 
-        confidence = min(
-            1.0, (max_score * 0.6 + pattern_count * 0.2 + change_clarity * 0.2)
-        )
+        confidence = min(1.0, (max_score * 0.6 + pattern_count * 0.2 + change_clarity * 0.2))
 
         return confidence
 
@@ -575,8 +526,7 @@ class FailurePatternClassifier:
             "total_failures": len(self.pattern_database),
             "pattern_distribution": pattern_counts,
             "strategy_failures": strategy_failures,
-            "average_confidence": sum(a.confidence for a in self.pattern_database)
-            / len(self.pattern_database),
+            "average_confidence": sum(a.confidence for a in self.pattern_database) / len(self.pattern_database),
         }
 
 
@@ -590,9 +540,7 @@ class AdvancedMetaLearningSystem:
         self.learning_active = True
         logger.info("AdvancedMetaLearningSystem 초기화 완료")
 
-    def start_learning_session(
-        self, targets: Dict[LearningTargetType, Tuple[float, float, float]]
-    ):
+    def start_learning_session(self, targets: Dict[LearningTargetType, Tuple[float, float, float]]):
         """학습 세션 시작"""
         logger.info("🎯 고급 메타-학습 세션 시작")
 
@@ -604,24 +552,17 @@ class AdvancedMetaLearningSystem:
 
     def execute_improvement_cycle(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """개선 사이클 실행"""
-        if (
-            not self.learning_active
-            or not self.target_manager.should_continue_learning()
-        ):
+        if not self.learning_active or not self.target_manager.should_continue_learning():
             return {"status": "completed", "reason": "목표 달성 또는 중단 조건"}
 
         # 1. 전략 선택
         strategy = self.strategy_selector.select_strategy(context)
 
         # 2. 개선 시도 (시뮬레이션)
-        success, improvement, metrics_before, metrics_after = self._attempt_improvement(
-            strategy, context
-        )
+        success, improvement, metrics_before, metrics_after = self._attempt_improvement(strategy, context)
 
         # 3. 성능 업데이트
-        self.strategy_selector.update_strategy_performance(
-            strategy, success, improvement
-        )
+        self.strategy_selector.update_strategy_performance(strategy, success, improvement)
 
         # 4. 목표 진행도 업데이트
         if success:
@@ -629,9 +570,7 @@ class AdvancedMetaLearningSystem:
 
         # 5. 실패 분석
         if not success:
-            failure_analysis = self.failure_classifier.classify_failure(
-                strategy, metrics_before, metrics_after
-            )
+            failure_analysis = self.failure_classifier.classify_failure(strategy, metrics_before, metrics_after)
             logger.warning(f"개선 실패: {failure_analysis.root_cause}")
 
         # 6. 반복 횟수 증가
@@ -667,21 +606,16 @@ class AdvancedMetaLearningSystem:
             StrategyType.PARALLELIZE: {"success_rate": 0.4, "improvement": 0.25},
         }
 
-        sim = improvement_simulation.get(
-            strategy, {"success_rate": 0.5, "improvement": 0.1}
-        )
+        sim = improvement_simulation.get(strategy, {"success_rate": 0.5, "improvement": 0.1})
 
         success = random.random() < sim["success_rate"]
         improvement = sim["improvement"] if success else -0.05
 
         metrics_after = {
             "performance": metrics_before["performance"] + improvement,
-            "accuracy": metrics_before["accuracy"]
-            + (improvement * 0.5 if success else -0.02),
-            "memory_efficiency": metrics_before["memory_efficiency"]
-            + (improvement * 0.3 if success else -0.01),
-            "stability": metrics_before["stability"]
-            + (improvement * 0.2 if success else -0.03),
+            "accuracy": metrics_before["accuracy"] + (improvement * 0.5 if success else -0.02),
+            "memory_efficiency": metrics_before["memory_efficiency"] + (improvement * 0.3 if success else -0.01),
+            "stability": metrics_before["stability"] + (improvement * 0.2 if success else -0.03),
         }
 
         return success, improvement, metrics_before, metrics_after
@@ -690,9 +624,7 @@ class AdvancedMetaLearningSystem:
         """목표 진행도 업데이트"""
         for target_type in self.target_manager.targets:
             if target_type.value in metrics:
-                self.target_manager.update_progress(
-                    target_type, metrics[target_type.value]
-                )
+                self.target_manager.update_progress(target_type, metrics[target_type.value])
 
     def get_system_status(self) -> Dict[str, Any]:
         """시스템 상태 조회"""
@@ -709,8 +641,7 @@ class AdvancedMetaLearningSystem:
                 for t, tg in self.target_manager.targets.items()
             },
             "strategy_recommendations": [
-                (s.value, score)
-                for s, score in self.strategy_selector.get_strategy_recommendations()
+                (s.value, score) for s, score in self.strategy_selector.get_strategy_recommendations()
             ],
             "failure_statistics": self.failure_classifier.get_failure_statistics(),
         }

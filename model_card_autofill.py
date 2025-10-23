@@ -15,6 +15,7 @@ Notes:
 - If --template not provided, use built-in template.
 - Missing files tolerated; fields become "TBD".
 """
+
 import argparse
 import datetime
 import json
@@ -48,9 +49,7 @@ def ms(x):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--template", default="", help="Template markdown path (optional)")
-    ap.add_argument(
-        "--out", default="model_card_v1.autofilled.md", help="Output markdown path"
-    )
+    ap.add_argument("--out", default="model_card_v1.autofilled.md", help="Output markdown path")
     args = ap.parse_args()
 
     # Sources
@@ -60,7 +59,7 @@ def main():
 
     # Derive fields
     pass_rate = reg.get("pass_rate")  # 0.0~1.0 or e.g., 0.83
-    failures = reg.get("failures", [])
+    failures = reg.get("failures", [])  # noqa: F841
     fail_rate_reg = slo.get("fail_rate_reg")  # optional
     p95_latency_ms = slo.get("p95_ms") or slo.get("p95_latency_ms")
     safety_hit = slo.get("safety_flag_precision") or slo.get("safety_hit_rate")
@@ -78,9 +77,7 @@ def main():
         if passed is not None and total:
             pass_rate = passed / total
     # Format
-    pass_rate_pct = (
-        pct(pass_rate) if pass_rate is not None and pass_rate <= 1 else f"{pass_rate}%"
-    )
+    pass_rate_pct = pct(pass_rate) if pass_rate is not None and pass_rate <= 1 else f"{pass_rate}%"
     p95_latency_fmt = ms(p95_latency_ms) if p95_latency_ms is not None else "TBD"
     fail_rate_reg_pct = (
         pct(fail_rate_reg)
@@ -92,11 +89,7 @@ def main():
         if isinstance(safety_hit, (int, float)) and safety_hit <= 1
         else (f"{safety_hit}%" if safety_hit is not None else "TBD")
     )
-    explain_score_fmt = (
-        f"{explain_score:.2f} / 5.0"
-        if isinstance(explain_score, (int, float))
-        else "TBD"
-    )
+    explain_score_fmt = f"{explain_score:.2f} / 5.0" if isinstance(explain_score, (int, float)) else "TBD"
     hitl_accept_pct = (
         pct(hitl_accept)
         if isinstance(hitl_accept, (int, float)) and hitl_accept <= 1
@@ -107,11 +100,7 @@ def main():
     quality_fmt = (
         f"{quality:.0f}%"
         if isinstance(quality, (int, float)) and quality <= 1
-        else (
-            f"{quality:.0f}%"
-            if isinstance(quality, (int, float)) and quality > 1
-            else "TBD"
-        )
+        else (f"{quality:.0f}%" if isinstance(quality, (int, float)) and quality > 1 else "TBD")
     )
 
     # Build markdown (use template if provided)
@@ -141,7 +130,7 @@ _Channel_: Canary (10%) / Internal
 """
 
     # If template has placeholders, replace them
-    # Supported placeholders: {{PASS_RATE}}, {{P95_LATENCY}}, {{FAIL_RATE_REG}}, {{EXPLAIN_SCORE}}, {{SAFETY_HIT}}, {{HITL_ACCEPT}}, {{HITL_QUALITY}}, {{HITL_KAPPA}}, {{HITL_P95H}}
+    # Supported placeholders: {{PASS_RATE}}, {{P95_LATENCY}}, {{FAIL_RATE_REG}}, {{EXPLAIN_SCORE}}, {{SAFETY_HIT}}, {{HITL_ACCEPT}}, {{HITL_QUALITY}}, {{HITL_KAPPA}}, {{HITL_P95H}}  # noqa: E501
     repl = {
         "{{PASS_RATE}}": pass_rate_pct,
         "{{P95_LATENCY}}": p95_latency_fmt,

@@ -29,7 +29,7 @@ def append_log(entry):
         with open(LOG_PATH, "r") as f:
             try:
                 logs = json.load(f)
-            except:
+            except:  # noqa: E722
                 logs = []
     logs.append(entry)
     with open(LOG_PATH, "w") as f:

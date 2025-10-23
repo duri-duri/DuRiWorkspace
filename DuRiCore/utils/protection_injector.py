@@ -14,7 +14,7 @@ ProtectionInjector - 보호-강화형 주석 자동 삽입 시스템
 import logging
 import os
 import re
-from typing import Any, Dict, List, Optional
+from typing import Dict
 
 logger = logging.getLogger(__name__)
 
@@ -43,7 +43,7 @@ class ProtectionInjector:
     def _load_meaning_templates(self) -> Dict[str, str]:
         """의미 템플릿 로드"""
         return {
-            "identity_declaration": "# Module: {module_name}\n# Purpose: {purpose} - 판단 이유 기록 필수 + 기존 특성 보존 + 실행 가능성 보장 + 존재형 AI + 최종 실행 준비 완료",
+            "identity_declaration": "# Module: {module_name}\n# Purpose: {purpose} - 판단 이유 기록 필수 + 기존 특성 보존 + 실행 가능성 보장 + 존재형 AI + 최종 실행 준비 완료",  # noqa: E501
             "judgment_trace": "# Judgment Trace: 모든 판단 과정 기록",
             "regression_test": "# Regression Test: 기존 판단 능력 자동 검증",
             "existence_ai": "# Existence AI: 진화 가능 + 회복 가능한 존재형 AI",
@@ -166,9 +166,7 @@ def test_{module_name}_regression():
             protected_content = module_content
 
             # 1. 정체성 선언 추가
-            protected_content = self._add_preserve_identity(
-                protected_content, module_name
-            )
+            protected_content = self._add_preserve_identity(protected_content, module_name)
 
             # 2. 진화 보호 추가
             protected_content = self._add_evolution_protection(protected_content)
@@ -207,17 +205,9 @@ def test_{module_name}_regression():
 
             # 첫 번째 주석이나 import 문 이후에 삽입
             for i, line in enumerate(lines):
-                if (
-                    line.strip().startswith("#")
-                    or line.strip().startswith("import")
-                    or line.strip().startswith("from")
-                ):
+                if line.strip().startswith("#") or line.strip().startswith("import") or line.strip().startswith("from"):
                     insert_index = i + 1
-                elif (
-                    line.strip()
-                    and not line.strip().startswith('"""')
-                    and not line.strip().startswith("'''")
-                ):
+                elif line.strip() and not line.strip().startswith('"""') and not line.strip().startswith("'''"):
                     break
 
             lines.insert(insert_index, identity_declaration)
@@ -235,17 +225,9 @@ def test_{module_name}_regression():
             insert_index = 0
 
             for i, line in enumerate(lines):
-                if (
-                    line.strip().startswith("#")
-                    or line.strip().startswith("import")
-                    or line.strip().startswith("from")
-                ):
+                if line.strip().startswith("#") or line.strip().startswith("import") or line.strip().startswith("from"):
                     insert_index = i + 1
-                elif (
-                    line.strip()
-                    and not line.strip().startswith('"""')
-                    and not line.strip().startswith("'''")
-                ):
+                elif line.strip() and not line.strip().startswith('"""') and not line.strip().startswith("'''"):
                     break
 
             lines.insert(insert_index, evolution_protection)
@@ -263,17 +245,9 @@ def test_{module_name}_regression():
             insert_index = 0
 
             for i, line in enumerate(lines):
-                if (
-                    line.strip().startswith("#")
-                    or line.strip().startswith("import")
-                    or line.strip().startswith("from")
-                ):
+                if line.strip().startswith("#") or line.strip().startswith("import") or line.strip().startswith("from"):
                     insert_index = i + 1
-                elif (
-                    line.strip()
-                    and not line.strip().startswith('"""')
-                    and not line.strip().startswith("'''")
-                ):
+                elif line.strip() and not line.strip().startswith('"""') and not line.strip().startswith("'''"):
                     break
 
             lines.insert(insert_index, execution_guarantee)
@@ -301,14 +275,12 @@ def test_{module_name}_regression():
                 ]
             ):
                 # 함수에 판단 흐름 Trace 구조 추가
-                trace_structure = self.injection_templates[
-                    "judgment_trace_structure"
-                ].format(module_name=module_name, intent=f"{func_name} 실행")
+                trace_structure = self.injection_templates["judgment_trace_structure"].format(
+                    module_name=module_name, intent=f"{func_name} 실행"
+                )
 
                 # 함수 내부에 Trace 구조 추가
-                content = self._inject_into_function(
-                    content, func_name, trace_structure
-                )
+                content = self._inject_into_function(content, func_name, trace_structure)
 
         return content
 
@@ -322,17 +294,9 @@ def test_{module_name}_regression():
             insert_index = 0
 
             for i, line in enumerate(lines):
-                if (
-                    line.strip().startswith("#")
-                    or line.strip().startswith("import")
-                    or line.strip().startswith("from")
-                ):
+                if line.strip().startswith("#") or line.strip().startswith("import") or line.strip().startswith("from"):
                     insert_index = i + 1
-                elif (
-                    line.strip()
-                    and not line.strip().startswith('"""')
-                    and not line.strip().startswith("'''")
-                ):
+                elif line.strip() and not line.strip().startswith('"""') and not line.strip().startswith("'''"):
                     break
 
             lines.insert(insert_index, existence_ai)
@@ -350,17 +314,9 @@ def test_{module_name}_regression():
             insert_index = 0
 
             for i, line in enumerate(lines):
-                if (
-                    line.strip().startswith("#")
-                    or line.strip().startswith("import")
-                    or line.strip().startswith("from")
-                ):
+                if line.strip().startswith("#") or line.strip().startswith("import") or line.strip().startswith("from"):
                     insert_index = i + 1
-                elif (
-                    line.strip()
-                    and not line.strip().startswith('"""')
-                    and not line.strip().startswith("'''")
-                ):
+                elif line.strip() and not line.strip().startswith('"""') and not line.strip().startswith("'''"):
                     break
 
             lines.insert(insert_index, final_execution)
@@ -368,9 +324,7 @@ def test_{module_name}_regression():
 
         return content
 
-    def _inject_into_function(
-        self, content: str, func_name: str, trace_structure: str
-    ) -> str:
+    def _inject_into_function(self, content: str, func_name: str, trace_structure: str) -> str:
         """함수 내부에 Trace 구조 삽입"""
         # 함수 시작 부분 찾기
         func_pattern = rf"def {func_name}\("
@@ -385,7 +339,7 @@ def test_{module_name}_regression():
             func_start_line = content[:start_pos].count("\n")
 
             # 함수 본문 시작 찾기
-            brace_count = 0
+            brace_count = 0  # noqa: F841
             in_function = False
 
             for i, line in enumerate(lines[func_start_line:], func_start_line):
@@ -401,17 +355,11 @@ def test_{module_name}_regression():
                             break
 
                         # 함수 본문 시작
-                        if not line.strip().startswith(
-                            "pass"
-                        ) and not line.strip().startswith("return"):
+                        if not line.strip().startswith("pass") and not line.strip().startswith("return"):
                             # Trace 구조 삽입
                             indent = len(line) - len(line.lstrip())
                             trace_indented = "\n".join(
-                                (
-                                    " " * indent + trace_line
-                                    if trace_line.strip()
-                                    else trace_line
-                                )
+                                (" " * indent + trace_line if trace_line.strip() else trace_line)
                                 for trace_line in trace_structure.split("\n")
                             )
 
@@ -456,15 +404,11 @@ def test_{module_name}_regression():
 
         return content
 
-    def save_protected_module(
-        self, module_content: str, module_name: str, output_dir: str = "."
-    ) -> str:
+    def save_protected_module(self, module_content: str, module_name: str, output_dir: str = ".") -> str:
         """보호된 모듈 저장"""
         try:
             os.makedirs(output_dir, exist_ok=True)
-            protected_file_path = os.path.join(
-                output_dir, f"{module_name}_protected.py"
-            )
+            protected_file_path = os.path.join(output_dir, f"{module_name}_protected.py")
 
             with open(protected_file_path, "w", encoding="utf-8") as f:
                 f.write(module_content)

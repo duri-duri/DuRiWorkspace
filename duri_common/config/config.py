@@ -5,7 +5,6 @@ Configuration management for DuRi Emotion Processing System
 
 import os
 from pathlib import Path
-from typing import Optional
 
 from dotenv import load_dotenv
 
@@ -53,9 +52,7 @@ class Config:
     @staticmethod
     def get_update_script_path() -> str:
         """업데이트 스크립트 경로"""
-        return os.getenv(
-            "UPDATE_SCRIPT_PATH", "/tmp/../scripts/update_cur_from_delta.py"
-        )
+        return os.getenv("UPDATE_SCRIPT_PATH", "/tmp/../scripts/update_cur_from_delta.py")
 
     @staticmethod
     def get_evolution_log() -> str:
@@ -261,18 +258,14 @@ def load_env(key, default=None, type_cast=str):
 
     value = os.getenv(key, default)
 
-    if type_cast == bool:
-        return (
-            value.lower() in ("true", "1", "yes", "on")
-            if isinstance(value, str)
-            else bool(value)
-        )
-    elif type_cast == int:
+    if type_cast is bool:
+        return value.lower() in ("true", "1", "yes", "on") if isinstance(value, str) else bool(value)
+    elif type_cast is int:
         try:
             return int(value) if value is not None else default
         except (ValueError, TypeError):
             return default
-    elif type_cast == float:
+    elif type_cast is float:
         try:
             return float(value) if value is not None else default
         except (ValueError, TypeError):

@@ -3,11 +3,12 @@
 DuRi 진화 분석 시스템
 양적/질적/시간적 진화를 종합적으로 분석하는 시스템
 """
+
 import json
 import logging
 from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
+from datetime import datetime
+from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 
@@ -46,10 +47,7 @@ class EvolutionAnalyzer:
         try:
             with open(self.analysis_data_file, "r", encoding="utf-8") as f:
                 data = json.load(f)
-                self.analysis_history = [
-                    EvolutionAnalysis(**analysis)
-                    for analysis in data.get("history", [])
-                ]
+                self.analysis_history = [EvolutionAnalysis(**analysis) for analysis in data.get("history", [])]
         except FileNotFoundError:
             logger.info("분석 데이터 파일이 없습니다. 새로 시작합니다.")
         except Exception as e:
@@ -71,14 +69,10 @@ class EvolutionAnalyzer:
         """진화 분석 실행"""
         try:
             # 양적 지표 분석
-            quantitative_metrics = self.analysis_models["quantitative"].analyze(
-                evolution_data
-            )
+            quantitative_metrics = self.analysis_models["quantitative"].analyze(evolution_data)
 
             # 질적 특성 분석
-            qualitative_metrics = self.analysis_models["qualitative"].analyze(
-                evolution_data
-            )
+            qualitative_metrics = self.analysis_models["qualitative"].analyze(evolution_data)
 
             # 시간적 변화 분석
             temporal_metrics = self.analysis_models["temporal"].analyze(evolution_data)
@@ -94,9 +88,7 @@ class EvolutionAnalyzer:
             )
 
             # 핵심 인사이트 추출
-            key_insights = self._extract_key_insights(
-                quantitative_metrics, qualitative_metrics, temporal_metrics
-            )
+            key_insights = self._extract_key_insights(quantitative_metrics, qualitative_metrics, temporal_metrics)
 
             # 분석 결과 생성
             analysis_result = EvolutionAnalysis(
@@ -115,9 +107,7 @@ class EvolutionAnalyzer:
             # 데이터 저장
             self._save_analysis_data()
 
-            logger.info(
-                f"🧠 진화 분석 완료: 종합 점수 {overall_score:.3f}, 신뢰도 {confidence:.3f}"
-            )
+            logger.info(f"🧠 진화 분석 완료: 종합 점수 {overall_score:.3f}, 신뢰도 {confidence:.3f}")
 
             return {
                 "status": "success",
@@ -134,9 +124,7 @@ class EvolutionAnalyzer:
             logger.error(f"진화 분석 오류: {e}")
             return {"status": "error", "error": str(e)}
 
-    def _calculate_overall_evolution_score(
-        self, quantitative: Dict, qualitative: Dict, temporal: Dict
-    ) -> float:
+    def _calculate_overall_evolution_score(self, quantitative: Dict, qualitative: Dict, temporal: Dict) -> float:
         """종합 진화 점수 계산"""
         try:
             # 각 분석 결과의 점수 추출
@@ -152,9 +140,7 @@ class EvolutionAnalyzer:
             logger.error(f"종합 진화 점수 계산 오류: {e}")
             return 0.0
 
-    def _calculate_evolution_confidence(
-        self, quantitative: Dict, qualitative: Dict, temporal: Dict
-    ) -> float:
+    def _calculate_evolution_confidence(self, quantitative: Dict, qualitative: Dict, temporal: Dict) -> float:
         """진화 신뢰도 계산"""
         try:
             # 각 분석의 신뢰도 추출
@@ -170,9 +156,7 @@ class EvolutionAnalyzer:
             logger.error(f"진화 신뢰도 계산 오류: {e}")
             return 0.7
 
-    def _extract_key_insights(
-        self, quantitative: Dict, qualitative: Dict, temporal: Dict
-    ) -> List[str]:
+    def _extract_key_insights(self, quantitative: Dict, qualitative: Dict, temporal: Dict) -> List[str]:
         """핵심 인사이트 추출"""
         insights = []
 
@@ -196,9 +180,7 @@ class EvolutionAnalyzer:
                 insights.append("진화 속도가 느려지고 있습니다")
 
             # 종합 인사이트
-            overall_score = self._calculate_overall_evolution_score(
-                quantitative, qualitative, temporal
-            )
+            overall_score = self._calculate_overall_evolution_score(quantitative, qualitative, temporal)
             if overall_score > 0.8:
                 insights.append("전체적으로 우수한 진화 상태입니다")
             elif overall_score < 0.5:
@@ -258,9 +240,7 @@ class QuantitativeAnalyzer:
             )
 
             # 신뢰도 계산
-            confidence = self._calculate_confidence(
-                performance_scores, learning_efficiency, autonomy_levels
-            )
+            confidence = self._calculate_confidence(performance_scores, learning_efficiency, autonomy_levels)
 
             return {
                 "evolution_score": evolution_score,
@@ -269,12 +249,8 @@ class QuantitativeAnalyzer:
                 "performance_trend": performance_trend,
                 "learning_trend": learning_trend,
                 "autonomy_trend": autonomy_trend,
-                "latest_performance": (
-                    performance_scores[-1] if performance_scores else 0.0
-                ),
-                "latest_learning": (
-                    learning_efficiency[-1] if learning_efficiency else 0.0
-                ),
+                "latest_performance": (performance_scores[-1] if performance_scores else 0.0),
+                "latest_learning": (learning_efficiency[-1] if learning_efficiency else 0.0),
                 "latest_autonomy": autonomy_levels[-1] if autonomy_levels else 0.0,
             }
         except Exception as e:
@@ -345,9 +321,7 @@ class QuantitativeAnalyzer:
             logger.error(f"양적 점수 계산 오류: {e}")
             return 0.0
 
-    def _calculate_confidence(
-        self, performance: List[float], learning: List[float], autonomy: List[float]
-    ) -> float:
+    def _calculate_confidence(self, performance: List[float], learning: List[float], autonomy: List[float]) -> float:
         """신뢰도 계산"""
         try:
             data_points = len(performance) + len(learning) + len(autonomy)
@@ -415,12 +389,7 @@ class QualitativeAnalyzer:
         """질적 점수 계산"""
         try:
             # 가중 평균 계산
-            score = (
-                autonomy * 0.3
-                + learning * 0.25
-                + problem_solving * 0.25
-                + evolution * 0.2
-            )
+            score = autonomy * 0.3 + learning * 0.25 + problem_solving * 0.25 + evolution * 0.2
 
             return max(0.0, min(1.0, score))
         except Exception as e:
@@ -434,9 +403,7 @@ class QualitativeAnalyzer:
         try:
             # 데이터 완성도 기반 신뢰도
             available_indicators = sum(
-                1
-                for indicator in [autonomy, learning, problem_solving, evolution]
-                if indicator > 0
+                1 for indicator in [autonomy, learning, problem_solving, evolution] if indicator > 0
             )
 
             confidence = available_indicators / 4.0
@@ -508,9 +475,7 @@ class TemporalAnalyzer:
             evolution_stage = self._analyze_evolution_stage(performance_history)
 
             # 진화 점수 계산
-            evolution_score = self._calculate_temporal_score(
-                evolution_speed, evolution_pattern, evolution_stage
-            )
+            evolution_score = self._calculate_temporal_score(evolution_speed, evolution_pattern, evolution_stage)
 
             # 신뢰도 계산
             confidence = self._calculate_confidence(performance_history, timestamps)
@@ -539,9 +504,7 @@ class TemporalAnalyzer:
 
             for i in range(1, len(recent_scores)):
                 if recent_scores[i - 1] > 0:
-                    improvement = (
-                        recent_scores[i] - recent_scores[i - 1]
-                    ) / recent_scores[i - 1]
+                    improvement = (recent_scores[i] - recent_scores[i - 1]) / recent_scores[i - 1]
                     improvements.append(improvement)
 
             return sum(improvements) / len(improvements) if improvements else 0.0
@@ -562,15 +525,9 @@ class TemporalAnalyzer:
                 return "steady_improvement"
             elif recent_scores[0] > recent_scores[1] > recent_scores[2]:
                 return "steady_decline"
-            elif (
-                recent_scores[1] > recent_scores[0]
-                and recent_scores[1] > recent_scores[2]
-            ):
+            elif recent_scores[1] > recent_scores[0] and recent_scores[1] > recent_scores[2]:
                 return "peak_and_decline"
-            elif (
-                recent_scores[1] < recent_scores[0]
-                and recent_scores[1] < recent_scores[2]
-            ):
+            elif recent_scores[1] < recent_scores[0] and recent_scores[1] < recent_scores[2]:
                 return "valley_and_improvement"
             else:
                 return "fluctuating"
@@ -598,9 +555,7 @@ class TemporalAnalyzer:
             logger.error(f"진화 단계 분석 오류: {e}")
             return "unknown"
 
-    def _calculate_temporal_score(
-        self, speed: float, pattern: str, stage: str
-    ) -> float:
+    def _calculate_temporal_score(self, speed: float, pattern: str, stage: str) -> float:
         """시간적 점수 계산"""
         try:
             # 속도 점수 (0-0.4)
@@ -633,9 +588,7 @@ class TemporalAnalyzer:
             logger.error(f"시간적 점수 계산 오류: {e}")
             return 0.0
 
-    def _calculate_confidence(
-        self, performance_history: List[float], timestamps: List[str]
-    ) -> float:
+    def _calculate_confidence(self, performance_history: List[float], timestamps: List[str]) -> float:
         """신뢰도 계산"""
         try:
             # 데이터 품질 기반 신뢰도

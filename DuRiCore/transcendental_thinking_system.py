@@ -6,13 +6,12 @@ DuRi 초월적 사고 시스템 (Phase 4.1)
 """
 
 import asyncio
-import json
 import logging
 import random
 import time
 from dataclasses import asdict, dataclass
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -38,9 +37,7 @@ class CreativeBreakthrough:
     """창의적 돌파구 데이터 클래스"""
 
     breakthrough_id: str
-    breakthrough_type: (
-        str  # 'paradigm_shift', 'lateral_thinking', 'synthesis', 'disruption'
-    )
+    breakthrough_type: str  # 'paradigm_shift', 'lateral_thinking', 'synthesis', 'disruption'
     originality_score: float
     impact_potential: float
     feasibility: float
@@ -54,9 +51,7 @@ class TranscendentalSolution:
     """초월적 해결책 데이터 클래스"""
 
     solution_id: str
-    solution_type: (
-        str  # 'holistic', 'paradigm_shift', 'meta_solution', 'transcendental'
-    )
+    solution_type: str  # 'holistic', 'paradigm_shift', 'meta_solution', 'transcendental'
     comprehensiveness: float
     elegance: float
     sustainability: float
@@ -79,9 +74,7 @@ class TranscendentalThinkingSystem:
         self.creative_synthesis_engine = CreativeSynthesisEngine()
         self.transcendental_solution_engine = TranscendentalSolutionEngine()
 
-    async def process_transcendental_thinking(
-        self, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def process_transcendental_thinking(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """초월적 사고 처리 메인 함수"""
         try:
             logger.info("=== 초월적 사고 시스템 시작 ===")
@@ -90,9 +83,7 @@ class TranscendentalThinkingSystem:
             intuitive_insights = await self.generate_intuitive_insights(context)
 
             # 2. 창의적 돌파구 발견
-            creative_breakthroughs = await self.discover_creative_breakthroughs(
-                context, intuitive_insights
-            )
+            creative_breakthroughs = await self.discover_creative_breakthroughs(context, intuitive_insights)
 
             # 3. 초월적 해결책 생성
             transcendental_solutions = await self.generate_transcendental_solutions(
@@ -108,15 +99,9 @@ class TranscendentalThinkingSystem:
                 "system_name": self.system_name,
                 "version": self.version,
                 "timestamp": datetime.now().isoformat(),
-                "intuitive_insights": [
-                    asdict(insight) for insight in intuitive_insights
-                ],
-                "creative_breakthroughs": [
-                    asdict(breakthrough) for breakthrough in creative_breakthroughs
-                ],
-                "transcendental_solutions": [
-                    asdict(solution) for solution in transcendental_solutions
-                ],
+                "intuitive_insights": [asdict(insight) for insight in intuitive_insights],
+                "creative_breakthroughs": [asdict(breakthrough) for breakthrough in creative_breakthroughs],
+                "transcendental_solutions": [asdict(solution) for solution in transcendental_solutions],
                 "integrated_analysis": integrated_analysis,
                 "transcendental_thinking_score": self.calculate_transcendental_score(
                     intuitive_insights, creative_breakthroughs, transcendental_solutions
@@ -130,16 +115,12 @@ class TranscendentalThinkingSystem:
             logger.error(f"초월적 사고 처리 중 오류: {e}")
             return {"error": str(e)}
 
-    async def generate_intuitive_insights(
-        self, context: Dict[str, Any]
-    ) -> List[IntuitiveInsight]:
+    async def generate_intuitive_insights(self, context: Dict[str, Any]) -> List[IntuitiveInsight]:
         """직관적 통찰 생성"""
         insights = []
 
         # 패턴 인식 기반 통찰
-        pattern_insights = await self.pattern_recognition_engine.recognize_patterns(
-            context
-        )
+        pattern_insights = await self.pattern_recognition_engine.recognize_patterns(context)
         for pattern in pattern_insights:
             insight = IntuitiveInsight(
                 insight_id=f"insight_{int(time.time() * 1000)}",
@@ -154,9 +135,7 @@ class TranscendentalThinkingSystem:
             insights.append(insight)
 
         # 연결성 기반 통찰
-        connection_insights = (
-            await self.intuitive_reasoning_engine.discover_connections(context)
-        )
+        connection_insights = await self.intuitive_reasoning_engine.discover_connections(context)
         for connection in connection_insights:
             insight = IntuitiveInsight(
                 insight_id=f"insight_{int(time.time() * 1000)}",
@@ -171,9 +150,7 @@ class TranscendentalThinkingSystem:
             insights.append(insight)
 
         # 돌파구 통찰
-        breakthrough_insights = (
-            await self.creative_synthesis_engine.generate_breakthrough_insights(context)
-        )
+        breakthrough_insights = await self.creative_synthesis_engine.generate_breakthrough_insights(context)
         for breakthrough in breakthrough_insights:
             insight = IntuitiveInsight(
                 insight_id=f"insight_{int(time.time() * 1000)}",
@@ -197,11 +174,7 @@ class TranscendentalThinkingSystem:
         breakthroughs = []
 
         # 패러다임 전환 돌파구
-        paradigm_breakthroughs = (
-            await self.creative_synthesis_engine.generate_paradigm_shifts(
-                context, insights
-            )
-        )
+        paradigm_breakthroughs = await self.creative_synthesis_engine.generate_paradigm_shifts(context, insights)
         for paradigm in paradigm_breakthroughs:
             breakthrough = CreativeBreakthrough(
                 breakthrough_id=f"breakthrough_{int(time.time() * 1000)}",
@@ -216,11 +189,7 @@ class TranscendentalThinkingSystem:
             breakthroughs.append(breakthrough)
 
         # 횡적 사고 돌파구
-        lateral_breakthroughs = (
-            await self.intuitive_reasoning_engine.generate_lateral_thinking(
-                context, insights
-            )
-        )
+        lateral_breakthroughs = await self.intuitive_reasoning_engine.generate_lateral_thinking(context, insights)
         for lateral in lateral_breakthroughs:
             breakthrough = CreativeBreakthrough(
                 breakthrough_id=f"breakthrough_{int(time.time() * 1000)}",
@@ -235,10 +204,8 @@ class TranscendentalThinkingSystem:
             breakthroughs.append(breakthrough)
 
         # 합성 돌파구
-        synthesis_breakthroughs = (
-            await self.creative_synthesis_engine.generate_synthesis_breakthroughs(
-                context, insights
-            )
+        synthesis_breakthroughs = await self.creative_synthesis_engine.generate_synthesis_breakthroughs(
+            context, insights
         )
         for synthesis in synthesis_breakthroughs:
             breakthrough = CreativeBreakthrough(
@@ -266,10 +233,8 @@ class TranscendentalThinkingSystem:
         solutions = []
 
         # 전체적 해결책
-        holistic_solutions = (
-            await self.transcendental_solution_engine.generate_holistic_solutions(
-                context, insights, breakthroughs
-            )
+        holistic_solutions = await self.transcendental_solution_engine.generate_holistic_solutions(
+            context, insights, breakthroughs
         )
         for holistic in holistic_solutions:
             solution = TranscendentalSolution(
@@ -285,10 +250,8 @@ class TranscendentalThinkingSystem:
             solutions.append(solution)
 
         # 패러다임 전환 해결책
-        paradigm_solutions = (
-            await self.transcendental_solution_engine.generate_paradigm_shift_solutions(
-                context, insights, breakthroughs
-            )
+        paradigm_solutions = await self.transcendental_solution_engine.generate_paradigm_shift_solutions(
+            context, insights, breakthroughs
         )
         for paradigm in paradigm_solutions:
             solution = TranscendentalSolution(
@@ -304,10 +267,8 @@ class TranscendentalThinkingSystem:
             solutions.append(solution)
 
         # 메타 해결책
-        meta_solutions = (
-            await self.transcendental_solution_engine.generate_meta_solutions(
-                context, insights, breakthroughs
-            )
+        meta_solutions = await self.transcendental_solution_engine.generate_meta_solutions(
+            context, insights, breakthroughs
         )
         for meta in meta_solutions:
             solution = TranscendentalSolution(
@@ -338,57 +299,25 @@ class TranscendentalThinkingSystem:
             "total_solutions": len(solutions),
             "insight_distribution": {
                 "pattern": len([i for i in insights if i.insight_type == "pattern"]),
-                "connection": len(
-                    [i for i in insights if i.insight_type == "connection"]
-                ),
-                "breakthrough": len(
-                    [i for i in insights if i.insight_type == "breakthrough"]
-                ),
+                "connection": len([i for i in insights if i.insight_type == "connection"]),
+                "breakthrough": len([i for i in insights if i.insight_type == "breakthrough"]),
             },
             "breakthrough_distribution": {
-                "paradigm_shift": len(
-                    [
-                        b
-                        for b in breakthroughs
-                        if b.breakthrough_type == "paradigm_shift"
-                    ]
-                ),
-                "lateral_thinking": len(
-                    [
-                        b
-                        for b in breakthroughs
-                        if b.breakthrough_type == "lateral_thinking"
-                    ]
-                ),
-                "synthesis": len(
-                    [b for b in breakthroughs if b.breakthrough_type == "synthesis"]
-                ),
+                "paradigm_shift": len([b for b in breakthroughs if b.breakthrough_type == "paradigm_shift"]),
+                "lateral_thinking": len([b for b in breakthroughs if b.breakthrough_type == "lateral_thinking"]),
+                "synthesis": len([b for b in breakthroughs if b.breakthrough_type == "synthesis"]),
             },
             "solution_distribution": {
-                "holistic": len(
-                    [s for s in solutions if s.solution_type == "holistic"]
-                ),
-                "paradigm_shift": len(
-                    [s for s in solutions if s.solution_type == "paradigm_shift"]
-                ),
-                "meta_solution": len(
-                    [s for s in solutions if s.solution_type == "meta_solution"]
-                ),
+                "holistic": len([s for s in solutions if s.solution_type == "holistic"]),
+                "paradigm_shift": len([s for s in solutions if s.solution_type == "paradigm_shift"]),
+                "meta_solution": len([s for s in solutions if s.solution_type == "meta_solution"]),
             },
-            "average_confidence": (
-                sum(i.confidence_level for i in insights) / len(insights)
-                if insights
-                else 0
-            ),
+            "average_confidence": (sum(i.confidence_level for i in insights) / len(insights) if insights else 0),
             "average_originality": (
-                sum(b.originality_score for b in breakthroughs) / len(breakthroughs)
-                if breakthroughs
-                else 0
+                sum(b.originality_score for b in breakthroughs) / len(breakthroughs) if breakthroughs else 0
             ),
             "average_comprehensiveness": (
-                sum(s.comprehensiveness for s in solutions) / len(solutions)
-                if solutions
-                else 0
+                sum(s.comprehensiveness for s in solutions) / len(solutions) if solutions else 0
             ),
         }
 
@@ -404,22 +333,13 @@ class TranscendentalThinkingSystem:
         if not insights and not breakthroughs and not solutions:
             return 0.0
 
-        insight_score = (
-            sum(i.confidence_level * i.novelty_score for i in insights) / len(insights)
-            if insights
-            else 0
-        )
+        insight_score = sum(i.confidence_level * i.novelty_score for i in insights) / len(insights) if insights else 0
         breakthrough_score = (
-            sum(b.originality_score * b.impact_potential for b in breakthroughs)
-            / len(breakthroughs)
+            sum(b.originality_score * b.impact_potential for b in breakthroughs) / len(breakthroughs)
             if breakthroughs
             else 0
         )
-        solution_score = (
-            sum(s.comprehensiveness * s.elegance for s in solutions) / len(solutions)
-            if solutions
-            else 0
-        )
+        solution_score = sum(s.comprehensiveness * s.elegance for s in solutions) / len(solutions) if solutions else 0
 
         # 가중 평균 계산
         total_weight = len(insights) + len(breakthroughs) + len(solutions)
@@ -427,9 +347,7 @@ class TranscendentalThinkingSystem:
             return 0.0
 
         weighted_score = (
-            insight_score * len(insights)
-            + breakthrough_score * len(breakthroughs)
-            + solution_score * len(solutions)
+            insight_score * len(insights) + breakthrough_score * len(breakthroughs) + solution_score * len(solutions)
         ) / total_weight
 
         return min(1.0, weighted_score)
@@ -456,9 +374,7 @@ class PatternRecognitionEngine:
 
         return patterns
 
-    def _analyze_temporal_patterns(
-        self, context: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    def _analyze_temporal_patterns(self, context: Dict[str, Any]) -> List[Dict[str, Any]]:
         """시간적 패턴 분석"""
         patterns = []
 
@@ -483,9 +399,7 @@ class PatternRecognitionEngine:
 
         return patterns
 
-    def _analyze_structural_patterns(
-        self, context: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    def _analyze_structural_patterns(self, context: Dict[str, Any]) -> List[Dict[str, Any]]:
         """구조적 패턴 분석"""
         patterns = []
 
@@ -509,9 +423,7 @@ class PatternRecognitionEngine:
 
         return patterns
 
-    def _analyze_behavioral_patterns(
-        self, context: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    def _analyze_behavioral_patterns(self, context: Dict[str, Any]) -> List[Dict[str, Any]]:
         """행동적 패턴 분석"""
         patterns = []
 
@@ -539,9 +451,7 @@ class PatternRecognitionEngine:
 class IntuitiveReasoningEngine:
     """직관적 추론 엔진"""
 
-    async def discover_connections(
-        self, context: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    async def discover_connections(self, context: Dict[str, Any]) -> List[Dict[str, Any]]:
         """연결성 발견"""
         connections = []
 
@@ -579,9 +489,7 @@ class IntuitiveReasoningEngine:
 
         return lateral_ideas
 
-    def _find_conceptual_connections(
-        self, context: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    def _find_conceptual_connections(self, context: Dict[str, Any]) -> List[Dict[str, Any]]:
         """개념적 연결 발견"""
         connections = []
 
@@ -603,9 +511,7 @@ class IntuitiveReasoningEngine:
 
         return connections
 
-    def _find_functional_connections(
-        self, context: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    def _find_functional_connections(self, context: Dict[str, Any]) -> List[Dict[str, Any]]:
         """기능적 연결 발견"""
         connections = []
 
@@ -725,9 +631,7 @@ class IntuitiveReasoningEngine:
 class CreativeSynthesisEngine:
     """창의적 합성 엔진"""
 
-    async def generate_breakthrough_insights(
-        self, context: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    async def generate_breakthrough_insights(self, context: Dict[str, Any]) -> List[Dict[str, Any]]:
         """돌파구 통찰 생성"""
         breakthroughs = []
 
@@ -764,9 +668,7 @@ class CreativeSynthesisEngine:
         syntheses = []
 
         # 다학제적 합성
-        interdisciplinary_syntheses = self._generate_interdisciplinary_syntheses(
-            context, insights
-        )
+        interdisciplinary_syntheses = self._generate_interdisciplinary_syntheses(context, insights)
         syntheses.extend(interdisciplinary_syntheses)
 
         # 개념적 합성
@@ -775,9 +677,7 @@ class CreativeSynthesisEngine:
 
         return syntheses
 
-    def _generate_paradigm_insights(
-        self, context: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    def _generate_paradigm_insights(self, context: Dict[str, Any]) -> List[Dict[str, Any]]:
         """패러다임 통찰 생성"""
         insights = []
 
@@ -799,9 +699,7 @@ class CreativeSynthesisEngine:
 
         return insights
 
-    def _generate_fusion_insights(
-        self, context: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    def _generate_fusion_insights(self, context: Dict[str, Any]) -> List[Dict[str, Any]]:
         """융합적 통찰 생성"""
         insights = []
 
@@ -933,15 +831,11 @@ class TranscendentalSolutionEngine:
         solutions = []
 
         # 시스템적 해결책
-        systemic_solutions = self._generate_systemic_solutions(
-            context, insights, breakthroughs
-        )
+        systemic_solutions = self._generate_systemic_solutions(context, insights, breakthroughs)
         solutions.extend(systemic_solutions)
 
         # 통합적 해결책
-        integrative_solutions = self._generate_integrative_solutions(
-            context, insights, breakthroughs
-        )
+        integrative_solutions = self._generate_integrative_solutions(context, insights, breakthroughs)
         solutions.extend(integrative_solutions)
 
         return solutions
@@ -956,15 +850,11 @@ class TranscendentalSolutionEngine:
         solutions = []
 
         # 근본적 재구성
-        fundamental_restructuring = self._generate_fundamental_restructuring(
-            context, insights, breakthroughs
-        )
+        fundamental_restructuring = self._generate_fundamental_restructuring(context, insights, breakthroughs)
         solutions.extend(fundamental_restructuring)
 
         # 혁신적 접근
-        innovative_approaches = self._generate_innovative_approaches(
-            context, insights, breakthroughs
-        )
+        innovative_approaches = self._generate_innovative_approaches(context, insights, breakthroughs)
         solutions.extend(innovative_approaches)
 
         return solutions
@@ -979,15 +869,11 @@ class TranscendentalSolutionEngine:
         solutions = []
 
         # 메타 수준 해결책
-        meta_level_solutions = self._generate_meta_level_solutions(
-            context, insights, breakthroughs
-        )
+        meta_level_solutions = self._generate_meta_level_solutions(context, insights, breakthroughs)
         solutions.extend(meta_level_solutions)
 
         # 초월적 해결책
-        transcendental_solutions = self._generate_transcendental_level_solutions(
-            context, insights, breakthroughs
-        )
+        transcendental_solutions = self._generate_transcendental_level_solutions(context, insights, breakthroughs)
         solutions.extend(transcendental_solutions)
 
         return solutions

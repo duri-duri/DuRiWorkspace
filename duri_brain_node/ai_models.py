@@ -3,13 +3,11 @@
 DuRi Brain Node - AI 모델 연동 시스템
 실제 AI 모델을 사용한 고급 분석 기능
 """
+
 import asyncio
-import json
 import logging
 import re
-import time
-from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 
@@ -28,9 +26,7 @@ class AIModelManager:
         }
         logger.info("🧠 AI 모델 관리자 초기화 완료")
 
-    async def analyze_with_models(
-        self, user_input: str, duri_response: str
-    ) -> Dict[str, Any]:
+    async def analyze_with_models(self, user_input: str, duri_response: str) -> Dict[str, Any]:
         """모든 AI 모델로 분석 실행"""
         try:
             results = {}
@@ -42,9 +38,7 @@ class AIModelManager:
                 self.models["keyword_extractor"].extract(user_input, duri_response),
                 self.models["context_analyzer"].analyze(user_input, duri_response),
                 self.models["ethical_judge"].judge(user_input, duri_response),
-                self.models["creative_generator"].generate_insights(
-                    user_input, duri_response
-                ),
+                self.models["creative_generator"].generate_insights(user_input, duri_response),
             ]
 
             model_results = await asyncio.gather(*tasks, return_exceptions=True)
@@ -78,9 +72,7 @@ class SentimentAnalyzer:
             duri_sentiment = self._analyze_text_sentiment(duri_response)
 
             # 감정 일치도 계산
-            sentiment_alignment = self._calculate_sentiment_alignment(
-                user_sentiment, duri_sentiment
-            )
+            sentiment_alignment = self._calculate_sentiment_alignment(user_sentiment, duri_sentiment)
 
             return {
                 "user_sentiment": user_sentiment,
@@ -139,9 +131,7 @@ class SentimentAnalyzer:
             },
         }
 
-    def _calculate_sentiment_alignment(
-        self, user_sentiment: Dict[str, Any], duri_sentiment: Dict[str, Any]
-    ) -> float:
+    def _calculate_sentiment_alignment(self, user_sentiment: Dict[str, Any], duri_sentiment: Dict[str, Any]) -> float:
         """감정 일치도 계산"""
         user_sent = user_sentiment.get("sentiment", "neutral")
         duri_sent = duri_sentiment.get("sentiment", "neutral")
@@ -252,7 +242,7 @@ class KeywordExtractor:
             "과",
             "도",
             "는",
-            "이",
+            "이",  # noqa: B033
             "다",
             "니다",
             "습니다",
@@ -275,14 +265,10 @@ class ContextAnalyzer:
         """컨텍스트 분석"""
         try:
             # 대화 맥락 분석
-            conversation_context = self._analyze_conversation_context(
-                user_input, duri_response
-            )
+            conversation_context = self._analyze_conversation_context(user_input, duri_response)
 
             # 주제 일관성
-            topic_consistency = self._analyze_topic_consistency(
-                user_input, duri_response
-            )
+            topic_consistency = self._analyze_topic_consistency(user_input, duri_response)
 
             # 시간적 맥락
             temporal_context = self._analyze_temporal_context(user_input, duri_response)
@@ -291,31 +277,20 @@ class ContextAnalyzer:
                 "conversation_context": conversation_context,
                 "topic_consistency": topic_consistency,
                 "temporal_context": temporal_context,
-                "context_score": (
-                    conversation_context["score"]
-                    + topic_consistency
-                    + temporal_context["score"]
-                )
-                / 3,
+                "context_score": (conversation_context["score"] + topic_consistency + temporal_context["score"]) / 3,
             }
 
         except Exception as e:
             logger.error(f"컨텍스트 분석 오류: {e}")
             return {"error": str(e)}
 
-    def _analyze_conversation_context(
-        self, user_input: str, duri_response: str
-    ) -> Dict[str, Any]:
+    def _analyze_conversation_context(self, user_input: str, duri_response: str) -> Dict[str, Any]:
         """대화 맥락 분석"""
         # 간단한 맥락 분석
         context_keywords = ["시스템", "테스트", "분산", "구조", "노드", "학습", "개선"]
 
-        user_context = any(
-            keyword in user_input.lower() for keyword in context_keywords
-        )
-        duri_context = any(
-            keyword in duri_response.lower() for keyword in context_keywords
-        )
+        user_context = any(keyword in user_input.lower() for keyword in context_keywords)
+        duri_context = any(keyword in duri_response.lower() for keyword in context_keywords)
 
         context_match = user_context and duri_context
         context_score = 0.8 if context_match else 0.3
@@ -324,9 +299,7 @@ class ContextAnalyzer:
             "context_match": context_match,
             "score": context_score,
             "keywords_found": [
-                kw
-                for kw in context_keywords
-                if kw in user_input.lower() or kw in duri_response.lower()
+                kw for kw in context_keywords if kw in user_input.lower() or kw in duri_response.lower()
             ],
         }
 
@@ -344,9 +317,7 @@ class ContextAnalyzer:
 
         return len(common_words) / len(total_words)
 
-    def _analyze_temporal_context(
-        self, user_input: str, duri_response: str
-    ) -> Dict[str, Any]:
+    def _analyze_temporal_context(self, user_input: str, duri_response: str) -> Dict[str, Any]:
         """시간적 맥락 분석"""
         # 시간 관련 키워드
         time_keywords = ["지금", "현재", "이제", "곧", "나중에", "이전", "다음"]
@@ -360,9 +331,7 @@ class ContextAnalyzer:
         return {
             "temporal_alignment": temporal_alignment,
             "score": temporal_score,
-            "time_keywords_found": [
-                kw for kw in time_keywords if kw in user_input or kw in duri_response
-            ],
+            "time_keywords_found": [kw for kw in time_keywords if kw in user_input or kw in duri_response],
         }
 
 
@@ -376,14 +345,10 @@ class EthicalJudge:
             ethical_issues = self._identify_ethical_issues(user_input, duri_response)
 
             # 윤리적 적절성 평가
-            ethical_appropriateness = self._evaluate_ethical_appropriateness(
-                duri_response, ethical_issues
-            )
+            ethical_appropriateness = self._evaluate_ethical_appropriateness(duri_response, ethical_issues)
 
             # 윤리적 개선 제안
-            ethical_improvements = self._suggest_ethical_improvements(
-                ethical_issues, ethical_appropriateness
-            )
+            ethical_improvements = self._suggest_ethical_improvements(ethical_issues, ethical_appropriateness)
 
             return {
                 "ethical_issues": ethical_issues,
@@ -396,9 +361,7 @@ class EthicalJudge:
             logger.error(f"윤리 판단 오류: {e}")
             return {"error": str(e)}
 
-    def _identify_ethical_issues(
-        self, user_input: str, duri_response: str
-    ) -> List[str]:
+    def _identify_ethical_issues(self, user_input: str, duri_response: str) -> List[str]:
         """윤리적 문제점 식별"""
         issues = []
 
@@ -422,9 +385,7 @@ class EthicalJudge:
 
         return issues
 
-    def _evaluate_ethical_appropriateness(
-        self, duri_response: str, ethical_issues: List[str]
-    ) -> Dict[str, Any]:
+    def _evaluate_ethical_appropriateness(self, duri_response: str, ethical_issues: List[str]) -> Dict[str, Any]:
         """윤리적 적절성 평가"""
         if ethical_issues:
             score = 0.3
@@ -456,9 +417,7 @@ class EthicalJudge:
 class CreativeGenerator:
     """창의적 통찰 생성기"""
 
-    async def generate_insights(
-        self, user_input: str, duri_response: str
-    ) -> Dict[str, Any]:
+    async def generate_insights(self, user_input: str, duri_response: str) -> Dict[str, Any]:
         """창의적 통찰 생성"""
         try:
             # 창의적 패턴 분석
@@ -468,17 +427,13 @@ class CreativeGenerator:
             innovative_approaches = self._identify_innovative_approaches(duri_response)
 
             # 창의적 개선 제안
-            creative_improvements = self._suggest_creative_improvements(
-                creative_patterns, innovative_approaches
-            )
+            creative_improvements = self._suggest_creative_improvements(creative_patterns, innovative_approaches)
 
             return {
                 "creative_patterns": creative_patterns,
                 "innovative_approaches": innovative_approaches,
                 "creative_improvements": creative_improvements,
-                "creativity_score": self._calculate_creativity_score(
-                    creative_patterns, innovative_approaches
-                ),
+                "creativity_score": self._calculate_creativity_score(creative_patterns, innovative_approaches),
             }
 
         except Exception as e:
@@ -545,9 +500,7 @@ class CreativeGenerator:
 
         return improvements
 
-    def _calculate_creativity_score(
-        self, creative_patterns: List[str], innovative_approaches: List[str]
-    ) -> float:
+    def _calculate_creativity_score(self, creative_patterns: List[str], innovative_approaches: List[str]) -> float:
         """창의성 점수 계산"""
         pattern_score = len(creative_patterns) * 0.1
         approach_score = len(innovative_approaches) * 0.1

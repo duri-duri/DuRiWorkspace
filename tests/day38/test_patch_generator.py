@@ -2,7 +2,6 @@ import json
 import os
 import subprocess
 import tempfile
-from pathlib import Path
 
 
 def run_patch_generator(action, file_path, *args):

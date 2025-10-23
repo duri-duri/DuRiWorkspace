@@ -3,18 +3,17 @@
 A/B 테스트 SRM/A/A 가드 테스트
 샘플 비율 검정 및 A/A 테스트 검증
 """
-import json
+
 import os
 import sys
 import tempfile
-from pathlib import Path
 
 import pytest
 
 # 프로젝트 루트를 Python 경로에 추가
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from ab_test_runner import ABTestRunner
+from ab_test_runner import ABTestRunner  # noqa: E402
 
 
 class TestABSRMAA:
@@ -42,9 +41,7 @@ B,120
 B,115
 B,125"""
 
-            with tempfile.NamedTemporaryFile(
-                mode="w", suffix=".csv", delete=False
-            ) as f:
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
                 f.write(csv_content)
                 csv_path = f.name
 
@@ -97,9 +94,7 @@ A,120
 B,135
 B,140"""
 
-            with tempfile.NamedTemporaryFile(
-                mode="w", suffix=".csv", delete=False
-            ) as f:
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
                 f.write(csv_content)
                 csv_path = f.name
 
@@ -158,9 +153,7 @@ B,135
 B,140
 B,132"""
 
-            with tempfile.NamedTemporaryFile(
-                mode="w", suffix=".csv", delete=False
-            ) as f:
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
                 f.write(csv_content)
                 csv_path = f.name
 

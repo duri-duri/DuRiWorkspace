@@ -18,15 +18,13 @@ Phase 6: 통합 테스트 및 검증 - 최종 실행 준비 완료 적용
 """
 
 import asyncio
-import json
 import logging
 import time
-import traceback
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -140,9 +138,7 @@ class IntegratedTestSystem:
         }
 
         # 성능 메트릭
-        self.performance_metrics: Dict[str, deque] = defaultdict(
-            lambda: deque(maxlen=100)
-        )
+        self.performance_metrics: Dict[str, deque] = defaultdict(lambda: deque(maxlen=100))
 
         # 존재형 AI 시스템 초기화
         self.existence_ai = self._initialize_existence_ai()
@@ -181,25 +177,17 @@ class IntegratedTestSystem:
             logger.info(f"테스트 스위트 등록: {suite.name} ({suite.id})")
 
             # 존재형 AI: 진화 가능성 확인
-            if (
-                self.existence_ai
-                and self.existence_ai.evolution_capability.can_evolve()
-            ):
+            if self.existence_ai and self.existence_ai.evolution_capability.can_evolve():
                 self.existence_ai.evolution_capability.evolve()
 
             # 최종 실행 준비 완료: 최종 실행 준비 완료 확인
-            if (
-                self.final_execution_verifier
-                and self.final_execution_verifier.verify_readiness()
-            ):
+            if self.final_execution_verifier and self.final_execution_verifier.verify_readiness():
                 logger.info("최종 실행 준비 완료 확인됨")
 
         except Exception as e:
             logger.error(f"테스트 스위트 등록 실패: {e}")
 
-    async def run_integration_tests(
-        self, suite_ids: List[str] = None
-    ) -> IntegrationTestReport:
+    async def run_integration_tests(self, suite_ids: List[str] = None) -> IntegrationTestReport:
         """통합 테스트 실행"""
         try:
             logger.info("통합 테스트 시작")
@@ -208,7 +196,7 @@ class IntegratedTestSystem:
             if suite_ids is None:
                 suite_ids = list(self.test_suites.keys())
 
-            start_time = datetime.now()
+            start_time = datetime.now()  # noqa: F841
             all_test_results = []
 
             # 테스트 스위트별 실행
@@ -223,15 +211,9 @@ class IntegratedTestSystem:
 
             # 결과 집계
             total_tests = len(all_test_results)
-            passed_tests = len(
-                [r for r in all_test_results if r.status == TestStatus.PASSED]
-            )
-            failed_tests = len(
-                [r for r in all_test_results if r.status == TestStatus.FAILED]
-            )
-            skipped_tests = len(
-                [r for r in all_test_results if r.status == TestStatus.SKIPPED]
-            )
+            passed_tests = len([r for r in all_test_results if r.status == TestStatus.PASSED])
+            failed_tests = len([r for r in all_test_results if r.status == TestStatus.FAILED])
+            skipped_tests = len([r for r in all_test_results if r.status == TestStatus.SKIPPED])
 
             # 전체 점수 계산
             overall_score = passed_tests / max(1, total_tests)
@@ -255,22 +237,14 @@ class IntegratedTestSystem:
             self.test_reports.append(report)
 
             # 존재형 AI: 진화 가능성 확인
-            if (
-                self.existence_ai
-                and self.existence_ai.evolution_capability.can_evolve()
-            ):
+            if self.existence_ai and self.existence_ai.evolution_capability.can_evolve():
                 self.existence_ai.evolution_capability.evolve()
 
             # 최종 실행 준비 완료: 최종 실행 준비 완료 확인
-            if (
-                self.final_execution_verifier
-                and self.final_execution_verifier.verify_readiness()
-            ):
+            if self.final_execution_verifier and self.final_execution_verifier.verify_readiness():
                 logger.info("최종 실행 준비 완료 확인됨")
 
-            logger.info(
-                f"통합 테스트 완료: {passed_tests}/{total_tests} 통과 (점수: {overall_score:.2f})"
-            )
+            logger.info(f"통합 테스트 완료: {passed_tests}/{total_tests} 통과 (점수: {overall_score:.2f})")
 
             return report
 
@@ -285,9 +259,7 @@ class IntegratedTestSystem:
 
             # 의존성 체크
             if not await self._check_dependencies(suite.dependencies):
-                logger.warning(
-                    f"테스트 스위트 {suite.name}의 의존성이 충족되지 않아 건너뜀"
-                )
+                logger.warning(f"테스트 스위트 {suite.name}의 의존성이 충족되지 않아 건너뜀")
                 return results
 
             # 테스트 실행
@@ -385,8 +357,7 @@ class IntegratedTestSystem:
         """통합 시스템 테스트 실행"""
         try:
             if test_name == "unified_performance_test":
-                from unified_performance_optimizer import \
-                    unified_performance_optimizer
+                from unified_performance_optimizer import unified_performance_optimizer
 
                 summary = await unified_performance_optimizer.get_performance_summary()
                 score = summary.get("current_metrics", {}).get("efficiency_score", 0.0)
@@ -397,9 +368,6 @@ class IntegratedTestSystem:
                 }
 
             elif test_name == "unified_conversation_test":
-                from unified_conversation_service import \
-                    unified_conversation_service
-
                 # 대화 서비스 테스트
                 return {
                     "status": TestStatus.PASSED,
@@ -408,8 +376,6 @@ class IntegratedTestSystem:
                 }
 
             elif test_name == "unified_learning_test":
-                from unified_learning_system import unified_learning_system
-
                 # 학습 시스템 테스트
                 return {
                     "status": TestStatus.PASSED,
@@ -418,8 +384,6 @@ class IntegratedTestSystem:
                 }
 
             elif test_name == "unified_judgment_test":
-                from unified_judgment_system import unified_judgment_system
-
                 # 판단 시스템 테스트
                 return {
                     "status": TestStatus.PASSED,
@@ -449,9 +413,7 @@ class IntegratedTestSystem:
                 from async_optimization_system import async_optimization_system
 
                 summary = await async_optimization_system.get_optimization_summary()
-                score = summary.get("current_metrics", {}).get(
-                    "optimization_score", 0.0
-                )
+                score = summary.get("current_metrics", {}).get("optimization_score", 0.0)
                 return {
                     "status": TestStatus.PASSED if score > 0.3 else TestStatus.FAILED,
                     "score": score,
@@ -477,13 +439,10 @@ class IntegratedTestSystem:
         """메모리 시스템 테스트 실행"""
         try:
             if test_name == "memory_optimization_test":
-                from memory_optimization_system import \
-                    memory_optimization_system
+                from memory_optimization_system import memory_optimization_system
 
                 summary = await memory_optimization_system.get_memory_summary()
-                score = summary.get("current_metrics", {}).get(
-                    "optimization_score", 0.0
-                )
+                score = summary.get("current_metrics", {}).get("optimization_score", 0.0)
                 return {
                     "status": TestStatus.PASSED if score > 0.5 else TestStatus.FAILED,
                     "score": score,
@@ -621,15 +580,9 @@ class IntegratedTestSystem:
         """테스트 통계 업데이트"""
         try:
             total_tests = len(test_results)
-            passed_tests = len(
-                [r for r in test_results if r.status == TestStatus.PASSED]
-            )
-            failed_tests = len(
-                [r for r in test_results if r.status == TestStatus.FAILED]
-            )
-            skipped_tests = len(
-                [r for r in test_results if r.status == TestStatus.SKIPPED]
-            )
+            passed_tests = len([r for r in test_results if r.status == TestStatus.PASSED])
+            failed_tests = len([r for r in test_results if r.status == TestStatus.FAILED])
+            skipped_tests = len([r for r in test_results if r.status == TestStatus.SKIPPED])
 
             self.test_statistics["total_tests_run"] += total_tests
             self.test_statistics["total_tests_passed"] += passed_tests
@@ -639,16 +592,12 @@ class IntegratedTestSystem:
             # 평균 테스트 시간 계산
             durations = [r.duration for r in test_results if r.duration > 0]
             if durations:
-                self.test_statistics["average_test_duration"] = sum(durations) / len(
-                    durations
-                )
+                self.test_statistics["average_test_duration"] = sum(durations) / len(durations)
 
             # 성공률 계산
             total_run = self.test_statistics["total_tests_run"]
             if total_run > 0:
-                self.test_statistics["success_rate"] = (
-                    self.test_statistics["total_tests_passed"] / total_run
-                )
+                self.test_statistics["success_rate"] = self.test_statistics["total_tests_passed"] / total_run
 
         except Exception as e:
             logger.error(f"테스트 통계 업데이트 실패: {e}")
@@ -661,35 +610,21 @@ class IntegratedTestSystem:
             # 실패한 테스트 분석
             failed_tests = [r for r in test_results if r.status == TestStatus.FAILED]
             if failed_tests:
-                recommendations.append(
-                    f"{len(failed_tests)}개의 테스트가 실패했습니다. 실패한 테스트를 검토하세요."
-                )
+                recommendations.append(f"{len(failed_tests)}개의 테스트가 실패했습니다. 실패한 테스트를 검토하세요.")
 
             # 성능 테스트 분석
-            performance_tests = [
-                r for r in test_results if r.test_type == TestType.PERFORMANCE
-            ]
+            performance_tests = [r for r in test_results if r.test_type == TestType.PERFORMANCE]
             if performance_tests:
-                avg_score = sum(r.score for r in performance_tests) / len(
-                    performance_tests
-                )
+                avg_score = sum(r.score for r in performance_tests) / len(performance_tests)
                 if avg_score < 0.7:
-                    recommendations.append(
-                        "성능 테스트 점수가 낮습니다. 성능 최적화를 고려하세요."
-                    )
+                    recommendations.append("성능 테스트 점수가 낮습니다. 성능 최적화를 고려하세요.")
 
             # 통합 테스트 분석
-            integration_tests = [
-                r for r in test_results if r.test_type == TestType.INTEGRATION
-            ]
+            integration_tests = [r for r in test_results if r.test_type == TestType.INTEGRATION]
             if integration_tests:
-                avg_score = sum(r.score for r in integration_tests) / len(
-                    integration_tests
-                )
+                avg_score = sum(r.score for r in integration_tests) / len(integration_tests)
                 if avg_score < 0.8:
-                    recommendations.append(
-                        "통합 테스트 점수가 낮습니다. 시스템 간 연동을 검토하세요."
-                    )
+                    recommendations.append("통합 테스트 점수가 낮습니다. 시스템 간 연동을 검토하세요.")
 
             if not recommendations:
                 recommendations.append("모든 테스트가 성공적으로 완료되었습니다.")

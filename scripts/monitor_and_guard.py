@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import json
-import os
 import re
 import subprocess as sp
 import time
@@ -40,10 +39,8 @@ def bench_once():
 
 def grep_errors():
     # 운영 로그 error/fail/traceback 스캔(없어도 OK)
-    rc, out, err = sh(
-        r"ls -1 var/reports/final_verify_*/run.log 2>/dev/null | tail -n 2"
-    )
-    files = [l for l in out.splitlines() if l.strip()]
+    rc, out, err = sh(r"ls -1 var/reports/final_verify_*/run.log 2>/dev/null | tail -n 2")
+    files = [l for l in out.splitlines() if l.strip()]  # noqa: E741
     bad = []
     for f in files:
         rc2, out2, _ = sh(rf"grep -Ein 'error|fail|traceback' {f} || true")
@@ -56,7 +53,7 @@ def read_baseline():
     if BASEF.exists():
         try:
             return json.loads(BASEF.read_text())
-        except:
+        except:  # noqa: E722
             return {}
     return {}
 
@@ -72,11 +69,7 @@ def append_csv(row):
         if head:
             f.write("ts,rollout,adv,gen,math,err_count,alerts\n")
         f.write(
-            ",".join(
-                str(row.get(k, ""))
-                for k in ["ts", "rollout", "adv", "gen", "math", "err_count", "alerts"]
-            )
-            + "\n"
+            ",".join(str(row.get(k, "")) for k in ["ts", "rollout", "adv", "gen", "math", "err_count", "alerts"]) + "\n"
         )
 
 
@@ -127,16 +120,14 @@ def main():
 
         # 콘솔 피드백
         print(
-            f"[{i+1}/{ITER}] ts={ts} rollout={rollout} adv={bvals.get('advanced')} gen={bvals.get('general')} math={bvals.get('math')} err={len(errs)}"
+            f"[{i+1}/{ITER}] ts={ts} rollout={rollout} adv={bvals.get('advanced')} gen={bvals.get('general')} math={bvals.get('math')} err={len(errs)}"  # noqa: E501
         )
         if alerts:
             print("  ALERT:", "; ".join(alerts))
             # 하드가드 트리거 시 즉시 권고 출력
             if any(a.startswith("HARD-") for a in alerts) or len(errs) > 0:
                 print("  >>> 권고: 즉시 완화(roll back) ↓")
-                print(
-                    "      export DURI_UNIFIED_REASONING_ROLLOUT=50 && bash scripts/rollout_ops.sh status"
-                )
+                print("      export DURI_UNIFIED_REASONING_ROLLOUT=50 && bash scripts/rollout_ops.sh status")
         if i < ITER - 1:
             time.sleep(INTERVAL)
 

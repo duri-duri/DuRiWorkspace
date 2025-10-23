@@ -5,24 +5,19 @@ DuRiCore Phase 7 - 실제 응용 시스템
 """
 
 import asyncio
-import json
 import logging
-import math
-import re
 import statistics
 import time
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List
 
 # 기존 시스템들 import
 from integrated_system_manager import IntegratedSystemManager
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -100,9 +95,7 @@ class DomainSpecificModule:
 
     def update_performance(self, metrics: Dict[str, float]):
         """성능 메트릭 업데이트"""
-        self.performance_history.append(
-            {"timestamp": datetime.now().isoformat(), "metrics": metrics}
-        )
+        self.performance_history.append({"timestamp": datetime.now().isoformat(), "metrics": metrics})
 
 
 class GeneralConversationModule(DomainSpecificModule):
@@ -125,9 +118,7 @@ class GeneralConversationModule(DomainSpecificModule):
         conversation_analysis = self._analyze_conversation(context.user_input)
 
         # 적절한 응답 생성
-        response = await self._generate_conversation_response(
-            context, conversation_analysis
-        )
+        response = await self._generate_conversation_response(context, conversation_analysis)
 
         execution_time = time.time() - start_time
 
@@ -214,52 +205,50 @@ class GeneralConversationModule(DomainSpecificModule):
             "alternatives": ["공감적 응답", "정보 제공", "질문 반문"],
         }
 
-    async def _generate_conversation_response(
-        self, context: ApplicationContext, analysis: Dict[str, Any]
-    ) -> str:
+    async def _generate_conversation_response(self, context: ApplicationContext, analysis: Dict[str, Any]) -> str:
         """대화 응답 생성 - 판단 로직 기반 동적 생성"""
         emotion = analysis["emotion"]
-        conv_type = analysis["type"]
+        conv_type = analysis["type"]  # noqa: F841
 
         # 컨텍스트 분석
         user_context = context.user_context or {}
         interaction_history = user_context.get("interaction_history", [])
-        recent_emotions = [
-            h.get("emotion") for h in interaction_history[-3:] if h.get("emotion")
-        ]
+        recent_emotions = [h.get("emotion") for h in interaction_history[-3:] if h.get("emotion")]
         user_goals = user_context.get("goals", [])
         system_performance = user_context.get("system_performance", 0.5)
 
         # 감정별 동적 응답 생성
         if emotion == "기쁨":
             if len(recent_emotions) > 0 and recent_emotions.count("슬픔") > 0:
-                return f"정말 기뻐 보이네요! 최근에 힘드셨던 것 같은데, {context.user_input}에 대해 더 자세히 들려주세요. 좋은 일이 생겼나요?"
+                return f"정말 기뻐 보이네요! 최근에 힘드셨던 것 같은데, {context.user_input}에 대해 더 자세히 들려주세요. 좋은 일이 생겼나요?"  # noqa: E501
             elif user_goals and len(user_goals) > 0:
-                return f"정말 기뻐 보이네요! 목표를 향해 나아가고 계시는 것 같아요. {context.user_input}에 대해 더 자세히 들려주세요."
+                return f"정말 기뻐 보이네요! 목표를 향해 나아가고 계시는 것 같아요. {context.user_input}에 대해 더 자세히 들려주세요."  # noqa: E501
             else:
-                return f"정말 기뻐 보이네요! {context.user_input}에 대해 더 자세히 들려주세요. 무엇이 그렇게 기쁘신가요?"
+                return (
+                    f"정말 기뻐 보이네요! {context.user_input}에 대해 더 자세히 들려주세요. 무엇이 그렇게 기쁘신가요?"
+                )
 
         elif emotion == "슬픔":
             if len(recent_emotions) > 0 and recent_emotions.count("기쁨") > 0:
-                return f"마음이 많이 아프시겠어요. 최근에 좋았던 일이 있었는데, {context.user_input}에 대해 이야기해보세요. 무슨 일이 있으셨나요?"
+                return f"마음이 많이 아프시겠어요. 최근에 좋았던 일이 있었는데, {context.user_input}에 대해 이야기해보세요. 무슨 일이 있으셨나요?"  # noqa: E501
             elif system_performance < 0.3:
-                return f"마음이 많이 아프시겠어요. 제가 도움이 부족했나 봐요. {context.user_input}에 대해 이야기해보세요. 어떻게 도와드릴까요?"
+                return f"마음이 많이 아프시겠어요. 제가 도움이 부족했나 봐요. {context.user_input}에 대해 이야기해보세요. 어떻게 도와드릴까요?"  # noqa: E501
             else:
                 return f"마음이 많이 아프시겠어요. {context.user_input}에 대해 이야기해보세요. 함께 생각해보아요."
 
         elif emotion == "화남":
             if len(recent_emotions) > 0 and recent_emotions.count("화남") > 1:
-                return f"화가 나실 만한 일이 있었군요. 최근에 계속 힘드셨던 것 같아요. {context.user_input}에 대해 차분히 이야기해보세요. 무엇이 그렇게 화나게 하시나요?"
+                return f"화가 나실 만한 일이 있었군요. 최근에 계속 힘드셨던 것 같아요. {context.user_input}에 대해 차분히 이야기해보세요. 무엇이 그렇게 화나게 하시나요?"  # noqa: E501
             elif user_goals and len(user_goals) > 0:
-                return f"화가 나실 만한 일이 있었군요. 목표를 향해 가시다가 방해받으셨나요? {context.user_input}에 대해 차분히 이야기해보세요."
+                return f"화가 나실 만한 일이 있었군요. 목표를 향해 가시다가 방해받으셨나요? {context.user_input}에 대해 차분히 이야기해보세요."  # noqa: E501
             else:
-                return f"화가 나실 만한 일이 있었군요. {context.user_input}에 대해 차분히 이야기해보세요. 무엇이 그렇게 화나게 하시나요?"
+                return f"화가 나실 만한 일이 있었군요. {context.user_input}에 대해 차분히 이야기해보세요. 무엇이 그렇게 화나게 하시나요?"  # noqa: E501
 
         elif emotion == "걱정":
             if len(recent_emotions) > 0 and recent_emotions.count("걱정") > 1:
-                return f"걱정이 많으시겠어요. 계속 걱정되시는 일이 있으신가요? {context.user_input}에 대해 함께 생각해보아요. 어떤 부분이 가장 걱정되시나요?"
+                return f"걱정이 많으시겠어요. 계속 걱정되시는 일이 있으신가요? {context.user_input}에 대해 함께 생각해보아요. 어떤 부분이 가장 걱정되시나요?"  # noqa: E501
             elif user_goals and len(user_goals) > 0:
-                return f"걱정이 많으시겠어요. 목표를 향해 가시다가 어려움이 있으신가요? {context.user_input}에 대해 함께 생각해보아요."
+                return f"걱정이 많으시겠어요. 목표를 향해 가시다가 어려움이 있으신가요? {context.user_input}에 대해 함께 생각해보아요."  # noqa: E501
             else:
                 return f"걱정이 많으시겠어요. {context.user_input}에 대해 함께 생각해보아요. 어떤 부분이 걱정되시나요?"
 
@@ -324,22 +313,20 @@ class ProblemSolvingModule(DomainSpecificModule):
 
         return {"type": problem_type, "complexity": "medium", "domain": "general"}
 
-    async def _generate_solution(
-        self, context: ApplicationContext, analysis: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _generate_solution(self, context: ApplicationContext, analysis: Dict[str, Any]) -> Dict[str, Any]:
         """해결책 생성"""
         problem_type = analysis["type"]
 
         if problem_type == ProblemType.LOGICAL:
             return {
-                "solution": "1. 문제를 명확히 정의하세요\n2. 관련 정보를 수집하세요\n3. 가능한 해결책들을 나열하세요\n4. 각 해결책의 장단점을 분석하세요\n5. 최적의 해결책을 선택하세요",
+                "solution": "1. 문제를 명확히 정의하세요\n2. 관련 정보를 수집하세요\n3. 가능한 해결책들을 나열하세요\n4. 각 해결책의 장단점을 분석하세요\n5. 최적의 해결책을 선택하세요",  # noqa: E501
                 "confidence": 0.9,
                 "reasoning": "논리적 문제 해결을 위한 체계적 접근법",
                 "alternatives": ["의사결정 트리 사용", "SWOT 분석", "5Why 분석"],
             }
         elif problem_type == ProblemType.CREATIVE:
             return {
-                "solution": "1. 기존 관념을 버리세요\n2. 다양한 관점에서 생각해보세요\n3. 브레인스토밍을 통해 아이디어를 생성하세요\n4. 조합과 변형을 시도해보세요\n5. 실험적 접근을 두려워하지 마세요",
+                "solution": "1. 기존 관념을 버리세요\n2. 다양한 관점에서 생각해보세요\n3. 브레인스토밍을 통해 아이디어를 생성하세요\n4. 조합과 변형을 시도해보세요\n5. 실험적 접근을 두려워하지 마세요",  # noqa: E501
                 "confidence": 0.85,
                 "reasoning": "창의적 사고를 위한 자유로운 접근법",
                 "alternatives": ["디자인 씽킹", "마인드맵", "역발상"],
@@ -402,15 +389,13 @@ class CreativeWritingModule(DomainSpecificModule):
 
         return {"genre": genre, "length": "medium", "style": "creative"}
 
-    async def _generate_creative_content(
-        self, context: ApplicationContext, analysis: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _generate_creative_content(self, context: ApplicationContext, analysis: Dict[str, Any]) -> Dict[str, Any]:
         """창작물 생성"""
         genre = analysis["genre"]
 
         if genre == "fiction":
             return {
-                "content": "어느 날, 작은 마을에 이상한 소문이 퍼졌다. 마을 사람들은 모두 두려워했지만, 한 소년만은 호기심을 가졌다. 그는 마을 뒤편의 오래된 나무에 가서 조심스럽게 다가갔다. 그리고는...",
+                "content": "어느 날, 작은 마을에 이상한 소문이 퍼졌다. 마을 사람들은 모두 두려워했지만, 한 소년만은 호기심을 가졌다. 그는 마을 뒤편의 오래된 나무에 가서 조심스럽게 다가갔다. 그리고는...",  # noqa: E501
                 "confidence": 0.85,
                 "reasoning": "소설적 요소를 포함한 창작 스토리",
                 "alternatives": [
@@ -459,9 +444,7 @@ class TechnicalAnalysisModule(DomainSpecificModule):
         technical_analysis = self._analyze_technical_request(context.user_input)
 
         # 분석 결과 생성
-        analysis_result = await self._generate_technical_analysis(
-            context, technical_analysis
-        )
+        analysis_result = await self._generate_technical_analysis(context, technical_analysis)
 
         execution_time = time.time() - start_time
 
@@ -498,14 +481,14 @@ class TechnicalAnalysisModule(DomainSpecificModule):
 
         if field == "programming":
             return {
-                "analysis": "코드 분석을 위해서는 구체적인 코드나 문제 상황을 알려주시면 더 정확한 분석을 제공할 수 있습니다. 일반적으로는 코드의 가독성, 효율성, 안정성을 중점적으로 검토합니다.",
+                "analysis": "코드 분석을 위해서는 구체적인 코드나 문제 상황을 알려주시면 더 정확한 분석을 제공할 수 있습니다. 일반적으로는 코드의 가독성, 효율성, 안정성을 중점적으로 검토합니다.",  # noqa: E501
                 "confidence": 0.85,
                 "reasoning": "프로그래밍 분야의 일반적 분석 가이드라인",
                 "alternatives": ["코드 리뷰", "성능 프로파일링", "아키텍처 분석"],
             }
         elif field == "performance":
             return {
-                "analysis": "성능 분석을 위해서는 현재 시스템의 성능 지표와 병목 지점을 파악해야 합니다. CPU, 메모리, 네트워크, 디스크 I/O 등을 종합적으로 분석하는 것이 중요합니다.",
+                "analysis": "성능 분석을 위해서는 현재 시스템의 성능 지표와 병목 지점을 파악해야 합니다. CPU, 메모리, 네트워크, 디스크 I/O 등을 종합적으로 분석하는 것이 중요합니다.",  # noqa: E501
                 "confidence": 0.9,
                 "reasoning": "성능 분석의 체계적 접근법",
                 "alternatives": [
@@ -516,7 +499,7 @@ class TechnicalAnalysisModule(DomainSpecificModule):
             }
         else:
             return {
-                "analysis": "기술적 분석을 위해서는 구체적인 기술적 요구사항이나 문제 상황을 알려주시면 더 정확한 분석을 제공할 수 있습니다.",
+                "analysis": "기술적 분석을 위해서는 구체적인 기술적 요구사항이나 문제 상황을 알려주시면 더 정확한 분석을 제공할 수 있습니다.",  # noqa: E501
                 "confidence": 0.8,
                 "reasoning": "일반적인 기술 분석 프레임워크",
                 "alternatives": ["상세 분석", "전문가 검토", "실험적 검증"],
@@ -591,9 +574,7 @@ class ApplicationSystem:
 
         # 성능 메트릭 업데이트
         execution_time = time.time() - start_time
-        self._update_performance_metrics(
-            domain, execution_time, final_result.confidence_score
-        )
+        self._update_performance_metrics(domain, execution_time, final_result.confidence_score)
 
         return final_result
 
@@ -644,9 +625,7 @@ class ApplicationSystem:
 
         recent_performance = self.performance_history[-10:]
         avg_confidence = statistics.mean([p["confidence"] for p in recent_performance])
-        avg_execution_time = statistics.mean(
-            [p["execution_time"] for p in recent_performance]
-        )
+        avg_execution_time = statistics.mean([p["execution_time"] for p in recent_performance])
 
         return {
             "average_confidence": avg_confidence,
@@ -664,9 +643,7 @@ class ApplicationSystem:
         adjusted_confidence = (module_result.confidence_score + judgment_score) / 2
 
         # 통합된 추론
-        integrated_reasoning = (
-            f"{module_result.reasoning} | 통합 시스템 판단: {judgment_score:.2f}"
-        )
+        integrated_reasoning = f"{module_result.reasoning} | 통합 시스템 판단: {judgment_score:.2f}"
 
         return ApplicationResult(
             domain=module_result.domain,
@@ -687,7 +664,7 @@ class ApplicationSystem:
         return ApplicationResult(
             domain=context.domain,
             problem_type=context.problem_type,
-            solution=f"'{context.user_input}'에 대한 기본 응답입니다. 더 구체적인 요청을 해주시면 더 정확한 도움을 드릴 수 있습니다.",
+            solution=f"'{context.user_input}'에 대한 기본 응답입니다. 더 구체적인 요청을 해주시면 더 정확한 도움을 드릴 수 있습니다.",  # noqa: E501
             confidence_score=0.7,
             reasoning="기본 처리 모듈을 통한 일반적 응답",
             alternatives=[
@@ -700,9 +677,7 @@ class ApplicationSystem:
             created_at=datetime.now().isoformat(),
         )
 
-    def _update_performance_metrics(
-        self, domain: ApplicationDomain, execution_time: float, confidence_score: float
-    ):
+    def _update_performance_metrics(self, domain: ApplicationDomain, execution_time: float, confidence_score: float):
         """성능 메트릭 업데이트"""
         performance_data = {
             "timestamp": datetime.now().isoformat(),
@@ -719,9 +694,7 @@ class ApplicationSystem:
 
         stats = self.domain_usage_stats[domain.value]
         stats["count"] += 1
-        stats["avg_confidence"] = (
-            stats["avg_confidence"] * (stats["count"] - 1) + confidence_score
-        ) / stats["count"]
+        stats["avg_confidence"] = (stats["avg_confidence"] * (stats["count"] - 1) + confidence_score) / stats["count"]
 
     async def get_system_status(self) -> Dict[str, Any]:
         """시스템 상태 반환"""
@@ -797,9 +770,7 @@ async def main():
     print("\n📋 테스트 결과:")
     for domain, result in test_results.items():
         if result["status"] == "success":
-            print(
-                f"   ✅ {domain}: 신뢰도 {result['confidence']:.2f}, 실행시간 {result['execution_time']:.2f}초"
-            )
+            print(f"   ✅ {domain}: 신뢰도 {result['confidence']:.2f}, 실행시간 {result['execution_time']:.2f}초")
         else:
             print(f"   ❌ {domain}: {result.get('error', 'Unknown error')}")
 

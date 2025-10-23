@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import ast
 import json
-import pathlib
 import sys
 from typing import Any, Dict, List
 

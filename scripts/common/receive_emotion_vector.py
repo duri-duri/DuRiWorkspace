@@ -21,7 +21,7 @@ def append_receive_json_log(entry):
         with open(RECEIVE_JSON_LOG, "r") as f:
             try:
                 logs = json.load(f)
-            except:
+            except:  # noqa: E722
                 logs = []
     logs.append(entry)
     with open(RECEIVE_JSON_LOG, "w") as f:

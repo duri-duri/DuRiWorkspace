@@ -9,13 +9,12 @@ import gzip
 import hashlib
 import json
 import logging
-import os
 import pickle
 import time
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -286,13 +285,9 @@ class MemoryManager:
             "type_distribution": type_counts,
             "tag_distribution": tag_counts,
             "average_importance": (
-                sum(m.importance for m in self.memories.values()) / len(self.memories)
-                if self.memories
-                else 0
+                sum(m.importance for m in self.memories.values()) / len(self.memories) if self.memories else 0
             ),
-            "most_accessed": sorted(
-                self.memories.values(), key=lambda x: x.accessed_count, reverse=True
-            )[:5],
+            "most_accessed": sorted(self.memories.values(), key=lambda x: x.accessed_count, reverse=True)[:5],
         }
 
     async def save_memories(self):
@@ -335,12 +330,8 @@ class MemoryManager:
                 # 메모리 로드
                 for memory_id, memory_data in data["memories"].items():
                     # datetime 변환
-                    memory_data["created_at"] = datetime.fromisoformat(
-                        memory_data["created_at"]
-                    )
-                    memory_data["last_accessed"] = datetime.fromisoformat(
-                        memory_data["last_accessed"]
-                    )
+                    memory_data["created_at"] = datetime.fromisoformat(memory_data["created_at"])
+                    memory_data["last_accessed"] = datetime.fromisoformat(memory_data["last_accessed"])
 
                     memory_entry = MemoryEntry(**memory_data)
                     self.memories[memory_id] = memory_entry
@@ -406,9 +397,7 @@ class MemoryManager:
         if self.stats["total_queries"] > 0:
             current_avg = self.stats["average_query_time"]
             new_count = self.stats["total_queries"]
-            self.stats["average_query_time"] = (
-                current_avg * (new_count - 1) + processing_time
-            ) / new_count
+            self.stats["average_query_time"] = (current_avg * (new_count - 1) + processing_time) / new_count
 
     async def _auto_save_loop(self):
         """자동 저장 루프"""
@@ -481,12 +470,8 @@ class MemoryManager:
 
             # 새 메모리 로드
             for memory_id, memory_data in import_data["memories"].items():
-                memory_data["created_at"] = datetime.fromisoformat(
-                    memory_data["created_at"]
-                )
-                memory_data["last_accessed"] = datetime.fromisoformat(
-                    memory_data["last_accessed"]
-                )
+                memory_data["created_at"] = datetime.fromisoformat(memory_data["created_at"])
+                memory_data["last_accessed"] = datetime.fromisoformat(memory_data["last_accessed"])
 
                 memory_entry = MemoryEntry(**memory_data)
                 self.memories[memory_id] = memory_entry

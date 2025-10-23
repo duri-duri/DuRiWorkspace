@@ -40,7 +40,7 @@ def append_broadcast_json_log(entry):
         with open(BROADCAST_JSON_LOG, "r") as f:
             try:
                 logs = json.load(f)
-            except:
+            except:  # noqa: E722
                 logs = []
     logs.append(entry)
     with open(BROADCAST_JSON_LOG, "w") as f:
@@ -67,7 +67,7 @@ def load_importance_threshold(default=0.3):
     try:
         with open(POLICY_PATH, "r") as f:
             return yaml.safe_load(f).get("importance_threshold", default)
-    except:
+    except:  # noqa: E722
         log("[⚠️] importance_policy.yaml 읽기 실패, 기본값 사용")
         return default
 
@@ -134,9 +134,7 @@ def main():
         log(f"[⚠️] last_sent.json 읽기 오류: {e}")
         return
 
-    if json.dumps(current_delta, sort_keys=True) != json.dumps(
-        last_sent, sort_keys=True
-    ):
+    if json.dumps(current_delta, sort_keys=True) != json.dumps(last_sent, sort_keys=True):
         log("[📢] 변화 감지됨 - 전송 실행")
         send_to_all_targets(current_delta)
         write_json(LAST_SENT_FILE, current_delta)

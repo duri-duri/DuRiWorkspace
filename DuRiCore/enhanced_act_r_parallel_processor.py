@@ -18,15 +18,13 @@ import statistics
 import time
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
-from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
+from dataclasses import dataclass
+from datetime import datetime
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -181,9 +179,7 @@ class EnhancedACTRParallelProcessor:
             else:
                 # 동기 함수를 비동기로 실행
                 loop = asyncio.get_event_loop()
-                result = await loop.run_in_executor(
-                    None, task.function, *task.args, **task.kwargs
-                )
+                result = await loop.run_in_executor(None, task.function, *task.args, **task.kwargs)
 
             task.status = TaskStatus.COMPLETED
             task.result = result
@@ -228,9 +224,7 @@ class EnhancedACTRParallelProcessor:
         # 캐시 크기 제한
         if len(self.cache) > self.cache_max_size:
             # 가장 오래된 항목 삭제
-            oldest_key = min(
-                self.cache.keys(), key=lambda k: self.cache[k]["timestamp"]
-            )
+            oldest_key = min(self.cache.keys(), key=lambda k: self.cache[k]["timestamp"])
             del self.cache[oldest_key]
 
     def _update_performance_metrics(self, execution_time: float, task_count: int):
@@ -240,9 +234,7 @@ class EnhancedACTRParallelProcessor:
 
         # 평균 실행 시간 계산
         if self.completed_tasks:
-            avg_time = statistics.mean(
-                [task.execution_time for task in self.completed_tasks]
-            )
+            avg_time = statistics.mean([task.execution_time for task in self.completed_tasks])
             self.performance_metrics["average_execution_time"] = avg_time
 
         # 병렬 효율성 계산
@@ -252,25 +244,17 @@ class EnhancedACTRParallelProcessor:
 
         # 성능 향상률 계산
         if self.baseline_execution_time > 0:
-            improvement = (
-                (self.baseline_execution_time - execution_time)
-                / self.baseline_execution_time
-            ) * 100
+            improvement = ((self.baseline_execution_time - execution_time) / self.baseline_execution_time) * 100
             self.performance_metrics["performance_improvement"] = improvement
 
         # 캐시 히트율 계산
-        total_cache_requests = (
-            self.performance_metrics["cache_hits"]
-            + self.performance_metrics["cache_misses"]
-        )
+        total_cache_requests = self.performance_metrics["cache_hits"] + self.performance_metrics["cache_misses"]
         if total_cache_requests > 0:
             self.performance_metrics["cache_hit_rate"] = (
                 self.performance_metrics["cache_hits"] / total_cache_requests
             ) * 100
 
-    async def execute_judgment_parallel(
-        self, judgment_tasks: List[Callable]
-    ) -> List[Any]:
+    async def execute_judgment_parallel(self, judgment_tasks: List[Callable]) -> List[Any]:
         """판단 작업 병렬 실행 (로드 밸런싱 포함)"""
         logger.info("🧠 판단 작업 병렬 실행")
 
@@ -308,9 +292,7 @@ class EnhancedACTRParallelProcessor:
 
         return await self.execute_parallel_tasks(tasks)
 
-    async def execute_feedback_parallel(
-        self, feedback_tasks: List[Callable]
-    ) -> List[Any]:
+    async def execute_feedback_parallel(self, feedback_tasks: List[Callable]) -> List[Any]:
         """피드백 작업 병렬 실행 (로드 밸런싱 포함)"""
         logger.info("🔄 피드백 작업 병렬 실행")
 
@@ -336,11 +318,7 @@ class EnhancedACTRParallelProcessor:
         for node_name, node_info in self.node_status.items():
             if node_info["status"] == "active":
                 # 응답 시간과 부하를 고려한 점수 계산
-                score = (
-                    1.0
-                    / (node_info["response_time"] + 0.001)
-                    * (1.0 - node_info["load"])
-                )
+                score = 1.0 / (node_info["response_time"] + 0.001) * (1.0 - node_info["load"])
                 available_nodes.append((node_name, score))
 
         if available_nodes:
@@ -348,9 +326,7 @@ class EnhancedACTRParallelProcessor:
             optimal_node = max(available_nodes, key=lambda x: x[1])[0]
 
             # 선택된 노드의 부하 증가
-            self.node_status[optimal_node]["load"] = min(
-                1.0, self.node_status[optimal_node]["load"] + 0.1
-            )
+            self.node_status[optimal_node]["load"] = min(1.0, self.node_status[optimal_node]["load"] + 0.1)
 
             return optimal_node
         else:
@@ -367,8 +343,7 @@ class EnhancedACTRParallelProcessor:
             "efficiency": self.performance_metrics["parallel_efficiency"],
             "total_completed": len(self.completed_tasks),
             "success_rate": (
-                self.performance_metrics["completed_tasks"]
-                / max(self.performance_metrics["total_tasks"], 1)
+                self.performance_metrics["completed_tasks"] / max(self.performance_metrics["total_tasks"], 1)
             )
             * 100,
             "cache_stats": {
@@ -464,7 +439,7 @@ async def test_enhanced_parallel_processor():
     total_time = time.time() - start_time
 
     # 결과 출력
-    logger.info(f"📊 테스트 결과:")
+    logger.info("📊 테스트 결과:")
     logger.info(f"   총 실행 시간: {total_time:.3f}초")
     logger.info(f"   판단 결과: {len(judgment_results)}개")
     logger.info(f"   행동 결과: {len(action_results)}개")
@@ -472,7 +447,7 @@ async def test_enhanced_parallel_processor():
 
     # 통합 성능 리포트
     report = processor.get_integrated_performance_report()
-    logger.info(f"📈 통합 성능 리포트:")
+    logger.info("📈 통합 성능 리포트:")
     logger.info(f"   성능 향상률: {report['current_improvement']:.1f}%")
     logger.info(f"   병렬 효율성: {report['efficiency']:.1f}%")
     logger.info(f"   성공률: {report['success_rate']:.1f}%")

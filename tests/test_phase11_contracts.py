@@ -16,7 +16,7 @@ def test_phase11_contract_minimal():
         snapshot_file.unlink()
 
     # 오케스트레이터 실행 (subprocess로 실행)
-    result = subprocess.run(
+    result = subprocess.run(  # noqa: F841
         [sys.executable, "scripts/core/phase11/orchestrator.py"],
         capture_output=True,
         text=True,

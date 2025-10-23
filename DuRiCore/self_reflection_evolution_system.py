@@ -10,11 +10,10 @@ import asyncio
 import logging
 import random
 import time
-from collections import defaultdict
 from dataclasses import asdict, dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List
 
 # 로깅 설정
 logger = logging.getLogger(__name__)
@@ -156,9 +155,7 @@ class SelfReflectionEvolutionSystem:
     """자기 성찰 및 진화 시스템"""
 
     def __init__(self):
-        self.evolution_state = SelfReflectionEvolutionState(
-            evolution_metrics=SelfReflectionEvolutionMetrics()
-        )
+        self.evolution_state = SelfReflectionEvolutionState(evolution_metrics=SelfReflectionEvolutionMetrics())
         self.reflection_database = {}
         self.modification_repository = {}
         self.evolution_models = {}
@@ -210,17 +207,13 @@ class SelfReflectionEvolutionSystem:
         before_state = await self._capture_current_state(target_component)
 
         # 수정 수행
-        modification_description = await self._perform_modification(
-            target_component, modification_type
-        )
+        modification_description = await self._perform_modification(target_component, modification_type)
 
         # 수정 후 상태 기록
         after_state = await self._capture_modified_state(target_component)
 
         # 성공 지표 계산
-        success_metrics = await self._calculate_modification_success(
-            before_state, after_state
-        )
+        success_metrics = await self._calculate_modification_success(before_state, after_state)
 
         modification = SelfModification(
             modification_id=modification_id,
@@ -235,14 +228,10 @@ class SelfReflectionEvolutionSystem:
         self.evolution_state.self_modifications.append(modification)
         await self._update_self_modification_metrics(modification)
 
-        logger.info(
-            f"🔧 자기 수정 완료: {modification_type.value} -> {target_component}"
-        )
+        logger.info(f"🔧 자기 수정 완료: {modification_type.value} -> {target_component}")
         return modification
 
-    async def initiate_evolution_process(
-        self, evolution_context: Dict[str, Any]
-    ) -> EvolutionProcess:
+    async def initiate_evolution_process(self, evolution_context: Dict[str, Any]) -> EvolutionProcess:
         """진화 과정 시작"""
         evolution_id = f"evolution_{int(time.time())}"
         start_time = time.time()
@@ -283,9 +272,7 @@ class SelfReflectionEvolutionSystem:
         self.evolution_state.evolution_processes.append(evolution)
         await self._update_evolution_capability_metrics(evolution)
 
-        logger.info(
-            f"🔄 진화 과정 완료: {evolution.process_duration:.1f}초, 점수: {evolution_score:.3f}"
-        )
+        logger.info(f"🔄 진화 과정 완료: {evolution.process_duration:.1f}초, 점수: {evolution_score:.3f}")
         return evolution
 
     async def assess_metacognition_level(self) -> MetaCognition:
@@ -311,9 +298,7 @@ class SelfReflectionEvolutionSystem:
         self.evolution_state.metacognition_history.append(metacognition)
         await self._update_metacognition_metrics(metacognition)
 
-        logger.info(
-            f"🧠 메타 인식 평가 완료: {metacognition.overall_metacognition_score:.3f}"
-        )
+        logger.info(f"🧠 메타 인식 평가 완료: {metacognition.overall_metacognition_score:.3f}")
         return metacognition
 
     async def assess_evolution_capability(self) -> Dict[str, Any]:
@@ -330,11 +315,7 @@ class SelfReflectionEvolutionSystem:
 
         # 전체 진화 능력 점수
         evolution_score = (
-            reflection_depth
-            + self_modification
-            + evolution_capability
-            + metacognition
-            + self_transcendence
+            reflection_depth + self_modification + evolution_capability + metacognition + self_transcendence
         ) / 5.0
 
         # 능력 수준 결정
@@ -362,16 +343,10 @@ class SelfReflectionEvolutionSystem:
 
         # 메트릭 업데이트
         self.evolution_state.evolution_metrics.reflection_depth_skill = reflection_depth
-        self.evolution_state.evolution_metrics.self_modification_skill = (
-            self_modification
-        )
-        self.evolution_state.evolution_metrics.evolution_capability = (
-            evolution_capability
-        )
+        self.evolution_state.evolution_metrics.self_modification_skill = self_modification
+        self.evolution_state.evolution_metrics.evolution_capability = evolution_capability
         self.evolution_state.evolution_metrics.metacognition_skill = metacognition
-        self.evolution_state.evolution_metrics.self_transcendence_skill = (
-            self_transcendence
-        )
+        self.evolution_state.evolution_metrics.self_transcendence_skill = self_transcendence
 
         return {
             "capability_level": capability_level,
@@ -459,9 +434,7 @@ class SelfReflectionEvolutionSystem:
 
         return observations
 
-    async def _generate_self_insights(
-        self, focus_area: str, observations: List[str]
-    ) -> List[str]:
+    async def _generate_self_insights(self, focus_area: str, observations: List[str]) -> List[str]:
         """자기 인사이트 생성"""
         insights = []
 
@@ -476,9 +449,7 @@ class SelfReflectionEvolutionSystem:
 
         return insights
 
-    async def _identify_improvement_areas(
-        self, focus_area: str, insights: List[str]
-    ) -> List[str]:
+    async def _identify_improvement_areas(self, focus_area: str, insights: List[str]) -> List[str]:
         """개선 영역 식별"""
         improvement_areas = []
 
@@ -501,9 +472,7 @@ class SelfReflectionEvolutionSystem:
 
         return improvement_areas
 
-    async def _set_transformation_goals(
-        self, improvement_areas: List[str]
-    ) -> List[str]:
+    async def _set_transformation_goals(self, improvement_areas: List[str]) -> List[str]:
         """변형 목표 설정"""
         goals = []
 
@@ -530,9 +499,7 @@ class SelfReflectionEvolutionSystem:
             "timestamp": datetime.now().isoformat(),
         }
 
-    async def _perform_modification(
-        self, target_component: str, modification_type: SelfModificationType
-    ) -> str:
+    async def _perform_modification(self, target_component: str, modification_type: SelfModificationType) -> str:
         """수정 수행"""
         modification_descriptions = {
             SelfModificationType.BEHAVIORAL: f"{target_component}의 행동적 패턴 수정",
@@ -542,9 +509,7 @@ class SelfReflectionEvolutionSystem:
             SelfModificationType.METACOGNITIVE: f"{target_component}의 메타인지적 접근 강화",
         }
 
-        return modification_descriptions.get(
-            modification_type, f"{target_component} 수정"
-        )
+        return modification_descriptions.get(modification_type, f"{target_component} 수정")
 
     async def _capture_modified_state(self, target_component: str) -> Dict[str, Any]:
         """수정된 상태 포착"""
@@ -562,29 +527,18 @@ class SelfReflectionEvolutionSystem:
     ) -> Dict[str, float]:
         """수정 성공 지표 계산"""
         # 실제 구현에서는 더 정교한 계산 로직 사용
-        performance_improvement = after_state.get("performance", 0) - before_state.get(
-            "performance", 0
-        )
-        efficiency_improvement = after_state.get("efficiency", 0) - before_state.get(
-            "efficiency", 0
-        )
-        stability_improvement = after_state.get("stability", 0) - before_state.get(
-            "stability", 0
-        )
+        performance_improvement = after_state.get("performance", 0) - before_state.get("performance", 0)
+        efficiency_improvement = after_state.get("efficiency", 0) - before_state.get("efficiency", 0)
+        stability_improvement = after_state.get("stability", 0) - before_state.get("stability", 0)
 
         return {
             "performance_improvement": max(0, performance_improvement),
             "efficiency_improvement": max(0, efficiency_improvement),
             "stability_improvement": max(0, stability_improvement),
-            "overall_success": (
-                performance_improvement + efficiency_improvement + stability_improvement
-            )
-            / 3,
+            "overall_success": (performance_improvement + efficiency_improvement + stability_improvement) / 3,
         }
 
-    async def _execute_evolution_stage(
-        self, stage: EvolutionStage, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _execute_evolution_stage(self, stage: EvolutionStage, context: Dict[str, Any]) -> Dict[str, Any]:
         """진화 단계 실행"""
         stage_results = {}
 
@@ -617,9 +571,7 @@ class SelfReflectionEvolutionSystem:
                 SelfModificationType.STRUCTURAL,
             ]
             for mod_type in modification_types:
-                modification = await self.execute_self_modification(
-                    "전체 시스템", mod_type
-                )
+                modification = await self.execute_self_modification("전체 시스템", mod_type)
                 modifications.append(modification)
             stage_results["modifications"] = modifications
 
@@ -639,8 +591,7 @@ class SelfReflectionEvolutionSystem:
                 [
                     r
                     for r in self.evolution_state.self_reflections
-                    if r.reflection_depth
-                    in [ReflectionDepth.DEEP, ReflectionDepth.TRANSCENDENT]
+                    if r.reflection_depth in [ReflectionDepth.DEEP, ReflectionDepth.TRANSCENDENT]
                 ]
             ),
             "modification_success_rate": (
@@ -660,13 +611,8 @@ class SelfReflectionEvolutionSystem:
         # 실제 구현에서는 더 정교한 합성 로직 사용
         return {
             "key_insights": len(self.evolution_state.self_reflections),
-            "transformation_goals": sum(
-                len(r.transformation_goals)
-                for r in self.evolution_state.self_reflections
-            ),
-            "improvement_areas": sum(
-                len(r.improvement_areas) for r in self.evolution_state.self_reflections
-            ),
+            "transformation_goals": sum(len(r.transformation_goals) for r in self.evolution_state.self_reflections),
+            "improvement_areas": sum(len(r.improvement_areas) for r in self.evolution_state.self_reflections),
         }
 
     async def _generate_transcendence_insights(self) -> List[str]:
@@ -689,17 +635,14 @@ class SelfReflectionEvolutionSystem:
             [
                 r
                 for r in evolution.self_reflections
-                if r.reflection_depth
-                in [ReflectionDepth.DEEP, ReflectionDepth.TRANSCENDENT]
+                if r.reflection_depth in [ReflectionDepth.DEEP, ReflectionDepth.TRANSCENDENT]
             ]
         )
         reflection_bonus = min(0.2, deep_reflections * 0.05)
 
         # 수정 성공률에 따른 보정
         successful_modifications = sum(
-            1
-            for m in evolution.self_modifications
-            if m.success_metrics.get("overall_success", 0) > 0.5
+            1 for m in evolution.self_modifications if m.success_metrics.get("overall_success", 0) > 0.5
         )
         modification_bonus = min(0.2, successful_modifications * 0.05)
 
@@ -755,9 +698,7 @@ class SelfReflectionEvolutionSystem:
         # 실제 구현에서는 더 정교한 계산 로직 사용
         return random.uniform(0.5, 0.8)
 
-    def _identify_evolution_improvement_areas(
-        self, scores: Dict[str, float]
-    ) -> List[str]:
+    def _identify_evolution_improvement_areas(self, scores: Dict[str, float]) -> List[str]:
         """진화 개선 영역 식별"""
         areas = []
         threshold = 0.7
@@ -778,17 +719,9 @@ class SelfReflectionEvolutionSystem:
             }
 
         total_processes = len(self.evolution_state.evolution_processes)
-        avg_evolution_score = (
-            sum(p.evolution_score for p in self.evolution_state.evolution_processes)
-            / total_processes
-        )
+        avg_evolution_score = sum(p.evolution_score for p in self.evolution_state.evolution_processes) / total_processes
         success_rate = (
-            sum(
-                1
-                for p in self.evolution_state.evolution_processes
-                if p.evolution_score > 0.6
-            )
-            / total_processes
+            sum(1 for p in self.evolution_state.evolution_processes if p.evolution_score > 0.6) / total_processes
         )
 
         return {
@@ -799,8 +732,7 @@ class SelfReflectionEvolutionSystem:
                 [
                     r
                     for r in self.evolution_state.self_reflections
-                    if r.reflection_depth
-                    in [ReflectionDepth.DEEP, ReflectionDepth.TRANSCENDENT]
+                    if r.reflection_depth in [ReflectionDepth.DEEP, ReflectionDepth.TRANSCENDENT]
                 ]
             ),
         }
@@ -827,27 +759,21 @@ class SelfReflectionEvolutionSystem:
 
         return recommendations
 
-    async def _update_reflection_depth_metrics(
-        self, reflection: SelfReflection
-    ) -> None:
+    async def _update_reflection_depth_metrics(self, reflection: SelfReflection) -> None:
         """성찰 깊이 메트릭 업데이트"""
         # 실제 구현에서는 더 정교한 업데이트 로직 사용
         self.evolution_state.evolution_metrics.reflection_depth_skill = min(
             1.0, self.evolution_state.evolution_metrics.reflection_depth_skill + 0.01
         )
 
-    async def _update_self_modification_metrics(
-        self, modification: SelfModification
-    ) -> None:
+    async def _update_self_modification_metrics(self, modification: SelfModification) -> None:
         """자기 수정 메트릭 업데이트"""
         # 실제 구현에서는 더 정교한 업데이트 로직 사용
         self.evolution_state.evolution_metrics.self_modification_skill = min(
             1.0, self.evolution_state.evolution_metrics.self_modification_skill + 0.01
         )
 
-    async def _update_evolution_capability_metrics(
-        self, evolution: EvolutionProcess
-    ) -> None:
+    async def _update_evolution_capability_metrics(self, evolution: EvolutionProcess) -> None:
         """진화 능력 메트릭 업데이트"""
         # 실제 구현에서는 더 정교한 업데이트 로직 사용
         self.evolution_state.evolution_metrics.evolution_capability = min(
@@ -880,7 +806,7 @@ async def test_self_reflection_evolution_system():
 
     # 깊은 자기 성찰 수행
     for focus_area in test_focus_areas:
-        reflection = await evolution_system.perform_deep_self_reflection(focus_area)
+        reflection = await evolution_system.perform_deep_self_reflection(focus_area)  # noqa: F841
 
     # 자기 수정 실행
     modification_types = [
@@ -891,13 +817,11 @@ async def test_self_reflection_evolution_system():
     ]
 
     for mod_type in modification_types:
-        modification = await evolution_system.execute_self_modification(
-            "전체 시스템", mod_type
-        )
+        modification = await evolution_system.execute_self_modification("전체 시스템", mod_type)  # noqa: F841
 
     # 진화 과정 시작
     evolution_context = {"evolution_type": "comprehensive", "complexity": "high"}
-    evolution = await evolution_system.initiate_evolution_process(evolution_context)
+    evolution = await evolution_system.initiate_evolution_process(evolution_context)  # noqa: F841
 
     # 진화 능력 평가
     capability = await evolution_system.assess_evolution_capability()
@@ -906,7 +830,7 @@ async def test_self_reflection_evolution_system():
     metacognition = await evolution_system.assess_metacognition_level()
 
     # 보고서 생성
-    report = await evolution_system.generate_evolution_report()
+    report = await evolution_system.generate_evolution_report()  # noqa: F841
 
     # 결과 출력
     print("\n=== 자기 성찰 및 진화 시스템 테스트 결과 ===")

@@ -5,16 +5,14 @@ DuRiCore Phase 5 Day 7 - 실제 환경 배포 시스템
 """
 
 import asyncio
-import json
 import logging
-import math
 import random
 import statistics
 import time
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 
@@ -120,9 +118,7 @@ class RealEnvironmentDeployment:
 
         logger.info("실제 환경 배포 시스템 초기화 완료")
 
-    async def deploy_to_production(
-        self, system_config: Dict[str, Any]
-    ) -> DeploymentReport:
+    async def deploy_to_production(self, system_config: Dict[str, Any]) -> DeploymentReport:
         """프로덕션 환경 배포"""
         try:
             logger.info("프로덕션 환경 배포 시작")
@@ -134,24 +130,16 @@ class RealEnvironmentDeployment:
             deployment_status = await self._execute_deployment(deployment_config)
 
             # 환경 모니터링
-            environment_metrics = await self._monitor_environment_conditions(
-                deployment_config
-            )
+            environment_metrics = await self._monitor_environment_conditions(deployment_config)
 
             # 성능 분석
-            performance_analysis = await self._analyze_deployment_performance(
-                environment_metrics
-            )
+            performance_analysis = await self._analyze_deployment_performance(environment_metrics)
 
             # 적응 성공 여부 검증
-            adaptation_success = await self._validate_system_adaptation(
-                performance_analysis
-            )
+            adaptation_success = await self._validate_system_adaptation(performance_analysis)
 
             # 권장사항 생성
-            recommendations = await self._generate_deployment_recommendations(
-                performance_analysis
-            )
+            recommendations = await self._generate_deployment_recommendations(performance_analysis)
 
             report = DeploymentReport(
                 report_id=f"deployment_report_{int(time.time())}",
@@ -172,19 +160,13 @@ class RealEnvironmentDeployment:
             logger.error(f"프로덕션 환경 배포 실패: {e}")
             return await self._create_failed_deployment_report()
 
-    async def monitor_environment_conditions(
-        self, environment_data: Dict[str, Any]
-    ) -> List[EnvironmentMetrics]:
+    async def monitor_environment_conditions(self, environment_data: Dict[str, Any]) -> List[EnvironmentMetrics]:
         """환경 조건 모니터링"""
         try:
             logger.info("환경 조건 모니터링 시작")
 
-            monitoring_duration = environment_data.get(
-                "monitoring_duration", 300.0
-            )  # 5분
-            monitoring_interval = environment_data.get(
-                "monitoring_interval", 5.0
-            )  # 5초
+            monitoring_duration = environment_data.get("monitoring_duration", 300.0)  # 5분
+            monitoring_interval = environment_data.get("monitoring_interval", 5.0)  # 5초
 
             metrics_list = []
             start_time = time.time()
@@ -204,9 +186,7 @@ class RealEnvironmentDeployment:
             logger.error(f"환경 조건 모니터링 실패: {e}")
             return []
 
-    async def analyze_deployment_performance(
-        self, performance_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def analyze_deployment_performance(self, performance_data: Dict[str, Any]) -> Dict[str, Any]:
         """배포 성능 분석"""
         try:
             logger.info("배포 성능 분석 시작")
@@ -220,15 +200,11 @@ class RealEnvironmentDeployment:
             }
 
             # 전체 성능 계산
-            overall_performance = await self._calculate_overall_performance(
-                performance_data
-            )
+            overall_performance = await self._calculate_overall_performance(performance_data)
             analysis_result["overall_performance"] = overall_performance
 
             # 성능 트렌드 분석
-            performance_trends = await self._analyze_performance_trends(
-                performance_data
-            )
+            performance_trends = await self._analyze_performance_trends(performance_data)
             analysis_result["performance_trends"] = performance_trends
 
             # 병목 지점 식별
@@ -236,9 +212,7 @@ class RealEnvironmentDeployment:
             analysis_result["bottlenecks"] = bottlenecks
 
             # 최적화 기회 식별
-            optimization_opportunities = (
-                await self._identify_optimization_opportunities(performance_data)
-            )
+            optimization_opportunities = await self._identify_optimization_opportunities(performance_data)
             analysis_result["optimization_opportunities"] = optimization_opportunities
 
             # 안정성 평가
@@ -252,22 +226,16 @@ class RealEnvironmentDeployment:
             logger.error(f"배포 성능 분석 실패: {e}")
             return {"error": str(e)}
 
-    async def validate_system_adaptation(
-        self, adaptation_metrics: Dict[str, Any]
-    ) -> bool:
+    async def validate_system_adaptation(self, adaptation_metrics: Dict[str, Any]) -> bool:
         """시스템 적응 검증"""
         try:
             logger.info("시스템 적응 검증 시작")
 
             # 적응 성공률 계산
-            adaptation_success_rate = await self._calculate_adaptation_success_rate(
-                adaptation_metrics
-            )
+            adaptation_success_rate = await self._calculate_adaptation_success_rate(adaptation_metrics)
 
             # 성능 임계값 확인
-            performance_threshold_met = await self._check_performance_threshold(
-                adaptation_metrics
-            )
+            performance_threshold_met = await self._check_performance_threshold(adaptation_metrics)
 
             # 안정성 확인
             stability_verified = await self._verify_stability(adaptation_metrics)
@@ -286,28 +254,20 @@ class RealEnvironmentDeployment:
             logger.error(f"시스템 적응 검증 실패: {e}")
             return False
 
-    async def _create_deployment_config(
-        self, system_config: Dict[str, Any]
-    ) -> DeploymentConfig:
+    async def _create_deployment_config(self, system_config: Dict[str, Any]) -> DeploymentConfig:
         """배포 설정 생성"""
         config_id = f"config_{int(time.time())}"
 
         return DeploymentConfig(
             config_id=config_id,
-            environment_type=EnvironmentType(
-                system_config.get("environment_type", "production")
-            ),
-            monitoring_level=MonitoringLevel(
-                system_config.get("monitoring_level", "standard")
-            ),
+            environment_type=EnvironmentType(system_config.get("environment_type", "production")),
+            monitoring_level=MonitoringLevel(system_config.get("monitoring_level", "standard")),
             deployment_parameters=system_config.get("deployment_parameters", {}),
             resource_requirements=system_config.get("resource_requirements", {}),
             created_at=datetime.now(),
         )
 
-    async def _execute_deployment(
-        self, deployment_config: DeploymentConfig
-    ) -> DeploymentStatus:
+    async def _execute_deployment(self, deployment_config: DeploymentConfig) -> DeploymentStatus:
         """배포 실행"""
         try:
             logger.info(f"배포 실행 시작: {deployment_config.config_id}")
@@ -324,9 +284,7 @@ class RealEnvironmentDeployment:
             logger.error(f"배포 실행 실패: {e}")
             return DeploymentStatus.FAILED
 
-    async def _monitor_environment_conditions(
-        self, deployment_config: DeploymentConfig
-    ) -> List[EnvironmentMetrics]:
+    async def _monitor_environment_conditions(self, deployment_config: DeploymentConfig) -> List[EnvironmentMetrics]:
         """환경 조건 모니터링"""
         metrics_list = []
         monitoring_duration = 300.0  # 5분
@@ -349,9 +307,7 @@ class RealEnvironmentDeployment:
 
         return metrics_list
 
-    async def _collect_environment_metrics(
-        self, environment_data: Dict[str, Any]
-    ) -> EnvironmentMetrics:
+    async def _collect_environment_metrics(self, environment_data: Dict[str, Any]) -> EnvironmentMetrics:
         """환경 지표 수집"""
         metrics_id = f"metrics_{int(time.time())}"
 
@@ -369,9 +325,7 @@ class RealEnvironmentDeployment:
 
         return metrics
 
-    async def _calculate_overall_performance(
-        self, performance_data: Dict[str, Any]
-    ) -> float:
+    async def _calculate_overall_performance(self, performance_data: Dict[str, Any]) -> float:
         """전체 성능 계산"""
         if "environment_metrics" not in performance_data:
             return 0.0
@@ -402,9 +356,7 @@ class RealEnvironmentDeployment:
 
         return overall_performance
 
-    async def _analyze_performance_trends(
-        self, performance_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _analyze_performance_trends(self, performance_data: Dict[str, Any]) -> Dict[str, Any]:
         """성능 트렌드 분석"""
         trends = {
             "cpu_trend": "stable",
@@ -418,39 +370,27 @@ class RealEnvironmentDeployment:
             if len(metrics_list) >= 2:
                 # CPU 트렌드
                 cpu_values = [m.cpu_usage for m in metrics_list]
-                trends["cpu_trend"] = (
-                    "increasing" if cpu_values[-1] > cpu_values[0] else "decreasing"
-                )
+                trends["cpu_trend"] = "increasing" if cpu_values[-1] > cpu_values[0] else "decreasing"
 
                 # 메모리 트렌드
                 memory_values = [m.memory_usage for m in metrics_list]
-                trends["memory_trend"] = (
-                    "increasing"
-                    if memory_values[-1] > memory_values[0]
-                    else "decreasing"
-                )
+                trends["memory_trend"] = "increasing" if memory_values[-1] > memory_values[0] else "decreasing"
 
                 # 응답 시간 트렌드
                 response_values = [m.response_time for m in metrics_list]
                 trends["response_time_trend"] = (
-                    "increasing"
-                    if response_values[-1] > response_values[0]
-                    else "decreasing"
+                    "increasing" if response_values[-1] > response_values[0] else "decreasing"
                 )
 
                 # 가용성 트렌드
                 availability_values = [m.availability for m in metrics_list]
                 trends["availability_trend"] = (
-                    "increasing"
-                    if availability_values[-1] > availability_values[0]
-                    else "decreasing"
+                    "increasing" if availability_values[-1] > availability_values[0] else "decreasing"
                 )
 
         return trends
 
-    async def _identify_bottlenecks(
-        self, performance_data: Dict[str, Any]
-    ) -> List[str]:
+    async def _identify_bottlenecks(self, performance_data: Dict[str, Any]) -> List[str]:
         """병목 지점 식별"""
         bottlenecks = []
 
@@ -476,9 +416,7 @@ class RealEnvironmentDeployment:
 
         return bottlenecks
 
-    async def _identify_optimization_opportunities(
-        self, performance_data: Dict[str, Any]
-    ) -> List[str]:
+    async def _identify_optimization_opportunities(self, performance_data: Dict[str, Any]) -> List[str]:
         """최적화 기회 식별"""
         opportunities = []
 
@@ -501,9 +439,7 @@ class RealEnvironmentDeployment:
 
         return opportunities
 
-    async def _assess_stability(
-        self, performance_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _assess_stability(self, performance_data: Dict[str, Any]) -> Dict[str, Any]:
         """안정성 평가"""
         stability_assessment = {
             "overall_stability": 0.0,
@@ -526,12 +462,8 @@ class RealEnvironmentDeployment:
                     )
                     stability_scores.append(score)
 
-                stability_assessment["overall_stability"] = statistics.mean(
-                    stability_scores
-                )
-                stability_assessment["stability_score"] = min(
-                    stability_assessment["overall_stability"], 1.0
-                )
+                stability_assessment["overall_stability"] = statistics.mean(stability_scores)
+                stability_assessment["stability_score"] = min(stability_assessment["overall_stability"], 1.0)
 
                 # 안정성 이슈 식별
                 if stability_assessment["stability_score"] < 0.8:
@@ -542,29 +474,21 @@ class RealEnvironmentDeployment:
 
                 # 안정성 권장사항
                 if stability_assessment["stability_score"] < 0.8:
-                    stability_assessment["stability_recommendations"].append(
-                        "시스템 안정성 개선 필요"
-                    )
+                    stability_assessment["stability_recommendations"].append("시스템 안정성 개선 필요")
 
                 if any(m.availability < 0.99 for m in metrics_list):
-                    stability_assessment["stability_recommendations"].append(
-                        "가용성 향상 필요"
-                    )
+                    stability_assessment["stability_recommendations"].append("가용성 향상 필요")
 
         return stability_assessment
 
-    async def _calculate_adaptation_success_rate(
-        self, adaptation_metrics: Dict[str, Any]
-    ) -> float:
+    async def _calculate_adaptation_success_rate(self, adaptation_metrics: Dict[str, Any]) -> float:
         """적응 성공률 계산"""
         if "overall_performance" in adaptation_metrics:
             performance = adaptation_metrics["overall_performance"]
             return min(performance, 1.0)
         return 0.0
 
-    async def _check_performance_threshold(
-        self, adaptation_metrics: Dict[str, Any]
-    ) -> bool:
+    async def _check_performance_threshold(self, adaptation_metrics: Dict[str, Any]) -> bool:
         """성능 임계값 확인"""
         if "overall_performance" in adaptation_metrics:
             performance = adaptation_metrics["overall_performance"]
@@ -579,9 +503,7 @@ class RealEnvironmentDeployment:
                 return stability["stability_score"] >= 0.8
         return False
 
-    async def _generate_deployment_recommendations(
-        self, performance_analysis: Dict[str, Any]
-    ) -> List[str]:
+    async def _generate_deployment_recommendations(self, performance_analysis: Dict[str, Any]) -> List[str]:
         """배포 권장사항 생성"""
         recommendations = []
 
@@ -680,9 +602,7 @@ async def test_real_environment_deployment():
         "environment_type": "production",
     }
 
-    environment_metrics = await deployment_system.monitor_environment_conditions(
-        environment_data
-    )
+    environment_metrics = await deployment_system.monitor_environment_conditions(environment_data)
     print(f"   - 모니터링 지표: {len(environment_metrics)}개")
 
     # 3. 배포 성능 분석 테스트
@@ -692,14 +612,10 @@ async def test_real_environment_deployment():
         "deployment_config": system_config,
     }
 
-    performance_analysis = await deployment_system.analyze_deployment_performance(
-        performance_data
-    )
+    performance_analysis = await deployment_system.analyze_deployment_performance(performance_data)
     print(f"   - 전체 성능: {performance_analysis.get('overall_performance', 0.0):.3f}")
     print(f"   - 병목 지점: {len(performance_analysis.get('bottlenecks', []))}개")
-    print(
-        f"   - 최적화 기회: {len(performance_analysis.get('optimization_opportunities', []))}개"
-    )
+    print(f"   - 최적화 기회: {len(performance_analysis.get('optimization_opportunities', []))}개")
 
     # 4. 시스템 적응 검증 테스트
     print("4. 시스템 적응 검증 테스트")
@@ -708,9 +624,7 @@ async def test_real_environment_deployment():
         "stability_assessment": performance_analysis.get("stability_assessment", {}),
     }
 
-    adaptation_success = await deployment_system.validate_system_adaptation(
-        adaptation_metrics
-    )
+    adaptation_success = await deployment_system.validate_system_adaptation(adaptation_metrics)
     print(f"   - 적응 성공: {adaptation_success}")
 
     print("=== 실제 환경 배포 시스템 테스트 완료 ===")

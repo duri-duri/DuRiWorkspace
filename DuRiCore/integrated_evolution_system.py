@@ -24,16 +24,13 @@ import asyncio
 import hashlib
 import json
 import logging
-import multiprocessing as mp
 import time
-from collections import defaultdict
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional, Tuple, Union
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
-import numpy as np
 # 기존 시스템들 import
 from duri_thought_flow import DuRiThoughtFlow, ThoughtFlowResult
 
@@ -62,16 +59,12 @@ def _get_phase_omega_system():
         return None
 
 
-from genetic_evolution_engine import (EvolutionResult, GeneticEvolutionEngine,
-                                      GeneticIndividual)
-from meta_coder import CodeAnalysis, MetaCoder, RefactorProposal
-from self_rewriting_module import (CodeAssessment, RewriteProposal,
-                                   SelfRewritingModule)
+from genetic_evolution_engine import EvolutionResult, GeneticEvolutionEngine  # noqa: E402
+from meta_coder import MetaCoder  # noqa: E402
+from self_rewriting_module import SelfRewritingModule  # noqa: E402
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -239,9 +232,7 @@ class DuRiIntegratedEvolutionSystem:
         self._try_initialize_phase_omega()
 
         # 통합 성능 최적화 시스템 (기존 시스템 통합)
-        self.enhanced_parallel_processor = (
-            self._initialize_enhanced_parallel_processor()
-        )
+        self.enhanced_parallel_processor = self._initialize_enhanced_parallel_processor()
         self.performance_optimizer = self._initialize_performance_optimizer()
         self.act_r_parallel_processor = self._initialize_act_r_parallel_processor()
 
@@ -322,17 +313,14 @@ class DuRiIntegratedEvolutionSystem:
                     self.phase_omega = phase_omega_module.DuRiPhaseOmega()
                     logger.info("Phase Ω 시스템 동적 import 및 초기화 완료")
                 else:
-                    logger.warning(
-                        "Phase Ω 시스템 동적 import 실패 또는 모듈을 찾을 수 없습니다."
-                    )
+                    logger.warning("Phase Ω 시스템 동적 import 실패 또는 모듈을 찾을 수 없습니다.")
             except Exception as e:
                 logger.error(f"Phase Ω 시스템 동적 초기화 실패: {e}")
 
     def _initialize_enhanced_parallel_processor(self):
         """향상된 병렬 처리 시스템 초기화"""
         try:
-            from enhanced_act_r_parallel_processor import \
-                EnhancedACTRParallelProcessor
+            from enhanced_act_r_parallel_processor import EnhancedACTRParallelProcessor
 
             processor = EnhancedACTRParallelProcessor(max_concurrent_tasks=10)
             logger.info("✅ 향상된 ACT-R 병렬 처리 시스템 통합 완료")
@@ -367,9 +355,7 @@ class DuRiIntegratedEvolutionSystem:
                         start_time = time.time()
 
                         # 캐시 확인
-                        cache_key = self._generate_cache_key(
-                            user_input, duri_response, metadata
-                        )
+                        cache_key = self._generate_cache_key(user_input, duri_response, metadata)
                         cached_result = self._get_from_cache(cache_key)
 
                         if cached_result:
@@ -379,9 +365,7 @@ class DuRiIntegratedEvolutionSystem:
                         self.performance_metrics["cache_misses"] += 1
 
                         # 병렬 처리 실행
-                        result = await self._parallel_processing(
-                            user_input, duri_response, metadata
-                        )
+                        result = await self._parallel_processing(user_input, duri_response, metadata)
 
                         # 결과 캐싱
                         self._cache_result(cache_key, result)
@@ -397,9 +381,7 @@ class DuRiIntegratedEvolutionSystem:
                         self.performance_metrics["error_count"] += 1
                         raise
 
-                def _generate_cache_key(
-                    self, user_input: str, duri_response: str, metadata: Dict[str, Any]
-                ) -> str:
+                def _generate_cache_key(self, user_input: str, duri_response: str, metadata: Dict[str, Any]) -> str:
                     """캐시 키 생성"""
                     content = f"{user_input}:{duri_response}:{json.dumps(metadata, sort_keys=True)}"
                     return hashlib.md5(content.encode()).hexdigest()
@@ -418,9 +400,7 @@ class DuRiIntegratedEvolutionSystem:
                     """결과 캐싱"""
                     if len(self.cache) >= 1000:  # 최대 캐시 크기
                         # 가장 오래된 항목 제거
-                        oldest_key = min(
-                            self.cache.keys(), key=lambda k: self.cache[k]["timestamp"]
-                        )
+                        oldest_key = min(self.cache.keys(), key=lambda k: self.cache[k]["timestamp"])
                         del self.cache[oldest_key]
 
                     self.cache[cache_key] = {"result": result, "timestamp": time.time()}
@@ -465,9 +445,7 @@ class DuRiIntegratedEvolutionSystem:
             logger.warning(f"ACT-R 병렬 처리 시스템 통합 실패: {e}")
             return None
 
-    def _generate_cache_key(
-        self, input_data: Dict[str, Any], context: Dict[str, Any]
-    ) -> str:
+    def _generate_cache_key(self, input_data: Dict[str, Any], context: Dict[str, Any]) -> str:
         """캐시 키 생성 (기존 시스템 통합) - 최적화된 버전"""
         try:
             # 더 효율적인 캐시 키 생성 알고리즘
@@ -479,9 +457,7 @@ class DuRiIntegratedEvolutionSystem:
             content = f"{json.dumps(input_data, sort_keys=True)}:{json.dumps(context, sort_keys=True)}"
             return hashlib.md5(content.encode()).hexdigest()
 
-    def _optimize_cache_key(
-        self, input_data: Dict[str, Any], context: Dict[str, Any]
-    ) -> str:
+    def _optimize_cache_key(self, input_data: Dict[str, Any], context: Dict[str, Any]) -> str:
         """최적화된 캐시 키 생성 (타임스탬프 제외) - 고급 버전"""
         try:
             # 고급 캐시 키 생성 알고리즘 사용
@@ -496,9 +472,7 @@ class DuRiIntegratedEvolutionSystem:
             key_content = f"{normalized_data}:{normalized_context}"
             return hashlib.md5(key_content.encode()).hexdigest()
 
-    def _advanced_cache_key_generation(
-        self, input_data: Dict[str, Any], context: Dict[str, Any]
-    ) -> str:
+    def _advanced_cache_key_generation(self, input_data: Dict[str, Any], context: Dict[str, Any]) -> str:
         """고급 캐시 키 생성 알고리즘"""
         try:
             # 1. 데이터 중요도 가중치 적용
@@ -506,9 +480,7 @@ class DuRiIntegratedEvolutionSystem:
             weighted_context = self._apply_context_priority_weights(context)
 
             # 2. 패턴 기반 키 생성
-            pattern_key = self._generate_pattern_based_key(
-                weighted_data, weighted_context
-            )
+            pattern_key = self._generate_pattern_based_key(weighted_data, weighted_context)
 
             # 3. 컨텍스트 우선순위 분석
             priority_key = self._analyze_context_priority(weighted_context)
@@ -521,9 +493,7 @@ class DuRiIntegratedEvolutionSystem:
             logger.error(f"고급 캐시 키 생성 실패: {e}")
             raise
 
-    def _apply_data_importance_weights(
-        self, input_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _apply_data_importance_weights(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
         """데이터 중요도 가중치 적용"""
         importance_weights = {
             "task": 1.0,  # 가장 중요
@@ -545,9 +515,7 @@ class DuRiIntegratedEvolutionSystem:
 
         return weighted_data
 
-    def _apply_context_priority_weights(
-        self, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _apply_context_priority_weights(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """컨텍스트 우선순위 가중치 적용"""
         priority_weights = {
             "goal": 1.0,  # 가장 중요
@@ -569,9 +537,7 @@ class DuRiIntegratedEvolutionSystem:
 
         return weighted_context
 
-    def _generate_pattern_based_key(
-        self, weighted_data: Dict[str, Any], weighted_context: Dict[str, Any]
-    ) -> str:
+    def _generate_pattern_based_key(self, weighted_data: Dict[str, Any], weighted_context: Dict[str, Any]) -> str:
         """패턴 기반 키 생성"""
         try:
             # 1. 데이터 패턴 분석
@@ -650,9 +616,7 @@ class DuRiIntegratedEvolutionSystem:
                 max_priority = max(priority_scores)
                 min_priority = min(priority_scores)
 
-                return (
-                    f"priority_{avg_priority:.2f}_{max_priority:.2f}_{min_priority:.2f}"
-                )
+                return f"priority_{avg_priority:.2f}_{max_priority:.2f}_{min_priority:.2f}"
             else:
                 return "priority_default"
 
@@ -733,14 +697,10 @@ class DuRiIntegratedEvolutionSystem:
 
                 # 사용 빈도 계산
                 age = current_time - data["timestamp"]
-                frequency = data["access_count"] / max(
-                    age / 3600, 1
-                )  # 시간당 접근 횟수
+                frequency = data["access_count"] / max(age / 3600, 1)  # 시간당 접근 횟수
 
                 # 낮은 빈도 항목 제거
-                if (
-                    frequency < low_frequency_threshold and age > 300
-                ):  # 5분 이상 된 항목
+                if frequency < low_frequency_threshold and age > 300:  # 5분 이상 된 항목
                     del self.cache[key]
                     logger.debug(f"낮은 빈도 캐시 항목 제거: {key[:20]}...")
 
@@ -771,7 +731,7 @@ class DuRiIntegratedEvolutionSystem:
 
             for key in recent_usage:
                 if key in self.cache:
-                    data = self.cache[key]
+                    data = self.cache[key]  # noqa: F841
                     pattern = self._extract_pattern_from_key(key)
 
                     if pattern in patterns:
@@ -891,10 +851,7 @@ class DuRiIntegratedEvolutionSystem:
     async def _update_cache_statistics(self):
         """캐시 통계 업데이트"""
         try:
-            total_requests = (
-                self.performance_metrics["cache_hits"]
-                + self.performance_metrics["cache_misses"]
-            )
+            total_requests = self.performance_metrics["cache_hits"] + self.performance_metrics["cache_misses"]
             if total_requests > 0:
                 hit_rate = self.performance_metrics["cache_hits"] / total_requests
                 self.performance_metrics["cache_hit_rate"] = hit_rate
@@ -908,12 +865,10 @@ class DuRiIntegratedEvolutionSystem:
 
     def _generate_task_cache_key(self, task: ParallelTask) -> str:
         """작업 캐시 키 생성 (기존 시스템 통합)"""
-        content = f"{task.id}:{task.name}:{task.function.__name__}:{json.dumps(task.args, sort_keys=True)}:{json.dumps(task.kwargs, sort_keys=True)}"
+        content = f"{task.id}:{task.name}:{task.function.__name__}:{json.dumps(task.args, sort_keys=True)}:{json.dumps(task.kwargs, sort_keys=True)}"  # noqa: E501
         return hashlib.md5(content.encode()).hexdigest()
 
-    async def _execute_parallel_tasks_with_optimization(
-        self, tasks: List[ParallelTask]
-    ) -> List[Any]:
+    async def _execute_parallel_tasks_with_optimization(self, tasks: List[ParallelTask]) -> List[Any]:
         """최적화된 병렬 작업 실행 (기존 시스템 통합)"""
         logger.info(f"⚡ {len(tasks)}개 작업 최적화된 병렬 실행 시작")
 
@@ -966,9 +921,7 @@ class DuRiIntegratedEvolutionSystem:
             else:
                 # 동기 함수를 비동기로 실행
                 loop = asyncio.get_event_loop()
-                result = await loop.run_in_executor(
-                    None, task.function, *task.args, **task.kwargs
-                )
+                result = await loop.run_in_executor(None, task.function, *task.args, **task.kwargs)
 
             task.status = TaskStatus.COMPLETED
             task.result = result
@@ -1007,17 +960,11 @@ class DuRiIntegratedEvolutionSystem:
                         id=f"{task_type}_{i}",
                         name=f"{task_type} 작업 {i+1}",
                         function=task_func,
-                        priority=(
-                            TaskPriority.HIGH
-                            if task_type in ["judgment", "critical"]
-                            else TaskPriority.MEDIUM
-                        ),
+                        priority=(TaskPriority.HIGH if task_type in ["judgment", "critical"] else TaskPriority.MEDIUM),
                     )
                     parallel_tasks.append(task)
 
-                results = await self.enhanced_parallel_processor.execute_parallel_tasks(
-                    parallel_tasks
-                )
+                results = await self.enhanced_parallel_processor.execute_parallel_tasks(parallel_tasks)
             else:
                 # 기본 병렬 처리
                 coroutines = []
@@ -1039,9 +986,7 @@ class DuRiIntegratedEvolutionSystem:
             logger.error(f"❌ 향상된 병렬 처리 실패: {e}")
             return []
 
-    async def _optimize_performance(
-        self, input_data: Dict[str, Any], context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _optimize_performance(self, input_data: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
         """성능 최적화 실행 (기존 시스템 통합)"""
         try:
             if self.performance_optimizer:
@@ -1079,28 +1024,20 @@ class DuRiIntegratedEvolutionSystem:
                 return cached_result
 
             # 자극 이벤트 생성 (향상된 버전)
-            stimulus_event = await self._create_enhanced_stimulus_event(
-                optimized_data, context or {}
-            )
+            stimulus_event = await self._create_enhanced_stimulus_event(optimized_data, context or {})
 
             # 진화 세션 시작
             session = await self._start_evolution_session(stimulus_event)
 
             # 향상된 통합 진화 실행
-            evolution_results = await self._execute_enhanced_integrated_evolution(
-                session
-            )
+            evolution_results = await self._execute_enhanced_integrated_evolution(session)
 
             # 결과 통합
-            integrated_result = await self._integrate_evolution_results(
-                session, evolution_results
-            )
+            integrated_result = await self._integrate_evolution_results(session, evolution_results)
 
             # 성능 메트릭 업데이트
             execution_time = time.time() - start_time
-            await self._update_performance_metrics(
-                execution_time, integrated_result.overall_improvement_score
-            )
+            await self._update_performance_metrics(execution_time, integrated_result.overall_improvement_score)
 
             # 결과 캐싱
             self._cache_result(cache_key, integrated_result)
@@ -1110,7 +1047,7 @@ class DuRiIntegratedEvolutionSystem:
             await self._update_adaptive_triggers(stimulus_event, integrated_result)
 
             logger.info(
-                f"✅ 통합 진화 완료: {execution_time:.3f}초, 개선점수: {integrated_result.overall_improvement_score:.3f}"
+                f"✅ 통합 진화 완료: {execution_time:.3f}초, 개선점수: {integrated_result.overall_improvement_score:.3f}"  # noqa: E501
             )
 
             return integrated_result
@@ -1130,9 +1067,7 @@ class DuRiIntegratedEvolutionSystem:
 
             return await self._create_failed_result(stimulus_event, error_message)
 
-    async def _execute_enhanced_integrated_evolution(
-        self, session: EvolutionSession
-    ) -> Dict[str, Any]:
+    async def _execute_enhanced_integrated_evolution(self, session: EvolutionSession) -> Dict[str, Any]:
         """향상된 통합 진화 실행 (성능 최적화 통합 버전)"""
         logger.info(f"🚀 향상된 통합 진화 실행 시작: {session.session_id}")
 
@@ -1215,9 +1150,7 @@ class DuRiIntegratedEvolutionSystem:
             parallel_tasks.append(adaptive_optimization_task)
 
             # 향상된 병렬 처리 실행
-            parallel_results = await self._execute_parallel_tasks_with_optimization(
-                parallel_tasks
-            )
+            parallel_results = await self._execute_parallel_tasks_with_optimization(parallel_tasks)
 
             # 결과 매핑
             for i, task in enumerate(parallel_tasks):
@@ -1244,12 +1177,10 @@ class DuRiIntegratedEvolutionSystem:
             logger.error(f"❌ 향상된 통합 진화 실패: {e}")
             return {"error": str(e)}
 
-    async def _execute_thought_flow(
-        self, session: EvolutionSession
-    ) -> Optional[ThoughtFlowResult]:
+    async def _execute_thought_flow(self, session: EvolutionSession) -> Optional[ThoughtFlowResult]:
         """사고 흐름 실행"""
         try:
-            thought_context = {
+            thought_context = {  # noqa: F841
                 "evolution_session": session.session_id,
                 "stimulus_event": session.stimulus_event.event_id,
                 "trigger_type": session.stimulus_event.trigger_type.value,
@@ -1272,9 +1203,7 @@ class DuRiIntegratedEvolutionSystem:
                 self._try_initialize_phase_omega()
 
             if self.phase_omega is None:
-                logger.warning(
-                    "Phase Ω 시스템이 초기화되지 않아 Phase Ω 실행을 건너뛰었습니다."
-                )
+                logger.warning("Phase Ω 시스템이 초기화되지 않아 Phase Ω 실행을 건너뛰었습니다.")
                 return None
 
             phase_omega_result = await self.phase_omega.process_with_survival_instinct(
@@ -1306,20 +1235,14 @@ class DuRiIntegratedEvolutionSystem:
                     with open(module_path, "r", encoding="utf-8") as f:
                         current_code = f.read()
 
-                    proposal = await self.self_rewriter.generate_alternative(
-                        current_code, assessment
-                    )
+                    proposal = await self.self_rewriter.generate_alternative(current_code, assessment)
 
                     if proposal.expected_impact > 0.3:
                         # 안전한 재작성 실행
-                        rewrite_result = await self.self_rewriter.safely_rewrite(
-                            module_path, proposal.proposed_code
-                        )
+                        rewrite_result = await self.self_rewriter.safely_rewrite(module_path, proposal.proposed_code)
 
                         if rewrite_result.success:
-                            improvements_made.append(
-                                f"{module_path}: {proposal.improvement_description}"
-                            )
+                            improvements_made.append(f"{module_path}: {proposal.improvement_description}")
 
             logger.info(f"자가 수정 완료: {len(improvements_made)}개 개선")
 
@@ -1332,9 +1255,7 @@ class DuRiIntegratedEvolutionSystem:
             logger.error(f"자가 수정 실행 실패: {e}")
             return None
 
-    async def _execute_genetic_evolution(
-        self, session: EvolutionSession
-    ) -> Optional[EvolutionResult]:
+    async def _execute_genetic_evolution(self, session: EvolutionSession) -> Optional[EvolutionResult]:
         """유전자 진화 실행"""
         try:
             # 시드 코드 생성
@@ -1345,9 +1266,7 @@ class DuRiIntegratedEvolutionSystem:
                 seed_code, target_goal="performance_optimization"
             )
 
-            logger.info(
-                f"유전자 진화 완료: {evolution_result.final_fitness:.2f} 적합도"
-            )
+            logger.info(f"유전자 진화 완료: {evolution_result.final_fitness:.2f} 적합도")
 
             return evolution_result
 
@@ -1369,9 +1288,7 @@ class DuRiIntegratedEvolutionSystem:
 
                 if analysis.complexity_score > 0.5:
                     # 리팩토링 제안 생성
-                    refactor_proposal = await self.meta_coder.refactor_code(
-                        analysis.ast_tree, goal="reduce_complexity"
-                    )
+                    refactor_proposal = await self.meta_coder.refactor_code(analysis.ast_tree, goal="reduce_complexity")
 
                     if refactor_proposal.expected_impact > 0.2:
                         # 검증 후 적용
@@ -1380,9 +1297,7 @@ class DuRiIntegratedEvolutionSystem:
                         )
 
                         if refactor_result.success:
-                            refactoring_results.append(
-                                f"{module_path}: {refactor_proposal.improvement_description}"
-                            )
+                            refactoring_results.append(f"{module_path}: {refactor_proposal.improvement_description}")
 
             logger.info(f"메타 코딩 완료: {len(refactoring_results)}개 리팩토링")
 
@@ -1395,24 +1310,16 @@ class DuRiIntegratedEvolutionSystem:
             logger.error(f"메타 코딩 실행 실패: {e}")
             return None
 
-    async def _execute_learning_analysis(
-        self, session: EvolutionSession
-    ) -> Optional[Any]:
+    async def _execute_learning_analysis(self, session: EvolutionSession) -> Optional[Any]:
         """학습 분석 실행"""
         try:
             # 이전 세션의 결과를 사용하여 학습 패턴 분석
-            previous_session = (
-                self.evolution_sessions[-1] if self.evolution_sessions else None
-            )
+            previous_session = self.evolution_sessions[-1] if self.evolution_sessions else None
 
             if previous_session and previous_session.success:
                 # 성공적인 세션의 평균 개선 점수와 실행 시간을 사용
-                avg_improvement = previous_session.results.get(
-                    "overall_improvement_score", 0.0
-                )
-                avg_time = previous_session.performance_metrics.get(
-                    "parallel_execution_time", 0.0
-                )
+                avg_improvement = previous_session.results.get("overall_improvement_score", 0.0)
+                avg_time = previous_session.performance_metrics.get("parallel_execution_time", 0.0)
 
                 # 새로운 패턴 생성
                 pattern_id = f"pattern_{int(time.time() * 1000)}"
@@ -1431,16 +1338,11 @@ class DuRiIntegratedEvolutionSystem:
                 # 적응형 트리거 업데이트 (새로운 패턴에 대한 적응형 임계값 설정)
                 if self.performance_config["enable_adaptive_triggers"]:
                     for trigger_id, trigger in self.adaptive_triggers.items():
-                        if (
-                            trigger.base_trigger
-                            == previous_session.stimulus_event.trigger_type
-                        ):
+                        if trigger.base_trigger == previous_session.stimulus_event.trigger_type:
                             trigger.adaptive_threshold = (
                                 new_pattern.average_improvement * 1.5
                             )  # 평균 개선 점수의 1.5배로 설정
-                            logger.info(
-                                f"적응형 트리거 '{trigger_id}' 업데이트: 임계값 {trigger.adaptive_threshold}"
-                            )
+                            logger.info(f"적응형 트리거 '{trigger_id}' 업데이트: 임계값 {trigger.adaptive_threshold}")
 
             return {
                 "learning_patterns_updated": len(self.learning_patterns),
@@ -1451,38 +1353,23 @@ class DuRiIntegratedEvolutionSystem:
             logger.error(f"학습 분석 실행 실패: {e}")
             return None
 
-    async def _execute_adaptive_optimization(
-        self, session: EvolutionSession
-    ) -> Optional[Any]:
+    async def _execute_adaptive_optimization(self, session: EvolutionSession) -> Optional[Any]:
         """적응형 최적화 실행"""
         try:
             # 이전 세션의 결과를 사용하여 적응형 트리거 업데이트
-            previous_session = (
-                self.evolution_sessions[-1] if self.evolution_sessions else None
-            )
+            previous_session = self.evolution_sessions[-1] if self.evolution_sessions else None
 
             if previous_session and previous_session.success:
                 # 성공적인 세션의 평균 개선 점수와 실행 시간을 사용
-                avg_improvement = previous_session.results.get(
-                    "overall_improvement_score", 0.0
-                )
-                avg_time = previous_session.performance_metrics.get(
-                    "parallel_execution_time", 0.0
-                )
+                avg_improvement = previous_session.results.get("overall_improvement_score", 0.0)  # noqa: F841
+                avg_time = previous_session.performance_metrics.get("parallel_execution_time", 0.0)  # noqa: F841
 
                 # 적응형 트리거 업데이트
                 for trigger_id, trigger in self.adaptive_triggers.items():
-                    if (
-                        trigger.base_trigger
-                        == previous_session.stimulus_event.trigger_type
-                    ):
+                    if trigger.base_trigger == previous_session.stimulus_event.trigger_type:
                         # 성공적인 세션에서 평균 개선 점수가 높을수록 적응형 임계값 증가
-                        trigger.adaptive_threshold = min(
-                            trigger.adaptive_threshold * 1.1, 1.0
-                        )  # 최대 1.0까지 증가
-                        logger.info(
-                            f"적응형 트리거 '{trigger_id}' 업데이트: 임계값 {trigger.adaptive_threshold}"
-                        )
+                        trigger.adaptive_threshold = min(trigger.adaptive_threshold * 1.1, 1.0)  # 최대 1.0까지 증가
+                        logger.info(f"적응형 트리거 '{trigger_id}' 업데이트: 임계값 {trigger.adaptive_threshold}")
 
             return {"adaptive_triggers_updated": len(self.adaptive_triggers)}
 
@@ -1490,9 +1377,7 @@ class DuRiIntegratedEvolutionSystem:
             logger.error(f"적응형 최적화 실행 실패: {e}")
             return None
 
-    async def _execute_sequential_evolution(
-        self, session: EvolutionSession
-    ) -> Dict[str, Any]:
+    async def _execute_sequential_evolution(self, session: EvolutionSession) -> Dict[str, Any]:
         """순차 진화 실행 (병렬 처리 비활성화 시)"""
         results = {}
 
@@ -1515,9 +1400,7 @@ class DuRiIntegratedEvolutionSystem:
         # 4. 유전자 진화 실행
         if self.evolution_config["enable_genetic_evolution"]:
             session.phases.append(EvolutionPhase.EVOLUTION_EXECUTION)
-            results["genetic_evolution"] = await self._execute_genetic_evolution(
-                session
-            )
+            results["genetic_evolution"] = await self._execute_genetic_evolution(session)
 
         # 5. 메타 코딩 실행
         if self.evolution_config["enable_meta_coding"]:
@@ -1527,16 +1410,12 @@ class DuRiIntegratedEvolutionSystem:
         # 6. 학습 분석 실행
         if self.performance_config["enable_learning_based_evolution"]:
             session.phases.append(EvolutionPhase.LEARNING_ANALYSIS)
-            results["learning_analysis"] = await self._execute_learning_analysis(
-                session
-            )
+            results["learning_analysis"] = await self._execute_learning_analysis(session)
 
         # 7. 적응형 최적화 실행
         if self.performance_config["enable_adaptive_triggers"]:
             session.phases.append(EvolutionPhase.ADAPTIVE_OPTIMIZATION)
-            results["adaptive_optimization"] = (
-                await self._execute_adaptive_optimization(session)
-            )
+            results["adaptive_optimization"] = await self._execute_adaptive_optimization(session)
 
         execution_time = time.time() - start_time
         session.performance_metrics["sequential_execution_time"] = execution_time
@@ -1567,7 +1446,7 @@ class DuRiIntegratedEvolutionSystem:
                         functions = content.count("def ")
                         classes = content.count("class ")
                         return lines + functions * 10 + classes * 20
-                except:
+                except:  # noqa: E722
                     return 0
 
             target_modules.sort(key=estimate_complexity, reverse=True)
@@ -1610,15 +1489,11 @@ def optimize_performance():
 
             # 학습 인사이트 추가
             if self.performance_config["enable_learning_based_evolution"]:
-                integrated_result.learning_insights = (
-                    await self._extract_learning_insights(results)
-                )
+                integrated_result.learning_insights = await self._extract_learning_insights(results)
 
             # 적응형 변경사항 추가
             if self.performance_config["enable_adaptive_triggers"]:
-                integrated_result.adaptive_changes = (
-                    await self._extract_adaptive_changes(results)
-                )
+                integrated_result.adaptive_changes = await self._extract_adaptive_changes(results)
 
             # 세션 결과 업데이트
             session.results = results
@@ -1641,16 +1516,12 @@ def optimize_performance():
 
             # Phase Z 결과
             if results.get("thought_flow"):
-                thought_score = getattr(
-                    results["thought_flow"], "reflection_score", 0.5
-                )
+                thought_score = getattr(results["thought_flow"], "reflection_score", 0.5)
                 scores.append(thought_score * 0.2)
 
             # Phase Ω 결과
             if results.get("phase_omega"):
-                phase_omega_score = getattr(
-                    results["phase_omega"], "survival_score", 0.5
-                )
+                phase_omega_score = getattr(results["phase_omega"], "survival_score", 0.5)
                 if hasattr(phase_omega_score, "overall_score"):
                     scores.append(phase_omega_score.overall_score * 0.2)
                 else:
@@ -1659,10 +1530,7 @@ def optimize_performance():
             # 자가 수정 결과
             if results.get("self_rewriting"):
                 self_rewriting_data = results["self_rewriting"]
-                if (
-                    isinstance(self_rewriting_data, dict)
-                    and "improvements_made" in self_rewriting_data
-                ):
+                if isinstance(self_rewriting_data, dict) and "improvements_made" in self_rewriting_data:
                     improvement_count = len(self_rewriting_data["improvements_made"])
                     scores.append(min(improvement_count * 0.1, 0.2))
                 else:
@@ -1670,18 +1538,13 @@ def optimize_performance():
 
             # 유전자 진화 결과
             if results.get("genetic_evolution"):
-                genetic_score = getattr(
-                    results["genetic_evolution"], "final_fitness", 0.5
-                )
+                genetic_score = getattr(results["genetic_evolution"], "final_fitness", 0.5)
                 scores.append(genetic_score * 0.2)
 
             # 메타 코딩 결과
             if results.get("meta_coding"):
                 meta_coding_data = results["meta_coding"]
-                if (
-                    isinstance(meta_coding_data, dict)
-                    and "refactoring_results" in meta_coding_data
-                ):
+                if isinstance(meta_coding_data, dict) and "refactoring_results" in meta_coding_data:
                     refactoring_count = len(meta_coding_data["refactoring_results"])
                     scores.append(min(refactoring_count * 0.1, 0.2))
                 else:
@@ -1721,13 +1584,8 @@ def optimize_performance():
             # 자가 수정 인사이트
             if results.get("self_rewriting"):
                 self_rewriting_data = results["self_rewriting"]
-                if (
-                    isinstance(self_rewriting_data, dict)
-                    and "improvements_made" in self_rewriting_data
-                ):
-                    insights.append(
-                        f"자가 수정을 통한 {len(self_rewriting_data['improvements_made'])}개 개선 완료"
-                    )
+                if isinstance(self_rewriting_data, dict) and "improvements_made" in self_rewriting_data:
+                    insights.append(f"자가 수정을 통한 {len(self_rewriting_data['improvements_made'])}개 개선 완료")
 
             # 유전자 진화 인사이트
             if results.get("genetic_evolution"):
@@ -1736,22 +1594,15 @@ def optimize_performance():
             # 메타 코딩 인사이트
             if results.get("meta_coding"):
                 meta_coding_data = results["meta_coding"]
-                if (
-                    isinstance(meta_coding_data, dict)
-                    and "refactoring_results" in meta_coding_data
-                ):
-                    insights.append(
-                        f"메타 코딩을 통한 {len(meta_coding_data['refactoring_results'])}개 리팩토링 완료"
-                    )
+                if isinstance(meta_coding_data, dict) and "refactoring_results" in meta_coding_data:
+                    insights.append(f"메타 코딩을 통한 {len(meta_coding_data['refactoring_results'])}개 리팩토링 완료")
 
         except Exception as e:
             logger.error(f"학습 인사이트 추출 실패: {e}")
 
         return insights
 
-    async def _extract_adaptive_changes(
-        self, results: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _extract_adaptive_changes(self, results: Dict[str, Any]) -> Dict[str, Any]:
         """적응형 변경사항 추출"""
         changes = {}
 
@@ -1759,24 +1610,14 @@ def optimize_performance():
             # 적응형 트리거 업데이트 정보
             if results.get("adaptive_optimization"):
                 adaptive_data = results["adaptive_optimization"]
-                if (
-                    isinstance(adaptive_data, dict)
-                    and "adaptive_triggers_updated" in adaptive_data
-                ):
-                    changes["adaptive_triggers_updated"] = adaptive_data[
-                        "adaptive_triggers_updated"
-                    ]
+                if isinstance(adaptive_data, dict) and "adaptive_triggers_updated" in adaptive_data:
+                    changes["adaptive_triggers_updated"] = adaptive_data["adaptive_triggers_updated"]
 
             # 학습 패턴 업데이트 정보
             if results.get("learning_analysis"):
                 learning_data = results["learning_analysis"]
-                if (
-                    isinstance(learning_data, dict)
-                    and "learning_patterns_updated" in learning_data
-                ):
-                    changes["learning_patterns_updated"] = learning_data[
-                        "learning_patterns_updated"
-                    ]
+                if isinstance(learning_data, dict) and "learning_patterns_updated" in learning_data:
+                    changes["learning_patterns_updated"] = learning_data["learning_patterns_updated"]
 
         except Exception as e:
             logger.error(f"적응형 변경사항 추출 실패: {e}")
@@ -1809,9 +1650,7 @@ def optimize_performance():
             error_message=error_message,
         )
 
-    async def _generate_stimulus_description(
-        self, trigger_type: EvolutionTrigger, input_data: Dict[str, Any]
-    ) -> str:
+    async def _generate_stimulus_description(self, trigger_type: EvolutionTrigger, input_data: Dict[str, Any]) -> str:
         """자극 설명 생성"""
         descriptions = {
             EvolutionTrigger.REFLECTION_SCORE_LOW: "낮은 반성 점수로 인한 진화 필요",
@@ -1847,17 +1686,13 @@ def optimize_performance():
             logger.error(f"학습 기반 강도 계산 실패: {e}")
             return 0.0
 
-    async def _calculate_adaptive_intensity(
-        self, trigger_type: EvolutionTrigger, context: Dict[str, Any]
-    ) -> float:
+    async def _calculate_adaptive_intensity(self, trigger_type: EvolutionTrigger, context: Dict[str, Any]) -> float:
         """적응형 강도 계산"""
         try:
             # 적응형 트리거 기반 강도 계산
             if trigger_type in self.adaptive_triggers:
                 trigger = self.adaptive_triggers[trigger_type]
-                return trigger.adaptive_threshold * (
-                    1.0 + len(trigger.success_history) * 0.1
-                )
+                return trigger.adaptive_threshold * (1.0 + len(trigger.success_history) * 0.1)
             return 0.0
         except Exception as e:
             logger.error(f"적응형 강도 계산 실패: {e}")
@@ -1870,18 +1705,12 @@ def optimize_performance():
         event_id = f"stimulus_{int(time.time() * 1000)}"
 
         # 자극 유형 및 강도 분석
-        trigger_type, intensity = await self._analyze_enhanced_stimulus(
-            input_data, context
-        )
+        trigger_type, intensity = await self._analyze_enhanced_stimulus(input_data, context)
 
         # 학습 패턴 분석
-        learning_pattern = await self._analyze_learning_pattern(
-            trigger_type, input_data, context
-        )
+        learning_pattern = await self._analyze_learning_pattern(trigger_type, input_data, context)
 
-        description = await self._generate_stimulus_description(
-            trigger_type, input_data
-        )
+        description = await self._generate_stimulus_description(trigger_type, input_data)
 
         return StimulusEvent(
             event_id=event_id,
@@ -1909,10 +1738,7 @@ def optimize_performance():
 
         if "survival_status" in context:
             survival_status = context["survival_status"]
-            if (
-                hasattr(survival_status, "threat_level")
-                and survival_status.threat_level > 0.5
-            ):
+            if hasattr(survival_status, "threat_level") and survival_status.threat_level > 0.5:
                 trigger_type = EvolutionTrigger.SURVIVAL_THREAT
                 intensity = max(intensity, survival_status.threat_level)
 
@@ -1925,17 +1751,13 @@ def optimize_performance():
                     intensity = max(intensity, degradation_score)
 
         # 학습 기반 진화 트리거
-        learning_intensity = await self._calculate_learning_based_intensity(
-            trigger_type, context
-        )
+        learning_intensity = await self._calculate_learning_based_intensity(trigger_type, context)
         if learning_intensity > 0.3:
             trigger_type = EvolutionTrigger.LEARNING_BASED_EVOLUTION
             intensity = max(intensity, learning_intensity)
 
         # 적응형 트리거
-        adaptive_intensity = await self._calculate_adaptive_intensity(
-            trigger_type, context
-        )
+        adaptive_intensity = await self._calculate_adaptive_intensity(trigger_type, context)
         if adaptive_intensity > 0.5:
             trigger_type = EvolutionTrigger.ADAPTIVE_TRIGGER
             intensity = max(intensity, adaptive_intensity)
@@ -1955,9 +1777,7 @@ def optimize_performance():
             for pattern in self.learning_patterns.values():
                 if pattern.trigger_type == trigger_type:
                     # 시간 가중치 적용 (최근 패턴일수록 높은 가중치)
-                    time_weight = 1.0 / (
-                        1.0 + (datetime.now() - pattern.last_used).days
-                    )
+                    time_weight = 1.0 / (1.0 + (datetime.now() - pattern.last_used).days)
                     weighted_score = pattern.average_improvement * time_weight
                     similar_patterns.append(
                         {
@@ -1984,24 +1804,18 @@ def optimize_performance():
             logger.error(f"학습 패턴 분석 실패: {e}")
             return None
 
-    async def _start_evolution_session(
-        self, stimulus_event: StimulusEvent
-    ) -> EvolutionSession:
+    async def _start_evolution_session(self, stimulus_event: StimulusEvent) -> EvolutionSession:
         """진화 세션 시작"""
         session_id = f"evolution_{int(time.time() * 1000)}"
         session = EvolutionSession(session_id=session_id, stimulus_event=stimulus_event)
 
         self.evolution_sessions.append(session)
 
-        logger.info(
-            f"진화 세션 시작: {session_id} - {stimulus_event.trigger_type.value}"
-        )
+        logger.info(f"진화 세션 시작: {session_id} - {stimulus_event.trigger_type.value}")
 
         return session
 
-    async def _generate_stimulus_description(
-        self, trigger_type: EvolutionTrigger, input_data: Dict[str, Any]
-    ) -> str:
+    async def _generate_stimulus_description(self, trigger_type: EvolutionTrigger, input_data: Dict[str, Any]) -> str:
         """자극 설명 생성"""
         descriptions = {
             EvolutionTrigger.REFLECTION_SCORE_LOW: "낮은 반성 점수로 인한 진화 필요",
@@ -2030,17 +1844,13 @@ def optimize_performance():
             logger.error(f"학습 기반 강도 계산 실패: {e}")
             return 0.0
 
-    async def _calculate_adaptive_intensity(
-        self, trigger_type: EvolutionTrigger, context: Dict[str, Any]
-    ) -> float:
+    async def _calculate_adaptive_intensity(self, trigger_type: EvolutionTrigger, context: Dict[str, Any]) -> float:
         """적응형 강도 계산"""
         try:
             # 적응형 트리거 기반 강도 계산
             if trigger_type in self.adaptive_triggers:
                 trigger = self.adaptive_triggers[trigger_type]
-                return trigger.adaptive_threshold * (
-                    1.0 + len(trigger.success_history) * 0.1
-                )
+                return trigger.adaptive_threshold * (1.0 + len(trigger.success_history) * 0.1)
             return 0.0
         except Exception as e:
             logger.error(f"적응형 강도 계산 실패: {e}")
@@ -2076,8 +1886,7 @@ def optimize_performance():
                     pattern.frequency += 1
                     pattern.last_used = datetime.now()
                     pattern.average_improvement = (
-                        pattern.average_improvement
-                        + integrated_result.overall_improvement_score
+                        pattern.average_improvement + integrated_result.overall_improvement_score
                     ) / 2
 
         except Exception as e:
@@ -2113,31 +1922,23 @@ def optimize_performance():
                 trigger.success_history = trigger.success_history[-10:]
 
             # 적응형 임계값 업데이트
-            if (
-                integrated_result.success
-                and integrated_result.overall_improvement_score > 0.5
-            ):
+            if integrated_result.success and integrated_result.overall_improvement_score > 0.5:
                 trigger.adaptive_threshold = min(trigger.adaptive_threshold * 1.1, 1.0)
             elif integrated_result.overall_improvement_score < 0.3:
                 trigger.adaptive_threshold = max(trigger.adaptive_threshold * 0.9, 0.1)
 
-            logger.info(
-                f"적응형 트리거 '{trigger_id}' 업데이트: 임계값 {trigger.adaptive_threshold:.3f}"
-            )
+            logger.info(f"적응형 트리거 '{trigger_id}' 업데이트: 임계값 {trigger.adaptive_threshold:.3f}")
 
         except Exception as e:
             logger.error(f"적응형 트리거 업데이트 실패: {e}")
 
-    async def _update_performance_metrics(
-        self, execution_time: float, improvement_score: float
-    ):
+    async def _update_performance_metrics(self, execution_time: float, improvement_score: float):
         """성능 메트릭 업데이트 (기존 시스템 통합)"""
         try:
             # 기본 메트릭 업데이트
             self.performance_metrics["total_tasks"] += 1
             self.performance_metrics["average_execution_time"] = (
-                self.performance_metrics["average_execution_time"]
-                * (self.performance_metrics["total_tasks"] - 1)
+                self.performance_metrics["average_execution_time"] * (self.performance_metrics["total_tasks"] - 1)
                 + execution_time
             ) / self.performance_metrics["total_tasks"]
 
@@ -2148,10 +1949,7 @@ def optimize_performance():
                 self.performance_metrics["failed_tasks"] += 1
 
             # 캐시 히트율 업데이트
-            total_cache_requests = (
-                self.performance_metrics["cache_hits"]
-                + self.performance_metrics["cache_misses"]
-            )
+            total_cache_requests = self.performance_metrics["cache_hits"] + self.performance_metrics["cache_misses"]
             if total_cache_requests > 0:
                 self.performance_metrics["cache_hit_rate"] = (
                     self.performance_metrics["cache_hits"] / total_cache_requests
@@ -2159,12 +1957,8 @@ def optimize_performance():
 
             # 성능 개선 점수 업데이트
             if self.baseline_execution_time > 0:
-                improvement_ratio = (
-                    self.baseline_execution_time - execution_time
-                ) / self.baseline_execution_time
-                current_improvement = self.performance_metrics[
-                    "performance_improvement"
-                ]
+                improvement_ratio = (self.baseline_execution_time - execution_time) / self.baseline_execution_time
+                current_improvement = self.performance_metrics["performance_improvement"]
                 total_sessions = self.performance_metrics["total_tasks"]
                 self.performance_metrics["performance_improvement"] = (
                     current_improvement * (total_sessions - 1) + improvement_ratio
@@ -2172,18 +1966,14 @@ def optimize_performance():
 
             # 병렬 효율성 업데이트
             if execution_time > 0:
-                parallel_efficiency = execution_time / (
-                    execution_time * len(self.node_status)
-                )  # 간단한 효율성 계산
+                parallel_efficiency = execution_time / (execution_time * len(self.node_status))  # 간단한 효율성 계산
                 current_efficiency = self.performance_metrics["parallel_efficiency"]
                 total_sessions = self.performance_metrics["total_tasks"]
                 self.performance_metrics["parallel_efficiency"] = (
                     current_efficiency * (total_sessions - 1) + parallel_efficiency
                 ) / total_sessions
 
-            logger.debug(
-                f"성능 메트릭 업데이트: 실행시간={execution_time:.3f}초, 개선점수={improvement_score:.3f}"
-            )
+            logger.debug(f"성능 메트릭 업데이트: 실행시간={execution_time:.3f}초, 개선점수={improvement_score:.3f}")
 
         except Exception as e:
             logger.error(f"성능 메트릭 업데이트 실패: {e}")
@@ -2213,9 +2003,7 @@ def optimize_performance():
             improvement_ratio = 0.0
             if self.baseline_execution_time > 0:
                 improvement_ratio = (
-                    (self.baseline_execution_time - current_execution_time)
-                    / self.baseline_execution_time
-                    * 100
+                    (self.baseline_execution_time - current_execution_time) / self.baseline_execution_time * 100
                 )
 
             summary = {
@@ -2234,11 +2022,9 @@ def optimize_performance():
                 "learning_patterns_count": len(self.learning_patterns),
                 "adaptive_triggers_count": len(self.adaptive_triggers),
                 "integrated_systems": {
-                    "enhanced_parallel_processor": self.enhanced_parallel_processor
-                    is not None,
+                    "enhanced_parallel_processor": self.enhanced_parallel_processor is not None,
                     "performance_optimizer": self.performance_optimizer is not None,
-                    "act_r_parallel_processor": self.act_r_parallel_processor
-                    is not None,
+                    "act_r_parallel_processor": self.act_r_parallel_processor is not None,
                 },
             }
 
@@ -2251,15 +2037,10 @@ def optimize_performance():
     def get_cache_stats(self) -> Dict[str, Any]:
         """캐시 통계 반환 (기존 시스템 통합)"""
         try:
-            total_cache_requests = (
-                self.performance_metrics["cache_hits"]
-                + self.performance_metrics["cache_misses"]
-            )
+            total_cache_requests = self.performance_metrics["cache_hits"] + self.performance_metrics["cache_misses"]
             cache_hit_rate = 0.0
             if total_cache_requests > 0:
-                cache_hit_rate = (
-                    self.performance_metrics["cache_hits"] / total_cache_requests * 100
-                )
+                cache_hit_rate = self.performance_metrics["cache_hits"] / total_cache_requests * 100
 
             return {
                 "cache_size": len(self.cache),
@@ -2308,9 +2089,7 @@ def optimize_performance():
                 )
                 parallel_tasks.append(task)
 
-            parallel_results = await self._execute_parallel_tasks_with_optimization(
-                parallel_tasks
-            )
+            parallel_results = await self._execute_parallel_tasks_with_optimization(parallel_tasks)
             parallel_test_time = time.time() - parallel_test_start
 
             test_results["parallel_processing"] = {
@@ -2349,12 +2128,8 @@ def optimize_performance():
             total_test_time = time.time() - start_time
             test_results["overall_performance"] = {
                 "total_test_time": total_test_time,
-                "average_execution_time": self.performance_metrics[
-                    "average_execution_time"
-                ],
-                "performance_improvement": self.performance_metrics[
-                    "performance_improvement"
-                ],
+                "average_execution_time": self.performance_metrics["average_execution_time"],
+                "performance_improvement": self.performance_metrics["performance_improvement"],
                 "cache_hit_rate": self.performance_metrics["cache_hit_rate"],
             }
 
@@ -2377,9 +2152,7 @@ def optimize_performance():
                 # 캐시 정리
                 current_time = time.time()
                 expired_keys = [
-                    key
-                    for key, data in self.cache.items()
-                    if current_time - data["timestamp"] > self.cache_ttl
+                    key for key, data in self.cache.items() if current_time - data["timestamp"] > self.cache_ttl
                 ]
                 for key in expired_keys:
                     del self.cache[key]
@@ -2393,9 +2166,7 @@ def optimize_performance():
             for node_name, node_info in self.node_status.items():
                 if node_info["load"] > 0.8:
                     # 부하가 높은 노드의 부하 감소
-                    self.node_status[node_name]["load"] = max(
-                        0.0, node_info["load"] - 0.2
-                    )
+                    self.node_status[node_name]["load"] = max(0.0, node_info["load"] - 0.2)
                     optimization_results[f"{node_name}_optimization"] = {
                         "previous_load": node_info["load"],
                         "current_load": self.node_status[node_name]["load"],
@@ -2404,12 +2175,8 @@ def optimize_performance():
             # 3. 성능 메트릭 최적화
             if self.performance_metrics["error_count"] > 10:
                 # 오류가 많은 경우 임계값 조정
-                self.performance_metrics["error_count"] = max(
-                    0, self.performance_metrics["error_count"] - 5
-                )
-                optimization_results["error_optimization"] = {
-                    "error_count_reduced": True
-                }
+                self.performance_metrics["error_count"] = max(0, self.performance_metrics["error_count"] - 5)
+                optimization_results["error_optimization"] = {"error_count_reduced": True}
 
             logger.info("✅ 시스템 성능 최적화 완료")
             return optimization_results
@@ -2452,7 +2219,7 @@ async def main():
         result = await evolution_system.process_stimulus(test_stimulus, test_context)
 
         # 결과 출력
-        print(f"\n📊 향상된 통합 진화 결과:")
+        print("\n📊 향상된 통합 진화 결과:")
         print(f"✅ 성공: {result.success}")
         print(f"⏱️  실행 시간: {result.evolution_time:.3f}초")
         print(f"🎯 개선 점수: {result.overall_improvement_score:.3f}")
@@ -2460,18 +2227,18 @@ async def main():
         print(f"🔄 적응형 변경사항: {len(result.adaptive_changes)}개")
 
         if result.learning_insights:
-            print(f"\n💡 학습 인사이트:")
+            print("\n💡 학습 인사이트:")
             for insight in result.learning_insights:
                 print(f"  - {insight}")
 
         if result.adaptive_changes:
-            print(f"\n🔄 적응형 변경사항:")
+            print("\n🔄 적응형 변경사항:")
             for change_type, change_value in result.adaptive_changes.items():
                 print(f"  - {change_type}: {change_value}")
 
         # 진화 요약 정보
         summary = await evolution_system.get_evolution_summary()
-        print(f"\n📋 진화 요약:")
+        print("\n📋 진화 요약:")
         print(f"총 세션: {summary['total_sessions']}")
         print(f"성공한 세션: {summary['successful_sessions']}")
         print(f"실패한 세션: {summary['failed_sessions']}")

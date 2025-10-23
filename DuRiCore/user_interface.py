@@ -4,22 +4,16 @@ DuRiCore Phase 9 - 사용자 인터페이스 시스템
 웹 대시보드, CLI 인터페이스, API 인터페이스 통합 시스템
 """
 
-import asyncio
-import json
 import logging
-import os
-import random
-import sys
 import time
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from enum import Enum
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 
 # 웹 인터페이스용
 try:
-    from flask import Flask, Response, jsonify, render_template, request
+    from flask import Flask, Response, jsonify, render_template, request  # noqa: F401
     from flask_cors import CORS
 
     FLASK_AVAILABLE = True
@@ -223,9 +217,7 @@ class UserInterfaceSystem:
 
         return ui
 
-    def _create_default_components(
-        self, interface_type: InterfaceType
-    ) -> List[UIComponent]:
+    def _create_default_components(self, interface_type: InterfaceType) -> List[UIComponent]:
         """기본 컴포넌트 생성"""
         components = []
 
@@ -677,7 +669,7 @@ class UserInterfaceSystem:
 
     def generate_cli_interface(self, ui: UserInterface) -> str:
         """CLI 인터페이스 생성"""
-        return f"""
+        return """
 DuRi Phase 9 - CLI Interface
 ============================
 
@@ -757,11 +749,9 @@ DuRi>
                 "average_performance": 0,
             }
 
-        avg_satisfaction = statistics.mean(
-            [f.satisfaction_score for f in feedback_list]
-        )
-        avg_usability = statistics.mean([f.usability_score for f in feedback_list])
-        avg_performance = statistics.mean([f.performance_rating for f in feedback_list])
+        avg_satisfaction = statistics.mean([f.satisfaction_score for f in feedback_list])  # noqa: F821
+        avg_usability = statistics.mean([f.usability_score for f in feedback_list])  # noqa: F821
+        avg_performance = statistics.mean([f.performance_rating for f in feedback_list])  # noqa: F821
 
         return {
             "interface_id": ui_id,
@@ -772,16 +762,12 @@ DuRi>
             "average_satisfaction": avg_satisfaction,
             "average_usability": avg_usability,
             "average_performance": avg_performance,
-            "total_feature_requests": sum(
-                len(f.feature_requests) for f in feedback_list
-            ),
+            "total_feature_requests": sum(len(f.feature_requests) for f in feedback_list),
             "total_bug_reports": sum(len(f.bug_reports) for f in feedback_list),
             "created_at": ui.created_at.isoformat(),
         }
 
-    def update_interface_customization(
-        self, ui_id: str, customization: Dict[str, Any]
-    ) -> bool:
+    def update_interface_customization(self, ui_id: str, customization: Dict[str, Any]) -> bool:
         """인터페이스 커스터마이징 업데이트"""
         if ui_id not in self.interfaces:
             return False
@@ -792,9 +778,7 @@ DuRi>
         logger.info(f"✅ 인터페이스 커스터마이징 업데이트 완료: {ui_id}")
         return True
 
-    def update_accessibility_settings(
-        self, ui_id: str, accessibility: Dict[str, bool]
-    ) -> bool:
+    def update_accessibility_settings(self, ui_id: str, accessibility: Dict[str, bool]) -> bool:
         """접근성 설정 업데이트"""
         if ui_id not in self.interfaces:
             return False
@@ -829,9 +813,7 @@ DuRi>
 
         @self.app.route("/")
         def index():
-            return self.generate_web_dashboard(
-                self.create_interface(InterfaceType.WEB_DASHBOARD)
-            )
+            return self.generate_web_dashboard(self.create_interface(InterfaceType.WEB_DASHBOARD))
 
         @self.app.route("/api/interfaces", methods=["GET"])
         def get_interfaces():
@@ -863,9 +845,7 @@ DuRi>
         def get_analytics(ui_id):
             return jsonify(self.get_interface_analytics(ui_id))
 
-    def run_web_server(
-        self, host: str = "0.0.0.0", port: int = 8080, debug: bool = False
-    ):
+    def run_web_server(self, host: str = "0.0.0.0", port: int = 8080, debug: bool = False):
         """웹 서버 실행"""
         if not self.app:
             logger.error("Flask가 설치되지 않아 웹 서버를 실행할 수 없습니다.")

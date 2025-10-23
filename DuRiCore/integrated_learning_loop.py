@@ -5,16 +5,13 @@ DuRiCore Phase 5 Day 6 - 통합 학습 루프 시스템
 """
 
 import asyncio
-import json
 import logging
-import math
 import random
-import statistics
 import time
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -166,32 +163,22 @@ class IntegratedLearningLoop:
             # 1. Memory 단계
             memory_result = await self._execute_memory_phase(input_data)
             if not memory_result["success"]:
-                return await self._create_failed_cycle(
-                    cycle_id, LoopPhase.MEMORY, time.time() - start_time
-                )
+                return await self._create_failed_cycle(cycle_id, LoopPhase.MEMORY, time.time() - start_time)
 
             # 2. Judgment 단계
             judgment_result = await self._execute_judgment_phase(memory_result["data"])
             if not judgment_result["success"]:
-                return await self._create_failed_cycle(
-                    cycle_id, LoopPhase.JUDGMENT, time.time() - start_time
-                )
+                return await self._create_failed_cycle(cycle_id, LoopPhase.JUDGMENT, time.time() - start_time)
 
             # 3. Action 단계
             action_result = await self._execute_action_phase(judgment_result["data"])
             if not action_result["success"]:
-                return await self._create_failed_cycle(
-                    cycle_id, LoopPhase.ACTION, time.time() - start_time
-                )
+                return await self._create_failed_cycle(cycle_id, LoopPhase.ACTION, time.time() - start_time)
 
             # 4. Evolution 단계
-            evolution_result = await self._execute_evolution_phase(
-                action_result["data"]
-            )
+            evolution_result = await self._execute_evolution_phase(action_result["data"])
             if not evolution_result["success"]:
-                return await self._create_failed_cycle(
-                    cycle_id, LoopPhase.EVOLUTION, time.time() - start_time
-                )
+                return await self._create_failed_cycle(cycle_id, LoopPhase.EVOLUTION, time.time() - start_time)
 
             # 5. Integration 단계
             integration_result = await self._execute_integration_phase(
@@ -230,36 +217,24 @@ class IntegratedLearningLoop:
 
         except Exception as e:
             logger.error(f"루프 사이클 실행 실패: {e}")
-            return await self._create_failed_cycle(
-                cycle_id, LoopPhase.INTEGRATION, time.time() - start_time
-            )
+            return await self._create_failed_cycle(cycle_id, LoopPhase.INTEGRATION, time.time() - start_time)
 
-    async def optimize_loop_performance(
-        self, performance_metrics: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def optimize_loop_performance(self, performance_metrics: Dict[str, Any]) -> Dict[str, Any]:
         """루프 성능 최적화"""
         try:
             logger.info("루프 성능 최적화 시작")
 
             # 성능 분석
-            performance_analysis = await self._analyze_loop_performance(
-                performance_metrics
-            )
+            performance_analysis = await self._analyze_loop_performance(performance_metrics)
 
             # 최적화 전략 수립
-            optimization_strategy = await self._create_optimization_strategy(
-                performance_analysis
-            )
+            optimization_strategy = await self._create_optimization_strategy(performance_analysis)
 
             # 최적화 실행
-            optimization_result = await self._execute_optimization(
-                optimization_strategy
-            )
+            optimization_result = await self._execute_optimization(optimization_strategy)
 
             # 최적화 효과 검증
-            validation_result = await self._validate_optimization_effects(
-                optimization_result
-            )
+            validation_result = await self._validate_optimization_effects(optimization_result)
 
             self.optimization_history.append(
                 {
@@ -270,9 +245,7 @@ class IntegratedLearningLoop:
                 }
             )
 
-            logger.info(
-                f"루프 성능 최적화 완료: {validation_result.get('improvement', 0.0):.3f}"
-            )
+            logger.info(f"루프 성능 최적화 완료: {validation_result.get('improvement', 0.0):.3f}")
 
             return validation_result
 
@@ -284,9 +257,7 @@ class IntegratedLearningLoop:
                 "issues": ["optimization_failed"],
             }
 
-    async def validate_loop_integration(
-        self, cycle_results: List[LoopCycle]
-    ) -> Dict[str, Any]:
+    async def validate_loop_integration(self, cycle_results: List[LoopCycle]) -> Dict[str, Any]:
         """루프 통합 검증"""
         try:
             logger.info("루프 통합 검증 시작")
@@ -312,25 +283,18 @@ class IntegratedLearningLoop:
             # 통합 점수 계산
             if connectivity_validation["success"] and data_flow_validation["success"]:
                 integration_result["overall_integration_score"] = (
-                    connectivity_validation["score"] * 0.5
-                    + data_flow_validation["score"] * 0.5
+                    connectivity_validation["score"] * 0.5 + data_flow_validation["score"] * 0.5
                 )
 
             # 문제점 식별
-            integration_result["integration_issues"] = (
-                await self._identify_integration_issues(
-                    integration_analysis, connectivity_validation, data_flow_validation
-                )
+            integration_result["integration_issues"] = await self._identify_integration_issues(
+                integration_analysis, connectivity_validation, data_flow_validation
             )
 
             # 권장사항 생성
-            integration_result["recommendations"] = (
-                await self._generate_integration_recommendations(integration_result)
-            )
+            integration_result["recommendations"] = await self._generate_integration_recommendations(integration_result)
 
-            logger.info(
-                f"루프 통합 검증 완료: {integration_result['overall_integration_score']:.3f}"
-            )
+            logger.info(f"루프 통합 검증 완료: {integration_result['overall_integration_score']:.3f}")
 
             return integration_result
 
@@ -344,9 +308,7 @@ class IntegratedLearningLoop:
                 "recommendations": ["retry_validation"],
             }
 
-    async def run_continuous_learning_session(
-        self, session_data: List[Dict[str, Any]]
-    ) -> LoopReport:
+    async def run_continuous_learning_session(self, session_data: List[Dict[str, Any]]) -> LoopReport:
         """연속 학습 세션 실행"""
         try:
             logger.info("연속 학습 세션 시작")
@@ -365,14 +327,12 @@ class IntegratedLearningLoop:
 
                 if cycle_result.success:
                     successful_cycles += 1
-                    performance_improvements.append(
-                        cycle_result.performance_metrics.get("overall_performance", 0.0)
-                    )
+                    performance_improvements.append(cycle_result.performance_metrics.get("overall_performance", 0.0))
 
                 # 최적화 간격 확인
                 if total_cycles % self.optimization_interval == 0:
                     logger.info(f"최적화 간격 도달: {total_cycles}사이클")
-                    optimization_result = await self.optimize_loop_performance(
+                    optimization_result = await self.optimize_loop_performance(  # noqa: F841
                         {
                             "successful_cycles": successful_cycles,
                             "total_cycles": total_cycles,
@@ -387,18 +347,14 @@ class IntegratedLearningLoop:
                     break
 
             # 세션 결과 분석
-            session_duration = time.time() - session_start_time
-            success_rate = successful_cycles / max(1, total_cycles)
+            session_duration = time.time() - session_start_time  # noqa: F841
+            success_rate = successful_cycles / max(1, total_cycles)  # noqa: F841
             average_performance = (
-                sum(performance_improvements) / len(performance_improvements)
-                if performance_improvements
-                else 0.0
+                sum(performance_improvements) / len(performance_improvements) if performance_improvements else 0.0
             )
 
             # 통합 검증
-            integration_result = await self.validate_loop_integration(
-                self.cycle_history[-total_cycles:]
-            )
+            integration_result = await self.validate_loop_integration(self.cycle_history[-total_cycles:])
 
             # 보고서 생성
             report = LoopReport(
@@ -435,9 +391,7 @@ class IntegratedLearningLoop:
             logger.error(f"Memory 단계 실행 실패: {e}")
             return {"success": False, "data": {}, "phase": "memory"}
 
-    async def _execute_judgment_phase(
-        self, memory_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _execute_judgment_phase(self, memory_data: Dict[str, Any]) -> Dict[str, Any]:
         """Judgment 단계 실행"""
         try:
             # 판단 시스템을 통한 상황 분석 및 판단
@@ -449,9 +403,7 @@ class IntegratedLearningLoop:
             logger.error(f"Judgment 단계 실행 실패: {e}")
             return {"success": False, "data": {}, "phase": "judgment"}
 
-    async def _execute_action_phase(
-        self, judgment_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _execute_action_phase(self, judgment_data: Dict[str, Any]) -> Dict[str, Any]:
         """Action 단계 실행"""
         try:
             # 행동 시스템을 통한 행동 생성 및 실행
@@ -463,9 +415,7 @@ class IntegratedLearningLoop:
             logger.error(f"Action 단계 실행 실패: {e}")
             return {"success": False, "data": {}, "phase": "action"}
 
-    async def _execute_evolution_phase(
-        self, action_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _execute_evolution_phase(self, action_data: Dict[str, Any]) -> Dict[str, Any]:
         """Evolution 단계 실행"""
         try:
             # 진화 시스템을 통한 학습 및 진화
@@ -534,24 +484,17 @@ class IntegratedLearningLoop:
                 performance_metrics["action_success_rate"] = random.uniform(0.9, 1.0)
 
             if evolution_result["success"]:
-                performance_metrics["evolution_effectiveness"] = random.uniform(
-                    0.8, 0.9
-                )
+                performance_metrics["evolution_effectiveness"] = random.uniform(0.8, 0.9)
 
             if integration_result["success"]:
-                performance_metrics["integration_stability"] = random.uniform(
-                    0.85, 0.95
-                )
+                performance_metrics["integration_stability"] = random.uniform(0.85, 0.95)
 
             # 전체 성능 계산
             performance_metrics["overall_performance"] = (
                 performance_metrics["memory_efficiency"] * self.loop_weights["memory"]
-                + performance_metrics["judgment_accuracy"]
-                * self.loop_weights["judgment"]
-                + performance_metrics["action_success_rate"]
-                * self.loop_weights["action"]
-                + performance_metrics["evolution_effectiveness"]
-                * self.loop_weights["evolution"]
+                + performance_metrics["judgment_accuracy"] * self.loop_weights["judgment"]
+                + performance_metrics["action_success_rate"] * self.loop_weights["action"]
+                + performance_metrics["evolution_effectiveness"] * self.loop_weights["evolution"]
             )
 
             return performance_metrics
@@ -560,9 +503,7 @@ class IntegratedLearningLoop:
             logger.error(f"사이클 성능 계산 실패: {e}")
             return {"overall_performance": 0.0}
 
-    async def _create_failed_cycle(
-        self, cycle_id: str, phase: LoopPhase, execution_time: float
-    ) -> LoopCycle:
+    async def _create_failed_cycle(self, cycle_id: str, phase: LoopPhase, execution_time: float) -> LoopCycle:
         """실패한 사이클 생성"""
         return LoopCycle(
             cycle_id=cycle_id,
@@ -575,9 +516,7 @@ class IntegratedLearningLoop:
             execution_time=execution_time,
         )
 
-    async def _analyze_loop_performance(
-        self, performance_metrics: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _analyze_loop_performance(self, performance_metrics: Dict[str, Any]) -> Dict[str, Any]:
         """루프 성능 분석"""
         try:
             analysis = {
@@ -615,9 +554,7 @@ class IntegratedLearningLoop:
                 "recommendations": [],
             }
 
-    async def _create_optimization_strategy(
-        self, performance_analysis: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _create_optimization_strategy(self, performance_analysis: Dict[str, Any]) -> Dict[str, Any]:
         """최적화 전략 수립"""
         try:
             strategy = {
@@ -636,9 +573,7 @@ class IntegratedLearningLoop:
                 elif bottleneck == "evolution_effectiveness":
                     strategy["optimization_methods"].append("evolution_optimization")
 
-            strategy["expected_improvement"] = (
-                len(strategy["optimization_methods"]) * 0.1
-            )
+            strategy["expected_improvement"] = len(strategy["optimization_methods"]) * 0.1
 
             return strategy
 
@@ -672,9 +607,7 @@ class IntegratedLearningLoop:
             logger.error(f"최적화 실행 실패: {e}")
             return {"success": False, "improvements": {}, "total_improvement": 0.0}
 
-    async def _validate_optimization_effects(
-        self, optimization_result: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _validate_optimization_effects(self, optimization_result: Dict[str, Any]) -> Dict[str, Any]:
         """최적화 효과 검증"""
         try:
             return {
@@ -687,9 +620,7 @@ class IntegratedLearningLoop:
             logger.error(f"최적화 효과 검증 실패: {e}")
             return {"success": False, "improvement": 0.0, "validated_improvements": {}}
 
-    async def _analyze_integration_status(
-        self, cycle_results: List[LoopCycle]
-    ) -> Dict[str, Any]:
+    async def _analyze_integration_status(self, cycle_results: List[LoopCycle]) -> Dict[str, Any]:
         """통합 상태 분석"""
         try:
             analysis = {
@@ -700,10 +631,7 @@ class IntegratedLearningLoop:
             }
 
             if cycle_results:
-                performances = [
-                    c.performance_metrics.get("overall_performance", 0.0)
-                    for c in cycle_results
-                ]
+                performances = [c.performance_metrics.get("overall_performance", 0.0) for c in cycle_results]
                 analysis["average_performance"] = sum(performances) / len(performances)
 
                 if len(performances) >= 2:
@@ -733,9 +661,7 @@ class IntegratedLearningLoop:
             return {
                 "success": connectivity_score > 0.8,
                 "score": connectivity_score,
-                "issues": (
-                    [] if connectivity_score > 0.9 else ["moderate_connectivity_issues"]
-                ),
+                "issues": ([] if connectivity_score > 0.9 else ["moderate_connectivity_issues"]),
             }
 
         except Exception as e:
@@ -746,9 +672,7 @@ class IntegratedLearningLoop:
                 "issues": ["connectivity_validation_failed"],
             }
 
-    async def _validate_data_flow(
-        self, cycle_results: List[LoopCycle]
-    ) -> Dict[str, Any]:
+    async def _validate_data_flow(self, cycle_results: List[LoopCycle]) -> Dict[str, Any]:
         """데이터 흐름 검증"""
         try:
             # 시뮬레이션된 데이터 흐름 검증
@@ -796,9 +720,7 @@ class IntegratedLearningLoop:
             logger.error(f"통합 문제점 식별 실패: {e}")
             return ["issue_identification_failed"]
 
-    async def _generate_integration_recommendations(
-        self, integration_result: Dict[str, Any]
-    ) -> List[str]:
+    async def _generate_integration_recommendations(self, integration_result: Dict[str, Any]) -> List[str]:
         """통합 권장사항 생성"""
         try:
             recommendations = []
@@ -813,9 +735,7 @@ class IntegratedLearningLoop:
                     ]
                 )
             elif integration_score < 0.9:
-                recommendations.extend(
-                    ["Monitor integration stability", "Fine-tune system connections"]
-                )
+                recommendations.extend(["Monitor integration stability", "Fine-tune system connections"])
             else:
                 recommendations.append("Maintain current integration strategy")
 
@@ -874,9 +794,7 @@ async def test_integrated_learning_loop():
 
         # 연속 학습 세션 실행
         logger.info("연속 학습 세션 실행 시작")
-        session_report = await integrated_loop.run_continuous_learning_session(
-            session_data
-        )
+        session_report = await integrated_loop.run_continuous_learning_session(session_data)
         logger.info(f"세션 보고서: {session_report}")
 
         # 개별 사이클 테스트
@@ -899,16 +817,12 @@ async def test_integrated_learning_loop():
             "evolution_effectiveness": 0.70,
         }
 
-        optimization_result = await integrated_loop.optimize_loop_performance(
-            performance_metrics
-        )
+        optimization_result = await integrated_loop.optimize_loop_performance(performance_metrics)
         logger.info(f"최적화 결과: {optimization_result}")
 
         # 통합 검증 테스트
         logger.info("통합 검증 테스트 시작")
-        validation_result = await integrated_loop.validate_loop_integration(
-            [cycle_result]
-        )
+        validation_result = await integrated_loop.validate_loop_integration([cycle_result])
         logger.info(f"통합 검증 결과: {validation_result}")
 
         logger.info("통합 학습 루프 테스트 완료")

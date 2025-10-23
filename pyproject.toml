@@ -1,3 +1,23 @@
+[tool.ruff]
+target-version = "py310"
+line-length = 120
+respect-gitignore = true
+extend-exclude = [
+  "DuRiCore/backup_repository",
+  "DuRi_Day11_15_starter",
+  ".venv", "build", "dist"
+]
+
+[tool.ruff.lint]
+# E/F=pycodestyle/pyflakes, I=isort, B=bugbear
+select = ["E", "F", "I", "B"]
+# 1단계: 레거시 소음은 우선 무시, 이후 래칫로 줄여감
+extend-ignore = ["B007", "B019", "B025"]
+per-file-ignores = { "tests/**" = ["B007"], "tools/**" = ["B007"] }
+
+[tool.ruff.format]
+# ruff formatter = black 대체. (블랙 유지 원하면 이 섹션/훅은 빼고 black --check 만 남겨도 OK)
+
 [tool.mutmut]
 paths_to_mutate = ["duri_core", "duri_brain", "duri_evolution"]
 tests_dir = "tests"

@@ -3,6 +3,7 @@
 A/B 테스트 러너 스모크 테스트
 기존 테스트와 호환되는 새로운 스모크 테스트
 """
+
 import json
 import os
 import sys
@@ -14,7 +15,7 @@ import pytest
 # 프로젝트 루트를 Python 경로에 추가
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from ab_test_runner import ABTestRunner
+from ab_test_runner import ABTestRunner  # noqa: E402
 
 
 class TestABRunnerSmoke:
@@ -58,9 +59,7 @@ B,140"""
         try:
             # 임시 설정 파일 생성
             config = {"day": 36}
-            with tempfile.NamedTemporaryFile(
-                mode="w", suffix=".yaml", delete=False
-            ) as f:
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
                 import yaml
 
                 yaml.dump(config, f)
@@ -68,9 +67,7 @@ B,140"""
 
             try:
                 runner = ABTestRunner(config_path)
-                group_a, group_b = runner.csv_to_variants(
-                    csv_path, "latency_ms", "variant"
-                )
+                group_a, group_b = runner.csv_to_variants(csv_path, "latency_ms", "variant")
 
                 assert len(group_a) == 2
                 assert len(group_b) == 2
@@ -99,9 +96,7 @@ B,132"""
         try:
             # 임시 설정 파일 생성
             config = {"day": 36}
-            with tempfile.NamedTemporaryFile(
-                mode="w", suffix=".yaml", delete=False
-            ) as f:
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
                 import yaml
 
                 yaml.dump(config, f)
@@ -201,17 +196,13 @@ B,132"""
 A,120
 B,135"""
 
-            with tempfile.NamedTemporaryFile(
-                mode="w", suffix=".csv", delete=False
-            ) as f:
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
                 f.write(csv_content)
                 csv_path = f.name
 
             try:
                 with pytest.raises(ValueError, match="Need ≥2 samples per variant"):
-                    runner.run_from_csv(
-                        csv_path=csv_path, metric_col="latency_ms", group_col="variant"
-                    )
+                    runner.run_from_csv(csv_path=csv_path, metric_col="latency_ms", group_col="variant")
             finally:
                 os.unlink(csv_path)
         finally:

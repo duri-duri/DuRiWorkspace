@@ -6,17 +6,11 @@ DuRi 추론 시스템 - 학습 전략 최적화 모듈
 상황에 따른 최적 학습 전략을 선택하는 모듈입니다.
 """
 
-import asyncio
-import hashlib
-import json
 import logging
-import re
 import time
-from collections import Counter, defaultdict
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List
 
 import numpy as np
 
@@ -53,9 +47,7 @@ class LearningStrategyOptimizer:
         self.optimization_history = []
         self.strategy_performance = {}
 
-    async def optimize_learning_strategy(
-        self, context: Dict[str, Any]
-    ) -> LearningOptimization:
+    async def optimize_learning_strategy(self, context: Dict[str, Any]) -> LearningOptimization:
         """학습 전략 최적화"""
         optimization_id = f"learning_optimization_{int(time.time())}"
 
@@ -69,19 +61,13 @@ class LearningStrategyOptimizer:
         optimized_strategy = await self._select_optimal_strategy(context_analysis)
 
         # 학습 효율성 계산
-        learning_efficiency = await self._calculate_learning_efficiency(
-            optimized_strategy, context
-        )
+        learning_efficiency = await self._calculate_learning_efficiency(optimized_strategy, context)
 
         # 적응 점수 계산
-        adaptation_score = await self._calculate_adaptation_score(
-            optimized_strategy, context
-        )
+        adaptation_score = await self._calculate_adaptation_score(optimized_strategy, context)
 
         # 최적화 요인 분석
-        optimization_factors = await self._analyze_optimization_factors(
-            context_analysis
-        )
+        optimization_factors = await self._analyze_optimization_factors(context_analysis)
 
         optimization = LearningOptimization(
             optimization_id=optimization_id,
@@ -107,16 +93,12 @@ class LearningStrategyOptimizer:
 
         return analysis
 
-    async def _determine_current_strategy(
-        self, context: Dict[str, Any]
-    ) -> LearningStrategy:
+    async def _determine_current_strategy(self, context: Dict[str, Any]) -> LearningStrategy:
         """현재 전략 결정"""
         # 기본적으로 적응적 학습 전략 사용
         return LearningStrategy.ADAPTIVE_LEARNING
 
-    async def _select_optimal_strategy(
-        self, context_analysis: Dict[str, Any]
-    ) -> LearningStrategy:
+    async def _select_optimal_strategy(self, context_analysis: Dict[str, Any]) -> LearningStrategy:
         """최적 전략 선택"""
         complexity = context_analysis.get("complexity", 0.5)
         urgency = context_analysis.get("urgency", 0.5)
@@ -135,9 +117,7 @@ class LearningStrategyOptimizer:
         else:
             return LearningStrategy.ADAPTIVE_LEARNING
 
-    async def _calculate_learning_efficiency(
-        self, strategy: LearningStrategy, context: Dict[str, Any]
-    ) -> float:
+    async def _calculate_learning_efficiency(self, strategy: LearningStrategy, context: Dict[str, Any]) -> float:
         """학습 효율성 계산"""
         base_efficiency = {
             LearningStrategy.FAST_LEARNING: 0.8,
@@ -173,9 +153,7 @@ class LearningStrategyOptimizer:
 
         return np.mean(factors)
 
-    async def _calculate_adaptation_score(
-        self, strategy: LearningStrategy, context: Dict[str, Any]
-    ) -> float:
+    async def _calculate_adaptation_score(self, strategy: LearningStrategy, context: Dict[str, Any]) -> float:
         """적응 점수 계산"""
         base_adaptation = {
             LearningStrategy.FAST_LEARNING: 0.6,
@@ -191,9 +169,7 @@ class LearningStrategyOptimizer:
 
         return min(1.0, base_score * context_stability)
 
-    async def _analyze_optimization_factors(
-        self, context_analysis: Dict[str, Any]
-    ) -> List[str]:
+    async def _analyze_optimization_factors(self, context_analysis: Dict[str, Any]) -> List[str]:
         """최적화 요인 분석"""
         factors = []
 

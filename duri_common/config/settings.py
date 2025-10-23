@@ -26,23 +26,15 @@ class DuRiSettings(BaseSettings):
     DEBUG: bool = Field(default=False, description="Debug mode")
 
     # === Database Settings ===
-    DATABASE_URL: str = Field(
-        default="sqlite:///duri_core.db", description="Database connection URL"
-    )
+    DATABASE_URL: str = Field(default="sqlite:///duri_core.db", description="Database connection URL")
 
     # === Redis Settings ===
-    REDIS_URL: str = Field(
-        default="redis://localhost:6379", description="Redis connection URL"
-    )
+    REDIS_URL: str = Field(default="redis://localhost:6379", description="Redis connection URL")
 
     # === Logging Settings ===
     LOG_DIR: str = Field(default="/tmp/logs", description="Log directory path")
-    LOG_FILE: Optional[str] = Field(
-        default=None, description="Main log file path (auto-generated if None)"
-    )
-    RECEIVE_JSON_LOG: str = Field(
-        default="/tmp/receive.json", description="Receive log file path"
-    )
+    LOG_FILE: Optional[str] = Field(default=None, description="Main log file path (auto-generated if None)")
+    RECEIVE_JSON_LOG: str = Field(default="/tmp/receive.json", description="Receive log file path")
 
     # === Evolution Settings ===
     EVOLUTION_LOG_PATH: str = Field(
@@ -55,23 +47,15 @@ class DuRiSettings(BaseSettings):
     )
 
     # === Service URLs ===
-    BRAIN_URL: str = Field(
-        default="http://duri-brain:8081/brain", description="Brain service URL"
-    )
-    EVOLUTION_URL: str = Field(
-        default="http://duri-evolution:8082/evolve", description="Evolution service URL"
-    )
+    BRAIN_URL: str = Field(default="http://duri-brain:8081/brain", description="Brain service URL")
+    EVOLUTION_URL: str = Field(default="http://duri-evolution:8082/evolve", description="Evolution service URL")
 
     # === Request Settings ===
-    REQUEST_TIMEOUT: int = Field(
-        default=5, description="Default request timeout in seconds"
-    )
+    REQUEST_TIMEOUT: int = Field(default=5, description="Default request timeout in seconds")
 
     # === Monitoring Settings ===
     METRICS_ENABLED: bool = Field(default=True, description="Enable metrics collection")
-    HEALTH_CHECK_INTERVAL: int = Field(
-        default=30, description="Health check interval in seconds"
-    )
+    HEALTH_CHECK_INTERVAL: int = Field(default=30, description="Health check interval in seconds")
 
     class Config:
         env_file = "/app/.env"

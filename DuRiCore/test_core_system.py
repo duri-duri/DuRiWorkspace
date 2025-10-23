@@ -8,17 +8,14 @@ import asyncio
 import logging
 import os
 import sys
-from typing import Any, Dict
 
 # DuRiCore 모듈 import를 위한 경로 추가
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
-from DuRiCore.core.main_loop import DuRiCore
-from DuRiCore.memory.vector_store import VectorMemoryStore
-from DuRiCore.modules.emotion.emotion_embedding import (EmotionCategory,
-                                                        NLPEmotionEmbedding)
-from DuRiCore.modules.judgment.self_critique import (BiasType, CritiqueLevel,
-                                                     SelfCritiqueSystem)
+from DuRiCore.core.main_loop import DuRiCore  # noqa: E402
+from DuRiCore.memory.vector_store import VectorMemoryStore  # noqa: E402
+from DuRiCore.modules.emotion.emotion_embedding import NLPEmotionEmbedding  # noqa: E402
+from DuRiCore.modules.judgment.self_critique import SelfCritiqueSystem  # noqa: E402
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -121,7 +118,7 @@ async def test_vector_memory():
 
     # 메모리 통계
     stats = memory_store.get_memory_statistics()
-    print(f"\n📊 메모리 통계:")
+    print("\n📊 메모리 통계:")
     print(f"  총 메모리 수: {stats['total_memories']}")
     print(f"  평균 중요도: {stats['average_importance']:.2f}")
     print(f"  평균 접근 횟수: {stats['average_access_count']:.2f}")
@@ -166,7 +163,7 @@ async def test_self_critique():
         {"intensity": 0.5, "primary_emotion": "anticipation"},
     ]
 
-    for i, (judgment, emotion) in enumerate(zip(test_judgments, test_emotions)):
+    for i, (judgment, emotion) in enumerate(zip(test_judgments, test_emotions)):  # noqa: B905
         print(f"\n📝 판단 {i+1}: {judgment['reasoning_process'][:50]}...")
 
         critique = critique_system.critique_judgment(judgment, emotion, {})
@@ -183,7 +180,7 @@ async def test_self_critique():
 
     # 성찰 통계
     stats = critique_system.get_critique_statistics()
-    print(f"\n📊 성찰 통계:")
+    print("\n📊 성찰 통계:")
     print(f"  총 성찰 수: {stats['total_critiques']}")
     print(f"  평균 판단 품질: {stats['average_judgment_quality']:.2f}")
     print(f"  편향 감지율: {stats['bias_detection_rate']:.2f}")
@@ -217,7 +214,7 @@ async def test_main_loop():
 
     # 시스템 상태
     status = duri_core.get_system_status()
-    print(f"\n📊 시스템 상태:")
+    print("\n📊 시스템 상태:")
     print(f"  총 대화 수: {status['total_conversations']}")
     print(f"  총 경험 수: {status['total_experiences']}")
     print(f"  학습 패턴 수: {status['learning_patterns']}")

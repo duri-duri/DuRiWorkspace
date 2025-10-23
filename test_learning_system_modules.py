@@ -8,10 +8,8 @@ DuRiCore Phase 2-3: 학습 시스템 모듈 테스트
 
 import asyncio
 import logging
-import os
 import sys
 from datetime import datetime, timedelta
-from typing import Any, Dict
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -24,25 +22,11 @@ def test_core_modules():
 
     try:
         # Core 모듈 import 테스트
-        from DuRiCore.learning_system.core import (EvolutionSession,
-                                                   EvolutionType,
-                                                   KnowledgeEvolution,
-                                                   KnowledgeEvolutionSystem,
-                                                   KnowledgeItem,
-                                                   KnowledgeQuality,
-                                                   LearningEngine,
-                                                   LearningOptimizationSystem,
-                                                   LearningProcess,
-                                                   LearningProcessType,
-                                                   LearningResult,
-                                                   LearningSession,
-                                                   LearningSessionStatus,
-                                                   OptimizationResult,
-                                                   OptimizationStatus,
-                                                   OptimizationStrategy,
-                                                   OptimizationTarget,
-                                                   OptimizationType,
-                                                   PerformanceMetrics)
+        from DuRiCore.learning_system.core import (
+            KnowledgeEvolutionSystem,
+            LearningEngine,
+            LearningOptimizationSystem,
+        )
 
         # LearningEngine 인스턴스 생성 테스트
         learning_engine = LearningEngine()
@@ -50,15 +34,11 @@ def test_core_modules():
 
         # KnowledgeEvolutionSystem 인스턴스 생성 테스트
         knowledge_evolution = KnowledgeEvolutionSystem()
-        logger.info(
-            f"✅ KnowledgeEvolutionSystem 생성 성공: {type(knowledge_evolution)}"
-        )
+        logger.info(f"✅ KnowledgeEvolutionSystem 생성 성공: {type(knowledge_evolution)}")
 
         # LearningOptimizationSystem 인스턴스 생성 테스트
         learning_optimization = LearningOptimizationSystem()
-        logger.info(
-            f"✅ LearningOptimizationSystem 생성 성공: {type(learning_optimization)}"
-        )
+        logger.info(f"✅ LearningOptimizationSystem 생성 성공: {type(learning_optimization)}")
 
         logger.info("✅ Core 모듈 테스트 완료")
         return True
@@ -75,24 +55,15 @@ def test_strategies_modules():
     try:
         # Strategies 모듈 import 테스트
         from DuRiCore.learning_system.strategies import (
-            AdaptationResult, AdaptationType, AdaptiveLearningStrategy,
-            CognitiveMetaLearningMetrics, CognitiveMetaLearningState,
-            CognitiveMetaLearningStrategy, CuriosityTrigger, LearningActivity,
-            LearningData, LearningEfficiency, LearningGoal, LearningModel,
-            LearningOutcome, LearningPattern, LearningResult, LearningStatus,
-            LearningStrategy, LearningType, MetaCognitionInsight,
-            MetaCognitionLevel, MetaCognitionResult, MetaCognitionStrategy,
-            MetaLearningProcess, MetaLearningStage, MetaLearningType,
-            ReflectionType, SelfDirectedLearningResult,
-            SelfDirectedLearningStrategy, SelfDiscoveredProblem,
-            SelfReflection, ThinkingProcess, ThinkingQuality,
-            ThinkingQualityAssessment)
+            AdaptiveLearningStrategy,
+            CognitiveMetaLearningStrategy,
+            MetaCognitionStrategy,
+            SelfDirectedLearningStrategy,
+        )
 
         # SelfDirectedLearningStrategy 인스턴스 생성 테스트
         self_directed_learning = SelfDirectedLearningStrategy()
-        logger.info(
-            f"✅ SelfDirectedLearningStrategy 생성 성공: {type(self_directed_learning)}"
-        )
+        logger.info(f"✅ SelfDirectedLearningStrategy 생성 성공: {type(self_directed_learning)}")
 
         # AdaptiveLearningStrategy 인스턴스 생성 테스트
         adaptive_learning = AdaptiveLearningStrategy()
@@ -104,9 +75,7 @@ def test_strategies_modules():
 
         # CognitiveMetaLearningStrategy 인스턴스 생성 테스트
         cognitive_meta_learning = CognitiveMetaLearningStrategy()
-        logger.info(
-            f"✅ CognitiveMetaLearningStrategy 생성 성공: {type(cognitive_meta_learning)}"
-        )
+        logger.info(f"✅ CognitiveMetaLearningStrategy 생성 성공: {type(cognitive_meta_learning)}")
 
         logger.info("✅ Strategies 모듈 테스트 완료")
         return True
@@ -123,23 +92,17 @@ def test_integration_modules():
     try:
         # Integration 모듈 import 테스트
         from DuRiCore.learning_system.integration import (
-            IntegratedKnowledge, IntegratedLearningResult, IntegrationMethod,
-            IntegrationSession, IntegrationStatus, IntegrationType,
-            KnowledgeIntegrationSession, KnowledgeIntegrationSystem,
-            KnowledgeQuality, KnowledgeSource, LearningIntegrationSystem,
-            LearningStrategyResult)
+            KnowledgeIntegrationSystem,
+            LearningIntegrationSystem,
+        )
 
         # LearningIntegrationSystem 인스턴스 생성 테스트
         learning_integration = LearningIntegrationSystem()
-        logger.info(
-            f"✅ LearningIntegrationSystem 생성 성공: {type(learning_integration)}"
-        )
+        logger.info(f"✅ LearningIntegrationSystem 생성 성공: {type(learning_integration)}")
 
         # KnowledgeIntegrationSystem 인스턴스 생성 테스트
         knowledge_integration = KnowledgeIntegrationSystem()
-        logger.info(
-            f"✅ KnowledgeIntegrationSystem 생성 성공: {type(knowledge_integration)}"
-        )
+        logger.info(f"✅ KnowledgeIntegrationSystem 생성 성공: {type(knowledge_integration)}")
 
         logger.info("✅ Integration 모듈 테스트 완료")
         return True
@@ -156,23 +119,17 @@ def test_monitoring_modules():
     try:
         # Monitoring 모듈 import 테스트
         from DuRiCore.learning_system.monitoring import (
-            AdvancedLearningMonitoringSystem, LearningEvent, LearningIssue,
-            LearningIssueType, LearningMetrics, LearningMonitoringSystem,
-            LearningPattern, LearningPhase, LearningPrediction,
-            MonitoringLevel, MonitoringSession, MonitoringStatus,
-            OptimizationRecommendation)
+            AdvancedLearningMonitoringSystem,
+            LearningMonitoringSystem,
+        )
 
         # LearningMonitoringSystem 인스턴스 생성 테스트
         learning_monitoring = LearningMonitoringSystem()
-        logger.info(
-            f"✅ LearningMonitoringSystem 생성 성공: {type(learning_monitoring)}"
-        )
+        logger.info(f"✅ LearningMonitoringSystem 생성 성공: {type(learning_monitoring)}")
 
         # AdvancedLearningMonitoringSystem 인스턴스 생성 테스트
         advanced_monitoring = AdvancedLearningMonitoringSystem()
-        logger.info(
-            f"✅ AdvancedLearningMonitoringSystem 생성 성공: {type(advanced_monitoring)}"
-        )
+        logger.info(f"✅ AdvancedLearningMonitoringSystem 생성 성공: {type(advanced_monitoring)}")
 
         logger.info("✅ Monitoring 모듈 테스트 완료")
         return True
@@ -187,8 +144,7 @@ async def test_async_functionality():
     logger.info("🔍 비동기 기능 테스트 시작")
 
     try:
-        from DuRiCore.learning_system.monitoring import \
-            AdvancedLearningMonitoringSystem
+        from DuRiCore.learning_system.monitoring import AdvancedLearningMonitoringSystem
 
         # AdvancedLearningMonitoringSystem 인스턴스 생성
         monitoring_system = AdvancedLearningMonitoringSystem()
@@ -221,22 +177,16 @@ async def test_async_functionality():
         logger.info(f"✅ 학습 이슈 감지 성공: {len(issues)}개 이슈 발견")
 
         # 학습 결과 예측 테스트
-        predictions = await monitoring_system.predict_learning_outcomes(
-            test_session_data
-        )
+        predictions = await monitoring_system.predict_learning_outcomes(test_session_data)
         logger.info(f"✅ 학습 결과 예측 성공: {len(predictions)}개 예측 생성")
 
         # 최적화 추천 생성 테스트
-        recommendations = await monitoring_system.generate_optimization_recommendations(
-            test_session_data
-        )
+        recommendations = await monitoring_system.generate_optimization_recommendations(test_session_data)
         logger.info(f"✅ 최적화 추천 생성 성공: {len(recommendations)}개 추천 생성")
 
         # 모니터링 리포트 생성 테스트
         report = await monitoring_system.get_monitoring_report("test_session_001")
-        logger.info(
-            f"✅ 모니터링 리포트 생성 성공: {report.get('monitoring_level', 'unknown')}"
-        )
+        logger.info(f"✅ 모니터링 리포트 생성 성공: {report.get('monitoring_level', 'unknown')}")
 
         logger.info("✅ 비동기 기능 테스트 완료")
         return True
@@ -252,17 +202,6 @@ def test_package_import():
 
     try:
         # 전체 패키지 import 테스트
-        from DuRiCore.learning_system import (AdaptiveLearningStrategy,
-                                              AdvancedLearningMonitoringSystem,
-                                              CognitiveMetaLearningStrategy,
-                                              KnowledgeEvolutionSystem,
-                                              KnowledgeIntegrationSystem,
-                                              LearningEngine,
-                                              LearningIntegrationSystem,
-                                              LearningMonitoringSystem,
-                                              LearningOptimizationSystem,
-                                              MetaCognitionStrategy,
-                                              SelfDirectedLearningStrategy)
 
         logger.info("✅ 패키지 전체 import 성공")
         return True

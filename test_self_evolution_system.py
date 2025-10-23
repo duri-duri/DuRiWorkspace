@@ -2,19 +2,16 @@
 """
 DuRi 자가 진화 인식 시스템 테스트
 """
+
 import asyncio
 import logging
-from datetime import datetime
 from typing import Any, Dict
 
 # 자가 진화 인식 시스템 import
-from duri_modules.self_awareness.integrated_self_evolution_system import \
-    integrated_self_evolution_system
+from duri_modules.self_awareness.integrated_self_evolution_system import integrated_self_evolution_system
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -53,28 +50,20 @@ def print_evolution_report(test_result: Dict[str, Any]):
         tracking_result = test_data.get("evolution_tracking", {})
         if tracking_result.get("status") == "success":
             print(f"✅ 진화 추적: {tracking_result.get('evolution_stage', 'N/A')}")
-            print(
-                f"   현재 점수: {tracking_result.get('current_metrics', {}).get('performance_score', 0.0):.3f}"
-            )
+            print(f"   현재 점수: {tracking_result.get('current_metrics', {}).get('performance_score', 0.0):.3f}")
 
         # 자가 평가 결과
         assessment_result = test_data.get("self_assessment", {})
         if assessment_result.get("status") == "success":
             current_assessment = assessment_result.get("current_assessment", {})
-            print(
-                f"✅ 자가 평가: 전체 점수 {current_assessment.get('overall_score', 0.0):.3f}"
-            )
+            print(f"✅ 자가 평가: 전체 점수 {current_assessment.get('overall_score', 0.0):.3f}")
             print(f"   자율성: {current_assessment.get('autonomy_score', 0.0):.3f}")
-            print(
-                f"   학습 효율성: {current_assessment.get('learning_efficiency_score', 0.0):.3f}"
-            )
+            print(f"   학습 효율성: {current_assessment.get('learning_efficiency_score', 0.0):.3f}")
 
         # 진화 분석 결과
         analysis_result = test_data.get("evolution_analysis", {})
         if analysis_result.get("status") == "success":
-            print(
-                f"✅ 진화 분석: 종합 점수 {analysis_result.get('overall_evolution_score', 0.0):.3f}"
-            )
+            print(f"✅ 진화 분석: 종합 점수 {analysis_result.get('overall_evolution_score', 0.0):.3f}")
             print(f"   신뢰도: {analysis_result.get('evolution_confidence', 0.0):.3f}")
 
         # 진화 보고서 결과
@@ -93,9 +82,7 @@ def print_evolution_report(test_result: Dict[str, Any]):
                 key_insights = getattr(integrated_result, "key_insights", [])
             else:
                 # dict인 경우
-                evolution_status = integrated_result.get(
-                    "overall_evolution_status", "N/A"
-                )
+                evolution_status = integrated_result.get("overall_evolution_status", "N/A")
                 confidence_level = integrated_result.get("confidence_level", 0.0)
                 key_insights = integrated_result.get("key_insights", [])
 
@@ -103,7 +90,7 @@ def print_evolution_report(test_result: Dict[str, Any]):
             print(f"   신뢰도: {confidence_level:.3f}")
 
             if key_insights:
-                print(f"\n💡 핵심 인사이트:")
+                print("\n💡 핵심 인사이트:")
                 for insight in key_insights[:3]:
                     print(f"   • {insight}")
 
@@ -119,9 +106,7 @@ async def test_comprehensive_evolution_report():
         logger.info("📊 종합 진화 보고서 생성 테스트")
 
         # 종합 보고서 생성
-        report_result = (
-            integrated_self_evolution_system.generate_comprehensive_evolution_report()
-        )
+        report_result = integrated_self_evolution_system.generate_comprehensive_evolution_report()
 
         if report_result.get("status") == "success":
             logger.info("✅ 종합 진화 보고서 생성 성공")
@@ -155,32 +140,32 @@ def print_comprehensive_report(report_result: Dict[str, Any]):
         # 핵심 인사이트
         key_insights = comprehensive_report.get("key_insights", [])
         if key_insights:
-            print(f"\n💡 핵심 인사이트:")
+            print("\n💡 핵심 인사이트:")
             for insight in key_insights:
                 print(f"   • {insight}")
 
         # 상세 요약
         summary = comprehensive_report.get("summary", {})
         if summary:
-            print(f"\n📈 진화 요약:")
+            print("\n📈 진화 요약:")
             print(f"   단계: {summary.get('evolution_stage', 'N/A')}")
             print(f"   트렌드: {summary.get('evolution_trend', 'N/A')}")
 
             achievements = summary.get("key_achievements", [])
             if achievements:
-                print(f"\n🏆 주요 성과:")
+                print("\n🏆 주요 성과:")
                 for achievement in achievements:
                     print(f"   • {achievement}")
 
             improvements = summary.get("improvement_areas", [])
             if improvements:
-                print(f"\n🔧 개선 영역:")
+                print("\n🔧 개선 영역:")
                 for improvement in improvements:
                     print(f"   • {improvement}")
 
             next_steps = summary.get("next_steps", [])
             if next_steps:
-                print(f"\n🚀 다음 단계:")
+                print("\n🚀 다음 단계:")
                 for step in next_steps:
                     print(f"   • {step}")
 
@@ -219,9 +204,7 @@ def print_evolution_summary(summary_result: Dict[str, Any]):
         print("📋 DuRi 진화 요약")
         print("=" * 80)
 
-        print(
-            f"🎯 전체 진화 상태: {summary_result.get('overall_evolution_status', 'N/A')}"
-        )
+        print(f"🎯 전체 진화 상태: {summary_result.get('overall_evolution_status', 'N/A')}")
         print(f"📊 신뢰도: {summary_result.get('confidence_level', 0.0):.3f}")
         print(f"📅 최근 분석: {summary_result.get('latest_analysis_date', 'N/A')}")
         print(f"📈 총 분석 수: {summary_result.get('total_analyses', 0)}")
@@ -229,7 +212,7 @@ def print_evolution_summary(summary_result: Dict[str, Any]):
         # 핵심 인사이트
         key_insights = summary_result.get("key_insights", [])
         if key_insights:
-            print(f"\n💡 핵심 인사이트:")
+            print("\n💡 핵심 인사이트:")
             for insight in key_insights:
                 print(f"   • {insight}")
 
@@ -276,9 +259,7 @@ async def main():
             else:
                 print(f"❌ {test_name}: 실패")
 
-        print(
-            f"\n📊 성공률: {success_count}/{len(tests)} ({success_count/len(tests)*100:.1f}%)"
-        )
+        print(f"\n📊 성공률: {success_count}/{len(tests)} ({success_count/len(tests)*100:.1f}%)")
 
         if success_count == len(tests):
             print("🎉 모든 테스트가 성공했습니다!")

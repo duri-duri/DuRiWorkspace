@@ -3,11 +3,10 @@ Phase 25: 창의적 협력 시스템 (Creative Collaboration System)
 인간과 AI의 시너지를 통한 새로운 가치 창조
 """
 
-import json
 import time
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List
 
 
 class CollaborationMode(Enum):
@@ -61,9 +60,7 @@ class CreativeCollaborationSystem:
             "safety": "안전하고 해로운 결과를 방지",
         }
 
-    def analyze_human_intent(
-        self, user_input: str, context: Dict[str, Any]
-    ) -> HumanIntent:
+    def analyze_human_intent(self, user_input: str, context: Dict[str, Any]) -> HumanIntent:
         """인간의 의도 분석"""
         # 방어 코드: user_input이 None일 때 처리
         safe_input = user_input or ""
@@ -118,9 +115,7 @@ class CreativeCollaborationSystem:
 
         return secondary_goals
 
-    def _extract_constraints(
-        self, user_input: str, context: Dict[str, Any]
-    ) -> List[str]:
+    def _extract_constraints(self, user_input: str, context: Dict[str, Any]) -> List[str]:
         """제약 조건 추출"""
         constraints = []
 
@@ -174,9 +169,7 @@ class CreativeCollaborationSystem:
         else:
             return "adaptive"
 
-    def identify_collaboration_opportunities(
-        self, human_intent: HumanIntent
-    ) -> CollaborationOpportunity:
+    def identify_collaboration_opportunities(self, human_intent: HumanIntent) -> CollaborationOpportunity:
         """협력 기회 식별"""
         print("🎯 협력 기회 분석 중...")
 
@@ -249,9 +242,7 @@ class CreativeCollaborationSystem:
 
         # 혁신 가능성이 높은 영역 식별
         if "새로운" in human_intent.primary_goal or "혁신" in human_intent.primary_goal:
-            innovation_areas.extend(
-                ["새로운 접근법 개발", "기존 방법론 개선", "크로스 도메인 적용"]
-            )
+            innovation_areas.extend(["새로운 접근법 개발", "기존 방법론 개선", "크로스 도메인 적용"])
 
         return innovation_areas
 
@@ -354,9 +345,7 @@ class CreativeCollaborationSystem:
 
         return timeline
 
-    def execute_collaboration(
-        self, strategy: Dict[str, Any], user_input: str
-    ) -> Dict[str, Any]:
+    def execute_collaboration(self, strategy: Dict[str, Any], user_input: str) -> Dict[str, Any]:
         """협력 실행"""
         print(f"🚀 협력 실행 시작: {strategy['mode']} 모드")
 
@@ -364,26 +353,20 @@ class CreativeCollaborationSystem:
         result = {
             "mode": strategy["mode"],
             "approach": strategy["approach"],
-            "collaboration_output": self._generate_collaboration_output(
-                strategy, user_input
-            ),
+            "collaboration_output": self._generate_collaboration_output(strategy, user_input),
             "synergy_achieved": self._evaluate_synergy_achievement(strategy),
             "innovation_level": self._assess_innovation_level(strategy),
             "ethical_compliance": self._check_ethical_compliance(strategy),
         }
 
         # 협력 기록 저장
-        self.collaboration_history.append(
-            {"timestamp": time.time(), "strategy": strategy, "result": result}
-        )
+        self.collaboration_history.append({"timestamp": time.time(), "strategy": strategy, "result": result})
 
         print("✅ 협력 실행 완료")
 
         return result
 
-    def _generate_collaboration_output(
-        self, strategy: Dict[str, Any], user_input: str
-    ) -> str:
+    def _generate_collaboration_output(self, strategy: Dict[str, Any], user_input: str) -> str:
         """협력 결과 생성"""
         mode = strategy["mode"]
 
@@ -424,19 +407,13 @@ class CreativeCollaborationSystem:
 
         insights = {
             "total_collaborations": len(self.collaboration_history),
-            "recent_synergy_avg": sum(
-                c["result"]["synergy_achieved"] for c in recent_collaborations
-            )
+            "recent_synergy_avg": sum(c["result"]["synergy_achieved"] for c in recent_collaborations)
             / len(recent_collaborations),
             "innovation_rate": sum(
-                1
-                for c in recent_collaborations
-                if c["result"]["innovation_level"] in ["high", "medium"]
+                1 for c in recent_collaborations if c["result"]["innovation_level"] in ["high", "medium"]
             )
             / len(recent_collaborations),
-            "ethical_compliance_rate": sum(
-                1 for c in recent_collaborations if c["result"]["ethical_compliance"]
-            )
+            "ethical_compliance_rate": sum(1 for c in recent_collaborations if c["result"]["ethical_compliance"])
             / len(recent_collaborations),
             "preferred_modes": self._analyze_preferred_modes(),
         }
@@ -457,27 +434,19 @@ class CreativeCollaborationSystem:
 creative_collaboration_system = CreativeCollaborationSystem()
 
 
-def phase_25_creative_collaboration(
-    user_input: str, context: Dict[str, Any] = None
-) -> Dict[str, Any]:
+def phase_25_creative_collaboration(user_input: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
     """Phase 25 창의적 협력 시스템 메인 함수"""
     if context is None:
         context = {}
 
     # 1. 인간 의도 분석
-    human_intent = creative_collaboration_system.analyze_human_intent(
-        user_input, context
-    )
+    human_intent = creative_collaboration_system.analyze_human_intent(user_input, context)
 
     # 2. 협력 기회 식별
-    opportunity = creative_collaboration_system.identify_collaboration_opportunities(
-        human_intent
-    )
+    opportunity = creative_collaboration_system.identify_collaboration_opportunities(human_intent)
 
     # 3. 협력 전략 생성
-    strategy = creative_collaboration_system.generate_collaboration_strategy(
-        human_intent, opportunity
-    )
+    strategy = creative_collaboration_system.generate_collaboration_strategy(human_intent, opportunity)
 
     # 4. 협력 실행
     result = creative_collaboration_system.execute_collaboration(strategy, user_input)

@@ -2,10 +2,9 @@
 """
 A/B 러너 통합 테스트
 """
+
 import os
 import sys
-
-import pytest
 
 # 레거시 src 우선 인식
 if "DuRi_Day11_15_starter" not in sys.path:
@@ -19,9 +18,7 @@ except ImportError:
     import importlib.util
 
     starter_path = "DuRi_Day11_15_starter"
-    spec = importlib.util.spec_from_file_location(
-        "core_runner", os.path.join(starter_path, "src/ab/core_runner.py")
-    )
+    spec = importlib.util.spec_from_file_location("core_runner", os.path.join(starter_path, "src/ab/core_runner.py"))
     core_runner = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(core_runner)
     run_ab_with_gate = core_runner.run_ab_with_gate
@@ -63,9 +60,7 @@ def test_run_ab_with_gate_fail():
 def test_run_ab_without_gate():
     """게이트 비활성화 테스트"""
     config = {"metrics": {"primary": "objective_delta"}}
-    results = run_ab_with_gate(
-        day=36, variant="A", seed=42, cfg=config, gate_policy_path=None
-    )
+    results = run_ab_with_gate(day=36, variant="A", seed=42, cfg=config, gate_policy_path=None)
 
     assert results["gate_pass"] is None
     assert results["gate_reasons"] == ["gate_disabled_or_no_policy"]
@@ -75,9 +70,8 @@ def test_run_ab_without_gate():
 """
 PoU 매니저 통합 테스트
 """
-import pytest
 
-from src.pou.manager import create_pou_manager, create_pou_monitor
+from src.pou.manager import create_pou_manager, create_pou_monitor  # noqa: E402
 
 
 def test_pou_manager_creation():

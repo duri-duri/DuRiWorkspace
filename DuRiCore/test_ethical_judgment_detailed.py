@@ -12,8 +12,7 @@ import sys
 # DuRiCore 경로 추가
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from ethical_judgment_system import (EthicalDilemmaType, EthicalJudgmentSystem,
-                                     EthicalPrinciple)
+from ethical_judgment_system import EthicalJudgmentSystem  # noqa: E402
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -82,7 +81,7 @@ async def test_ethical_judgment_system_detailed():
             if conflict.compromise_solution:
                 print(f"  • 타협 해결책: {conflict.compromise_solution}")
 
-    print(f"\n📊 윤리적 성숙도 평가...")
+    print("\n📊 윤리적 성숙도 평가...")
 
     # 윤리적 성숙도 평가
     maturity = await judgment_system.assess_ethical_maturity()
@@ -106,14 +105,14 @@ async def test_ethical_judgment_system_detailed():
         print(f"  • 윤리적 일관성: {metrics.ethical_consistency:.3f}")
         print(f"  • 도덕적 상상력: {metrics.moral_imagination:.3f}")
 
-    print(f"\n📈 개선 영역...")
+    print("\n📈 개선 영역...")
     if "areas" in maturity and maturity["areas"]:
         for area in maturity["areas"]:
             print(f"  • {area}")
     else:
-        print(f"  • 개선 영역이 없습니다.")
+        print("  • 개선 영역이 없습니다.")
 
-    print(f"\n📋 보고서 생성...")
+    print("\n📋 보고서 생성...")
 
     # 보고서 생성
     report = await judgment_system.generate_ethical_report()
@@ -123,7 +122,7 @@ async def test_ethical_judgment_system_detailed():
     print(f"  • 평균 신뢰도: {report['average_confidence']:.3f}")
     print(f"  • 평균 윤리적 점수: {report['average_ethical_score']:.3f}")
 
-    print(f"\n🎯 시스템 상태 확인...")
+    print("\n🎯 시스템 상태 확인...")
 
     # 시스템 상태 확인
     state = judgment_system.get_judgment_state()
@@ -132,13 +131,11 @@ async def test_ethical_judgment_system_detailed():
     print(f"  • 윤리적 갈등: {len(state['ethical_conflicts'])}개")
     print(f"  • 판단 이력: {len(state['judgment_history'])}개")
 
-    print(f"\n" + "=" * 60)
+    print("\n" + "=" * 60)
     print("✅ Day 9: 윤리적 판단 시스템 상세 테스트 완료!")
-    print(f"📊 최종 결과:")
+    print("📊 최종 결과:")
     print(f"  • 윤리적 성숙도: {maturity['score']:.3f} ({maturity['maturity_level']})")
-    print(
-        f"  • 분석된 상황: {len(judgment_system.judgment_state.ethical_situations)}개"
-    )
+    print(f"  • 분석된 상황: {len(judgment_system.judgment_state.ethical_situations)}개")
     print(f"  • 수행된 판단: {len(judgment_system.judgment_state.ethical_judgments)}개")
     print(f"  • 해결된 갈등: {len(judgment_system.judgment_state.ethical_conflicts)}개")
 
@@ -157,4 +154,4 @@ if __name__ == "__main__":
     if result["success"]:
         print(f"\n🎉 Day 9 테스트 성공! 윤리적 성숙도: {result['maturity_score']:.3f}")
     else:
-        print(f"\n❌ Day 9 테스트 실패!")
+        print("\n❌ Day 9 테스트 실패!")

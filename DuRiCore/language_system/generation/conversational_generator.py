@@ -12,7 +12,7 @@ DuRi 언어 생성 시스템 - 대화 생성기
 
 import logging
 from dataclasses import dataclass
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 logger = logging.getLogger(__name__)
 
@@ -38,8 +38,8 @@ class ConversationalGenerator:
         try:
             # 맥락 분석
             intent = context.get("intent", "일반")
-            emotion = context.get("emotion", "중립")
-            topic = context.get("topic", "일반")
+            emotion = context.get("emotion", "중립")  # noqa: F841
+            topic = context.get("topic", "일반")  # noqa: F841
 
             # 의도별 응답 생성
             if intent == "질문":
@@ -66,9 +66,7 @@ class ConversationalGenerator:
     def _generate_request_response(self, context: Dict[str, Any]) -> str:
         """요청 응답 생성"""
         try:
-            return (
-                "네, 도와드리겠습니다. 어떤 도움이 필요하신지 구체적으로 말씀해 주세요."
-            )
+            return "네, 도와드리겠습니다. 어떤 도움이 필요하신지 구체적으로 말씀해 주세요."
         except Exception as e:
             self.logger.error(f"요청 응답 생성 중 오류: {e}")
             return "도움을 드리겠습니다. 구체적으로 말씀해 주세요."
