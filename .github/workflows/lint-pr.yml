@@ -13,31 +13,28 @@ jobs:
     steps:
       - name: Checkout (full history for diff)
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+        with: { fetch-depth: 0 }
 
       - name: Setup Python
         uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
+        with: { python-version: "3.10" }
 
       - name: Install pre-commit
-        run: |
-          pip install pre-commit
+        run: pip install pre-commit
 
       - name: Run pre-commit on changed files
         env:
-          # pre-commit/action이 아니므로 명시적으로 범위를 지정
           BASE: ${{ github.event.pull_request.base.sha }}
-          HEAD: ${{ github.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
         run: |
           pre-commit install
-          # 변경 파일만 추출
-          CHANGED=$(git diff --name-only "$BASE" "$HEAD" -- '*.py' '*.json' '*.yaml' '*.yml' | tr '\n' ' ')
+          # 린트 가능한 확장자만 추출
+          CHANGED=$(git diff --name-only "$BASE" "$HEAD" -- \
+            '*.py' '*.json' '*.yml' '*.yaml' | tr '\n' ' ')
           if [ -z "$CHANGED" ]; then
             echo "No changed lintable files."
             exit 0
           fi
           echo "Changed files: $CHANGED"
-          # 훅은 파일 목록만 대상으로
+          # 파일 수정이 발생하면 exit 1로 실패 → 수정사항 커밋 필요
           pre-commit run --files $CHANGED --color always --show-diff-on-failure
