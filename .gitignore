@@ -163,3 +163,4 @@ reports/
 **/evolution_log.json
 DuRiCore/test_results_*.json
 scripts/._*
+**/._*
