@@ -322,11 +322,15 @@ class ForceLearningDataInitializer:
         failure_count = self.initial_data_count - success_count
 
         # 성공 케이스 선택
-        selected_success = random.sample(success_cases, min(success_count, len(success_cases)))
+        selected_success = random.sample(
+            success_cases, min(success_count, len(success_cases))
+        )
         experiences.extend(selected_success)
 
         # 실패 케이스 선택
-        selected_failure = random.sample(failure_cases, min(failure_count, len(failure_cases)))
+        selected_failure = random.sample(
+            failure_cases, min(failure_count, len(failure_cases))
+        )
         experiences.extend(selected_failure)
 
         # 시간대 분산을 위한 타임스탬프 추가
@@ -390,7 +394,9 @@ class ForceLearningDataInitializer:
 
             # 학습률 계산
             if experiences:
-                success_count = sum(1 for e in experiences if e.get("outcome") == "success")
+                success_count = sum(
+                    1 for e in experiences if e.get("outcome") == "success"
+                )
                 learning_rate = success_count / len(experiences)
             else:
                 learning_rate = 0.0

@@ -72,7 +72,9 @@ def main():
             "reason": reason,
             "importance_score": 1.0,  # 기본적으로 전송되도록 설정
         }
-        delta_path = os.path.join(BASE_DIR, datetime.now().strftime("%Y-%m-%d"), "delta.json")
+        delta_path = os.path.join(
+            BASE_DIR, datetime.now().strftime("%Y-%m-%d"), "delta.json"
+        )
         os.makedirs(os.path.dirname(delta_path), exist_ok=True)
         save_json(delta_path, delta)
 

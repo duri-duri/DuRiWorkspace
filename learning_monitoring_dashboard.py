@@ -150,7 +150,9 @@ class LearningMonitoringDashboard:
 
             learning_system = UnifiedLearningSystem()
             active_sessions = [
-                s for s in learning_system.learning_sessions if s.status.value == "in_progress"
+                s
+                for s in learning_system.learning_sessions
+                if s.status.value == "in_progress"
             ]
 
             is_active = len(active_sessions) > 0
@@ -275,7 +277,9 @@ class LearningMonitoringDashboard:
                     "learning_cycle_count": learning_loop_manager.learning_cycle_count,
                     "total_cycles": len(learning_loop_manager.learning_cycles),
                     "current_stage": current_status.get("current_stage"),
-                    "performance_metrics": current_status.get("performance_metrics", {}),
+                    "performance_metrics": current_status.get(
+                        "performance_metrics", {}
+                    ),
                 },
             )
         except Exception as e:
@@ -392,7 +396,9 @@ class LearningMonitoringDashboard:
                 runtime_text = f" (실행: {status.runtime})" if status.runtime else ""
                 session_text = f" [{status.session_id}]" if status.session_id else ""
 
-                print(f"  {status_icon} {system_name}: {status_text}{runtime_text}{session_text}")
+                print(
+                    f"  {status_icon} {system_name}: {status_text}{runtime_text}{session_text}"
+                )
             else:
                 print(f"  ⚪ {system_name}: 상태 확인 불가")
 

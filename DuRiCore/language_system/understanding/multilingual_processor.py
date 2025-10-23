@@ -109,7 +109,9 @@ class MultilingualProcessor:
             self.logger.error(f"중국어 감지 중 오류: {e}")
             return False
 
-    async def _process_language_specific(self, text: str, language: str) -> Dict[str, Any]:
+    async def _process_language_specific(
+        self, text: str, language: str
+    ) -> Dict[str, Any]:
         """언어별 특화 처리"""
         try:
             if language == "ko":

@@ -125,7 +125,9 @@ class GeneralConversationModule(DomainSpecificModule):
         conversation_analysis = self._analyze_conversation(context.user_input)
 
         # 적절한 응답 생성
-        response = await self._generate_conversation_response(context, conversation_analysis)
+        response = await self._generate_conversation_response(
+            context, conversation_analysis
+        )
 
         execution_time = time.time() - start_time
 
@@ -222,7 +224,9 @@ class GeneralConversationModule(DomainSpecificModule):
         # 컨텍스트 분석
         user_context = context.user_context or {}
         interaction_history = user_context.get("interaction_history", [])
-        recent_emotions = [h.get("emotion") for h in interaction_history[-3:] if h.get("emotion")]
+        recent_emotions = [
+            h.get("emotion") for h in interaction_history[-3:] if h.get("emotion")
+        ]
         user_goals = user_context.get("goals", [])
         system_performance = user_context.get("system_performance", 0.5)
 
@@ -263,9 +267,7 @@ class GeneralConversationModule(DomainSpecificModule):
             if len(interaction_history) > 0:
                 return f"{context.user_input}에 대해 더 자세히 들려주세요. 이전 대화를 이어가시는 건가요?"
             elif user_goals and len(user_goals) > 0:
-                return (
-                    f"{context.user_input}에 대해 더 자세히 들려주세요. 목표와 관련된 이야기인가요?"
-                )
+                return f"{context.user_input}에 대해 더 자세히 들려주세요. 목표와 관련된 이야기인가요?"
             else:
                 return f"{context.user_input}에 대해 더 자세히 들려주세요."
 
@@ -457,7 +459,9 @@ class TechnicalAnalysisModule(DomainSpecificModule):
         technical_analysis = self._analyze_technical_request(context.user_input)
 
         # 분석 결과 생성
-        analysis_result = await self._generate_technical_analysis(context, technical_analysis)
+        analysis_result = await self._generate_technical_analysis(
+            context, technical_analysis
+        )
 
         execution_time = time.time() - start_time
 
@@ -587,7 +591,9 @@ class ApplicationSystem:
 
         # 성능 메트릭 업데이트
         execution_time = time.time() - start_time
-        self._update_performance_metrics(domain, execution_time, final_result.confidence_score)
+        self._update_performance_metrics(
+            domain, execution_time, final_result.confidence_score
+        )
 
         return final_result
 
@@ -638,7 +644,9 @@ class ApplicationSystem:
 
         recent_performance = self.performance_history[-10:]
         avg_confidence = statistics.mean([p["confidence"] for p in recent_performance])
-        avg_execution_time = statistics.mean([p["execution_time"] for p in recent_performance])
+        avg_execution_time = statistics.mean(
+            [p["execution_time"] for p in recent_performance]
+        )
 
         return {
             "average_confidence": avg_confidence,
@@ -656,7 +664,9 @@ class ApplicationSystem:
         adjusted_confidence = (module_result.confidence_score + judgment_score) / 2
 
         # 통합된 추론
-        integrated_reasoning = f"{module_result.reasoning} | 통합 시스템 판단: {judgment_score:.2f}"
+        integrated_reasoning = (
+            f"{module_result.reasoning} | 통합 시스템 판단: {judgment_score:.2f}"
+        )
 
         return ApplicationResult(
             domain=module_result.domain,

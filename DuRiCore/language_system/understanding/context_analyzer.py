@@ -39,7 +39,9 @@ class ContextAnalyzer:
         self.logger = logging.getLogger(__name__)
         self.logger.info("맥락 분석기 초기화 완료")
 
-    async def analyze_context(self, text: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
+    async def analyze_context(
+        self, text: str, context: Dict[str, Any] = None
+    ) -> Dict[str, Any]:
         """맥락 분석"""
         try:
             # 시간적 맥락
@@ -116,37 +118,51 @@ class ContextAnalyzer:
 
         return {
             "spatial_keywords": spatial_keywords,
-            "spatial_relevance": (len(spatial_keywords) / len(text.split()) if text.split() else 0),
+            "spatial_relevance": (
+                len(spatial_keywords) / len(text.split()) if text.split() else 0
+            ),
         }
 
     def _extract_social_context(self, text: str) -> Dict[str, Any]:
         """사회적 맥락 추출"""
         # 사회적 관계 키워드
-        social_keywords = re.findall(r"가족|친구|동료|선생님|학생|부모|자식|형제|자매", text)
+        social_keywords = re.findall(
+            r"가족|친구|동료|선생님|학생|부모|자식|형제|자매", text
+        )
 
         return {
             "social_keywords": social_keywords,
-            "social_relevance": (len(social_keywords) / len(text.split()) if text.split() else 0),
+            "social_relevance": (
+                len(social_keywords) / len(text.split()) if text.split() else 0
+            ),
         }
 
     def _extract_topical_context(self, text: str) -> Dict[str, Any]:
         """주제적 맥락 추출"""
         # 주제 관련 키워드
-        topic_keywords = re.findall(r"학습|교육|일|취미|운동|음식|여행|영화|음악|책", text)
+        topic_keywords = re.findall(
+            r"학습|교육|일|취미|운동|음식|여행|영화|음악|책", text
+        )
 
         return {
             "topic_keywords": topic_keywords,
-            "topic_relevance": (len(topic_keywords) / len(text.split()) if text.split() else 0),
+            "topic_relevance": (
+                len(topic_keywords) / len(text.split()) if text.split() else 0
+            ),
         }
 
     def _extract_emotional_context(self, text: str) -> Dict[str, Any]:
         """감정적 맥락 추출"""
         # 감정 관련 키워드
-        emotion_keywords = re.findall(r"기쁨|슬픔|화남|놀람|두려움|사랑|미움|희망|절망|감사", text)
+        emotion_keywords = re.findall(
+            r"기쁨|슬픔|화남|놀람|두려움|사랑|미움|희망|절망|감사", text
+        )
 
         return {
             "emotion_keywords": emotion_keywords,
-            "emotion_relevance": (len(emotion_keywords) / len(text.split()) if text.split() else 0),
+            "emotion_relevance": (
+                len(emotion_keywords) / len(text.split()) if text.split() else 0
+            ),
         }
 
     def _integrate_context_meaning(

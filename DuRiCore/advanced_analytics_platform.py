@@ -152,7 +152,9 @@ class AdvancedAnalyticsPlatform:
 
         logger.info("AdvancedAnalyticsPlatform 초기화 완료")
 
-    async def perform_advanced_analysis(self, analytics_data: Dict[str, Any]) -> AnalyticsResult:
+    async def perform_advanced_analysis(
+        self, analytics_data: Dict[str, Any]
+    ) -> AnalyticsResult:
         """고급 분석 수행"""
         try:
             self.analytics_status = AnalyticsStatus.ANALYZING
@@ -170,7 +172,9 @@ class AdvancedAnalyticsPlatform:
             )
 
             # 분석 수행
-            analysis_metrics = await self._perform_analysis(prepared_data, analysis_parameters)
+            analysis_metrics = await self._perform_analysis(
+                prepared_data, analysis_parameters
+            )
 
             # 처리 시간 측정
             processing_time = await self._measure_processing_time()
@@ -197,7 +201,9 @@ class AdvancedAnalyticsPlatform:
             logger.error(f"고급 분석 수행 실패: {str(e)}")
             raise
 
-    async def generate_data_insights(self, data_collection: List[Dict[str, Any]]) -> InsightReport:
+    async def generate_data_insights(
+        self, data_collection: List[Dict[str, Any]]
+    ) -> InsightReport:
         """데이터 인사이트 생성"""
         try:
             self.analytics_status = AnalyticsStatus.GENERATING_INSIGHTS
@@ -210,18 +216,24 @@ class AdvancedAnalyticsPlatform:
             insight_type = await self._determine_insight_type(processed_data)
 
             # 인사이트 생성
-            insights_generated = await self._generate_insights(processed_data, insight_type)
+            insights_generated = await self._generate_insights(
+                processed_data, insight_type
+            )
 
             # 신뢰도 점수 계산
-            confidence_scores = await self._calculate_confidence_scores(insights_generated)
-
-            # 실행 가능한 권장사항 생성
-            actionable_recommendations = await self._generate_actionable_recommendations(
+            confidence_scores = await self._calculate_confidence_scores(
                 insights_generated
             )
 
+            # 실행 가능한 권장사항 생성
+            actionable_recommendations = (
+                await self._generate_actionable_recommendations(insights_generated)
+            )
+
             # 시각화 데이터 생성
-            visualization_data = await self._generate_visualization_data(insights_generated)
+            visualization_data = await self._generate_visualization_data(
+                insights_generated
+            )
 
             # 인사이트 보고서 생성
             insight_report = InsightReport(
@@ -264,7 +276,9 @@ class AdvancedAnalyticsPlatform:
             validation_metrics = await self._validate_model(training_metrics)
 
             # 모델 성능 평가
-            model_performance = await self._evaluate_model_performance(validation_metrics)
+            model_performance = await self._evaluate_model_performance(
+                validation_metrics
+            )
 
             # 모델 결과 생성
             model_result = ModelResult(
@@ -346,7 +360,9 @@ class AdvancedAnalyticsPlatform:
             logger.error(f"분석 효과 검증 실패: {str(e)}")
             raise
 
-    async def _prepare_analytics_data(self, analytics_data: Dict[str, Any]) -> AnalyticsData:
+    async def _prepare_analytics_data(
+        self, analytics_data: Dict[str, Any]
+    ) -> AnalyticsData:
         """분석 데이터 준비"""
         prepared_data = AnalyticsData(
             data_id=f"data_{int(time.time())}",
@@ -354,14 +370,18 @@ class AdvancedAnalyticsPlatform:
             data_source=analytics_data.get("data_source", "database"),
             data_size=random.randint(1000, 100000),
             data_quality=random.uniform(0.8, 0.98),
-            features=analytics_data.get("features", ["feature1", "feature2", "feature3"]),
+            features=analytics_data.get(
+                "features", ["feature1", "feature2", "feature3"]
+            ),
             timestamp=datetime.now(),
         )
 
         await asyncio.sleep(0.1)
         return prepared_data
 
-    async def _determine_analytics_type(self, analytics_data: Dict[str, Any]) -> AnalyticsType:
+    async def _determine_analytics_type(
+        self, analytics_data: Dict[str, Any]
+    ) -> AnalyticsType:
         """분석 타입 결정"""
         analytics_types = list(AnalyticsType)
         await asyncio.sleep(0.1)
@@ -412,8 +432,12 @@ class AdvancedAnalyticsPlatform:
         """데이터 수집 처리"""
         processed_data = {
             "total_records": len(data_collection),
-            "data_sources": list(set(item.get("source", "unknown") for item in data_collection)),
-            "data_types": list(set(item.get("type", "unknown") for item in data_collection)),
+            "data_sources": list(
+                set(item.get("source", "unknown") for item in data_collection)
+            ),
+            "data_types": list(
+                set(item.get("type", "unknown") for item in data_collection)
+            ),
             "quality_metrics": {
                 "completeness": random.uniform(0.8, 0.98),
                 "accuracy": random.uniform(0.85, 0.97),
@@ -426,7 +450,9 @@ class AdvancedAnalyticsPlatform:
         await asyncio.sleep(0.1)
         return processed_data
 
-    async def _determine_insight_type(self, processed_data: Dict[str, Any]) -> InsightType:
+    async def _determine_insight_type(
+        self, processed_data: Dict[str, Any]
+    ) -> InsightType:
         """인사이트 타입 결정"""
         insight_types = list(InsightType)
         await asyncio.sleep(0.1)
@@ -497,7 +523,9 @@ class AdvancedAnalyticsPlatform:
             ],
         }
 
-        available_insights = insight_templates.get(insight_type, [{"default": "insight"}])
+        available_insights = insight_templates.get(
+            insight_type, [{"default": "insight"}]
+        )
 
         for i, template in enumerate(available_insights):
             insight = {
@@ -517,7 +545,9 @@ class AdvancedAnalyticsPlatform:
         self, insights_generated: List[Dict[str, Any]]
     ) -> List[float]:
         """신뢰도 점수 계산"""
-        confidence_scores = [insight.get("confidence", 0.8) for insight in insights_generated]
+        confidence_scores = [
+            insight.get("confidence", 0.8) for insight in insights_generated
+        ]
         await asyncio.sleep(0.1)
         return confidence_scores
 
@@ -592,7 +622,9 @@ class AdvancedAnalyticsPlatform:
         await asyncio.sleep(0.2)
         return training_metrics
 
-    async def _validate_model(self, training_metrics: Dict[str, float]) -> Dict[str, float]:
+    async def _validate_model(
+        self, training_metrics: Dict[str, float]
+    ) -> Dict[str, float]:
         """모델 검증"""
         validation_metrics = {
             "validation_accuracy": training_metrics.get("training_accuracy", 0.8)
@@ -607,7 +639,9 @@ class AdvancedAnalyticsPlatform:
         await asyncio.sleep(0.1)
         return validation_metrics
 
-    async def _evaluate_model_performance(self, validation_metrics: Dict[str, float]) -> float:
+    async def _evaluate_model_performance(
+        self, validation_metrics: Dict[str, float]
+    ) -> float:
         """모델 성능 평가"""
         # 여러 메트릭을 종합한 성능 점수 계산
         accuracy = validation_metrics.get("validation_accuracy", 0.0)
@@ -625,7 +659,9 @@ class AdvancedAnalyticsPlatform:
         await asyncio.sleep(0.1)
         return accuracy
 
-    async def _measure_precision_score(self, analytics_result: AnalyticsResult) -> float:
+    async def _measure_precision_score(
+        self, analytics_result: AnalyticsResult
+    ) -> float:
         """정밀도 점수 측정"""
         # 실제 구현에서는 정밀도 측정을 수행
         precision = random.uniform(0.75, 0.95)
@@ -639,12 +675,16 @@ class AdvancedAnalyticsPlatform:
         await asyncio.sleep(0.1)
         return recall
 
-    async def _calculate_f1_score(self, precision_score: float, recall_score: float) -> float:
+    async def _calculate_f1_score(
+        self, precision_score: float, recall_score: float
+    ) -> float:
         """F1 점수 계산"""
         if precision_score + recall_score == 0:
             return 0.0
 
-        f1_score = 2 * (precision_score * recall_score) / (precision_score + recall_score)
+        f1_score = (
+            2 * (precision_score * recall_score) / (precision_score + recall_score)
+        )
         return f1_score
 
     async def _determine_validation_status(
@@ -674,7 +714,9 @@ class AdvancedAnalyticsPlatform:
         recommendations = []
 
         if accuracy_score < self.min_accuracy_score:
-            recommendations.append("모델 정확도를 향상시키기 위한 추가 훈련이 필요합니다")
+            recommendations.append(
+                "모델 정확도를 향상시키기 위한 추가 훈련이 필요합니다"
+            )
 
         if precision_score < self.min_precision_score:
             recommendations.append("정밀도를 개선하기 위한 특성 선택이 필요합니다")

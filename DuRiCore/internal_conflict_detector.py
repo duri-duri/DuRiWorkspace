@@ -143,7 +143,9 @@ class InternalConflictDetector:
             "fluctuation_limit": 0.3,
         }
 
-    async def detect_conflicts(self, thought_data: Dict[str, Any]) -> ConflictAnalysisResult:
+    async def detect_conflicts(
+        self, thought_data: Dict[str, Any]
+    ) -> ConflictAnalysisResult:
         """전체 충돌 탐지"""
         logger.info("🔍 내부 모순 탐지 시작")
         start_time = time.time()
@@ -201,7 +203,9 @@ class InternalConflictDetector:
                 success=False,
             )
 
-    async def _detect_logical_conflicts(self, thought_data: Dict[str, Any]) -> List[Conflict]:
+    async def _detect_logical_conflicts(
+        self, thought_data: Dict[str, Any]
+    ) -> List[Conflict]:
         """논리적 충돌 탐지"""
         conflicts = []
 
@@ -216,7 +220,9 @@ class InternalConflictDetector:
 
         return conflicts
 
-    async def _detect_goal_conflicts(self, thought_data: Dict[str, Any]) -> List[Conflict]:
+    async def _detect_goal_conflicts(
+        self, thought_data: Dict[str, Any]
+    ) -> List[Conflict]:
         """목표 충돌 탐지"""
         conflicts = []
 
@@ -245,7 +251,9 @@ class InternalConflictDetector:
 
         return conflicts
 
-    async def _detect_ethical_conflicts(self, thought_data: Dict[str, Any]) -> List[Conflict]:
+    async def _detect_ethical_conflicts(
+        self, thought_data: Dict[str, Any]
+    ) -> List[Conflict]:
         """윤리적 충돌 탐지"""
         conflicts = []
 
@@ -253,7 +261,9 @@ class InternalConflictDetector:
         principles = self.ethical_principles
         for i, principle1 in enumerate(principles):
             for j, principle2 in enumerate(principles[i + 1 :], i + 1):
-                if await self._check_ethical_conflict(principle1, principle2, thought_data):
+                if await self._check_ethical_conflict(
+                    principle1, principle2, thought_data
+                ):
                     conflict = Conflict(
                         conflict_type=ConflictType.ETHICAL,
                         severity=ConflictSeverity.HIGH,
@@ -271,7 +281,9 @@ class InternalConflictDetector:
 
         return conflicts
 
-    async def _detect_stability_conflicts(self, thought_data: Dict[str, Any]) -> List[Conflict]:
+    async def _detect_stability_conflicts(
+        self, thought_data: Dict[str, Any]
+    ) -> List[Conflict]:
         """불안정성 탐지"""
         conflicts = []
 
@@ -313,7 +325,9 @@ class InternalConflictDetector:
 
         return conflicts
 
-    async def _detect_internal_conflicts(self, thought_data: Dict[str, Any]) -> List[Conflict]:
+    async def _detect_internal_conflicts(
+        self, thought_data: Dict[str, Any]
+    ) -> List[Conflict]:
         """내적 모순 탐지"""
         conflicts = []
 
@@ -328,13 +342,17 @@ class InternalConflictDetector:
         return conflicts
 
     # 헬퍼 메서드들
-    async def _check_non_contradiction(self, thought_data: Dict[str, Any]) -> List[Conflict]:
+    async def _check_non_contradiction(
+        self, thought_data: Dict[str, Any]
+    ) -> List[Conflict]:
         """모순 검사"""
         conflicts = []
         # 구현 필요
         return conflicts
 
-    async def _check_excluded_middle(self, thought_data: Dict[str, Any]) -> List[Conflict]:
+    async def _check_excluded_middle(
+        self, thought_data: Dict[str, Any]
+    ) -> List[Conflict]:
         """배중률 검사"""
         conflicts = []
         # 구현 필요
@@ -346,7 +364,9 @@ class InternalConflictDetector:
         # 구현 필요
         return conflicts
 
-    async def _check_logical_patterns(self, thought_data: Dict[str, Any]) -> List[Conflict]:
+    async def _check_logical_patterns(
+        self, thought_data: Dict[str, Any]
+    ) -> List[Conflict]:
         """논리적 패턴 검사"""
         conflicts = []
         # 구현 필요
@@ -385,19 +405,25 @@ class InternalConflictDetector:
         # 구현 필요
         return 0.7
 
-    async def _check_internal_patterns(self, thought_data: Dict[str, Any]) -> List[Conflict]:
+    async def _check_internal_patterns(
+        self, thought_data: Dict[str, Any]
+    ) -> List[Conflict]:
         """내적 패턴 검사"""
         conflicts = []
         # 구현 필요
         return conflicts
 
-    async def _check_self_contradictions(self, thought_data: Dict[str, Any]) -> List[Conflict]:
+    async def _check_self_contradictions(
+        self, thought_data: Dict[str, Any]
+    ) -> List[Conflict]:
         """자기 모순 검사"""
         conflicts = []
         # 구현 필요
         return conflicts
 
-    def _calculate_severity_distribution(self, conflicts: List[Conflict]) -> Dict[str, int]:
+    def _calculate_severity_distribution(
+        self, conflicts: List[Conflict]
+    ) -> Dict[str, int]:
         """심각도 분포 계산"""
         distribution = {"low": 0, "medium": 0, "high": 0, "critical": 0}
 

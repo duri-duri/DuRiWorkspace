@@ -127,7 +127,9 @@ class EnhancedWisdomIntegration:
             ethical_situation = await self.ethical_system.analyze_ethical_situation(
                 {"description": situation, "context": context or {}}
             )
-            ethical_judgment = await self.ethical_system.make_ethical_judgment(ethical_situation)
+            ethical_judgment = await self.ethical_system.make_ethical_judgment(
+                ethical_situation
+            )
 
             # 3. 실제 지혜 판단 (랜덤 제거)
             wisdom_judgment = await self._make_real_wisdom_judgment(situation, context)
@@ -204,10 +206,12 @@ class EnhancedWisdomIntegration:
         """윤리적 딜레마 처리"""
         # 실제 윤리적 규칙 적용
         if "거짓말" in situation:
-            kantian_judgment = self.real_judgment_rules["ethical_dilemmas"]["lying"]["kantian"]
-            utilitarian_judgment = self.real_judgment_rules["ethical_dilemmas"]["lying"][
-                "utilitarian"
+            kantian_judgment = self.real_judgment_rules["ethical_dilemmas"]["lying"][
+                "kantian"
             ]
+            utilitarian_judgment = self.real_judgment_rules["ethical_dilemmas"][
+                "lying"
+            ]["utilitarian"]
 
             # 더 높은 신뢰도를 가진 판단 선택
             if kantian_judgment["confidence"] > utilitarian_judgment["confidence"]:
@@ -231,10 +235,12 @@ class EnhancedWisdomIntegration:
             }
 
         elif "희생" in situation:
-            utilitarian_judgment = self.real_judgment_rules["ethical_dilemmas"]["sacrifice"][
-                "utilitarian"
-            ]
-            kantian_judgment = self.real_judgment_rules["ethical_dilemmas"]["sacrifice"]["kantian"]
+            utilitarian_judgment = self.real_judgment_rules["ethical_dilemmas"][
+                "sacrifice"
+            ]["utilitarian"]
+            kantian_judgment = self.real_judgment_rules["ethical_dilemmas"][
+                "sacrifice"
+            ]["kantian"]
 
             if utilitarian_judgment["confidence"] > kantian_judgment["confidence"]:
                 selected_judgment = utilitarian_judgment
@@ -370,7 +376,9 @@ class EnhancedWisdomIntegration:
         patterns = self._analyze_real_patterns(situation, situation_analysis)
 
         # 윤리적 통찰
-        ethical_insights = self._generate_ethical_insights(ethical_judgment, wisdom_judgment)
+        ethical_insights = self._generate_ethical_insights(
+            ethical_judgment, wisdom_judgment
+        )
 
         # 실용적 통찰
         practical_insights = self._generate_practical_insights(wisdom_judgment)
@@ -444,17 +452,23 @@ class EnhancedWisdomIntegration:
             insights.append(f"윤리적 판단: {ethical_judgment.decision}")
 
         if wisdom_judgment.get("type") == "ethical_dilemma":
-            insights.append(f"윤리적 프레임워크: {wisdom_judgment.get('framework', 'unknown')}")
+            insights.append(
+                f"윤리적 프레임워크: {wisdom_judgment.get('framework', 'unknown')}"
+            )
             insights.append(f"적용 원칙: {wisdom_judgment.get('principle', 'unknown')}")
 
         return insights
 
-    def _generate_practical_insights(self, wisdom_judgment: Dict[str, Any]) -> List[str]:
+    def _generate_practical_insights(
+        self, wisdom_judgment: Dict[str, Any]
+    ) -> List[str]:
         """실용적 통찰 생성"""
         insights = []
 
         if wisdom_judgment.get("type") == "practical_decision":
-            insights.append(f"실용적 접근: {wisdom_judgment.get('approach', 'unknown')}")
+            insights.append(
+                f"실용적 접근: {wisdom_judgment.get('approach', 'unknown')}"
+            )
             insights.append(f"판단 근거: {wisdom_judgment.get('reasoning', 'unknown')}")
 
         return insights
@@ -493,7 +507,9 @@ class EnhancedWisdomIntegration:
         pattern_score = min(len(patterns) * 0.1, 0.3)
 
         # 통찰 깊이에 따른 점수
-        insight_score = min((len(ethical_insights) + len(practical_insights)) * 0.05, 0.2)
+        insight_score = min(
+            (len(ethical_insights) + len(practical_insights)) * 0.05, 0.2
+        )
 
         return min(base_score + pattern_score + insight_score, 1.0)
 
@@ -549,10 +565,14 @@ class EnhancedWisdomIntegration:
             confidence_scores.append(float(wisdom_judgment["confidence"]))
 
         if transcendental_insight.get("transcendence_level"):
-            confidence_scores.append(float(transcendental_insight["transcendence_level"]))
+            confidence_scores.append(
+                float(transcendental_insight["transcendence_level"])
+            )
 
         overall_confidence = (
-            sum(confidence_scores) / len(confidence_scores) if confidence_scores else 0.5
+            sum(confidence_scores) / len(confidence_scores)
+            if confidence_scores
+            else 0.5
         )
 
         return {
@@ -564,7 +584,9 @@ class EnhancedWisdomIntegration:
                 if hasattr(ethical_judgment, "decision")
                 else "윤리적 고려 없음"
             ),
-            "transcendental_elements": transcendental_insight.get("integrated_insights", []),
+            "transcendental_elements": transcendental_insight.get(
+                "integrated_insights", []
+            ),
             "recommendation": self._generate_final_recommendation(
                 wisdom_judgment, ethical_judgment, transcendental_insight
             ),
@@ -610,15 +632,23 @@ async def test_enhanced_wisdom_integration():
         print(f"상황: {situation}")
         print(f"{'='*50}")
 
-        result = await integration_system.process_real_transcendental_judgment(situation)
+        result = await integration_system.process_real_transcendental_judgment(
+            situation
+        )
 
         if "error" not in result:
             print(f"통합 결과:")
-            print(f"  - 전체 신뢰도: {result['integration_result']['overall_confidence']:.2f}")
+            print(
+                f"  - 전체 신뢰도: {result['integration_result']['overall_confidence']:.2f}"
+            )
             print(f"  - 주요 판단: {result['integration_result']['primary_judgment']}")
             print(f"  - 판단 근거: {result['integration_result']['primary_reasoning']}")
-            print(f"  - 윤리적 고려: {result['integration_result']['ethical_considerations']}")
-            print(f"  - 초월적 요소: {result['integration_result']['transcendental_elements']}")
+            print(
+                f"  - 윤리적 고려: {result['integration_result']['ethical_considerations']}"
+            )
+            print(
+                f"  - 초월적 요소: {result['integration_result']['transcendental_elements']}"
+            )
             print(f"  - 최종 권고: {result['integration_result']['recommendation']}")
             print(f"  - 실행 시간: {result['execution_time']:.3f}초")
         else:

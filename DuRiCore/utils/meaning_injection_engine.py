@@ -363,19 +363,29 @@ class {class_name}:
             meaning_injected = module_content
 
             # 1. 정체성 선언 추가
-            meaning_injected = self._add_identity_declaration(meaning_injected, module_name)
+            meaning_injected = self._add_identity_declaration(
+                meaning_injected, module_name
+            )
 
             # 2. 판단 흐름 Trace 구조 추가
-            meaning_injected = self._add_judgment_trace_structure(meaning_injected, module_name)
+            meaning_injected = self._add_judgment_trace_structure(
+                meaning_injected, module_name
+            )
 
             # 3. 회귀 테스트 스텁 추가
-            meaning_injected = self._add_regression_test_stub(meaning_injected, module_name)
+            meaning_injected = self._add_regression_test_stub(
+                meaning_injected, module_name
+            )
 
             # 4. 존재형 AI 구조 추가
-            meaning_injected = self._add_existence_ai_structure(meaning_injected, module_name)
+            meaning_injected = self._add_existence_ai_structure(
+                meaning_injected, module_name
+            )
 
             # 5. 최종 실행 준비 완료 구조 추가
-            meaning_injected = self._add_final_execution_structure(meaning_injected, module_name)
+            meaning_injected = self._add_final_execution_structure(
+                meaning_injected, module_name
+            )
 
             logger.info(f"의미 주입 완료: {module_name}")
             return meaning_injected
@@ -393,7 +403,9 @@ class {class_name}:
             must_not = self._extract_must_not(content)
             integration = self._extract_integration(content)
 
-            identity_declaration = self.meaning_templates["identity_declaration"].format(
+            identity_declaration = self.meaning_templates[
+                "identity_declaration"
+            ].format(
                 module_name=module_name,
                 purpose=purpose,
                 must_provide=must_provide,
@@ -481,7 +493,9 @@ class {class_name}:
                             content, class_name, existence_ai_structure
                         )
                     except Exception as e:
-                        logger.warning(f"클래스 {class_name}에 존재형 AI 구조 추가 실패: {str(e)}")
+                        logger.warning(
+                            f"클래스 {class_name}에 존재형 AI 구조 추가 실패: {str(e)}"
+                        )
                         continue
         except Exception as e:
             logger.error(f"존재형 AI 구조 추가 실패: {str(e)}")
@@ -629,9 +643,7 @@ class {class_name}:
 
     def _extract_existing_init(self, content: str, class_name: str) -> str:
         """기존 __init__ 메서드 추출"""
-        init_pattern = (
-            rf"class {class_name}:\s*\n\s*def __init__\(self\):\s*\n(.*?)(?=\n\s*def|\n\n|\Z)"
-        )
+        init_pattern = rf"class {class_name}:\s*\n\s*def __init__\(self\):\s*\n(.*?)(?=\n\s*def|\n\n|\Z)"
         match = re.search(init_pattern, content, re.DOTALL)
 
         if match:
@@ -639,7 +651,9 @@ class {class_name}:
 
         return "pass"
 
-    def _replace_class_content(self, content: str, class_name: str, new_structure: str) -> str:
+    def _replace_class_content(
+        self, content: str, class_name: str, new_structure: str
+    ) -> str:
         """클래스 내용 교체"""
         class_pattern = rf"class {class_name}:.*?(?=\nclass|\n\n|\Z)"
         replacement = f"class {class_name}:\n{new_structure}"

@@ -91,7 +91,9 @@ class ConversationStore:
 
     def get_conversation_history(self, limit: int = 50) -> List[Dict[str, Any]]:
         """대화 기록 조회"""
-        return sorted(self.conversation_history, key=lambda x: x["timestamp"], reverse=True)[:limit]
+        return sorted(
+            self.conversation_history, key=lambda x: x["timestamp"], reverse=True
+        )[:limit]
 
     def get_learning_statistics(self) -> Dict[str, Any]:
         """학습 통계 생성"""
@@ -100,7 +102,8 @@ class ConversationStore:
 
         total_conversations = len(self.conversation_history)
         avg_learning_value = (
-            sum(conv["learning_value"] for conv in self.conversation_history) / total_conversations
+            sum(conv["learning_value"] for conv in self.conversation_history)
+            / total_conversations
         )
         total_response_time = sum(
             conv.get("response_time", 0) for conv in self.conversation_history
@@ -117,7 +120,11 @@ class ConversationStore:
                 conv["conversation_length"] for conv in self.conversation_history
             ),
             "high_value_conversations": len(
-                [conv for conv in self.conversation_history if conv["learning_value"] > 0.7]
+                [
+                    conv
+                    for conv in self.conversation_history
+                    if conv["learning_value"] > 0.7
+                ]
             ),
         }
 
@@ -134,11 +141,17 @@ class ConversationStore:
                     keyword_patterns[word] = keyword_patterns.get(word, 0) + 1
 
         # 상위 키워드
-        top_keywords = sorted(keyword_patterns.items(), key=lambda x: x[1], reverse=True)[:10]
+        top_keywords = sorted(
+            keyword_patterns.items(), key=lambda x: x[1], reverse=True
+        )[:10]
 
         # 응답 길이 패턴
-        response_lengths = [conv["conversation_length"] for conv in self.conversation_history]
-        avg_length = sum(response_lengths) / len(response_lengths) if response_lengths else 0
+        response_lengths = [
+            conv["conversation_length"] for conv in self.conversation_history
+        ]
+        avg_length = (
+            sum(response_lengths) / len(response_lengths) if response_lengths else 0
+        )
 
         patterns.append(
             {
@@ -179,7 +192,9 @@ class ConversationStore:
                 "learning_patterns": patterns,
                 "total_conversations": len(self.conversation_history),
                 "recent_conversations": (
-                    len(self.conversation_history[-10:]) if self.conversation_history else 0
+                    len(self.conversation_history[-10:])
+                    if self.conversation_history
+                    else 0
                 ),
             }
         except Exception as e:

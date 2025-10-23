@@ -54,13 +54,17 @@ class PromptPipeline:
                 continue
 
             # 금칙어 체크
-            if any(word in candidate.lower() for word in self.cleaning_rules["forbidden_words"]):
+            if any(
+                word in candidate.lower()
+                for word in self.cleaning_rules["forbidden_words"]
+            ):
                 continue
 
             # 중복 체크 (간단한 토큰 기반)
             token_set = frozenset(tokens)
             if any(
-                len(token_set & seen) / len(token_set) > self.cleaning_rules["duplicate_threshold"]
+                len(token_set & seen) / len(token_set)
+                > self.cleaning_rules["duplicate_threshold"]
                 for seen in seen_tokens
             ):
                 continue
@@ -82,7 +86,9 @@ class PromptPipeline:
         ]
         return base_candidates[:num_candidates]
 
-    def enhanced_evaluation(self, prompt: str, candidates: List[str]) -> List[Dict[str, Any]]:
+    def enhanced_evaluation(
+        self, prompt: str, candidates: List[str]
+    ) -> List[Dict[str, Any]]:
         """기존 시스템을 활용한 향상된 평가"""
         enhanced_results = []
 
@@ -104,7 +110,9 @@ class PromptPipeline:
             # ChatGPT 6차원 평가 (기존 시스템)
             if INTEGRATION_AVAILABLE:
                 try:
-                    chatgpt_result = self.chatgpt_evaluator.evaluate_response(candidate, prompt)
+                    chatgpt_result = self.chatgpt_evaluator.evaluate_response(
+                        candidate, prompt
+                    )
                     result["chatgpt_scores"] = chatgpt_result["scores"]
                     result["chatgpt_total"] = chatgpt_result["total_score"]
 
@@ -205,7 +213,9 @@ class PromptPipeline:
 
         return report
 
-    def save_report(self, report: Dict[str, Any], output_path: str, format: str = "json"):
+    def save_report(
+        self, report: Dict[str, Any], output_path: str, format: str = "json"
+    ):
         """리포트 저장"""
         path = pathlib.Path(output_path)
         path.parent.mkdir(parents=True, exist_ok=True)

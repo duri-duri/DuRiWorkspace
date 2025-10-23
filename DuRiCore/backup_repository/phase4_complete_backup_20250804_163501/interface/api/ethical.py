@@ -65,7 +65,9 @@ async def analyze_ethical_dilemma(request: EthicalRequest):
         )
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"윤리 분석 중 오류가 발생했습니다: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"윤리 분석 중 오류가 발생했습니다: {str(e)}"
+        )
 
 
 @router.get("/stats")
@@ -82,7 +84,9 @@ async def get_ethical_stats():
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"통계 조회 중 오류가 발생했습니다: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"통계 조회 중 오류가 발생했습니다: {str(e)}"
+        )
 
 
 @router.post("/batch-analyze")
@@ -112,13 +116,17 @@ async def batch_analyze_ethical_dilemmas(requests: List[EthicalRequest]):
             "results": results,
             "total_analyzed": len(results),
             "average_score": (
-                sum(r["ethical_score"] for r in results) / len(results) if results else 0
+                sum(r["ethical_score"] for r in results) / len(results)
+                if results
+                else 0
             ),
             "message": f"{len(results)}개의 윤리적 상황에 대한 분석이 완료되었습니다.",
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"배치 분석 중 오류가 발생했습니다: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"배치 분석 중 오류가 발생했습니다: {str(e)}"
+        )
 
 
 @router.get("/principles")

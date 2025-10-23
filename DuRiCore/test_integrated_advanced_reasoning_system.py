@@ -207,9 +207,13 @@ class AdvancedReasoningSystemTester:
             result = {
                 "status": "success",
                 "adaptive_results": adaptive_results,
-                "average_confidence": sum(r["confidence_score"] for r in adaptive_results)
+                "average_confidence": sum(
+                    r["confidence_score"] for r in adaptive_results
+                )
                 / len(adaptive_results),
-                "average_adaptation": sum(r["adaptation_score"] for r in adaptive_results)
+                "average_adaptation": sum(
+                    r["adaptation_score"] for r in adaptive_results
+                )
                 / len(adaptive_results),
             }
 
@@ -259,10 +263,16 @@ class AdvancedReasoningSystemTester:
 
             result = {
                 "status": "success",
-                "original_consistency": consistency_result.get("original_consistency", 0.0),
-                "enhanced_consistency": consistency_result.get("enhanced_consistency", 0.0),
+                "original_consistency": consistency_result.get(
+                    "original_consistency", 0.0
+                ),
+                "enhanced_consistency": consistency_result.get(
+                    "enhanced_consistency", 0.0
+                ),
                 "improvement_score": consistency_result.get("improvement_score", 0.0),
-                "enhancement_methods": consistency_result.get("enhancement_methods", []),
+                "enhancement_methods": consistency_result.get(
+                    "enhancement_methods", []
+                ),
             }
 
             logger.info("일관성 강화 테스트 완료")
@@ -308,7 +318,9 @@ class AdvancedReasoningSystemTester:
                 ReasoningContext.SYNTHESIS, test_input
             )
 
-            integration_result = reasoning_session.reasoning_results.get("integration_success", {})
+            integration_result = reasoning_session.reasoning_results.get(
+                "integration_success", {}
+            )
 
             result = {
                 "status": "success",
@@ -363,8 +375,12 @@ class AdvancedReasoningSystemTester:
 
             result = {
                 "status": "success",
-                "original_efficiency": efficiency_result.get("original_efficiency", 0.0),
-                "optimized_efficiency": efficiency_result.get("optimized_efficiency", 0.0),
+                "original_efficiency": efficiency_result.get(
+                    "original_efficiency", 0.0
+                ),
+                "optimized_efficiency": efficiency_result.get(
+                    "optimized_efficiency", 0.0
+                ),
                 "improvement_score": efficiency_result.get("improvement_score", 0.0),
                 "strategy": efficiency_result.get("strategy", "unknown"),
             }
@@ -441,12 +457,16 @@ class AdvancedReasoningSystemTester:
                 ReasoningContext.INTEGRATED, test_input
             )
 
-            integration_result = reasoning_session.reasoning_results.get("integration_result", {})
+            integration_result = reasoning_session.reasoning_results.get(
+                "integration_result", {}
+            )
 
             result = {
                 "status": "success",
                 "overall_score": integration_result.get("overall_score", 0.0),
-                "adaptive_reasoning_score": integration_result.get("adaptive_reasoning_score", 0.0),
+                "adaptive_reasoning_score": integration_result.get(
+                    "adaptive_reasoning_score", 0.0
+                ),
                 "consistency_enhancement_score": integration_result.get(
                     "consistency_enhancement_score", 0.0
                 ),
@@ -536,7 +556,9 @@ class AdvancedReasoningSystemTester:
         if not test_results:
             return 0.0
 
-        successful_tests = sum(1 for result in test_results if result.get("status") == "success")
+        successful_tests = sum(
+            1 for result in test_results if result.get("status") == "success"
+        )
         return successful_tests / len(test_results)
 
     async def save_test_results(self, filename: str = None):
@@ -546,7 +568,9 @@ class AdvancedReasoningSystemTester:
 
         try:
             with open(filename, "w", encoding="utf-8") as f:
-                json.dump(self.test_results, f, indent=2, ensure_ascii=False, default=str)
+                json.dump(
+                    self.test_results, f, indent=2, ensure_ascii=False, default=str
+                )
 
             logger.info(f"테스트 결과가 {filename}에 저장되었습니다.")
         except Exception as e:
@@ -579,9 +603,13 @@ async def main():
 
         print("\n=== Day 14 목표 달성도 ===")
         print(f"일관성 점수: {performance_report['consistency_score']:.2%} (목표: 60%)")
-        print(f"통합 성공도: {performance_report['integration_success_score']:.2%} (목표: 60%)")
+        print(
+            f"통합 성공도: {performance_report['integration_success_score']:.2%} (목표: 60%)"
+        )
         print(f"효율성: {performance_report['efficiency_score']:.2%} (목표: 80%)")
-        print(f"추론 적응력: {performance_report['reasoning_adaptation_score']:.2%} (목표: 70%)")
+        print(
+            f"추론 적응력: {performance_report['reasoning_adaptation_score']:.2%} (목표: 70%)"
+        )
         print(
             f"전체 시스템 안정성: {performance_report['overall_system_stability']:.2%} (목표: 90%)"
         )

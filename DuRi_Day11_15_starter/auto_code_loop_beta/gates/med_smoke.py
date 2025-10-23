@@ -11,7 +11,9 @@ import yaml
 def load_rules(p):
     r = yaml.safe_load(open(p, "r", encoding="utf-8"))
     bans = [re.compile(re.escape(s)) for s in r.get("banned_phrases", [])]
-    hr = [(re.compile(x["regex"]), x["action"]) for x in r.get("high_risk_triggers", [])]
+    hr = [
+        (re.compile(x["regex"]), x["action"]) for x in r.get("high_risk_triggers", [])
+    ]
     need_disclaimer = bool(r.get("disclaimer_required", False))
     pii = r.get("pii_guard", {})
     pii_detect = [re.compile(re.escape(s)) for s in pii.get("detect", [])]

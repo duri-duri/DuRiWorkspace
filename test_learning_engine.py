@@ -127,7 +127,9 @@ def test_individual_systems():
         {"reflection_level": "high"},
     )
     print(f"학습 점수: {metacognitive_result['learning_score']:.2f}")
-    print(f"반성 수준: {metacognitive_result['knowledge_gained']['reflection_level']:.2f}")
+    print(
+        f"반성 수준: {metacognitive_result['knowledge_gained']['reflection_level']:.2f}"
+    )
 
     # 가족 학습 시스템 테스트
     print("\n--- 가족 학습 시스템 ---")
@@ -137,7 +139,9 @@ def test_individual_systems():
         {"family_members": ["parent", "child"]},
     )
     print(f"학습 점수: {family_result['learning_score']:.2f}")
-    print(f"가족 관계 이해: {family_result['knowledge_gained']['family_relationship']:.2f}")
+    print(
+        f"가족 관계 이해: {family_result['knowledge_gained']['family_relationship']:.2f}"
+    )
 
     # 자율 학습 시스템 테스트
     print("\n--- 자율 학습 시스템 ---")
@@ -157,7 +161,9 @@ def test_individual_systems():
         {"group_size": 5, "interaction_type": "collaborative"},
     )
     print(f"학습 점수: {social_result['learning_score']:.2f}")
-    print(f"사회적 상호작용: {social_result['knowledge_gained']['social_interaction']:.2f}")
+    print(
+        f"사회적 상호작용: {social_result['knowledge_gained']['social_interaction']:.2f}"
+    )
 
     print("\n✅ 개별 학습 시스템 테스트 완료!")
 

@@ -21,7 +21,9 @@ def main():
     rank_parser = subparsers.add_parser(
         "rank", help="Rank candidate prompts based on novelty, coherence, and brevity."
     )
-    rank_parser.add_argument("--prompt", type=str, required=True, help="The original prompt text.")
+    rank_parser.add_argument(
+        "--prompt", type=str, required=True, help="The original prompt text."
+    )
     rank_parser.add_argument(
         "--candidates",
         type=str,
@@ -29,7 +31,9 @@ def main():
         required=True,
         help="List of candidate prompts to rank.",
     )
-    rank_parser.add_argument("--k", type=int, default=1, help="Number of top candidates to return.")
+    rank_parser.add_argument(
+        "--k", type=int, default=1, help="Number of top candidates to return."
+    )
     rank_parser.add_argument(
         "--weights",
         type=json.loads,
@@ -38,8 +42,12 @@ def main():
     )
 
     # Score command
-    score_parser = subparsers.add_parser("score", help="Score a single candidate prompt.")
-    score_parser.add_argument("--prompt", type=str, required=True, help="The original prompt text.")
+    score_parser = subparsers.add_parser(
+        "score", help="Score a single candidate prompt."
+    )
+    score_parser.add_argument(
+        "--prompt", type=str, required=True, help="The original prompt text."
+    )
     score_parser.add_argument(
         "--candidate", type=str, required=True, help="The candidate prompt to score."
     )
@@ -75,7 +83,9 @@ def main():
         action="store_true",
         help="Output detailed scores for each metric.",
     )
-    eval_parser.add_argument("--output", type=str, help="Output file path for results (JSON).")
+    eval_parser.add_argument(
+        "--output", type=str, help="Output file path for results (JSON)."
+    )
 
     # League command
     league_parser = subparsers.add_parser(
@@ -91,10 +101,14 @@ def main():
     regress_parser = subparsers.add_parser(
         "regress", help="Compare current league result with baseline"
     )
-    regress_parser.add_argument("--baseline", required=True, help="Baseline league.json")
+    regress_parser.add_argument(
+        "--baseline", required=True, help="Baseline league.json"
+    )
     regress_parser.add_argument("--current", required=True, help="Current league.json")
     regress_parser.add_argument("--out-md", default="regression.md")
-    regress_parser.add_argument("--out-json", help="Output JSON summary for badge generation")
+    regress_parser.add_argument(
+        "--out-json", help="Output JSON summary for badge generation"
+    )
     regress_parser.add_argument("--threshold-overall", type=float, default=0.005)
     regress_parser.add_argument("--threshold-group", type=float, default=0.010)
     regress_parser.add_argument("--fail-on-drop", action="store_true")
@@ -127,7 +141,9 @@ def main():
                     sys.exit(1)
 
         if not candidates_to_eval:
-            print("Error: No text or candidates provided for evaluation.", file=sys.stderr)
+            print(
+                "Error: No text or candidates provided for evaluation.", file=sys.stderr
+            )
             sys.exit(1)
 
         if len(candidates_to_eval) == 1 and not args.eval_file and not args.eval_json:

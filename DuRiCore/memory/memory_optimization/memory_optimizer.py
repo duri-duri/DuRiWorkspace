@@ -145,15 +145,23 @@ class MemoryOptimizer:
             if optimization_task.optimization_type == OptimizationType.CLEANUP:
                 success = await self._perform_cleanup_optimization(optimization_task)
             elif optimization_task.optimization_type == OptimizationType.COMPRESSION:
-                success = await self._perform_compression_optimization(optimization_task)
+                success = await self._perform_compression_optimization(
+                    optimization_task
+                )
             elif optimization_task.optimization_type == OptimizationType.DEDUPLICATION:
-                success = await self._perform_deduplication_optimization(optimization_task)
+                success = await self._perform_deduplication_optimization(
+                    optimization_task
+                )
             elif optimization_task.optimization_type == OptimizationType.FRAGMENTATION:
-                success = await self._perform_fragmentation_optimization(optimization_task)
+                success = await self._perform_fragmentation_optimization(
+                    optimization_task
+                )
             elif optimization_task.optimization_type == OptimizationType.PRIORITY:
                 success = await self._perform_priority_optimization(optimization_task)
             else:
-                logger.error(f"알 수 없는 최적화 타입: {optimization_task.optimization_type}")
+                logger.error(
+                    f"알 수 없는 최적화 타입: {optimization_task.optimization_type}"
+                )
                 success = False
 
             # 최적화 완료 처리
@@ -166,7 +174,9 @@ class MemoryOptimizer:
             self.performance_metrics["total_optimizations"] += 1
             if success:
                 self.performance_metrics["successful_optimizations"] += 1
-                self.performance_metrics["total_space_saved"] += optimization_task.space_saved
+                self.performance_metrics[
+                    "total_space_saved"
+                ] += optimization_task.space_saved
             else:
                 self.performance_metrics["failed_optimizations"] += 1
 
@@ -193,11 +203,15 @@ class MemoryOptimizer:
             optimization_task.completed_at = datetime.now()
             return False
 
-    async def _perform_cleanup_optimization(self, optimization_task: OptimizationTask) -> bool:
+    async def _perform_cleanup_optimization(
+        self, optimization_task: OptimizationTask
+    ) -> bool:
         """정리 최적화 수행"""
         try:
             # 사용되지 않는 메모리 블록 정리
-            unused_memories = await self._find_unused_memories(optimization_task.target_memory_ids)
+            unused_memories = await self._find_unused_memories(
+                optimization_task.target_memory_ids
+            )
 
             cleaned_count = 0
             space_saved = 0
@@ -228,7 +242,9 @@ class MemoryOptimizer:
             logger.error(f"정리 최적화 실패: {e}")
             return False
 
-    async def _perform_compression_optimization(self, optimization_task: OptimizationTask) -> bool:
+    async def _perform_compression_optimization(
+        self, optimization_task: OptimizationTask
+    ) -> bool:
         """압축 최적화 수행"""
         try:
             # 압축 가능한 메모리 블록 찾기
@@ -328,11 +344,15 @@ class MemoryOptimizer:
 
             for memory_id in fragmented_memories:
                 try:
-                    original_fragmentation = await self._get_fragmentation_ratio(memory_id)
+                    original_fragmentation = await self._get_fragmentation_ratio(
+                        memory_id
+                    )
                     success = await self._defragment_memory(memory_id)
 
                     if success:
-                        new_fragmentation = await self._get_fragmentation_ratio(memory_id)
+                        new_fragmentation = await self._get_fragmentation_ratio(
+                            memory_id
+                        )
                         space_saved += int(
                             (original_fragmentation - new_fragmentation) * 1000
                         )  # 가상의 절약 공간
@@ -355,7 +375,9 @@ class MemoryOptimizer:
             logger.error(f"단편화 최적화 실패: {e}")
             return False
 
-    async def _perform_priority_optimization(self, optimization_task: OptimizationTask) -> bool:
+    async def _perform_priority_optimization(
+        self, optimization_task: OptimizationTask
+    ) -> bool:
         """우선순위 최적화 수행"""
         try:
             # 우선순위가 낮은 메모리 블록 찾기
@@ -495,7 +517,9 @@ class MemoryOptimizer:
                         if t.status == OptimizationStatus.FAILED
                     ]
                 ),
-                "total_space_saved": sum(t.space_saved for t in self.optimization_tasks.values()),
+                "total_space_saved": sum(
+                    t.space_saved for t in self.optimization_tasks.values()
+                ),
                 "performance_metrics": self.performance_metrics.copy(),
             }
 

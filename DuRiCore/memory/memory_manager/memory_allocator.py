@@ -213,7 +213,9 @@ class MemoryAllocator:
             logger.error(f"메모리 블록 조회 실패: {e}")
             return None
 
-    async def get_allocation_info(self, allocation_id: str) -> Optional[MemoryAllocation]:
+    async def get_allocation_info(
+        self, allocation_id: str
+    ) -> Optional[MemoryAllocation]:
         """할당 정보 조회"""
         try:
             return self.allocations.get(allocation_id)
@@ -295,7 +297,8 @@ class MemoryAllocator:
             for block_id, memory_block in self.memory_blocks.items():
                 if (
                     memory_block.status == MemoryStatus.FREE
-                    and memory_block.last_accessed < datetime.now() - timedelta(hours=24)
+                    and memory_block.last_accessed
+                    < datetime.now() - timedelta(hours=24)
                 ):
                     unused_blocks.append(block_id)
 
@@ -324,20 +327,38 @@ class MemoryAllocator:
             stats = {
                 "total_blocks": len(self.memory_blocks),
                 "allocated_blocks": len(
-                    [b for b in self.memory_blocks.values() if b.status == MemoryStatus.ALLOCATED]
+                    [
+                        b
+                        for b in self.memory_blocks.values()
+                        if b.status == MemoryStatus.ALLOCATED
+                    ]
                 ),
                 "free_blocks": len(
-                    [b for b in self.memory_blocks.values() if b.status == MemoryStatus.FREE]
+                    [
+                        b
+                        for b in self.memory_blocks.values()
+                        if b.status == MemoryStatus.FREE
+                    ]
                 ),
                 "reserved_blocks": len(
-                    [b for b in self.memory_blocks.values() if b.status == MemoryStatus.RESERVED]
+                    [
+                        b
+                        for b in self.memory_blocks.values()
+                        if b.status == MemoryStatus.RESERVED
+                    ]
                 ),
                 "total_allocations": self.performance_metrics["total_allocations"],
                 "total_deallocations": self.performance_metrics["total_deallocations"],
-                "current_allocated_size": self.performance_metrics["current_allocated_size"],
+                "current_allocated_size": self.performance_metrics[
+                    "current_allocated_size"
+                ],
                 "current_free_size": self.performance_metrics["current_free_size"],
-                "allocation_success_rate": self.performance_metrics["allocation_success_rate"],
-                "average_allocation_time": self.performance_metrics["average_allocation_time"],
+                "allocation_success_rate": self.performance_metrics[
+                    "allocation_success_rate"
+                ],
+                "average_allocation_time": self.performance_metrics[
+                    "average_allocation_time"
+                ],
             }
 
             # 타입별 통계

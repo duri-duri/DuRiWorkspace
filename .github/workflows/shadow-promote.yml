@@ -1,0 +1,167 @@
+name: Shadow Promote Smoke Test
+
+on:
+  push:
+    branches:
+      - 'pr/shadow-**'
+  pull_request:
+    branches:
+      - 'pr/shadow-**'
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt || true
+          pip install docker-compose
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Start DuRi services
+        run: |
+          # 모니터링 스택 포함 전체 서비스 시작
+          docker compose -p duriworkspace -f docker-compose.monitoring.yml up -d --build
+
+          # 서비스 시작 대기
+          echo "Waiting for services to start..."
+          sleep 15
+
+      - name: Health check - Core services
+        run: |
+          echo "=== Core Services Health Check ==="
+          curl -fsS http://localhost:8080/health | jq .
+          curl -fsS http://localhost:8081/health | jq .
+          curl -fsS http://localhost:8082/health | jq .
+          curl -fsS http://localhost:8083/health | jq .
+
+      - name: Health check - Infrastructure
+        run: |
+          echo "=== Infrastructure Health Check ==="
+          curl -fsS http://localhost:5432 || echo "PostgreSQL port check"
+          curl -fsS http://localhost:6379 || echo "Redis port check"
+
+      - name: Health check - Monitoring
+        run: |
+          echo "=== Monitoring Health Check ==="
+          curl -fsS http://localhost:9090/-/healthy || echo "Prometheus health"
+          curl -fsS http://localhost:3000/api/health || echo "Grafana health"
+
+      - name: API Smoke Test
+        run: |
+          echo "=== API Smoke Tests ==="
+
+          # Emotion API 테스트
+          echo "Testing emotion API..."
+          curl -fsS -X POST http://localhost:8080/emotion \
+            -H "Content-Type: application/json" \
+            -d '{"emotion": "happy", "intensity": 0.8}' | jq .
+
+          # Joy alias 테스트
+          echo "Testing joy alias..."
+          curl -fsS -X POST http://localhost:8080/emotion \
+            -H "Content-Type: application/json" \
+            -d '{"emotion": "joy", "intensity": 0.9}' | jq .
+
+      - name: Metrics Check
+        run: |
+          echo "=== Metrics Endpoint Check ==="
+          curl -fsS http://localhost:8080/metrics | head -20
+
+          # Prometheus 타겟 확인
+          curl -fsS "http://localhost:9090/api/v1/targets" | jq '.data.activeTargets[] | select(.health == "up") | .labels.job'
+
+      - name: Container Status
+        run: |
+          echo "=== Container Status ==="
+          docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+
+      - name: Cleanup
+        if: always()
+        run: |
+          echo "=== Cleanup ==="
+          docker compose -p duriworkspace -f docker-compose.monitoring.yml down -v || true
+
+  quality-gate:
+    runs-on: ubuntu-latest
+    needs: smoke-test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install quality tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+          pip install bandit safety
+
+      - name: Security scan
+        run: |
+          echo "=== Security Scan ==="
+          bandit -r duri_core/ duri_brain/ duri_evolution/ duri_control/ || true
+
+      - name: Dependency check
+        run: |
+          echo "=== Dependency Check ==="
+          safety check || true
+
+      - name: Code quality
+        run: |
+          echo "=== Code Quality ==="
+          # Ruff linting
+          python -m ruff check duri_core/ duri_brain/ duri_evolution/ duri_control/ || true
+
+          # Import check
+          python -c "
+          import sys
+          sys.path.append('duri_core')
+          sys.path.append('duri_brain')
+          sys.path.append('duri_evolution')
+          sys.path.append('duri_control')
+
+          try:
+              from duri_core.app import create_app
+              from duri_brain.app import create_app
+              from duri_evolution.app import create_app
+              from duri_control.app import create_app
+              print('✅ All modules importable')
+          except Exception as e:
+              print(f'❌ Import error: {e}')
+              sys.exit(1)
+          "
+
+  promotion-success:
+    runs-on: ubuntu-latest
+    needs: [smoke-test, quality-gate]
+    if: github.event_name == 'push'
+
+    steps:
+      - name: Promotion Success Notification
+        run: |
+          echo "🎉 Shadow promotion successful!"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Commit: ${{ github.sha }}"
+          echo "Ready for manual merge to main/release branches"

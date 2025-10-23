@@ -187,13 +187,17 @@ class EnhancedEmotionFilter:
         confidence = self._calculate_confidence(emotion_scores, text)
 
         # 4. 보조 감정 식별
-        secondary_emotions = self._identify_secondary_emotions(emotion_scores, primary_emotion[0])
+        secondary_emotions = self._identify_secondary_emotions(
+            emotion_scores, primary_emotion[0]
+        )
 
         # 5. 판단 편향 감지
         bias_detected = self._detect_judgment_bias(text, primary_emotion[0])
 
         # 6. 메타 인식 분석
-        meta_cognition = self._analyze_meta_cognition(text, primary_emotion[0], bias_detected)
+        meta_cognition = self._analyze_meta_cognition(
+            text, primary_emotion[0], bias_detected
+        )
 
         # 7. 분석 결과 저장
         analysis = EmotionAnalysis(
@@ -237,7 +241,9 @@ class EnhancedEmotionFilter:
 
         return emotion_scores
 
-    def _analyze_emotion_intensity(self, text: str, emotion: EmotionCategory) -> EmotionIntensity:
+    def _analyze_emotion_intensity(
+        self, text: str, emotion: EmotionCategory
+    ) -> EmotionIntensity:
         """감정 강도 분석"""
         text_lower = text.lower()
         intensity_score = 0.0
@@ -246,12 +252,16 @@ class EnhancedEmotionFilter:
             config = self.emotion_keywords[emotion]
 
             # 키워드 개수
-            keyword_count = sum(1 for keyword in config["keywords"] if keyword in text_lower)
+            keyword_count = sum(
+                1 for keyword in config["keywords"] if keyword in text_lower
+            )
             intensity_score += keyword_count * 0.1
 
             # 강도 지시어 개수
             indicator_count = sum(
-                1 for indicator in config["intensity_indicators"] if indicator in text_lower
+                1
+                for indicator in config["intensity_indicators"]
+                if indicator in text_lower
             )
             intensity_score += indicator_count * 0.2
 
@@ -309,7 +319,9 @@ class EnhancedEmotionFilter:
 
         return secondary_emotions[:2]  # 최대 2개
 
-    def _detect_judgment_bias(self, text: str, emotion: EmotionCategory) -> JudgmentBias:
+    def _detect_judgment_bias(
+        self, text: str, emotion: EmotionCategory
+    ) -> JudgmentBias:
         """판단 편향 감지"""
         if not self.bias_detection_enabled:
             return JudgmentBias.NONE
@@ -357,10 +369,15 @@ class EnhancedEmotionFilter:
 
         return min(1.0, score)
 
-    def _assess_regulation_capability(self, emotion: EmotionCategory, bias: JudgmentBias) -> float:
+    def _assess_regulation_capability(
+        self, emotion: EmotionCategory, bias: JudgmentBias
+    ) -> float:
         """감정 조절 능력 평가"""
         # 강한 감정과 편향이 있으면 조절 능력 낮음
-        if emotion in [EmotionCategory.ANGER, EmotionCategory.FEAR] and bias != JudgmentBias.NONE:
+        if (
+            emotion in [EmotionCategory.ANGER, EmotionCategory.FEAR]
+            and bias != JudgmentBias.NONE
+        ):
             return 0.3
 
         # 중립적이거나 약한 감정이면 조절 능력 높음
@@ -380,7 +397,9 @@ class EnhancedEmotionFilter:
 
         return min(1.0, score)
 
-    def _assess_cognitive_load(self, emotion: EmotionCategory, bias: JudgmentBias) -> float:
+    def _assess_cognitive_load(
+        self, emotion: EmotionCategory, bias: JudgmentBias
+    ) -> float:
         """인지 부하 평가"""
         # 강한 감정과 편향이 있으면 인지 부하 높음
         if bias != JudgmentBias.NONE:

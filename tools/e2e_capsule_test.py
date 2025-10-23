@@ -23,7 +23,9 @@ except Exception:
         core = payload.get("core", {})
         out = payload.get("output", {})
         pii_fields = set(core.get("pii_fields", []))
-        if mode == "external" and any(f in out and out[f] is not None for f in pii_fields):
+        if mode == "external" and any(
+            f in out and out[f] is not None for f in pii_fields
+        ):
             return False
         core_vals = core.get("values", {})
         for k, v in core_vals.items():
@@ -60,8 +62,12 @@ def main():
     print("• Core upsert OK")
 
     # ---- B) 후보 생성 + Fusion ----
-    rag_candidates = [{"val": {"name_pub": "두리"}, "sim": 0.86, "recency": 0.7, "prov": 0.9}]
-    fused_val, meta = crdt_merge(core_val={"name_pub": core_val}, rag_candidates=rag_candidates)
+    rag_candidates = [
+        {"val": {"name_pub": "두리"}, "sim": 0.86, "recency": 0.7, "prov": 0.9}
+    ]
+    fused_val, meta = crdt_merge(
+        core_val={"name_pub": core_val}, rag_candidates=rag_candidates
+    )
     # crdt_merge에서 core가 있으면 core 선택 → fused_val은 dict가 아닌 문자열일 수 있으므로 정규화
     if isinstance(fused_val, str):
         fused_val = {"name_pub": fused_val}
@@ -100,7 +106,9 @@ def main():
 
         def _write(cur):
             insert_answer_capsule(cur, cap)
-            append_audit(cur, "capsule_recorded", {"qid": cap["qid"], "prob": p, "meta": meta})
+            append_audit(
+                cur, "capsule_recorded", {"qid": cap["qid"], "prob": p, "meta": meta}
+            )
 
         with_tx(_write)
         print(f"• Capsule stored: qid={cap['qid']}")

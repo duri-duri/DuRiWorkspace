@@ -100,7 +100,9 @@ class IntegratedLearningSystem:
         except Exception as e:
             print(f"❌ 시스템 초기화 실패: {e}")
 
-    def execute_full_learning_cycle(self, trigger_type: str = "user_request") -> Dict[str, Any]:
+    def execute_full_learning_cycle(
+        self, trigger_type: str = "user_request"
+    ) -> Dict[str, Any]:
         """
         완전한 3단계 학습 사이클을 실행합니다.
 
@@ -113,7 +115,9 @@ class IntegratedLearningSystem:
         cycle_start_time = time.time()
         cycle_id = f"cycle_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
 
-        print(f"🔄 3단계 통합 학습 사이클 시작 (ID: {cycle_id}, 트리거: {trigger_type})")
+        print(
+            f"🔄 3단계 통합 학습 사이클 시작 (ID: {cycle_id}, 트리거: {trigger_type})"
+        )
 
         try:
             # 1단계: 판단 과정 기록 시스템 강제 실행
@@ -129,7 +133,10 @@ class IntegratedLearningSystem:
 
             # reflection_result에서 insights 추출
             reflection_insights = []
-            if isinstance(reflection_result, dict) and "new_insights" in reflection_result:
+            if (
+                isinstance(reflection_result, dict)
+                and "new_insights" in reflection_result
+            ):
                 reflection_insights = reflection_result.get("new_insights", [])
             elif hasattr(reflection_result, "insights"):
                 reflection_insights = reflection_result.insights
@@ -279,8 +286,9 @@ class IntegratedLearningSystem:
         current_time = datetime.now()
 
         # 마지막 일일 트리거가 없거나 24시간이 지났는지 확인
-        if self.last_daily_trigger is None or current_time - self.last_daily_trigger > timedelta(
-            hours=24
+        if (
+            self.last_daily_trigger is None
+            or current_time - self.last_daily_trigger > timedelta(hours=24)
         ):
 
             print("📅 일일 학습 사이클 트리거 감지")
@@ -302,7 +310,9 @@ class IntegratedLearningSystem:
                 "reflection_system": reflection_summary,
                 "evolution_system": evolution_summary,
                 "total_learning_cycles": len(self.learning_cycles),
-                "recent_cycles": (len(self.learning_cycles[-5:]) if self.learning_cycles else 0),
+                "recent_cycles": (
+                    len(self.learning_cycles[-5:]) if self.learning_cycles else 0
+                ),
                 "system_status": "active",
                 "last_updated": datetime.now().isoformat(),
             }
@@ -314,7 +324,9 @@ class IntegratedLearningSystem:
                 "last_updated": datetime.now().isoformat(),
             }
 
-    def force_learning_cycle(self, trigger_type: str = "user_request") -> Dict[str, Any]:
+    def force_learning_cycle(
+        self, trigger_type: str = "user_request"
+    ) -> Dict[str, Any]:
         """
         사용자 요청에 의한 강제 학습 사이클 실행
 

@@ -178,7 +178,9 @@ def test_ethical_scenarios():
         print(f"\n--- {scenario['name']} ---")
         print(f"상황: {scenario['situation']}")
 
-        result = ethical_engine.analyze_ethical_dilemma(scenario["situation"], scenario["context"])
+        result = ethical_engine.analyze_ethical_dilemma(
+            scenario["situation"], scenario["context"]
+        )
 
         print(f"윤리 점수: {result.ethical_score:.2f}")
         print(f"신뢰도: {result.confidence:.2f}")

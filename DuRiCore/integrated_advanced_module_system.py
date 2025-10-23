@@ -212,7 +212,9 @@ class IntegratedAdvancedModuleSystem:
             return True
 
         except Exception as e:
-            logger.error(f"❌ 모듈 상호작용 설정 실패: {source_module} → {target_module} - {e}")
+            logger.error(
+                f"❌ 모듈 상호작용 설정 실패: {source_module} → {target_module} - {e}"
+            )
             return False
 
     async def execute_module_interaction(
@@ -228,9 +230,13 @@ class IntegratedAdvancedModuleSystem:
 
             # 상호작용 타입에 따른 실행
             if target_info["interaction_type"] == ModuleInteractionType.SYNC:
-                result = await self._execute_sync_interaction(source_module, target_module, data)
+                result = await self._execute_sync_interaction(
+                    source_module, target_module, data
+                )
             elif target_info["interaction_type"] == ModuleInteractionType.ASYNC:
-                result = await self._execute_async_interaction(source_module, target_module, data)
+                result = await self._execute_async_interaction(
+                    source_module, target_module, data
+                )
             elif target_info["interaction_type"] == ModuleInteractionType.EVENT_DRIVEN:
                 result = await self._execute_event_driven_interaction(
                     source_module, target_module, data
@@ -247,7 +253,9 @@ class IntegratedAdvancedModuleSystem:
             return result
 
         except Exception as e:
-            logger.error(f"❌ 모듈 상호작용 실행 실패: {source_module} → {target_module} - {e}")
+            logger.error(
+                f"❌ 모듈 상호작용 실행 실패: {source_module} → {target_module} - {e}"
+            )
             self._update_interaction_efficiency(source_module, target_module, False)
             raise
 
@@ -295,7 +303,9 @@ class IntegratedAdvancedModuleSystem:
         else:
             return {"status": "message_handled", "data": data}
 
-    def _update_interaction_efficiency(self, source_module: str, target_module: str, success: bool):
+    def _update_interaction_efficiency(
+        self, source_module: str, target_module: str, success: bool
+    ):
         """상호작용 효율성 업데이트"""
         # 실제 구현에서는 더 정교한 효율성 계산
         if success:
@@ -306,7 +316,9 @@ class IntegratedAdvancedModuleSystem:
     def _update_system_metrics(self):
         """시스템 메트릭 업데이트"""
         total_modules = len(self.modules)
-        active_modules = sum(1 for m in self.modules.values() if m["status"] == "active")
+        active_modules = sum(
+            1 for m in self.modules.values() if m["status"] == "active"
+        )
 
         # 상호작용 효율성 계산
         total_interactions = sum(
@@ -385,19 +397,33 @@ class IntegratedAdvancedModuleSystem:
             "system_metrics": asdict(self.system_metrics),
             "performance_metrics": self.performance_metrics,
             "target_integration_rate": self.target_integration_rate,
-            "current_integration_rate": self.performance_metrics["system_integration_rate"],
-            "integration_improvement": (self.performance_metrics["system_integration_rate"] - 0.5)
+            "current_integration_rate": self.performance_metrics[
+                "system_integration_rate"
+            ],
+            "integration_improvement": (
+                self.performance_metrics["system_integration_rate"] - 0.5
+            )
             * 100,
             "target_interaction_rate": self.target_interaction_rate,
-            "current_interaction_rate": self.performance_metrics["module_interaction_rate"],
-            "interaction_improvement": (self.performance_metrics["module_interaction_rate"] - 0.5)
+            "current_interaction_rate": self.performance_metrics[
+                "module_interaction_rate"
+            ],
+            "interaction_improvement": (
+                self.performance_metrics["module_interaction_rate"] - 0.5
+            )
             * 100,
             "target_stability_improvement": self.target_stability_improvement * 100,
-            "current_stability_score": self.performance_metrics["system_stability_score"],
-            "stability_improvement": (self.performance_metrics["system_stability_score"] - 0.7)
+            "current_stability_score": self.performance_metrics[
+                "system_stability_score"
+            ],
+            "stability_improvement": (
+                self.performance_metrics["system_stability_score"] - 0.7
+            )
             * 100,
             "target_efficiency_improvement": self.target_efficiency_improvement * 100,
-            "current_efficiency_score": self.performance_metrics["development_efficiency_score"],
+            "current_efficiency_score": self.performance_metrics[
+                "development_efficiency_score"
+            ],
             "efficiency_improvement": (
                 self.performance_metrics["development_efficiency_score"] - 0.5
             )
@@ -405,9 +431,12 @@ class IntegratedAdvancedModuleSystem:
             "total_modules": len(self.modules),
             "module_interactions": {
                 "total_interactions": sum(
-                    len(interactions) for interactions in self.module_interactions.values()
+                    len(interactions)
+                    for interactions in self.module_interactions.values()
                 ),
-                "active_modules": sum(1 for m in self.modules.values() if m["status"] == "active"),
+                "active_modules": sum(
+                    1 for m in self.modules.values() if m["status"] == "active"
+                ),
                 "interaction_types": {
                     "sync": sum(
                         1
@@ -457,7 +486,9 @@ class SystemStabilityEnhancer:
             # 모듈 상태 확인
             if hasattr(system_instance, "modules"):
                 active_modules = sum(
-                    1 for m in system_instance.modules.values() if m.get("status") == "active"
+                    1
+                    for m in system_instance.modules.values()
+                    if m.get("status") == "active"
                 )
                 total_modules = len(system_instance.modules)
                 if total_modules > 0:
@@ -641,20 +672,26 @@ async def test_integrated_advanced_module_system():
                     )
                     logger.info(f"   ✅ 상호작용 실행: {source_name} → {target_name}")
                 except Exception as e:
-                    logger.error(f"   ❌ 상호작용 실패: {source_name} → {target_name} - {e}")
+                    logger.error(
+                        f"   ❌ 상호작용 실패: {source_name} → {target_name} - {e}"
+                    )
 
     # 시스템 안정성 강화 테스트
     logger.info("🛡️ 시스템 안정성 강화 테스트")
 
     stability_enhancer = SystemStabilityEnhancer()
-    stability_score = await stability_enhancer.enhance_system_stability(integrated_system)
+    stability_score = await stability_enhancer.enhance_system_stability(
+        integrated_system
+    )
     logger.info(f"   안정성 점수: {stability_score:.3f}")
 
     # 개발 효율성 최적화 테스트
     logger.info("⚡ 개발 효율성 최적화 테스트")
 
     efficiency_optimizer = DevelopmentEfficiencyOptimizer()
-    efficiency_score = await efficiency_optimizer.optimize_development_efficiency(integrated_system)
+    efficiency_score = await efficiency_optimizer.optimize_development_efficiency(
+        integrated_system
+    )
     logger.info(f"   효율성 점수: {efficiency_score:.3f}")
 
     # 시스템 리포트

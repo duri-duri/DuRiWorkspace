@@ -138,7 +138,9 @@ class CreativeSolution:
     @property
     def overall_score(self) -> float:
         """전체 점수"""
-        return (self.innovation_score + self.feasibility_score + self.impact_score) / 3.0
+        return (
+            self.innovation_score + self.feasibility_score + self.impact_score
+        ) / 3.0
 
 
 @dataclass
@@ -605,7 +607,9 @@ class CreativeProblemSolvingSystem:
         logger.info(f"창의적 검증 {len(validations)}개 완료")
         return validations
 
-    async def _apply_validation_method(self, solution: CreativeSolution, method: str) -> float:
+    async def _apply_validation_method(
+        self, solution: CreativeSolution, method: str
+    ) -> float:
         """특정 검증 방법 적용"""
         base_score = solution.overall_score
 
@@ -680,9 +684,15 @@ class CreativeProblemSolvingSystem:
 
         # 평균 점수 계산
         if solutions:
-            average_innovation_score = sum(s.innovation_score for s in solutions) / len(solutions)
-            average_feasibility_score = sum(s.feasibility_score for s in solutions) / len(solutions)
-            average_impact_score = sum(s.impact_score for s in solutions) / len(solutions)
+            average_innovation_score = sum(s.innovation_score for s in solutions) / len(
+                solutions
+            )
+            average_feasibility_score = sum(
+                s.feasibility_score for s in solutions
+            ) / len(solutions)
+            average_impact_score = sum(s.impact_score for s in solutions) / len(
+                solutions
+            )
         else:
             average_innovation_score = 0.0
             average_feasibility_score = 0.0
@@ -739,7 +749,8 @@ class CreativeProblemSolvingSystem:
         # 통계 업데이트
         self.total_problems_solved += 1
         self.average_solving_time = (
-            self.average_solving_time * (self.total_problems_solved - 1) + result.solving_duration
+            self.average_solving_time * (self.total_problems_solved - 1)
+            + result.solving_duration
         ) / self.total_problems_solved
 
         # 성공률 계산

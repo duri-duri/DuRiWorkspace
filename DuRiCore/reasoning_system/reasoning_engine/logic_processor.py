@@ -136,7 +136,11 @@ class LogicProcessor:
 
         try:
             for key, value in input_data.items():
-                if isinstance(value, dict) and "premises" in value and "conclusion" in value:
+                if (
+                    isinstance(value, dict)
+                    and "premises" in value
+                    and "conclusion" in value
+                ):
                     rule = LogicalRule(
                         rule_id=f"rule_{len(rules)}",
                         rule_type=logic_type,
@@ -225,7 +229,9 @@ class LogicProcessor:
             self.logger.error(f"규칙 연결 확인 중 오류: {e}")
             return False
 
-    def _analyze_logic(self, chains: List[LogicalChain], logic_type: LogicType) -> LogicAnalysis:
+    def _analyze_logic(
+        self, chains: List[LogicalChain], logic_type: LogicType
+    ) -> LogicAnalysis:
         """논리 분석 수행"""
         try:
             # 일관성 분석
@@ -282,7 +288,8 @@ class LogicProcessor:
 
             # 전체 일관성 점수
             overall_consistency = (
-                sum(consistency_scores) / len(consistency_scores) + conclusion_consistency
+                sum(consistency_scores) / len(consistency_scores)
+                + conclusion_consistency
             ) / 2
             return min(1.0, overall_consistency)
 
@@ -344,7 +351,9 @@ class LogicProcessor:
                     if self._are_conclusions_consistent(conclusions[i], conclusions[j]):
                         consistency_count += 1
 
-            return consistency_count / total_comparisons if total_comparisons > 0 else 1.0
+            return (
+                consistency_count / total_comparisons if total_comparisons > 0 else 1.0
+            )
 
         except Exception as e:
             self.logger.error(f"결론 일관성 확인 중 오류: {e}")
@@ -448,9 +457,13 @@ class LogicProcessor:
                 issues.append("논리적 체인이 부족합니다.")
 
             # 신뢰도가 낮은 체인들
-            low_confidence_chains = [chain for chain in chains if chain.confidence < 0.5]
+            low_confidence_chains = [
+                chain for chain in chains if chain.confidence < 0.5
+            ]
             if low_confidence_chains:
-                issues.append(f"신뢰도가 낮은 체인이 {len(low_confidence_chains)}개 있습니다.")
+                issues.append(
+                    f"신뢰도가 낮은 체인이 {len(low_confidence_chains)}개 있습니다."
+                )
 
             # 짧은 체인들
             short_chains = [chain for chain in chains if len(chain.steps) < 2]
@@ -463,7 +476,9 @@ class LogicProcessor:
             self.logger.error(f"문제점 식별 중 오류: {e}")
             return [f"문제점 식별 오류: {str(e)}"]
 
-    def _generate_suggestions(self, chains: List[LogicalChain], logic_type: LogicType) -> List[str]:
+    def _generate_suggestions(
+        self, chains: List[LogicalChain], logic_type: LogicType
+    ) -> List[str]:
         """개선 제안 생성"""
         suggestions = []
 
@@ -473,18 +488,24 @@ class LogicProcessor:
                 suggestions.append("더 많은 논리적 규칙을 추가하여 체인을 확장하세요.")
 
             # 신뢰도가 낮은 체인들
-            low_confidence_chains = [chain for chain in chains if chain.confidence < 0.5]
+            low_confidence_chains = [
+                chain for chain in chains if chain.confidence < 0.5
+            ]
             if low_confidence_chains:
                 suggestions.append("신뢰도가 낮은 규칙들을 개선하거나 대체하세요.")
 
             # 짧은 체인들
             short_chains = [chain for chain in chains if len(chain.steps) < 2]
             if short_chains:
-                suggestions.append("단일 규칙 체인들을 연결하여 복합 체인을 구축하세요.")
+                suggestions.append(
+                    "단일 규칙 체인들을 연결하여 복합 체인을 구축하세요."
+                )
 
             # 논리 유형별 제안
             if logic_type == LogicType.PROPOSITIONAL:
-                suggestions.append("명제 논리를 위해 더 명확한 전제-결론 구조를 사용하세요.")
+                suggestions.append(
+                    "명제 논리를 위해 더 명확한 전제-결론 구조를 사용하세요."
+                )
             elif logic_type == LogicType.PREDICATE:
                 suggestions.append("술어 논리를 위해 변수와 양화사를 활용하세요.")
             elif logic_type == LogicType.MODAL:
@@ -496,7 +517,9 @@ class LogicProcessor:
             self.logger.error(f"개선 제안 생성 중 오류: {e}")
             return [f"제안 생성 오류: {str(e)}"]
 
-    def _update_performance_metrics(self, analysis: LogicAnalysis, processing_time: float):
+    def _update_performance_metrics(
+        self, analysis: LogicAnalysis, processing_time: float
+    ):
         """성능 메트릭 업데이트"""
         self.performance_metrics["total_processings"] += 1
         if analysis.consistency_score > 0.5 and analysis.validity_score > 0.5:

@@ -198,11 +198,17 @@ class UnifiedLearningSystem:
             self.learning_sessions.append(learning_session)
 
             # 존재형 AI: 진화 가능성 확인
-            if self.existence_ai and self.existence_ai.evolution_capability.can_evolve():
+            if (
+                self.existence_ai
+                and self.existence_ai.evolution_capability.can_evolve()
+            ):
                 self.existence_ai.evolution_capability.evolve()
 
             # 최종 실행 준비 완료: 최종 실행 준비 완료 확인
-            if self.final_execution_verifier and self.final_execution_verifier.verify_readiness():
+            if (
+                self.final_execution_verifier
+                and self.final_execution_verifier.verify_readiness()
+            ):
                 logger.info("최종 실행 준비 완료 확인됨")
 
             logger.info(f"학습 세션 시작: {session_id} - {learning_type.value}")
@@ -226,11 +232,17 @@ class UnifiedLearningSystem:
             self.evolution_sessions.append(evolution_session)
 
             # 존재형 AI: 진화 가능성 확인
-            if self.existence_ai and self.existence_ai.evolution_capability.can_evolve():
+            if (
+                self.existence_ai
+                and self.existence_ai.evolution_capability.can_evolve()
+            ):
                 self.existence_ai.evolution_capability.evolve()
 
             # 최종 실행 준비 완료: 최종 실행 준비 완료 확인
-            if self.final_execution_verifier and self.final_execution_verifier.verify_readiness():
+            if (
+                self.final_execution_verifier
+                and self.final_execution_verifier.verify_readiness()
+            ):
                 logger.info("최종 실행 준비 완료 확인됨")
 
             logger.info(f"진화 세션 시작: {session_id} - {evolution_type.value}")
@@ -248,7 +260,9 @@ class UnifiedLearningSystem:
     ) -> LearningResult:
         """학습 처리"""
         try:
-            session = next((s for s in self.learning_sessions if s.id == session_id), None)
+            session = next(
+                (s for s in self.learning_sessions if s.id == session_id), None
+            )
             if not session:
                 raise ValueError(f"학습 세션을 찾을 수 없습니다: {session_id}")
 
@@ -262,7 +276,9 @@ class UnifiedLearningSystem:
                     session, input_data, learning_context
                 )
             elif session.learning_type == LearningType.META:
-                result = await self._process_meta_learning(session, input_data, learning_context)
+                result = await self._process_meta_learning(
+                    session, input_data, learning_context
+                )
             elif session.learning_type == LearningType.SELF_DIRECTED:
                 result = await self._process_self_directed_learning(
                     session, input_data, learning_context
@@ -272,7 +288,9 @@ class UnifiedLearningSystem:
                     session, input_data, learning_context
                 )
             else:
-                result = await self._process_general_learning(session, input_data, learning_context)
+                result = await self._process_general_learning(
+                    session, input_data, learning_context
+                )
 
             # 세션 업데이트
             session.status = LearningStatus.COMPLETED
@@ -283,11 +301,17 @@ class UnifiedLearningSystem:
             session.evolution_progress = result.evolution_progress
 
             # 존재형 AI: 진화 가능성 확인
-            if self.existence_ai and self.existence_ai.evolution_capability.can_evolve():
+            if (
+                self.existence_ai
+                and self.existence_ai.evolution_capability.can_evolve()
+            ):
                 self.existence_ai.evolution_capability.evolve()
 
             # 최종 실행 준비 완료: 최종 실행 준비 완료 확인
-            if self.final_execution_verifier and self.final_execution_verifier.verify_readiness():
+            if (
+                self.final_execution_verifier
+                and self.final_execution_verifier.verify_readiness()
+            ):
                 logger.info("최종 실행 준비 완료 확인됨")
 
             logger.info(f"학습 처리 완료: {session_id}")
@@ -305,7 +329,9 @@ class UnifiedLearningSystem:
     ) -> EvolutionResult:
         """진화 처리"""
         try:
-            session = next((s for s in self.evolution_sessions if s.id == session_id), None)
+            session = next(
+                (s for s in self.evolution_sessions if s.id == session_id), None
+            )
             if not session:
                 raise ValueError(f"진화 세션을 찾을 수 없습니다: {session_id}")
 
@@ -336,11 +362,17 @@ class UnifiedLearningSystem:
             session.stability_score = result.stability_score
 
             # 존재형 AI: 진화 가능성 확인
-            if self.existence_ai and self.existence_ai.evolution_capability.can_evolve():
+            if (
+                self.existence_ai
+                and self.existence_ai.evolution_capability.can_evolve()
+            ):
                 self.existence_ai.evolution_capability.evolve()
 
             # 최종 실행 준비 완료: 최종 실행 준비 완료 확인
-            if self.final_execution_verifier and self.final_execution_verifier.verify_readiness():
+            if (
+                self.final_execution_verifier
+                and self.final_execution_verifier.verify_readiness()
+            ):
                 logger.info("최종 실행 준비 완료 확인됨")
 
             logger.info(f"진화 처리 완료: {session_id}")
@@ -613,7 +645,9 @@ class UnifiedLearningSystem:
     async def get_learning_summary(self, session_id: str) -> Dict[str, Any]:
         """학습 요약 생성"""
         try:
-            session = next((s for s in self.learning_sessions if s.id == session_id), None)
+            session = next(
+                (s for s in self.learning_sessions if s.id == session_id), None
+            )
             if not session:
                 return {"error": "학습 세션을 찾을 수 없습니다."}
 
@@ -636,7 +670,9 @@ class UnifiedLearningSystem:
     async def get_evolution_summary(self, session_id: str) -> Dict[str, Any]:
         """진화 요약 생성"""
         try:
-            session = next((s for s in self.evolution_sessions if s.id == session_id), None)
+            session = next(
+                (s for s in self.evolution_sessions if s.id == session_id), None
+            )
             if not session:
                 return {"error": "진화 세션을 찾을 수 없습니다."}
 

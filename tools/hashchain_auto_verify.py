@@ -65,7 +65,8 @@ def verify_hashchain_integrity():
                                 "timestamp": datetime.now().isoformat(),
                             }
                         ),
-                        "hashchain_violation_" + datetime.now().strftime("%Y%m%d_%H%M%S"),
+                        "hashchain_violation_"
+                        + datetime.now().strftime("%Y%m%d_%H%M%S"),
                     ),
                 )
 

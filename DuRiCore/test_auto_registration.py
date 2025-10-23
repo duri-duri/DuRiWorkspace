@@ -35,7 +35,9 @@ async def test_auto_registration():
         # 테스트 1: 데코레이터 방식 자동 등록
         logger.info("📝 테스트 1: 데코레이터 방식 자동 등록")
 
-        @register_module(name="auto_test_module", dependencies=[], priority=ModulePriority.NORMAL)
+        @register_module(
+            name="auto_test_module", dependencies=[], priority=ModulePriority.NORMAL
+        )
         class AutoTestModule(BaseModule):
             async def initialize(self):
                 self._initialized = True

@@ -40,7 +40,9 @@ def bench_once():
 
 def grep_errors():
     # 운영 로그 error/fail/traceback 스캔(없어도 OK)
-    rc, out, err = sh(r"ls -1 var/reports/final_verify_*/run.log 2>/dev/null | tail -n 2")
+    rc, out, err = sh(
+        r"ls -1 var/reports/final_verify_*/run.log 2>/dev/null | tail -n 2"
+    )
     files = [l for l in out.splitlines() if l.strip()]
     bad = []
     for f in files:

@@ -321,16 +321,22 @@ class SurvivalInstinctEngine:
 
         try:
             # 1. 기본 생존 확률 (자원 기반)
-            base_probability = await self._calculate_base_survival_probability(resources)
+            base_probability = await self._calculate_base_survival_probability(
+                resources
+            )
 
             # 2. 위협 영향 계산
             threat_impact = await self._calculate_threat_impact(threats)
 
             # 3. 환경적 영향 계산
-            environmental_impact = await self._calculate_environmental_impact(environmental_factors)
+            environmental_impact = await self._calculate_environmental_impact(
+                environmental_factors
+            )
 
             # 4. 종합 생존 확률 계산
-            survival_probability = base_probability * (1 - threat_impact) * environmental_impact
+            survival_probability = (
+                base_probability * (1 - threat_impact) * environmental_impact
+            )
 
             # 5. 확률 범위 조정 (0.0 ~ 1.0)
             survival_probability = max(0.0, min(1.0, survival_probability))
@@ -342,7 +348,9 @@ class SurvivalInstinctEngine:
             logger.error(f"생존 확률 계산 실패: {e}")
             return 0.5  # 기본값
 
-    async def generate_survival_goals(self, survival_status: SurvivalStatus) -> List[SurvivalGoal]:
+    async def generate_survival_goals(
+        self, survival_status: SurvivalStatus
+    ) -> List[SurvivalGoal]:
         """생존 목표 생성"""
         logger.info("🎯 생존 목표 생성 시작")
 
@@ -350,7 +358,9 @@ class SurvivalInstinctEngine:
             goals = []
 
             # 1. 위협 대응 목표
-            threat_goals = await self._generate_threat_response_goals(survival_status.threats)
+            threat_goals = await self._generate_threat_response_goals(
+                survival_status.threats
+            )
             goals.extend(threat_goals)
 
             # 2. 자원 확보 목표
@@ -366,13 +376,17 @@ class SurvivalInstinctEngine:
             goals.extend(adaptation_goals)
 
             # 4. 장기 생존 목표
-            long_term_goals = await self._generate_long_term_survival_goals(survival_status)
+            long_term_goals = await self._generate_long_term_survival_goals(
+                survival_status
+            )
             goals.extend(long_term_goals)
 
             # 5. 목표 우선순위 설정
             prioritized_goals = await self._prioritize_survival_goals(goals)
 
-            logger.info(f"✅ 생존 목표 생성 완료 - {len(prioritized_goals)}개 목표 생성")
+            logger.info(
+                f"✅ 생존 목표 생성 완료 - {len(prioritized_goals)}개 목표 생성"
+            )
             return prioritized_goals
 
         except Exception as e:
@@ -380,7 +394,9 @@ class SurvivalInstinctEngine:
             return []
 
     # 헬퍼 메서드들
-    async def _assess_resource_availability(self, context: Dict[str, Any]) -> Dict[str, float]:
+    async def _assess_resource_availability(
+        self, context: Dict[str, Any]
+    ) -> Dict[str, float]:
         """자원 가용성 평가"""
         resources = {}
 
@@ -398,7 +414,9 @@ class SurvivalInstinctEngine:
 
         return resources
 
-    async def _assess_environmental_factors(self, context: Dict[str, Any]) -> Dict[str, Any]:
+    async def _assess_environmental_factors(
+        self, context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """환경적 요소 평가"""
         factors = {}
 
@@ -420,7 +438,9 @@ class SurvivalInstinctEngine:
 
         return factors
 
-    async def _determine_survival_status(self, survival_probability: float) -> SurvivalStatusEnum:
+    async def _determine_survival_status(
+        self, survival_probability: float
+    ) -> SurvivalStatusEnum:
         """생존 상태 결정"""
         if survival_probability <= self.survival_thresholds["critical_survival"]:
             return SurvivalStatusEnum.CRITICAL
@@ -450,7 +470,9 @@ class SurvivalInstinctEngine:
         environmental_confidence = 0.8  # 기본값
 
         # 종합 신뢰도
-        confidence = (threat_confidence + resource_confidence + environmental_confidence) / 3.0
+        confidence = (
+            threat_confidence + resource_confidence + environmental_confidence
+        ) / 3.0
 
         return max(0.0, min(1.0, confidence))
 
@@ -465,7 +487,9 @@ class SurvivalInstinctEngine:
                 Threat(
                     threat_id=f"resource_cpu_{int(time.time())}",
                     threat_type=ThreatType.RESOURCE,
-                    threat_level=(ThreatLevel.HIGH if cpu_usage > 0.95 else ThreatLevel.MEDIUM),
+                    threat_level=(
+                        ThreatLevel.HIGH if cpu_usage > 0.95 else ThreatLevel.MEDIUM
+                    ),
                     description=f"CPU 사용률이 높음: {cpu_usage:.2f}",
                     detected_at=datetime.now(),
                     probability=cpu_usage,
@@ -485,7 +509,9 @@ class SurvivalInstinctEngine:
                 Threat(
                     threat_id=f"resource_memory_{int(time.time())}",
                     threat_type=ThreatType.RESOURCE,
-                    threat_level=(ThreatLevel.HIGH if memory_usage > 0.95 else ThreatLevel.MEDIUM),
+                    threat_level=(
+                        ThreatLevel.HIGH if memory_usage > 0.95 else ThreatLevel.MEDIUM
+                    ),
                     description=f"메모리 사용률이 높음: {memory_usage:.2f}",
                     detected_at=datetime.now(),
                     probability=memory_usage,
@@ -500,7 +526,9 @@ class SurvivalInstinctEngine:
 
         return threats
 
-    async def _identify_environmental_threats(self, context: Dict[str, Any]) -> List[Threat]:
+    async def _identify_environmental_threats(
+        self, context: Dict[str, Any]
+    ) -> List[Threat]:
         """환경적 위협 식별"""
         threats = []
 
@@ -512,7 +540,9 @@ class SurvivalInstinctEngine:
                     threat_id=f"environmental_stability_{int(time.time())}",
                     threat_type=ThreatType.ENVIRONMENTAL,
                     threat_level=(
-                        ThreatLevel.HIGH if system_stability < 0.3 else ThreatLevel.MEDIUM
+                        ThreatLevel.HIGH
+                        if system_stability < 0.3
+                        else ThreatLevel.MEDIUM
                     ),
                     description=f"시스템 안정성이 낮음: {system_stability:.2f}",
                     detected_at=datetime.now(),
@@ -528,7 +558,9 @@ class SurvivalInstinctEngine:
 
         return threats
 
-    async def _identify_technical_threats(self, context: Dict[str, Any]) -> List[Threat]:
+    async def _identify_technical_threats(
+        self, context: Dict[str, Any]
+    ) -> List[Threat]:
         """기술적 위협 식별"""
         threats = []
 
@@ -539,7 +571,9 @@ class SurvivalInstinctEngine:
                 Threat(
                     threat_id=f"technical_error_{int(time.time())}",
                     threat_type=ThreatType.TECHNICAL,
-                    threat_level=(ThreatLevel.HIGH if error_rate > 0.3 else ThreatLevel.MEDIUM),
+                    threat_level=(
+                        ThreatLevel.HIGH if error_rate > 0.3 else ThreatLevel.MEDIUM
+                    ),
                     description=f"기술적 오류율이 높음: {error_rate:.2f}",
                     detected_at=datetime.now(),
                     probability=error_rate,
@@ -550,7 +584,9 @@ class SurvivalInstinctEngine:
 
         return threats
 
-    async def _identify_competitive_threats(self, context: Dict[str, Any]) -> List[Threat]:
+    async def _identify_competitive_threats(
+        self, context: Dict[str, Any]
+    ) -> List[Threat]:
         """경쟁적 위협 식별"""
         threats = []
 
@@ -576,7 +612,9 @@ class SurvivalInstinctEngine:
 
         return threats
 
-    async def _identify_existential_threats(self, context: Dict[str, Any]) -> List[Threat]:
+    async def _identify_existential_threats(
+        self, context: Dict[str, Any]
+    ) -> List[Threat]:
         """존재적 위협 식별"""
         threats = []
 
@@ -602,7 +640,9 @@ class SurvivalInstinctEngine:
 
         return threats
 
-    async def _calculate_base_survival_probability(self, resources: Dict[str, float]) -> float:
+    async def _calculate_base_survival_probability(
+        self, resources: Dict[str, float]
+    ) -> float:
         """기본 생존 확률 계산"""
         if not resources:
             return 0.5
@@ -640,7 +680,9 @@ class SurvivalInstinctEngine:
 
         return min(1.0, average_impact)
 
-    async def _calculate_environmental_impact(self, environmental_factors: Dict[str, Any]) -> float:
+    async def _calculate_environmental_impact(
+        self, environmental_factors: Dict[str, Any]
+    ) -> float:
         """환경적 영향 계산"""
         if not environmental_factors:
             return 1.0
@@ -658,7 +700,9 @@ class SurvivalInstinctEngine:
 
         return 1.0
 
-    async def _generate_threat_response_goals(self, threats: List[Threat]) -> List[SurvivalGoal]:
+    async def _generate_threat_response_goals(
+        self, threats: List[Threat]
+    ) -> List[SurvivalGoal]:
         """위협 대응 목표 생성"""
         goals = []
 
@@ -679,7 +723,9 @@ class SurvivalInstinctEngine:
 
         return goals
 
-    async def _generate_resource_goals(self, resources: Dict[str, float]) -> List[SurvivalGoal]:
+    async def _generate_resource_goals(
+        self, resources: Dict[str, float]
+    ) -> List[SurvivalGoal]:
         """자원 확보 목표 생성"""
         goals = []
 
@@ -744,7 +790,9 @@ class SurvivalInstinctEngine:
 
         return goals
 
-    async def _prioritize_survival_goals(self, goals: List[SurvivalGoal]) -> List[SurvivalGoal]:
+    async def _prioritize_survival_goals(
+        self, goals: List[SurvivalGoal]
+    ) -> List[SurvivalGoal]:
         """생존 목표 우선순위 설정"""
         # 우선순위, 긴급도, 실현 가능성을 기반으로 정렬
         prioritized = sorted(

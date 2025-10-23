@@ -53,7 +53,9 @@ class Config:
     @staticmethod
     def get_update_script_path() -> str:
         """업데이트 스크립트 경로"""
-        return os.getenv("UPDATE_SCRIPT_PATH", "/tmp/../scripts/update_cur_from_delta.py")
+        return os.getenv(
+            "UPDATE_SCRIPT_PATH", "/tmp/../scripts/update_cur_from_delta.py"
+        )
 
     @staticmethod
     def get_evolution_log() -> str:
@@ -261,7 +263,9 @@ def load_env(key, default=None, type_cast=str):
 
     if type_cast == bool:
         return (
-            value.lower() in ("true", "1", "yes", "on") if isinstance(value, str) else bool(value)
+            value.lower() in ("true", "1", "yes", "on")
+            if isinstance(value, str)
+            else bool(value)
         )
     elif type_cast == int:
         try:

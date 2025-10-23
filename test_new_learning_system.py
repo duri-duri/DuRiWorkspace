@@ -36,7 +36,9 @@ def test_meaning_extraction():
         print(f"   DuRi: {conversation['duri_response']}")
 
         try:
-            response = requests.post(f"{base_url}/learning/extract-meaning", json=conversation)
+            response = requests.post(
+                f"{base_url}/learning/extract-meaning", json=conversation
+            )
             result = response.json()
 
             if result.get("status") == "success":
@@ -81,7 +83,9 @@ def test_result_evaluation():
         print(f"   DuRi: {conversation['duri_response']}")
 
         try:
-            response = requests.post(f"{base_url}/learning/evaluate-result", json=conversation)
+            response = requests.post(
+                f"{base_url}/learning/evaluate-result", json=conversation
+            )
             result = response.json()
 
             if result.get("status") == "success":
@@ -122,7 +126,9 @@ def test_complete_learning_analysis():
     print(f"   DuRi: {test_conversation['duri_response']}")
 
     try:
-        response = requests.post(f"{base_url}/learning/complete-analysis", json=test_conversation)
+        response = requests.post(
+            f"{base_url}/learning/complete-analysis", json=test_conversation
+        )
         result = response.json()
 
         if result.get("status") == "success":
@@ -205,7 +211,9 @@ def test_integration_with_existing_systems():
     }
 
     try:
-        response = requests.post(f"{base_url}/learning/complete-analysis", json=test_conversation)
+        response = requests.post(
+            f"{base_url}/learning/complete-analysis", json=test_conversation
+        )
         result = response.json()
 
         if result.get("status") == "success":

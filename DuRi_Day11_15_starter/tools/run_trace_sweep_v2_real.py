@@ -51,13 +51,17 @@ def bench_cmd():
 def assert_real_bench(cmd: str):
     # Contract: prefer --self-check, else --version content check
     try:
-        out = subprocess.run([cmd, "--self-check"], capture_output=True, text=True, timeout=5)
+        out = subprocess.run(
+            [cmd, "--self-check"], capture_output=True, text=True, timeout=5
+        )
         if out.returncode == 0 and out.stdout.startswith("TRACE_BENCH_OK:"):
             return
     except Exception:
         pass
     try:
-        out = subprocess.run([cmd, "--version"], capture_output=True, text=True, timeout=5)
+        out = subprocess.run(
+            [cmd, "--version"], capture_output=True, text=True, timeout=5
+        )
         ver = (out.stdout or out.stderr).strip()
         if (
             (not ver)
@@ -77,7 +81,9 @@ def load_slo_metrics(path: pathlib.Path):
     base_size = float(d.get("baseline_size_kb", 100.0))
     req = float(d.get("requests", 0.0))
     fail = float(d.get("failures", 0.0))
-    base_err = (fail / max(1.0, req)) if req > 0 else float(d.get("baseline_error_rate", 0.0))
+    base_err = (
+        (fail / max(1.0, req)) if req > 0 else float(d.get("baseline_error_rate", 0.0))
+    )
     return base_p95, base_err, base_size
 
 
@@ -86,7 +92,11 @@ def validate_policy(w, T_over, T_err):
         raise ValueError(f"max_overhead_pct out of range: {T_over*100:.2f}%")
     if not (0.0 <= T_err <= 0.02):  # ≤2%
         raise ValueError(f"max_error_rate out of range: {T_err:.4f}")
-    if not (0.0 <= w["overhead"] <= 1.0 and 0.0 <= w["error"] <= 1.0 and 0.0 <= w["size"] <= 1.0):
+    if not (
+        0.0 <= w["overhead"] <= 1.0
+        and 0.0 <= w["error"] <= 1.0
+        and 0.0 <= w["size"] <= 1.0
+    ):
         raise ValueError("weights must be in [0,1]")
     s = max(1e-9, (w["overhead"] + w["error"] + w["size"]))
     for k in list(w.keys()):
@@ -113,7 +123,9 @@ def main():
     policy = dict(tcfg.get("policy") or {})
     grid = cfg["grid"]
     levels = list(
-        itertools.product(grid["sampling_rate"], grid["serialization"], grid["compression"])
+        itertools.product(
+            grid["sampling_rate"], grid["serialization"], grid["compression"]
+        )
     )
     ts = datetime.utcnow().isoformat() + "Z"
     sweep_id = f"sweep_{int(time.time())}"
@@ -176,7 +188,9 @@ def main():
         "best": best,
         "results": results,
     }
-    atomic_write(sweep_dir / "summary.json", json.dumps(summary, ensure_ascii=False, indent=2))
+    atomic_write(
+        sweep_dir / "summary.json", json.dumps(summary, ensure_ascii=False, indent=2)
+    )
     md = [
         f"# Trace v2 Sweep Report — {ts}",
         f"- Baseline p95: **{base_p95:.2f} ms**, size: **{base_size:.1f} KB**",

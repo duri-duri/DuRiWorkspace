@@ -9,6 +9,8 @@ rule_files:
   - /etc/prometheus/rules/quality_recording.rules.yml
   - /etc/prometheus/rules/quality_slo.rules.yml
   - /etc/prometheus/rules/quality_alerts.rules.yml
+  - alerting/rules/*.yml
+  - prometheus/rules/*.yml
 
 alerting:
   alertmanagers:
@@ -19,30 +21,30 @@ scrape_configs:
     static_configs: [{ targets: ['localhost:9090'] }]
 
   - job_name: 'node'
-    static_configs: [{ targets: ['node_exporter:9100'] }]
+    static_configs: [{ targets: ['node-exporter:9100'] }]
 
   - job_name: 'cadvisor'
     static_configs: [{ targets: ['cadvisor:8080'] }]
 
   - job_name: 'redis'
-    static_configs: [{ targets: ['redis_exporter:9121'] }]
+    static_configs: [{ targets: ['redis-exporter:9121'] }]
 
   - job_name: 'postgres'
-    static_configs: [{ targets: ['postgres_exporter:9187'] }]
+    static_configs: [{ targets: ['postgres-exporter:9187'] }]
 
   - job_name: 'blackbox'
     metrics_path: /metrics
-    static_configs: [{ targets: ['blackbox_exporter:9115'] }]
+    static_configs: [{ targets: ['blackbox-exporter:9115'] }]
 
   - job_name: 'blackbox_probe'
     metrics_path: /probe
     params: { module: [http_2xx] }
     static_configs:
       - targets:
-          - http://duri_core_container:8080/health
-          - http://duri_brain_container:8081/health
-          - http://duri_evolution_container:8082/health
-          - http://duri_control_container:8083/health
+          - http://duri-core:8080/health
+          - http://duri-brain:8081/health
+          - http://duri-evolution:8082/health
+          - http://duri-control:8083/health
           - http://localhost:9090/-/ready
           - http://localhost:3000/api/health
     relabel_configs:
@@ -51,4 +53,4 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: blackbox_exporter:9115
+        replacement: blackbox-exporter:9115

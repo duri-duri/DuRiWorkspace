@@ -306,7 +306,9 @@ class FutureDesignSystem:
         impact_assessment = self._assess_scenario_impact(trends, scenario_type)
 
         # 적응 전략 생성
-        adaptation_strategies = self._generate_adaptation_strategies(trends, scenario_type)
+        adaptation_strategies = self._generate_adaptation_strategies(
+            trends, scenario_type
+        )
 
         scenario = FutureScenario(
             scenario_type=scenario_type,
@@ -413,7 +415,9 @@ class FutureDesignSystem:
                 ]
             )
         elif scenario_type == ScenarioType.REALISTIC:
-            strategies.extend(["점진적 기술 도입", "사회적 합의 도출", "균형적 발전 정책"])
+            strategies.extend(
+                ["점진적 기술 도입", "사회적 합의 도출", "균형적 발전 정책"]
+            )
         else:  # DISRUPTIVE
             strategies.extend(
                 [
@@ -453,13 +457,17 @@ class FutureDesignSystem:
 
         return ideas
 
-    def _create_innovation_idea(self, trend: TrendAnalysis, domain: str = None) -> InnovationIdea:
+    def _create_innovation_idea(
+        self, trend: TrendAnalysis, domain: str = None
+    ) -> InnovationIdea:
         """트렌드 기반 혁신 아이디어 생성"""
         # 아이디어 제목 생성
         title = f"{trend.trend_name} 기반 혁신 솔루션"
 
         # 아이디어 설명 생성
-        description = f"{trend.description}을 활용하여 새로운 가치를 창조하는 혁신적 접근법"
+        description = (
+            f"{trend.description}을 활용하여 새로운 가치를 창조하는 혁신적 접근법"
+        )
 
         # 카테고리 결정
         category = domain if domain else trend.category.value
@@ -501,7 +509,9 @@ class FutureDesignSystem:
         title = f"{pattern_data['name']} 기반 혁신 플랫폼"
 
         # 패턴 기반 설명 생성
-        description = f"{pattern_data['description']}을 통해 새로운 가치를 창조하는 플랫폼"
+        description = (
+            f"{pattern_data['description']}을 통해 새로운 가치를 창조하는 플랫폼"
+        )
 
         # 점수 계산
         novelty_score = 0.8
@@ -614,7 +624,9 @@ class FutureDesignSystem:
 
         return list(set(focus_areas))  # 중복 제거
 
-    def _generate_short_term_initiatives(self, ideas: List[InnovationIdea]) -> List[str]:
+    def _generate_short_term_initiatives(
+        self, ideas: List[InnovationIdea]
+    ) -> List[str]:
         """단기 이니셔티브 생성"""
         initiatives = []
 
@@ -623,7 +635,9 @@ class FutureDesignSystem:
 
         return initiatives
 
-    def _generate_medium_term_initiatives(self, scenarios: List[FutureScenario]) -> List[str]:
+    def _generate_medium_term_initiatives(
+        self, scenarios: List[FutureScenario]
+    ) -> List[str]:
         """중기 이니셔티브 생성"""
         initiatives = []
 
@@ -634,7 +648,9 @@ class FutureDesignSystem:
 
         return initiatives
 
-    def _generate_long_term_initiatives(self, scenarios: List[FutureScenario]) -> List[str]:
+    def _generate_long_term_initiatives(
+        self, scenarios: List[FutureScenario]
+    ) -> List[str]:
         """장기 이니셔티브 생성"""
         initiatives = []
 
@@ -679,7 +695,9 @@ class FutureDesignSystem:
             if "scenarios" in analysis:
                 for scenario in analysis["scenarios"]:
                     scenario_type = scenario.scenario_type.value
-                    scenario_counts[scenario_type] = scenario_counts.get(scenario_type, 0) + 1
+                    scenario_counts[scenario_type] = (
+                        scenario_counts.get(scenario_type, 0) + 1
+                    )
 
         return scenario_counts
 
@@ -699,7 +717,9 @@ class FutureDesignSystem:
 future_design_system = FutureDesignSystem()
 
 
-def phase_25_future_design(domain: str = None, time_horizon: str = "5-10년") -> Dict[str, Any]:
+def phase_25_future_design(
+    domain: str = None, time_horizon: str = "5-10년"
+) -> Dict[str, Any]:
     """Phase 25 미래 예측 및 설계 시스템 메인 함수"""
     # 1. 트렌드 분석
     trends = future_design_system.analyze_trends(domain, time_horizon)

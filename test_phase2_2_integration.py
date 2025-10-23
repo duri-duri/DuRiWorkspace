@@ -81,7 +81,9 @@ async def test_lida_attention_integration():
     }
 
     # 내적 동기 기반 주의 처리
-    attention_result = await attention_system.process_attention_with_motivation(test_context)
+    attention_result = await attention_system.process_attention_with_motivation(
+        test_context
+    )
 
     print(f"✅ 주의 집중 영역: {attention_result.get('focus_areas', [])}")
     print(f"✅ 호기심 기반 탐구: {attention_result.get('exploration_focus', [])}")
@@ -100,7 +102,9 @@ async def test_lida_attention_integration():
 
     # 동기 상태 확인
     motivation_state = attention_system.get_motivation_state()
-    print(f"✅ 업데이트된 호기심: {motivation_state['curiosity_metrics']['overall_curiosity']:.3f}")
+    print(
+        f"✅ 업데이트된 호기심: {motivation_state['curiosity_metrics']['overall_curiosity']:.3f}"
+    )
     print(
         f"✅ 업데이트된 성취욕: {motivation_state['achievement_metrics']['overall_achievement']:.3f}"
     )
@@ -124,7 +128,9 @@ async def test_social_intelligence_integration():
     }
 
     # 내적 동기를 고려한 상황 이해
-    context_analysis = await social_system.understand_context_with_motivation(test_situation)
+    context_analysis = await social_system.understand_context_with_motivation(
+        test_situation
+    )
 
     print(f"✅ 상황 이해 - 핵심 요소: {context_analysis.key_factors}")
     print(f"✅ 복잡성 수준: {context_analysis.complexity.value}")
@@ -165,7 +171,9 @@ async def test_social_intelligence_integration():
 
     # 사회적 동기 상태 확인
     social_motivation = social_system.get_social_motivation_state()
-    print(f"✅ 사회적 호기심: {social_motivation['curiosity_metrics']['overall_curiosity']:.3f}")
+    print(
+        f"✅ 사회적 호기심: {social_motivation['curiosity_metrics']['overall_curiosity']:.3f}"
+    )
     print(
         f"✅ 사회적 성취욕: {social_motivation['achievement_metrics']['overall_achievement']:.3f}"
     )
@@ -196,18 +204,26 @@ async def test_system_integration():
     print(f"📋 시나리오: {scenario['situation']}")
 
     # 1단계: 내적 동기 상태 평가
-    curiosity_level = motivation_system.motivation_state.curiosity_metrics.overall_curiosity
-    achievement_level = motivation_system.motivation_state.achievement_metrics.overall_achievement
+    curiosity_level = (
+        motivation_system.motivation_state.curiosity_metrics.overall_curiosity
+    )
+    achievement_level = (
+        motivation_system.motivation_state.achievement_metrics.overall_achievement
+    )
 
     print(f"🔍 호기심 수준: {curiosity_level:.3f}")
     print(f"🏆 성취욕 수준: {achievement_level:.3f}")
 
     # 2단계: 주의 집중
-    attention_result = await attention_system.process_attention_with_motivation(scenario["context"])
+    attention_result = await attention_system.process_attention_with_motivation(
+        scenario["context"]
+    )
     print(f"🎯 주의 집중: {attention_result.get('focus_areas', [])}")
 
     # 3단계: 사회적 상황 이해
-    social_analysis = await social_system.understand_context_with_motivation(scenario["context"])
+    social_analysis = await social_system.understand_context_with_motivation(
+        scenario["context"]
+    )
     print(f"🤝 사회적 이해: {social_analysis.key_factors[:3]}")
 
     # 4단계: 자발적 학습 실행

@@ -66,7 +66,9 @@ def test_emotion_api():
         print(f"입력: {test_case['text']}")
 
         try:
-            response = requests.post(f"{BASE_URL}/api/v1/emotion/analyze", json=test_case)
+            response = requests.post(
+                f"{BASE_URL}/api/v1/emotion/analyze", json=test_case
+            )
             print(f"상태 코드: {response.status_code}")
 
             if response.status_code == 200:
@@ -116,7 +118,9 @@ def test_learning_api():
         print(f"콘텐츠: {test_case['content'][:50]}...")
 
         try:
-            response = requests.post(f"{BASE_URL}/api/v1/learning/process", json=test_case)
+            response = requests.post(
+                f"{BASE_URL}/api/v1/learning/process", json=test_case
+            )
             print(f"상태 코드: {response.status_code}")
 
             if response.status_code == 200:
@@ -162,7 +166,9 @@ def test_ethical_api():
         print(f"상황: {test_case['situation'][:50]}...")
 
         try:
-            response = requests.post(f"{BASE_URL}/api/v1/ethical/analyze", json=test_case)
+            response = requests.post(
+                f"{BASE_URL}/api/v1/ethical/analyze", json=test_case
+            )
             print(f"상태 코드: {response.status_code}")
 
             if response.status_code == 200:
@@ -253,7 +259,9 @@ def test_health_api():
             engines = data.get("engines", {})
             print(f"등록된 엔진: {len(engines)}개")
             for engine_name, engine_info in engines.items():
-                print(f"  - {engine_info.get('name')}: {engine_info.get('description')}")
+                print(
+                    f"  - {engine_info.get('name')}: {engine_info.get('description')}"
+                )
     except Exception as e:
         print(f"엔진 정보 조회 오류: {e}")
 

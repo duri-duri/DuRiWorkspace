@@ -10,7 +10,11 @@ def crdt_merge(core_val, rag_candidates):
         return core_val, {"source": "core"}
     if not rag_candidates:
         return None, {"source": "none"}
-    score = lambda x: 0.6 * x.get("sim", 0) + 0.2 * x.get("recency", 0) + 0.2 * x.get("prov", 0)
+    score = (
+        lambda x: 0.6 * x.get("sim", 0)
+        + 0.2 * x.get("recency", 0)
+        + 0.2 * x.get("prov", 0)
+    )
     best = max(rag_candidates, key=score)
     return best["val"], {"source": "rag", "score": score(best)}
 

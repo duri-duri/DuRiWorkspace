@@ -38,8 +38,11 @@ services:
     environment:
       - DURI_MODE=core
       - PYTHONPATH=/app:/app/duri_common
-      - DATABASE_URL=postgresql://postgres:postgres@duri-postgres:5432/duri_workspace
+      - DATABASE_URL=sqlite:////tmp/duri_core.db
       - REDIS_URL=redis://duri-redis:6379
+      # 포트/어댑터 설정
+      - REFLEXION_BACKEND=http
+      - BRAIN_BASE_URL=http://duri-brain:8081
     ports:
       - "8080:8080"
     depends_on:

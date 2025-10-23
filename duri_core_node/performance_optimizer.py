@@ -55,7 +55,9 @@ class PerformanceOptimizer:
             self.performance_metrics["cache_misses"] += 1
 
             # 2. 병렬 처리 실행
-            result = await self._parallel_processing(user_input, duri_response, metadata)
+            result = await self._parallel_processing(
+                user_input, duri_response, metadata
+            )
 
             # 3. 결과 캐싱
             self._cache_result(cache_key, result)
@@ -96,7 +98,9 @@ class PerformanceOptimizer:
         # 캐시 크기 제한 (최대 1000개)
         if len(self.cache) > 1000:
             # 가장 오래된 항목 삭제
-            oldest_key = min(self.cache.keys(), key=lambda k: self.cache[k]["timestamp"])
+            oldest_key = min(
+                self.cache.keys(), key=lambda k: self.cache[k]["timestamp"]
+            )
             del self.cache[oldest_key]
 
     async def _parallel_processing(
@@ -225,7 +229,9 @@ class PerformanceOptimizer:
         # 평균 응답 시간 업데이트
         current_avg = self.performance_metrics["average_response_time"]
         total_requests = self.performance_metrics["total_requests"]
-        new_avg = ((current_avg * (total_requests - 1)) + processing_time) / total_requests
+        new_avg = (
+            (current_avg * (total_requests - 1)) + processing_time
+        ) / total_requests
         self.performance_metrics["average_response_time"] = new_avg
 
     def get_performance_metrics(self) -> Dict[str, Any]:
@@ -233,7 +239,8 @@ class PerformanceOptimizer:
         cache_hit_rate = 0.0
         if self.performance_metrics["total_requests"] > 0:
             cache_hit_rate = (
-                self.performance_metrics["cache_hits"] / self.performance_metrics["total_requests"]
+                self.performance_metrics["cache_hits"]
+                / self.performance_metrics["total_requests"]
             )
 
         return {
@@ -276,10 +283,16 @@ class LoadBalancer:
             brain_start = time.time()
             try:
                 async with aiohttp.ClientSession() as session:
-                    async with session.get("http://localhost:8091/health", timeout=2) as response:
+                    async with session.get(
+                        "http://localhost:8091/health", timeout=2
+                    ) as response:
                         self.node_health["brain"]["healthy"] = response.status == 200
-                        self.node_health["brain"]["response_time"] = time.time() - brain_start
-                        self.node_health["brain"]["last_check"] = datetime.now().isoformat()
+                        self.node_health["brain"]["response_time"] = (
+                            time.time() - brain_start
+                        )
+                        self.node_health["brain"][
+                            "last_check"
+                        ] = datetime.now().isoformat()
             except:
                 self.node_health["brain"]["healthy"] = False
 
@@ -287,12 +300,18 @@ class LoadBalancer:
             evolution_start = time.time()
             try:
                 async with aiohttp.ClientSession() as session:
-                    async with session.get("http://localhost:8092/health", timeout=2) as response:
-                        self.node_health["evolution"]["healthy"] = response.status == 200
+                    async with session.get(
+                        "http://localhost:8092/health", timeout=2
+                    ) as response:
+                        self.node_health["evolution"]["healthy"] = (
+                            response.status == 200
+                        )
                         self.node_health["evolution"]["response_time"] = (
                             time.time() - evolution_start
                         )
-                        self.node_health["evolution"]["last_check"] = datetime.now().isoformat()
+                        self.node_health["evolution"][
+                            "last_check"
+                        ] = datetime.now().isoformat()
             except:
                 self.node_health["evolution"]["healthy"] = False
 

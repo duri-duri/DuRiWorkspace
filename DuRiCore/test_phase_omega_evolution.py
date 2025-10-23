@@ -166,7 +166,9 @@ class PhaseOmegaEvolutionTest:
                 overall_success=failed_tests == 0,
             )
 
-            logger.info(f"✅ Self-Rewriting Module 테스트 완료: {passed_tests}/{total_tests} 통과")
+            logger.info(
+                f"✅ Self-Rewriting Module 테스트 완료: {passed_tests}/{total_tests} 통과"
+            )
 
             return suite_result
 
@@ -270,7 +272,9 @@ class PhaseOmegaEvolutionTest:
                 overall_success=failed_tests == 0,
             )
 
-            logger.info(f"✅ MetaCoder Engine 테스트 완료: {passed_tests}/{total_tests} 통과")
+            logger.info(
+                f"✅ MetaCoder Engine 테스트 완료: {passed_tests}/{total_tests} 통과"
+            )
 
             return suite_result
 
@@ -321,7 +325,9 @@ class PhaseOmegaEvolutionTest:
                 overall_success=failed_tests == 0,
             )
 
-            logger.info(f"✅ Evolution Integration 테스트 완료: {passed_tests}/{total_tests} 통과")
+            logger.info(
+                f"✅ Evolution Integration 테스트 완료: {passed_tests}/{total_tests} 통과"
+            )
 
             return suite_result
 
@@ -372,7 +378,9 @@ class PhaseOmegaEvolutionTest:
                 overall_success=failed_tests == 0,
             )
 
-            logger.info(f"✅ 통합 워크플로우 테스트 완료: {passed_tests}/{total_tests} 통과")
+            logger.info(
+                f"✅ 통합 워크플로우 테스트 완료: {passed_tests}/{total_tests} 통과"
+            )
 
             return suite_result
 
@@ -418,7 +426,9 @@ def example_function():
                 # 임시 파일 생성
                 import tempfile
 
-                with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+                with tempfile.NamedTemporaryFile(
+                    mode="w", suffix=".py", delete=False
+                ) as f:
                     f.write(test_code)
                     test_module = f.name
 
@@ -439,8 +449,12 @@ def example_function():
 
                     details = {
                         "module_path": test_module,
-                        "complexity_score": (assessment.complexity_score if assessment else 0),
-                        "performance_score": (assessment.performance_score if assessment else 0),
+                        "complexity_score": (
+                            assessment.complexity_score if assessment else 0
+                        ),
+                        "performance_score": (
+                            assessment.performance_score if assessment else 0
+                        ),
                         "maintainability_score": (
                             assessment.maintainability_score if assessment else 0
                         ),
@@ -474,8 +488,12 @@ def example_function():
 
                 details = {
                     "module_path": test_module,
-                    "complexity_score": (assessment.complexity_score if assessment else 0),
-                    "performance_score": (assessment.performance_score if assessment else 0),
+                    "complexity_score": (
+                        assessment.complexity_score if assessment else 0
+                    ),
+                    "performance_score": (
+                        assessment.performance_score if assessment else 0
+                    ),
                     "maintainability_score": (
                         assessment.maintainability_score if assessment else 0
                     ),
@@ -521,7 +539,9 @@ def example_function():
             )
 
             # 개선 제안 생성
-            proposal = await self.self_rewriter.generate_alternative(test_code, assessment)
+            proposal = await self.self_rewriter.generate_alternative(
+                test_code, assessment
+            )
 
             # 결과 검증
             success = (
@@ -624,12 +644,16 @@ def example_function():
             success = (
                 population is not None
                 and len(population) == 10
-                and all(hasattr(individual, "individual_id") for individual in population)
+                and all(
+                    hasattr(individual, "individual_id") for individual in population
+                )
             )
 
             details = {
                 "population_size": len(population) if population else 0,
-                "individual_ids": ([ind.individual_id for ind in population] if population else []),
+                "individual_ids": (
+                    [ind.individual_id for ind in population] if population else []
+                ),
             }
 
             return TestResult(
@@ -707,7 +731,9 @@ def example_function():
 """
 
             # 진화 실행
-            result = await self.genetic_engine.evolve_capabilities(seed_code, "테스트 목표")
+            result = await self.genetic_engine.evolve_capabilities(
+                seed_code, "테스트 목표"
+            )
 
             # 결과 검증
             success = (
@@ -773,7 +799,9 @@ class ExampleClass:
                 # 임시 파일 생성
                 import tempfile
 
-                with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+                with tempfile.NamedTemporaryFile(
+                    mode="w", suffix=".py", delete=False
+                ) as f:
                     f.write(test_code)
                     test_module = f.name
 
@@ -937,7 +965,9 @@ def test_function():
             start_time = time.time()
 
             # 진화 세션 생성
-            session = await self.evolution_integration.start_evolution_session("테스트 목표")
+            session = await self.evolution_integration.start_evolution_session(
+                "테스트 목표"
+            )
 
             # 결과 검증
             success = (
@@ -974,7 +1004,9 @@ def test_function():
             start_time = time.time()
 
             # 진화 세션 생성
-            session = await self.evolution_integration.start_evolution_session("테스트 목표")
+            session = await self.evolution_integration.start_evolution_session(
+                "테스트 목표"
+            )
 
             # 진화 사이클 실행
             result = await self.evolution_integration.execute_evolution_cycle(session)
@@ -1013,7 +1045,9 @@ def test_function():
             start_time = time.time()
 
             # 진화 세션 생성 및 실행
-            session = await self.evolution_integration.start_evolution_session("테스트 목표")
+            session = await self.evolution_integration.start_evolution_session(
+                "테스트 목표"
+            )
             result = await self.evolution_integration.execute_evolution_cycle(session)
 
             # 결과 검증
@@ -1027,7 +1061,9 @@ def test_function():
             details = {
                 "improvements_count": len(result.improvements_made) if result else 0,
                 "quality_improvement": result.quality_improvement if result else 0,
-                "performance_improvement": (result.performance_improvement if result else 0),
+                "performance_improvement": (
+                    result.performance_improvement if result else 0
+                ),
             }
 
             return TestResult(
@@ -1053,7 +1089,9 @@ def test_function():
             start_time = time.time()
 
             # 전체 진화 워크플로우 실행
-            session = await self.evolution_integration.start_evolution_session("통합 테스트 목표")
+            session = await self.evolution_integration.start_evolution_session(
+                "통합 테스트 목표"
+            )
             result = await self.evolution_integration.execute_evolution_cycle(session)
 
             # 결과 검증
@@ -1061,7 +1099,10 @@ def test_function():
                 result is not None
                 and result.success
                 and len(session.steps) > 0
-                and all(step.status.value in ["completed", "failed"] for step in session.steps)
+                and all(
+                    step.status.value in ["completed", "failed"]
+                    for step in session.steps
+                )
             )
 
             details = {
@@ -1092,7 +1133,9 @@ def test_function():
             start_time = time.time()
 
             # 성능 테스트 실행
-            session = await self.evolution_integration.start_evolution_session("성능 테스트")
+            session = await self.evolution_integration.start_evolution_session(
+                "성능 테스트"
+            )
             result = await self.evolution_integration.execute_evolution_cycle(session)
 
             # 성능 검증 (5초 이내 완료)
@@ -1134,7 +1177,9 @@ def test_function():
                     session = await self.evolution_integration.start_evolution_session(
                         f"안정성 테스트 {i+1}"
                     )
-                    result = await self.evolution_integration.execute_evolution_cycle(session)
+                    result = await self.evolution_integration.execute_evolution_cycle(
+                        session
+                    )
 
                     if result and result.success:
                         success_count += 1
@@ -1197,7 +1242,9 @@ async def main():
     print(f"\n🔍 상세 결과:")
     for test_result in result.results:
         status = "✅ 통과" if test_result.success else "❌ 실패"
-        print(f"  - {test_result.test_name}: {status} ({test_result.execution_time:.2f}초)")
+        print(
+            f"  - {test_result.test_name}: {status} ({test_result.execution_time:.2f}초)"
+        )
 
         if test_result.error_message:
             print(f"    오류: {test_result.error_message}")

@@ -20,7 +20,9 @@ def load_cfg():
 def eval_J(evaluator, cfg, preset, m):
     import tempfile
 
-    with tempfile.NamedTemporaryFile("w", delete=False, suffix=".json", encoding="utf-8") as tf:
+    with tempfile.NamedTemporaryFile(
+        "w", delete=False, suffix=".json", encoding="utf-8"
+    ) as tf:
         json.dump(m, tf)
         tmp = tf.name
     try:

@@ -188,7 +188,8 @@ class AutonomousLearner:
     def _calculate_learning_metrics(self, data: Dict[str, Any]) -> Dict[str, float]:
         """학습 메트릭 계산"""
         return {
-            "error_rate": data.get("error_count", 0) / max(self.total_learning_cycles, 1),
+            "error_rate": data.get("error_count", 0)
+            / max(self.total_learning_cycles, 1),
             "avg_response_time": data.get("response_time", 0.0),
             "memory_efficiency": 1.0 - data.get("memory_usage", 0.0),
             "learning_progress": self._calculate_progress_score(data),
@@ -272,7 +273,9 @@ class AutonomousLearner:
             "problem_type": problem_type,
             "description": description,
             "timestamp": datetime.now().isoformat(),
-            "session_id": (self.current_session.session_id if self.current_session else None),
+            "session_id": (
+                self.current_session.session_id if self.current_session else None
+            ),
             "total_cycles": self.total_learning_cycles,
             "total_problems": self.total_problems_detected,
         }
@@ -289,7 +292,9 @@ class AutonomousLearner:
         report = {
             "type": "status_report",
             "session_id": self.current_session.session_id,
-            "session_duration": (datetime.now() - self.current_session.start_time).total_seconds(),
+            "session_duration": (
+                datetime.now() - self.current_session.start_time
+            ).total_seconds(),
             "learning_cycles": self.current_session.learning_cycles,
             "problems_detected": self.current_session.problems_detected,
             "decisions_made": self.current_session.decisions_made,
@@ -305,7 +310,9 @@ class AutonomousLearner:
     def _save_report(self, report: Dict[str, Any]):
         """보고서 저장"""
         os.makedirs("reports", exist_ok=True)
-        filename = f"reports/autonomous_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+        filename = (
+            f"reports/autonomous_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+        )
 
         with open(filename, "w", encoding="utf-8") as f:
             json.dump(report, f, ensure_ascii=False, indent=2)
@@ -316,7 +323,9 @@ class AutonomousLearner:
             "timestamp": datetime.now().isoformat(),
             "metrics": metrics,
             "progress": progress,
-            "session_id": (self.current_session.session_id if self.current_session else None),
+            "session_id": (
+                self.current_session.session_id if self.current_session else None
+            ),
         }
 
         self.learning_history.append(record)
@@ -388,7 +397,9 @@ class AutonomousLearner:
 
         return False
 
-    def _calculate_severity(self, metrics: Dict[str, float], pattern: Dict[str, Any]) -> float:
+    def _calculate_severity(
+        self, metrics: Dict[str, float], pattern: Dict[str, Any]
+    ) -> float:
         """문제 심각도 계산"""
         threshold = pattern["threshold"]
 
@@ -417,7 +428,9 @@ class AutonomousLearner:
             return metrics["learning_progress"] < 0.1
         elif rule_name == "backup_data":
             if self.current_session:
-                duration = (datetime.now() - self.current_session.start_time).total_seconds()
+                duration = (
+                    datetime.now() - self.current_session.start_time
+                ).total_seconds()
                 return duration > 3600
 
         return False
@@ -456,7 +469,9 @@ class AutonomousLearner:
         """시스템 건강도 계산"""
         memory_score = 1.0 - data.get("memory_usage", 0.5)
         cpu_score = 1.0 - data.get("cpu_usage", 0.3)
-        error_score = 1.0 - data.get("error_count", 0) / max(self.total_learning_cycles, 1)
+        error_score = 1.0 - data.get("error_count", 0) / max(
+            self.total_learning_cycles, 1
+        )
 
         return (memory_score + cpu_score + error_score) / 3.0
 
@@ -480,7 +495,9 @@ class AutonomousLearner:
 
         return last_progress - first_progress
 
-    def process_learning_question(self, learning_metrics: Dict[str, Any]) -> Dict[str, Any]:
+    def process_learning_question(
+        self, learning_metrics: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """학습 질문 처리 및 자율 학습 결과 생성"""
         try:
             logger.info("🧠 자율 학습 질문 처리 시작")
@@ -489,7 +506,9 @@ class AutonomousLearner:
             current_status = self.get_status()
 
             # 학습 메트릭 기반 개선 방향 결정
-            improvement_direction = self._determine_improvement_direction(learning_metrics)
+            improvement_direction = self._determine_improvement_direction(
+                learning_metrics
+            )
 
             # 자율 학습 실행
             learning_result = {
@@ -504,7 +523,9 @@ class AutonomousLearner:
 
             # 자율 학습 액션 실행
             if improvement_direction.get("needs_optimization"):
-                optimization_result = self._execute_optimization_actions(learning_metrics)
+                optimization_result = self._execute_optimization_actions(
+                    learning_metrics
+                )
                 learning_result["autonomous_actions"].append(optimization_result)
 
             if improvement_direction.get("needs_adaptation"):
@@ -512,12 +533,18 @@ class AutonomousLearner:
                 learning_result["autonomous_actions"].append(adaptation_result)
 
             if improvement_direction.get("needs_restructuring"):
-                restructuring_result = self._execute_restructuring_actions(learning_metrics)
+                restructuring_result = self._execute_restructuring_actions(
+                    learning_metrics
+                )
                 learning_result["autonomous_actions"].append(restructuring_result)
 
             # 학습 점수 계산
-            learning_result["learning_score"] = self._calculate_learning_score(learning_result)
-            learning_result["confidence"] = self._calculate_confidence_score(learning_result)
+            learning_result["learning_score"] = self._calculate_learning_score(
+                learning_result
+            )
+            learning_result["confidence"] = self._calculate_confidence_score(
+                learning_result
+            )
 
             logger.info(
                 f"✅ 자율 학습 질문 처리 완료 - 점수: {learning_result['learning_score']:.3f}"
@@ -533,7 +560,9 @@ class AutonomousLearner:
                 "confidence": 0.0,
             }
 
-    def _determine_improvement_direction(self, learning_metrics: Dict[str, Any]) -> Dict[str, bool]:
+    def _determine_improvement_direction(
+        self, learning_metrics: Dict[str, Any]
+    ) -> Dict[str, bool]:
         """학습 메트릭 기반 개선 방향 결정"""
         direction = {
             "needs_optimization": False,
@@ -555,7 +584,9 @@ class AutonomousLearner:
 
         return direction
 
-    def _execute_optimization_actions(self, learning_metrics: Dict[str, Any]) -> Dict[str, Any]:
+    def _execute_optimization_actions(
+        self, learning_metrics: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """최적화 액션 실행"""
         return {
             "action_type": "optimization",
@@ -564,7 +595,9 @@ class AutonomousLearner:
             "impact_score": 0.7,
         }
 
-    def _execute_adaptation_actions(self, learning_metrics: Dict[str, Any]) -> Dict[str, Any]:
+    def _execute_adaptation_actions(
+        self, learning_metrics: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """적응성 액션 실행"""
         return {
             "action_type": "adaptation",
@@ -573,7 +606,9 @@ class AutonomousLearner:
             "impact_score": 0.8,
         }
 
-    def _execute_restructuring_actions(self, learning_metrics: Dict[str, Any]) -> Dict[str, Any]:
+    def _execute_restructuring_actions(
+        self, learning_metrics: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """구조 개선 액션 실행"""
         return {
             "action_type": "restructuring",
@@ -588,7 +623,9 @@ class AutonomousLearner:
 
     def _calculate_learning_score(self, learning_result: Dict[str, Any]) -> float:
         """학습 점수 계산"""
-        base_score = learning_result.get("learning_metrics", {}).get("overall_score", 0.0)
+        base_score = learning_result.get("learning_metrics", {}).get(
+            "overall_score", 0.0
+        )
         action_bonus = len(learning_result.get("autonomous_actions", [])) * 0.1
         return min(1.0, base_score + action_bonus)
 
@@ -605,7 +642,9 @@ class AutonomousLearner:
         """현재 상태 반환"""
         return {
             "is_running": self.is_running,
-            "session_id": (self.current_session.session_id if self.current_session else None),
+            "session_id": (
+                self.current_session.session_id if self.current_session else None
+            ),
             "session_duration": (
                 (datetime.now() - self.current_session.start_time).total_seconds()
                 if self.current_session

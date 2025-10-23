@@ -130,12 +130,20 @@ class VectorMemoryStore:
 
             for memory_id, memory in self.memories.items():
                 # 각 차원별 유사도 계산
-                semantic_sim = self._cosine_similarity(query_semantic, memory.semantic_vector)
-                emotion_sim = self._cosine_similarity(query_emotion, memory.emotion_vector)
-                context_sim = self._cosine_similarity(query_context, memory.context_vector)
+                semantic_sim = self._cosine_similarity(
+                    query_semantic, memory.semantic_vector
+                )
+                emotion_sim = self._cosine_similarity(
+                    query_emotion, memory.emotion_vector
+                )
+                context_sim = self._cosine_similarity(
+                    query_context, memory.context_vector
+                )
 
                 # 가중 평균 유사도
-                weighted_sim = semantic_sim * 0.5 + emotion_sim * 0.3 + context_sim * 0.2
+                weighted_sim = (
+                    semantic_sim * 0.5 + emotion_sim * 0.3 + context_sim * 0.2
+                )
 
                 # 중요도 보정
                 adjusted_sim = weighted_sim * (0.5 + memory.importance * 0.5)
@@ -191,8 +199,12 @@ class VectorMemoryStore:
             return {"total_memories": 0}
 
         total_memories = len(self.memories)
-        avg_importance = sum(m.importance for m in self.memories.values()) / total_memories
-        avg_access_count = sum(m.accessed_count for m in self.memories.values()) / total_memories
+        avg_importance = (
+            sum(m.importance for m in self.memories.values()) / total_memories
+        )
+        avg_access_count = (
+            sum(m.accessed_count for m in self.memories.values()) / total_memories
+        )
 
         # 메모리 타입별 통계
         type_counts = {}
@@ -379,7 +391,10 @@ class VectorMemoryStore:
 
         # 상호 연관 설정
         for assoc_id in associations[:5]:
-            if assoc_id in self.memories and memory_id not in self.memories[assoc_id].associations:
+            if (
+                assoc_id in self.memories
+                and memory_id not in self.memories[assoc_id].associations
+            ):
                 self.memories[assoc_id].associations.append(memory_id)
 
     def _cosine_similarity(self, vec1: List[float], vec2: List[float]) -> float:
@@ -408,7 +423,9 @@ class VectorMemoryStore:
 
     def _get_most_important_memories(self, limit: int) -> List[Dict[str, Any]]:
         """가장 중요한 메모리들"""
-        sorted_memories = sorted(self.memories.values(), key=lambda x: x.importance, reverse=True)
+        sorted_memories = sorted(
+            self.memories.values(), key=lambda x: x.importance, reverse=True
+        )
         return [
             {"id": m.id, "content": m.content[:50], "importance": m.importance}
             for m in sorted_memories[:limit]
@@ -418,7 +435,9 @@ class VectorMemoryStore:
         """메모리 내보내기"""
         try:
             export_data = {
-                "memories": {mid: asdict(memory) for mid, memory in self.memories.items()},
+                "memories": {
+                    mid: asdict(memory) for mid, memory in self.memories.items()
+                },
                 "semantic_index": self.semantic_index,
                 "emotion_index": self.emotion_index,
                 "context_index": self.context_index,
@@ -441,8 +460,12 @@ class VectorMemoryStore:
             # 메모리 복원
             for mid, memory_data in import_data["memories"].items():
                 # datetime 문자열을 datetime 객체로 변환
-                memory_data["created_at"] = datetime.fromisoformat(memory_data["created_at"])
-                memory_data["last_accessed"] = datetime.fromisoformat(memory_data["last_accessed"])
+                memory_data["created_at"] = datetime.fromisoformat(
+                    memory_data["created_at"]
+                )
+                memory_data["last_accessed"] = datetime.fromisoformat(
+                    memory_data["last_accessed"]
+                )
 
                 self.memories[mid] = MemoryEntry(**memory_data)
 

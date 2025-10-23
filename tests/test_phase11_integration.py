@@ -224,7 +224,9 @@ class TestPhase11Integration:
         orchestrator = EnhancedDuRiOrchestrator()
 
         # Mock 기존 상태 리포트
-        with patch.object(orchestrator, "generate_status_report", return_value={"base": "report"}):
+        with patch.object(
+            orchestrator, "generate_status_report", return_value={"base": "report"}
+        ):
             report = orchestrator.get_phase11_status_report()
 
             assert "phase11_metrics" in report
@@ -242,16 +244,22 @@ class TestPhase11Integration:
 
         # Mock을 사용하여 각 단계 시뮬레이션
         with (
-            patch.object(orchestrator, "_execute_enhanced_judgment_phase") as mock_judgment,
+            patch.object(
+                orchestrator, "_execute_enhanced_judgment_phase"
+            ) as mock_judgment,
             patch.object(orchestrator, "_execute_enhanced_action_phase") as mock_action,
-            patch.object(orchestrator, "_execute_enhanced_feedback_phase") as mock_feedback,
+            patch.object(
+                orchestrator, "_execute_enhanced_feedback_phase"
+            ) as mock_feedback,
             patch.object(orchestrator, "_execute_inner_reflection") as mock_reflection,
             patch.object(orchestrator, "_execute_external_learning") as mock_learning,
             patch.object(orchestrator, "_record_insight_metrics") as mock_insight,
             patch.object(orchestrator, "_update_enhanced_system_status") as mock_update,
             patch.object(orchestrator, "_monitor_enhanced_performance") as mock_monitor,
             patch.object(orchestrator, "_record_phase11_metrics") as mock_record,
-            patch.object(orchestrator.integrated_manager, "initialize_all_systems") as mock_init,
+            patch.object(
+                orchestrator.integrated_manager, "initialize_all_systems"
+            ) as mock_init,
         ):
 
             # Mock 반환값 설정
@@ -277,7 +285,9 @@ class TestPhase11Integration:
                 orchestrator.execution_loop_active = False
 
             # 병렬로 실행
-            await asyncio.gather(orchestrator.start_enhanced_execution_loop(), stop_loop())
+            await asyncio.gather(
+                orchestrator.start_enhanced_execution_loop(), stop_loop()
+            )
 
             # 각 단계가 호출되었는지 확인
             mock_init.assert_called_once()

@@ -302,9 +302,13 @@ class PhaseZIntegrationTest:
             execution_time = time.time() - start_time
 
             # 결과 검증
-            test_result = await self._validate_test_result(test_case, actual_result, execution_time)
+            test_result = await self._validate_test_result(
+                test_case, actual_result, execution_time
+            )
 
-            logger.info(f"✅ 테스트 완료: {test_case.test_id} - {test_result.result.value}")
+            logger.info(
+                f"✅ 테스트 완료: {test_case.test_id} - {test_result.result.value}"
+            )
             return test_result
 
         except Exception as e:
@@ -347,9 +351,13 @@ class PhaseZIntegrationTest:
         elif test_case.test_id.startswith("EL_"):
             # DuRiExpressionLayer 테스트
             expression_layer = DuRiExpressionLayer()
-            emotion_result = await expression_layer.express_emotion(test_case.input_data)
+            emotion_result = await expression_layer.express_emotion(
+                test_case.input_data
+            )
             art_result = await expression_layer.express_art(test_case.input_data)
-            social_result = await expression_layer.express_sociality(test_case.input_data)
+            social_result = await expression_layer.express_sociality(
+                test_case.input_data
+            )
 
             return {
                 "success": True,
@@ -375,7 +383,9 @@ class PhaseZIntegrationTest:
 
         # 3. 표현 계층
         expression_layer = DuRiExpressionLayer()
-        expression_result = await expression_layer.express_integrated(thought_result.final_decision)
+        expression_result = await expression_layer.express_integrated(
+            thought_result.final_decision
+        )
 
         return {
             "success": True,
@@ -482,7 +492,9 @@ class PhaseZIntegrationTest:
                         score += 1.0
                     elif abs(expected_value - actual_value) < 0.3:
                         score += 0.5
-                elif isinstance(expected_value, bool) and isinstance(actual_value, bool):
+                elif isinstance(expected_value, bool) and isinstance(
+                    actual_value, bool
+                ):
                     # 불린 비교
                     if expected_value == actual_value:
                         score += 1.0
@@ -490,9 +502,13 @@ class PhaseZIntegrationTest:
                     # 문자열 비교
                     if expected_value.lower() in actual_value.lower():
                         score += 1.0
-                elif isinstance(expected_value, dict) and isinstance(actual_value, dict):
+                elif isinstance(expected_value, dict) and isinstance(
+                    actual_value, dict
+                ):
                     # 딕셔너리 비교
-                    sub_score = await self._calculate_validation_score(expected_value, actual_value)
+                    sub_score = await self._calculate_validation_score(
+                        expected_value, actual_value
+                    )
                     score += sub_score
                 else:
                     # 기타 타입 비교
@@ -506,23 +522,37 @@ class PhaseZIntegrationTest:
     async def _generate_test_report(self) -> IntegrationTestReport:
         """테스트 리포트 생성"""
         total_tests = len(self.test_results)
-        passed_tests = len([r for r in self.test_results if r.result == TestResult.PASS])
-        failed_tests = len([r for r in self.test_results if r.result == TestResult.FAIL])
-        warning_tests = len([r for r in self.test_results if r.result == TestResult.WARNING])
-        error_tests = len([r for r in self.test_results if r.result == TestResult.ERROR])
+        passed_tests = len(
+            [r for r in self.test_results if r.result == TestResult.PASS]
+        )
+        failed_tests = len(
+            [r for r in self.test_results if r.result == TestResult.FAIL]
+        )
+        warning_tests = len(
+            [r for r in self.test_results if r.result == TestResult.WARNING]
+        )
+        error_tests = len(
+            [r for r in self.test_results if r.result == TestResult.ERROR]
+        )
 
         total_execution_time = sum(r.execution_time for r in self.test_results)
-        average_execution_time = total_execution_time / total_tests if total_tests > 0 else 0.0
+        average_execution_time = (
+            total_execution_time / total_tests if total_tests > 0 else 0.0
+        )
         success_rate = passed_tests / total_tests if total_tests > 0 else 0.0
 
         # 성능 요약
         performance_summary = {
             "average_execution_time": average_execution_time,
             "max_execution_time": (
-                max(r.execution_time for r in self.test_results) if self.test_results else 0.0
+                max(r.execution_time for r in self.test_results)
+                if self.test_results
+                else 0.0
             ),
             "min_execution_time": (
-                min(r.execution_time for r in self.test_results) if self.test_results else 0.0
+                min(r.execution_time for r in self.test_results)
+                if self.test_results
+                else 0.0
             ),
             "total_execution_time": total_execution_time,
         }
@@ -573,7 +603,9 @@ class PhaseZIntegrationTest:
         )
 
         if success_rate < 0.8:
-            recommendations.append("테스트 성공률이 낮습니다. 시스템 안정성을 개선해야 합니다.")
+            recommendations.append(
+                "테스트 성공률이 낮습니다. 시스템 안정성을 개선해야 합니다."
+            )
 
         # 성능 기반 권장사항
         avg_time = (
@@ -583,10 +615,14 @@ class PhaseZIntegrationTest:
         )
 
         if avg_time > 5.0:
-            recommendations.append("평균 실행 시간이 길습니다. 성능 최적화가 필요합니다.")
+            recommendations.append(
+                "평균 실행 시간이 길습니다. 성능 최적화가 필요합니다."
+            )
 
         # 에러 기반 권장사항
-        error_count = len([r for r in self.test_results if r.result == TestResult.ERROR])
+        error_count = len(
+            [r for r in self.test_results if r.result == TestResult.ERROR]
+        )
 
         if error_count > 0:
             recommendations.append(
@@ -620,8 +656,12 @@ async def main():
     print(f"\n⏱️ 성능 정보:")
     print(f"  - 총 실행 시간: {report.total_execution_time:.2f}초")
     print(f"  - 평균 실행 시간: {report.average_execution_time:.2f}초")
-    print(f"  - 최대 실행 시간: {report.performance_summary.get('max_execution_time', 0):.2f}초")
-    print(f"  - 최소 실행 시간: {report.performance_summary.get('min_execution_time', 0):.2f}초")
+    print(
+        f"  - 최대 실행 시간: {report.performance_summary.get('max_execution_time', 0):.2f}초"
+    )
+    print(
+        f"  - 최소 실행 시간: {report.performance_summary.get('min_execution_time', 0):.2f}초"
+    )
 
     print(f"\n🧪 상세 테스트 결과:")
     for result in report.test_results:

@@ -131,8 +131,12 @@ class SemanticKnowledgeGraph:
         """초기화"""
         self.concepts = {}  # concept_id -> ConceptNode
         self.edges = {}  # edge_id -> InferenceEdge
-        self.adjacency_list = defaultdict(set)  # concept_id -> set of connected concept_ids
-        self.reverse_adjacency = defaultdict(set)  # concept_id -> set of concepts that point to it
+        self.adjacency_list = defaultdict(
+            set
+        )  # concept_id -> set of connected concept_ids
+        self.reverse_adjacency = defaultdict(
+            set
+        )  # concept_id -> set of concepts that point to it
 
         # 시맨틱 분석기들
         self.concept_analyzer = ConceptAnalyzer(self)
@@ -167,7 +171,9 @@ class SemanticKnowledgeGraph:
                 # 기존 개념 업데이트
                 existing_concept.frequency += 1
                 existing_concept.last_updated = datetime.now()
-                existing_concept.confidence = max(existing_concept.confidence, confidence)
+                existing_concept.confidence = max(
+                    existing_concept.confidence, confidence
+                )
                 if properties:
                     existing_concept.properties.update(properties)
                 logger.info(f"기존 개념 업데이트: {name}")
@@ -240,7 +246,9 @@ class SemanticKnowledgeGraph:
             self.adjacency_list[source_id].add(target_id)
             self.reverse_adjacency[target_id].add(source_id)
 
-            logger.info(f"새 추론 추가: {source_name} -> {target_name} ({inference_type.value})")
+            logger.info(
+                f"새 추론 추가: {source_name} -> {target_name} ({inference_type.value})"
+            )
             return edge_id
 
         except Exception as e:
@@ -289,7 +297,9 @@ class SemanticKnowledgeGraph:
             logger.error(f"지식 추론 실패: {e}")
             return []
 
-    async def analyze_semantic_similarity(self, concept1_name: str, concept2_name: str) -> float:
+    async def analyze_semantic_similarity(
+        self, concept1_name: str, concept2_name: str
+    ) -> float:
         """시맨틱 유사도 분석"""
         try:
             concept1 = self._find_concept_by_name(concept1_name)
@@ -312,8 +322,12 @@ class SemanticKnowledgeGraph:
             edge_count = len(self.edges)
 
             # 평균 신뢰도 계산
-            total_confidence = sum(concept.confidence for concept in self.concepts.values())
-            avg_confidence = total_confidence / concept_count if concept_count > 0 else 0.0
+            total_confidence = sum(
+                concept.confidence for concept in self.concepts.values()
+            )
+            avg_confidence = (
+                total_confidence / concept_count if concept_count > 0 else 0.0
+            )
 
             # 그래프 밀도 계산
             max_edges = concept_count * (concept_count - 1) if concept_count > 1 else 0
@@ -392,19 +406,25 @@ class SemanticKnowledgeGraph:
                 return edge
         return None
 
-    def _calculate_semantic_similarity(self, concept1: ConceptNode, concept2: ConceptNode) -> float:
+    def _calculate_semantic_similarity(
+        self, concept1: ConceptNode, concept2: ConceptNode
+    ) -> float:
         """시맨틱 유사도 계산"""
         # 벡터 유사도 계산
         vec1 = np.array(concept1.semantic_vector)
         vec2 = np.array(concept2.semantic_vector)
 
-        cosine_similarity = np.dot(vec1, vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2))
+        cosine_similarity = np.dot(vec1, vec2) / (
+            np.linalg.norm(vec1) * np.linalg.norm(vec2)
+        )
 
         # 개념 타입 일치도
         type_similarity = 1.0 if concept1.concept_type == concept2.concept_type else 0.5
 
         # 속성 유사도
-        common_properties = set(concept1.properties.keys()) & set(concept2.properties.keys())
+        common_properties = set(concept1.properties.keys()) & set(
+            concept2.properties.keys()
+        )
         property_similarity = len(common_properties) / max(
             len(concept1.properties), len(concept2.properties), 1
         )
@@ -528,7 +548,9 @@ class InferenceEngine:
             inferences.extend(indirect_inferences)
 
             # 패턴 기반 추론
-            pattern_inferences = await self._infer_from_patterns(concept_id, inference_type)
+            pattern_inferences = await self._infer_from_patterns(
+                concept_id, inference_type
+            )
             inferences.extend(pattern_inferences)
 
             return inferences
@@ -546,7 +568,9 @@ class InferenceEngine:
         # 나가는 엣지들
         for target_id in self.parent.adjacency_list.get(concept_id, set()):
             edge = self._find_edge_by_concepts(concept_id, target_id)
-            if edge and (inference_type is None or edge.inference_type == inference_type):
+            if edge and (
+                inference_type is None or edge.inference_type == inference_type
+            ):
                 target_concept = self.parent.concepts.get(target_id)
                 if target_concept:
                     inferences.append(
@@ -562,7 +586,9 @@ class InferenceEngine:
         # 들어오는 엣지들
         for source_id in self.parent.reverse_adjacency.get(concept_id, set()):
             edge = self._find_edge_by_concepts(source_id, concept_id)
-            if edge and (inference_type is None or edge.inference_type == inference_type):
+            if edge and (
+                inference_type is None or edge.inference_type == inference_type
+            ):
                 source_concept = self.parent.concepts.get(source_id)
                 if source_concept:
                     inferences.append(
@@ -602,7 +628,8 @@ class InferenceEngine:
                     if distance == 1:  # 2단계 연결
                         edge = self._find_edge_by_concepts(current_id, neighbor_id)
                         if edge and (
-                            inference_type is None or edge.inference_type == inference_type
+                            inference_type is None
+                            or edge.inference_type == inference_type
                         ):
                             neighbor_concept = self.parent.concepts.get(neighbor_id)
                             if neighbor_concept:
@@ -611,7 +638,8 @@ class InferenceEngine:
                                         "type": "indirect",
                                         "inference_type": edge.inference_type.value,
                                         "target_concept": neighbor_concept.name,
-                                        "confidence": edge.confidence * 0.8,  # 신뢰도 감소
+                                        "confidence": edge.confidence
+                                        * 0.8,  # 신뢰도 감소
                                         "distance": distance + 1,
                                     }
                                 )
@@ -659,7 +687,9 @@ class InferenceEngine:
 
         return inferences
 
-    def _find_edge_by_concepts(self, source_id: str, target_id: str) -> Optional[InferenceEdge]:
+    def _find_edge_by_concepts(
+        self, source_id: str, target_id: str
+    ) -> Optional[InferenceEdge]:
         """두 개념 간의 엣지 찾기"""
         for edge in self.parent.edges.values():
             if edge.source_id == source_id and edge.target_id == target_id:
@@ -701,7 +731,9 @@ class PathFinder:
                         edge = self._find_edge_by_concepts(current_id, neighbor_id)
                         new_path_edges = path_edges + [edge.id] if edge else path_edges
 
-                        queue.append((neighbor_id, path_nodes + [neighbor_id], new_path_edges))
+                        queue.append(
+                            (neighbor_id, path_nodes + [neighbor_id], new_path_edges)
+                        )
 
             return None  # 경로를 찾지 못함
 
@@ -743,7 +775,9 @@ class PathFinder:
             logger.error(f"시맨틱 경로 생성 실패: {e}")
             return None
 
-    def _find_edge_by_concepts(self, source_id: str, target_id: str) -> Optional[InferenceEdge]:
+    def _find_edge_by_concepts(
+        self, source_id: str, target_id: str
+    ) -> Optional[InferenceEdge]:
         """두 개념 간의 엣지 찾기"""
         for edge in self.parent.edges.values():
             if edge.source_id == source_id and edge.target_id == target_id:
@@ -845,7 +879,9 @@ class SemanticOptimizer:
                 ):
                     continue
 
-                similarity = self.parent._calculate_semantic_similarity(concept1, concept2)
+                similarity = self.parent._calculate_semantic_similarity(
+                    concept1, concept2
+                )
                 if similarity > self.parent.graph_parameters["similarity_threshold"]:
                     # 개념 병합
                     await self._merge_concepts(concept_id1, concept_id2)

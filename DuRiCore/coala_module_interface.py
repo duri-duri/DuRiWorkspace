@@ -222,7 +222,9 @@ class AdvancedPluginSystem:
                 except Exception as e:
                     logger.error(f"❌ 플러그인 모니터링 오류: {e}")
 
-        self.plugin_monitor_thread = threading.Thread(target=monitor_plugins, daemon=True)
+        self.plugin_monitor_thread = threading.Thread(
+            target=monitor_plugins, daemon=True
+        )
         self.plugin_monitor_thread.start()
         logger.info("🔍 플러그인 모니터링 시작")
 
@@ -296,7 +298,9 @@ class VersionCompatibilityManager:
         self.auto_update_enabled = True
         logger.info("🔄 버전 호환성 관리자 초기화 완료")
 
-    def register_version(self, module_name: str, version: str, compatibility: List[str] = None):
+    def register_version(
+        self, module_name: str, version: str, compatibility: List[str] = None
+    ):
         """버전 등록"""
         if module_name not in self.version_registry:
             self.version_registry[module_name] = {}
@@ -325,12 +329,16 @@ class VersionCompatibilityManager:
         if version not in self.version_registry[module_name]:
             return {target: False for target in target_modules}
 
-        module_compatibility = self.version_registry[module_name][version]["compatibility"]
+        module_compatibility = self.version_registry[module_name][version][
+            "compatibility"
+        ]
 
         for target in target_modules:
             compatibility_result[target] = target in module_compatibility
 
-        logger.info(f"🔄 호환성 확인: {module_name} v{version} → {compatibility_result}")
+        logger.info(
+            f"🔄 호환성 확인: {module_name} v{version} → {compatibility_result}"
+        )
         return compatibility_result
 
 
@@ -419,7 +427,9 @@ class CoALAModuleInterface:
         def validate_performance(module_instance):
             return module_instance.error_count < 5 and module_instance.load_time < 1.0
 
-        self.validation_system.add_validation_rule("required_methods", validate_required_methods)
+        self.validation_system.add_validation_rule(
+            "required_methods", validate_required_methods
+        )
         self.validation_system.add_validation_rule("checksum", validate_checksum)
         self.validation_system.add_validation_rule("performance", validate_performance)
 
@@ -460,7 +470,9 @@ class CoALAModuleInterface:
 
             # 자동 검증
             if self.validation_system.auto_validation_enabled:
-                validation_result = await self.validation_system.validate_module(module_instance)
+                validation_result = await self.validation_system.validate_module(
+                    module_instance
+                )
                 if validation_result["overall_status"] == "failed":
                     module_instance.status = ModuleStatus.ERROR
                     logger.warning(f"⚠️  모듈 검증 실패: {module_name}")
@@ -473,12 +485,16 @@ class CoALAModuleInterface:
             self.expansion_system.add_module(module_instance)
 
             # 버전 호환성 등록
-            self.compatibility_manager.register_version(module_name, version, dependencies)
+            self.compatibility_manager.register_version(
+                module_name, version, dependencies
+            )
 
             # 성능 메트릭 업데이트
             self._update_performance_metrics()
 
-            logger.info(f"✅ 모듈 등록 완료: {module_name} (로드 시간: {load_time:.3f}초)")
+            logger.info(
+                f"✅ 모듈 등록 완료: {module_name} (로드 시간: {load_time:.3f}초)"
+            )
             return True
 
         except Exception as e:
@@ -501,13 +517,19 @@ class CoALAModuleInterface:
                 methods[name] = method
 
         # 표준 인터페이스 검증
-        standard_interface = self.standard_interfaces.get(f"{module_type.value}_module", {})
+        standard_interface = self.standard_interfaces.get(
+            f"{module_type.value}_module", {}
+        )
         required_methods = standard_interface.get("required_methods", [])
 
         # 필수 메서드 확인
-        missing_methods = [method for method in required_methods if method not in methods]
+        missing_methods = [
+            method for method in required_methods if method not in methods
+        ]
         if missing_methods:
-            logger.warning(f"⚠️  모듈 {module_name}에 필수 메서드 누락: {missing_methods}")
+            logger.warning(
+                f"⚠️  모듈 {module_name}에 필수 메서드 누락: {missing_methods}"
+            )
 
         return ModuleInterface(
             name=module_name,
@@ -611,12 +633,17 @@ class CoALAModuleInterface:
             "checksum": module_instance.checksum,
         }
 
-    def list_modules(self, module_type: Optional[ModuleType] = None) -> List[Dict[str, Any]]:
+    def list_modules(
+        self, module_type: Optional[ModuleType] = None
+    ) -> List[Dict[str, Any]]:
         """모듈 목록 조회"""
         modules = []
 
         for module_name, module_instance in self.module_registry.items():
-            if module_type is None or module_instance.interface.module_type == module_type:
+            if (
+                module_type is None
+                or module_instance.interface.module_type == module_type
+            ):
                 modules.append(self.get_module_info(module_name))
 
         return modules
@@ -626,8 +653,8 @@ class CoALAModuleInterface:
         validation_results = {}
 
         for module_name, module_instance in self.module_registry.items():
-            validation_results[module_name] = await self.validation_system.validate_module(
-                module_instance
+            validation_results[module_name] = (
+                await self.validation_system.validate_module(module_instance)
             )
 
         return validation_results
@@ -638,8 +665,10 @@ class CoALAModuleInterface:
 
         for module_name, module_instance in self.module_registry.items():
             dependencies = module_instance.interface.dependencies
-            compatibility_results[module_name] = self.compatibility_manager.check_compatibility(
-                module_name, module_instance.interface.version, dependencies
+            compatibility_results[module_name] = (
+                self.compatibility_manager.check_compatibility(
+                    module_name, module_instance.interface.version, dependencies
+                )
             )
 
         return compatibility_results
@@ -651,13 +680,17 @@ class CoALAModuleInterface:
             1 for m in self.module_registry.values() if m.status == ModuleStatus.ACTIVE
         )
         plugin_count = sum(
-            1 for m in self.module_registry.values() if m.interface.module_type == ModuleType.PLUGIN
+            1
+            for m in self.module_registry.values()
+            if m.interface.module_type == ModuleType.PLUGIN
         )
 
         # 유연성 점수 계산 (개선된 알고리즘)
         base_flexibility = active_modules / max(total_modules, 1)
         plugin_bonus = plugin_count * 0.05  # 플러그인당 5% 보너스
-        expansion_bonus = len(self.expansion_system.module_registry) * 0.02  # 확장 모듈당 2% 보너스
+        expansion_bonus = (
+            len(self.expansion_system.module_registry) * 0.02
+        )  # 확장 모듈당 2% 보너스
         validation_bonus = 0.1 if self.validation_system.auto_validation_enabled else 0
 
         flexibility_score = min(
@@ -688,7 +721,9 @@ class CoALAModuleInterface:
         compatibility_results = self.check_system_compatibility()
         if compatibility_results:
             total_checks = sum(len(checks) for checks in compatibility_results.values())
-            passed_checks = sum(sum(checks.values()) for checks in compatibility_results.values())
+            passed_checks = sum(
+                sum(checks.values()) for checks in compatibility_results.values()
+            )
             compatibility_rate = passed_checks / max(total_checks, 1)
         else:
             compatibility_rate = 1.0
@@ -784,7 +819,9 @@ class CommunicationProtocol:
         self.event_handlers: Dict[str, List[Callable]] = {}
         logger.info("📡 통신 프로토콜 초기화 완료")
 
-    def send_message(self, from_module: str, to_module: str, message_type: str, data: Any) -> bool:
+    def send_message(
+        self, from_module: str, to_module: str, message_type: str, data: Any
+    ) -> bool:
         """메시지 전송"""
         message = {
             "from": from_module,
@@ -884,7 +921,9 @@ async def test_coala_module_interface():
     await coala_system.register_module("sample_core", SampleCoreModule, ModuleType.CORE)
 
     # 플러그인 모듈 등록
-    await coala_system.register_module("sample_plugin", SamplePluginModule, ModuleType.PLUGIN)
+    await coala_system.register_module(
+        "sample_plugin", SamplePluginModule, ModuleType.PLUGIN
+    )
 
     # 확장 모듈 등록
     await coala_system.register_module(
@@ -892,7 +931,9 @@ async def test_coala_module_interface():
     )
 
     # 어댑터 모듈 등록
-    await coala_system.register_module("sample_adapter", SampleAdapterModule, ModuleType.ADAPTER)
+    await coala_system.register_module(
+        "sample_adapter", SampleAdapterModule, ModuleType.ADAPTER
+    )
 
     # 모듈 메서드 실행 테스트
     logger.info("⚡ 모듈 메서드 실행 테스트")

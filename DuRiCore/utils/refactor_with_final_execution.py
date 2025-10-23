@@ -118,10 +118,14 @@ class RefactorWithFinalExecution:
             protected_content = self._inject_protection(module_content, module_name)
 
             # 5. 의미 주입
-            meaning_injected_content = self._inject_meaning(protected_content, module_name)
+            meaning_injected_content = self._inject_meaning(
+                protected_content, module_name
+            )
 
             # 6. 리팩토링된 모듈 저장
-            save_result = self._save_refactored_module(module_name, meaning_injected_content)
+            save_result = self._save_refactored_module(
+                module_name, meaning_injected_content
+            )
             if not save_result.get("success", False):
                 return {"status": "failed", "reason": "save_failed"}
 
@@ -225,7 +229,9 @@ class RefactorWithFinalExecution:
             logger.error(f"의미 주입 실패: {str(e)}")
             return module_content
 
-    def _save_refactored_module(self, module_name: str, module_content: str) -> Dict[str, Any]:
+    def _save_refactored_module(
+        self, module_name: str, module_content: str
+    ) -> Dict[str, Any]:
         """리팩토링된 모듈 저장"""
         try:
             # 모듈 경로를 동적으로 처리
@@ -360,9 +366,15 @@ class RefactorWithFinalExecution:
                 "created_at": self.refactoring_state.get("created_at"),
                 "refactoring_count": self.refactoring_state.get("refactoring_count", 0),
                 "last_refactoring": self.refactoring_state.get("last_refactoring"),
-                "refactoring_strength": self.refactoring_state.get("refactoring_strength", 0.0),
-                "modules_refactored": self.refactoring_state.get("modules_refactored", []),
-                "refactoring_ready": self.refactoring_state.get("refactoring_ready", False),
+                "refactoring_strength": self.refactoring_state.get(
+                    "refactoring_strength", 0.0
+                ),
+                "modules_refactored": self.refactoring_state.get(
+                    "modules_refactored", []
+                ),
+                "refactoring_ready": self.refactoring_state.get(
+                    "refactoring_ready", False
+                ),
             }
         except Exception as e:
             logger.error(f"리팩토링 상태 조회 실패: {str(e)}")
@@ -373,13 +385,21 @@ def main():
     """메인 함수"""
     parser = argparse.ArgumentParser(description="최종 실행 준비 완료 리팩토링 도구")
     parser.add_argument("--module", required=True, help="리팩토링할 모듈 이름")
-    parser.add_argument("--auto-meaning-injection", action="store_true", help="자동 의미 주입")
-    parser.add_argument("--auto-meta-json", action="store_true", help="자동 메타 JSON 생성")
+    parser.add_argument(
+        "--auto-meaning-injection", action="store_true", help="자동 의미 주입"
+    )
+    parser.add_argument(
+        "--auto-meta-json", action="store_true", help="자동 메타 JSON 생성"
+    )
     parser.add_argument("--preserve-identity", action="store_true", help="정체성 보존")
     parser.add_argument("--evolution-protection", action="store_true", help="진화 보호")
-    parser.add_argument("--execution-guarantee", action="store_true", help="실행 가능성 보장")
+    parser.add_argument(
+        "--execution-guarantee", action="store_true", help="실행 가능성 보장"
+    )
     parser.add_argument("--existence-ai", action="store_true", help="존재형 AI")
-    parser.add_argument("--final-execution", action="store_true", help="최종 실행 준비 완료")
+    parser.add_argument(
+        "--final-execution", action="store_true", help="최종 실행 준비 완료"
+    )
 
     args = parser.parse_args()
 
@@ -408,10 +428,16 @@ def main():
         print(f"✅ 모듈 리팩토링 성공: {args.module}")
         print(f"   - 리팩토링 ID: {result.get('refactoring_id')}")
         print(f"   - 타임스탬프: {result.get('timestamp')}")
-        print(f"   - 메타 정보: {result.get('meta_result', {}).get('meta_path', 'N/A')}")
-        print(f"   - 회귀 테스트: {result.get('regression_result', {}).get('success', False)}")
+        print(
+            f"   - 메타 정보: {result.get('meta_result', {}).get('meta_path', 'N/A')}"
+        )
+        print(
+            f"   - 회귀 테스트: {result.get('regression_result', {}).get('success', False)}"
+        )
         print(f"   - 안전성 확인: {result.get('safety_result', {}).get('safe', False)}")
-        print(f"   - 존재형 AI: {result.get('existence_result', {}).get('success', False)}")
+        print(
+            f"   - 존재형 AI: {result.get('existence_result', {}).get('success', False)}"
+        )
         print(
             f"   - 최종 실행 준비 완료: {result.get('final_execution_result', {}).get('final_execution_ready', False)}"
         )

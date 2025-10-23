@@ -45,7 +45,9 @@ for p in SRC.rglob("*"):
     out = DER / f"{h}.txt"
     if raw:
         out.write_text(masked, encoding="utf-8")
-    index.append({"path": rel, "size": p.stat().st_size, "hash": h, "extracted": bool(raw)})
+    index.append(
+        {"path": rel, "size": p.stat().st_size, "hash": h, "extracted": bool(raw)}
+    )
     if raw and masked != raw:
         redactions.append({"path": rel, "diff": "masked"})
 

@@ -75,7 +75,9 @@ async def get_evolution_stats():
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"통계 조회 중 오류가 발생했습니다: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"통계 조회 중 오류가 발생했습니다: {str(e)}"
+        )
 
 
 @router.post("/improve")
@@ -85,7 +87,9 @@ async def trigger_self_improvement(request: EvolutionRequest):
         evolution_engine = SelfEvolutionEngine()
 
         # 자기 개선 실행
-        improvement_result = evolution_engine.trigger_improvement(context=request.context or {})
+        improvement_result = evolution_engine.trigger_improvement(
+            context=request.context or {}
+        )
 
         return {
             "success": True,

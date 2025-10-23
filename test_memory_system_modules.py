@@ -141,11 +141,15 @@ async def test_async_functionality():
         memory_optimizer = MemoryOptimizer()
 
         # 최적화 작업 시작
-        optimization_id = await memory_optimizer.start_optimization(OptimizationType.CLEANUP)
+        optimization_id = await memory_optimizer.start_optimization(
+            OptimizationType.CLEANUP
+        )
         logger.info(f"✅ 최적화 작업 시작: {optimization_id}")
 
         # 최적화 상태 조회
-        optimization_status = await memory_optimizer.get_optimization_status(optimization_id)
+        optimization_status = await memory_optimizer.get_optimization_status(
+            optimization_id
+        )
         if optimization_status:
             logger.info(f"✅ 최적화 상태 조회: {optimization_status.status.value}")
 

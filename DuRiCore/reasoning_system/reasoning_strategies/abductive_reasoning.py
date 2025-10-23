@@ -142,7 +142,9 @@ class AbductiveReasoning:
         except Exception as e:
             self.logger.error(f"가설적 추론 중 오류 발생: {e}")
             return AbductiveAnalysis(
-                best_hypothesis=AbductiveHypothesis(hypothesis_id="error", content="오류 발생"),
+                best_hypothesis=AbductiveHypothesis(
+                    hypothesis_id="error", content="오류 발생"
+                ),
                 alternative_hypotheses=[],
                 explanatory_power=0.0,
                 coherence_score=0.0,
@@ -212,8 +214,12 @@ class AbductiveReasoning:
         try:
             if len(observations) >= 2:
                 # 여러 관찰을 종합한 복합 가설 생성
-                combined_content = " 및 ".join([obs.content for obs in observations[:3]])
-                hypothesis_content = f"복합 가설: {combined_content}의 상호작용으로 인한 현상이다."
+                combined_content = " 및 ".join(
+                    [obs.content for obs in observations[:3]]
+                )
+                hypothesis_content = (
+                    f"복합 가설: {combined_content}의 상호작용으로 인한 현상이다."
+                )
 
                 hypothesis = AbductiveHypothesis(
                     hypothesis_id="complex_hypothesis_0",
@@ -325,7 +331,9 @@ class AbductiveReasoning:
 
         try:
             if observations:
-                hypothesis_content = f"일반 가설: {observations[0].content}에 대한 일반적인 설명"
+                hypothesis_content = (
+                    f"일반 가설: {observations[0].content}에 대한 일반적인 설명"
+                )
 
                 hypothesis = AbductiveHypothesis(
                     hypothesis_id="general_hypothesis_0",
@@ -361,7 +369,9 @@ class AbductiveReasoning:
                 return "시스템적 요인"
             elif any(word in content_lower for word in ["human", "person", "user"]):
                 return "인간적 요인"
-            elif any(word in content_lower for word in ["environment", "weather", "climate"]):
+            elif any(
+                word in content_lower for word in ["environment", "weather", "climate"]
+            ):
                 return "환경적 요인"
             else:
                 return causes[hash(observation_content) % len(causes)]
@@ -381,7 +391,9 @@ class AbductiveReasoning:
         try:
             for hypothesis in hypotheses:
                 # 설명력 평가
-                explanation_power = self._evaluate_explanation_power(hypothesis, observations)
+                explanation_power = self._evaluate_explanation_power(
+                    hypothesis, observations
+                )
 
                 # 간단성 평가
                 simplicity = self._evaluate_simplicity(hypothesis)
@@ -461,7 +473,9 @@ class AbductiveReasoning:
                 "verify",
                 "confirm",
             ]
-            testable_count = sum(1 for keyword in testable_keywords if keyword in content_lower)
+            testable_count = sum(
+                1 for keyword in testable_keywords if keyword in content_lower
+            )
 
             # 검증 가능성 점수 계산
             testability = min(1.0, testable_count / len(testable_keywords) + 0.3)
@@ -491,7 +505,9 @@ class AbductiveReasoning:
             self.logger.error(f"설명 가능성 확인 중 오류: {e}")
             return False
 
-    def _select_best_hypothesis(self, hypotheses: List[AbductiveHypothesis]) -> AbductiveHypothesis:
+    def _select_best_hypothesis(
+        self, hypotheses: List[AbductiveHypothesis]
+    ) -> AbductiveHypothesis:
         """최적 가설 선택"""
         try:
             if not hypotheses:
@@ -534,18 +550,24 @@ class AbductiveReasoning:
             coherence_score = self._analyze_coherence(best_hypothesis, observations)
 
             # 완전성 분석
-            completeness_score = self._analyze_completeness(best_hypothesis, observations)
+            completeness_score = self._analyze_completeness(
+                best_hypothesis, observations
+            )
 
             # 대안 가설들
             alternative_hypotheses = [
-                h for h in all_hypotheses if h.hypothesis_id != best_hypothesis.hypothesis_id
+                h
+                for h in all_hypotheses
+                if h.hypothesis_id != best_hypothesis.hypothesis_id
             ]
 
             # 문제점 식별
             issues = self._identify_issues(best_hypothesis, alternative_hypotheses)
 
             # 개선 제안
-            suggestions = self._generate_suggestions(best_hypothesis, alternative_hypotheses)
+            suggestions = self._generate_suggestions(
+                best_hypothesis, alternative_hypotheses
+            )
 
             return AbductiveAnalysis(
                 best_hypothesis=best_hypothesis,
@@ -634,9 +656,9 @@ class AbductiveReasoning:
             ]
 
             for pair in opposite_pairs:
-                if (pair[0] in hypothesis_content and pair[1] in observation_content) or (
-                    pair[1] in hypothesis_content and pair[0] in observation_content
-                ):
+                if (
+                    pair[0] in hypothesis_content and pair[1] in observation_content
+                ) or (pair[1] in hypothesis_content and pair[0] in observation_content):
                     return False
 
             return True
@@ -660,7 +682,9 @@ class AbductiveReasoning:
 
             # 50% 이상의 단어가 포함되어 있으면 완전한 설명으로 간주
             common_words = observation_words.intersection(hypothesis_words)
-            coverage = len(common_words) / len(observation_words) if observation_words else 0
+            coverage = (
+                len(common_words) / len(observation_words) if observation_words else 0
+            )
 
             return coverage > 0.5
 
@@ -710,7 +734,9 @@ class AbductiveReasoning:
         try:
             # 설명력이 낮은 경우
             if best_hypothesis.explanation_power < 0.5:
-                suggestions.append("가설의 설명력을 높이기 위해 더 많은 관찰을 고려하세요.")
+                suggestions.append(
+                    "가설의 설명력을 높이기 위해 더 많은 관찰을 고려하세요."
+                )
 
             # 간단성이 낮은 경우
             if best_hypothesis.simplicity < 0.5:
@@ -730,16 +756,18 @@ class AbductiveReasoning:
             self.logger.error(f"개선 제안 생성 중 오류: {e}")
             return [f"제안 생성 오류: {str(e)}"]
 
-    def _update_performance_metrics(self, analysis: AbductiveAnalysis, processing_time: float):
+    def _update_performance_metrics(
+        self, analysis: AbductiveAnalysis, processing_time: float
+    ):
         """성능 메트릭 업데이트"""
         self.performance_metrics["total_reasonings"] += 1
         if analysis.explanatory_power > 0.5 and analysis.coherence_score > 0.5:
             self.performance_metrics["successful_reasonings"] += 1
 
         # 평균 설명력 업데이트
-        total_explanatory_power = self.performance_metrics["average_explanatory_power"] * (
-            self.performance_metrics["total_reasonings"] - 1
-        )
+        total_explanatory_power = self.performance_metrics[
+            "average_explanatory_power"
+        ] * (self.performance_metrics["total_reasonings"] - 1)
         self.performance_metrics["average_explanatory_power"] = (
             total_explanatory_power + analysis.explanatory_power
         ) / self.performance_metrics["total_reasonings"]

@@ -73,7 +73,9 @@ class DynamicResourceAllocator:
 
         for resource_type in ResourceType:
             if resource_type.value in requirements:
-                allocation = await self._allocate_resource(resource_type, requirements, strategy)
+                allocation = await self._allocate_resource(
+                    resource_type, requirements, strategy
+                )
                 if allocation:
                     allocations.append(allocation)
 
@@ -95,7 +97,9 @@ class DynamicResourceAllocator:
         allocated_amount = await self._calculate_allocation(
             required_amount, max_available, strategy
         )
-        utilization_rate = allocated_amount / max_available if max_available > 0 else 0.0
+        utilization_rate = (
+            allocated_amount / max_available if max_available > 0 else 0.0
+        )
         priority = await self._determine_priority(resource_type, strategy)
 
         allocation = ResourceAllocation(

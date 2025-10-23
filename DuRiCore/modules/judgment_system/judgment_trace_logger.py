@@ -51,7 +51,9 @@ class JudgmentTraceLogger:
             if os.path.exists(self.trace_file):
                 with open(self.trace_file, "r", encoding="utf-8") as f:
                     data = json.load(f)
-                    self.traces = [JudgmentTrace(**trace) for trace in data.get("traces", [])]
+                    self.traces = [
+                        JudgmentTrace(**trace) for trace in data.get("traces", [])
+                    ]
         except Exception as e:
             print(f"판단 기록 로드 실패: {e}")
 

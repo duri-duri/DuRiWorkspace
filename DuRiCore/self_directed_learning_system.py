@@ -216,10 +216,14 @@ class SelfDirectedLearningSystem:
             curiosity_triggers = await self._generate_curiosity_triggers(context)
 
             # 2. 자발적 문제 발견
-            discovered_problems = await self._discover_problems(context, curiosity_triggers)
+            discovered_problems = await self._discover_problems(
+                context, curiosity_triggers
+            )
 
             # 3. 학습 목표 자동 설정
-            learning_goals = await self._set_learning_goals(context, discovered_problems)
+            learning_goals = await self._set_learning_goals(
+                context, discovered_problems
+            )
 
             # 4. 자기 주도적 학습 루프
             learning_activities, learning_outcomes = await self._execute_learning_loop(
@@ -259,7 +263,9 @@ class SelfDirectedLearningSystem:
                 error_message=str(e),
             )
 
-    async def _generate_curiosity_triggers(self, context: Dict[str, Any]) -> List[CuriosityTrigger]:
+    async def _generate_curiosity_triggers(
+        self, context: Dict[str, Any]
+    ) -> List[CuriosityTrigger]:
         """호기심 기반 탐구 트리거 생성"""
         triggers = []
 
@@ -391,7 +397,9 @@ class SelfDirectedLearningSystem:
             base_duration = timedelta(minutes=30)
             complexity_multiplier = 1 + problem.complexity
             proficiency_multiplier = 1 + target_proficiency
-            estimated_duration = base_duration * complexity_multiplier * proficiency_multiplier
+            estimated_duration = (
+                base_duration * complexity_multiplier * proficiency_multiplier
+            )
 
             # 목표 기술명 생성
             skill_names = {
@@ -580,11 +588,17 @@ class SelfDirectedLearningSystem:
     ) -> LearningOutcome:
         """학습 성과 평가"""
         # 전체 활동의 평균 참여도와 진행도 계산
-        avg_engagement = sum(activity.engagement_level for activity in activities) / len(activities)
-        avg_progress = sum(activity.progress_score for activity in activities) / len(activities)
+        avg_engagement = sum(
+            activity.engagement_level for activity in activities
+        ) / len(activities)
+        avg_progress = sum(activity.progress_score for activity in activities) / len(
+            activities
+        )
 
         # 기술 향상도 계산
-        skill_improvement = min(goal.target_proficiency, avg_progress * goal.target_proficiency)
+        skill_improvement = min(
+            goal.target_proficiency, avg_progress * goal.target_proficiency
+        )
 
         # 획득한 지식과 통찰 수집
         knowledge_gained = []
@@ -668,10 +682,12 @@ class SelfDirectedLearningSystem:
             timedelta(),
         )
         avg_engagement = (
-            sum((result.average_engagement for result in self.learning_history)) / total_sessions
+            sum((result.average_engagement for result in self.learning_history))
+            / total_sessions
         )
         avg_progress = (
-            sum((result.overall_progress for result in self.learning_history)) / total_sessions
+            sum((result.overall_progress for result in self.learning_history))
+            / total_sessions
         )
 
         # 영역별 학습 분포
@@ -737,15 +753,21 @@ async def test_self_directed_learning_system():
 
     print(f"\n=== 호기심 트리거 ({len(result.curiosity_triggers)}개) ===")
     for trigger in result.curiosity_triggers:
-        print(f"- {trigger.domain.value}: {trigger.description} (강도: {trigger.intensity:.2f})")
+        print(
+            f"- {trigger.domain.value}: {trigger.description} (강도: {trigger.intensity:.2f})"
+        )
 
     print(f"\n=== 발견된 문제 ({len(result.discovered_problems)}개) ===")
     for problem in result.discovered_problems:
-        print(f"- {problem.domain.value}: {problem.description} (복잡도: {problem.complexity:.2f})")
+        print(
+            f"- {problem.domain.value}: {problem.description} (복잡도: {problem.complexity:.2f})"
+        )
 
     print(f"\n=== 학습 목표 ({len(result.learning_goals)}개) ===")
     for goal in result.learning_goals:
-        print(f"- {goal.target_skill}: {goal.description} (우선순위: {goal.priority:.2f})")
+        print(
+            f"- {goal.target_skill}: {goal.description} (우선순위: {goal.priority:.2f})"
+        )
 
     print(f"\n=== 학습 활동 ({len(result.learning_activities)}개) ===")
     for activity in result.learning_activities:

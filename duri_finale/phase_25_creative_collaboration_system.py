@@ -61,7 +61,9 @@ class CreativeCollaborationSystem:
             "safety": "안전하고 해로운 결과를 방지",
         }
 
-    def analyze_human_intent(self, user_input: str, context: Dict[str, Any]) -> HumanIntent:
+    def analyze_human_intent(
+        self, user_input: str, context: Dict[str, Any]
+    ) -> HumanIntent:
         """인간의 의도 분석"""
         # 방어 코드: user_input이 None일 때 처리
         safe_input = user_input or ""
@@ -116,7 +118,9 @@ class CreativeCollaborationSystem:
 
         return secondary_goals
 
-    def _extract_constraints(self, user_input: str, context: Dict[str, Any]) -> List[str]:
+    def _extract_constraints(
+        self, user_input: str, context: Dict[str, Any]
+    ) -> List[str]:
         """제약 조건 추출"""
         constraints = []
 
@@ -350,7 +354,9 @@ class CreativeCollaborationSystem:
 
         return timeline
 
-    def execute_collaboration(self, strategy: Dict[str, Any], user_input: str) -> Dict[str, Any]:
+    def execute_collaboration(
+        self, strategy: Dict[str, Any], user_input: str
+    ) -> Dict[str, Any]:
         """협력 실행"""
         print(f"🚀 협력 실행 시작: {strategy['mode']} 모드")
 
@@ -358,7 +364,9 @@ class CreativeCollaborationSystem:
         result = {
             "mode": strategy["mode"],
             "approach": strategy["approach"],
-            "collaboration_output": self._generate_collaboration_output(strategy, user_input),
+            "collaboration_output": self._generate_collaboration_output(
+                strategy, user_input
+            ),
             "synergy_achieved": self._evaluate_synergy_achievement(strategy),
             "innovation_level": self._assess_innovation_level(strategy),
             "ethical_compliance": self._check_ethical_compliance(strategy),
@@ -373,7 +381,9 @@ class CreativeCollaborationSystem:
 
         return result
 
-    def _generate_collaboration_output(self, strategy: Dict[str, Any], user_input: str) -> str:
+    def _generate_collaboration_output(
+        self, strategy: Dict[str, Any], user_input: str
+    ) -> str:
         """협력 결과 생성"""
         mode = strategy["mode"]
 
@@ -455,10 +465,14 @@ def phase_25_creative_collaboration(
         context = {}
 
     # 1. 인간 의도 분석
-    human_intent = creative_collaboration_system.analyze_human_intent(user_input, context)
+    human_intent = creative_collaboration_system.analyze_human_intent(
+        user_input, context
+    )
 
     # 2. 협력 기회 식별
-    opportunity = creative_collaboration_system.identify_collaboration_opportunities(human_intent)
+    opportunity = creative_collaboration_system.identify_collaboration_opportunities(
+        human_intent
+    )
 
     # 3. 협력 전략 생성
     strategy = creative_collaboration_system.generate_collaboration_strategy(

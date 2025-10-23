@@ -24,7 +24,9 @@ class TestImageProcessor(TestCase):
     def setUp(self):
         """테스트 설정"""
         self.image_processor = ImageProcessor()
-        self.test_image_path = "resources/images/f2cdf86f-c29b-4c06-97b5-dea28c8d0668.png"
+        self.test_image_path = (
+            "resources/images/f2cdf86f-c29b-4c06-97b5-dea28c8d0668.png"
+        )
         self.temp_dir = tempfile.mkdtemp()
 
     def tearDown(self):
@@ -140,7 +142,9 @@ class TestImageProcessor(TestCase):
         self.assertEqual(self.image_processor._categorize_file_size(7.0), "medium")
 
         # 중간-큰 파일
-        self.assertEqual(self.image_processor._categorize_file_size(15.0), "medium_large")
+        self.assertEqual(
+            self.image_processor._categorize_file_size(15.0), "medium_large"
+        )
 
         # 큰 파일
         self.assertEqual(self.image_processor._categorize_file_size(25.0), "large")
@@ -153,7 +157,9 @@ class TestImageProcessor(TestCase):
         metadata = {"file_size_mb": 25.0}
         basic_result = {"quality_estimate": "very_low"}
 
-        recommendations = self.image_processor._generate_recommendations(metadata, basic_result)
+        recommendations = self.image_processor._generate_recommendations(
+            metadata, basic_result
+        )
 
         self.assertIsInstance(recommendations, list)
         self.assertGreater(len(recommendations), 0)

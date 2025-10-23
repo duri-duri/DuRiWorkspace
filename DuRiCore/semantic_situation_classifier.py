@@ -291,7 +291,9 @@ class SemanticSituationClassifier:
         consequences = self._analyze_consequences(situation, intent, value_conflicts)
 
         # 6. 상황 유형 분류
-        situation_type = self._classify_situation_type(situation, intent, value_conflicts)
+        situation_type = self._classify_situation_type(
+            situation, intent, value_conflicts
+        )
 
         # 7. 복잡성 및 긴급성 평가
         complexity_level = self._assess_complexity(situation, value_conflicts)
@@ -371,7 +373,9 @@ class SemanticSituationClassifier:
 
         return context
 
-    def _analyze_intent(self, situation: str, context_elements: Dict[str, Any]) -> IntentType:
+    def _analyze_intent(
+        self, situation: str, context_elements: Dict[str, Any]
+    ) -> IntentType:
         """의도 분석"""
         intent_scores = {
             IntentType.DECEPTION: 0.0,
@@ -398,7 +402,9 @@ class SemanticSituationClassifier:
         else:
             return IntentType.UNKNOWN
 
-    def _identify_stakeholders(self, situation: str, context_elements: Dict[str, Any]) -> List[str]:
+    def _identify_stakeholders(
+        self, situation: str, context_elements: Dict[str, Any]
+    ) -> List[str]:
         """이해관계자 식별"""
         stakeholders = []
 
@@ -434,7 +440,9 @@ class SemanticSituationClassifier:
             stakeholders.extend(["sacrificed_party", "saved_party"])
 
         if "갈등" in situation:
-            stakeholders.extend(["conflicting_party_a", "conflicting_party_b", "mediator"])
+            stakeholders.extend(
+                ["conflicting_party_a", "conflicting_party_b", "mediator"]
+            )
 
         if "거짓말" in situation:
             stakeholders.extend(["deceiver", "deceived_party"])
@@ -452,7 +460,9 @@ class SemanticSituationClassifier:
 
         return list(set(stakeholders))  # 중복 제거
 
-    def _analyze_value_conflicts(self, situation: str, intent: IntentType) -> List[ValueConflict]:
+    def _analyze_value_conflicts(
+        self, situation: str, intent: IntentType
+    ) -> List[ValueConflict]:
         """가치 충돌 분석"""
         conflicts = []
 
@@ -507,7 +517,9 @@ class SemanticSituationClassifier:
 
         return opposing_mapping.get(value_type, [])
 
-    def _create_value_conflict(self, value1: str, value2: str) -> Optional[ValueConflict]:
+    def _create_value_conflict(
+        self, value1: str, value2: str
+    ) -> Optional[ValueConflict]:
         """가치 충돌 생성"""
         conflict_mapping = {
             ("honesty", "harm_prevention"): ValueConflict.HONESTY_VS_HARM_PREVENTION,
@@ -592,7 +604,9 @@ class SemanticSituationClassifier:
 
         return SituationType.GENERAL_SITUATION
 
-    def _assess_complexity(self, situation: str, value_conflicts: List[ValueConflict]) -> float:
+    def _assess_complexity(
+        self, situation: str, value_conflicts: List[ValueConflict]
+    ) -> float:
         """복잡성 평가"""
         complexity_score = 0.5  # 기본값
 
@@ -611,7 +625,9 @@ class SemanticSituationClassifier:
 
         return min(complexity_score, 1.0)
 
-    def _assess_urgency(self, situation: str, context_elements: Dict[str, Any]) -> float:
+    def _assess_urgency(
+        self, situation: str, context_elements: Dict[str, Any]
+    ) -> float:
         """긴급성 평가"""
         urgency_score = 0.5  # 기본값
 
@@ -725,19 +741,27 @@ class SemanticSituationClassifier:
         secondary_conflicts = value_conflicts[1:] if len(value_conflicts) > 1 else []
 
         # 충돌 강도 분석
-        conflict_intensity = self._assess_conflict_intensity(situation, primary_conflict)
+        conflict_intensity = self._assess_conflict_intensity(
+            situation, primary_conflict
+        )
 
         # 해결 난이도 분석
-        resolution_difficulty = self._assess_resolution_difficulty(situation, primary_conflict)
+        resolution_difficulty = self._assess_resolution_difficulty(
+            situation, primary_conflict
+        )
 
         # 이해관계자별 영향도
-        stakeholder_impact = self._assess_stakeholder_impact(situation, primary_conflict)
+        stakeholder_impact = self._assess_stakeholder_impact(
+            situation, primary_conflict
+        )
 
         # 윤리적 함의
         ethical_implications = self._analyze_ethical_implications(primary_conflict)
 
         # 실용적 제약
-        practical_constraints = self._analyze_practical_constraints(situation, primary_conflict)
+        practical_constraints = self._analyze_practical_constraints(
+            situation, primary_conflict
+        )
 
         return ValueConflictAnalysis(
             primary_conflict=primary_conflict,
@@ -751,7 +775,9 @@ class SemanticSituationClassifier:
 
     def _analyze_temporal_context(self, situation: str) -> str:
         """시간적 맥락 분석"""
-        for context_type, keywords in self.contextual_patterns["temporal_contexts"].items():
+        for context_type, keywords in self.contextual_patterns[
+            "temporal_contexts"
+        ].items():
             for keyword in keywords:
                 if keyword in situation:
                     return context_type
@@ -759,7 +785,9 @@ class SemanticSituationClassifier:
 
     def _analyze_spatial_context(self, situation: str) -> str:
         """공간적 맥락 분석"""
-        for context_type, keywords in self.contextual_patterns["spatial_contexts"].items():
+        for context_type, keywords in self.contextual_patterns[
+            "spatial_contexts"
+        ].items():
             for keyword in keywords:
                 if keyword in situation:
                     return context_type
@@ -767,7 +795,9 @@ class SemanticSituationClassifier:
 
     def _analyze_social_context(self, situation: str) -> str:
         """사회적 맥락 분석"""
-        for context_type, keywords in self.contextual_patterns["social_contexts"].items():
+        for context_type, keywords in self.contextual_patterns[
+            "social_contexts"
+        ].items():
             for keyword in keywords:
                 if keyword in situation:
                     return context_type
@@ -775,7 +805,9 @@ class SemanticSituationClassifier:
 
     def _analyze_emotional_context(self, situation: str) -> str:
         """감정적 맥락 분석"""
-        for context_type, keywords in self.contextual_patterns["emotional_contexts"].items():
+        for context_type, keywords in self.contextual_patterns[
+            "emotional_contexts"
+        ].items():
             for keyword in keywords:
                 if keyword in situation:
                     return context_type
@@ -827,7 +859,9 @@ class SemanticSituationClassifier:
 
         return urgency_factors
 
-    def _assess_conflict_intensity(self, situation: str, conflict: ValueConflict) -> float:
+    def _assess_conflict_intensity(
+        self, situation: str, conflict: ValueConflict
+    ) -> float:
         """충돌 강도 평가"""
         intensity = 0.5  # 기본값
 
@@ -851,7 +885,9 @@ class SemanticSituationClassifier:
 
         return min(max(intensity, 0.0), 1.0)
 
-    def _assess_resolution_difficulty(self, situation: str, conflict: ValueConflict) -> float:
+    def _assess_resolution_difficulty(
+        self, situation: str, conflict: ValueConflict
+    ) -> float:
         """해결 난이도 평가"""
         difficulty = 0.5  # 기본값
 
@@ -920,7 +956,9 @@ class SemanticSituationClassifier:
 
         return implications.get(conflict, [])
 
-    def _analyze_practical_constraints(self, situation: str, conflict: ValueConflict) -> List[str]:
+    def _analyze_practical_constraints(
+        self, situation: str, conflict: ValueConflict
+    ) -> List[str]:
         """실용적 제약 분석"""
         constraints = []
 
@@ -972,7 +1010,9 @@ async def test_semantic_situation_classifier():
         print(f"  • 상황 유형: {semantic_context.situation_type.value}")
         print(f"  • 의도: {semantic_context.intent.value}")
         print(f"  • 이해관계자: {semantic_context.stakeholders}")
-        print(f"  • 가치 충돌: {[conflict.value for conflict in semantic_context.value_conflicts]}")
+        print(
+            f"  • 가치 충돌: {[conflict.value for conflict in semantic_context.value_conflicts]}"
+        )
         print(f"  • 결과: {semantic_context.consequences}")
         print(f"  • 복잡성: {semantic_context.complexity_level:.2f}")
         print(f"  • 긴급성: {semantic_context.urgency_level:.2f}")
@@ -996,7 +1036,9 @@ async def test_semantic_situation_classifier():
         )
         print(f"\n⚖️ 가치 충돌 상세 분석 (Day 2):")
         print(f"  • 주요 충돌: {value_conflict_analysis.primary_conflict.value}")
-        print(f"  • 부차적 충돌: {[c.value for c in value_conflict_analysis.secondary_conflicts]}")
+        print(
+            f"  • 부차적 충돌: {[c.value for c in value_conflict_analysis.secondary_conflicts]}"
+        )
         print(f"  • 충돌 강도: {value_conflict_analysis.conflict_intensity:.2f}")
         print(f"  • 해결 난이도: {value_conflict_analysis.resolution_difficulty:.2f}")
         print(f"  • 이해관계자 영향도: {value_conflict_analysis.stakeholder_impact}")

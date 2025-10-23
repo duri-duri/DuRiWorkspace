@@ -49,7 +49,9 @@ class MultilingualGenerator:
             self.logger.error(f"다국어 텍스트 생성 중 오류 발생: {e}")
             return "이해했습니다. 더 구체적으로 말씀해 주시면 더 나은 도움을 드릴 수 있습니다."
 
-    async def get_multilingual_support(self, text: str, context: Dict[str, Any]) -> Dict[str, Any]:
+    async def get_multilingual_support(
+        self, text: str, context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """다국어 지원 정보"""
         try:
             return {

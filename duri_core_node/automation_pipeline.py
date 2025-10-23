@@ -78,7 +78,9 @@ class TriggerLayer:
         """모니터링 시작"""
         if not self.is_monitoring:
             self.is_monitoring = True
-            self.monitor_thread = threading.Thread(target=self._monitor_loop, daemon=True)
+            self.monitor_thread = threading.Thread(
+                target=self._monitor_loop, daemon=True
+            )
             self.monitor_thread.start()
             logger.info("🔍 트리거 레이어 모니터링 시작")
 
@@ -122,7 +124,9 @@ class TriggerLayer:
         # 구현: 스케줄 확인
         pass
 
-    def add_trigger(self, trigger_type: TriggerType, data: Dict[str, Any], priority: int = 1):
+    def add_trigger(
+        self, trigger_type: TriggerType, data: Dict[str, Any], priority: int = 1
+    ):
         """트리거 추가"""
         event = TriggerEvent(
             trigger_type=trigger_type,
@@ -147,7 +151,9 @@ class LearningExecutor:
         self.current_phase = None
         self.learning_history: List[LearningResult] = []
 
-    async def execute_learning_loop(self, trigger_event: TriggerEvent) -> LearningResult:
+    async def execute_learning_loop(
+        self, trigger_event: TriggerEvent
+    ) -> LearningResult:
         """학습 루프 실행"""
         logger.info(f"🚀 학습 루프 시작: {trigger_event.trigger_type.value}")
 
@@ -155,23 +161,33 @@ class LearningExecutor:
         results = []
 
         # 1. 모방 단계
-        imitation_result = await self._execute_phase(LearningPhase.IMITATION, trigger_event)
+        imitation_result = await self._execute_phase(
+            LearningPhase.IMITATION, trigger_event
+        )
         results.append(imitation_result)
 
         # 2. 반복 단계
-        repetition_result = await self._execute_phase(LearningPhase.REPETITION, trigger_event)
+        repetition_result = await self._execute_phase(
+            LearningPhase.REPETITION, trigger_event
+        )
         results.append(repetition_result)
 
         # 3. 피드백 단계
-        feedback_result = await self._execute_phase(LearningPhase.FEEDBACK, trigger_event)
+        feedback_result = await self._execute_phase(
+            LearningPhase.FEEDBACK, trigger_event
+        )
         results.append(feedback_result)
 
         # 4. 도전 단계
-        challenge_result = await self._execute_phase(LearningPhase.CHALLENGE, trigger_event)
+        challenge_result = await self._execute_phase(
+            LearningPhase.CHALLENGE, trigger_event
+        )
         results.append(challenge_result)
 
         # 5. 개선 단계
-        improvement_result = await self._execute_phase(LearningPhase.IMPROVEMENT, trigger_event)
+        improvement_result = await self._execute_phase(
+            LearningPhase.IMPROVEMENT, trigger_event
+        )
         results.append(improvement_result)
 
         # 통합 결과 생성
@@ -476,7 +492,9 @@ class SchedulerWatcher:
         self.is_running = False
         self.watcher_thread = None
 
-    def add_schedule(self, schedule_type: str, interval_minutes: int, callback: Callable):
+    def add_schedule(
+        self, schedule_type: str, interval_minutes: int, callback: Callable
+    ):
         """스케줄 추가"""
         schedule = {
             "type": schedule_type,
@@ -492,7 +510,9 @@ class SchedulerWatcher:
         """감시 시작"""
         if not self.is_running:
             self.is_running = True
-            self.watcher_thread = threading.Thread(target=self._watcher_loop, daemon=True)
+            self.watcher_thread = threading.Thread(
+                target=self._watcher_loop, daemon=True
+            )
             self.watcher_thread.start()
             logger.info("👀 스케줄러 감시 시작")
 
@@ -520,7 +540,9 @@ class SchedulerWatcher:
                             )
                             logger.info(f"⏰ 스케줄 실행: {schedule['type']}")
                         except Exception as e:
-                            logger.error(f"❌ 스케줄 실행 오류: {schedule['type']} - {e}")
+                            logger.error(
+                                f"❌ 스케줄 실행 오류: {schedule['type']} - {e}"
+                            )
 
                 time.sleep(30)  # 30초마다 체크
 
@@ -586,10 +608,14 @@ class AutomationPipeline:
             self.automation_stats["total_triggers"] += 1
 
             # 1. 학습 실행
-            learning_result = await self.learning_executor.execute_learning_loop(trigger_event)
+            learning_result = await self.learning_executor.execute_learning_loop(
+                trigger_event
+            )
 
             # 2. 평가
-            evaluation = self.improvement_evaluator.evaluate_learning_result(learning_result)
+            evaluation = self.improvement_evaluator.evaluate_learning_result(
+                learning_result
+            )
 
             # 3. 메모리 동기화
             await self.memory_sync_engine.sync_learning_result(learning_result)
@@ -649,7 +675,9 @@ class AutomationPipeline:
             # 성공률
             cursor.execute("SELECT COUNT(*) FROM learning_results WHERE success = 1")
             successful_results = cursor.fetchone()[0]
-            success_rate = successful_results / total_results if total_results > 0 else 0
+            success_rate = (
+                successful_results / total_results if total_results > 0 else 0
+            )
 
             # 평균 점수
             cursor.execute("SELECT AVG(score) FROM learning_results")

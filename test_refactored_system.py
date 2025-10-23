@@ -32,9 +32,13 @@ async def test_refactored_system():
     config = Config.get_system_config()
     print(f"   📋 시스템 이름: {config['name']}")
     print(f"   📋 버전: {config['version']}")
-    print(f"   📋 감정 모듈: {'활성화' if config['emotion']['enabled'] else '비활성화'}")
+    print(
+        f"   📋 감정 모듈: {'활성화' if config['emotion']['enabled'] else '비활성화'}"
+    )
     print(f"   📋 성장 모듈: {'활성화' if config['growth']['enabled'] else '비활성화'}")
-    print(f"   📋 판단 모듈: {'활성화' if config['judgment']['enabled'] else '비활성화'}")
+    print(
+        f"   📋 판단 모듈: {'활성화' if config['judgment']['enabled'] else '비활성화'}"
+    )
 
     # 3. 완전한 생애 루프 테스트
     print("\n3️⃣ 완전한 생애 루프 테스트...")
@@ -81,7 +85,9 @@ async def test_refactored_system():
     # 감정 상태
     emotion_status = system_status.get("emotion_status", {})
     print(f"   🧠 감정 상태: {emotion_status.get('current_emotion', 'unknown')}")
-    print(f"   🧠 편향 감지: {'예' if emotion_status.get('bias_detected', False) else '아니오'}")
+    print(
+        f"   🧠 편향 감지: {'예' if emotion_status.get('bias_detected', False) else '아니오'}"
+    )
 
     # 성장 상태
     growth_status = system_status.get("growth_status", {})
@@ -126,14 +132,18 @@ async def test_refactored_system():
     print("\n   ⚖️  판단 모듈 테스트...")
     judgment_manager = unified_manager.judgment_manager
     bias_result = judgment_manager.detect_biases("판단 테스트", {"test": "data"})
-    print(f"      📊 편향 탐지 완료: 점수 {bias_result.get('overall_bias_score', 0.0):.3f}")
+    print(
+        f"      📊 편향 탐지 완료: 점수 {bias_result.get('overall_bias_score', 0.0):.3f}"
+    )
 
     # 6. 통합 응답 포맷 테스트
     print("\n6️⃣ 통합 응답 포맷 테스트...")
     response_format = unified_manager.get_unified_response_format()
     print(f"   📋 응답 포맷: {response_format.get('status', 'unknown')}")
     print(f"   📋 모듈: {response_format.get('metadata', {}).get('module', 'unknown')}")
-    print(f"   📋 버전: {response_format.get('metadata', {}).get('version', 'unknown')}")
+    print(
+        f"   📋 버전: {response_format.get('metadata', {}).get('version', 'unknown')}"
+    )
 
     print("\n" + "=" * 60)
     print("🎉 리팩토링된 시스템 테스트 완료!")
@@ -164,7 +174,9 @@ async def test_individual_modules():
     for emotion_text in test_emotions:
         result = emotion_manager.analyze_emotion(emotion_text)
         emotion_state = result.get("emotion_state", {})
-        print(f"   '{emotion_text}' → {emotion_state.get('current_emotion', 'unknown')}")
+        print(
+            f"   '{emotion_text}' → {emotion_state.get('current_emotion', 'unknown')}"
+        )
 
     # 성장 모듈 테스트
     print("\n📈 성장 모듈 테스트...")

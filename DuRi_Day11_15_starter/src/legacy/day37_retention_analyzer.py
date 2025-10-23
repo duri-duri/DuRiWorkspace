@@ -99,7 +99,9 @@ def retention_for_domain(
     return ret, n0
 
 
-def analyze_retention(domains: List[str], start_date: dt.date, glob_pattern: str) -> Dict[str, Any]:
+def analyze_retention(
+    domains: List[str], start_date: dt.date, glob_pattern: str
+) -> Dict[str, Any]:
     """전체 유지율 분석"""
     out = {
         "generated_at": dt.datetime.utcnow().isoformat() + "Z",
@@ -227,11 +229,17 @@ def main():
         default=["medical", "rehab", "coding"],
         help="분석할 도메인 목록",
     )
-    parser.add_argument("--glob", default="samples/logs/{dom}_*.jsonl", help="로그 파일 패턴")
-    parser.add_argument("--start-date", default="2025-01-16", help="코호트 시작일 (YYYY-MM-DD)")
+    parser.add_argument(
+        "--glob", default="samples/logs/{dom}_*.jsonl", help="로그 파일 패턴"
+    )
+    parser.add_argument(
+        "--start-date", default="2025-01-16", help="코호트 시작일 (YYYY-MM-DD)"
+    )
     parser.add_argument("--output-dir", default="artifacts/day37", help="출력 디렉토리")
     parser.add_argument("--verbose", "-v", action="store_true", help="상세 로그")
-    parser.add_argument("--auto-start", action="store_true", help="로그의 최소 날짜를 D0로 사용")
+    parser.add_argument(
+        "--auto-start", action="store_true", help="로그의 최소 날짜를 D0로 사용"
+    )
 
     args = parser.parse_args()
 
@@ -273,7 +281,9 @@ def main():
         print()
 
         for dom, n0, d7, lo, hi, decision in summary:
-            print(f"{dom:8s}  n0={n0:4d}  D7={d7:.3f}  CI95=[{lo:.3f},{hi:.3f}]  {decision}")
+            print(
+                f"{dom:8s}  n0={n0:4d}  D7={d7:.3f}  CI95=[{lo:.3f},{hi:.3f}]  {decision}"
+            )
 
         print(f"\nResults saved to: {json_file}")
         print(f"Report saved to: {report_file}")

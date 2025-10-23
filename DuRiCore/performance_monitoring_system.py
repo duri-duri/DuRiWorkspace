@@ -284,7 +284,8 @@ class PerformanceMonitoringSystem:
         relevant_metrics = [
             metric
             for metric in self.performance_metrics.values()
-            if metric.metric_name == metric_name and start_time <= metric.timestamp <= end_time
+            if metric.metric_name == metric_name
+            and start_time <= metric.timestamp <= end_time
         ]
 
         if not relevant_metrics:
@@ -435,7 +436,9 @@ class PerformanceMonitoringSystem:
 
             if metric.value > threshold:
                 alert_level = (
-                    AlertLevel.WARNING if metric.value < threshold * 1.5 else AlertLevel.ERROR
+                    AlertLevel.WARNING
+                    if metric.value < threshold * 1.5
+                    else AlertLevel.ERROR
                 )
                 alert_message = f"{metric.metric_name}이 임계값({threshold})을 초과했습니다. 현재 값: {metric.value}"
 
@@ -475,7 +478,9 @@ class PerformanceMonitoringSystem:
         else:
             return "stable"
 
-    def _generate_metrics_summary(self, metrics: List[PerformanceMetric]) -> Dict[str, Any]:
+    def _generate_metrics_summary(
+        self, metrics: List[PerformanceMetric]
+    ) -> Dict[str, Any]:
         """메트릭 요약 생성"""
         if not metrics:
             return {}
@@ -497,7 +502,9 @@ class PerformanceMonitoringSystem:
 
         return summary
 
-    def _generate_alerts_summary(self, alerts: List[PerformanceAlert]) -> Dict[str, Any]:
+    def _generate_alerts_summary(
+        self, alerts: List[PerformanceAlert]
+    ) -> Dict[str, Any]:
         """알림 요약 생성"""
         if not alerts:
             return {}
@@ -602,7 +609,8 @@ class PerformanceMonitoringSystem:
         recent_alerts = [
             alert
             for alert in self.performance_alerts.values()
-            if alert.timestamp >= datetime.now() - timedelta(hours=1) and not alert.resolved
+            if alert.timestamp >= datetime.now() - timedelta(hours=1)
+            and not alert.resolved
         ]
 
         if not recent_alerts:
@@ -612,7 +620,9 @@ class PerformanceMonitoringSystem:
         critical_alerts = [
             alert for alert in recent_alerts if alert.alert_level == AlertLevel.CRITICAL
         ]
-        error_alerts = [alert for alert in recent_alerts if alert.alert_level == AlertLevel.ERROR]
+        error_alerts = [
+            alert for alert in recent_alerts if alert.alert_level == AlertLevel.ERROR
+        ]
 
         if critical_alerts:
             recommendations.append(

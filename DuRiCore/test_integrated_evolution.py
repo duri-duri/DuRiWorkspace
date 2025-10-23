@@ -77,8 +77,12 @@ async def test_integrated_performance_optimization():
         logger.info("✅ 진화 시스템 요약 완료")
         logger.info(f"   - 총 세션: {summary.get('total_sessions', 0)}")
         logger.info(f"   - 성공률: {summary.get('success_rate', 0):.1f}%")
-        logger.info(f"   - 평균 실행시간: {summary.get('average_execution_time', 0):.3f}초")
-        logger.info(f"   - 성능 개선률: {summary.get('performance_improvement', 0):.1f}%")
+        logger.info(
+            f"   - 평균 실행시간: {summary.get('average_execution_time', 0):.3f}초"
+        )
+        logger.info(
+            f"   - 성능 개선률: {summary.get('performance_improvement', 0):.1f}%"
+        )
 
         # 5. 캐시 통계
         cache_stats = system.get_cache_stats()
@@ -147,10 +151,14 @@ async def test_integrated_performance_optimization():
         }
 
         # 결과를 JSON 파일로 저장
-        with open("integrated_performance_test_results.json", "w", encoding="utf-8") as f:
+        with open(
+            "integrated_performance_test_results.json", "w", encoding="utf-8"
+        ) as f:
             json.dump(test_results, f, indent=2, ensure_ascii=False, default=str)
 
-        logger.info("💾 테스트 결과가 'integrated_performance_test_results.json'에 저장되었습니다.")
+        logger.info(
+            "💾 테스트 결과가 'integrated_performance_test_results.json'에 저장되었습니다."
+        )
 
         return test_results
 

@@ -213,11 +213,15 @@ class LearningDataInitializer:
         failure_count = self.initial_data_count - success_count
 
         # 성공 케이스 선택
-        selected_success = random.sample(success_cases, min(success_count, len(success_cases)))
+        selected_success = random.sample(
+            success_cases, min(success_count, len(success_cases))
+        )
         experiences.extend(selected_success)
 
         # 실패 케이스 선택
-        selected_failure = random.sample(failure_cases, min(failure_count, len(failure_cases)))
+        selected_failure = random.sample(
+            failure_cases, min(failure_count, len(failure_cases))
+        )
         experiences.extend(selected_failure)
 
         # 시간대 분산을 위한 타임스탬프 추가
@@ -236,7 +240,9 @@ class LearningDataInitializer:
             # 기존 데이터 확인
             existing_experiences = self.memory_sync.get_recent_experiences(limit=50)
             if len(existing_experiences) > 10:
-                logger.warning(f"이미 {len(existing_experiences)}개의 경험 데이터가 존재합니다.")
+                logger.warning(
+                    f"이미 {len(existing_experiences)}개의 경험 데이터가 존재합니다."
+                )
                 return {
                     "status": "warning",
                     "message": f"이미 {len(existing_experiences)}개의 경험 데이터가 존재합니다.",
@@ -259,7 +265,9 @@ class LearningDataInitializer:
             analysis_result = self.auto_retrospector.run_comprehensive_analysis()
 
             logger.info(f"✅ 초기 데이터 주입 완료: {injected_count}개")
-            logger.info(f"📊 초기 분석 결과 - 성공률: {analysis_result.get('success_rate', 0):.2%}")
+            logger.info(
+                f"📊 초기 분석 결과 - 성공률: {analysis_result.get('success_rate', 0):.2%}"
+            )
 
             return {
                 "status": "success",
@@ -285,7 +293,9 @@ class LearningDataInitializer:
 
             # 학습률 계산
             if experiences:
-                success_count = sum(1 for e in experiences if e.get("outcome") == "success")
+                success_count = sum(
+                    1 for e in experiences if e.get("outcome") == "success"
+                )
                 learning_rate = success_count / len(experiences)
             else:
                 learning_rate = 0.0

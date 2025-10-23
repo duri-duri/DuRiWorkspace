@@ -312,8 +312,12 @@ class RegressionTestFramework:
                 "neutral": ["객관", "중립", "평온", "균형", "이성"],
             }
 
-            expected_category = self._categorize_emotion(expected_emotional, emotional_keywords)
-            actual_category = self._categorize_emotion(actual_emotional, emotional_keywords)
+            expected_category = self._categorize_emotion(
+                expected_emotional, emotional_keywords
+            )
+            actual_category = self._categorize_emotion(
+                actual_emotional, emotional_keywords
+            )
 
             return 1.0 if expected_category == actual_category else 0.3
 
@@ -321,7 +325,9 @@ class RegressionTestFramework:
             logger.error(f"감정 반응 유사도 계산 실패: {str(e)}")
             return 0.0
 
-    def _calculate_memory_similarity(self, expected_memory: str, actual_memory: str) -> float:
+    def _calculate_memory_similarity(
+        self, expected_memory: str, actual_memory: str
+    ) -> float:
         """기억 활성도 유사도 계산"""
         try:
             if not expected_memory or not actual_memory:
@@ -334,7 +340,9 @@ class RegressionTestFramework:
                 "integrated": ["통합", "연결", "통합", "조합"],
             }
 
-            expected_category = self._categorize_memory(expected_memory, memory_keywords)
+            expected_category = self._categorize_memory(
+                expected_memory, memory_keywords
+            )
             actual_category = self._categorize_memory(actual_memory, memory_keywords)
 
             return 1.0 if expected_category == actual_category else 0.3
@@ -361,7 +369,9 @@ class RegressionTestFramework:
             expected_category = self._categorize_creativity(
                 expected_creativity, creativity_keywords
             )
-            actual_category = self._categorize_creativity(actual_creativity, creativity_keywords)
+            actual_category = self._categorize_creativity(
+                actual_creativity, creativity_keywords
+            )
 
             return 1.0 if expected_category == actual_category else 0.3
 
@@ -369,7 +379,9 @@ class RegressionTestFramework:
             logger.error(f"창의성 유사도 계산 실패: {str(e)}")
             return 0.0
 
-    def _categorize_emotion(self, emotion_text: str, keywords: Dict[str, List[str]]) -> str:
+    def _categorize_emotion(
+        self, emotion_text: str, keywords: Dict[str, List[str]]
+    ) -> str:
         """감정 카테고리 분류"""
         emotion_text_lower = emotion_text.lower()
 
@@ -379,7 +391,9 @@ class RegressionTestFramework:
 
         return "neutral"
 
-    def _categorize_memory(self, memory_text: str, keywords: Dict[str, List[str]]) -> str:
+    def _categorize_memory(
+        self, memory_text: str, keywords: Dict[str, List[str]]
+    ) -> str:
         """기억 카테고리 분류"""
         memory_text_lower = memory_text.lower()
 
@@ -389,7 +403,9 @@ class RegressionTestFramework:
 
         return "passive"
 
-    def _categorize_creativity(self, creativity_text: str, keywords: Dict[str, List[str]]) -> str:
+    def _categorize_creativity(
+        self, creativity_text: str, keywords: Dict[str, List[str]]
+    ) -> str:
         """창의성 카테고리 분류"""
         creativity_text_lower = creativity_text.lower()
 
@@ -512,7 +528,9 @@ class RegressionTestFramework:
                         ),
                     },
                 },
-                "overall_similarity": self.calculate_judgment_similarity(expected, actual),
+                "overall_similarity": self.calculate_judgment_similarity(
+                    expected, actual
+                ),
                 "recommendations": self._generate_recommendations(expected, actual),
             }
 

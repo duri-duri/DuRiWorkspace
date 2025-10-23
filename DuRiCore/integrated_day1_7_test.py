@@ -39,30 +39,40 @@ class IntegratedDuRiSystem:
         # Day 6: 학습 피드백 시스템
         self.memory_system = JudgmentMemorySystem()
         self.improvement_system = SelfImprovementSystem(self.memory_system)
-        self.learning_engine = AdaptiveLearningEngine(self.memory_system, self.improvement_system)
+        self.learning_engine = AdaptiveLearningEngine(
+            self.memory_system, self.improvement_system
+        )
 
         # Day 7: 통찰 평가 시스템
         self.insight_evaluator = InsightEvaluationSystem()
 
-    async def process_complex_situation(self, situation: str, action: str) -> Dict[str, Any]:
+    async def process_complex_situation(
+        self, situation: str, action: str
+    ) -> Dict[str, Any]:
         """복잡한 상황을 전체 시스템으로 처리"""
         print(f"\n🔍 복잡한 상황 분석 시작: {situation[:50]}...")
 
         # Day 1-2: 의미적 맥락 분석
         print("\n📊 Day 1-2: 의미적 맥락 분석")
-        semantic_context = await self.semantic_classifier.analyze_semantic_context(situation)
+        semantic_context = await self.semantic_classifier.analyze_semantic_context(
+            situation
+        )
         print(f"  • 맥락 유형: {semantic_context.situation_type.value}")
         print(f"  • 이해관계자: {len(semantic_context.stakeholders)}명")
         print(f"  • 가치 충돌: {len(semantic_context.value_conflicts)}개")
 
         # Day 3-4: 철학적 논증 분석
         print("\n🤔 Day 3-4: 철학적 논증 분석")
-        philosophical_arguments = await self.philosophical_analysis.analyze_multiple_perspectives(
-            action, situation
+        philosophical_arguments = (
+            await self.philosophical_analysis.analyze_multiple_perspectives(
+                action, situation
+            )
         )
         kantian_arg = philosophical_arguments.get("kantian")
         utilitarian_arg = philosophical_arguments.get("utilitarian")
-        print(f"  • 칸트적 분석: {kantian_arg.final_conclusion[:50] if kantian_arg else 'N/A'}...")
+        print(
+            f"  • 칸트적 분석: {kantian_arg.final_conclusion[:50] if kantian_arg else 'N/A'}..."
+        )
         print(
             f"  • 공리주의 분석: {utilitarian_arg.final_conclusion[:50] if utilitarian_arg else 'N/A'}..."
         )
@@ -75,8 +85,12 @@ class IntegratedDuRiSystem:
         reasoning_graph = await self.reasoning_analyzer.analyze_reasoning_process(
             situation, semantic_context, philosophical_arguments
         )
-        print(f"  • 노드 수: {reasoning_graph.get('graph_metrics', {}).get('node_count', 0)}")
-        print(f"  • 엣지 수: {reasoning_graph.get('graph_metrics', {}).get('edge_count', 0)}")
+        print(
+            f"  • 노드 수: {reasoning_graph.get('graph_metrics', {}).get('node_count', 0)}"
+        )
+        print(
+            f"  • 엣지 수: {reasoning_graph.get('graph_metrics', {}).get('edge_count', 0)}"
+        )
         print(f"  • 논리적 일관성: {reasoning_graph.get('logical_consistency', 0):.2f}")
 
         # Day 6: 학습 피드백 처리
@@ -146,7 +160,9 @@ async def test_integrated_system():
     action = "AI 시스템의 데이터 수집 범위를 확대하여 정확도를 향상시킨다"
 
     # 전체 시스템으로 상황 처리
-    result = await integrated_system.process_complex_situation(complex_situation, action)
+    result = await integrated_system.process_complex_situation(
+        complex_situation, action
+    )
 
     # 결과 요약
     print("\n" + "=" * 80)
@@ -156,8 +172,12 @@ async def test_integrated_system():
     print(f"\n🎯 핵심 통찰:")
     print(f"  • 상황 복잡도: 높음 (다중 이해관계자, 가치 충돌)")
     print(f"  • 철학적 분석: 칸트적 의무론 vs 공리주의 효용성")
-    print(f"  • 추론 품질: {result['reasoning_graph'].get('logical_consistency', 0):.2f}")
-    print(f"  • 학습 효과: {result['learning_feedback'].get('learning_potential', 0):.2f}")
+    print(
+        f"  • 추론 품질: {result['reasoning_graph'].get('logical_consistency', 0):.2f}"
+    )
+    print(
+        f"  • 학습 효과: {result['learning_feedback'].get('learning_potential', 0):.2f}"
+    )
     print(
         f"  • 통찰 등급: {result['insight_evaluation']['overall_assessment'].get('grade', 'unknown')}"
     )

@@ -18,7 +18,9 @@ def check_audit_chain():
             password=os.getenv("PGPASSWORD", None),  # 없으면 peer로 시도
         )
         cur = conn.cursor()
-        cur.execute("SELECT id,prev_hash,this_hash,details::text FROM audit_ledger ORDER BY id")
+        cur.execute(
+            "SELECT id,prev_hash,this_hash,details::text FROM audit_ledger ORDER BY id"
+        )
         bad, prev = [], None
         for i, ph, th, det in cur:
             h = hashlib.sha256(((prev or "") + det).encode()).hexdigest()

@@ -22,7 +22,8 @@ def compute_delta_importance(current, previous):
     if current is None or previous is None:
         return 0.0  # 비교할 대상이 없으면 중요도 없음
     delta = sum(
-        abs(current.get(emotion, 0.0) - previous.get(emotion, 0.0)) for emotion in current.keys()
+        abs(current.get(emotion, 0.0) - previous.get(emotion, 0.0))
+        for emotion in current.keys()
     )
     return round(delta / len(current), 4)
 

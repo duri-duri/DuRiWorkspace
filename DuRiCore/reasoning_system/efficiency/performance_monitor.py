@@ -133,7 +133,9 @@ class PerformanceMonitor:
 
         trends = {
             "average_efficiency": np.mean([m.efficiency_score for m in recent_metrics]),
-            "average_execution_time": np.mean([m.execution_time for m in recent_metrics]),
+            "average_execution_time": np.mean(
+                [m.execution_time for m in recent_metrics]
+            ),
             "average_memory_usage": np.mean([m.memory_usage for m in recent_metrics]),
             "average_cpu_usage": np.mean([m.cpu_usage for m in recent_metrics]),
             "average_throughput": np.mean([m.throughput for m in recent_metrics]),

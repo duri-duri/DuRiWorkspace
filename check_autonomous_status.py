@@ -88,10 +88,14 @@ async def check_autonomous_status():
 
             # 활성 세션 확인
             active_learning = [
-                s for s in unified_system.learning_sessions if s.status.value == "in_progress"
+                s
+                for s in unified_system.learning_sessions
+                if s.status.value == "in_progress"
             ]
             active_evolution = [
-                s for s in unified_system.evolution_sessions if s.status.value == "in_progress"
+                s
+                for s in unified_system.evolution_sessions
+                if s.status.value == "in_progress"
             ]
 
             print(f"  - 활성 학습 세션: {len(active_learning)}")

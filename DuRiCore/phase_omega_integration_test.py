@@ -158,9 +158,15 @@ class PhaseOmegaIntegrationTest:
 
             # 테스트 스위트 생성
             execution_time = time.time() - start_time
-            passed_tests = len([t for t in test_results if t.status == TestStatus.PASSED])
-            failed_tests = len([t for t in test_results if t.status == TestStatus.FAILED])
-            skipped_tests = len([t for t in test_results if t.status == TestStatus.SKIPPED])
+            passed_tests = len(
+                [t for t in test_results if t.status == TestStatus.PASSED]
+            )
+            failed_tests = len(
+                [t for t in test_results if t.status == TestStatus.FAILED]
+            )
+            skipped_tests = len(
+                [t for t in test_results if t.status == TestStatus.SKIPPED]
+            )
             total_tests = len(test_results)
             success_rate = passed_tests / total_tests if total_tests > 0 else 0.0
 
@@ -353,7 +359,9 @@ class PhaseOmegaIntegrationTest:
                 execution_time=execution_time,
                 success=current_state is not None,
                 metrics={
-                    "confidence_score": (current_state.confidence_score if current_state else 0.0)
+                    "confidence_score": (
+                        current_state.confidence_score if current_state else 0.0
+                    )
                 },
             )
             test_results.append(test_result)
@@ -361,8 +369,8 @@ class PhaseOmegaIntegrationTest:
             # 테스트 2: 자가 목표 생성
             if current_state:
                 start_time = time.time()
-                improvement_areas = await self.goal_generator.identify_improvement_areas(
-                    current_state
+                improvement_areas = (
+                    await self.goal_generator.identify_improvement_areas(current_state)
                 )
                 self_goals = await self.goal_generator.generate_self_goals(
                     current_state, improvement_areas
@@ -401,7 +409,9 @@ class PhaseOmegaIntegrationTest:
         try:
             # 테스트 1: 진화 진행도 평가
             start_time = time.time()
-            evolution_progress = await self.evolution_system.evaluate_evolution_progress()
+            evolution_progress = (
+                await self.evolution_system.evaluate_evolution_progress()
+            )
             execution_time = time.time() - start_time
 
             test_result = TestResult(
@@ -413,7 +423,9 @@ class PhaseOmegaIntegrationTest:
                 success=evolution_progress is not None,
                 metrics={
                     "evolution_score": (
-                        evolution_progress.evolution_score if evolution_progress else 0.0
+                        evolution_progress.evolution_score
+                        if evolution_progress
+                        else 0.0
                     )
                 },
             )
@@ -421,7 +433,9 @@ class PhaseOmegaIntegrationTest:
 
             # 테스트 2: 환경 적응
             start_time = time.time()
-            adaptation_result = await self.evolution_system.adapt_to_environment({"magnitude": 0.5})
+            adaptation_result = await self.evolution_system.adapt_to_environment(
+                {"magnitude": 0.5}
+            )
             execution_time = time.time() - start_time
 
             test_result = TestResult(
@@ -456,7 +470,9 @@ class PhaseOmegaIntegrationTest:
         try:
             # 테스트 1: 환경적 위험 평가
             start_time = time.time()
-            risk_assessments = await self.survival_assessment.assess_environmental_risks()
+            risk_assessments = (
+                await self.survival_assessment.assess_environmental_risks()
+            )
             execution_time = time.time() - start_time
 
             test_result = TestResult(
@@ -472,7 +488,9 @@ class PhaseOmegaIntegrationTest:
 
             # 테스트 2: 생존 점수 계산
             start_time = time.time()
-            resource_assessments = await self.survival_assessment.evaluate_resource_availability()
+            resource_assessments = (
+                await self.survival_assessment.evaluate_resource_availability()
+            )
             survival_score = await self.survival_assessment.calculate_survival_score(
                 risk_assessments, resource_assessments
             )
@@ -486,7 +504,9 @@ class PhaseOmegaIntegrationTest:
                 execution_time=execution_time,
                 success=survival_score is not None,
                 metrics={
-                    "survival_score": (survival_score.overall_score if survival_score else 0.0)
+                    "survival_score": (
+                        survival_score.overall_score if survival_score else 0.0
+                    )
                 },
             )
             test_results.append(test_result)
@@ -629,8 +649,8 @@ class PhaseOmegaIntegrationTest:
             current_state = await self.goal_generator.analyze_current_state()
 
             if survival_status and current_state:
-                improvement_areas = await self.goal_generator.identify_improvement_areas(
-                    current_state
+                improvement_areas = (
+                    await self.goal_generator.identify_improvement_areas(current_state)
                 )
                 self_goals = await self.goal_generator.generate_self_goals(
                     current_state, improvement_areas
@@ -781,7 +801,9 @@ class PhaseOmegaIntegrationTest:
                 test_id="memory_usage",
                 test_type=TestType.PERFORMANCE,
                 test_name="메모리 사용량 테스트",
-                status=(TestStatus.PASSED if memory_increase < 100 else TestStatus.FAILED),
+                status=(
+                    TestStatus.PASSED if memory_increase < 100 else TestStatus.FAILED
+                ),
                 execution_time=0.0,
                 success=memory_increase < 100,
                 metrics={"memory_increase_mb": memory_increase},
@@ -1006,7 +1028,9 @@ async def main():
             if test.status == TestStatus.PASSED
             else "❌" if test.status == TestStatus.FAILED else "⏭️"
         )
-        print(f"{status_emoji} {test.test_name}: {test.status.value} ({test.execution_time:.2f}초)")
+        print(
+            f"{status_emoji} {test.test_name}: {test.status.value} ({test.execution_time:.2f}초)"
+        )
         if test.error_message:
             print(f"   오류: {test.error_message}")
 

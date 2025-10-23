@@ -112,7 +112,9 @@ async def test_async_functionality():
             logger.info(f"✅ 메트릭 수집: {metric_id}")
 
         # 메트릭 통계 조회
-        stats = await metric_collector.get_metric_statistics("cpu_usage", timedelta(hours=1))
+        stats = await metric_collector.get_metric_statistics(
+            "cpu_usage", timedelta(hours=1)
+        )
         logger.info(f"✅ 메트릭 통계 조회: {len(stats)}개 항목")
 
         # 2. 성능 분석 테스트
@@ -131,7 +133,9 @@ async def test_async_functionality():
             logger.info(f"✅ 패턴 감지 완료: {len(patterns)}개 패턴")
 
             # 성능 예측
-            prediction = await performance_analyzer.predict_performance(metrics, "cpu_usage")
+            prediction = await performance_analyzer.predict_performance(
+                metrics, "cpu_usage"
+            )
             if prediction:
                 logger.info(f"✅ 성능 예측 완료: {prediction.predicted_value:.2f}")
 

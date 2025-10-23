@@ -113,7 +113,9 @@ class InferenceEngine:
                 }
             )
 
-            self.logger.info(f"추론 완료: {inference_type.value}, 신뢰도: {result.confidence:.2f}")
+            self.logger.info(
+                f"추론 완료: {inference_type.value}, 신뢰도: {result.confidence:.2f}"
+            )
             return result
 
         except Exception as e:
@@ -186,12 +188,16 @@ class InferenceEngine:
             best_hypothesis = self._select_best_hypothesis(hypotheses, observations)
 
             # 신뢰도 계산
-            confidence = self._calculate_hypothesis_confidence(best_hypothesis, observations)
+            confidence = self._calculate_hypothesis_confidence(
+                best_hypothesis, observations
+            )
 
             return InferenceResult(
                 conclusion=best_hypothesis,
                 confidence=confidence,
-                reasoning_path=[f"가설적 추론: {len(observations)}개 관찰로부터 최적 가설 선택"],
+                reasoning_path=[
+                    f"가설적 추론: {len(observations)}개 관찰로부터 최적 가설 선택"
+                ],
                 evidence=observations,
                 alternatives=hypotheses,
             )
@@ -211,15 +217,21 @@ class InferenceEngine:
             similar_cases = self._find_similar_cases(similarities)
 
             # 유추적 결론 도출
-            conclusion = self._derive_analogical_conclusion(similar_cases, context.input_data)
+            conclusion = self._derive_analogical_conclusion(
+                similar_cases, context.input_data
+            )
 
             # 신뢰도 계산
-            confidence = self._calculate_analogical_confidence(similarities, similar_cases)
+            confidence = self._calculate_analogical_confidence(
+                similarities, similar_cases
+            )
 
             return InferenceResult(
                 conclusion=conclusion,
                 confidence=confidence,
-                reasoning_path=[f"유추적 추론: {len(similar_cases)}개 유사 사례로부터 결론 도출"],
+                reasoning_path=[
+                    f"유추적 추론: {len(similar_cases)}개 유사 사례로부터 결론 도출"
+                ],
                 evidence=similar_cases,
             )
         except Exception as e:
@@ -243,7 +255,9 @@ class InferenceEngine:
             return InferenceResult(
                 conclusion=best_idea,
                 confidence=confidence,
-                reasoning_path=[f"창의적 추론: {len(creative_ideas)}개 아이디어로부터 최적 선택"],
+                reasoning_path=[
+                    f"창의적 추론: {len(creative_ideas)}개 아이디어로부터 최적 선택"
+                ],
                 evidence=creative_ideas,
             )
         except Exception as e:
@@ -393,13 +407,17 @@ class InferenceEngine:
             hypotheses.append(f"가설 {i+1}: {observation}로부터 추론")
         return hypotheses
 
-    def _select_best_hypothesis(self, hypotheses: List[Any], observations: List[Any]) -> Any:
+    def _select_best_hypothesis(
+        self, hypotheses: List[Any], observations: List[Any]
+    ) -> Any:
         """최적 가설 선택"""
         if hypotheses:
             return hypotheses[0]
         return "가설 없음"
 
-    def _calculate_hypothesis_confidence(self, hypothesis: Any, observations: List[Any]) -> float:
+    def _calculate_hypothesis_confidence(
+        self, hypothesis: Any, observations: List[Any]
+    ) -> float:
         """가설 신뢰도 계산"""
         return min(1.0, len(observations) * 0.1 + 0.2)
 
@@ -501,7 +519,9 @@ class InferenceEngine:
         total_confidence = sum(result.confidence for result in results)
         return min(1.0, total_confidence / len(results) * 1.2)
 
-    def _update_performance_metrics(self, result: InferenceResult, processing_time: float):
+    def _update_performance_metrics(
+        self, result: InferenceResult, processing_time: float
+    ):
         """성능 메트릭 업데이트"""
         self.performance_metrics["total_inferences"] += 1
         if result.confidence > 0.5:

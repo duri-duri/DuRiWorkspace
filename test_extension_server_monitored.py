@@ -113,7 +113,9 @@ async def analyze_context(context_request: Dict[str, Any]):
         conversation_history = context_request.get("conversation_history", [])
 
         # 맥락 분석 수행
-        context_result = context_analyzer.analyze_conversation_context(conversation_history)
+        context_result = context_analyzer.analyze_conversation_context(
+            conversation_history
+        )
 
         return {
             "status": "success",
@@ -138,12 +140,16 @@ async def trigger_intuitive_judgment(intuitive_request: Dict[str, Any]):
             raise HTTPException(status_code=400, detail="user_input이 필요합니다")
 
         # 직관적 판단 트리거
-        intuitive_result = intuitive_judgment.trigger_intuitive_response(user_input, context)
+        intuitive_result = intuitive_judgment.trigger_intuitive_response(
+            user_input, context
+        )
 
         return {
             "status": "success",
             "intuitive_judgment": intuitive_result,
-            "should_trigger": intuitive_judgment.should_trigger_intuition(user_input, context),
+            "should_trigger": intuitive_judgment.should_trigger_intuition(
+                user_input, context
+            ),
             "message": "직관적 판단이 완료되었습니다",
             "timestamp": datetime.now().isoformat(),
         }
@@ -195,13 +201,19 @@ async def generate_human_ai_response(human_request: Dict[str, Any]):
             raise HTTPException(status_code=400, detail="user_input이 필요합니다")
 
         # 1. 맥락 분석
-        context_result = context_analyzer.analyze_conversation_context(conversation_history)
+        context_result = context_analyzer.analyze_conversation_context(
+            conversation_history
+        )
 
         # 2. 감정 분석
-        emotion_result = emotion_analyzer.analyze_user_emotion(user_input, context_result)
+        emotion_result = emotion_analyzer.analyze_user_emotion(
+            user_input, context_result
+        )
 
         # 3. 직관적 판단 트리거
-        intuitive_result = intuitive_judgment.trigger_intuitive_response(user_input, context_result)
+        intuitive_result = intuitive_judgment.trigger_intuitive_response(
+            user_input, context_result
+        )
 
         # 4. 감정에 적응한 응답 생성
         adaptive_response = emotion_analyzer.generate_emotion_adaptive_response(
@@ -292,7 +304,9 @@ async def chatgpt_evaluate_response(evaluation_request: Dict[str, Any]):
             )
 
         # 모듈화된 평가 시스템 사용
-        evaluation_result = chatgpt_evaluator.evaluate_response(duri_response, user_question)
+        evaluation_result = chatgpt_evaluator.evaluate_response(
+            duri_response, user_question
+        )
 
         # 학습 메트릭 추적
         performance_tracker.track_learning_metric(
@@ -334,7 +348,9 @@ async def duri_self_reflect_endpoint(reflection_request: Dict[str, Any]):
 
         # 학습 메트릭 추적
         improvement_count = len(
-            reflection_result.get("improvement_proposal", {}).get("specific_improvements", [])
+            reflection_result.get("improvement_proposal", {}).get(
+                "specific_improvements", []
+            )
         )
         performance_tracker.track_learning_metric(
             "improvement_suggestions",
@@ -363,13 +379,19 @@ async def capture_conversation_endpoint(conversation_data: Dict[str, Any]):
         metadata = conversation_data.get("metadata", {})
 
         if not user_input or not duri_response:
-            raise HTTPException(status_code=400, detail="user_input과 duri_response가 필요합니다")
+            raise HTTPException(
+                status_code=400, detail="user_input과 duri_response가 필요합니다"
+            )
 
         # 대화 데이터 저장
-        conversation_id = conversation_store.store_conversation(user_input, duri_response, metadata)
+        conversation_id = conversation_store.store_conversation(
+            user_input, duri_response, metadata
+        )
 
         # 학습 메트릭 추적
-        learning_value = conversation_store._calculate_learning_value(user_input, duri_response)
+        learning_value = conversation_store._calculate_learning_value(
+            user_input, duri_response
+        )
         performance_tracker.track_learning_metric(
             "conversation_learning_value",
             learning_value,
@@ -383,8 +405,12 @@ async def capture_conversation_endpoint(conversation_data: Dict[str, Any]):
             print(f"🔄 자동 학습 루프 시작: {conversation_id}")
 
             # 1단계: ChatGPT 평가
-            evaluation_result = chatgpt_evaluator.evaluate_response(duri_response, user_input)
-            print(f"   📊 ChatGPT 평가 완료: 총점 {evaluation_result.get('total_score', 0):.3f}")
+            evaluation_result = chatgpt_evaluator.evaluate_response(
+                duri_response, user_input
+            )
+            print(
+                f"   📊 ChatGPT 평가 완료: 총점 {evaluation_result.get('total_score', 0):.3f}"
+            )
 
             # 2단계: DuRi 자기성찰
             reflection_result = duri_self_reflector.reflect_on_chatgpt_feedback(
@@ -805,7 +831,9 @@ async def extract_meaning_endpoint(conversation_data: Dict[str, Any]):
         duri_response = conversation_data.get("duri_response", "")
 
         if not user_input or not duri_response:
-            raise HTTPException(status_code=400, detail="user_input과 duri_response가 필요합니다")
+            raise HTTPException(
+                status_code=400, detail="user_input과 duri_response가 필요합니다"
+            )
 
         # 의미 추출
         meaning = meaning_extractor.extract_meaning(user_input, duri_response)
@@ -828,7 +856,9 @@ async def evaluate_result_endpoint(conversation_data: Dict[str, Any]):
         duri_response = conversation_data.get("duri_response", "")
 
         if not user_input or not duri_response:
-            raise HTTPException(status_code=400, detail="user_input과 duri_response가 필요합니다")
+            raise HTTPException(
+                status_code=400, detail="user_input과 duri_response가 필요합니다"
+            )
 
         # 결과 평가
         evaluation = result_evaluator.evaluate_conversation(user_input, duri_response)
@@ -851,7 +881,9 @@ async def complete_learning_analysis(conversation_data: Dict[str, Any]):
         duri_response = conversation_data.get("duri_response", "")
 
         if not user_input or not duri_response:
-            raise HTTPException(status_code=400, detail="user_input과 duri_response가 필요합니다")
+            raise HTTPException(
+                status_code=400, detail="user_input과 duri_response가 필요합니다"
+            )
 
         # 1. 의미 추출
         meaning = meaning_extractor.extract_meaning(user_input, duri_response)

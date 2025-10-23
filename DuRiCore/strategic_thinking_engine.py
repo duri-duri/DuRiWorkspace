@@ -188,13 +188,17 @@ class StrategicThinkingEngine:
     ) -> List[StrategicPlan]:
         """장기 계획 수립"""
         try:
-            logger.info(f"장기 계획 수립 시작: 수준 {strategic_level.value}, 기간 {time_horizon}")
+            logger.info(
+                f"장기 계획 수립 시작: 수준 {strategic_level.value}, 기간 {time_horizon}"
+            )
 
             # 컨텍스트 전처리
             processed_context = await self._preprocess_strategic_context(context)
 
             # 전략적 분석
-            strategic_analysis = await self._analyze_strategic_context(processed_context)
+            strategic_analysis = await self._analyze_strategic_context(
+                processed_context
+            )
 
             # 목표 설정
             objectives = await self._define_strategic_objectives(
@@ -202,7 +206,9 @@ class StrategicThinkingEngine:
             )
 
             # 핵심 이니셔티브 개발
-            initiatives = await self._develop_key_initiatives(objectives, strategic_level)
+            initiatives = await self._develop_key_initiatives(
+                objectives, strategic_level
+            )
 
             # 계획 생성
             plans = await self._create_strategic_plans(
@@ -271,13 +277,17 @@ class StrategicThinkingEngine:
             context_analysis = await self._analyze_decision_context(decision_context)
 
             # 옵션 생성
-            options = await self._generate_strategic_options(context_analysis, strategic_level)
+            options = await self._generate_strategic_options(
+                context_analysis, strategic_level
+            )
 
             # 의사결정 기준 설정
             criteria = await self._define_decision_criteria(strategic_level)
 
             # 옵션 평가
-            evaluated_options = await self._evaluate_strategic_options(options, criteria)
+            evaluated_options = await self._evaluate_strategic_options(
+                options, criteria
+            )
 
             # 최적 옵션 선택
             selected_option = await self._select_optimal_option(evaluated_options)
@@ -314,10 +324,14 @@ class StrategicThinkingEngine:
             analyzed_scenarios = await self._analyze_scenarios(scenarios)
 
             # 전략적 함의 도출
-            strategic_implications = await self._derive_strategic_implications(analyzed_scenarios)
+            strategic_implications = await self._derive_strategic_implications(
+                analyzed_scenarios
+            )
 
             # 대응 전략 개발
-            response_strategies = await self._develop_response_strategies(strategic_implications)
+            response_strategies = await self._develop_response_strategies(
+                strategic_implications
+            )
 
             # 시나리오 계획 생성
             scenario_plans = await self._create_scenario_plans(
@@ -334,7 +348,9 @@ class StrategicThinkingEngine:
             logger.error(f"시나리오 계획 개발 실패: {str(e)}")
             return []
 
-    async def _preprocess_strategic_context(self, context: Dict[str, Any]) -> Dict[str, Any]:
+    async def _preprocess_strategic_context(
+        self, context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """전략적 컨텍스트 전처리"""
         processed_context = context.copy()
 
@@ -352,7 +368,9 @@ class StrategicThinkingEngine:
 
         return processed_context
 
-    async def _analyze_strategic_context(self, context: Dict[str, Any]) -> Dict[str, Any]:
+    async def _analyze_strategic_context(
+        self, context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """전략적 컨텍스트 분석"""
         analysis = {
             "internal_environment": context.get("internal_environment", {}),
@@ -369,7 +387,9 @@ class StrategicThinkingEngine:
 
         return analysis
 
-    async def _apply_swot_analysis(self, analysis: Dict[str, Any]) -> Dict[str, List[str]]:
+    async def _apply_swot_analysis(
+        self, analysis: Dict[str, Any]
+    ) -> Dict[str, List[str]]:
         """SWOT 분석 적용"""
         swot = {"strengths": [], "weaknesses": [], "opportunities": [], "threats": []}
 
@@ -469,7 +489,9 @@ class StrategicThinkingEngine:
 
         return plans
 
-    async def _evaluate_strategic_plans(self, plans: List[StrategicPlan]) -> List[StrategicPlan]:
+    async def _evaluate_strategic_plans(
+        self, plans: List[StrategicPlan]
+    ) -> List[StrategicPlan]:
         """전략 계획 평가"""
         evaluated_plans = []
 
@@ -486,14 +508,18 @@ class StrategicThinkingEngine:
 
         return evaluated_plans
 
-    async def _optimize_strategic_plans(self, plans: List[StrategicPlan]) -> List[StrategicPlan]:
+    async def _optimize_strategic_plans(
+        self, plans: List[StrategicPlan]
+    ) -> List[StrategicPlan]:
         """전략 계획 최적화"""
         optimized_plans = []
 
         for plan in plans:
             # 성과 지표 개선
             for metric in plan.success_metrics:
-                plan.success_metrics[metric] = min(1.0, plan.success_metrics[metric] * 1.05)
+                plan.success_metrics[metric] = min(
+                    1.0, plan.success_metrics[metric] * 1.05
+                )
 
             # 위험 완화
             for risk in plan.risk_assessment:
@@ -565,19 +591,25 @@ class StrategicThinkingEngine:
 
         return mitigated_risks
 
-    async def _build_risk_monitoring(self, risk_analyses: List[RiskAnalysis]) -> List[RiskAnalysis]:
+    async def _build_risk_monitoring(
+        self, risk_analyses: List[RiskAnalysis]
+    ) -> List[RiskAnalysis]:
         """위험 모니터링 구축"""
         monitored_risks = []
 
         for risk in risk_analyses:
             # 모니터링 지표 추가
-            risk.monitoring_indicators.extend(["위험 지수 추적", "트렌드 분석", "경고 신호 감지"])
+            risk.monitoring_indicators.extend(
+                ["위험 지수 추적", "트렌드 분석", "경고 신호 감지"]
+            )
 
             monitored_risks.append(risk)
 
         return monitored_risks
 
-    async def _analyze_decision_context(self, context: Dict[str, Any]) -> Dict[str, Any]:
+    async def _analyze_decision_context(
+        self, context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """의사결정 컨텍스트 분석"""
         analysis = {
             "decision_problem": context.get("problem", ""),
@@ -606,7 +638,9 @@ class StrategicThinkingEngine:
 
         return options
 
-    async def _define_decision_criteria(self, strategic_level: StrategicLevel) -> Dict[str, float]:
+    async def _define_decision_criteria(
+        self, strategic_level: StrategicLevel
+    ) -> Dict[str, float]:
         """의사결정 기준 설정"""
         criteria = {
             "효과성": 0.3,
@@ -650,7 +684,9 @@ class StrategicThinkingEngine:
     ) -> Dict[str, Any]:
         """최적 옵션 선택"""
         # 점수 기준으로 정렬
-        sorted_options = sorted(evaluated_options, key=lambda x: x["total_score"], reverse=True)
+        sorted_options = sorted(
+            evaluated_options, key=lambda x: x["total_score"], reverse=True
+        )
 
         return sorted_options[0] if sorted_options else {}
 
@@ -725,7 +761,9 @@ class StrategicThinkingEngine:
 
         return scenarios
 
-    async def _analyze_scenarios(self, scenarios: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    async def _analyze_scenarios(
+        self, scenarios: List[Dict[str, Any]]
+    ) -> List[Dict[str, Any]]:
         """시나리오 분석"""
         analyzed_scenarios = []
 

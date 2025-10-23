@@ -123,7 +123,9 @@ class ImageProcessor:
             logger.error(f"메타데이터 분석 실패: {e}")
             return {"error": str(e)}
 
-    def _basic_analysis(self, image_path: str, metadata: Dict[str, Any]) -> Dict[str, Any]:
+    def _basic_analysis(
+        self, image_path: str, metadata: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """기본 이미지 분석"""
         try:
             # 파일 크기 기반 분석
@@ -150,7 +152,9 @@ class ImageProcessor:
             logger.error(f"기본 분석 실패: {e}")
             return {"error": str(e)}
 
-    def _comprehensive_analysis(self, image_path: str, metadata: Dict[str, Any]) -> Dict[str, Any]:
+    def _comprehensive_analysis(
+        self, image_path: str, metadata: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """종합 이미지 분석"""
         try:
             # 기본 분석 결과
@@ -221,7 +225,9 @@ class ImageProcessor:
 image_processor = ImageProcessor()
 
 
-def analyze_image(image_path: str, analysis_type: str = "comprehensive") -> Dict[str, Any]:
+def analyze_image(
+    image_path: str, analysis_type: str = "comprehensive"
+) -> Dict[str, Any]:
     """
     이미지 분석 함수 (전역 함수)
 
@@ -277,7 +283,9 @@ def main():
         """,
     )
 
-    parser.add_argument("--image_path", "-i", required=True, help="분석할 이미지 파일 경로")
+    parser.add_argument(
+        "--image_path", "-i", required=True, help="분석할 이미지 파일 경로"
+    )
 
     parser.add_argument(
         "--mode",
@@ -289,7 +297,9 @@ def main():
 
     parser.add_argument("--output", "-o", help="결과를 저장할 JSON 파일 경로")
 
-    parser.add_argument("--refresh-cache", action="store_true", help="캐시를 무시하고 재분석")
+    parser.add_argument(
+        "--refresh-cache", action="store_true", help="캐시를 무시하고 재분석"
+    )
 
     parser.add_argument("--verbose", "-v", action="store_true", help="상세 출력")
 

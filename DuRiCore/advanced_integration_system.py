@@ -63,7 +63,9 @@ class SelfReflection:
                 "status": "synchronized",
             }
 
-            instance.thought_flow.register_stream("self_reflection_sync", reflection_summary)
+            instance.thought_flow.register_stream(
+                "self_reflection_sync", reflection_summary
+            )
 
             print(
                 f"✅ 자가 반성 동기화 완료: {reflection_result.get('new_insights', 0)}개 통찰 생성"
@@ -108,7 +110,9 @@ class GrowthLoop:
 
         try:
             # 자기개선 시퀀스 실행
-            evolution_result = instance.evolution_manager.execute_self_improvement_sequence()
+            evolution_result = (
+                instance.evolution_manager.execute_self_improvement_sequence()
+            )
 
             # 사고 흐름에 성장 결과 기록
             growth_summary = {
@@ -187,7 +191,9 @@ class JudgmentTrace:
             }
 
             # 사고 흐름에 시각화 결과 기록
-            instance.thought_flow.register_stream("judgment_visualization", visualization_data)
+            instance.thought_flow.register_stream(
+                "judgment_visualization", visualization_data
+            )
 
             print(f"✅ 판단 시각화 완료: {len(recent_traces)}개 최근 기록 분석")
 
@@ -210,7 +216,9 @@ def execute_advanced_integration():
         print("\n" + "=" * 50)
         print("① 자가 반성 동기화 실행")
         print("=" * 50)
-        reflection_result = SelfReflection.self_reflection_sync(trigger="strategic_judgment")
+        reflection_result = SelfReflection.self_reflection_sync(
+            trigger="strategic_judgment"
+        )
 
         # ② 성장 루프 트리거
         print("\n" + "=" * 50)

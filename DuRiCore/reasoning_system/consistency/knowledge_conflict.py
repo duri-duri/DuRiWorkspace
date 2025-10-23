@@ -94,9 +94,7 @@ class KnowledgeConflictResolver:
                 element2[key], (str, int, float)
             ):
                 if element1[key] != element2[key]:
-                    conflict_id = (
-                        f"conflict_{int(time.time())}_{hash(str(element1))}_{hash(str(element2))}"
-                    )
+                    conflict_id = f"conflict_{int(time.time())}_{hash(str(element1))}_{hash(str(element2))}"
 
                     conflict = KnowledgeConflict(
                         conflict_id=conflict_id,
@@ -123,7 +121,9 @@ class KnowledgeConflictResolver:
         else:
             return await self._evidence_based_resolution(conflict)
 
-    async def _evidence_based_resolution(self, conflict: KnowledgeConflict) -> Dict[str, Any]:
+    async def _evidence_based_resolution(
+        self, conflict: KnowledgeConflict
+    ) -> Dict[str, Any]:
         """증거 기반 해결"""
         return {
             "resolution_method": "evidence_based",
@@ -132,7 +132,9 @@ class KnowledgeConflictResolver:
             "resolution_details": "증거 기반 해결 적용",
         }
 
-    async def _priority_based_resolution(self, conflict: KnowledgeConflict) -> Dict[str, Any]:
+    async def _priority_based_resolution(
+        self, conflict: KnowledgeConflict
+    ) -> Dict[str, Any]:
         """우선순위 기반 해결"""
         return {
             "resolution_method": "priority_based",
@@ -141,7 +143,9 @@ class KnowledgeConflictResolver:
             "resolution_details": "우선순위 기반 해결 적용",
         }
 
-    async def _consensus_based_resolution(self, conflict: KnowledgeConflict) -> Dict[str, Any]:
+    async def _consensus_based_resolution(
+        self, conflict: KnowledgeConflict
+    ) -> Dict[str, Any]:
         """합의 기반 해결"""
         return {
             "resolution_method": "consensus_based",

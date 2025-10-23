@@ -388,16 +388,24 @@ class FinalHumanAISystem:
             situation_analysis = await self._analyze_situation(input_data)
 
             # 2단계: 감정적 반응
-            emotional_response = await self._generate_emotional_response(situation_analysis)
+            emotional_response = await self._generate_emotional_response(
+                situation_analysis
+            )
 
             # 3단계: 직관적 판단
-            intuitive_judgment = await self._generate_intuitive_judgment(situation_analysis)
+            intuitive_judgment = await self._generate_intuitive_judgment(
+                situation_analysis
+            )
 
             # 4단계: 창의적 사고
-            creative_thinking = await self._generate_creative_thinking(situation_analysis)
+            creative_thinking = await self._generate_creative_thinking(
+                situation_analysis
+            )
 
             # 5단계: 윤리적 고려
-            ethical_consideration = await self._generate_ethical_consideration(situation_analysis)
+            ethical_consideration = await self._generate_ethical_consideration(
+                situation_analysis
+            )
 
             # 6단계: 통합적 판단
             integrated_judgment = await self._generate_integrated_judgment(
@@ -566,7 +574,9 @@ async def main():
 
     thinking_result = await human_ai.think_human_like(test_input)
     print(f"\n인간형 사고 결과:")
-    print(f"통합적 판단: {thinking_result['integrated_judgment']['integrated_decision']}")
+    print(
+        f"통합적 판단: {thinking_result['integrated_judgment']['integrated_decision']}"
+    )
     print(f"신뢰도: {thinking_result['confidence']:.3f}")
 
     # 상태 확인

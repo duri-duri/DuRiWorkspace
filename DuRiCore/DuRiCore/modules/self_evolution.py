@@ -42,7 +42,9 @@ class SelfEvolutionEngine:
             performance_analysis = self._analyze_self_performance()
 
             # 2. LLM 기반 고급 진화 분석
-            llm_evolution_analysis = self.llm_interface.analyze_evolution_need(performance_analysis)
+            llm_evolution_analysis = self.llm_interface.analyze_evolution_need(
+                performance_analysis
+            )
 
             # 3. 개선점 식별
             improvement_areas = self._identify_improvement_areas(performance_analysis)
@@ -283,7 +285,9 @@ class SelfEvolutionEngine:
                             "current_score": score,
                             "target_score": 85,
                             "priority": "high" if score < 70 else "medium",
-                            "suggested_actions": self._get_suggested_actions(system_name, score),
+                            "suggested_actions": self._get_suggested_actions(
+                                system_name, score
+                            ),
                         }
                     )
 
@@ -387,7 +391,9 @@ class SelfEvolutionEngine:
             logger.error(f"개선 액션 실행 실패: {e}")
             return []
 
-    def _execute_improvement(self, improvement_area: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    def _execute_improvement(
+        self, improvement_area: Dict[str, Any]
+    ) -> Optional[Dict[str, Any]]:
         """개별 개선 액션 실행"""
         try:
             system = improvement_area.get("system", "")
@@ -490,7 +496,9 @@ class LLMInterface:
         self.model_name = "gpt-4"
         self.api_key = None
 
-    def analyze_evolution_need(self, performance_analysis: Dict[str, Any]) -> Dict[str, Any]:
+    def analyze_evolution_need(
+        self, performance_analysis: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """LLM 기반 진화 필요성 분석"""
         # TODO: 실제 LLM 호출
         # 임시로 기본 분석 반환

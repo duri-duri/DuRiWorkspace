@@ -137,7 +137,10 @@ class DuRiLearningConfig:
 
     def check_trigger_conditions(self, trigger: LearningTrigger) -> bool:
         """트리거 조건 확인"""
-        return trigger.value in self.learning_loop["external_llm_call"]["trigger_conditions"]
+        return (
+            trigger.value
+            in self.learning_loop["external_llm_call"]["trigger_conditions"]
+        )
 
     def can_call_llm(self, model: LLMModel) -> bool:
         """LLM 호출 가능 여부 확인"""
@@ -165,7 +168,8 @@ class DuRiLearningConfig:
         self.budget_status.used_budget_dollars += cost
         self.budget_status.remaining_budget_dollars -= cost
         self.budget_status.usage_percentage = (
-            self.budget_status.used_budget_dollars / self.budget_status.monthly_budget_dollars
+            self.budget_status.used_budget_dollars
+            / self.budget_status.monthly_budget_dollars
         ) * 100
 
         # 호출 횟수 업데이트
@@ -192,11 +196,15 @@ class DuRiLearningConfig:
             "trigger": "token_budget_exceeded",
             "learning_opportunity": {
                 "type": (
-                    "전략 판단 피드백" if model == LLMModel.CLAUDE3_HAIKU else "감정적 피드백"
+                    "전략 판단 피드백"
+                    if model == LLMModel.CLAUDE3_HAIKU
+                    else "감정적 피드백"
                 ),
                 "model": model.value,
                 "expected_tokens": estimated_tokens,
-                "importance_score": self.core_belief_score.get("learning_priority", 0.0),
+                "importance_score": self.core_belief_score.get(
+                    "learning_priority", 0.0
+                ),
                 "risk_if_denied": "DuRi의 전략 수정 실패 가능성",
             },
             "requested_amount_usd": estimated_cost,
@@ -281,14 +289,23 @@ class CursorMonitor:
         """부모에게 알림"""
         if channel == "voice + visual":
             # 자금 요청 메시지인지 확인
-            if message.get("type") == "FUNDING_REQUEST" and "learning_opportunity" in message:
-                voice_message = DuRiLearningConfig().generate_voice_request_message(message)
+            if (
+                message.get("type") == "FUNDING_REQUEST"
+                and "learning_opportunity" in message
+            ):
+                voice_message = DuRiLearningConfig().generate_voice_request_message(
+                    message
+                )
                 logger.info(f"🔔 커서 알림 ({urgency}): {voice_message}")
             else:
                 # 일반 메시지
-                logger.info(f"🔔 커서 알림 ({urgency}): {json.dumps(message, ensure_ascii=False)}")
+                logger.info(
+                    f"🔔 커서 알림 ({urgency}): {json.dumps(message, ensure_ascii=False)}"
+                )
         else:
-            logger.info(f"🔔 커서 알림 ({urgency}): {json.dumps(message, ensure_ascii=False)}")
+            logger.info(
+                f"🔔 커서 알림 ({urgency}): {json.dumps(message, ensure_ascii=False)}"
+            )
 
     @staticmethod
     def receive_directive(directive_name: str, content: str):
@@ -332,7 +349,9 @@ def monitor_budget_and_request_funding():
             available_models = config.get_available_models()
             if available_models:
                 selected_model = available_models[0]
-                funding_request = config.DuRi_generate_funding_request(selected_model, 280)
+                funding_request = config.DuRi_generate_funding_request(
+                    selected_model, 280
+                )
 
                 CursorMonitor.notify_parent(
                     channel="voice + visual", urgency="high", message=funding_request

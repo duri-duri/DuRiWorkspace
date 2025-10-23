@@ -56,7 +56,9 @@ async def test_simple_learning():
 
         print(f"\n=== 학습 목표 ({len(result.learning_goals)}개) ===")
         for goal in result.learning_goals[:3]:  # 처음 3개만 출력
-            print(f"- {goal.target_skill}: {goal.description} (우선순위: {goal.priority:.2f})")
+            print(
+                f"- {goal.target_skill}: {goal.description} (우선순위: {goal.priority:.2f})"
+            )
 
         print(f"\n=== 학습 활동 ({len(result.learning_activities)}개) ===")
         for activity in result.learning_activities[:3]:  # 처음 3개만 출력

@@ -54,7 +54,9 @@ async def test_simple_creative_problem_solving():
 
         print(f"\n=== 문제 재정의 ({len(result.problem_reframes)}개) ===")
         for reframe in result.problem_reframes[:3]:  # 처음 3개만 출력
-            print(f"- {reframe.reframed_title} (접근법: {reframe.reframe_approach.value})")
+            print(
+                f"- {reframe.reframed_title} (접근법: {reframe.reframe_approach.value})"
+            )
 
         print(f"\n=== 창의적 해결책 ({len(result.solutions)}개) ===")
         for solution in result.solutions[:3]:  # 처음 3개만 출력
@@ -68,7 +70,9 @@ async def test_simple_creative_problem_solving():
 
         print(f"\n=== 검증 결과 ({len(result.validations)}개) ===")
         for validation in result.validations[:3]:  # 처음 3개만 출력
-            print(f"- {validation.validation_method}: {validation.validation_score:.2f}")
+            print(
+                f"- {validation.validation_method}: {validation.validation_score:.2f}"
+            )
 
         print(f"\n=== 성과 지표 ===")
         print(f"평균 혁신성 점수: {result.average_innovation_score:.3f}")

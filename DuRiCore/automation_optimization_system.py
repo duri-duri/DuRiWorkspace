@@ -229,7 +229,9 @@ class WorkflowAutomation:
         # 기본 단계 실행
         step.parameters["result"] = f"일반 단계 완료: {step.name}"
 
-    def calculate_execution_metrics(self, execution: WorkflowExecution) -> Dict[str, Any]:
+    def calculate_execution_metrics(
+        self, execution: WorkflowExecution
+    ) -> Dict[str, Any]:
         """실행 메트릭 계산"""
         if not execution.end_time:
             return {}
@@ -243,7 +245,9 @@ class WorkflowAutomation:
             "completed_steps": completed_steps,
             "total_steps": total_steps,
             "success_rate": completed_steps / total_steps if total_steps > 0 else 0.0,
-            "average_step_duration": (total_duration / total_steps if total_steps > 0 else 0.0),
+            "average_step_duration": (
+                total_duration / total_steps if total_steps > 0 else 0.0
+            ),
         }
 
 
@@ -339,12 +343,16 @@ class PerformanceOptimizer:
         for metric_name in target_metrics:
             if metric_name in current_analysis:
                 current_value = current_analysis[metric_name]["mean"]
-                optimized_value = self.apply_optimization_strategy(metric_name, current_value)
+                optimized_value = self.apply_optimization_strategy(
+                    metric_name, current_value
+                )
                 optimized_metrics[metric_name] = optimized_value
 
                 # 개선률 계산
                 improvement = (
-                    (optimized_value - current_value) / current_value if current_value != 0 else 0
+                    (optimized_value - current_value) / current_value
+                    if current_value != 0
+                    else 0
                 )
                 recommendations.append(f"{metric_name}: {improvement:.2%} 개선 가능")
 
@@ -354,14 +362,18 @@ class PerformanceOptimizer:
             optimization_type="performance",
             original_metrics=current_analysis,
             optimized_metrics=optimized_metrics,
-            improvement_rate=self.calculate_improvement_rate(current_analysis, optimized_metrics),
+            improvement_rate=self.calculate_improvement_rate(
+                current_analysis, optimized_metrics
+            ),
             recommendations=recommendations,
         )
 
         self.optimization_history.append(optimization_result)
         return optimization_result
 
-    def apply_optimization_strategy(self, metric_name: str, current_value: float) -> float:
+    def apply_optimization_strategy(
+        self, metric_name: str, current_value: float
+    ) -> float:
         """최적화 전략 적용"""
         # 간단한 최적화 전략
         if metric_name == "response_time":
@@ -459,7 +471,9 @@ class ResourceManager:
             )
 
             if current_resource:
-                available_capacity = current_resource.max_capacity - current_resource.current_usage
+                available_capacity = (
+                    current_resource.max_capacity - current_resource.current_usage
+                )
 
                 if available_capacity >= required_amount:
                     allocation_result[resource_id] = {
@@ -520,7 +534,9 @@ class AutoTuner:
         original_parameters = parameters.copy()
 
         # 튜닝 알고리즘 적용
-        tuned_parameters = self.apply_tuning_algorithm(parameters, target_metric, target_value)
+        tuned_parameters = self.apply_tuning_algorithm(
+            parameters, target_metric, target_value
+        )
 
         # 튜닝 결과 기록
         tuning_result = {
@@ -529,7 +545,9 @@ class AutoTuner:
             "tuned_parameters": tuned_parameters,
             "target_metric": target_metric,
             "target_value": target_value,
-            "improvement": self.calculate_tuning_improvement(original_parameters, tuned_parameters),
+            "improvement": self.calculate_tuning_improvement(
+                original_parameters, tuned_parameters
+            ),
             "timestamp": datetime.now(),
         }
 
@@ -626,7 +644,9 @@ class AutomationOptimizationSystem:
             workflow_id = self.workflow_automation.create_workflow(workflow_name, steps)
 
             # 워크플로우 실행
-            execution_result = await self.workflow_automation.execute_workflow(workflow_id)
+            execution_result = await self.workflow_automation.execute_workflow(
+                workflow_id
+            )
 
             result = {
                 "type": "workflow_automation",
@@ -641,7 +661,9 @@ class AutomationOptimizationSystem:
         result["processing_time"] = time.time() - start_time
         return result
 
-    async def optimize_performance(self, optimization_data: Dict[str, Any]) -> Dict[str, Any]:
+    async def optimize_performance(
+        self, optimization_data: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """성능 최적화"""
         start_time = time.time()
 
@@ -649,7 +671,9 @@ class AutomationOptimizationSystem:
             target_metrics = optimization_data.get("target_metrics", [])
 
             # 성능 최적화 실행
-            optimization_result = self.performance_optimizer.optimize_performance(target_metrics)
+            optimization_result = self.performance_optimizer.optimize_performance(
+                target_metrics
+            )
 
             result = {
                 "type": "performance_optimization",
@@ -684,7 +708,9 @@ class AutomationOptimizationSystem:
                 }
             elif action == "allocate":
                 requirements = resource_data.get("requirements", {})
-                allocation_result = self.resource_manager.allocate_resources(requirements)
+                allocation_result = self.resource_manager.allocate_resources(
+                    requirements
+                )
                 result = {
                     "type": "resource_management",
                     "action": "allocate",

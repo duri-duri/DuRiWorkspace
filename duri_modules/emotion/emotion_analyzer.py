@@ -163,10 +163,14 @@ class EmotionAnalyzer:
         intensity = self._calculate_emotion_intensity(text, primary_emotion[0])
 
         # 6. 신뢰도 계산
-        confidence = self._calculate_emotion_confidence(emotion_scores, structure_analysis)
+        confidence = self._calculate_emotion_confidence(
+            emotion_scores, structure_analysis
+        )
 
         return {
-            "primary_emotion": (primary_emotion[0] if primary_emotion[1] > 0 else "neutral"),
+            "primary_emotion": (
+                primary_emotion[0] if primary_emotion[1] > 0 else "neutral"
+            ),
             "emotion_scores": emotion_scores,
             "intensity": intensity,
             "confidence": confidence,
@@ -211,7 +215,9 @@ class EmotionAnalyzer:
                 [word for word in self.emotion_indicators["urgency"] if word in text]
             ),
             "text_length": len(text),
-            "sentence_count": len(text.split(".")) + len(text.split("!")) + len(text.split("?")),
+            "sentence_count": len(text.split("."))
+            + len(text.split("!"))
+            + len(text.split("?")),
         }
 
         # 구조적 감정 지표
@@ -288,11 +294,14 @@ class EmotionAnalyzer:
         # 강도 키워드 확인
         intensity_keywords = self.emotion_keywords[primary_emotion]["intensity"]
         intensity_count = sum(
-            len(re.findall(keyword, text, re.IGNORECASE)) for keyword in intensity_keywords
+            len(re.findall(keyword, text, re.IGNORECASE))
+            for keyword in intensity_keywords
         )
 
         # 최종 강도 계산
-        final_intensity = base_intensity + (intensity_count * 0.1) + (text_length_factor * 0.2)
+        final_intensity = (
+            base_intensity + (intensity_count * 0.1) + (text_length_factor * 0.2)
+        )
 
         return min(final_intensity, 1.0)
 

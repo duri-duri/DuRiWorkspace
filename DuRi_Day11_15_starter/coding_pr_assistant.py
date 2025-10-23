@@ -178,7 +178,9 @@ class CodingPRAssistant:
         handler = logging.FileHandler(
             f"coding_pr_assistant_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
         )
-        formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+        formatter = logging.Formatter(
+            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        )
         handler.setFormatter(formatter)
         logger.addHandler(handler)
 
@@ -265,7 +267,9 @@ class CodingPRAssistant:
                         )
                         issues.append(issue)
 
-        self.logger.info(f"Found {len(issues)} security issues in {code_file.file_path}")
+        self.logger.info(
+            f"Found {len(issues)} security issues in {code_file.file_path}"
+        )
         return issues
 
     def scan_performance_issues(self, code_file: CodeFile) -> List[PerformanceIssue]:
@@ -289,7 +293,9 @@ class CodingPRAssistant:
                         )
                         issues.append(issue)
 
-        self.logger.info(f"Found {len(issues)} performance issues in {code_file.file_path}")
+        self.logger.info(
+            f"Found {len(issues)} performance issues in {code_file.file_path}"
+        )
         return issues
 
     def review_code_standards(self, code_file: CodeFile) -> List[str]:
@@ -305,7 +311,9 @@ class CodingPRAssistant:
         lines = code_file.content.split("\n")
         for i, line in enumerate(lines):
             if len(line) > max_line_length:
-                suggestions.append(f"Line {i+1}: Line too long ({len(line)} > {max_line_length})")
+                suggestions.append(
+                    f"Line {i+1}: Line too long ({len(line)} > {max_line_length})"
+                )
 
         # 복잡도 체크
         max_complexity = standards.get("max_complexity", 10)
@@ -346,7 +354,10 @@ class CodingPRAssistant:
         test_coverage_score = self._estimate_test_coverage(code_file)
 
         overall_score = (
-            security_score + performance_score + maintainability_score + test_coverage_score
+            security_score
+            + performance_score
+            + maintainability_score
+            + test_coverage_score
         ) / 4
 
         # 승인 여부 결정
@@ -426,7 +437,9 @@ class CodingPRAssistant:
         """테스트 커버리지 추정"""
         # 간단한 테스트 커버리지 추정
         test_keywords = ["test", "spec", "assert", "expect", "mock"]
-        test_count = sum(1 for keyword in test_keywords if keyword in code_file.content.lower())
+        test_count = sum(
+            1 for keyword in test_keywords if keyword in code_file.content.lower()
+        )
 
         # 파일 크기에 따른 테스트 커버리지 추정
         if test_count > 0:
@@ -441,10 +454,14 @@ class CodingPRAssistant:
         rejected_files = total_files - approved_files
 
         avg_overall_score = (
-            sum(review.overall_score for review in reviews) / total_files if total_files > 0 else 0
+            sum(review.overall_score for review in reviews) / total_files
+            if total_files > 0
+            else 0
         )
         avg_security_score = (
-            sum(review.security_score for review in reviews) / total_files if total_files > 0 else 0
+            sum(review.security_score for review in reviews) / total_files
+            if total_files > 0
+            else 0
         )
         avg_performance_score = (
             sum(review.performance_score for review in reviews) / total_files
@@ -470,7 +487,9 @@ class CodingPRAssistant:
                 "total_files": total_files,
                 "approved_files": approved_files,
                 "rejected_files": rejected_files,
-                "approval_rate": ((approved_files / total_files * 100) if total_files > 0 else 0),
+                "approval_rate": (
+                    (approved_files / total_files * 100) if total_files > 0 else 0
+                ),
                 "avg_overall_score": avg_overall_score,
                 "avg_security_score": avg_security_score,
                 "avg_performance_score": avg_performance_score,
@@ -489,9 +508,13 @@ class CodingPRAssistant:
                 "보안 점수가 낮습니다. 보안 이슈를 우선적으로 해결하세요."
             )
         if avg_performance_score < 80:
-            summary["recommendations"].append("성능 점수가 낮습니다. 성능 최적화가 필요합니다.")
+            summary["recommendations"].append(
+                "성능 점수가 낮습니다. 성능 최적화가 필요합니다."
+            )
         if avg_maintainability_score < 80:
-            summary["recommendations"].append("유지보수성 점수가 낮습니다. 코드 표준을 준수하세요.")
+            summary["recommendations"].append(
+                "유지보수성 점수가 낮습니다. 코드 표준을 준수하세요."
+            )
         if avg_test_coverage_score < 70:
             summary["recommendations"].append(
                 "테스트 커버리지가 낮습니다. 테스트 코드를 추가하세요."
@@ -607,8 +630,12 @@ function inefficientSearch(data, target) {
     print(f"   - 평균 전체 점수: {summary['pr_summary']['avg_overall_score']:.1f}")
     print(f"   - 평균 보안 점수: {summary['pr_summary']['avg_security_score']:.1f}")
     print(f"   - 평균 성능 점수: {summary['pr_summary']['avg_performance_score']:.1f}")
-    print(f"   - 평균 유지보수성: {summary['pr_summary']['avg_maintainability_score']:.1f}")
-    print(f"   - 평균 테스트 커버리지: {summary['pr_summary']['avg_test_coverage_score']:.1f}")
+    print(
+        f"   - 평균 유지보수성: {summary['pr_summary']['avg_maintainability_score']:.1f}"
+    )
+    print(
+        f"   - 평균 테스트 커버리지: {summary['pr_summary']['avg_test_coverage_score']:.1f}"
+    )
     print(f"   - 총 이슈 수: {summary['pr_summary']['total_issues']}")
     print(f"   - 총 제안 수: {summary['pr_summary']['total_suggestions']}")
 
@@ -625,7 +652,9 @@ function inefficientSearch(data, target) {
             print(f"   - {step}")
 
     # 결과 저장
-    result_path = f"coding_pr_assistant_result_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+    result_path = (
+        f"coding_pr_assistant_result_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+    )
     with open(result_path, "w", encoding="utf-8") as f:
         json.dump(
             {

@@ -351,7 +351,9 @@ class DashboardGenerator:
             current_value = metric_data.get("current_value", 0)
             trend = metric_data.get("trend", "stable")
 
-            trend_icon = "➡️" if trend == "stable" else "📈" if trend == "improving" else "📉"
+            trend_icon = (
+                "➡️" if trend == "stable" else "📈" if trend == "improving" else "📉"
+            )
 
             html += f"""
                 <div class="metric">

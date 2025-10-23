@@ -20,7 +20,9 @@ class ChatGPTEvaluator:
         "actionability": "실행가능성 - 실용적 적용 가능성",
     }
 
-    def evaluate_response(self, duri_response: str, user_question: str) -> Dict[str, Any]:
+    def evaluate_response(
+        self, duri_response: str, user_question: str
+    ) -> Dict[str, Any]:
         """DuRi 응답을 6차원으로 평가"""
 
         print(f"🤖 ChatGPT 평가 시작: {len(duri_response)}자 응답")
@@ -98,7 +100,9 @@ class ChatGPTEvaluator:
             "Flask",
             "Python",
         ]
-        keyword_count = sum(1 for keyword in tech_keywords if keyword.lower() in response.lower())
+        keyword_count = sum(
+            1 for keyword in tech_keywords if keyword.lower() in response.lower()
+        )
         return min(keyword_count / len(tech_keywords), 1.0)
 
     def _assess_relevance(self, response: str, question: str) -> float:
@@ -139,21 +143,27 @@ class ChatGPTEvaluator:
             "단계",
             "단계별",
         ]
-        indicator_count = sum(1 for indicator in structure_indicators if indicator in response)
+        indicator_count = sum(
+            1 for indicator in structure_indicators if indicator in response
+        )
         return min(indicator_count / 3, 1.0)
 
     def _assess_clarity(self, response: str) -> float:
         """명확성 평가"""
         # 명확한 설명 요소
         clarity_indicators = ["예를 들어", "즉", "다시 말해", "구체적으로", "예시"]
-        indicator_count = sum(1 for indicator in clarity_indicators if indicator in response)
+        indicator_count = sum(
+            1 for indicator in clarity_indicators if indicator in response
+        )
         return min(indicator_count / 2, 1.0)
 
     def _assess_actionability(self, response: str) -> float:
         """실행가능성 평가"""
         # 실용적 요소
         action_indicators = ["코드", "예제", "실제", "구현", "사용법", "방법"]
-        indicator_count = sum(1 for indicator in action_indicators if indicator in response)
+        indicator_count = sum(
+            1 for indicator in action_indicators if indicator in response
+        )
         return min(indicator_count / 3, 1.0)
 
     def _identify_improvements(self, response: str) -> List[str]:

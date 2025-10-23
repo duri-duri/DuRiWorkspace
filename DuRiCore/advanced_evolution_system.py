@@ -122,7 +122,9 @@ class ContinuousLearningSystem:
         """학습 패턴 분석"""
         recent_performance = context.performance_metrics
         avg_score = (
-            statistics.mean(list(recent_performance.values())) if recent_performance else 0.8
+            statistics.mean(list(recent_performance.values()))
+            if recent_performance
+            else 0.8
         )
 
         return {
@@ -157,7 +159,9 @@ class ContinuousLearningSystem:
                 # 기존 지식과 통합
                 existing = self.knowledge_base[domain]
                 integrated_level = (existing["level"] + knowledge["level"]) / 2
-                integrated_confidence = max(existing["confidence"], knowledge["confidence"])
+                integrated_confidence = max(
+                    existing["confidence"], knowledge["confidence"]
+                )
                 integrated_applicability = (
                     existing["applicability"] + knowledge["applicability"]
                 ) / 2
@@ -185,17 +189,25 @@ class ContinuousLearningSystem:
         base_score = 0.8
 
         # 학습 패턴 기반 점수
-        pattern_bonus = 0.1 if learning_pattern["performance_trend"] == "increasing" else 0.05
+        pattern_bonus = (
+            0.1 if learning_pattern["performance_trend"] == "increasing" else 0.05
+        )
 
         # 지식 통합 기반 점수
-        knowledge_bonus = statistics.mean([k["level"] for k in integrated_knowledge.values()]) * 0.1
+        knowledge_bonus = (
+            statistics.mean([k["level"] for k in integrated_knowledge.values()]) * 0.1
+        )
 
         # 적응 수준 기반 점수
-        adaptation_bonus = 0.05 if learning_pattern["adaptation_level"] == "high" else 0.02
+        adaptation_bonus = (
+            0.05 if learning_pattern["adaptation_level"] == "high" else 0.02
+        )
 
         return min(1.0, base_score + pattern_bonus + knowledge_bonus + adaptation_bonus)
 
-    def _identify_new_capabilities(self, integrated_knowledge: Dict[str, Any]) -> List[str]:
+    def _identify_new_capabilities(
+        self, integrated_knowledge: Dict[str, Any]
+    ) -> List[str]:
         """새로운 능력 식별"""
         new_capabilities = []
 
@@ -271,15 +283,23 @@ class SelfEvolutionSystem:
 
     def _analyze_evolution_markers(self, context: EvolutionContext) -> Dict[str, Any]:
         """진화 마커 분석"""
-        performance_trend = self._calculate_performance_trend(context.performance_metrics)
-        learning_efficiency = self._calculate_learning_efficiency(context.evolution_history)
-        adaptation_capacity = self._calculate_adaptation_capacity(context.environment_data)
+        performance_trend = self._calculate_performance_trend(
+            context.performance_metrics
+        )
+        learning_efficiency = self._calculate_learning_efficiency(
+            context.evolution_history
+        )
+        adaptation_capacity = self._calculate_adaptation_capacity(
+            context.environment_data
+        )
 
         return {
             "performance_trend": performance_trend,
             "learning_efficiency": learning_efficiency,
             "adaptation_capacity": adaptation_capacity,
-            "evolution_readiness": (performance_trend + learning_efficiency + adaptation_capacity)
+            "evolution_readiness": (
+                performance_trend + learning_efficiency + adaptation_capacity
+            )
             / 3,
         }
 
@@ -347,7 +367,9 @@ class SelfEvolutionSystem:
             "success_level": "high" if success_rate > 0.9 else "medium",
         }
 
-    def _calculate_performance_trend(self, performance_metrics: Dict[str, float]) -> float:
+    def _calculate_performance_trend(
+        self, performance_metrics: Dict[str, float]
+    ) -> float:
         """성능 트렌드 계산"""
         if not performance_metrics:
             return 0.8
@@ -355,12 +377,16 @@ class SelfEvolutionSystem:
         avg_performance = statistics.mean(list(performance_metrics.values()))
         return min(1.0, avg_performance + 0.1)
 
-    def _calculate_learning_efficiency(self, evolution_history: List[Dict[str, Any]]) -> float:
+    def _calculate_learning_efficiency(
+        self, evolution_history: List[Dict[str, Any]]
+    ) -> float:
         """학습 효율성 계산"""
         if not evolution_history:
             return 0.8
 
-        recent_improvements = [h.get("improvement_score", 0.8) for h in evolution_history[-5:]]
+        recent_improvements = [
+            h.get("improvement_score", 0.8) for h in evolution_history[-5:]
+        ]
         return statistics.mean(recent_improvements)
 
     def _calculate_adaptation_capacity(self, environment_data: Dict[str, Any]) -> float:
@@ -412,7 +438,9 @@ class AdaptivePerformanceOptimizer:
         optimization_strategy = self._select_optimization_strategy(performance_analysis)
 
         # 최적화 실행
-        optimization_result = await self._execute_optimization(optimization_strategy, context)
+        optimization_result = await self._execute_optimization(
+            optimization_strategy, context
+        )
 
         # 최적화 검증
         optimization_validation = self._validate_optimization(optimization_result)
@@ -420,7 +448,9 @@ class AdaptivePerformanceOptimizer:
         execution_time = time.time() - start_time
 
         # 최적화 기록 업데이트
-        self._update_optimization_history(context, optimization_result, optimization_validation)
+        self._update_optimization_history(
+            context, optimization_result, optimization_validation
+        )
 
         return EvolutionResult(
             evolution_level=context.evolution_level,
@@ -459,7 +489,9 @@ class AdaptivePerformanceOptimizer:
             ),
         }
 
-    def _select_optimization_strategy(self, performance_analysis: Dict[str, Any]) -> str:
+    def _select_optimization_strategy(
+        self, performance_analysis: Dict[str, Any]
+    ) -> str:
         """최적화 전략 선택"""
         bottlenecks = performance_analysis["bottlenecks"]
         optimization_potential = performance_analysis["optimization_potential"]
@@ -514,7 +546,9 @@ class AdaptivePerformanceOptimizer:
             "optimization_timestamp": datetime.now().isoformat(),
         }
 
-    def _validate_optimization(self, optimization_result: Dict[str, Any]) -> Dict[str, Any]:
+    def _validate_optimization(
+        self, optimization_result: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """최적화 검증"""
         success_rate = optimization_result["success_rate"]
         performance_gain = optimization_result["performance_gain"]
@@ -542,7 +576,9 @@ class AdaptivePerformanceOptimizer:
             priority_scores[bottleneck] = 1.0 - current_value
 
         # 우선순위 정렬
-        sorted_priorities = sorted(priority_scores.items(), key=lambda x: x[1], reverse=True)
+        sorted_priorities = sorted(
+            priority_scores.items(), key=lambda x: x[1], reverse=True
+        )
         return [item[0] for item in sorted_priorities]
 
     def _update_optimization_history(
@@ -584,7 +620,9 @@ class AdvancedEvolutionSystem:
         await self.enhanced_integration_system.initialize()
         logger.info("Advanced Evolution System initialized successfully")
 
-    async def run_advanced_evolution_cycle(self, context: EvolutionContext) -> Dict[str, Any]:
+    async def run_advanced_evolution_cycle(
+        self, context: EvolutionContext
+    ) -> Dict[str, Any]:
         """고급 진화 사이클 실행"""
         start_time = time.time()
 
@@ -600,12 +638,14 @@ class AdvancedEvolutionSystem:
             )
 
             # 2. 지속적 학습
-            continuous_learning_result = await self.continuous_learning_system.continuous_learn(
-                context
+            continuous_learning_result = (
+                await self.continuous_learning_system.continuous_learn(context)
             )
 
             # 3. 자기 진화
-            self_evolution_result = await self.self_evolution_system.self_evolve(context)
+            self_evolution_result = await self.self_evolution_system.self_evolve(
+                context
+            )
 
             # 4. 적응형 성능 최적화
             performance_optimization_result = (
@@ -705,14 +745,16 @@ class AdvancedEvolutionSystem:
 
         # 지속적 학습 테스트
         try:
-            continuous_learning_test = await self.continuous_learning_system.continuous_learn(
-                EvolutionContext(
-                    evolution_level=EvolutionLevel.ADVANCED,
-                    learning_type=LearningType.CONTINUOUS,
-                    performance_metrics={"cognitive": 0.85, "adaptive": 0.88},
-                    environment_data={"complexity": "high", "change_rate": "fast"},
-                    evolution_history=[],
-                    created_at=datetime.now().isoformat(),
+            continuous_learning_test = (
+                await self.continuous_learning_system.continuous_learn(
+                    EvolutionContext(
+                        evolution_level=EvolutionLevel.ADVANCED,
+                        learning_type=LearningType.CONTINUOUS,
+                        performance_metrics={"cognitive": 0.85, "adaptive": 0.88},
+                        environment_data={"complexity": "high", "change_rate": "fast"},
+                        evolution_history=[],
+                        created_at=datetime.now().isoformat(),
+                    )
                 )
             )
             test_results["continuous_learning"] = {
@@ -783,7 +825,9 @@ async def main():
     # 시스템 상태 확인
     status = await evolution_system.get_system_status()
     print(f"📊 시스템 상태: {status['advanced_evolution_system']['status']}")
-    print(f"🔧 진화 시스템 수: {status['advanced_evolution_system']['evolution_systems_count']}")
+    print(
+        f"🔧 진화 시스템 수: {status['advanced_evolution_system']['evolution_systems_count']}"
+    )
     print(f"📈 전체 시스템 수: {status['total_systems']}")
 
     # 포괄적 테스트 실행
@@ -809,10 +853,14 @@ async def main():
         created_at=datetime.now().isoformat(),
     )
 
-    cycle_result = await evolution_system.run_advanced_evolution_cycle(evolution_context)
+    cycle_result = await evolution_system.run_advanced_evolution_cycle(
+        evolution_context
+    )
 
     if cycle_result.get("status") != "error":
-        print(f"   ✅ 전체 진화 점수: {cycle_result.get('overall_evolution_score', 0):.2f}")
+        print(
+            f"   ✅ 전체 진화 점수: {cycle_result.get('overall_evolution_score', 0):.2f}"
+        )
         print(f"   ⏱️  실행 시간: {cycle_result.get('execution_time', 0):.2f}초")
     else:
         print(f"   ❌ 사이클 오류: {cycle_result.get('error', 'Unknown error')}")

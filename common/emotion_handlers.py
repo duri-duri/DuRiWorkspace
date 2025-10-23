@@ -27,7 +27,8 @@ class EmotionLogger:
             "timestamp": datetime.now().isoformat(),
             "old_emotions": old_vector.get_dominant_emotions(),
             "new_emotions": new_vector.get_dominant_emotions(),
-            "importance_delta": new_vector.compute_importance() - old_vector.compute_importance(),
+            "importance_delta": new_vector.compute_importance()
+            - old_vector.compute_importance(),
         }
 
         with open(self.log_path, "a") as f:

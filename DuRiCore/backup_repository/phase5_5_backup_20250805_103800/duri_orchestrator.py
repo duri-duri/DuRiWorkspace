@@ -400,7 +400,9 @@ class DuRiOrchestrator:
     def generate_status_report(self) -> Dict[str, Any]:
         """상태 리포트 생성"""
         return {
-            "orchestrator_status": ("active" if self.execution_loop_active else "inactive"),
+            "orchestrator_status": (
+                "active" if self.execution_loop_active else "inactive"
+            ),
             "system_count": len(self.systems),
             "active_systems": sum(
                 1 for status in self.system_status.values() if status.status == "active"

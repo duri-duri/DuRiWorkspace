@@ -111,7 +111,9 @@ async def test_system_adapters():
 
         # 어댑터 생성 테스트
         test_judgment = TestJudgmentSystem()
-        judgment_adapter = SystemAdapterFactory.create_adapter("judgment_system", test_judgment)
+        judgment_adapter = SystemAdapterFactory.create_adapter(
+            "judgment_system", test_judgment
+        )
 
         if judgment_adapter:
             # 초기화 테스트

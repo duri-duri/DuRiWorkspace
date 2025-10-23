@@ -2,14 +2,25 @@ FROM duri-base:latest
 
 WORKDIR /app
 
-# Core 서비스 파일 복사
+# 모든 서브모듈 복사 (SSH 연결된 상태)
 COPY duri_core/ /app/duri_core/
+COPY duri_brain/ /app/duri_brain/
+COPY duri_evolution/ /app/duri_evolution/
+COPY duri_control/ /app/duri_control/
 # 공통 모듈 복사
 COPY duri_common/ /app/duri_common/
 
-# Core 서비스 의존성 설치
-COPY duri_core/requirements.txt ./requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+# 모든 서비스 의존성 설치
+COPY duri_core/requirements.txt ./requirements_core.txt
+COPY duri_brain/requirements.txt ./requirements_brain.txt
+COPY duri_evolution/requirements.txt ./requirements_evolution.txt
+COPY duri_control/requirements.txt ./requirements_control.txt
+
+# 모든 requirements 설치
+RUN pip install --no-cache-dir -r requirements_core.txt && \
+    pip install --no-cache-dir -r requirements_brain.txt && \
+    pip install --no-cache-dir -r requirements_evolution.txt && \
+    pip install --no-cache-dir -r requirements_control.txt
 
 # Core 서비스 실행
 CMD ["python", "duri_core/run.py"]

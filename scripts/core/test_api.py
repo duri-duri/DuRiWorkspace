@@ -30,7 +30,9 @@ class EmotionAPITester:
             base_url (str): API 기본 URL
             timeout (int): 요청 타임아웃 (초)
         """
-        self.base_url = base_url or config.get_local_emotion_url().replace("/emotion", "")
+        self.base_url = base_url or config.get_local_emotion_url().replace(
+            "/emotion", ""
+        )
         self.timeout = timeout
         self.session = requests.Session()
 
@@ -69,7 +71,9 @@ class EmotionAPITester:
             print(f"❌ 인덱스 페이지 오류: {e}")
             return False
 
-    def send_emotion(self, emotion: str, intensity: float = 0.8, **kwargs) -> Optional[Dict]:
+    def send_emotion(
+        self, emotion: str, intensity: float = 0.8, **kwargs
+    ) -> Optional[Dict]:
         """
         감정 데이터 전송
 
@@ -194,7 +198,9 @@ class EmotionAPITester:
         # 존재하지 않는 엔드포인트
         print("\n3. 존재하지 않는 엔드포인트 테스트:")
         try:
-            response = self.session.get(f"{self.base_url}/nonexistent", timeout=self.timeout)
+            response = self.session.get(
+                f"{self.base_url}/nonexistent", timeout=self.timeout
+            )
             print(f"응답: HTTP {response.status_code}")
         except Exception as e:
             print(f"오류: {e}")
@@ -253,11 +259,17 @@ def main():
         help="테스트 타입",
     )
 
-    parser.add_argument("--emotion", "-e", default="curious", help="감정 (기본값: curious)")
+    parser.add_argument(
+        "--emotion", "-e", default="curious", help="감정 (기본값: curious)"
+    )
 
-    parser.add_argument("--intensity", "-i", type=float, default=0.8, help="강도 (기본값: 0.8)")
+    parser.add_argument(
+        "--intensity", "-i", type=float, default=0.8, help="강도 (기본값: 0.8)"
+    )
 
-    parser.add_argument("--count", "-c", type=int, default=10, help="테스트 횟수 (기본값: 10)")
+    parser.add_argument(
+        "--count", "-c", type=int, default=10, help="테스트 횟수 (기본값: 10)"
+    )
 
     parser.add_argument(
         "--delay",
@@ -267,7 +279,9 @@ def main():
         help="요청 간 대기 시간 (초, 기본값: 1.0)",
     )
 
-    parser.add_argument("--url", "-u", help="API 기본 URL (기본값: 환경변수에서 가져옴)")
+    parser.add_argument(
+        "--url", "-u", help="API 기본 URL (기본값: 환경변수에서 가져옴)"
+    )
 
     parser.add_argument(
         "--timeout", "-t", type=int, default=10, help="요청 타임아웃 (초, 기본값: 10)"

@@ -227,7 +227,9 @@ class IntuitiveThinkingSystem:
         except Exception as e:
             logger.warning(f"기존 시스템 통합 중 오류 발생: {e}")
 
-    async def think_intuitively(self, situation: Dict[str, Any]) -> IntuitiveThinkingResult:
+    async def think_intuitively(
+        self, situation: Dict[str, Any]
+    ) -> IntuitiveThinkingResult:
         """직관적 사고 실행"""
         logger.info(f"=== 직관적 사고 시작 ===")
 
@@ -245,7 +247,9 @@ class IntuitiveThinkingSystem:
             experiences = await self._access_experience_memories(situation)
 
             # 4. 직관적 통찰 생성
-            insights = await self._generate_intuitive_insights(situation, patterns, experiences)
+            insights = await self._generate_intuitive_insights(
+                situation, patterns, experiences
+            )
 
             # 5. 종합적 직관적 사고
             synthetic_insights = await self._apply_synthetic_thinking(
@@ -295,7 +299,9 @@ class IntuitiveThinkingSystem:
                 error_message=str(e),
             )
 
-    async def _recognize_patterns(self, situation: Dict[str, Any]) -> List[IntuitivePattern]:
+    async def _recognize_patterns(
+        self, situation: Dict[str, Any]
+    ) -> List[IntuitivePattern]:
         """패턴 인식"""
         patterns = []
 
@@ -417,7 +423,9 @@ class IntuitiveThinkingSystem:
 
         return patterns
 
-    async def _recognize_causal_patterns(self, situation: Dict[str, Any]) -> List[IntuitivePattern]:
+    async def _recognize_causal_patterns(
+        self, situation: Dict[str, Any]
+    ) -> List[IntuitivePattern]:
         """인과적 패턴 인식"""
         patterns = []
         situation_text = str(situation).lower()
@@ -468,7 +476,9 @@ class IntuitiveThinkingSystem:
         judgments = []
 
         # 1. 패턴 기반 빠른 판단
-        pattern_judgments = await self._make_pattern_based_judgments(situation, patterns)
+        pattern_judgments = await self._make_pattern_based_judgments(
+            situation, patterns
+        )
         judgments.extend(pattern_judgments)
 
         # 2. 경험 기반 빠른 판단
@@ -488,8 +498,13 @@ class IntuitiveThinkingSystem:
         judgments = []
 
         for pattern in patterns:
-            if pattern.confidence >= self.intuitive_thresholds["pattern_recognition_threshold"]:
-                judgment_text = await self._generate_pattern_based_judgment(pattern, situation)
+            if (
+                pattern.confidence
+                >= self.intuitive_thresholds["pattern_recognition_threshold"]
+            ):
+                judgment_text = await self._generate_pattern_based_judgment(
+                    pattern, situation
+                )
 
                 judgment = IntuitiveJudgment(
                     judgment_id=f"pattern_judgment_{len(self.intuitive_judgments)}",
@@ -521,7 +536,9 @@ class IntuitiveThinkingSystem:
             PatternType.EMERGENT: "이 상황은 새로운 창발적 패턴을 보여준다.",
         }
 
-        return pattern_judgments.get(pattern.pattern_type, "이 상황은 특정 패턴을 보여준다.")
+        return pattern_judgments.get(
+            pattern.pattern_type, "이 상황은 특정 패턴을 보여준다."
+        )
 
     async def _make_experience_based_judgments(
         self, situation: Dict[str, Any]
@@ -548,7 +565,9 @@ class IntuitiveThinkingSystem:
 
         return judgments
 
-    async def _make_intuitive_judgments(self, situation: Dict[str, Any]) -> List[IntuitiveJudgment]:
+    async def _make_intuitive_judgments(
+        self, situation: Dict[str, Any]
+    ) -> List[IntuitiveJudgment]:
         """직관적 빠른 판단"""
         judgments = []
 
@@ -592,7 +611,9 @@ class IntuitiveThinkingSystem:
 
         return experiences
 
-    async def _find_similar_experiences(self, situation: Dict[str, Any]) -> List[ExperienceMemory]:
+    async def _find_similar_experiences(
+        self, situation: Dict[str, Any]
+    ) -> List[ExperienceMemory]:
         """유사한 경험 검색"""
         experiences = []
 
@@ -637,7 +658,9 @@ class IntuitiveThinkingSystem:
 
         return experiences
 
-    async def _find_failed_experiences(self, situation: Dict[str, Any]) -> List[ExperienceMemory]:
+    async def _find_failed_experiences(
+        self, situation: Dict[str, Any]
+    ) -> List[ExperienceMemory]:
         """실패한 경험 검색"""
         experiences = []
 
@@ -669,7 +692,9 @@ class IntuitiveThinkingSystem:
         insights.extend(pattern_insights)
 
         # 2. 경험 기반 통찰
-        experience_insights = await self._generate_experience_based_insights(experiences)
+        experience_insights = await self._generate_experience_based_insights(
+            experiences
+        )
         insights.extend(experience_insights)
 
         # 3. 상황 기반 통찰
@@ -711,7 +736,9 @@ class IntuitiveThinkingSystem:
             PatternType.EMERGENT: "창발적 패턴은 새로운 가능성과 기회를 드러낸다.",
         }
 
-        return pattern_insights.get(pattern.pattern_type, "패턴은 상황의 본질을 드러낸다.")
+        return pattern_insights.get(
+            pattern.pattern_type, "패턴은 상황의 본질을 드러낸다."
+        )
 
     async def _generate_experience_based_insights(
         self, experiences: List[ExperienceMemory]
@@ -721,9 +748,13 @@ class IntuitiveThinkingSystem:
 
         for experience in experiences:
             if experience.success_rate >= 0.7:
-                insight_text = f"성공한 경험에서 {experience.outcome}의 핵심 요소를 발견했다."
+                insight_text = (
+                    f"성공한 경험에서 {experience.outcome}의 핵심 요소를 발견했다."
+                )
             else:
-                insight_text = f"실패한 경험에서 {experience.outcome}의 개선점을 발견했다."
+                insight_text = (
+                    f"실패한 경험에서 {experience.outcome}의 개선점을 발견했다."
+                )
 
             insight = IntuitiveInsight(
                 insight_id=f"experience_insight_{len(self.intuitive_insights)}",
@@ -819,7 +850,9 @@ class IntuitiveThinkingSystem:
 
         # 판단 신뢰도
         for judgment in judgments:
-            confidence_value = self._convert_confidence_enum_to_float(judgment.confidence)
+            confidence_value = self._convert_confidence_enum_to_float(
+                judgment.confidence
+            )
             total_confidence += confidence_value
             total_count += 1
 
@@ -830,7 +863,9 @@ class IntuitiveThinkingSystem:
 
         return total_confidence / total_count if total_count > 0 else 0.0
 
-    def _convert_confidence_enum_to_float(self, confidence: IntuitiveConfidence) -> float:
+    def _convert_confidence_enum_to_float(
+        self, confidence: IntuitiveConfidence
+    ) -> float:
         """신뢰도 열거형을 float로 변환"""
         confidence_values = {
             IntuitiveConfidence.VERY_LOW: 0.1,
@@ -856,7 +891,9 @@ class IntuitiveThinkingSystem:
             "pattern_distribution": self._get_pattern_distribution(),
             "confidence_distribution": self._get_confidence_distribution(),
             "recent_insights": (
-                [i.insight for i in self.intuitive_insights[-3:]] if self.intuitive_insights else []
+                [i.insight for i in self.intuitive_insights[-3:]]
+                if self.intuitive_insights
+                else []
             ),
         }
 

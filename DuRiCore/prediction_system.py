@@ -111,10 +111,14 @@ class PredictionSystem:
             trend_analysis = await self.trend_analyzer.analyze_trends(context)
 
             # 4. 리스크 평가
-            risk_assessment = await self.risk_assessor.assess_risks(context, prediction_type)
+            risk_assessment = await self.risk_assessor.assess_risks(
+                context, prediction_type
+            )
 
             # 5. 시나리오 생성
-            scenarios = await self.scenario_generator.generate_scenarios(context, prediction_type)
+            scenarios = await self.scenario_generator.generate_scenarios(
+                context, prediction_type
+            )
 
             # 6. 예측 결과 생성
             prediction = self._generate_prediction(
@@ -255,7 +259,9 @@ class PredictionSystem:
             logger.error(f"패턴 분석 실패: {e}")
             return {}
 
-    def _analyze_behavioral_patterns(self, context: Dict[str, Any]) -> List[PatternAnalysis]:
+    def _analyze_behavioral_patterns(
+        self, context: Dict[str, Any]
+    ) -> List[PatternAnalysis]:
         """행동 패턴 분석"""
         patterns = []
 
@@ -288,7 +294,9 @@ class PredictionSystem:
 
         return patterns
 
-    def _analyze_temporal_patterns(self, context: Dict[str, Any]) -> List[PatternAnalysis]:
+    def _analyze_temporal_patterns(
+        self, context: Dict[str, Any]
+    ) -> List[PatternAnalysis]:
         """시간적 패턴 분석"""
         patterns = []
 
@@ -308,7 +316,9 @@ class PredictionSystem:
 
         return patterns
 
-    def _analyze_structural_patterns(self, context: Dict[str, Any]) -> List[PatternAnalysis]:
+    def _analyze_structural_patterns(
+        self, context: Dict[str, Any]
+    ) -> List[PatternAnalysis]:
         """구조적 패턴 분석"""
         patterns = []
 
@@ -359,7 +369,9 @@ class PredictionSystem:
 
         except Exception as e:
             logger.error(f"예측 생성 실패: {e}")
-            return ErrorHandler.handle_exception(e, "prediction_generation", ErrorSeverity.HIGH)
+            return ErrorHandler.handle_exception(
+                e, "prediction_generation", ErrorSeverity.HIGH
+            )
 
     def _get_base_prediction(self, prediction_type: PredictionType) -> str:
         """기본 예측 템플릿"""
@@ -371,7 +383,9 @@ class PredictionSystem:
             PredictionType.PATTERN: "기존 패턴을 기반으로 한 예측 가능한 발전이 예상됩니다.",
             PredictionType.RISK: "리스크 요소를 고려한 신중한 발전이 예상됩니다.",
         }
-        base_prediction = predictions.get(prediction_type, "기본 예측을 생성할 수 없습니다.")
+        base_prediction = predictions.get(
+            prediction_type, "기본 예측을 생성할 수 없습니다."
+        )
         return StandardResponse.prediction(
             prediction_type=prediction_type.value,
             predicted_outcome=base_prediction,
@@ -384,9 +398,7 @@ class PredictionSystem:
         patterns = pattern_analysis.get("behavioral_patterns", [])
         if patterns:
             strongest_pattern = max(patterns, key=lambda p: p.pattern_strength)
-            prediction_message = (
-                f"패턴 분석 결과, {strongest_pattern.description}이 적용될 것으로 예상됩니다."
-            )
+            prediction_message = f"패턴 분석 결과, {strongest_pattern.description}이 적용될 것으로 예상됩니다."
             return StandardResponse.prediction(
                 prediction_type="pattern_analysis",
                 predicted_outcome=prediction_message,
@@ -405,7 +417,9 @@ class PredictionSystem:
         """트렌드 기반 예측 적용"""
         trends = trend_analysis.get("identified_trends", [])
         if trends:
-            prediction_message = f"트렌드 분석 결과, {trends[0]} 방향으로 발전할 것으로 예상됩니다."
+            prediction_message = (
+                f"트렌드 분석 결과, {trends[0]} 방향으로 발전할 것으로 예상됩니다."
+            )
             return StandardResponse.prediction(
                 prediction_type="trend_analysis",
                 predicted_outcome=prediction_message,
@@ -459,9 +473,7 @@ class PredictionSystem:
         elif system_performance < 0.3:
             return "시스템 성능 저하로 예측을 생성할 수 없습니다. 잠시 후 다시 시도해주세요."
         elif len(prediction_history) < 2:
-            return (
-                "충분한 예측 데이터가 없어 예측을 생성할 수 없습니다. 더 많은 정보를 제공해주세요."
-            )
+            return "충분한 예측 데이터가 없어 예측을 생성할 수 없습니다. 더 많은 정보를 제공해주세요."
         else:
             return "현재 상황에서는 예측을 생성할 수 없습니다. 다른 접근 방법을 시도해보겠습니다."
 
@@ -484,7 +496,11 @@ class PredictionSystem:
             risk_confidence = risk_assessment.get("confidence", 0.5)
 
             # 가중 평균
-            confidence = pattern_confidence * 0.4 + trend_confidence * 0.3 + risk_confidence * 0.3
+            confidence = (
+                pattern_confidence * 0.4
+                + trend_confidence * 0.3
+                + risk_confidence * 0.3
+            )
             return min(max(confidence, 0.0), 1.0)
 
         except Exception as e:
@@ -570,7 +586,9 @@ class PredictionSystem:
             "prediction_count": len(self.prediction_history),
             "pattern_count": len(self.pattern_database),
             "last_prediction": (
-                self.prediction_history[-1].created_at if self.prediction_history else None
+                self.prediction_history[-1].created_at
+                if self.prediction_history
+                else None
             ),
         }
 

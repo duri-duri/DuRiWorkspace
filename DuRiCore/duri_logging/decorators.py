@@ -101,7 +101,9 @@ def log_calls(
                 elapsed_ms = (time.perf_counter() - start_time) * 1000
 
                 # 오류 로그
-                log.error(f"✗ {func.__name__} 실패 ({elapsed_ms:.1f}ms): {type(e).__name__}: {e}")
+                log.error(
+                    f"✗ {func.__name__} 실패 ({elapsed_ms:.1f}ms): {type(e).__name__}: {e}"
+                )
 
                 # 원본 예외 재발생
                 raise

@@ -117,7 +117,8 @@ class AdvancedCommunicationProtocol:
                         last_heartbeat = connection.get("last_heartbeat")
                         if (
                             last_heartbeat
-                            and (current_time - last_heartbeat).seconds > self.connection_timeout
+                            and (current_time - last_heartbeat).seconds
+                            > self.connection_timeout
                         ):
                             logger.warning(f"⚠️  연결 타임아웃: {module_name}")
                             if self.auto_recovery_enabled:
@@ -183,7 +184,9 @@ class AdvancedCommunicationProtocol:
             self.performance_metrics["total_messages"] += 1
             self.performance_metrics["message_queue_size"] = self.message_queue.qsize()
 
-            logger.info(f"📤 메시지 전송: {from_module} → {to_module} ({message_type.value})")
+            logger.info(
+                f"📤 메시지 전송: {from_module} → {to_module} ({message_type.value})"
+            )
             return message.id
 
         except Exception as e:
@@ -207,7 +210,10 @@ class AdvancedCommunicationProtocol:
                         self.performance_metrics["failed_messages"] += 1
 
                         # 재시도 로직
-                        if self.auto_retry_enabled and message.retry_count < message.max_retries:
+                        if (
+                            self.auto_retry_enabled
+                            and message.retry_count < message.max_retries
+                        ):
                             message.retry_count += 1
                             self.message_queue.put((priority, time.time(), message))
                             logger.warning(
@@ -331,7 +337,9 @@ class AdvancedCommunicationProtocol:
 
             # 연결 상태 업데이트
             if message.from_module in self.module_connections:
-                self.module_connections[message.from_module]["last_heartbeat"] = datetime.now()
+                self.module_connections[message.from_module][
+                    "last_heartbeat"
+                ] = datetime.now()
 
             return True
 
@@ -427,10 +435,14 @@ class AdvancedCommunicationProtocol:
                     msg1 = recent_messages[i]
                     msg2 = recent_messages[i + 1]
                     if msg2.correlation_id == msg1.id:
-                        response_time = (msg2.timestamp - msg1.timestamp).total_seconds()
+                        response_time = (
+                            msg2.timestamp - msg1.timestamp
+                        ).total_seconds()
                         response_times.append(response_time)
 
-            avg_response_time = sum(response_times) / len(response_times) if response_times else 0.0
+            avg_response_time = (
+                sum(response_times) / len(response_times) if response_times else 0.0
+            )
         else:
             avg_response_time = 0.0
 
@@ -475,7 +487,9 @@ class AutoRecoverySystem:
         self.recovery_strategies[error_type] = strategy
         logger.info(f"🔄 복구 전략 등록: {error_type}")
 
-    async def attempt_recovery(self, module_name: str, error_type: str, error_details: Any) -> bool:
+    async def attempt_recovery(
+        self, module_name: str, error_type: str, error_details: Any
+    ) -> bool:
         """복구 시도"""
         try:
             if error_type in self.recovery_strategies:

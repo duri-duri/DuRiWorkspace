@@ -69,7 +69,9 @@ class SnapshotManager:
                     for snapshot_data in data.get("snapshots", []):
                         snapshot_info = SnapshotInfo(
                             name=snapshot_data["name"],
-                            timestamp=datetime.fromisoformat(snapshot_data["timestamp"]),
+                            timestamp=datetime.fromisoformat(
+                                snapshot_data["timestamp"]
+                            ),
                             size=snapshot_data["size"],
                             description=snapshot_data.get("description", ""),
                             tags=snapshot_data.get("tags", []),
@@ -138,12 +140,16 @@ class SnapshotManager:
 
             # 스냅샷 정보 업데이트
             snapshot_data.snapshot_info.size = snapshot_file.stat().st_size
-            snapshot_data.snapshot_info.checksum = self._calculate_checksum(snapshot_file)
+            snapshot_data.snapshot_info.checksum = self._calculate_checksum(
+                snapshot_file
+            )
 
             self.snapshots[name] = snapshot_data.snapshot_info
             self._save_snapshots()
 
-            logger.info(f"스냅샷 저장 완료: {name} ({snapshot_data.snapshot_info.size} bytes)")
+            logger.info(
+                f"스냅샷 저장 완료: {name} ({snapshot_data.snapshot_info.size} bytes)"
+            )
             return True
 
         except Exception as e:
@@ -233,7 +239,9 @@ class SnapshotManager:
         """스냅샷 정보 반환"""
         return self.snapshots.get(name)
 
-    def search_snapshots(self, tags: List[str] = None, description: str = "") -> List[SnapshotInfo]:
+    def search_snapshots(
+        self, tags: List[str] = None, description: str = ""
+    ) -> List[SnapshotInfo]:
         """스냅샷 검색"""
         results = []
 
@@ -259,10 +267,14 @@ class SnapshotManager:
             "total_snapshots": len(self.snapshots),
             "total_size": sum(s.size for s in self.snapshots.values()),
             "oldest_snapshot": (
-                min(s.timestamp for s in self.snapshots.values()) if self.snapshots else None
+                min(s.timestamp for s in self.snapshots.values())
+                if self.snapshots
+                else None
             ),
             "newest_snapshot": (
-                max(s.timestamp for s in self.snapshots.values()) if self.snapshots else None
+                max(s.timestamp for s in self.snapshots.values())
+                if self.snapshots
+                else None
             ),
         }
 

@@ -362,13 +362,15 @@ class GrowthLevelSystem:
 
         # 감정적 자극
         elif any(
-            word in stimulus_lower for word in ["기쁘", "슬프", "화나", "무서", "사랑", "미워"]
+            word in stimulus_lower
+            for word in ["기쁘", "슬프", "화나", "무서", "사랑", "미워"]
         ):
             return StimulusType.EMOTIONAL
 
         # 인지적 자극
         elif any(
-            word in stimulus_lower for word in ["왜", "어떻게", "문제", "학습", "이해", "생각"]
+            word in stimulus_lower
+            for word in ["왜", "어떻게", "문제", "학습", "이해", "생각"]
         ):
             return StimulusType.COGNITIVE
 
@@ -381,7 +383,8 @@ class GrowthLevelSystem:
 
         # 창의적 자극
         elif any(
-            word in stimulus_lower for word in ["상상", "창작", "새로", "혁신", "예술", "발명"]
+            word in stimulus_lower
+            for word in ["상상", "창작", "새로", "혁신", "예술", "발명"]
         ):
             return StimulusType.CREATIVE
 
@@ -392,41 +395,75 @@ class GrowthLevelSystem:
     def _update_emotion_from_stimulus(self, stimulus: str):
         """자극에 따른 감정 변화"""
         # 긍정적 자극
-        if any(word in stimulus.lower() for word in ["놀고", "재미", "좋아", "기쁘", "즐거"]):
+        if any(
+            word in stimulus.lower()
+            for word in ["놀고", "재미", "좋아", "기쁘", "즐거"]
+        ):
             self.emotion_state.happiness = min(1.0, self.emotion_state.happiness + 0.1)
-            self.emotion_state.excitement = min(1.0, self.emotion_state.excitement + 0.1)
-            self.emotion_state.satisfaction = min(1.0, self.emotion_state.satisfaction + 0.05)
+            self.emotion_state.excitement = min(
+                1.0, self.emotion_state.excitement + 0.1
+            )
+            self.emotion_state.satisfaction = min(
+                1.0, self.emotion_state.satisfaction + 0.05
+            )
 
         # 호기심 자극
-        if any(word in stimulus.lower() for word in ["왜", "어떻게", "무엇", "어디", "언제"]):
+        if any(
+            word in stimulus.lower()
+            for word in ["왜", "어떻게", "무엇", "어디", "언제"]
+        ):
             self.emotion_state.curiosity = min(1.0, self.emotion_state.curiosity + 0.15)
-            self.emotion_state.excitement = min(1.0, self.emotion_state.excitement + 0.1)
+            self.emotion_state.excitement = min(
+                1.0, self.emotion_state.excitement + 0.1
+            )
 
         # 도전적 자극
         if any(word in stimulus.lower() for word in ["어려워", "몰라", "힘들", "실패"]):
-            self.emotion_state.frustration = min(1.0, self.emotion_state.frustration + 0.1)
+            self.emotion_state.frustration = min(
+                1.0, self.emotion_state.frustration + 0.1
+            )
             self.emotion_state.anxiety = min(1.0, self.emotion_state.anxiety + 0.05)
-            self.emotion_state.confidence = max(0.0, self.emotion_state.confidence - 0.05)
+            self.emotion_state.confidence = max(
+                0.0, self.emotion_state.confidence - 0.05
+            )
 
         # 성취 자극
-        if any(word in stimulus.lower() for word in ["성공", "완성", "해결", "이해", "알았"]):
-            self.emotion_state.satisfaction = min(1.0, self.emotion_state.satisfaction + 0.15)
-            self.emotion_state.confidence = min(1.0, self.emotion_state.confidence + 0.1)
+        if any(
+            word in stimulus.lower()
+            for word in ["성공", "완성", "해결", "이해", "알았"]
+        ):
+            self.emotion_state.satisfaction = min(
+                1.0, self.emotion_state.satisfaction + 0.15
+            )
+            self.emotion_state.confidence = min(
+                1.0, self.emotion_state.confidence + 0.1
+            )
             self.emotion_state.happiness = min(1.0, self.emotion_state.happiness + 0.05)
 
     def _update_emotion_from_response(self, response: str):
         """반응에 따른 감정 변화"""
         # 긍정적 반응
-        if any(word in response.lower() for word in ["좋아", "재미", "기쁘", "즐거", "성공"]):
-            self.emotion_state.satisfaction = min(1.0, self.emotion_state.satisfaction + 0.1)
-            self.emotion_state.confidence = min(1.0, self.emotion_state.confidence + 0.05)
+        if any(
+            word in response.lower()
+            for word in ["좋아", "재미", "기쁘", "즐거", "성공"]
+        ):
+            self.emotion_state.satisfaction = min(
+                1.0, self.emotion_state.satisfaction + 0.1
+            )
+            self.emotion_state.confidence = min(
+                1.0, self.emotion_state.confidence + 0.05
+            )
 
         # 호기심 반응
         if any(word in response.lower() for word in ["궁금", "더", "다시", "새로"]):
             self.emotion_state.curiosity = min(1.0, self.emotion_state.curiosity + 0.1)
-            self.emotion_state.excitement = min(1.0, self.emotion_state.excitement + 0.05)
+            self.emotion_state.excitement = min(
+                1.0, self.emotion_state.excitement + 0.05
+            )
 
-    def _generate_level_appropriate_response(self, stimulus: str, original_response: str) -> str:
+    def _generate_level_appropriate_response(
+        self, stimulus: str, original_response: str
+    ) -> str:
         """현재 레벨에 맞는 반응 생성"""
         level_info = self.level_characteristics[self.current_level]
 
@@ -632,13 +669,16 @@ class GrowthLevelSystem:
             emotional_stability_rate = self.metrics.emotional_stability_count / max(
                 1, self.metrics.stimulus_count
             )
-            success_rate = self.metrics.successful_responses / max(1, self.metrics.stimulus_count)
+            success_rate = self.metrics.successful_responses / max(
+                1, self.metrics.stimulus_count
+            )
             can_evolve = emotional_stability_rate >= 0.7 and success_rate >= 0.6
 
         elif self.current_level == GrowthLevel.INFANT_EARLY:
             # 감정 인식과 기억 형성 확인
             can_evolve = (
-                self.metrics.emotional_maturity > 0.6 and self.metrics.cognitive_development > 0.5
+                self.metrics.emotional_maturity > 0.6
+                and self.metrics.cognitive_development > 0.5
             )
 
         elif self.current_level == GrowthLevel.INFANT_LATE:
@@ -646,7 +686,9 @@ class GrowthLevelSystem:
             problem_solving_rate = self.metrics.problem_solving_count / max(
                 1, self.metrics.stimulus_count
             )
-            can_evolve = problem_solving_rate >= 0.4 and self.metrics.emotional_maturity > 0.6
+            can_evolve = (
+                problem_solving_rate >= 0.4 and self.metrics.emotional_maturity > 0.6
+            )
 
         elif self.current_level == GrowthLevel.TODDLER:
             # 자기 표현과 타자 예측 확인
@@ -658,7 +700,8 @@ class GrowthLevelSystem:
         elif self.current_level == GrowthLevel.SCHOOL_AGE:
             # 규칙 준수와 공감 판단 확인
             can_evolve = (
-                self.metrics.cognitive_development > 0.7 and self.metrics.social_skills > 0.6
+                self.metrics.cognitive_development > 0.7
+                and self.metrics.social_skills > 0.6
             )
 
         elif self.current_level == GrowthLevel.ADOLESCENT:
@@ -671,7 +714,8 @@ class GrowthLevelSystem:
         elif self.current_level == GrowthLevel.YOUTH:
             # 자기성찰과 가치 판단 확인
             can_evolve = (
-                self.metrics.self_motivation > 0.7 and self.metrics.emotional_maturity > 0.8
+                self.metrics.self_motivation > 0.7
+                and self.metrics.emotional_maturity > 0.8
             )
 
         # 성인기는 최종 단계
@@ -729,7 +773,9 @@ class GrowthLevelSystem:
             "learning_permissions": self.learning_permissions[self.current_level],
             "high_order_thinking_ratio": level_info["high_order_thinking"],
             "total_stimulus_count": len(self.stimulus_history),
-            "recent_stimulus": [record.stimulus for record in self.stimulus_history[-5:]],
+            "recent_stimulus": [
+                record.stimulus for record in self.stimulus_history[-5:]
+            ],
         }
 
 

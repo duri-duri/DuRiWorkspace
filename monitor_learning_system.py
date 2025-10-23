@@ -96,7 +96,9 @@ class LearningSystemMonitor:
 
             # 학습률 계산
             if experiences:
-                success_count = sum(1 for e in experiences if e.get("outcome") == "success")
+                success_count = sum(
+                    1 for e in experiences if e.get("outcome") == "success"
+                )
                 learning_rate = success_count / len(experiences)
             else:
                 learning_rate = 0.0
@@ -193,7 +195,9 @@ class LearningSystemMonitor:
     ):
         """상태 대시보드 출력"""
         print("\n" + "=" * 80)
-        print(f"🔍 DuRi 학습 시스템 모니터링 - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        print(
+            f"🔍 DuRi 학습 시스템 모니터링 - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+        )
         print("=" * 80)
 
         # 시스템 상태
@@ -216,8 +220,12 @@ class LearningSystemMonitor:
         # 자율 학습 상태
         autonomous_status = learning_metrics["autonomous_status"]
         print(f"  자율 학습 활성화: {'✅' if autonomous_status['is_active'] else '❌'}")
-        print(f"  연속 학습: {'✅' if autonomous_status['continuous_learner_active'] else '❌'}")
-        print(f"  실시간 학습: {'✅' if autonomous_status['realtime_learner_active'] else '❌'}")
+        print(
+            f"  연속 학습: {'✅' if autonomous_status['continuous_learner_active'] else '❌'}"
+        )
+        print(
+            f"  실시간 학습: {'✅' if autonomous_status['realtime_learner_active'] else '❌'}"
+        )
 
         # 알림
         if alerts:
@@ -269,7 +277,9 @@ class LearningSystemMonitor:
     def export_monitoring_data(self, filename: str = None):
         """모니터링 데이터 내보내기"""
         if filename is None:
-            filename = f"learning_monitor_data_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+            filename = (
+                f"learning_monitor_data_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+            )
 
         try:
             with open(filename, "w", encoding="utf-8") as f:

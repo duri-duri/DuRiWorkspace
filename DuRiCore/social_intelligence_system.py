@@ -313,7 +313,9 @@ class SocialIntelligenceSystem(BaseModule):
 
             # 기본 실행 (컨텍스트 이해)
             elif "context_data" in context:
-                social_context = await self.understand_social_context(context["context_data"])
+                social_context = await self.understand_social_context(
+                    context["context_data"]
+                )
                 return {
                     "status": "success",
                     "social_context": social_context,
@@ -426,7 +428,9 @@ class SocialIntelligenceSystem(BaseModule):
         self.trust_models["high"] = 0.8
         self.trust_models["low"] = 0.2
 
-    async def understand_social_context(self, context_data: Dict[str, Any]) -> SocialContext:
+    async def understand_social_context(
+        self, context_data: Dict[str, Any]
+    ) -> SocialContext:
         """사회적 맥락 이해 (성능 최적화 적용)"""
         try:
             start_time = time.time()
@@ -436,10 +440,14 @@ class SocialIntelligenceSystem(BaseModule):
             participants = await self._analyze_participants(context_data)
             relationship_type = await self._determine_relationship_type(participants)
             interaction_type = await self._determine_interaction_type(context_data)
-            emotional_atmosphere = await self._analyze_emotional_atmosphere(context_data)
+            emotional_atmosphere = await self._analyze_emotional_atmosphere(
+                context_data
+            )
 
             # 권력 역학 분석
-            power_dynamics = await self._analyze_power_dynamics(participants, context_data)
+            power_dynamics = await self._analyze_power_dynamics(
+                participants, context_data
+            )
 
             # 문화적 맥락 분석
             cultural_context = await self._analyze_cultural_context(context_data)
@@ -466,10 +474,14 @@ class SocialIntelligenceSystem(BaseModule):
             )
 
             # 관계 유형별 전략 처리
-            relationship_result = handle_relationship(relationship_context, relationship_type)
+            relationship_result = handle_relationship(
+                relationship_context, relationship_type
+            )
 
             # 전략 결과를 반영
-            communication_style = relationship_result.get("communication_style", "professional")
+            communication_style = relationship_result.get(
+                "communication_style", "professional"
+            )
             emotional_atmosphere.update(
                 {
                     "trust": relationship_result.get("trust_level", 0.5),
@@ -543,22 +555,34 @@ class SocialIntelligenceSystem(BaseModule):
 
             # 결과 처리
             integrated_result = (
-                results[0] if len(results) > 0 and not isinstance(results[0], Exception) else None
+                results[0]
+                if len(results) > 0 and not isinstance(results[0], Exception)
+                else None
             )
             communication_optimization = (
-                results[1] if len(results) > 1 and not isinstance(results[1], Exception) else {}
+                results[1]
+                if len(results) > 1 and not isinstance(results[1], Exception)
+                else {}
             )
             emotional_optimization = (
-                results[2] if len(results) > 2 and not isinstance(results[2], Exception) else {}
+                results[2]
+                if len(results) > 2 and not isinstance(results[2], Exception)
+                else {}
             )
             language_optimization = (
-                results[3] if len(results) > 3 and not isinstance(results[3], Exception) else {}
+                results[3]
+                if len(results) > 3 and not isinstance(results[3], Exception)
+                else {}
             )
             timing_optimization = (
-                results[4] if len(results) > 4 and not isinstance(results[4], Exception) else {}
+                results[4]
+                if len(results) > 4 and not isinstance(results[4], Exception)
+                else {}
             )
             feedback_optimization = (
-                results[5] if len(results) > 5 and not isinstance(results[5], Exception) else {}
+                results[5]
+                if len(results) > 5 and not isinstance(results[5], Exception)
+                else {}
             )
 
             # 통합된 최적화 결과
@@ -588,7 +612,9 @@ class SocialIntelligenceSystem(BaseModule):
 
             # 기존 학습 시스템을 활용하여 적응 (병렬 처리)
             learning_system = self._get_system("self_directed_learning")
-            if learning_system and hasattr(learning_system, "start_self_directed_learning"):
+            if learning_system and hasattr(
+                learning_system, "start_self_directed_learning"
+            ):
                 tasks.append(
                     learning_system.start_self_directed_learning(
                         {
@@ -616,19 +642,29 @@ class SocialIntelligenceSystem(BaseModule):
 
             # 결과 처리
             learning_result = (
-                results[0] if len(results) > 0 and not isinstance(results[0], Exception) else None
+                results[0]
+                if len(results) > 0 and not isinstance(results[0], Exception)
+                else None
             )
             situation_analysis = (
-                results[1] if len(results) > 1 and not isinstance(results[1], Exception) else {}
+                results[1]
+                if len(results) > 1 and not isinstance(results[1], Exception)
+                else {}
             )
             adaptation_strategy = (
-                results[2] if len(results) > 2 and not isinstance(results[2], Exception) else {}
+                results[2]
+                if len(results) > 2 and not isinstance(results[2], Exception)
+                else {}
             )
             behavior_adjustment = (
-                results[3] if len(results) > 3 and not isinstance(results[3], Exception) else {}
+                results[3]
+                if len(results) > 3 and not isinstance(results[3], Exception)
+                else {}
             )
             feedback_learning = (
-                results[4] if len(results) > 4 and not isinstance(results[4], Exception) else {}
+                results[4]
+                if len(results) > 4 and not isinstance(results[4], Exception)
+                else {}
             )
 
             # 통합된 적응 결과
@@ -675,19 +711,29 @@ class SocialIntelligenceSystem(BaseModule):
 
             # 결과 처리
             teamwork_analysis = (
-                results[0] if len(results) > 0 and not isinstance(results[0], Exception) else {}
+                results[0]
+                if len(results) > 0 and not isinstance(results[0], Exception)
+                else {}
             )
             collaboration_strategy = (
-                results[1] if len(results) > 1 and not isinstance(results[1], Exception) else {}
+                results[1]
+                if len(results) > 1 and not isinstance(results[1], Exception)
+                else {}
             )
             role_optimization = (
-                results[2] if len(results) > 2 and not isinstance(results[2], Exception) else {}
+                results[2]
+                if len(results) > 2 and not isinstance(results[2], Exception)
+                else {}
             )
             communication_optimization = (
-                results[3] if len(results) > 3 and not isinstance(results[3], Exception) else {}
+                results[3]
+                if len(results) > 3 and not isinstance(results[3], Exception)
+                else {}
             )
             conflict_resolution = (
-                results[4] if len(results) > 4 and not isinstance(results[4], Exception) else {}
+                results[4]
+                if len(results) > 4 and not isinstance(results[4], Exception)
+                else {}
             )
 
             # 통합된 협업 결과
@@ -727,8 +773,8 @@ class SocialIntelligenceSystem(BaseModule):
             tasks.append(self.collaborate_effectively(context, interaction_data))
 
             # 병렬 실행
-            optimization_result, adaptation_result, collaboration_result = await asyncio.gather(
-                *tasks, return_exceptions=True
+            optimization_result, adaptation_result, collaboration_result = (
+                await asyncio.gather(*tasks, return_exceptions=True)
             )
 
             # 예외 처리
@@ -756,16 +802,24 @@ class SocialIntelligenceSystem(BaseModule):
             # 5. SocialIntelligenceResult 생성
             result = SocialIntelligenceResult(
                 interaction_id=interaction_data.get("interaction_id", "unknown"),
-                context_understanding=integrated_result.get("context_understanding", 0.8),
-                interaction_optimization=integrated_result.get("interaction_optimization", 0.8),
+                context_understanding=integrated_result.get(
+                    "context_understanding", 0.8
+                ),
+                interaction_optimization=integrated_result.get(
+                    "interaction_optimization", 0.8
+                ),
                 social_adaptation=integrated_result.get("social_adaptation", 0.8),
                 collaboration_effectiveness=integrated_result.get(
                     "collaboration_effectiveness", 0.8
                 ),
                 empathy_score=integrated_result.get("empathy_score", 0.8),
                 trust_building=integrated_result.get("trust_building", 0.7),
-                communication_quality=integrated_result.get("communication_quality", 0.8),
-                relationship_improvement=integrated_result.get("relationship_improvement", 0.8),
+                communication_quality=integrated_result.get(
+                    "communication_quality", 0.8
+                ),
+                relationship_improvement=integrated_result.get(
+                    "relationship_improvement", 0.8
+                ),
                 insights=integrated_result.get(
                     "insights",
                     [
@@ -834,7 +888,9 @@ class SocialIntelligenceSystem(BaseModule):
         else:
             return SocialContextType.INFORMAL
 
-    async def _determine_context_type(self, context_data: Dict[str, Any]) -> SocialContextType:
+    async def _determine_context_type(
+        self, context_data: Dict[str, Any]
+    ) -> SocialContextType:
         """맥락 유형 결정 (캐시 래퍼)"""
         # 효율적인 캐시 키 생성
         context_str = self._generate_cache_key(context_data)
@@ -848,7 +904,9 @@ class SocialIntelligenceSystem(BaseModule):
         return participants
 
     @lru_cache(maxsize=128)
-    def _determine_relationship_type_cached(self, participants_hash: str) -> RelationshipType:
+    def _determine_relationship_type_cached(
+        self, participants_hash: str
+    ) -> RelationshipType:
         """관계 유형 결정 (캐시 적용)"""
         # participants_hash를 다시 리스트로 변환
         participants = participants_hash.split("|") if participants_hash else []
@@ -877,13 +935,17 @@ class SocialIntelligenceSystem(BaseModule):
             # 단일 참가자 또는 기본값
             return RelationshipType.FRIEND
 
-    async def _determine_relationship_type(self, participants: List[str]) -> RelationshipType:
+    async def _determine_relationship_type(
+        self, participants: List[str]
+    ) -> RelationshipType:
         """관계 유형 결정 (캐시 래퍼)"""
         # 효율적인 캐시 키 생성
         participants_hash = self._generate_cache_key(participants)
         return self._determine_relationship_type_cached(participants_hash)
 
-    async def _determine_interaction_type(self, context_data: Dict[str, Any]) -> InteractionType:
+    async def _determine_interaction_type(
+        self, context_data: Dict[str, Any]
+    ) -> InteractionType:
         """상호작용 유형 결정"""
         interaction_type = context_data.get("interaction_type", "conversation")
         if interaction_type == "collaboration":
@@ -902,7 +964,9 @@ class SocialIntelligenceSystem(BaseModule):
             return InteractionType.CONVERSATION
 
     @lru_cache(maxsize=256)  # 캐시 크기 증가
-    def _analyze_emotional_atmosphere_cached(self, context_hash: str) -> Dict[str, float]:
+    def _analyze_emotional_atmosphere_cached(
+        self, context_hash: str
+    ) -> Dict[str, float]:
         """감정적 분위기 분석 (캐시 적용)"""
         # context_hash를 다시 dict로 변환 (간단한 구현)
         return {
@@ -913,7 +977,9 @@ class SocialIntelligenceSystem(BaseModule):
             "excited": 0.3,
         }
 
-    async def _analyze_emotional_atmosphere(self, context_data: Dict[str, Any]) -> Dict[str, float]:
+    async def _analyze_emotional_atmosphere(
+        self, context_data: Dict[str, Any]
+    ) -> Dict[str, float]:
         """감정적 분위기 분석 (캐시 래퍼)"""
         # 효율적인 캐시 키 생성
         context_str = self._generate_cache_key(context_data)
@@ -922,7 +988,9 @@ class SocialIntelligenceSystem(BaseModule):
         # 실제 데이터로 업데이트
         return {
             "friendly": context_data.get("friendly", cached_result["friendly"]),
-            "professional": context_data.get("professional", cached_result["professional"]),
+            "professional": context_data.get(
+                "professional", cached_result["professional"]
+            ),
             "tense": context_data.get("tense", cached_result["tense"]),
             "relaxed": context_data.get("relaxed", cached_result["relaxed"]),
             "excited": context_data.get("excited", cached_result["excited"]),
@@ -937,7 +1005,9 @@ class SocialIntelligenceSystem(BaseModule):
             power_dynamics[participant] = context_data.get(f"power_{participant}", 0.5)
         return power_dynamics
 
-    async def _analyze_cultural_context(self, context_data: Dict[str, Any]) -> Dict[str, Any]:
+    async def _analyze_cultural_context(
+        self, context_data: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """문화적 맥락 분석"""
         return {
             "formality": context_data.get("formality", 0.5),
@@ -946,7 +1016,9 @@ class SocialIntelligenceSystem(BaseModule):
             "individualism": context_data.get("individualism", 0.5),
         }
 
-    async def _optimize_communication_style(self, context: SocialContext) -> Dict[str, Any]:
+    async def _optimize_communication_style(
+        self, context: SocialContext
+    ) -> Dict[str, Any]:
         """의사소통 스타일 최적화 (성능 최적화 적용)"""
         # 전략 패턴을 사용하여 관계 유형별 처리
         from relationship_strategies import (RelationshipContext,
@@ -1269,7 +1341,9 @@ class SocialIntelligenceSystem(BaseModule):
             "recommendations": recommendations,
         }
 
-    def _update_performance_metrics(self, success: bool, duration: float, result: Dict[str, Any]):
+    def _update_performance_metrics(
+        self, success: bool, duration: float, result: Dict[str, Any]
+    ):
         """성능 메트릭 업데이트"""
         self.performance_metrics["total_interactions"] += 1
 
@@ -1287,7 +1361,9 @@ class SocialIntelligenceSystem(BaseModule):
             # 평균 계산
             current_avg_empathy = self.performance_metrics["average_empathy_score"]
             current_avg_trust = self.performance_metrics["average_trust_score"]
-            current_avg_communication = self.performance_metrics["communication_quality"]
+            current_avg_communication = self.performance_metrics[
+                "communication_quality"
+            ]
 
             self.performance_metrics["average_empathy_score"] = (
                 current_avg_empathy * (total_interactions - 1) + empathy_score
@@ -1298,7 +1374,8 @@ class SocialIntelligenceSystem(BaseModule):
             ) / total_interactions
 
             self.performance_metrics["communication_quality"] = (
-                current_avg_communication * (total_interactions - 1) + communication_quality
+                current_avg_communication * (total_interactions - 1)
+                + communication_quality
             ) / total_interactions
 
     async def get_social_intelligence_summary(self) -> Dict[str, Any]:
@@ -1379,9 +1456,15 @@ async def test_social_intelligence_system():
     print(
         f"   성공률: {summary['performance_metrics']['successful_interactions']/summary['performance_metrics']['total_interactions']*100:.1f}%"
     )
-    print(f"   평균 공감 점수: {summary['performance_metrics']['average_empathy_score']:.2f}")
-    print(f"   평균 신뢰 점수: {summary['performance_metrics']['average_trust_score']:.2f}")
-    print(f"   의사소통 품질: {summary['performance_metrics']['communication_quality']:.2f}")
+    print(
+        f"   평균 공감 점수: {summary['performance_metrics']['average_empathy_score']:.2f}"
+    )
+    print(
+        f"   평균 신뢰 점수: {summary['performance_metrics']['average_trust_score']:.2f}"
+    )
+    print(
+        f"   의사소통 품질: {summary['performance_metrics']['communication_quality']:.2f}"
+    )
 
     print("\n🎯 사회적 지능 시스템 테스트 완료!")
 

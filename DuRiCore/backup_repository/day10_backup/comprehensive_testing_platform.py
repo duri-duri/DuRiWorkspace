@@ -136,7 +136,9 @@ class ComprehensiveTestingPlatform:
 
         logger.info("종합 테스트 플랫폼 초기화 완료")
 
-    async def perform_comprehensive_tests(self, test_data: Dict[str, Any]) -> TestResult:
+    async def perform_comprehensive_tests(
+        self, test_data: Dict[str, Any]
+    ) -> TestResult:
         """종합 성능 테스트 수행"""
         test_id = f"comprehensive_{int(time.time())}_{uuid.uuid4().hex[:8]}"
         start_time = time.time()
@@ -156,14 +158,18 @@ class ComprehensiveTestingPlatform:
                 test_results = await self._execute_sequential_tests(test_cases)
 
             # 성능 메트릭 수집
-            performance_metrics = await self._collect_test_performance_metrics(test_results)
+            performance_metrics = await self._collect_test_performance_metrics(
+                test_results
+            )
 
             # 성공/실패 분석
             successful_tests = [r for r in test_results if r.success]
             failed_tests = [r for r in test_results if not r.success]
 
             # 전체 성공률 계산
-            success_rate = len(successful_tests) / len(test_results) if test_results else 0.0
+            success_rate = (
+                len(successful_tests) / len(test_results) if test_results else 0.0
+            )
 
             execution_time = time.time() - start_time
 
@@ -206,7 +212,9 @@ class ComprehensiveTestingPlatform:
                 actual_result={},
             )
 
-    async def conduct_stability_tests(self, stability_data: Dict[str, Any]) -> StabilityReport:
+    async def conduct_stability_tests(
+        self, stability_data: Dict[str, Any]
+    ) -> StabilityReport:
         """시스템 안정성 테스트 수행"""
         report_id = f"stability_{int(time.time())}_{uuid.uuid4().hex[:8]}"
         start_time = time.time()
@@ -231,7 +239,9 @@ class ComprehensiveTestingPlatform:
             stability_issues = self._identify_stability_issues(stability_results)
 
             # 권장사항 생성
-            recommendations = await self._generate_stability_recommendations(stability_results)
+            recommendations = await self._generate_stability_recommendations(
+                stability_results
+            )
 
             test_time = time.time() - start_time
 
@@ -309,7 +319,9 @@ class ComprehensiveTestingPlatform:
             )
 
             self.stress_history.append(result)
-            logger.info(f"스트레스 테스트 완료: {report_id}, 스트레스 레벨: {stress_level}")
+            logger.info(
+                f"스트레스 테스트 완료: {report_id}, 스트레스 레벨: {stress_level}"
+            )
 
             return result
 
@@ -350,7 +362,9 @@ class ComprehensiveTestingPlatform:
             # 권장사항 및 위험도 평가
             recommendations = await self._generate_test_recommendations(test_results)
             risk_assessment = self._assess_test_risks(test_results)
-            improvement_suggestions = self._generate_improvement_suggestions(test_results)
+            improvement_suggestions = self._generate_improvement_suggestions(
+                test_results
+            )
 
             analysis_time = time.time() - start_time
 
@@ -367,7 +381,9 @@ class ComprehensiveTestingPlatform:
             )
 
             self.analysis_history.append(result)
-            logger.info(f"테스트 결과 분석 완료: {report_id}, 전체 점수: {overall_score:.2%}")
+            logger.info(
+                f"테스트 결과 분석 완료: {report_id}, 전체 점수: {overall_score:.2%}"
+            )
 
             return result
 
@@ -431,7 +447,9 @@ class ComprehensiveTestingPlatform:
 
         logger.info(f"기본 테스트 케이스 {len(default_cases)}개 등록 완료")
 
-    async def _execute_sequential_tests(self, test_cases: List[str]) -> List[TestResult]:
+    async def _execute_sequential_tests(
+        self, test_cases: List[str]
+    ) -> List[TestResult]:
         """순차적 테스트 실행"""
         results = []
 
@@ -449,12 +467,16 @@ class ComprehensiveTestingPlatform:
         """병렬 테스트 실행"""
         results = []
 
-        with ThreadPoolExecutor(max_workers=self.test_config["max_concurrent_tests"]) as executor:
+        with ThreadPoolExecutor(
+            max_workers=self.test_config["max_concurrent_tests"]
+        ) as executor:
             test_tasks = []
             for test_case_name in test_cases:
                 if test_case_name in self.test_suite:
                     test_case = self.test_suite[test_case_name]
-                    task = executor.submit(asyncio.run, self._execute_single_test(test_case))
+                    task = executor.submit(
+                        asyncio.run, self._execute_single_test(test_case)
+                    )
                     test_tasks.append((test_case_name, task))
 
             for test_case_name, task in test_tasks:
@@ -561,18 +583,23 @@ class ComprehensiveTestingPlatform:
         if successful_results:
             # 응답 시간 평균
             response_times = [
-                r.performance_metrics.get("response_time", 0) for r in successful_results
+                r.performance_metrics.get("response_time", 0)
+                for r in successful_results
             ]
             if response_times:
                 metrics["avg_response_time"] = statistics.mean(response_times)
 
             # 처리량 평균
-            throughputs = [r.performance_metrics.get("throughput", 0) for r in successful_results]
+            throughputs = [
+                r.performance_metrics.get("throughput", 0) for r in successful_results
+            ]
             if throughputs:
                 metrics["avg_throughput"] = statistics.mean(throughputs)
 
             # CPU 사용률 평균
-            cpu_usages = [r.performance_metrics.get("cpu_usage", 0) for r in successful_results]
+            cpu_usages = [
+                r.performance_metrics.get("cpu_usage", 0) for r in successful_results
+            ]
             if cpu_usages:
                 metrics["avg_cpu_usage"] = statistics.mean(cpu_usages)
 
@@ -616,7 +643,9 @@ class ComprehensiveTestingPlatform:
 
         return results
 
-    def _calculate_overall_stability(self, stability_results: List[Dict[str, Any]]) -> float:
+    def _calculate_overall_stability(
+        self, stability_results: List[Dict[str, Any]]
+    ) -> float:
         """전체 안정성 계산"""
         if not stability_results:
             return 0.0
@@ -646,7 +675,9 @@ class ComprehensiveTestingPlatform:
 
         return system_stability
 
-    def _identify_stability_issues(self, stability_results: List[Dict[str, Any]]) -> List[str]:
+    def _identify_stability_issues(
+        self, stability_results: List[Dict[str, Any]]
+    ) -> List[str]:
         """안정성 문제 식별"""
         issues = []
 
@@ -716,7 +747,9 @@ class ComprehensiveTestingPlatform:
 
         return results
 
-    def _analyze_stress_performance(self, stress_results: List[Dict[str, Any]]) -> Dict[str, float]:
+    def _analyze_stress_performance(
+        self, stress_results: List[Dict[str, Any]]
+    ) -> Dict[str, float]:
         """스트레스 성능 분석"""
         system_performance = {}
 
@@ -736,7 +769,9 @@ class ComprehensiveTestingPlatform:
 
         return system_performance
 
-    def _identify_breaking_points(self, stress_results: List[Dict[str, Any]]) -> List[str]:
+    def _identify_breaking_points(
+        self, stress_results: List[Dict[str, Any]]
+    ) -> List[str]:
         """파괴 지점 식별"""
         breaking_points = []
 
@@ -752,7 +787,9 @@ class ComprehensiveTestingPlatform:
 
         return breaking_points
 
-    def _analyze_recovery_patterns(self, stress_results: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def _analyze_recovery_patterns(
+        self, stress_results: List[Dict[str, Any]]
+    ) -> Dict[str, Any]:
         """복구 패턴 분석"""
         recovery_analysis = {
             "total_breakdowns": 0,
@@ -765,7 +802,9 @@ class ComprehensiveTestingPlatform:
 
         # 파괴 및 복구 분석
         breakdowns = [r for r in stress_results if r["is_breaking"]]
-        recovery_times = [r["recovery_time"] for r in breakdowns if r["recovery_time"] > 0]
+        recovery_times = [
+            r["recovery_time"] for r in breakdowns if r["recovery_time"] > 0
+        ]
 
         recovery_analysis["total_breakdowns"] = len(breakdowns)
         recovery_analysis["avg_recovery_time"] = (
@@ -796,7 +835,9 @@ class ComprehensiveTestingPlatform:
                     performance_score = max(0, 1 - response_time / 0.5)  # 0.5초 기준
                     performance_scores.append(performance_score)
 
-            avg_performance = statistics.mean(performance_scores) if performance_scores else 0.0
+            avg_performance = (
+                statistics.mean(performance_scores) if performance_scores else 0.0
+            )
         else:
             avg_performance = 0.0
 
@@ -833,12 +874,17 @@ class ComprehensiveTestingPlatform:
         successful_results = [r for r in test_results if r.success]
         if successful_results:
             response_times = [
-                r.performance_metrics.get("response_time", 0) for r in successful_results
+                r.performance_metrics.get("response_time", 0)
+                for r in successful_results
             ]
-            throughputs = [r.performance_metrics.get("throughput", 0) for r in successful_results]
+            throughputs = [
+                r.performance_metrics.get("throughput", 0) for r in successful_results
+            ]
 
             analysis["performance_analysis"] = {
-                "avg_response_time": (statistics.mean(response_times) if response_times else 0.0),
+                "avg_response_time": (
+                    statistics.mean(response_times) if response_times else 0.0
+                ),
                 "avg_throughput": statistics.mean(throughputs) if throughputs else 0.0,
                 "min_response_time": min(response_times) if response_times else 0.0,
                 "max_response_time": max(response_times) if response_times else 0.0,
@@ -858,7 +904,9 @@ class ComprehensiveTestingPlatform:
 
         return analysis
 
-    def _analyze_performance_trends(self, test_results: List[TestResult]) -> List[Dict[str, Any]]:
+    def _analyze_performance_trends(
+        self, test_results: List[TestResult]
+    ) -> List[Dict[str, Any]]:
         """성능 트렌드 분석"""
         trends = []
 
@@ -881,7 +929,9 @@ class ComprehensiveTestingPlatform:
 
         return trends
 
-    async def _generate_test_recommendations(self, test_results: List[TestResult]) -> List[str]:
+    async def _generate_test_recommendations(
+        self, test_results: List[TestResult]
+    ) -> List[str]:
         """테스트 권장사항 생성"""
         recommendations = []
 
@@ -897,7 +947,10 @@ class ComprehensiveTestingPlatform:
         successful_results = [r for r in test_results if r.success]
         if successful_results:
             avg_response_time = statistics.mean(
-                [r.performance_metrics.get("response_time", 0) for r in successful_results]
+                [
+                    r.performance_metrics.get("response_time", 0)
+                    for r in successful_results
+                ]
             )
 
             if avg_response_time > 0.2:
@@ -921,20 +974,31 @@ class ComprehensiveTestingPlatform:
         successful_results = [r for r in test_results if r.success]
         if successful_results:
             response_times = [
-                r.performance_metrics.get("response_time", 0) for r in successful_results
+                r.performance_metrics.get("response_time", 0)
+                for r in successful_results
             ]
-            avg_response_time = statistics.mean(response_times) if response_times else 0.0
+            avg_response_time = (
+                statistics.mean(response_times) if response_times else 0.0
+            )
             risks["performance_risk"] = min(1.0, avg_response_time / 0.3)  # 0.3초 기준
 
         # 안정성 위험도
-        failure_rate = len([r for r in test_results if not r.success]) / len(test_results)
+        failure_rate = len([r for r in test_results if not r.success]) / len(
+            test_results
+        )
         risks["stability_risk"] = failure_rate
 
         # 호환성 위험도 (테스트 타입별)
-        compatibility_tests = [r for r in test_results if r.test_type == "compatibility"]
+        compatibility_tests = [
+            r for r in test_results if r.test_type == "compatibility"
+        ]
         if compatibility_tests:
-            compatibility_failures = len([r for r in compatibility_tests if not r.success])
-            risks["compatibility_risk"] = compatibility_failures / len(compatibility_tests)
+            compatibility_failures = len(
+                [r for r in compatibility_tests if not r.success]
+            )
+            risks["compatibility_risk"] = compatibility_failures / len(
+                compatibility_tests
+            )
 
         # 전체 위험도
         risks["overall_risk"] = statistics.mean(
@@ -947,7 +1011,9 @@ class ComprehensiveTestingPlatform:
 
         return risks
 
-    def _generate_improvement_suggestions(self, test_results: List[TestResult]) -> List[str]:
+    def _generate_improvement_suggestions(
+        self, test_results: List[TestResult]
+    ) -> List[str]:
         """개선 제안 생성"""
         suggestions = []
 
@@ -958,9 +1024,12 @@ class ComprehensiveTestingPlatform:
         successful_results = [r for r in test_results if r.success]
         if successful_results:
             response_times = [
-                r.performance_metrics.get("response_time", 0) for r in successful_results
+                r.performance_metrics.get("response_time", 0)
+                for r in successful_results
             ]
-            avg_response_time = statistics.mean(response_times) if response_times else 0.0
+            avg_response_time = (
+                statistics.mean(response_times) if response_times else 0.0
+            )
 
             if avg_response_time > 0.15:
                 suggestions.append("캐싱 시스템 도입 고려")
@@ -968,7 +1037,9 @@ class ComprehensiveTestingPlatform:
                 suggestions.append("로드 밸런싱 구현 필요")
 
         # 안정성 개선 제안
-        failure_rate = len([r for r in test_results if not r.success]) / len(test_results)
+        failure_rate = len([r for r in test_results if not r.success]) / len(
+            test_results
+        )
         if failure_rate > 0.1:
             suggestions.append("오류 처리 메커니즘 강화")
         if failure_rate > 0.2:
@@ -1057,7 +1128,9 @@ async def main():
 
     # 5. 테스트 결과 요약
     print("\n=== 종합 테스트 플랫폼 테스트 완료 ===")
-    print(f"종합 테스트 성공률: {comprehensive_result.actual_result.get('success_rate', 0):.2%}")
+    print(
+        f"종합 테스트 성공률: {comprehensive_result.actual_result.get('success_rate', 0):.2%}"
+    )
     print(f"시스템 안정성: {stability_report.overall_stability:.2%}")
     print(f"스트레스 내성: {len(stress_report.breaking_points)}개 파괴 지점")
     print(f"전체 분석 점수: {analysis_report.overall_score:.2%}")

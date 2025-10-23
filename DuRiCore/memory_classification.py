@@ -174,7 +174,9 @@ class MemoryClassifier:
 
         logger.info("기억 분류 시스템 초기화 완료")
 
-    async def classify_memory(self, content: str, context: Dict[str, Any]) -> ClassificationResult:
+    async def classify_memory(
+        self, content: str, context: Dict[str, Any]
+    ) -> ClassificationResult:
         """메모리 분류 (주 메서드)"""
         try:
             # 여러 분류 방법 시도
@@ -211,7 +213,9 @@ class MemoryClassifier:
                 reasoning="분류 오류로 인한 기본값",
             )
 
-    def _classify_by_keywords(self, content: str, context: Dict[str, Any]) -> ClassificationResult:
+    def _classify_by_keywords(
+        self, content: str, context: Dict[str, Any]
+    ) -> ClassificationResult:
         """키워드 기반 분류"""
         try:
             scores = {}
@@ -279,7 +283,9 @@ class MemoryClassifier:
                 reasoning=f"키워드 분류 오류: {e}",
             )
 
-    def _classify_by_context(self, content: str, context: Dict[str, Any]) -> ClassificationResult:
+    def _classify_by_context(
+        self, content: str, context: Dict[str, Any]
+    ) -> ClassificationResult:
         """컨텍스트 기반 분류"""
         try:
             context_indicators = []
@@ -306,13 +312,21 @@ class MemoryClassifier:
             for pattern_name, pattern in self.context_patterns.items():
                 if re.search(pattern, content):
                     if pattern_name == "learning":
-                        scores[MemoryType.KNOWLEDGE] = scores.get(MemoryType.KNOWLEDGE, 0) + 3
+                        scores[MemoryType.KNOWLEDGE] = (
+                            scores.get(MemoryType.KNOWLEDGE, 0) + 3
+                        )
                     elif pattern_name == "experience":
-                        scores[MemoryType.EXPERIENCE] = scores.get(MemoryType.EXPERIENCE, 0) + 3
+                        scores[MemoryType.EXPERIENCE] = (
+                            scores.get(MemoryType.EXPERIENCE, 0) + 3
+                        )
                     elif pattern_name == "emotion":
-                        scores[MemoryType.EMOTION] = scores.get(MemoryType.EMOTION, 0) + 3
+                        scores[MemoryType.EMOTION] = (
+                            scores.get(MemoryType.EMOTION, 0) + 3
+                        )
                     elif pattern_name == "pattern":
-                        scores[MemoryType.PATTERN] = scores.get(MemoryType.PATTERN, 0) + 3
+                        scores[MemoryType.PATTERN] = (
+                            scores.get(MemoryType.PATTERN, 0) + 3
+                        )
 
                     context_indicators.append(pattern_name)
 
@@ -351,7 +365,9 @@ class MemoryClassifier:
                 reasoning=f"컨텍스트 분류 오류: {e}",
             )
 
-    def _classify_by_semantics(self, content: str, context: Dict[str, Any]) -> ClassificationResult:
+    def _classify_by_semantics(
+        self, content: str, context: Dict[str, Any]
+    ) -> ClassificationResult:
         """의미 기반 분류"""
         try:
             # 감정 분석
@@ -383,9 +399,13 @@ class MemoryClassifier:
             # 의미적 특징 점수
             for feature, value in semantic_features.items():
                 if feature == "learning_related" and value > 0.5:
-                    scores[MemoryType.KNOWLEDGE] = scores.get(MemoryType.KNOWLEDGE, 0) + 2
+                    scores[MemoryType.KNOWLEDGE] = (
+                        scores.get(MemoryType.KNOWLEDGE, 0) + 2
+                    )
                 elif feature == "experience_related" and value > 0.5:
-                    scores[MemoryType.EXPERIENCE] = scores.get(MemoryType.EXPERIENCE, 0) + 2
+                    scores[MemoryType.EXPERIENCE] = (
+                        scores.get(MemoryType.EXPERIENCE, 0) + 2
+                    )
                 elif feature == "pattern_related" and value > 0.5:
                     scores[MemoryType.PATTERN] = scores.get(MemoryType.PATTERN, 0) + 2
 
@@ -490,9 +510,15 @@ class MemoryClassifier:
     def _analyze_emotion(self, content: str) -> float:
         """감정 분석"""
         try:
-            positive_count = sum(1 for word in self.emotion_keywords["positive"] if word in content)
-            negative_count = sum(1 for word in self.emotion_keywords["negative"] if word in content)
-            neutral_count = sum(1 for word in self.emotion_keywords["neutral"] if word in content)
+            positive_count = sum(
+                1 for word in self.emotion_keywords["positive"] if word in content
+            )
+            negative_count = sum(
+                1 for word in self.emotion_keywords["negative"] if word in content
+            )
+            neutral_count = sum(
+                1 for word in self.emotion_keywords["neutral"] if word in content
+            )
 
             total_emotion_words = positive_count + negative_count + neutral_count
 
@@ -659,7 +685,9 @@ class MemoryTagger:
             tags.extend(self._extract_context_tags(context))
 
             # 4. 자동 생성 태그
-            tags.extend(self._generate_auto_tags(content, context, classification_result))
+            tags.extend(
+                self._generate_auto_tags(content, context, classification_result)
+            )
 
             # 중복 제거 및 정렬
             unique_tags = self._deduplicate_tags(tags)
@@ -709,7 +737,9 @@ class MemoryTagger:
             for tag in tag_list:
                 if tag in content:
                     tags.append(
-                        TagInfo(tag=tag, confidence=0.7, source="content", category=category)
+                        TagInfo(
+                            tag=tag, confidence=0.7, source="content", category=category
+                        )
                     )
 
         # 시간 관련 태그
@@ -724,7 +754,9 @@ class MemoryTagger:
         for time_tag, pattern in time_patterns.items():
             if re.search(pattern, content):
                 tags.append(
-                    TagInfo(tag=time_tag, confidence=0.9, source="content", category="time")
+                    TagInfo(
+                        tag=time_tag, confidence=0.9, source="content", category="time"
+                    )
                 )
 
         return tags
@@ -767,9 +799,15 @@ class MemoryTagger:
         # 길이 기반 태그
         content_length = len(content)
         if content_length > 100:
-            tags.append(TagInfo(tag="긴내용", confidence=0.6, source="auto", category="length"))
+            tags.append(
+                TagInfo(tag="긴내용", confidence=0.6, source="auto", category="length")
+            )
         elif content_length < 20:
-            tags.append(TagInfo(tag="짧은내용", confidence=0.6, source="auto", category="length"))
+            tags.append(
+                TagInfo(
+                    tag="짧은내용", confidence=0.6, source="auto", category="length"
+                )
+            )
 
         # 신뢰도 기반 태그
         if classification_result.confidence > 0.8:
@@ -864,8 +902,12 @@ async def test_memory_classification():
     # 분류 테스트
     print("\n1. 메모리 분류 테스트")
     for i, test_case in enumerate(test_cases):
-        result = await classifier.classify_memory(test_case["content"], test_case["context"])
-        print(f"테스트 {i+1}: {result.memory_type.value} (신뢰도: {result.confidence:.3f})")
+        result = await classifier.classify_memory(
+            test_case["content"], test_case["context"]
+        )
+        print(
+            f"테스트 {i+1}: {result.memory_type.value} (신뢰도: {result.confidence:.3f})"
+        )
         print(f"  내용: {test_case['content'][:50]}...")
         print(f"  방법: {result.method.value}")
         print(f"  키워드: {result.keywords_found}")

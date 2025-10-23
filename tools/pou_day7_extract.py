@@ -16,7 +16,9 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 # 로깅 설정
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
 
 
@@ -55,7 +57,9 @@ def extract_retention_data(input_file: str, output_file: str) -> Dict[str, Any]:
 
             for row in reader:
                 # 필수 필드 확인
-                if not all(key in row for key in ["timestamp", "user_id", "variant", "event"]):
+                if not all(
+                    key in row for key in ["timestamp", "user_id", "variant", "event"]
+                ):
                     logger.warning(f"Missing required fields in row: {row}")
                     continue
 
@@ -93,10 +97,14 @@ def extract_retention_data(input_file: str, output_file: str) -> Dict[str, Any]:
 
         # D+7 기간 계산 (±12시간)
         d7_start = (
-            datetime.combine(day0, datetime.min.time()) + timedelta(days=7) - timedelta(hours=12)
+            datetime.combine(day0, datetime.min.time())
+            + timedelta(days=7)
+            - timedelta(hours=12)
         )
         d7_end = (
-            datetime.combine(day0, datetime.min.time()) + timedelta(days=7) + timedelta(hours=12)
+            datetime.combine(day0, datetime.min.time())
+            + timedelta(days=7)
+            + timedelta(hours=12)
         )
 
         # D+7 기간 내 이벤트 확인
@@ -122,12 +130,16 @@ def extract_retention_data(input_file: str, output_file: str) -> Dict[str, Any]:
 
         with open(output_file, "w", encoding="utf-8", newline="") as f:
             if retention_data:
-                writer = csv.DictWriter(f, fieldnames=["variant", "retained_d7", "cohort_date"])
+                writer = csv.DictWriter(
+                    f, fieldnames=["variant", "retained_d7", "cohort_date"]
+                )
                 writer.writeheader()
                 writer.writerows(retention_data)
             else:
                 # 빈 파일 생성
-                writer = csv.DictWriter(f, fieldnames=["variant", "retained_d7", "cohort_date"])
+                writer = csv.DictWriter(
+                    f, fieldnames=["variant", "retained_d7", "cohort_date"]
+                )
                 writer.writeheader()
 
         logger.info(f"Retention data saved to: {output_file}")
@@ -148,7 +160,9 @@ def extract_retention_data(input_file: str, output_file: str) -> Dict[str, Any]:
     for variant in stats["variants"]:
         variant_data = [r for r in retention_data if r["variant"] == variant]
         if variant_data:
-            retention_rate = sum(r["retained_d7"] for r in variant_data) / len(variant_data)
+            retention_rate = sum(r["retained_d7"] for r in variant_data) / len(
+                variant_data
+            )
             stats[f"{variant}_retention_rate"] = retention_rate
             stats[f"{variant}_count"] = len(variant_data)
 
@@ -197,7 +211,9 @@ def create_synthetic_data(output_file: str, n_users: int = 1000) -> Dict[str, An
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
         with open(output_file, "w", encoding="utf-8", newline="") as f:
-            writer = csv.DictWriter(f, fieldnames=["variant", "retained_d7", "cohort_date"])
+            writer = csv.DictWriter(
+                f, fieldnames=["variant", "retained_d7", "cohort_date"]
+            )
             writer.writeheader()
             writer.writerows(retention_data)
 
@@ -219,7 +235,9 @@ def create_synthetic_data(output_file: str, n_users: int = 1000) -> Dict[str, An
     for variant in ["A", "B"]:
         variant_data = [r for r in retention_data if r["variant"] == variant]
         if variant_data:
-            retention_rate = sum(r["retained_d7"] for r in variant_data) / len(variant_data)
+            retention_rate = sum(r["retained_d7"] for r in variant_data) / len(
+                variant_data
+            )
             stats[f"{variant}_retention_rate"] = retention_rate
             stats[f"{variant}_count"] = len(variant_data)
 
@@ -231,9 +249,13 @@ def main():
     parser = argparse.ArgumentParser(description="PoU 7일차 유지율 ETL 스크립트")
 
     parser.add_argument("--in", dest="input_file", help="입력 파일 경로 (raw 로그 CSV)")
-    parser.add_argument("--out", dest="output_file", required=True, help="출력 파일 경로")
+    parser.add_argument(
+        "--out", dest="output_file", required=True, help="출력 파일 경로"
+    )
     parser.add_argument("--synthetic", action="store_true", help="합성 데이터 생성")
-    parser.add_argument("--n-users", type=int, default=1000, help="합성 데이터 사용자 수")
+    parser.add_argument(
+        "--n-users", type=int, default=1000, help="합성 데이터 사용자 수"
+    )
     parser.add_argument("--verbose", "-v", action="store_true", help="상세 로그 출력")
 
     args = parser.parse_args()

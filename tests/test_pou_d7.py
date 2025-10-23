@@ -105,7 +105,9 @@ class TestPoUD7:
             runner = ABTestRunner(config_path)
 
             # 합성 데이터 생성
-            with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
+            with tempfile.NamedTemporaryFile(
+                mode="w", suffix=".csv", delete=False
+            ) as f:
                 temp_csv = f.name
 
             try:
@@ -168,7 +170,9 @@ B,1,2025-09-23
 B,1,2025-09-23
 B,0,2025-09-23"""
 
-            with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
+            with tempfile.NamedTemporaryFile(
+                mode="w", suffix=".csv", delete=False
+            ) as f:
                 f.write(significant_data)
                 temp_csv = f.name
 
@@ -219,7 +223,9 @@ B,1,2025-09-23
 B,0,2025-09-23
 B,1,2025-09-23"""
 
-            with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
+            with tempfile.NamedTemporaryFile(
+                mode="w", suffix=".csv", delete=False
+            ) as f:
                 f.write(aa_data)
                 temp_csv = f.name
 
@@ -258,7 +264,9 @@ B,1,2025-09-23"""
             runner = ABTestRunner(config_path)
 
             # 합성 데이터 생성
-            with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
+            with tempfile.NamedTemporaryFile(
+                mode="w", suffix=".csv", delete=False
+            ) as f:
                 temp_csv = f.name
 
             try:

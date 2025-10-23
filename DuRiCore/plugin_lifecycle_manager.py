@@ -340,7 +340,9 @@ class PluginLifecycleManager:
             logger.error(f"❌ 플러그인 제거 실패: {plugin_name} - {e}")
             return False
 
-    async def update_plugin(self, plugin_name: str, new_version: str, update_path: str) -> bool:
+    async def update_plugin(
+        self, plugin_name: str, new_version: str, update_path: str
+    ) -> bool:
         """플러그인 업데이트"""
         if plugin_name not in self.plugins:
             return False
@@ -455,7 +457,9 @@ class PluginLifecycleManager:
     def _update_performance_metrics(self):
         """성능 메트릭 업데이트"""
         total_plugins = len(self.plugins)
-        active_plugins = sum(1 for p in self.plugins.values() if p.state == PluginState.ACTIVE)
+        active_plugins = sum(
+            1 for p in self.plugins.values() if p.state == PluginState.ACTIVE
+        )
 
         # 자동화율 계산
         automation_score = 0.0
@@ -474,7 +478,9 @@ class PluginLifecycleManager:
             automation_score = min(1.0, auto_features / 4.0)
 
         # 업데이트 성공률 계산
-        update_attempts = sum(1 for p in self.plugins.values() if p.last_updated != p.created_at)
+        update_attempts = sum(
+            1 for p in self.plugins.values() if p.last_updated != p.created_at
+        )
         update_successes = sum(
             1
             for p in self.plugins.values()
@@ -485,7 +491,10 @@ class PluginLifecycleManager:
         # 의존성 해결률 계산
         total_deps = sum(len(p.dependencies) for p in self.plugins.values())
         resolved_deps = sum(
-            1 for p in self.plugins.values() for dep in p.dependencies if dep in self.plugins
+            1
+            for p in self.plugins.values()
+            for dep in p.dependencies
+            if dep in self.plugins
         )
         dependency_resolution_rate = resolved_deps / max(total_deps, 1)
 
@@ -507,15 +516,24 @@ class PluginLifecycleManager:
             "metrics": self.performance_metrics,
             "target_automation_rate": 0.6,  # 목표 60%
             "current_automation_rate": self.performance_metrics["automation_rate"],
-            "automation_improvement": (self.performance_metrics["automation_rate"] - 0.4) * 100,
+            "automation_improvement": (
+                self.performance_metrics["automation_rate"] - 0.4
+            )
+            * 100,
             "total_plugins": len(self.plugins),
             "plugin_states": {
-                "active": sum(1 for p in self.plugins.values() if p.state == PluginState.ACTIVE),
-                "loaded": sum(1 for p in self.plugins.values() if p.state == PluginState.LOADED),
+                "active": sum(
+                    1 for p in self.plugins.values() if p.state == PluginState.ACTIVE
+                ),
+                "loaded": sum(
+                    1 for p in self.plugins.values() if p.state == PluginState.LOADED
+                ),
                 "inactive": sum(
                     1 for p in self.plugins.values() if p.state == PluginState.INACTIVE
                 ),
-                "error": sum(1 for p in self.plugins.values() if p.state == PluginState.ERROR),
+                "error": sum(
+                    1 for p in self.plugins.values() if p.state == PluginState.ERROR
+                ),
             },
             "lifecycle_hooks": {
                 "registered_hooks": len(self.lifecycle_hooks),
@@ -572,7 +590,9 @@ class AutoUpdateSystem:
             return True
 
         except Exception as e:
-            logger.error(f"❌ 업데이트 다운로드 실패: {update_info['plugin_name']} - {e}")
+            logger.error(
+                f"❌ 업데이트 다운로드 실패: {update_info['plugin_name']} - {e}"
+            )
             return False
 
     async def install_update(self, update_info: Dict[str, Any]) -> bool:
@@ -744,7 +764,9 @@ class {plugin_class}:
     logger.info(f"   자동화 향상: {report['automation_improvement']:.1f}%")
     logger.info(f"   목표 자동화율: {report['target_automation_rate']:.1%}")
     logger.info(f"   업데이트 성공률: {report['metrics']['update_success_rate']:.1%}")
-    logger.info(f"   의존성 해결률: {report['metrics']['dependency_resolution_rate']:.1%}")
+    logger.info(
+        f"   의존성 해결률: {report['metrics']['dependency_resolution_rate']:.1%}"
+    )
 
     return report
 

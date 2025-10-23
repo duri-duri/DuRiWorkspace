@@ -52,11 +52,15 @@ def test_dashboard():
                 "duri_response": conv["duri_response"],
                 "auto_learn": True,
             }
-            response = requests.post(f"{base_url}/capture-conversation", json=data, timeout=30)
+            response = requests.post(
+                f"{base_url}/capture-conversation", json=data, timeout=30
+            )
             print(f"✅ 대화 {i} 캡처 성공: {response.status_code}")
             result = response.json()
             if response.status_code == 200:
-                print(f"📊 학습 가치: {result.get('data', {}).get('learning_value', 'N/A')}")
+                print(
+                    f"📊 학습 가치: {result.get('data', {}).get('learning_value', 'N/A')}"
+                )
                 print(
                     f"📊 평가 점수: {result.get('learning_summary', {}).get('evaluation_score', 'N/A')}"
                 )
@@ -71,7 +75,9 @@ def test_dashboard():
         response = requests.get(f"{base_url}/learning-statistics")
         print(f"✅ 학습 통계 성공: {response.status_code}")
         stats = response.json()
-        print(f"📊 총 대화 수: {stats.get('data', {}).get('total_conversations', 'N/A')}")
+        print(
+            f"📊 총 대화 수: {stats.get('data', {}).get('total_conversations', 'N/A')}"
+        )
     except Exception as e:
         print(f"❌ 학습 통계 실패: {e}")
 

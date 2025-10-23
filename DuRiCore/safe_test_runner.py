@@ -117,14 +117,18 @@ async def test_social_intelligence_safe():
                 timeout=30.0,
             )
             print(f"\n📈 성능 요약:")
-            print(f"   총 상호작용: {summary['performance_metrics']['total_interactions']}")
+            print(
+                f"   총 상호작용: {summary['performance_metrics']['total_interactions']}"
+            )
             print(
                 f"   성공률: {summary['performance_metrics']['successful_interactions']/summary['performance_metrics']['total_interactions']*100:.1f}%"
             )
             print(
                 f"   평균 공감 점수: {summary['performance_metrics']['average_empathy_score']:.2f}"
             )
-            print(f"   평균 신뢰 점수: {summary['performance_metrics']['average_trust_score']:.2f}")
+            print(
+                f"   평균 신뢰 점수: {summary['performance_metrics']['average_trust_score']:.2f}"
+            )
         except asyncio.TimeoutError:
             print("⚠️ 성능 요약 타임아웃 (30초 초과)")
         except Exception as e:

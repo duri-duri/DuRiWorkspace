@@ -202,9 +202,7 @@ class LearningDataCollector:
         logger.info(f"학습 데이터 수집 시작: {data_type.value}")
 
         # 데이터 ID 생성
-        data_id = (
-            f"{data_type.value}_{int(datetime.now().timestamp())}_{random.randint(1000, 9999)}"
-        )
+        data_id = f"{data_type.value}_{int(datetime.now().timestamp())}_{random.randint(1000, 9999)}"
 
         # 학습 데이터 생성
         learning_data = LearningData(
@@ -257,7 +255,9 @@ class LearningDataCollector:
             "timestamp": datetime.now().isoformat(),
         }
 
-        return await self.collect_learning_data(LearningDataType.SYSTEM_FEEDBACK, content, "system")
+        return await self.collect_learning_data(
+            LearningDataType.SYSTEM_FEEDBACK, content, "system"
+        )
 
     async def collect_performance_metric(
         self, metric_name: str, metric_value: float, context: Dict[str, Any] = None
@@ -298,7 +298,9 @@ class LearningDataCollector:
         """학습 데이터 조회"""
         if data_type:
             filtered_data = [
-                data for data in self.data_storage.values() if data.data_type == data_type
+                data
+                for data in self.data_storage.values()
+                if data.data_type == data_type
             ]
         else:
             filtered_data = list(self.data_storage.values())
@@ -367,7 +369,9 @@ class RealtimeModelUpdater:
         logger.info(f"모델 업데이트 시작: {strategy}")
 
         learning_id = f"learning_{int(datetime.now().timestamp())}"
-        strategy_config = self.update_strategies.get(strategy, self.update_strategies["adaptive"])
+        strategy_config = self.update_strategies.get(
+            strategy, self.update_strategies["adaptive"]
+        )
 
         improvements = []
         metrics = {}
@@ -382,7 +386,9 @@ class RealtimeModelUpdater:
             improvements.extend(edge_improvements)
 
             # 3. 연결성 최적화
-            connectivity_improvements = await self._optimize_connectivity(graph, learning_data)
+            connectivity_improvements = await self._optimize_connectivity(
+                graph, learning_data
+            )
             improvements.extend(connectivity_improvements)
 
             # 4. 성능 메트릭 계산
@@ -444,7 +450,9 @@ class RealtimeModelUpdater:
                 # 피드백 기반 신뢰도 조정
                 feedback_score = self._calculate_feedback_score(relevant_feedback)
                 old_confidence = node.confidence
-                node.confidence = min(1.0, max(0.0, old_confidence + feedback_score * 0.1))
+                node.confidence = min(
+                    1.0, max(0.0, old_confidence + feedback_score * 0.1)
+                )
 
                 if abs(node.confidence - old_confidence) > 0.01:
                     improvements.append(
@@ -561,7 +569,9 @@ class RealtimeModelUpdater:
         total_nodes = len(graph.nodes)
         total_edges = len(graph.edges)
         metrics["connectivity"] = (
-            total_edges / (total_nodes * (total_nodes - 1) / 2) if total_nodes > 1 else 0.0
+            total_edges / (total_nodes * (total_nodes - 1) / 2)
+            if total_nodes > 1
+            else 0.0
         )
 
         # 학습 데이터 품질
@@ -582,7 +592,9 @@ class RealtimeModelUpdater:
         self, graph: "DynamicReasoningGraph", strategy: str, metrics: Dict[str, float]
     ) -> Dict[str, Any]:
         """모델 버전 생성"""
-        version_id = f"v{len(self.model_versions) + 1}_{int(datetime.now().timestamp())}"
+        version_id = (
+            f"v{len(self.model_versions) + 1}_{int(datetime.now().timestamp())}"
+        )
 
         version_info = {
             "version_id": version_id,
@@ -655,7 +667,9 @@ class LearningPerformanceEvaluator:
         logger.info(f"학습 성과 평가 시작: {learning_result.learning_id}")
 
         # 1. 정확도 향상 평가
-        accuracy_improvement = await self._evaluate_accuracy_improvement(graph, learning_data)
+        accuracy_improvement = await self._evaluate_accuracy_improvement(
+            graph, learning_data
+        )
 
         # 2. 적응성 평가
         adaptability = await self._evaluate_adaptability(graph, learning_data)
@@ -668,7 +682,8 @@ class LearningPerformanceEvaluator:
 
         # 종합 성과 점수
         overall_performance = (
-            accuracy_improvement * self.evaluation_criteria["accuracy_improvement"]["weight"]
+            accuracy_improvement
+            * self.evaluation_criteria["accuracy_improvement"]["weight"]
             + adaptability * self.evaluation_criteria["adaptability"]["weight"]
             + efficiency * self.evaluation_criteria["efficiency"]["weight"]
             + stability * self.evaluation_criteria["stability"]["weight"]
@@ -707,15 +722,21 @@ class LearningPerformanceEvaluator:
 
         # 노드 신뢰도 향상
         node_confidences = [node.confidence for node in graph.nodes.values()]
-        avg_confidence = sum(node_confidences) / len(node_confidences) if node_confidences else 0.0
+        avg_confidence = (
+            sum(node_confidences) / len(node_confidences) if node_confidences else 0.0
+        )
 
         # 엣지 강도 향상
         edge_strengths = [edge.strength for edge in graph.edges.values()]
-        avg_strength = sum(edge_strengths) / len(edge_strengths) if edge_strengths else 0.0
+        avg_strength = (
+            sum(edge_strengths) / len(edge_strengths) if edge_strengths else 0.0
+        )
 
         # 학습 데이터 품질
         processed_data = [d for d in learning_data if d.processed]
-        data_quality = len(processed_data) / len(learning_data) if learning_data else 0.0
+        data_quality = (
+            len(processed_data) / len(learning_data) if learning_data else 0.0
+        )
 
         # 종합 정확도 향상
         accuracy_improvement = (avg_confidence + avg_strength + data_quality) / 3.0
@@ -741,11 +762,15 @@ class LearningPerformanceEvaluator:
         )
 
         # 학습 속도
-        recent_data = [d for d in learning_data if (datetime.now() - d.timestamp).days <= 7]
+        recent_data = [
+            d for d in learning_data if (datetime.now() - d.timestamp).days <= 7
+        ]
         learning_speed = len(recent_data) / max(1, len(learning_data))
 
         # 종합 적응성
-        adaptability = (type_diversity + connectivity_adaptability + learning_speed) / 3.0
+        adaptability = (
+            type_diversity + connectivity_adaptability + learning_speed
+        ) / 3.0
 
         return adaptability
 
@@ -756,7 +781,9 @@ class LearningPerformanceEvaluator:
 
         # 개선사항 수
         improvements_count = len(learning_result.improvements)
-        efficiency_score = min(1.0, improvements_count / 10.0)  # 최대 10개 개선사항 기준
+        efficiency_score = min(
+            1.0, improvements_count / 10.0
+        )  # 최대 10개 개선사항 기준
 
         # 신뢰도
         confidence_score = learning_result.confidence
@@ -800,7 +827,9 @@ class LearningPerformanceEvaluator:
         )
 
         # 종합 안정성
-        stability = (confidence_stability + strength_stability + connectivity_stability) / 3.0
+        stability = (
+            confidence_stability + strength_stability + connectivity_stability
+        ) / 3.0
 
         return stability
 
@@ -849,7 +878,8 @@ class LearningValidator:
             + performance_improvement
             * self.validation_criteria["performance_improvement"]["weight"]
             + system_stability * self.validation_criteria["system_stability"]["weight"]
-            + learning_efficiency * self.validation_criteria["learning_efficiency"]["weight"]
+            + learning_efficiency
+            * self.validation_criteria["learning_efficiency"]["weight"]
         )
 
         return {
@@ -928,7 +958,9 @@ async def test_realtime_learning_system():
 
     # 초기 노드들 생성
     initial_nodes = {
-        "node1": DynamicReasoningNode("node1", NodeType.PREMISE, "윤리적 행동은 옳다", 0.8, "test"),
+        "node1": DynamicReasoningNode(
+            "node1", NodeType.PREMISE, "윤리적 행동은 옳다", 0.8, "test"
+        ),
         "node2": DynamicReasoningNode(
             "node2", NodeType.INFERENCE, "윤리적 행동 분석: 도덕적 의무", 0.7, "test"
         ),

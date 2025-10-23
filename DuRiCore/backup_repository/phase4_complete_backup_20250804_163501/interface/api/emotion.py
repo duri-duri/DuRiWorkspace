@@ -55,7 +55,9 @@ async def analyze_emotion(request: EmotionRequest):
 
         return EmotionResponse(
             primary_emotion=analysis.primary_emotion.value,
-            secondary_emotions=[emotion.value for emotion in analysis.secondary_emotions],
+            secondary_emotions=[
+                emotion.value for emotion in analysis.secondary_emotions
+            ],
             intensity=analysis.intensity,
             confidence=analysis.confidence,
             context_fit=analysis.context_fit,
@@ -66,7 +68,9 @@ async def analyze_emotion(request: EmotionRequest):
         )
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"감정 분석 중 오류가 발생했습니다: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"감정 분석 중 오류가 발생했습니다: {str(e)}"
+        )
 
 
 @router.get("/stats")
@@ -83,7 +87,9 @@ async def get_emotion_stats():
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"통계 조회 중 오류가 발생했습니다: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"통계 조회 중 오류가 발생했습니다: {str(e)}"
+        )
 
 
 @router.post("/batch-analyze")
@@ -116,7 +122,9 @@ async def batch_analyze_emotions(requests: list[EmotionRequest]):
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"배치 분석 중 오류가 발생했습니다: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"배치 분석 중 오류가 발생했습니다: {str(e)}"
+        )
 
 
 @router.get("/health")

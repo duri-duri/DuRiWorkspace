@@ -169,7 +169,9 @@ class AdaptiveLearningStrategy:
         """학습 모델 생성"""
         model_id = f"model_{int(time.time())}_{model_type}"
 
-        model = LearningModel(model_id=model_id, model_type=model_type, parameters=parameters or {})
+        model = LearningModel(
+            model_id=model_id, model_type=model_type, parameters=parameters or {}
+        )
 
         self.learning_models[model_id] = model
 
@@ -197,7 +199,9 @@ class AdaptiveLearningStrategy:
         # 모델 훈련 실행
         start_time = time.time()
         try:
-            performance_metrics = await self._execute_learning(model, learning_type, training_data)
+            performance_metrics = await self._execute_learning(
+                model, learning_type, training_data
+            )
 
             # 결과 생성
             result_id = f"result_{int(time.time())}_{model_id}"
@@ -377,13 +381,21 @@ class AdaptiveLearningStrategy:
     ) -> Dict[str, Any]:
         """적응 실행"""
         if adaptation_type == AdaptationType.INCREMENTAL:
-            return await self._execute_incremental_adaptation(system_instance, adaptation_data)
+            return await self._execute_incremental_adaptation(
+                system_instance, adaptation_data
+            )
         elif adaptation_type == AdaptationType.BATCH:
-            return await self._execute_batch_adaptation(system_instance, adaptation_data)
+            return await self._execute_batch_adaptation(
+                system_instance, adaptation_data
+            )
         elif adaptation_type == AdaptationType.ONLINE:
-            return await self._execute_online_adaptation(system_instance, adaptation_data)
+            return await self._execute_online_adaptation(
+                system_instance, adaptation_data
+            )
         elif adaptation_type == AdaptationType.ACTIVE:
-            return await self._execute_active_adaptation(system_instance, adaptation_data)
+            return await self._execute_active_adaptation(
+                system_instance, adaptation_data
+            )
         else:
             return {"error": "알 수 없는 적응 유형"}
 
@@ -430,7 +442,8 @@ class AdaptiveLearningStrategy:
         successful_results = [r for r in self.learning_results if r.success]
         if successful_results:
             avg_efficiency = sum(
-                r.performance_metrics.get("learning_efficiency", 0.0) for r in successful_results
+                r.performance_metrics.get("learning_efficiency", 0.0)
+                for r in successful_results
             ) / len(successful_results)
             self.performance_metrics["average_learning_efficiency"] = avg_efficiency
 
@@ -457,7 +470,9 @@ class AdaptiveLearningStrategy:
         # 모델 성과 메트릭 반환
         return model.performance_metrics
 
-    async def get_learning_recommendations(self, system_name: str = None) -> List[Dict[str, Any]]:
+    async def get_learning_recommendations(
+        self, system_name: str = None
+    ) -> List[Dict[str, Any]]:
         """학습 추천 생성"""
         recommendations = []
 

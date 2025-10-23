@@ -147,7 +147,9 @@ class SystemIntegrationManager:
 
         logger.info("시스템 통합 매니저 초기화 완료")
 
-    async def register_system(self, system_name: str, system_info: Dict[str, Any]) -> bool:
+    async def register_system(
+        self, system_name: str, system_info: Dict[str, Any]
+    ) -> bool:
         """시스템 등록"""
         try:
             system_component = SystemComponent(
@@ -179,7 +181,9 @@ class SystemIntegrationManager:
 
         try:
             # 통합 전 검증
-            validation_result = await self._validate_systems_for_integration(system_names)
+            validation_result = await self._validate_systems_for_integration(
+                system_names
+            )
             if not validation_result["success"]:
                 return IntegrationResult(
                     integration_id=integration_id,
@@ -227,7 +231,9 @@ class SystemIntegrationManager:
                 error_messages=[str(e)],
             )
 
-    async def optimize_systems(self, system_names: List[str] = None) -> OptimizationResult:
+    async def optimize_systems(
+        self, system_names: List[str] = None
+    ) -> OptimizationResult:
         """시스템 최적화"""
         optimization_id = f"optimization_{int(time.time())}_{uuid.uuid4().hex[:8]}"
         start_time = time.time()
@@ -298,7 +304,8 @@ class SystemIntegrationManager:
 
             # 전체 결과 집계
             test_results["success"] = all(
-                result.get("success", False) for result in test_results["test_results"].values()
+                result.get("success", False)
+                for result in test_results["test_results"].values()
             )
 
             logger.info("통합 테스트 완료")
@@ -343,7 +350,9 @@ class SystemIntegrationManager:
 
             # 전체 점수 계산
             scores = list(validation_result["validation_scores"].values())
-            validation_result["overall_score"] = statistics.mean(scores) if scores else 0.0
+            validation_result["overall_score"] = (
+                statistics.mean(scores) if scores else 0.0
+            )
 
             # 권장사항 생성
             validation_result["recommendations"] = await self._generate_recommendations(
@@ -359,14 +368,18 @@ class SystemIntegrationManager:
             validation_result["error_messages"].append(str(e))
             return validation_result
 
-    async def _validate_systems_for_integration(self, system_names: List[str]) -> Dict[str, Any]:
+    async def _validate_systems_for_integration(
+        self, system_names: List[str]
+    ) -> Dict[str, Any]:
         """통합을 위한 시스템 검증"""
         validation_result = {"success": True, "errors": [], "warnings": []}
 
         for system_name in system_names:
             if system_name not in self.systems:
                 validation_result["success"] = False
-                validation_result["errors"].append(f"시스템을 찾을 수 없음: {system_name}")
+                validation_result["errors"].append(
+                    f"시스템을 찾을 수 없음: {system_name}"
+                )
                 continue
 
             system = self.systems[system_name]
@@ -380,20 +393,28 @@ class SystemIntegrationManager:
                     )
 
             # 호환성 검증
-            if system.compatibility_score < self.integration_config["compatibility_threshold"]:
+            if (
+                system.compatibility_score
+                < self.integration_config["compatibility_threshold"]
+            ):
                 validation_result["warnings"].append(
                     f"낮은 호환성 점수: {system_name} ({system.compatibility_score:.2f})"
                 )
 
             # 성능 검증
-            if system.performance_score < self.integration_config["performance_threshold"]:
+            if (
+                system.performance_score
+                < self.integration_config["performance_threshold"]
+            ):
                 validation_result["warnings"].append(
                     f"낮은 성능 점수: {system_name} ({system.performance_score:.2f})"
                 )
 
         return validation_result
 
-    async def _sequential_integration(self, system_names: List[str]) -> IntegrationResult:
+    async def _sequential_integration(
+        self, system_names: List[str]
+    ) -> IntegrationResult:
         """순차적 통합"""
         integrated_systems = []
         failed_integrations = []
@@ -422,7 +443,10 @@ class SystemIntegrationManager:
             performance_metrics=performance_metrics,
             compatibility_score=(
                 statistics.mean(
-                    [self.systems[name].compatibility_score for name in integrated_systems]
+                    [
+                        self.systems[name].compatibility_score
+                        for name in integrated_systems
+                    ]
                 )
                 if integrated_systems
                 else 0.0
@@ -437,7 +461,9 @@ class SystemIntegrationManager:
         # 병렬 통합 구현 (실제로는 순차적 통합과 유사하지만 동시 실행)
         return await self._sequential_integration(system_names)
 
-    async def _execute_optimization(self, system_names: List[str]) -> OptimizationResult:
+    async def _execute_optimization(
+        self, system_names: List[str]
+    ) -> OptimizationResult:
         """최적화 실행"""
         optimized_systems = []
         performance_improvements = {}
@@ -473,7 +499,9 @@ class SystemIntegrationManager:
             success=len(optimized_systems) > 0,
             optimized_systems=optimized_systems,
             performance_improvements=performance_improvements,
-            memory_usage_reduction=(memory_reduction / len(system_names) if system_names else 0.0),
+            memory_usage_reduction=(
+                memory_reduction / len(system_names) if system_names else 0.0
+            ),
             processing_speed_improvement=(
                 speed_improvement / len(system_names) if system_names else 0.0
             ),
@@ -518,7 +546,9 @@ class SystemIntegrationManager:
         performance_scores = []
         for system_name, system in self.systems.items():
             performance_scores.append(system.performance_score)
-            test_result["details"][system_name] = {"performance_score": system.performance_score}
+            test_result["details"][system_name] = {
+                "performance_score": system.performance_score
+            }
 
         if performance_scores:
             test_result["average_performance"] = statistics.mean(performance_scores)
@@ -593,7 +623,9 @@ class SystemIntegrationManager:
 
     async def _validate_performance(self) -> float:
         """성능 검증"""
-        performance_scores = [system.performance_score for system in self.systems.values()]
+        performance_scores = [
+            system.performance_score for system in self.systems.values()
+        ]
         return statistics.mean(performance_scores) if performance_scores else 0.0
 
     async def _validate_stability(self) -> float:
@@ -603,7 +635,9 @@ class SystemIntegrationManager:
             return 0.0
 
         stable_systems = sum(
-            1 for system in self.systems.values() if system.status == SystemStatus.ACTIVE
+            1
+            for system in self.systems.values()
+            if system.status == SystemStatus.ACTIVE
         )
         return stable_systems / total_systems
 
@@ -614,12 +648,16 @@ class SystemIntegrationManager:
 
         for system in self.systems.values():
             # 사용성 점수 시뮬레이션
-            usability_score = min(1.0, system.performance_score + system.compatibility_score) / 2
+            usability_score = (
+                min(1.0, system.performance_score + system.compatibility_score) / 2
+            )
             usability_scores.append(usability_score)
 
         return statistics.mean(usability_scores) if usability_scores else 0.0
 
-    async def _generate_recommendations(self, validation_scores: Dict[str, float]) -> List[str]:
+    async def _generate_recommendations(
+        self, validation_scores: Dict[str, float]
+    ) -> List[str]:
         """권장사항 생성"""
         recommendations = []
 
@@ -646,8 +684,12 @@ class SystemIntegrationManager:
             return self.system_metrics
 
         # 메트릭 계산
-        performance_scores = [system.performance_score for system in self.systems.values()]
-        compatibility_scores = [system.compatibility_score for system in self.systems.values()]
+        performance_scores = [
+            system.performance_score for system in self.systems.values()
+        ]
+        compatibility_scores = [
+            system.compatibility_score for system in self.systems.values()
+        ]
 
         self.system_metrics.performance_score = (
             statistics.mean(performance_scores) if performance_scores else 0.0
@@ -656,13 +698,18 @@ class SystemIntegrationManager:
             statistics.mean(compatibility_scores) if compatibility_scores else 0.0
         )
         self.system_metrics.stability_score = (
-            sum(1 for system in self.systems.values() if system.status == SystemStatus.ACTIVE)
+            sum(
+                1
+                for system in self.systems.values()
+                if system.status == SystemStatus.ACTIVE
+            )
             / len(self.systems)
             if self.systems
             else 0.0
         )
         self.system_metrics.efficiency_score = (
-            self.system_metrics.performance_score + self.system_metrics.compatibility_score
+            self.system_metrics.performance_score
+            + self.system_metrics.compatibility_score
         ) / 2
         self.system_metrics.integration_level = len(
             [r for r in self.integration_results if r.success]
@@ -760,7 +807,9 @@ async def test_system_integration_manager():
     # 1. 시스템 통합 테스트
     print("\n1. 시스템 통합 테스트")
     system_names = [system["name"] for system in test_systems]
-    integration_result = await integration_manager.integrate_systems(system_names, "sequential")
+    integration_result = await integration_manager.integrate_systems(
+        system_names, "sequential"
+    )
 
     print(f"통합 결과: {integration_result.integration_id}")
     print(

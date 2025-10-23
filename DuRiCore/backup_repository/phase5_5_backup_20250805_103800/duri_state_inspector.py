@@ -210,7 +210,9 @@ class DuriStateInspector:
                 module_info.can_import = True
                 self.connectivity_status[file_path] = True
 
-                print(f"✅ {file_path}: import 성공, {len(callable_functions)}개 함수 호출 가능")
+                print(
+                    f"✅ {file_path}: import 성공, {len(callable_functions)}개 함수 호출 가능"
+                )
 
             except Exception as e:
                 module_info.can_import = False
@@ -223,7 +225,9 @@ class DuriStateInspector:
         print("🚨 문제점 식별 중...")
 
         # 1. import 실패한 모듈들
-        failed_imports = [path for path, status in self.connectivity_status.items() if not status]
+        failed_imports = [
+            path for path, status in self.connectivity_status.items() if not status
+        ]
         if failed_imports:
             self.problems.append(f"Import 실패 모듈: {len(failed_imports)}개")
             for path in failed_imports[:5]:  # 상위 5개만 표시
@@ -317,11 +321,15 @@ class DuriStateInspector:
         print(f"  - 총 파일 크기: {report.total_size:,} bytes")
 
         print(f"\n🔌 연결성 진단:")
-        working_modules = sum(1 for status in report.connectivity_status.values() if status)
+        working_modules = sum(
+            1 for status in report.connectivity_status.values() if status
+        )
         failed_modules = len(report.connectivity_status) - working_modules
         print(f"  - 호출 가능한 모듈: {working_modules}개")
         print(f"  - 호출 불가 모듈: {failed_modules}개")
-        print(f"  - 연결성 성공률: {working_modules/(working_modules+failed_modules)*100:.1f}%")
+        print(
+            f"  - 연결성 성공률: {working_modules/(working_modules+failed_modules)*100:.1f}%"
+        )
 
         print(f"\n🚨 발견된 문제점:")
         if report.problems:

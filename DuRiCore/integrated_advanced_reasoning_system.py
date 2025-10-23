@@ -152,16 +152,24 @@ class IntegratedAdvancedReasoningSystem:
             self.system_status = SystemIntegrationStatus.ACTIVE
 
             # 1. 적응적 추론 처리
-            adaptive_reasoning_result = await self._process_adaptive_reasoning(context, input_data)
+            adaptive_reasoning_result = await self._process_adaptive_reasoning(
+                context, input_data
+            )
 
             # 2. 일관성 강화 처리
-            consistency_enhancement_result = await self._process_consistency_enhancement(input_data)
+            consistency_enhancement_result = (
+                await self._process_consistency_enhancement(input_data)
+            )
 
             # 3. 통합 성공도 개선 처리
-            integration_success_result = await self._process_integration_success(input_data)
+            integration_success_result = await self._process_integration_success(
+                input_data
+            )
 
             # 4. 효율성 최적화 처리
-            efficiency_optimization_result = await self._process_efficiency_optimization(input_data)
+            efficiency_optimization_result = (
+                await self._process_efficiency_optimization(input_data)
+            )
 
             # 5. 시스템 통합 결과 생성
             integration_result = await self._create_integration_result(
@@ -221,8 +229,10 @@ class IntegratedAdvancedReasoningSystem:
     ) -> Dict[str, Any]:
         """적응적 추론 처리"""
         try:
-            reasoning_session = await self.adaptive_reasoning.process_adaptive_reasoning(
-                context, input_data
+            reasoning_session = (
+                await self.adaptive_reasoning.process_adaptive_reasoning(
+                    context, input_data
+                )
             )
             return {
                 "session_id": reasoning_session.session_id,
@@ -243,7 +253,9 @@ class IntegratedAdvancedReasoningSystem:
                 "learning_feedback": ["적응적 추론 처리 실패"],
             }
 
-    async def _process_consistency_enhancement(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
+    async def _process_consistency_enhancement(
+        self, input_data: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """일관성 강화 처리"""
         try:
             reasoning_data = {
@@ -252,7 +264,9 @@ class IntegratedAdvancedReasoningSystem:
                 "knowledge_sources": input_data.get("knowledge_sources", []),
             }
 
-            enhancement = await self.consistency_enhancement.enhance_consistency(reasoning_data)
+            enhancement = await self.consistency_enhancement.enhance_consistency(
+                reasoning_data
+            )
             return {
                 "enhancement_id": enhancement.enhancement_id,
                 "original_consistency": enhancement.original_consistency,
@@ -270,21 +284,29 @@ class IntegratedAdvancedReasoningSystem:
                 "enhancement_methods": ["일관성 강화 처리 실패"],
             }
 
-    async def _process_integration_success(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
+    async def _process_integration_success(
+        self, input_data: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """통합 성공도 개선 처리"""
         try:
             knowledge_elements = input_data.get("knowledge_elements", [])
-            improvement_result = await self.integration_success.improve_integration_success(
-                knowledge_elements
+            improvement_result = (
+                await self.integration_success.improve_integration_success(
+                    knowledge_elements
+                )
             )
             return {
                 "improvement_id": improvement_result["improvement_id"],
                 "improvement_score": improvement_result["improvement_score"],
-                "total_conflicts": improvement_result["improvement_details"]["total_conflicts"],
+                "total_conflicts": improvement_result["improvement_details"][
+                    "total_conflicts"
+                ],
                 "resolved_conflicts": improvement_result["improvement_details"][
                     "resolved_conflicts"
                 ],
-                "total_priorities": improvement_result["improvement_details"]["total_priorities"],
+                "total_priorities": improvement_result["improvement_details"][
+                    "total_priorities"
+                ],
             }
         except Exception as e:
             logger.error(f"통합 성공도 개선 처리 실패: {e}")
@@ -296,7 +318,9 @@ class IntegratedAdvancedReasoningSystem:
                 "total_priorities": 0,
             }
 
-    async def _process_efficiency_optimization(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
+    async def _process_efficiency_optimization(
+        self, input_data: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """효율성 최적화 처리"""
         try:
             context = {
@@ -309,7 +333,9 @@ class IntegratedAdvancedReasoningSystem:
                 "performance_data": input_data.get("performance_data", {}),
             }
 
-            optimization_result = await self.efficiency_optimization.optimize_efficiency(context)
+            optimization_result = (
+                await self.efficiency_optimization.optimize_efficiency(context)
+            )
             return {
                 "optimization_id": optimization_result.optimization_id,
                 "original_efficiency": optimization_result.original_efficiency,
@@ -339,11 +365,15 @@ class IntegratedAdvancedReasoningSystem:
         integration_id = f"integration_{int(time.time())}"
 
         # 각 시스템의 점수 추출
-        adaptive_reasoning_score = adaptive_reasoning_result.get("confidence_score", 0.0)
+        adaptive_reasoning_score = adaptive_reasoning_result.get(
+            "confidence_score", 0.0
+        )
         consistency_enhancement_score = consistency_enhancement_result.get(
             "enhanced_consistency", 0.0
         )
-        integration_success_score = integration_success_result.get("improvement_score", 0.0)
+        integration_success_score = integration_success_result.get(
+            "improvement_score", 0.0
+        )
         efficiency_optimization_score = efficiency_optimization_result.get(
             "optimized_efficiency", 0.0
         )
@@ -471,11 +501,15 @@ class IntegratedAdvancedReasoningSystem:
         # 최근 통합 결과들의 평균 계산
         recent_integrations = self.integration_history[-10:]  # 최근 10개
 
-        avg_consistency = np.mean([i.consistency_enhancement_score for i in recent_integrations])
+        avg_consistency = np.mean(
+            [i.consistency_enhancement_score for i in recent_integrations]
+        )
         avg_integration_success = np.mean(
             [i.integration_success_score for i in recent_integrations]
         )
-        avg_efficiency = np.mean([i.efficiency_optimization_score for i in recent_integrations])
+        avg_efficiency = np.mean(
+            [i.efficiency_optimization_score for i in recent_integrations]
+        )
         avg_reasoning_adaptation = np.mean(
             [i.adaptive_reasoning_score for i in recent_integrations]
         )
@@ -502,44 +536,66 @@ class IntegratedAdvancedReasoningSystem:
                 "current": report.consistency_score,
                 "target": 0.6,
                 "achievement_rate": report.consistency_score / 0.6 if 0.6 > 0 else 0.0,
-                "status": ("achieved" if report.consistency_score >= 0.6 else "in_progress"),
+                "status": (
+                    "achieved" if report.consistency_score >= 0.6 else "in_progress"
+                ),
             },
             "integration_success_score": {
                 "current": report.integration_success_score,
                 "target": 0.6,
-                "achievement_rate": (report.integration_success_score / 0.6 if 0.6 > 0 else 0.0),
+                "achievement_rate": (
+                    report.integration_success_score / 0.6 if 0.6 > 0 else 0.0
+                ),
                 "status": (
-                    "achieved" if report.integration_success_score >= 0.6 else "in_progress"
+                    "achieved"
+                    if report.integration_success_score >= 0.6
+                    else "in_progress"
                 ),
             },
             "efficiency_score": {
                 "current": report.efficiency_score,
                 "target": 0.8,
                 "achievement_rate": report.efficiency_score / 0.8 if 0.8 > 0 else 0.0,
-                "status": ("achieved" if report.efficiency_score >= 0.8 else "in_progress"),
+                "status": (
+                    "achieved" if report.efficiency_score >= 0.8 else "in_progress"
+                ),
             },
             "reasoning_adaptation_score": {
                 "current": report.reasoning_adaptation_score,
                 "target": 0.7,
-                "achievement_rate": (report.reasoning_adaptation_score / 0.7 if 0.7 > 0 else 0.0),
+                "achievement_rate": (
+                    report.reasoning_adaptation_score / 0.7 if 0.7 > 0 else 0.0
+                ),
                 "status": (
-                    "achieved" if report.reasoning_adaptation_score >= 0.7 else "in_progress"
+                    "achieved"
+                    if report.reasoning_adaptation_score >= 0.7
+                    else "in_progress"
                 ),
             },
             "overall_system_stability": {
                 "current": report.overall_system_stability,
                 "target": 0.9,
-                "achievement_rate": (report.overall_system_stability / 0.9 if 0.9 > 0 else 0.0),
-                "status": ("achieved" if report.overall_system_stability >= 0.9 else "in_progress"),
+                "achievement_rate": (
+                    report.overall_system_stability / 0.9 if 0.9 > 0 else 0.0
+                ),
+                "status": (
+                    "achieved"
+                    if report.overall_system_stability >= 0.9
+                    else "in_progress"
+                ),
             },
         }
 
         # 전체 달성도 계산
-        total_achievement_rate = np.mean([goal["achievement_rate"] for goal in goals.values()])
+        total_achievement_rate = np.mean(
+            [goal["achievement_rate"] for goal in goals.values()]
+        )
 
         return {
             "goals": goals,
             "total_achievement_rate": total_achievement_rate,
-            "overall_status": ("achieved" if total_achievement_rate >= 1.0 else "in_progress"),
+            "overall_status": (
+                "achieved" if total_achievement_rate >= 1.0 else "in_progress"
+            ),
             "evaluation_time": datetime.now().isoformat(),
         }

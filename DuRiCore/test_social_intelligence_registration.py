@@ -83,7 +83,9 @@ async def test_social_intelligence_registration():
             }
 
             result = await module_instance.execute(test_context)
-            logger.info(f"✅ SocialIntelligenceSystem 실행 성공: {result.get('status', 'unknown')}")
+            logger.info(
+                f"✅ SocialIntelligenceSystem 실행 성공: {result.get('status', 'unknown')}"
+            )
         else:
             logger.error("❌ SocialIntelligenceSystem 인스턴스를 가져올 수 없습니다")
             return False
@@ -111,7 +113,9 @@ async def test_all_registered_modules():
         logger.info(f"📈 등록된 모듈 수: {len(all_modules)}")
 
         for name, info in all_modules.items():
-            logger.info(f"   - {name}: {info.state.value} (의존성: {info.dependencies})")
+            logger.info(
+                f"   - {name}: {info.state.value} (의존성: {info.dependencies})"
+            )
 
         return True
 

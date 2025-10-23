@@ -28,7 +28,9 @@ def check_file(path):
 
         def flush_block():
             nonlocal missing, have_labels, have_annotations, in_alert, in_labels, in_annotations
-            if in_alert and not (all(have_labels.values()) and all(have_annotations.values())):
+            if in_alert and not (
+                all(have_labels.values()) and all(have_annotations.values())
+            ):
                 missing.append(path)
             in_alert = False
             in_labels = False

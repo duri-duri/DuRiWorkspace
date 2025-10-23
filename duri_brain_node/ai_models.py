@@ -28,7 +28,9 @@ class AIModelManager:
         }
         logger.info("🧠 AI 모델 관리자 초기화 완료")
 
-    async def analyze_with_models(self, user_input: str, duri_response: str) -> Dict[str, Any]:
+    async def analyze_with_models(
+        self, user_input: str, duri_response: str
+    ) -> Dict[str, Any]:
         """모든 AI 모델로 분석 실행"""
         try:
             results = {}
@@ -40,7 +42,9 @@ class AIModelManager:
                 self.models["keyword_extractor"].extract(user_input, duri_response),
                 self.models["context_analyzer"].analyze(user_input, duri_response),
                 self.models["ethical_judge"].judge(user_input, duri_response),
-                self.models["creative_generator"].generate_insights(user_input, duri_response),
+                self.models["creative_generator"].generate_insights(
+                    user_input, duri_response
+                ),
             ]
 
             model_results = await asyncio.gather(*tasks, return_exceptions=True)
@@ -271,10 +275,14 @@ class ContextAnalyzer:
         """컨텍스트 분석"""
         try:
             # 대화 맥락 분석
-            conversation_context = self._analyze_conversation_context(user_input, duri_response)
+            conversation_context = self._analyze_conversation_context(
+                user_input, duri_response
+            )
 
             # 주제 일관성
-            topic_consistency = self._analyze_topic_consistency(user_input, duri_response)
+            topic_consistency = self._analyze_topic_consistency(
+                user_input, duri_response
+            )
 
             # 시간적 맥락
             temporal_context = self._analyze_temporal_context(user_input, duri_response)
@@ -284,7 +292,9 @@ class ContextAnalyzer:
                 "topic_consistency": topic_consistency,
                 "temporal_context": temporal_context,
                 "context_score": (
-                    conversation_context["score"] + topic_consistency + temporal_context["score"]
+                    conversation_context["score"]
+                    + topic_consistency
+                    + temporal_context["score"]
                 )
                 / 3,
             }
@@ -293,13 +303,19 @@ class ContextAnalyzer:
             logger.error(f"컨텍스트 분석 오류: {e}")
             return {"error": str(e)}
 
-    def _analyze_conversation_context(self, user_input: str, duri_response: str) -> Dict[str, Any]:
+    def _analyze_conversation_context(
+        self, user_input: str, duri_response: str
+    ) -> Dict[str, Any]:
         """대화 맥락 분석"""
         # 간단한 맥락 분석
         context_keywords = ["시스템", "테스트", "분산", "구조", "노드", "학습", "개선"]
 
-        user_context = any(keyword in user_input.lower() for keyword in context_keywords)
-        duri_context = any(keyword in duri_response.lower() for keyword in context_keywords)
+        user_context = any(
+            keyword in user_input.lower() for keyword in context_keywords
+        )
+        duri_context = any(
+            keyword in duri_response.lower() for keyword in context_keywords
+        )
 
         context_match = user_context and duri_context
         context_score = 0.8 if context_match else 0.3
@@ -328,7 +344,9 @@ class ContextAnalyzer:
 
         return len(common_words) / len(total_words)
 
-    def _analyze_temporal_context(self, user_input: str, duri_response: str) -> Dict[str, Any]:
+    def _analyze_temporal_context(
+        self, user_input: str, duri_response: str
+    ) -> Dict[str, Any]:
         """시간적 맥락 분석"""
         # 시간 관련 키워드
         time_keywords = ["지금", "현재", "이제", "곧", "나중에", "이전", "다음"]
@@ -378,7 +396,9 @@ class EthicalJudge:
             logger.error(f"윤리 판단 오류: {e}")
             return {"error": str(e)}
 
-    def _identify_ethical_issues(self, user_input: str, duri_response: str) -> List[str]:
+    def _identify_ethical_issues(
+        self, user_input: str, duri_response: str
+    ) -> List[str]:
         """윤리적 문제점 식별"""
         issues = []
 
@@ -436,7 +456,9 @@ class EthicalJudge:
 class CreativeGenerator:
     """창의적 통찰 생성기"""
 
-    async def generate_insights(self, user_input: str, duri_response: str) -> Dict[str, Any]:
+    async def generate_insights(
+        self, user_input: str, duri_response: str
+    ) -> Dict[str, Any]:
         """창의적 통찰 생성"""
         try:
             # 창의적 패턴 분석

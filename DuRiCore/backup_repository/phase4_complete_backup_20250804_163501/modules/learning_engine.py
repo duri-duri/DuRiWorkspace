@@ -35,7 +35,9 @@ class LLMInterface:
         self.model_name = "gpt-4"
         self.api_key = None
 
-    def analyze_learning_content(self, content: str, context: Dict[str, Any]) -> Dict[str, Any]:
+    def analyze_learning_content(
+        self, content: str, context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """LLM 기반 학습 콘텐츠 분석"""
         # TODO: 실제 LLM 호출
         # 임시로 기본 분석 반환
@@ -97,7 +99,9 @@ class LearningEngine:
                 result = self.metacognitive_learning.process(content, context)
 
             # 4. 학습 결과 통합
-            integrated_result = self._integrate_learning_results(result, llm_analysis, context)
+            integrated_result = self._integrate_learning_results(
+                result, llm_analysis, context
+            )
 
             # 5. 학습 통계 업데이트
             self._update_learning_stats(integrated_result)
@@ -219,7 +223,9 @@ class LearningEngine:
             self.learning_stats["average_learning_score"] = new_avg
 
             # 가장 일반적인 콘텐츠 타입 업데이트
-            self.learning_stats["most_common_content_type"] = learning_result.content_type
+            self.learning_stats["most_common_content_type"] = (
+                learning_result.content_type
+            )
 
             # 향상된 스킬 추가
             for skill in learning_result.skills_improved:
@@ -290,7 +296,9 @@ class TextLearningSystem:
         try:
             # 간단한 복잡도 계산
             sentences = content.split(".")
-            avg_sentence_length = np.mean([len(s.split()) for s in sentences if s.strip()])
+            avg_sentence_length = np.mean(
+                [len(s.split()) for s in sentences if s.strip()]
+            )
 
             # 복잡도 점수 (0-1)
             complexity = min(1.0, avg_sentence_length / 20)
@@ -313,7 +321,9 @@ class TextLearningSystem:
                     word_freq[word] = word_freq.get(word, 0) + 1
 
             # 가장 빈도가 높은 단어들
-            key_concepts = sorted(word_freq.items(), key=lambda x: x[1], reverse=True)[:5]
+            key_concepts = sorted(word_freq.items(), key=lambda x: x[1], reverse=True)[
+                :5
+            ]
 
             return [concept[0] for concept in key_concepts]
 
@@ -457,7 +467,9 @@ class MetacognitiveLearningSystem:
                 "반성",
                 "분석",
             ]
-            reflection_count = sum(1 for keyword in reflection_keywords if keyword in content)
+            reflection_count = sum(
+                1 for keyword in reflection_keywords if keyword in content
+            )
 
             return min(1.0, reflection_count / 5)
 
@@ -653,7 +665,9 @@ class AutonomousLearningController:
         """자율성 수준 평가"""
         try:
             autonomy_keywords = ["스스로", "자율", "독립", "스스로", "자신", "스스로"]
-            autonomy_count = sum(1 for keyword in autonomy_keywords if keyword in content)
+            autonomy_count = sum(
+                1 for keyword in autonomy_keywords if keyword in content
+            )
 
             return min(1.0, autonomy_count / 3)
 
@@ -665,7 +679,9 @@ class AutonomousLearningController:
         """자기 주도성 평가"""
         try:
             direction_keywords = ["계획", "목표", "결정", "선택", "의지", "노력"]
-            direction_count = sum(1 for keyword in direction_keywords if keyword in content)
+            direction_count = sum(
+                1 for keyword in direction_keywords if keyword in content
+            )
 
             return min(1.0, direction_count / 3)
 
@@ -759,7 +775,9 @@ class SocialLearningSystem:
         """소통 능력 평가"""
         try:
             communication_keywords = ["대화", "소통", "이해", "표현", "듣기", "말하기"]
-            communication_count = sum(1 for keyword in communication_keywords if keyword in content)
+            communication_count = sum(
+                1 for keyword in communication_keywords if keyword in content
+            )
 
             return min(1.0, communication_count / 3)
 

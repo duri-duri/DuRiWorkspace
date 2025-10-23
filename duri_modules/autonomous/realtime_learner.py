@@ -85,11 +85,15 @@ class RealtimeLearner:
         except Exception as e:
             logger.error(f"실시간 대화 처리 오류: {e}")
 
-    def _execute_realtime_learning_cycle(self, user_input: str, assistant_response: str):
+    def _execute_realtime_learning_cycle(
+        self, user_input: str, assistant_response: str
+    ):
         """실시간 학습 사이클 실행"""
         try:
             # 1. 즉시 평가
-            evaluation_result = self._evaluate_response_realtime(assistant_response, user_input)
+            evaluation_result = self._evaluate_response_realtime(
+                assistant_response, user_input
+            )
 
             # 2. 즉시 자기성찰
             reflection_result = self._reflect_realtime(
@@ -97,7 +101,9 @@ class RealtimeLearner:
             )
 
             # 3. 즉시 개선 제안
-            improvement_suggestions = self._generate_improvements_realtime(reflection_result)
+            improvement_suggestions = self._generate_improvements_realtime(
+                reflection_result
+            )
 
             # 4. 학습 메트릭 업데이트
             self._update_learning_metrics_realtime(evaluation_result, reflection_result)
@@ -108,7 +114,9 @@ class RealtimeLearner:
         except Exception as e:
             logger.error(f"실시간 학습 사이클 오류: {e}")
 
-    def _evaluate_response_realtime(self, response: str, user_input: str) -> Dict[str, Any]:
+    def _evaluate_response_realtime(
+        self, response: str, user_input: str
+    ) -> Dict[str, Any]:
         """실시간 응답 평가"""
         # 간단한 실시간 평가 (전체 ChatGPT 평가 대신)
         evaluation = {
@@ -143,7 +151,9 @@ class RealtimeLearner:
         """명확성 점수 계산"""
         # 문장 길이와 구조 기반
         sentences = response.split(".")
-        avg_sentence_length = sum(len(s.split()) for s in sentences) / max(len(sentences), 1)
+        avg_sentence_length = sum(len(s.split()) for s in sentences) / max(
+            len(sentences), 1
+        )
 
         # 적절한 문장 길이 (10-20단어)를 선호
         if 10 <= avg_sentence_length <= 20:
@@ -196,11 +206,15 @@ class RealtimeLearner:
 
         if evaluation["clarity_score"] < 0.5:
             reflection["accepted_criticisms"].append("응답이 명확하지 않음")
-            reflection["improvement_suggestions"].append("더 간결하고 명확한 문장으로 구성하라")
+            reflection["improvement_suggestions"].append(
+                "더 간결하고 명확한 문장으로 구성하라"
+            )
 
         if evaluation["actionability_score"] < 0.5:
             reflection["accepted_criticisms"].append("실행 가능한 구체적 지침 부족")
-            reflection["improvement_suggestions"].append("구체적인 단계나 예제를 포함하라")
+            reflection["improvement_suggestions"].append(
+                "구체적인 단계나 예제를 포함하라"
+            )
 
         return reflection
 
@@ -222,7 +236,9 @@ class RealtimeLearner:
             }
             self.autonomous_learner.learning_history.append(metric)
 
-    def _generate_realtime_feedback(self, evaluation: Dict[str, Any], improvements: list):
+    def _generate_realtime_feedback(
+        self, evaluation: Dict[str, Any], improvements: list
+    ):
         """실시간 피드백 생성"""
         if evaluation["overall_score"] < 0.5:
             logger.warning(
@@ -231,7 +247,9 @@ class RealtimeLearner:
             if improvements:
                 logger.info(f"개선 제안: {', '.join(improvements[:3])}")
         else:
-            logger.info(f"실시간 학습: 응답 품질 양호 (점수: {evaluation['overall_score']:.2f})")
+            logger.info(
+                f"실시간 학습: 응답 품질 양호 (점수: {evaluation['overall_score']:.2f})"
+            )
 
     def _update_autonomous_learner(self, user_input: str, assistant_response: str):
         """자동 학습 시스템 업데이트"""
@@ -267,7 +285,9 @@ class RealtimeLearner:
         return {
             "is_active": self.is_active,
             "queue_size": (
-                self.conversation_queue.qsize() if hasattr(self.conversation_queue, "qsize") else 0
+                self.conversation_queue.qsize()
+                if hasattr(self.conversation_queue, "qsize")
+                else 0
             ),
             "last_conversation_time": self.last_conversation_time,
             "learning_history_count": (

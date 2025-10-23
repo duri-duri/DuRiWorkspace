@@ -59,7 +59,9 @@ class Phase13TestRunner:
 
         # 전체 결과 종합
         total_tests = len(test_results)
-        passed_tests = sum(1 for result in test_results.values() if result.get("success", False))
+        passed_tests = sum(
+            1 for result in test_results.values() if result.get("success", False)
+        )
 
         overall_result = {
             "phase": "Phase 13",
@@ -67,7 +69,9 @@ class Phase13TestRunner:
             "total_tests": total_tests,
             "passed_tests": passed_tests,
             "failed_tests": total_tests - passed_tests,
-            "success_rate": ((passed_tests / total_tests) * 100 if total_tests > 0 else 0),
+            "success_rate": (
+                (passed_tests / total_tests) * 100 if total_tests > 0 else 0
+            ),
             "test_results": test_results,
             "execution_time": time.time() - self.test_start_time,
             "timestamp": datetime.now().isoformat(),
@@ -147,7 +151,9 @@ class Phase13TestRunner:
                     },
                 }
             else:
-                logger.error(f"❌ Reasoning + Learning 통합 실패: {result.error_message}")
+                logger.error(
+                    f"❌ Reasoning + Learning 통합 실패: {result.error_message}"
+                )
                 return {
                     "test_name": "Reasoning + Learning 통합",
                     "success": False,

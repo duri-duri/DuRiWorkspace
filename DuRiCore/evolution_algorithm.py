@@ -111,13 +111,17 @@ class EvolutionAlgorithm:
 
         logger.info("진화 알고리즘 시스템 초기화 완료")
 
-    async def adaptive_evolution(self, performance_data: Dict[str, Any]) -> EvolutionResult:
+    async def adaptive_evolution(
+        self, performance_data: Dict[str, Any]
+    ) -> EvolutionResult:
         """적응적 진화 알고리즘"""
         try:
             start_time = time.time()
 
             # 현재 성능 분석
-            current_performance = await self._analyze_current_performance(performance_data)
+            current_performance = await self._analyze_current_performance(
+                performance_data
+            )
 
             # 적응 필요성 판단
             adaptation_needed = await self._assess_adaptation_need(current_performance)
@@ -126,7 +130,9 @@ class EvolutionAlgorithm:
                 return await self._create_stable_result(EvolutionType.ADAPTIVE)
 
             # 적응 전략 수립
-            adaptation_strategy = await self._create_adaptation_strategy(current_performance)
+            adaptation_strategy = await self._create_adaptation_strategy(
+                current_performance
+            )
 
             # 적응 실행
             adaptation_result = await self._execute_adaptation(adaptation_strategy)
@@ -146,19 +152,25 @@ class EvolutionAlgorithm:
             logger.error(f"적응적 진화 실패: {e}")
             return await self._create_failed_result(EvolutionType.ADAPTIVE)
 
-    async def performance_optimization(self, current_metrics: Dict[str, Any]) -> EvolutionResult:
+    async def performance_optimization(
+        self, current_metrics: Dict[str, Any]
+    ) -> EvolutionResult:
         """성능 최적화 알고리즘"""
         try:
             start_time = time.time()
 
             # 최적화 대상 식별
-            optimization_targets = await self._identify_optimization_targets(current_metrics)
+            optimization_targets = await self._identify_optimization_targets(
+                current_metrics
+            )
 
             if not optimization_targets:
                 return await self._create_stable_result(EvolutionType.OPTIMIZATION)
 
             # 최적화 알고리즘 실행
-            optimization_result = await self._run_optimization_algorithm(optimization_targets)
+            optimization_result = await self._run_optimization_algorithm(
+                optimization_targets
+            )
 
             # 최적화 결과 검증
             validation_result = await self._validate_optimization(optimization_result)
@@ -199,10 +211,14 @@ class EvolutionAlgorithm:
             )
 
             # 자기 개선 실행
-            improvement_result = await self._execute_self_improvement(improvement_strategy)
+            improvement_result = await self._execute_self_improvement(
+                improvement_strategy
+            )
 
             # 개선 효과 측정
-            improvement_effect = await self._measure_improvement_effect(improvement_result)
+            improvement_effect = await self._measure_improvement_effect(
+                improvement_result
+            )
 
             # 결과 측정
             execution_time = time.time() - start_time
@@ -293,7 +309,9 @@ class EvolutionAlgorithm:
                     analysis["trend_analysis"] = recent_trend
 
             # 병목 지점 식별
-            analysis["bottlenecks"] = await self._identify_bottlenecks(analysis["component_scores"])
+            analysis["bottlenecks"] = await self._identify_bottlenecks(
+                analysis["component_scores"]
+            )
 
             # 개선 기회 식별
             analysis["opportunities"] = await self._identify_opportunities(
@@ -312,7 +330,9 @@ class EvolutionAlgorithm:
                 "opportunities": [],
             }
 
-    async def _assess_adaptation_need(self, current_performance: Dict[str, Any]) -> bool:
+    async def _assess_adaptation_need(
+        self, current_performance: Dict[str, Any]
+    ) -> bool:
         """적응 필요성 평가"""
         try:
             overall_score = current_performance.get("overall_score", 0.0)
@@ -365,7 +385,9 @@ class EvolutionAlgorithm:
                 )
 
             # 예상 개선 효과 계산
-            strategy["expected_improvement"] = await self._estimate_improvement(strategy)
+            strategy["expected_improvement"] = await self._estimate_improvement(
+                strategy
+            )
 
             # 위험도 평가
             strategy["risk_level"] = await self._assess_adaptation_risk(strategy)
@@ -404,7 +426,8 @@ class EvolutionAlgorithm:
             # 결과 집계
             if len(result["execution_details"]) > 0:
                 result["success"] = any(
-                    detail.get("success", False) for detail in result["execution_details"].values()
+                    detail.get("success", False)
+                    for detail in result["execution_details"].values()
                 )
 
                 if result["success"]:
@@ -443,8 +466,10 @@ class EvolutionAlgorithm:
             for metric_name, metric_value in current_metrics.items():
                 if isinstance(metric_value, (int, float)):
                     # 최적화 필요성 평가
-                    optimization_potential = await self._calculate_optimization_potential(
-                        metric_name, metric_value
+                    optimization_potential = (
+                        await self._calculate_optimization_potential(
+                            metric_name, metric_value
+                        )
                     )
 
                     if optimization_potential > self.optimization_threshold:
@@ -468,7 +493,9 @@ class EvolutionAlgorithm:
             logger.error(f"최적화 대상 식별 실패: {e}")
             return []
 
-    async def _run_optimization_algorithm(self, targets: List[Dict[str, Any]]) -> Dict[str, Any]:
+    async def _run_optimization_algorithm(
+        self, targets: List[Dict[str, Any]]
+    ) -> Dict[str, Any]:
         """최적화 알고리즘 실행"""
         try:
             result = {
@@ -485,7 +512,9 @@ class EvolutionAlgorithm:
                 result["optimization_details"][target["metric"]] = optimization_result
 
                 if optimization_result["success"]:
-                    result["optimized_metrics"][target["metric"]] = optimization_result["new_value"]
+                    result["optimized_metrics"][target["metric"]] = optimization_result[
+                        "new_value"
+                    ]
                     total_improvement += optimization_result["improvement"]
 
             if len(result["optimized_metrics"]) > 0:
@@ -503,13 +532,17 @@ class EvolutionAlgorithm:
                 "optimization_details": {},
             }
 
-    async def _validate_optimization(self, optimization_result: Dict[str, Any]) -> Dict[str, Any]:
+    async def _validate_optimization(
+        self, optimization_result: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """최적화 결과 검증"""
         try:
             # 최적화 결과를 진화 결과 형식으로 변환
             return {
                 "success": optimization_result.get("success", False),
-                "performance_change": optimization_result.get("performance_improvement", 0.0),
+                "performance_change": optimization_result.get(
+                    "performance_improvement", 0.0
+                ),
                 "stability_change": 0.0,  # 최적화는 안정성에 미미한 영향
                 "learning_gain": 0.0,  # 최적화는 학습에 직접적 영향 없음
             }
@@ -578,7 +611,9 @@ class EvolutionAlgorithm:
 
             for opportunity in opportunities:
                 strategy["target_patterns"].append(opportunity["pattern_id"])
-                strategy["improvement_methods"].append(opportunity["improvement_method"])
+                strategy["improvement_methods"].append(
+                    opportunity["improvement_method"]
+                )
                 total_expected_gain += opportunity["expected_gain"]
 
             strategy["expected_gain"] = total_expected_gain
@@ -598,7 +633,9 @@ class EvolutionAlgorithm:
                 "execution_plan": {},
             }
 
-    async def _execute_self_improvement(self, strategy: Dict[str, Any]) -> Dict[str, Any]:
+    async def _execute_self_improvement(
+        self, strategy: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """자기 개선 실행"""
         try:
             result = {
@@ -615,7 +652,9 @@ class EvolutionAlgorithm:
 
             for i, pattern_id in enumerate(strategy["target_patterns"]):
                 method = strategy["improvement_methods"][i]
-                improvement_result = await self._execute_improvement_method(pattern_id, method)
+                improvement_result = await self._execute_improvement_method(
+                    pattern_id, method
+                )
 
                 result["execution_details"][pattern_id] = improvement_result
 
@@ -685,7 +724,9 @@ class EvolutionAlgorithm:
             logger.error(f"진화 결과 생성 실패: {e}")
             return await self._create_failed_result(evolution_type)
 
-    async def _create_stable_result(self, evolution_type: EvolutionType) -> EvolutionResult:
+    async def _create_stable_result(
+        self, evolution_type: EvolutionType
+    ) -> EvolutionResult:
         """안정 상태 결과 생성"""
         return EvolutionResult(
             result_id=f"stable_{evolution_type.value}_{int(time.time())}",
@@ -698,7 +739,9 @@ class EvolutionAlgorithm:
             created_at=datetime.now(),
         )
 
-    async def _create_failed_result(self, evolution_type: EvolutionType) -> EvolutionResult:
+    async def _create_failed_result(
+        self, evolution_type: EvolutionType
+    ) -> EvolutionResult:
         """실패 결과 생성"""
         return EvolutionResult(
             result_id=f"failed_{evolution_type.value}_{int(time.time())}",
@@ -747,7 +790,9 @@ class EvolutionAlgorithm:
                     analysis["trend_analysis"] = recent_trend
 
             # 병목 지점 식별
-            analysis["bottlenecks"] = await self._identify_bottlenecks(analysis["component_scores"])
+            analysis["bottlenecks"] = await self._identify_bottlenecks(
+                analysis["component_scores"]
+            )
 
             # 개선 기회 식별
             analysis["opportunities"] = await self._identify_opportunities(
@@ -766,7 +811,9 @@ class EvolutionAlgorithm:
                 "opportunities": [],
             }
 
-    async def _assess_adaptation_need(self, current_performance: Dict[str, Any]) -> bool:
+    async def _assess_adaptation_need(
+        self, current_performance: Dict[str, Any]
+    ) -> bool:
         """적응 필요성 평가"""
         try:
             overall_score = current_performance.get("overall_score", 0.0)
@@ -819,7 +866,9 @@ class EvolutionAlgorithm:
                 )
 
             # 예상 개선 효과 계산
-            strategy["expected_improvement"] = await self._estimate_improvement(strategy)
+            strategy["expected_improvement"] = await self._estimate_improvement(
+                strategy
+            )
 
             # 위험도 평가
             strategy["risk_level"] = await self._assess_adaptation_risk(strategy)
@@ -858,7 +907,8 @@ class EvolutionAlgorithm:
             # 결과 집계
             if len(result["execution_details"]) > 0:
                 result["success"] = any(
-                    detail.get("success", False) for detail in result["execution_details"].values()
+                    detail.get("success", False)
+                    for detail in result["execution_details"].values()
                 )
 
                 if result["success"]:
@@ -897,8 +947,10 @@ class EvolutionAlgorithm:
             for metric_name, metric_value in current_metrics.items():
                 if isinstance(metric_value, (int, float)):
                     # 최적화 필요성 평가
-                    optimization_potential = await self._calculate_optimization_potential(
-                        metric_name, metric_value
+                    optimization_potential = (
+                        await self._calculate_optimization_potential(
+                            metric_name, metric_value
+                        )
                     )
 
                     if optimization_potential > self.optimization_threshold:
@@ -922,7 +974,9 @@ class EvolutionAlgorithm:
             logger.error(f"최적화 대상 식별 실패: {e}")
             return []
 
-    async def _run_optimization_algorithm(self, targets: List[Dict[str, Any]]) -> Dict[str, Any]:
+    async def _run_optimization_algorithm(
+        self, targets: List[Dict[str, Any]]
+    ) -> Dict[str, Any]:
         """최적화 알고리즘 실행"""
         try:
             result = {
@@ -939,7 +993,9 @@ class EvolutionAlgorithm:
                 result["optimization_details"][target["metric"]] = optimization_result
 
                 if optimization_result["success"]:
-                    result["optimized_metrics"][target["metric"]] = optimization_result["new_value"]
+                    result["optimized_metrics"][target["metric"]] = optimization_result[
+                        "new_value"
+                    ]
                     total_improvement += optimization_result["improvement"]
 
             if len(result["optimized_metrics"]) > 0:
@@ -1012,7 +1068,9 @@ class EvolutionAlgorithm:
 
             for opportunity in opportunities:
                 strategy["target_patterns"].append(opportunity["pattern_id"])
-                strategy["improvement_methods"].append(opportunity["improvement_method"])
+                strategy["improvement_methods"].append(
+                    opportunity["improvement_method"]
+                )
                 total_expected_gain += opportunity["expected_gain"]
 
             strategy["expected_gain"] = total_expected_gain
@@ -1032,7 +1090,9 @@ class EvolutionAlgorithm:
                 "execution_plan": {},
             }
 
-    async def _execute_self_improvement(self, strategy: Dict[str, Any]) -> Dict[str, Any]:
+    async def _execute_self_improvement(
+        self, strategy: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """자기 개선 실행"""
         try:
             result = {
@@ -1049,7 +1109,9 @@ class EvolutionAlgorithm:
 
             for i, pattern_id in enumerate(strategy["target_patterns"]):
                 method = strategy["improvement_methods"][i]
-                improvement_result = await self._execute_improvement_method(pattern_id, method)
+                improvement_result = await self._execute_improvement_method(
+                    pattern_id, method
+                )
 
                 result["execution_details"][pattern_id] = improvement_result
 
@@ -1097,7 +1159,9 @@ class EvolutionAlgorithm:
             logger.error(f"진화 결과 생성 실패: {e}")
             return await self._create_failed_result(evolution_type)
 
-    async def _create_stable_result(self, evolution_type: EvolutionType) -> EvolutionResult:
+    async def _create_stable_result(
+        self, evolution_type: EvolutionType
+    ) -> EvolutionResult:
         """안정 상태 결과 생성"""
         return EvolutionResult(
             result_id=f"stable_{evolution_type.value}_{int(time.time())}",
@@ -1110,7 +1174,9 @@ class EvolutionAlgorithm:
             created_at=datetime.now(),
         )
 
-    async def _create_failed_result(self, evolution_type: EvolutionType) -> EvolutionResult:
+    async def _create_failed_result(
+        self, evolution_type: EvolutionType
+    ) -> EvolutionResult:
         """실패 결과 생성"""
         return EvolutionResult(
             result_id=f"failed_{evolution_type.value}_{int(time.time())}",
@@ -1137,7 +1203,9 @@ class EvolutionAlgorithm:
             slope = np.polyfit(x, values, 1)[0] if len(values) > 1 else 0.0
 
             direction = (
-                "increasing" if slope > 0.01 else "decreasing" if slope < -0.01 else "stable"
+                "increasing"
+                if slope > 0.01
+                else "decreasing" if slope < -0.01 else "stable"
             )
 
             return {"slope": slope, "direction": direction}
@@ -1146,12 +1214,16 @@ class EvolutionAlgorithm:
             logger.error(f"트렌드 계산 실패: {e}")
             return {"slope": 0.0, "direction": "stable"}
 
-    async def _identify_bottlenecks(self, component_scores: Dict[str, float]) -> List[str]:
+    async def _identify_bottlenecks(
+        self, component_scores: Dict[str, float]
+    ) -> List[str]:
         """병목 지점 식별"""
         try:
             bottlenecks = []
             avg_score = (
-                sum(component_scores.values()) / len(component_scores) if component_scores else 0.0
+                sum(component_scores.values()) / len(component_scores)
+                if component_scores
+                else 0.0
             )
 
             for component, score in component_scores.items():
@@ -1171,11 +1243,15 @@ class EvolutionAlgorithm:
         try:
             opportunities = []
             avg_score = (
-                sum(component_scores.values()) / len(component_scores) if component_scores else 0.0
+                sum(component_scores.values()) / len(component_scores)
+                if component_scores
+                else 0.0
             )
 
             for component, score in component_scores.items():
-                improvement_potential = max(0.0, 1.0 - score)  # 1.0에 가까울수록 개선 여지 적음
+                improvement_potential = max(
+                    0.0, 1.0 - score
+                )  # 1.0에 가까울수록 개선 여지 적음
 
                 if improvement_potential > 0.1:  # 10% 이상 개선 가능
                     opportunities.append(
@@ -1214,7 +1290,9 @@ class EvolutionAlgorithm:
             logger.error(f"적응 방법 선택 실패: {e}")
             return []
 
-    async def _execute_adaptation_method(self, method: Dict[str, Any]) -> Dict[str, Any]:
+    async def _execute_adaptation_method(
+        self, method: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """적응 방법 실행"""
         try:
             # 시뮬레이션된 적응 실행
@@ -1306,7 +1384,9 @@ class EvolutionAlgorithm:
                 "improvement": 0.0,
             }
 
-    async def _analyze_learning_pattern(self, pattern: Dict[str, Any]) -> Dict[str, Any]:
+    async def _analyze_learning_pattern(
+        self, pattern: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """학습 패턴 분석"""
         try:
             analysis = {
@@ -1328,7 +1408,9 @@ class EvolutionAlgorithm:
                 "stability": 0.0,
             }
 
-    async def _calculate_improvement_potential(self, pattern_analysis: Dict[str, Any]) -> float:
+    async def _calculate_improvement_potential(
+        self, pattern_analysis: Dict[str, Any]
+    ) -> float:
         """개선 잠재력 계산"""
         try:
             # 패턴 강도와 개선 잠재력을 고려한 계산
@@ -1383,7 +1465,9 @@ class EvolutionAlgorithm:
             logger.error(f"실행 계획 수립 실패: {e}")
             return {"steps": [], "timeline": {}, "resources": {}, "checkpoints": []}
 
-    async def _execute_improvement_method(self, pattern_id: str, method: str) -> Dict[str, Any]:
+    async def _execute_improvement_method(
+        self, pattern_id: str, method: str
+    ) -> Dict[str, Any]:
         """개선 방법 실행"""
         try:
             # 시뮬레이션된 개선 실행
@@ -1420,9 +1504,9 @@ class EvolutionAlgorithm:
                 analysis["stability_trend"] = sum(
                     c.stability_change for c in evolution_changes
                 ) / len(evolution_changes)
-                analysis["learning_trend"] = sum(c.learning_gain for c in evolution_changes) / len(
-                    evolution_changes
-                )
+                analysis["learning_trend"] = sum(
+                    c.learning_gain for c in evolution_changes
+                ) / len(evolution_changes)
 
             return analysis
 
@@ -1436,7 +1520,9 @@ class EvolutionAlgorithm:
                 "learning_trend": 0.0,
             }
 
-    async def _calculate_stability_metrics(self, change_analysis: Dict[str, Any]) -> Dict[str, Any]:
+    async def _calculate_stability_metrics(
+        self, change_analysis: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """안정성 지표 계산"""
         try:
             metrics = {
@@ -1463,14 +1549,22 @@ class EvolutionAlgorithm:
                 )
 
             if change_analysis["stability_trend"] >= 0:
-                metrics["stability_stability"] = min(1.0, 1.0 + change_analysis["stability_trend"])
+                metrics["stability_stability"] = min(
+                    1.0, 1.0 + change_analysis["stability_trend"]
+                )
             else:
-                metrics["stability_stability"] = max(0.0, 1.0 + change_analysis["stability_trend"])
+                metrics["stability_stability"] = max(
+                    0.0, 1.0 + change_analysis["stability_trend"]
+                )
 
             if change_analysis["learning_trend"] >= 0:
-                metrics["learning_stability"] = min(1.0, 1.0 + change_analysis["learning_trend"])
+                metrics["learning_stability"] = min(
+                    1.0, 1.0 + change_analysis["learning_trend"]
+                )
             else:
-                metrics["learning_stability"] = max(0.0, 1.0 + change_analysis["learning_trend"])
+                metrics["learning_stability"] = max(
+                    0.0, 1.0 + change_analysis["learning_trend"]
+                )
 
             return metrics
 
@@ -1483,7 +1577,9 @@ class EvolutionAlgorithm:
                 "learning_stability": 0.0,
             }
 
-    async def _assess_stability(self, stability_metrics: Dict[str, Any]) -> Dict[str, Any]:
+    async def _assess_stability(
+        self, stability_metrics: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """안정성 평가"""
         try:
             overall_stability = stability_metrics["overall_stability"]
@@ -1647,18 +1743,24 @@ async def test_evolution_algorithm():
 
         # 성능 최적화 테스트
         logger.info("성능 최적화 테스트 시작")
-        optimization_result = await evolution_algorithm.performance_optimization(current_metrics)
+        optimization_result = await evolution_algorithm.performance_optimization(
+            current_metrics
+        )
         logger.info(f"성능 최적화 결과: {optimization_result}")
 
         # 자기 개선 테스트
         logger.info("자기 개선 테스트 시작")
-        improvement_result = await evolution_algorithm.self_improvement_mechanism(learning_patterns)
+        improvement_result = await evolution_algorithm.self_improvement_mechanism(
+            learning_patterns
+        )
         logger.info(f"자기 개선 결과: {improvement_result}")
 
         # 안정성 평가 테스트
         logger.info("안정성 평가 테스트 시작")
         evolution_changes = [adaptive_result, optimization_result, improvement_result]
-        stability_result = await evolution_algorithm.stability_assessment(evolution_changes)
+        stability_result = await evolution_algorithm.stability_assessment(
+            evolution_changes
+        )
         logger.info(f"안정성 평가 결과: {stability_result}")
 
         logger.info("진화 알고리즘 테스트 완료")

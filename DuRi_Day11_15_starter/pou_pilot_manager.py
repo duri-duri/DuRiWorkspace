@@ -78,7 +78,9 @@ class PoUPilotManager:
         handler = logging.FileHandler(
             f"pou_pilot_logs_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
         )
-        formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+        formatter = logging.Formatter(
+            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        )
         handler.setFormatter(formatter)
         logger.addHandler(handler)
 
@@ -174,7 +176,9 @@ class PoUPilotManager:
 
         # 평균 계산
         if self.metrics:
-            metrics_list = [m["metrics"] for m in self.metrics.values() if "metrics" in m]
+            metrics_list = [
+                m["metrics"] for m in self.metrics.values() if "metrics" in m
+            ]
             if metrics_list:
                 report["summary"]["avg_quality_score"] = sum(
                     m["quality_score"] for m in metrics_list

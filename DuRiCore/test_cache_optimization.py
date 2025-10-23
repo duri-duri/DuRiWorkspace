@@ -115,7 +115,9 @@ async def test_cache_optimization():
         optimization_results = []
         for test_case in test_cases:
             start_time = time.time()
-            cache_key = system._optimize_cache_key(test_case["input"], test_case["context"])
+            cache_key = system._optimize_cache_key(
+                test_case["input"], test_case["context"]
+            )
             optimization_time = time.time() - start_time
 
             optimization_results.append(
@@ -158,7 +160,9 @@ async def test_cache_optimization():
         logger.info("📈 6. 성능 비교 분석")
 
         # 캐시 히트율 계산
-        total_requests = cache_stats.get("cache_hits", 0) + cache_stats.get("cache_misses", 0)
+        total_requests = cache_stats.get("cache_hits", 0) + cache_stats.get(
+            "cache_misses", 0
+        )
         hit_rate = cache_stats.get("cache_hit_rate", 0.0)
 
         logger.info(f"   총 요청 수: {total_requests}")
@@ -195,7 +199,9 @@ async def test_cache_optimization():
         with open("cache_optimization_test_results.json", "w", encoding="utf-8") as f:
             json.dump(test_results, f, indent=2, ensure_ascii=False, default=str)
 
-        logger.info("💾 테스트 결과가 'cache_optimization_test_results.json'에 저장되었습니다.")
+        logger.info(
+            "💾 테스트 결과가 'cache_optimization_test_results.json'에 저장되었습니다."
+        )
 
         return test_results
 

@@ -39,9 +39,7 @@ class StrategicLearningEngine:
 
         summary = "DuRi가 전략적으로 판단한 흐름 요약:\n"
         for idx, h in enumerate(self.history):
-            summary += (
-                f"{idx+1}. 상황: {h['situation']} → 행동: {h['action']} (이유: {h['reasoning']})\n"
-            )
+            summary += f"{idx+1}. 상황: {h['situation']} → 행동: {h['action']} (이유: {h['reasoning']})\n"
 
         return summary
 

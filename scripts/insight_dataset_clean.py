@@ -88,7 +88,9 @@ def clean_dataset(
         for seen_token_set in seen_tokens:
             similarity = calculate_similarity(tokens, seen_token_set)
             if similarity > duplicate_threshold:
-                print(f"중복 제외 [{i}]: {candidate[:50]}... (유사도: {similarity:.2f})")
+                print(
+                    f"중복 제외 [{i}]: {candidate[:50]}... (유사도: {similarity:.2f})"
+                )
                 is_duplicate = True
                 break
 
@@ -127,10 +129,14 @@ def main():
     parser = argparse.ArgumentParser(description="Insight Dataset Cleaning")
     parser.add_argument("input", help="입력 파일 경로")
     parser.add_argument("-o", "--output", help="출력 파일 경로")
-    parser.add_argument("--format", choices=["txt", "csv", "json"], default="txt", help="출력 형식")
+    parser.add_argument(
+        "--format", choices=["txt", "csv", "json"], default="txt", help="출력 형식"
+    )
     parser.add_argument("--min-length", type=int, default=10, help="최소 토큰 수")
     parser.add_argument("--max-length", type=int, default=500, help="최대 토큰 수")
-    parser.add_argument("--duplicate-threshold", type=float, default=0.8, help="중복 임계값")
+    parser.add_argument(
+        "--duplicate-threshold", type=float, default=0.8, help="중복 임계값"
+    )
     parser.add_argument(
         "--forbidden-words", nargs="+", default=["spam", "test", "dummy"], help="금칙어"
     )

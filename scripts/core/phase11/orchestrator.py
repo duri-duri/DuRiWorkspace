@@ -119,7 +119,8 @@ class Telemetry:
         snapshot = {
             "conv_id": ctx.conv_id,
             "messages": [
-                {"role": m.role, "content": m.content, "meta": m.meta} for m in ctx.messages
+                {"role": m.role, "content": m.content, "meta": m.meta}
+                for m in ctx.messages
             ],
             "memory": ctx.memory,
             "timestamp": datetime.now().isoformat(),

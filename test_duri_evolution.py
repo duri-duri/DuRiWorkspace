@@ -54,7 +54,9 @@ async def test_application_system_evolution():
             "name": "화남 + 목표 진행 중",
             "user_input": "화가 나요!",
             "user_context": {
-                "interaction_history": [{"emotion": "화남", "timestamp": "2025-08-05T09:00:00"}],
+                "interaction_history": [
+                    {"emotion": "화남", "timestamp": "2025-08-05T09:00:00"}
+                ],
                 "goals": ["프로젝트 완성"],
                 "system_performance": 0.7,
             },

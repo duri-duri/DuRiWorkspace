@@ -202,10 +202,14 @@ class EnhancedMemorySystem:
             tags = await self._extract_enhanced_tags(content, context)
 
             # 우선순위 점수 계산
-            priority_score = self._calculate_priority_score(importance, 0, datetime.now())
+            priority_score = self._calculate_priority_score(
+                importance, 0, datetime.now()
+            )
 
             # 보존 점수 계산
-            retention_score = self._calculate_retention_score(content, memory_type, importance)
+            retention_score = self._calculate_retention_score(
+                content, memory_type, importance
+            )
 
             # 메모리 엔트리 생성
             memory_entry = MemoryEntry(
@@ -237,7 +241,9 @@ class EnhancedMemorySystem:
             # 연관성 분석 및 연결
             await self._analyze_and_link_associations(memory_id)
 
-            logger.info(f"고도화된 메모리 저장 완료: {memory_id} (타입: {memory_type.value})")
+            logger.info(
+                f"고도화된 메모리 저장 완료: {memory_id} (타입: {memory_type.value})"
+            )
             return memory_id
 
         except Exception as e:
@@ -258,7 +264,9 @@ class EnhancedMemorySystem:
             for memory_id in search_ids:
                 if memory_id in self.memories:
                     memory = self.memories[memory_id]
-                    similarity = self._cosine_similarity(query_vector, memory.vector_data)
+                    similarity = self._cosine_similarity(
+                        query_vector, memory.vector_data
+                    )
 
                     if similarity > 0.3:  # 임계값
                         results.append((memory, similarity))
@@ -295,10 +303,15 @@ class EnhancedMemorySystem:
             # 연관성 링크 검색
             for link_id, link in self.associations.items():
                 if (link.source_id == memory_id or link.target_id == memory_id) and (
-                    association_type is None or link.association_type == association_type
+                    association_type is None
+                    or link.association_type == association_type
                 ):
 
-                    related_id = link.target_id if link.source_id == memory_id else link.source_id
+                    related_id = (
+                        link.target_id
+                        if link.source_id == memory_id
+                        else link.source_id
+                    )
                     if related_id in self.memories:
                         related_memory = self.memories[related_id]
                         related_memories.append((related_memory, link.strength))
@@ -341,14 +354,20 @@ class EnhancedMemorySystem:
 
             # 타입별 통계
             for memory_type in MemoryType:
-                type_memories = [m for m in self.memories.values() if m.memory_type == memory_type]
+                type_memories = [
+                    m for m in self.memories.values() if m.memory_type == memory_type
+                ]
                 stats["memory_types"][memory_type.value] = {
                     "count": len(type_memories),
                     "avg_importance": (
-                        np.mean([m.importance for m in type_memories]) if type_memories else 0
+                        np.mean([m.importance for m in type_memories])
+                        if type_memories
+                        else 0
                     ),
                     "avg_priority": (
-                        np.mean([m.priority_score for m in type_memories]) if type_memories else 0
+                        np.mean([m.priority_score for m in type_memories])
+                        if type_memories
+                        else 0
                     ),
                 }
 
@@ -362,11 +381,15 @@ class EnhancedMemorySystem:
             }
 
             # 연관성 통계
-            association_types = [link.association_type for link in self.associations.values()]
+            association_types = [
+                link.association_type for link in self.associations.values()
+            ]
             type_counts = Counter(association_types)
             stats["association_stats"] = {
                 "total_links": len(self.associations),
-                "type_distribution": {t.value: count for t, count in type_counts.items()},
+                "type_distribution": {
+                    t.value: count for t, count in type_counts.items()
+                },
             }
 
             # 접근 패턴
@@ -443,7 +466,9 @@ class EnhancedMemorySystem:
             logger.error(f"메모리 타입 분류 오류: {e}")
             return MemoryType.EXPERIENCE, 0.5
 
-    async def _create_enhanced_vector(self, content: str, context: Dict[str, Any]) -> List[float]:
+    async def _create_enhanced_vector(
+        self, content: str, context: Dict[str, Any]
+    ) -> List[float]:
         """고도화된 벡터 생성"""
         try:
             # 간단한 해시 기반 벡터 생성 (실제로는 임베딩 모델 사용)
@@ -460,7 +485,9 @@ class EnhancedMemorySystem:
             logger.error(f"벡터 생성 오류: {e}")
             return [0.0] * self.vector_dim
 
-    async def _extract_enhanced_tags(self, content: str, context: Dict[str, Any]) -> List[str]:
+    async def _extract_enhanced_tags(
+        self, content: str, context: Dict[str, Any]
+    ) -> List[str]:
         """고도화된 태그 추출"""
         try:
             tags = []
@@ -491,7 +518,9 @@ class EnhancedMemorySystem:
         try:
             # 시간 가중치 (최근일수록 높음)
             time_diff = datetime.now() - last_accessed
-            time_weight = max(0, 1 - (time_diff.total_seconds() / (24 * 3600)))  # 24시간 기준
+            time_weight = max(
+                0, 1 - (time_diff.total_seconds() / (24 * 3600))
+            )  # 24시간 기준
 
             # 접근 빈도 가중치
             access_weight = min(1.0, access_count / 10.0)  # 최대 10회 기준
@@ -735,7 +764,9 @@ class EnhancedMemorySystem:
                 }
 
             # 연산 수행
-            operation_result = await self._execute_memory_operation(operation_type, input_memories)
+            operation_result = await self._execute_memory_operation(
+                operation_type, input_memories
+            )
 
             # 결과를 작업 기억 버퍼에 저장
             buffer_id = await self._store_in_working_memory(
@@ -797,7 +828,9 @@ class EnhancedMemorySystem:
         combined_tags = list(set([tag for m in memories for tag in m.tags]))
 
         # 신뢰도 계산 (평균 + 유사성 보너스)
-        avg_confidence = sum(m.classification_confidence for m in memories) / len(memories)
+        avg_confidence = sum(m.classification_confidence for m in memories) / len(
+            memories
+        )
         similarity_bonus = self._calculate_memory_similarity(memories) * 0.1
 
         confidence = min(1.0, avg_confidence + similarity_bonus)
@@ -823,7 +856,9 @@ class EnhancedMemorySystem:
 
         # 차감된 결과
         remaining_tags = set(base_memory.tags) - common_tags
-        result_content = f"차감된 정보: {base_memory.content} (제외: {', '.join(common_tags)})"
+        result_content = (
+            f"차감된 정보: {base_memory.content} (제외: {', '.join(common_tags)})"
+        )
 
         confidence = base_memory.classification_confidence * 0.8
 
@@ -853,7 +888,9 @@ class EnhancedMemorySystem:
         else:
             comparison_result = "낮은 유사성"
 
-        result_content = f"비교 결과: {comparison_result} (평균 유사도: {avg_similarity:.3f})"
+        result_content = (
+            f"비교 결과: {comparison_result} (평균 유사도: {avg_similarity:.3f})"
+        )
 
         return {"result": result_content, "confidence": avg_similarity}
 
@@ -869,7 +906,9 @@ class EnhancedMemorySystem:
         integrated_content += " + ".join(integrated_parts)
 
         # 통합 신뢰도 계산
-        avg_confidence = sum(m.classification_confidence for m in memories) / len(memories)
+        avg_confidence = sum(m.classification_confidence for m in memories) / len(
+            memories
+        )
         integration_bonus = 0.1  # 통합 자체의 가치
 
         confidence = min(1.0, avg_confidence + integration_bonus)
@@ -888,7 +927,9 @@ class EnhancedMemorySystem:
         # 작업 기억 용량 확인
         if len(self.working_memory_buffers) >= self.working_memory_capacity:
             # 가장 오래된 버퍼 제거
-            oldest_buffer = min(self.working_memory_buffers.values(), key=lambda x: x.created_at)
+            oldest_buffer = min(
+                self.working_memory_buffers.values(), key=lambda x: x.created_at
+            )
             del self.working_memory_buffers[oldest_buffer.id]
 
         # 새 버퍼 생성
@@ -939,7 +980,8 @@ class EnhancedMemorySystem:
         return {
             "total_buffers": len(self.working_memory_buffers),
             "capacity": self.working_memory_capacity,
-            "utilization": len(self.working_memory_buffers) / self.working_memory_capacity,
+            "utilization": len(self.working_memory_buffers)
+            / self.working_memory_capacity,
             "buffers": [
                 {
                     "id": buffer.id,
@@ -1036,7 +1078,9 @@ class EnhancedMemorySystem:
                         "target": path.target_concept,
                         "path_length": path.path_length,
                         "total_confidence": path.total_confidence,
-                        "inference_chain": [inference.value for inference in path.inference_chain],
+                        "inference_chain": [
+                            inference.value for inference in path.inference_chain
+                        ],
                     },
                 }
             else:
@@ -1050,14 +1094,20 @@ class EnhancedMemorySystem:
     ) -> List[Dict[str, Any]]:
         """시맨틱 지식 추론"""
         try:
-            inferences = await self.semantic_graph.infer_new_knowledge(concept_name, inference_type)
-            logger.info(f"시맨틱 지식 추론 완료: {concept_name} -> {len(inferences)}개 추론")
+            inferences = await self.semantic_graph.infer_new_knowledge(
+                concept_name, inference_type
+            )
+            logger.info(
+                f"시맨틱 지식 추론 완료: {concept_name} -> {len(inferences)}개 추론"
+            )
             return inferences
         except Exception as e:
             logger.error(f"시맨틱 지식 추론 실패: {e}")
             return []
 
-    async def analyze_semantic_similarity(self, concept1_name: str, concept2_name: str) -> float:
+    async def analyze_semantic_similarity(
+        self, concept1_name: str, concept2_name: str
+    ) -> float:
         """시맨틱 유사도 분석"""
         try:
             similarity = await self.semantic_graph.analyze_semantic_similarity(
@@ -1091,7 +1141,9 @@ class EnhancedMemorySystem:
     async def optimize_semantic_graph(self) -> Dict[str, Any]:
         """시맨틱 그래프 최적화"""
         try:
-            optimization_results = await self.semantic_graph.semantic_optimizer.optimize_graph()
+            optimization_results = (
+                await self.semantic_graph.semantic_optimizer.optimize_graph()
+            )
             logger.info(f"시맨틱 그래프 최적화 완료: {optimization_results}")
             return optimization_results
         except Exception as e:
@@ -1163,7 +1215,9 @@ async def test_enhanced_memory_system():
     # 연관 메모리 검색 테스트
     print("\n3. 연관 메모리 검색 테스트")
     if memory_ids:
-        related_memories = await memory_system.get_related_memories(memory_ids[0], limit=3)
+        related_memories = await memory_system.get_related_memories(
+            memory_ids[0], limit=3
+        )
         print(f"첫 번째 메모리의 연관 메모리: {len(related_memories)}개")
         for memory, strength in related_memories:
             print(f"  - {memory.content[:50]}... (강도: {strength:.3f})")
@@ -1186,21 +1240,27 @@ async def test_enhanced_memory_system():
     print("\n6. Working Memory 연산 테스트")
     if len(memory_ids) >= 2:
         # 메모리 추가 연산
-        add_result = await memory_system.perform_memory_operation("addition", memory_ids[:2])
+        add_result = await memory_system.perform_memory_operation(
+            "addition", memory_ids[:2]
+        )
         print(f"메모리 추가 연산: {add_result.get('success', False)}")
         if add_result.get("success"):
             print(f"  결과: {add_result.get('result', '')[:50]}...")
             print(f"  신뢰도: {add_result.get('confidence', 0):.3f}")
 
         # 메모리 비교 연산
-        compare_result = await memory_system.perform_memory_operation("comparison", memory_ids[:2])
+        compare_result = await memory_system.perform_memory_operation(
+            "comparison", memory_ids[:2]
+        )
         print(f"메모리 비교 연산: {compare_result.get('success', False)}")
         if compare_result.get("success"):
             print(f"  결과: {compare_result.get('result', '')[:50]}...")
             print(f"  신뢰도: {compare_result.get('confidence', 0):.3f}")
 
         # 메모리 통합 연산
-        integrate_result = await memory_system.perform_memory_operation("integration", memory_ids)
+        integrate_result = await memory_system.perform_memory_operation(
+            "integration", memory_ids
+        )
         print(f"메모리 통합 연산: {integrate_result.get('success', False)}")
         if integrate_result.get("success"):
             print(f"  결과: {integrate_result.get('result', '')[:50]}...")

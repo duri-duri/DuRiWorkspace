@@ -85,7 +85,9 @@ class ConflictDetectionSystem:
         self, element1: Dict[str, Any], element2: Dict[str, Any]
     ) -> Optional[IntegrationConflict]:
         """통합 충돌 확인"""
-        conflict_id = f"conflict_{int(time.time())}_{hash(str(element1))}_{hash(str(element2))}"
+        conflict_id = (
+            f"conflict_{int(time.time())}_{hash(str(element1))}_{hash(str(element2))}"
+        )
 
         # 값 충돌 확인
         value_conflict = await self._check_value_conflict(element1, element2)

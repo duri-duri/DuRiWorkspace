@@ -196,10 +196,14 @@ class BehaviorGenerator:
             customized_steps = await self._customize_steps(template, decision_result)
 
             # 4. 성공 기준 정의
-            success_criteria = await self._define_success_criteria(template, decision_result)
+            success_criteria = await self._define_success_criteria(
+                template, decision_result
+            )
 
             # 5. 위험 평가
-            risk_assessment = await self._assess_risks(decision_result, customized_steps)
+            risk_assessment = await self._assess_risks(
+                decision_result, customized_steps
+            )
 
             # 6. 리소스 요구사항 계산
             resource_requirements = await self._calculate_resource_requirements(
@@ -213,13 +217,17 @@ class BehaviorGenerator:
             priority = await self._calculate_priority(decision_result, constraints)
 
             # 9. 행동 계획 생성
-            behavior_id = f"behavior_{int(time.time())}_{hash(str(decision_result)) % 10000}"
+            behavior_id = (
+                f"behavior_{int(time.time())}_{hash(str(decision_result)) % 10000}"
+            )
 
             return BehaviorPlan(
                 behavior_id=behavior_id,
                 behavior_type=behavior_type,
                 strategy=strategy,
-                description=await self._generate_description(decision_result, behavior_type),
+                description=await self._generate_description(
+                    decision_result, behavior_type
+                ),
                 steps=customized_steps,
                 expected_outcome=await self._generate_expected_outcome(decision_result),
                 success_criteria=success_criteria,
@@ -234,7 +242,9 @@ class BehaviorGenerator:
             logger.error(f"행동 계획 생성 실패: {e}")
             raise
 
-    async def _determine_behavior_type(self, decision_result: Dict[str, Any]) -> BehaviorType:
+    async def _determine_behavior_type(
+        self, decision_result: Dict[str, Any]
+    ) -> BehaviorType:
         """행동 타입 결정"""
         situation_type = decision_result.get("situation_type", "")
         urgency = decision_result.get("urgency_level", 0.0)
@@ -421,13 +431,21 @@ class BehaviorGenerator:
 
         return f"{type_descriptions[behavior_type]}: {decision} - {reasoning}"
 
-    async def _generate_expected_outcome(self, decision_result: Dict[str, Any]) -> Dict[str, Any]:
+    async def _generate_expected_outcome(
+        self, decision_result: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """예상 결과 생성"""
         return {
             "goal": decision_result.get("decision", ""),
-            "quality": ("높음" if decision_result.get("confidence", 0.0) > 0.7 else "보통"),
-            "impact": ("높음" if decision_result.get("importance", 0.0) > 0.7 else "보통"),
-            "timeline": ("즉시" if decision_result.get("urgency_level", 0.0) > 0.8 else "일반"),
+            "quality": (
+                "높음" if decision_result.get("confidence", 0.0) > 0.7 else "보통"
+            ),
+            "impact": (
+                "높음" if decision_result.get("importance", 0.0) > 0.7 else "보통"
+            ),
+            "timeline": (
+                "즉시" if decision_result.get("urgency_level", 0.0) > 0.8 else "일반"
+            ),
         }
 
 

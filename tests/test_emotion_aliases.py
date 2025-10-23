@@ -52,7 +52,9 @@ def test_emotion_alias_mapping():
         # Test all defined aliases
         for alias, expected in EMOTION_ALIASES.items():
             result = normalize_emotion(alias)
-            assert result == expected, f"Alias '{alias}' should map to '{expected}', got '{result}'"
+            assert (
+                result == expected
+            ), f"Alias '{alias}' should map to '{expected}', got '{result}'"
 
         print("✅ All emotion aliases map correctly")
     except Exception as e:

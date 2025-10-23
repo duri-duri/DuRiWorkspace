@@ -98,7 +98,9 @@ class ConversationLogger:
         # 실시간 분석
         self._analyze_exchange(entry)
 
-        logger.info(f"📝 대화 교환 로그: {response_time:.3f}초 ({'성공' if success else '실패'})")
+        logger.info(
+            f"📝 대화 교환 로그: {response_time:.3f}초 ({'성공' if success else '실패'})"
+        )
 
     def end_conversation(self) -> EvolutionLog:
         """대화 종료 및 진화 로그 생성"""
@@ -130,15 +132,20 @@ class ConversationLogger:
         total_conversations = len(self.evolution_logs)
         total_exchanges = sum(log.total_exchanges for log in self.evolution_logs)
         avg_response_time = (
-            sum(log.average_response_time for log in self.evolution_logs) / total_conversations
+            sum(log.average_response_time for log in self.evolution_logs)
+            / total_conversations
         )
         avg_learning_efficiency = (
-            sum(log.learning_efficiency for log in self.evolution_logs) / total_conversations
+            sum(log.learning_efficiency for log in self.evolution_logs)
+            / total_conversations
         )
         avg_problem_solving = (
-            sum(log.problem_solving_score for log in self.evolution_logs) / total_conversations
+            sum(log.problem_solving_score for log in self.evolution_logs)
+            / total_conversations
         )
-        avg_autonomy = sum(log.autonomy_level for log in self.evolution_logs) / total_conversations
+        avg_autonomy = (
+            sum(log.autonomy_level for log in self.evolution_logs) / total_conversations
+        )
 
         # 진화 패턴 분석
         evolution_patterns = self._analyze_evolution_patterns()
@@ -188,21 +195,27 @@ class ConversationLogger:
         if response_times:
             avg_response_time = sum(response_times) / len(response_times)
             if avg_response_time > 2.0:
-                suggestions.append("응답 시간이 2초를 초과합니다. 성능 최적화가 필요합니다.")
+                suggestions.append(
+                    "응답 시간이 2초를 초과합니다. 성능 최적화가 필요합니다."
+                )
 
         # 학습 효율성 분석
         learning_efficiencies = [log.learning_efficiency for log in self.evolution_logs]
         if learning_efficiencies:
             avg_efficiency = sum(learning_efficiencies) / len(learning_efficiencies)
             if avg_efficiency < 0.6:
-                suggestions.append("학습 효율성이 낮습니다. 학습 방법 개선이 필요합니다.")
+                suggestions.append(
+                    "학습 효율성이 낮습니다. 학습 방법 개선이 필요합니다."
+                )
 
         # 자율성 분석
         autonomy_levels = [log.autonomy_level for log in self.evolution_logs]
         if autonomy_levels:
             avg_autonomy = sum(autonomy_levels) / len(autonomy_levels)
             if avg_autonomy < 0.5:
-                suggestions.append("자율성이 낮습니다. 자율적 의사결정 능력 향상이 필요합니다.")
+                suggestions.append(
+                    "자율성이 낮습니다. 자율적 의사결정 능력 향상이 필요합니다."
+                )
 
         return suggestions
 
@@ -241,9 +254,13 @@ class ConversationLogger:
 
         # 학습 효율성 계산
         learning_patterns = [
-            pattern for entry in self.current_conversation for pattern in entry.learning_patterns
+            pattern
+            for entry in self.current_conversation
+            for pattern in entry.learning_patterns
         ]
-        learning_efficiency = min(1.0, len(learning_patterns) / len(self.current_conversation))
+        learning_efficiency = min(
+            1.0, len(learning_patterns) / len(self.current_conversation)
+        )
 
         # 문제 해결 점수
         success_count = sum(1 for entry in self.current_conversation if entry.success)
@@ -283,18 +300,22 @@ class ConversationLogger:
         if len(response_times) > 1:
             if all(t2 >= t1 for t1, t2 in zip(response_times[:-1], response_times[1:])):
                 patterns.append("response_time_increasing")
-            elif all(t2 <= t1 for t1, t2 in zip(response_times[:-1], response_times[1:])):
+            elif all(
+                t2 <= t1 for t1, t2 in zip(response_times[:-1], response_times[1:])
+            ):
                 patterns.append("response_time_decreasing")
 
         # 학습 패턴
-        learning_counts = [len(entry.learning_patterns) for entry in self.current_conversation]
+        learning_counts = [
+            len(entry.learning_patterns) for entry in self.current_conversation
+        ]
         if any(count > 0 for count in learning_counts):
             patterns.append("active_learning")
 
         # 성공 패턴
-        success_rate = sum(1 for entry in self.current_conversation if entry.success) / len(
-            self.current_conversation
-        )
+        success_rate = sum(
+            1 for entry in self.current_conversation if entry.success
+        ) / len(self.current_conversation)
         if success_rate > 0.8:
             patterns.append("high_success_rate")
         elif success_rate < 0.5:
@@ -307,7 +328,9 @@ class ConversationLogger:
         insights = []
 
         # 가장 긴 응답 시간
-        max_response_time = max(entry.response_time for entry in self.current_conversation)
+        max_response_time = max(
+            entry.response_time for entry in self.current_conversation
+        )
         if max_response_time > 3.0:
             insights.append(f"최대 응답 시간: {max_response_time:.2f}초 (개선 필요)")
 
@@ -319,9 +342,9 @@ class ConversationLogger:
             insights.append(f"학습 패턴 {total_learning_patterns}개 감지됨")
 
         # 성공률
-        success_rate = sum(1 for entry in self.current_conversation if entry.success) / len(
-            self.current_conversation
-        )
+        success_rate = sum(
+            1 for entry in self.current_conversation if entry.success
+        ) / len(self.current_conversation)
         insights.append(f"성공률: {success_rate:.1%}")
 
         return insights
@@ -390,7 +413,9 @@ class ConversationLogger:
         if not evolution_log:
             return
 
-        log_file = os.path.join(self.log_dir, f"evolution_{evolution_log.conversation_id}.json")
+        log_file = os.path.join(
+            self.log_dir, f"evolution_{evolution_log.conversation_id}.json"
+        )
 
         with open(log_file, "w", encoding="utf-8") as f:
             json.dump(asdict(evolution_log), f, ensure_ascii=False, indent=2)

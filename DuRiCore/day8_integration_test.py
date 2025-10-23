@@ -110,7 +110,9 @@ class Day8IntegrationTest:
             systems = ["lida_attention", "realtime_learning", "dynamic_reasoning"]
             for system_name in systems:
                 mock_system = MockSystem(system_name)
-                await self.advanced_interaction.register_system(system_name, mock_system)
+                await self.advanced_interaction.register_system(
+                    system_name, mock_system
+                )
 
             # 데이터 공유 상호작용 테스트
             data_share_id = await self.advanced_interaction.create_interaction(
@@ -120,7 +122,9 @@ class Day8IntegrationTest:
                 {"data_key": "attention_data"},
             )
 
-            data_share_result = await self.advanced_interaction.execute_interaction(data_share_id)
+            data_share_result = await self.advanced_interaction.execute_interaction(
+                data_share_id
+            )
 
             # 워크플로우 테스트
             workflow_steps = [
@@ -147,7 +151,9 @@ class Day8IntegrationTest:
             workflow_id = await self.advanced_interaction.create_workflow(
                 "테스트 워크플로우", workflow_steps
             )
-            workflow_result = await self.advanced_interaction.execute_workflow(workflow_id)
+            workflow_result = await self.advanced_interaction.execute_workflow(
+                workflow_id
+            )
 
             # 메트릭 확인
             interaction_metrics = self.advanced_interaction.get_interaction_metrics()
@@ -212,8 +218,8 @@ class Day8IntegrationTest:
             )
 
             # 학습 성과 평가 테스트
-            performance_metrics = await self.adaptive_learning.evaluate_learning_performance(
-                model_id
+            performance_metrics = (
+                await self.adaptive_learning.evaluate_learning_performance(model_id)
             )
 
             # 시스템 적응 테스트
@@ -286,7 +292,9 @@ class Day8IntegrationTest:
 
             # 결과 시각화 테스트
             test_data = [{"x": 1, "y": 10}, {"x": 2, "y": 20}, {"x": 3, "y": 30}]
-            visualization = await self.user_interface.visualize_results(test_data, "chart")
+            visualization = await self.user_interface.visualize_results(
+                test_data, "chart"
+            )
 
             # 사용자 상호작용 처리 테스트
             interaction_result = await self.user_interface.handle_user_interaction(
@@ -332,17 +340,21 @@ class Day8IntegrationTest:
             systems = ["lida_attention", "realtime_learning", "dynamic_reasoning"]
             for system_name in systems:
                 mock_system = MockSystem(system_name)
-                await self.performance_monitoring.register_system(system_name, mock_system)
+                await self.performance_monitoring.register_system(
+                    system_name, mock_system
+                )
 
             # 성능 메트릭 수집 테스트
             metric_ids = []
             for i in range(5):
-                metric_id = await self.performance_monitoring.collect_performance_metric(
-                    MetricType.PERFORMANCE,
-                    "cpu_usage",
-                    75.0 + i * 2,
-                    "%",
-                    "test_system",
+                metric_id = (
+                    await self.performance_monitoring.collect_performance_metric(
+                        MetricType.PERFORMANCE,
+                        "cpu_usage",
+                        75.0 + i * 2,
+                        "%",
+                        "test_system",
+                    )
                 )
                 metric_ids.append(metric_id)
 
@@ -352,17 +364,21 @@ class Day8IntegrationTest:
             )
 
             # 최적화 제안 생성 테스트
-            suggestion_id = await self.performance_monitoring.generate_optimization_suggestion(
-                "cpu",
-                "CPU 최적화",
-                "CPU 사용률을 줄이기 위해 불필요한 프로세스를 종료하세요.",
-                15.0,
-                "high",
+            suggestion_id = (
+                await self.performance_monitoring.generate_optimization_suggestion(
+                    "cpu",
+                    "CPU 최적화",
+                    "CPU 사용률을 줄이기 위해 불필요한 프로세스를 종료하세요.",
+                    15.0,
+                    "high",
+                )
             )
 
             # 성능 트렌드 분석 테스트
-            trend_analysis = await self.performance_monitoring.analyze_performance_trends(
-                "cpu_usage"
+            trend_analysis = (
+                await self.performance_monitoring.analyze_performance_trends(
+                    "cpu_usage"
+                )
             )
 
             # 성능 보고서 생성 테스트
@@ -374,7 +390,9 @@ class Day8IntegrationTest:
             health_score = await self.performance_monitoring.get_system_health_score()
 
             # 성능 권장사항 생성 테스트
-            recommendations = await self.performance_monitoring.get_performance_recommendations()
+            recommendations = (
+                await self.performance_monitoring.get_performance_recommendations()
+            )
 
             # 메트릭 확인
             monitoring_metrics = self.performance_monitoring.get_monitoring_metrics()
@@ -432,12 +450,14 @@ class Day8IntegrationTest:
                 integration_results["learning_interaction"] = interaction_id
 
             # 2. 사용자 인터페이스와 성능 모니터링 연결
-            if self.test_results["user_interface"].get("success", False) and self.test_results[
-                "performance_monitoring"
-            ].get("success", False):
+            if self.test_results["user_interface"].get(
+                "success", False
+            ) and self.test_results["performance_monitoring"].get("success", False):
 
                 # 성능 메트릭을 사용자 인터페이스에 표시
-                performance_status = await self.performance_monitoring.get_system_health_score()
+                performance_status = (
+                    await self.performance_monitoring.get_system_health_score()
+                )
                 ui_output = await self.user_interface.generate_system_output(
                     OutputType.TEXT,
                     f"시스템 건강 점수: {performance_status:.1f}%",
@@ -449,7 +469,9 @@ class Day8IntegrationTest:
             # 3. 전체 시스템 통합 상태 확인
             total_systems = 4
             successful_systems = sum(
-                1 for result in self.test_results.values() if result.get("success", False)
+                1
+                for result in self.test_results.values()
+                if result.get("success", False)
             )
             integration_score = (successful_systems / total_systems) * 100
 
@@ -491,20 +513,28 @@ class Day8IntegrationTest:
 
                 elif system_name == "adaptive_learning":
                     metrics = result.get("learning_metrics", {})
-                    print(f"   - 학습 세션: {metrics.get('total_learning_sessions', 0)}")
+                    print(
+                        f"   - 학습 세션: {metrics.get('total_learning_sessions', 0)}"
+                    )
                     print(f"   - 적응 수: {metrics.get('total_adaptations', 0)}")
 
                 elif system_name == "user_interface":
                     metrics = result.get("interface_metrics", {})
                     print(f"   - 입력 수: {metrics.get('total_inputs', 0)}")
                     print(f"   - 출력 수: {metrics.get('total_outputs', 0)}")
-                    print(f"   - 사용자 만족도: {metrics.get('user_satisfaction', 0):.1f}")
+                    print(
+                        f"   - 사용자 만족도: {metrics.get('user_satisfaction', 0):.1f}"
+                    )
 
                 elif system_name == "performance_monitoring":
                     metrics = result.get("monitoring_metrics", {})
-                    print(f"   - 메트릭 수: {metrics.get('total_metrics_collected', 0)}")
+                    print(
+                        f"   - 메트릭 수: {metrics.get('total_metrics_collected', 0)}"
+                    )
                     print(f"   - 알림 수: {metrics.get('total_alerts_generated', 0)}")
-                    print(f"   - 시스템 건강 점수: {metrics.get('system_health_score', 0):.1f}%")
+                    print(
+                        f"   - 시스템 건강 점수: {metrics.get('system_health_score', 0):.1f}%"
+                    )
             else:
                 print(f"   - 오류: {result.get('error', '알 수 없는 오류')}")
 
@@ -512,7 +542,9 @@ class Day8IntegrationTest:
         integration_result = self.test_results["integration"]
         if integration_result.get("success", False):
             print(f"\n🎉 시스템 통합: ✅ 성공")
-            print(f"   - 통합 점수: {integration_result.get('integration_score', 0):.1f}%")
+            print(
+                f"   - 통합 점수: {integration_result.get('integration_score', 0):.1f}%"
+            )
             print(
                 f"   - 성공한 시스템: {integration_result.get('successful_systems', 0)}/{integration_result.get('total_systems', 0)}"
             )
@@ -534,9 +566,15 @@ class Day8IntegrationTest:
             "시스템 간 고급 상호작용": self.test_results["advanced_interaction"].get(
                 "success", False
             ),
-            "실시간 학습 및 적응": self.test_results["adaptive_learning"].get("success", False),
-            "사용자 인터페이스": self.test_results["user_interface"].get("success", False),
-            "성능 모니터링": self.test_results["performance_monitoring"].get("success", False),
+            "실시간 학습 및 적응": self.test_results["adaptive_learning"].get(
+                "success", False
+            ),
+            "사용자 인터페이스": self.test_results["user_interface"].get(
+                "success", False
+            ),
+            "성능 모니터링": self.test_results["performance_monitoring"].get(
+                "success", False
+            ),
             "시스템 통합": self.test_results["integration"].get("success", False),
         }
 

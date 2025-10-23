@@ -271,7 +271,9 @@ class ReasoningLearningIntegrationSystem:
             integration_context.phase = IntegrationPhase.REASONING_EXECUTION
 
             # 4. Learning 통합
-            learning_result = await self._execute_learning_integration(reasoning_result, context)
+            learning_result = await self._execute_learning_integration(
+                reasoning_result, context
+            )
             integration_context.learning_result = learning_result
             integration_context.phase = IntegrationPhase.LEARNING_INTEGRATION
 
@@ -375,9 +377,9 @@ class ReasoningLearningIntegrationSystem:
             # 2. 논리 처리
             if self.reasoning_system and "logic_processor" in self.reasoning_system:
                 try:
-                    logic_result = await self.reasoning_system["logic_processor"].process_logic(
-                        input_data, context
-                    )
+                    logic_result = await self.reasoning_system[
+                        "logic_processor"
+                    ].process_logic(input_data, context)
                     reasoning_result["logic_result"] = logic_result
                 except Exception as e:
                     logger.warning(f"⚠️ 논리 처리 실패: {e}")
@@ -386,9 +388,9 @@ class ReasoningLearningIntegrationSystem:
             # 3. 의사결정
             if self.reasoning_system and "decision_maker" in self.reasoning_system:
                 try:
-                    decision_result = await self.reasoning_system["decision_maker"].make_decision(
-                        input_data, context
-                    )
+                    decision_result = await self.reasoning_system[
+                        "decision_maker"
+                    ].make_decision(input_data, context)
                     reasoning_result["decision_result"] = decision_result
                 except Exception as e:
                     logger.warning(f"⚠️ 의사결정 실패: {e}")
@@ -401,8 +403,12 @@ class ReasoningLearningIntegrationSystem:
                         strategy, "process_reasoning"
                     ):
                         try:
-                            strategy_result = await strategy.process_reasoning(input_data, context)
-                            reasoning_result["strategy_results"][strategy_name] = strategy_result
+                            strategy_result = await strategy.process_reasoning(
+                                input_data, context
+                            )
+                            reasoning_result["strategy_results"][
+                                strategy_name
+                            ] = strategy_result
                         except Exception as e:
                             logger.warning(f"⚠️ {strategy_name} 실행 실패: {e}")
 
@@ -571,10 +577,12 @@ class ReasoningLearningIntegrationSystem:
                 feedback_data["improvement_suggestions"].extend(improvements)
 
                 # 3. 최적화 기회 식별
-                optimization_opportunities = await self._identify_optimization_opportunities(
-                    feedback, context
+                optimization_opportunities = (
+                    await self._identify_optimization_opportunities(feedback, context)
                 )
-                feedback_data["optimization_opportunities"].extend(optimization_opportunities)
+                feedback_data["optimization_opportunities"].extend(
+                    optimization_opportunities
+                )
 
                 # 4. 피드백 적용 여부 확인
                 if not await self._should_continue_feedback(feedback, iteration):
@@ -658,7 +666,9 @@ class ReasoningLearningIntegrationSystem:
             optimization_data["integration_optimization"] = integration_optimization
 
             # 4. 성능 최적화
-            performance_optimization = await self._optimize_performance(optimization_data, context)
+            performance_optimization = await self._optimize_performance(
+                optimization_data, context
+            )
             optimization_data["performance_optimization"] = performance_optimization
 
             logger.info("✅ 최적화 실행 완료")
@@ -691,7 +701,9 @@ class ReasoningLearningIntegrationSystem:
         feedback_loop_count = len(feedback_data.get("feedback_iterations", []))
 
         # 최적화 적용 여부
-        optimization_applied = bool(optimization_data and not optimization_data.get("error"))
+        optimization_applied = bool(
+            optimization_data and not optimization_data.get("error")
+        )
 
         return IntegrationResult(
             session_id=session_id,
@@ -723,7 +735,9 @@ class ReasoningLearningIntegrationSystem:
 
         return np.mean(quality_scores) if quality_scores else 0.5
 
-    def _calculate_learning_effectiveness(self, learning_result: Dict[str, Any]) -> float:
+    def _calculate_learning_effectiveness(
+        self, learning_result: Dict[str, Any]
+    ) -> float:
         """Learning 효과성 계산"""
         if not learning_result or "error" in learning_result:
             return 0.0
@@ -767,7 +781,8 @@ class ReasoningLearningIntegrationSystem:
         # 평균 통합 점수 업데이트
         current_avg_score = self.performance_metrics["average_integration_score"]
         self.performance_metrics["average_integration_score"] = (
-            current_avg_score * (total_sessions - 1) + integration_result.integration_score
+            current_avg_score * (total_sessions - 1)
+            + integration_result.integration_score
         ) / total_sessions
 
     async def _generate_feedback(
@@ -796,7 +811,9 @@ class ReasoningLearningIntegrationSystem:
         # Learning 피드백
         if learning_result and "error" not in learning_result:
             feedback["learning_feedback"] = {
-                "effectiveness": self._calculate_learning_effectiveness(learning_result),
+                "effectiveness": self._calculate_learning_effectiveness(
+                    learning_result
+                ),
                 "improvements": self._identify_learning_improvements(learning_result),
             }
 
@@ -806,12 +823,16 @@ class ReasoningLearningIntegrationSystem:
                 feedback["reasoning_feedback"].get("quality", 0.0),
                 feedback["learning_feedback"].get("effectiveness", 0.0),
             ),
-            "coordination": self._assess_coordination(reasoning_result, learning_result),
+            "coordination": self._assess_coordination(
+                reasoning_result, learning_result
+            ),
         }
 
         return feedback
 
-    def _identify_reasoning_improvements(self, reasoning_result: Dict[str, Any]) -> List[str]:
+    def _identify_reasoning_improvements(
+        self, reasoning_result: Dict[str, Any]
+    ) -> List[str]:
         """Reasoning 개선점 식별"""
         improvements = []
 
@@ -829,7 +850,9 @@ class ReasoningLearningIntegrationSystem:
 
         return improvements
 
-    def _identify_learning_improvements(self, learning_result: Dict[str, Any]) -> List[str]:
+    def _identify_learning_improvements(
+        self, learning_result: Dict[str, Any]
+    ) -> List[str]:
         """Learning 개선점 식별"""
         improvements = []
 
@@ -901,7 +924,9 @@ class ReasoningLearningIntegrationSystem:
 
         return opportunities
 
-    async def _should_continue_feedback(self, feedback: Dict[str, Any], iteration: int) -> bool:
+    async def _should_continue_feedback(
+        self, feedback: Dict[str, Any], iteration: int
+    ) -> bool:
         """피드백 루프 계속 여부 확인"""
         # 최대 반복 횟수 확인
         max_iterations = self.integration_config.get("max_feedback_iterations", 3)
@@ -909,7 +934,9 @@ class ReasoningLearningIntegrationSystem:
             return False
 
         # 품질 임계값 확인
-        overall_score = feedback.get("integration_feedback", {}).get("overall_score", 0.0)
+        overall_score = feedback.get("integration_feedback", {}).get(
+            "overall_score", 0.0
+        )
         threshold = self.integration_config.get("optimization_threshold", 0.8)
 
         if overall_score >= threshold:
@@ -933,16 +960,22 @@ class ReasoningLearningIntegrationSystem:
 
         # 통합 개선사항
         if feedback_data.get("improvement_suggestions"):
-            optimization["integration_improvements"] = feedback_data["improvement_suggestions"]
+            optimization["integration_improvements"] = feedback_data[
+                "improvement_suggestions"
+            ]
 
         # 조정 강화
-        coordination_score = self._assess_coordination(reasoning_result, learning_result)
+        coordination_score = self._assess_coordination(
+            reasoning_result, learning_result
+        )
         if coordination_score < 0.7:
             optimization["coordination_enhancements"].append("시스템 간 통신 강화")
 
         # 성능 최적화
         if feedback_data.get("optimization_opportunities"):
-            optimization["performance_optimizations"] = feedback_data["optimization_opportunities"]
+            optimization["performance_optimizations"] = feedback_data[
+                "optimization_opportunities"
+            ]
 
         return optimization
 
@@ -958,14 +991,20 @@ class ReasoningLearningIntegrationSystem:
 
         # 실행 최적화
         if optimization_data.get("integration_optimization"):
-            performance_optimization["execution_optimizations"].append("통합 프로세스 최적화")
+            performance_optimization["execution_optimizations"].append(
+                "통합 프로세스 최적화"
+            )
 
         # 리소스 최적화
         if context.get("resource_constraints"):
-            performance_optimization["resource_optimizations"].append("리소스 사용량 최적화")
+            performance_optimization["resource_optimizations"].append(
+                "리소스 사용량 최적화"
+            )
 
         # 메모리 최적화
-        performance_optimization["memory_optimizations"].append("메모리 사용량 모니터링 및 최적화")
+        performance_optimization["memory_optimizations"].append(
+            "메모리 사용량 모니터링 및 최적화"
+        )
 
         return performance_optimization
 
@@ -977,7 +1016,9 @@ class ReasoningLearningIntegrationSystem:
         """현재 상태 반환"""
         return {
             "integration_status": self.integration_status.value,
-            "current_session": (self.current_session.session_id if self.current_session else None),
+            "current_session": (
+                self.current_session.session_id if self.current_session else None
+            ),
             "performance_metrics": self.get_performance_metrics(),
         }
 

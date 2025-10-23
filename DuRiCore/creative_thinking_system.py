@@ -263,13 +263,17 @@ class CreativeThinkingSystem:
             solutions = await self._solve_creative_problems(context, ideas)
 
             # 3. 혁신적 접근법 개발
-            approaches = await self._develop_innovative_approaches(context, ideas, solutions)
+            approaches = await self._develop_innovative_approaches(
+                context, ideas, solutions
+            )
 
             # 4. 창의적 패턴 학습
             patterns = await self._learn_creative_patterns(context, ideas, solutions)
 
             # 5. 창의적 통찰 발견
-            insights = await self._discover_creative_insights(context, ideas, solutions, patterns)
+            insights = await self._discover_creative_insights(
+                context, ideas, solutions, patterns
+            )
 
             end_time = datetime.now()
             duration = (end_time - start_time).total_seconds()
@@ -317,7 +321,9 @@ class CreativeThinkingSystem:
                 error_message=str(e),
             )
 
-    async def _generate_creative_ideas(self, context: Dict[str, Any]) -> List[CreativeIdea]:
+    async def _generate_creative_ideas(
+        self, context: Dict[str, Any]
+    ) -> List[CreativeIdea]:
         """창의적 아이디어 생성"""
         ideas = []
 
@@ -343,7 +349,9 @@ class CreativeThinkingSystem:
 
         return ideas
 
-    async def _generate_divergent_ideas(self, context: Dict[str, Any]) -> List[CreativeIdea]:
+    async def _generate_divergent_ideas(
+        self, context: Dict[str, Any]
+    ) -> List[CreativeIdea]:
         """발산적 사고로 아이디어 생성"""
         ideas = []
         context_text = str(context).lower()
@@ -373,7 +381,9 @@ class CreativeThinkingSystem:
 
         return ideas
 
-    async def _generate_lateral_ideas(self, context: Dict[str, Any]) -> List[CreativeIdea]:
+    async def _generate_lateral_ideas(
+        self, context: Dict[str, Any]
+    ) -> List[CreativeIdea]:
         """측면적 사고로 아이디어 생성"""
         ideas = []
         context_text = str(context).lower()
@@ -403,7 +413,9 @@ class CreativeThinkingSystem:
 
         return ideas
 
-    async def _generate_analogical_ideas(self, context: Dict[str, Any]) -> List[CreativeIdea]:
+    async def _generate_analogical_ideas(
+        self, context: Dict[str, Any]
+    ) -> List[CreativeIdea]:
         """유추적 사고로 아이디어 생성"""
         ideas = []
         context_text = str(context).lower()
@@ -433,7 +445,9 @@ class CreativeThinkingSystem:
 
         return ideas
 
-    async def _generate_combinatorial_ideas(self, context: Dict[str, Any]) -> List[CreativeIdea]:
+    async def _generate_combinatorial_ideas(
+        self, context: Dict[str, Any]
+    ) -> List[CreativeIdea]:
         """조합적 사고로 아이디어 생성"""
         ideas = []
         context_text = str(context).lower()
@@ -463,7 +477,9 @@ class CreativeThinkingSystem:
 
         return ideas
 
-    async def _generate_transformative_ideas(self, context: Dict[str, Any]) -> List[CreativeIdea]:
+    async def _generate_transformative_ideas(
+        self, context: Dict[str, Any]
+    ) -> List[CreativeIdea]:
         """변환적 사고로 아이디어 생성"""
         ideas = []
         context_text = str(context).lower()
@@ -541,7 +557,9 @@ class CreativeThinkingSystem:
 
         return solutions
 
-    async def _apply_creative_framework(self, context: Dict[str, Any]) -> List[CreativeSolution]:
+    async def _apply_creative_framework(
+        self, context: Dict[str, Any]
+    ) -> List[CreativeSolution]:
         """창의적 문제 해결 프레임워크 적용"""
         solutions = []
 
@@ -722,7 +740,10 @@ class CreativeThinkingSystem:
                     pattern_type=f"solution_{approach[:20]}",
                     pattern_description=f"{approach} 접근법을 통한 해결책 생성 패턴",
                     success_rate=np.mean(
-                        [solution.effectiveness_score for solution in approach_solutions]
+                        [
+                            solution.effectiveness_score
+                            for solution in approach_solutions
+                        ]
                     ),
                     frequency=len(approach_solutions),
                     context={"approach": approach, "count": len(approach_solutions)},
@@ -775,7 +796,9 @@ class CreativeThinkingSystem:
         insights.extend(pattern_insights)
 
         # 4. 종합적 통찰 발견
-        synthetic_insights = await self._generate_synthetic_insights(ideas, solutions, patterns)
+        synthetic_insights = await self._generate_synthetic_insights(
+            ideas, solutions, patterns
+        )
         insights.extend(synthetic_insights)
 
         return insights
@@ -887,25 +910,33 @@ class CreativeThinkingSystem:
 
         # 아이디어 창의성
         for idea in ideas:
-            creativity_value = self._convert_creativity_level_to_float(idea.creativity_level)
+            creativity_value = self._convert_creativity_level_to_float(
+                idea.creativity_level
+            )
             total_creativity += creativity_value
             total_count += 1
 
         # 해결책 창의성
         for solution in solutions:
-            creativity_value = self._convert_creativity_level_to_float(solution.creativity_level)
+            creativity_value = self._convert_creativity_level_to_float(
+                solution.creativity_level
+            )
             total_creativity += creativity_value
             total_count += 1
 
         # 통찰 창의성
         for insight in insights:
-            creativity_value = self._convert_creativity_level_to_float(insight.creativity_level)
+            creativity_value = self._convert_creativity_level_to_float(
+                insight.creativity_level
+            )
             total_creativity += creativity_value
             total_count += 1
 
         return total_creativity / total_count if total_count > 0 else 0.0
 
-    def _convert_creativity_level_to_float(self, creativity_level: CreativityLevel) -> float:
+    def _convert_creativity_level_to_float(
+        self, creativity_level: CreativityLevel
+    ) -> float:
         """창의성 수준을 float로 변환"""
         creativity_values = {
             CreativityLevel.BASIC: 0.2,
@@ -955,7 +986,9 @@ class CreativeThinkingSystem:
             "idea_type_distribution": self._get_idea_type_distribution(),
             "creativity_level_distribution": self._get_creativity_level_distribution(),
             "recent_insights": (
-                [i.insight for i in self.creative_insights[-3:]] if self.creative_insights else []
+                [i.insight for i in self.creative_insights[-3:]]
+                if self.creative_insights
+                else []
             ),
         }
 

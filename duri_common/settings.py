@@ -174,8 +174,12 @@ class DuRiSettings:
         object.__setattr__(self, "env", cfg.get("env", "dev"))
         object.__setattr__(self, "debug", cfg.get("debug", False))
         object.__setattr__(self, "version", cfg.get("version", "latest"))
-        object.__setattr__(self, "monitoring", MonitoringSettings(**cfg.get("monitoring", {})))
-        object.__setattr__(self, "database", DatabaseSettings(**cfg.get("database", {})))
+        object.__setattr__(
+            self, "monitoring", MonitoringSettings(**cfg.get("monitoring", {}))
+        )
+        object.__setattr__(
+            self, "database", DatabaseSettings(**cfg.get("database", {}))
+        )
         object.__setattr__(self, "redis", RedisSettings())
         object.__setattr__(self, "server", ServerSettings())
         object.__setattr__(self, "evolution", EvolutionSettings())

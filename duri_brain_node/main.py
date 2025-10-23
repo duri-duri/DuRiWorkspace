@@ -88,15 +88,23 @@ async def analyze_conversation(request: BrainAnalysisRequest):
         metadata = request.metadata or {}
 
         if not user_input or not duri_response:
-            raise HTTPException(status_code=400, detail="user_input과 duri_response가 필요합니다")
+            raise HTTPException(
+                status_code=400, detail="user_input과 duri_response가 필요합니다"
+            )
 
-        logger.info(f"🧠 Brain 분석 시작: {len(user_input)}자 입력, {len(duri_response)}자 응답")
+        logger.info(
+            f"🧠 Brain 분석 시작: {len(user_input)}자 입력, {len(duri_response)}자 응답"
+        )
 
         # AI 모델을 사용한 고급 분석
-        ai_analysis = await ai_model_manager.analyze_with_models(user_input, duri_response)
+        ai_analysis = await ai_model_manager.analyze_with_models(
+            user_input, duri_response
+        )
 
         # 1단계: 의미 분석 (AI 모델 결과 활용)
-        meaning_analysis = await _analyze_meaning(user_input, duri_response, ai_analysis)
+        meaning_analysis = await _analyze_meaning(
+            user_input, duri_response, ai_analysis
+        )
 
         # 2단계: 컨텍스트 분석 (AI 모델 결과 활용)
         context_analysis = await _analyze_context(
@@ -104,10 +112,14 @@ async def analyze_conversation(request: BrainAnalysisRequest):
         )
 
         # 3단계: 감정 분석 (AI 모델 결과 활용)
-        emotion_analysis = await _analyze_emotion(user_input, duri_response, ai_analysis)
+        emotion_analysis = await _analyze_emotion(
+            user_input, duri_response, ai_analysis
+        )
 
         # 4단계: 기억 검색
-        memory_retrieval = await _retrieve_memory(user_input, duri_response, context_analysis)
+        memory_retrieval = await _retrieve_memory(
+            user_input, duri_response, context_analysis
+        )
 
         # 5단계: 윤리 판단 (AI 모델 결과 활용)
         ethical_judgment = await _judge_ethics(
@@ -163,8 +175,12 @@ async def _analyze_meaning(
         intent_classification = ai_analysis.get("intent_classifier", {})
 
         # 사용자 입력 분석
-        user_keywords = keyword_extraction.get("user_keywords", _extract_keywords(user_input))
-        user_intent = intent_classification.get("primary_intent", _analyze_intent(user_input))
+        user_keywords = keyword_extraction.get(
+            "user_keywords", _extract_keywords(user_input)
+        )
+        user_intent = intent_classification.get(
+            "primary_intent", _analyze_intent(user_input)
+        )
 
         # DuRi 응답 분석
         response_keywords = keyword_extraction.get(
@@ -258,7 +274,9 @@ async def _retrieve_memory(
         relevant_memories = _search_relevant_memories(user_input, context_analysis)
 
         # 기억 활용도 분석
-        memory_utilization = _analyze_memory_utilization(duri_response, relevant_memories)
+        memory_utilization = _analyze_memory_utilization(
+            duri_response, relevant_memories
+        )
 
         # 새로운 기억 저장
         new_memory = _store_new_memory(user_input, duri_response, context_analysis)
@@ -267,7 +285,9 @@ async def _retrieve_memory(
             "relevant_memories": relevant_memories,
             "memory_utilization": memory_utilization,
             "new_memory": new_memory,
-            "memory_score": _calculate_memory_score(relevant_memories, memory_utilization),
+            "memory_score": _calculate_memory_score(
+                relevant_memories, memory_utilization
+            ),
         }
 
     except Exception as e:
@@ -284,7 +304,9 @@ async def _judge_ethics(
         ethical_issues = _identify_ethical_issues(user_input, duri_response)
 
         # 윤리적 적절성 평가
-        ethical_appropriateness = _evaluate_ethical_appropriateness(duri_response, ethical_issues)
+        ethical_appropriateness = _evaluate_ethical_appropriateness(
+            duri_response, ethical_issues
+        )
 
         # 윤리적 개선 제안
         ethical_improvements = _suggest_ethical_improvements(
@@ -295,7 +317,9 @@ async def _judge_ethics(
             "ethical_issues": ethical_issues,
             "ethical_appropriateness": ethical_appropriateness,
             "ethical_improvements": ethical_improvements,
-            "ethics_score": _calculate_ethics_score(ethical_issues, ethical_appropriateness),
+            "ethics_score": _calculate_ethics_score(
+                ethical_issues, ethical_appropriateness
+            ),
         }
 
     except Exception as e:
@@ -312,7 +336,9 @@ async def _generate_creative_insights(
         creative_patterns = _analyze_creative_patterns(duri_response)
 
         # 혁신적 접근법 식별
-        innovative_approaches = _identify_innovative_approaches(duri_response, memory_retrieval)
+        innovative_approaches = _identify_innovative_approaches(
+            duri_response, memory_retrieval
+        )
 
         # 창의적 개선 제안
         creative_improvements = _suggest_creative_improvements(
@@ -387,7 +413,9 @@ def _calculate_relevance(user_keywords: list, response_keywords: list) -> float:
     return len(common) / max(len(user_keywords), 1)
 
 
-def _extract_conversation_context(user_input: str, duri_response: str) -> Dict[str, Any]:
+def _extract_conversation_context(
+    user_input: str, duri_response: str
+) -> Dict[str, Any]:
     """대화 맥락 추출"""
     return {"topic": "general", "context": "conversation"}
 
@@ -433,7 +461,9 @@ def _calculate_emotion_score(
     return emotion_alignment
 
 
-def _search_relevant_memories(user_input: str, context_analysis: Dict[str, Any]) -> list:
+def _search_relevant_memories(
+    user_input: str, context_analysis: Dict[str, Any]
+) -> list:
     """관련 기억 검색"""
     return []  # 기본값
 
@@ -450,7 +480,9 @@ def _store_new_memory(
     return {"stored": True, "timestamp": datetime.now().isoformat()}
 
 
-def _calculate_memory_score(relevant_memories: list, memory_utilization: float) -> float:
+def _calculate_memory_score(
+    relevant_memories: list, memory_utilization: float
+) -> float:
     """기억 점수 계산"""
     return memory_utilization
 
@@ -460,17 +492,23 @@ def _identify_ethical_issues(user_input: str, duri_response: str) -> list:
     return []  # 기본값
 
 
-def _evaluate_ethical_appropriateness(duri_response: str, ethical_issues: list) -> float:
+def _evaluate_ethical_appropriateness(
+    duri_response: str, ethical_issues: list
+) -> float:
     """윤리적 적절성 평가"""
     return 0.9  # 기본값
 
 
-def _suggest_ethical_improvements(ethical_issues: list, ethical_appropriateness: float) -> list:
+def _suggest_ethical_improvements(
+    ethical_issues: list, ethical_appropriateness: float
+) -> list:
     """윤리적 개선 제안"""
     return []  # 기본값
 
 
-def _calculate_ethics_score(ethical_issues: list, ethical_appropriateness: float) -> float:
+def _calculate_ethics_score(
+    ethical_issues: list, ethical_appropriateness: float
+) -> float:
     """윤리 점수 계산"""
     return ethical_appropriateness
 
@@ -480,17 +518,23 @@ def _analyze_creative_patterns(duri_response: str) -> list:
     return []  # 기본값
 
 
-def _identify_innovative_approaches(duri_response: str, memory_retrieval: Dict[str, Any]) -> list:
+def _identify_innovative_approaches(
+    duri_response: str, memory_retrieval: Dict[str, Any]
+) -> list:
     """혁신적 접근법 식별"""
     return []  # 기본값
 
 
-def _suggest_creative_improvements(creative_patterns: list, innovative_approaches: list) -> list:
+def _suggest_creative_improvements(
+    creative_patterns: list, innovative_approaches: list
+) -> list:
     """창의적 개선 제안"""
     return []  # 기본값
 
 
-def _calculate_creativity_score(creative_patterns: list, innovative_approaches: list) -> float:
+def _calculate_creativity_score(
+    creative_patterns: list, innovative_approaches: list
+) -> float:
     """창의성 점수 계산"""
     return 0.7  # 기본값
 

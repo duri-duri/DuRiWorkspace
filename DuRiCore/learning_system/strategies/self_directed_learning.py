@@ -177,10 +177,14 @@ class SelfDirectedLearningStrategy:
             curiosity_triggers = await self._generate_curiosity_triggers(context or {})
 
             # 2. 문제 발견
-            discovered_problems = await self._discover_problems(context or {}, curiosity_triggers)
+            discovered_problems = await self._discover_problems(
+                context or {}, curiosity_triggers
+            )
 
             # 3. 학습 목표 설정
-            learning_goals = await self._set_learning_goals(context or {}, discovered_problems)
+            learning_goals = await self._set_learning_goals(
+                context or {}, discovered_problems
+            )
 
             # 4. 학습 루프 실행
             learning_activities, learning_outcomes = await self._execute_learning_loop(
@@ -205,7 +209,9 @@ class SelfDirectedLearningStrategy:
             self.total_learning_sessions += 1
             self.total_learning_time += total_learning_time
 
-            logger.info(f"자기 주도적 학습 완료: {session_id} (지속시간: {total_learning_time})")
+            logger.info(
+                f"자기 주도적 학습 완료: {session_id} (지속시간: {total_learning_time})"
+            )
             return result
 
         except Exception as e:
@@ -224,7 +230,9 @@ class SelfDirectedLearningStrategy:
                 error_message=str(e),
             )
 
-    async def _generate_curiosity_triggers(self, context: Dict[str, Any]) -> List[CuriosityTrigger]:
+    async def _generate_curiosity_triggers(
+        self, context: Dict[str, Any]
+    ) -> List[CuriosityTrigger]:
         """호기심 트리거 생성"""
         triggers = []
 
@@ -322,7 +330,9 @@ class SelfDirectedLearningStrategy:
                     description=objective["description"],
                     target_skill=objective.get("skill", "general_learning"),
                     target_proficiency=objective.get("proficiency", 0.7),
-                    estimated_duration=timedelta(hours=objective.get("duration_hours", 1)),
+                    estimated_duration=timedelta(
+                        hours=objective.get("duration_hours", 1)
+                    ),
                     priority=objective.get("priority", 0.5),
                     context=context,
                 )
@@ -381,15 +391,23 @@ class SelfDirectedLearningStrategy:
 
         # 단계별 통찰 생성
         if phase == LearningPhase.EXPLORATION:
-            insights.append(f"{goal.domain.value} 영역 탐구를 통해 새로운 관점을 발견했습니다.")
+            insights.append(
+                f"{goal.domain.value} 영역 탐구를 통해 새로운 관점을 발견했습니다."
+            )
         elif phase == LearningPhase.INVESTIGATION:
-            insights.append(f"{goal.target_skill}에 대한 심층 조사를 통해 패턴을 발견했습니다.")
+            insights.append(
+                f"{goal.target_skill}에 대한 심층 조사를 통해 패턴을 발견했습니다."
+            )
         elif phase == LearningPhase.EXPERIMENTATION:
             insights.append(f"실험을 통해 {goal.target_skill}의 실용성을 확인했습니다.")
         elif phase == LearningPhase.INTEGRATION:
-            insights.append(f"다양한 지식을 통합하여 {goal.target_skill}을 체계화했습니다.")
+            insights.append(
+                f"다양한 지식을 통합하여 {goal.target_skill}을 체계화했습니다."
+            )
         elif phase == LearningPhase.APPLICATION:
-            insights.append(f"{goal.target_skill}을 실제 상황에 적용하여 효과를 검증했습니다.")
+            insights.append(
+                f"{goal.target_skill}을 실제 상황에 적용하여 효과를 검증했습니다."
+            )
 
         return insights
 
@@ -471,25 +489,32 @@ class SelfDirectedLearningStrategy:
         average_engagement = (
             sum(r.average_engagement for r in self.learning_history) / total_sessions
         )
-        average_progress = sum(r.overall_progress for r in self.learning_history) / total_sessions
+        average_progress = (
+            sum(r.overall_progress for r in self.learning_history) / total_sessions
+        )
 
         # 도메인별 통계
         domain_stats = defaultdict(lambda: {"count": 0, "total_progress": 0.0})
         for result in self.learning_history:
             for goal in result.learning_goals:
                 domain_stats[goal.domain.value]["count"] += 1
-                domain_stats[goal.domain.value]["total_progress"] += goal.target_proficiency
+                domain_stats[goal.domain.value][
+                    "total_progress"
+                ] += goal.target_proficiency
 
         for domain in domain_stats:
             if domain_stats[domain]["count"] > 0:
                 domain_stats[domain]["average_progress"] = (
-                    domain_stats[domain]["total_progress"] / domain_stats[domain]["count"]
+                    domain_stats[domain]["total_progress"]
+                    / domain_stats[domain]["count"]
                 )
 
         return {
             "total_sessions": total_sessions,
             "successful_sessions": successful_sessions,
-            "success_rate": (successful_sessions / total_sessions if total_sessions > 0 else 0.0),
+            "success_rate": (
+                successful_sessions / total_sessions if total_sessions > 0 else 0.0
+            ),
             "average_engagement": average_engagement,
             "average_progress": average_progress,
             "total_learning_time": str(self.total_learning_time),

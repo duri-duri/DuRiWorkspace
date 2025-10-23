@@ -161,8 +161,12 @@ class AutoRollbackSystem:
                                 "name": file,
                                 "path": file_path,
                                 "size": stat.st_size,
-                                "created": datetime.fromtimestamp(stat.st_ctime).isoformat(),
-                                "modified": datetime.fromtimestamp(stat.st_mtime).isoformat(),
+                                "created": datetime.fromtimestamp(
+                                    stat.st_ctime
+                                ).isoformat(),
+                                "modified": datetime.fromtimestamp(
+                                    stat.st_mtime
+                                ).isoformat(),
                             }
                         )
 
@@ -340,7 +344,10 @@ class AutoRollbackSystem:
                 logger.info("롤백 스크립트 실행 완료")
 
                 # 3. 존재형 AI 회복 시도
-                if self.existence_ai and self.existence_ai.recovery_capability.can_recover():
+                if (
+                    self.existence_ai
+                    and self.existence_ai.recovery_capability.can_recover()
+                ):
                     recovery_result = self.existence_ai.recovery_capability.recover()
                     logger.info(f"존재형 AI 회복 완료: {recovery_result}")
 
@@ -452,7 +459,9 @@ echo "현재 상태 백업: $CURRENT_BACKUP"
 """
         return script_content
 
-    def _record_rollback_history(self, rollback_type: str, backup_file: str, success: bool) -> None:
+    def _record_rollback_history(
+        self, rollback_type: str, backup_file: str, success: bool
+    ) -> None:
         """롤백 히스토리에 기록"""
         try:
             rollback_record = {
@@ -489,14 +498,18 @@ echo "현재 상태 백업: $CURRENT_BACKUP"
             if not backup_name:
                 backup_name = f"DuRi_backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
 
-            backup_file = os.path.join(self.backup_manager["backup_dir"], f"{backup_name}.tar.gz")
+            backup_file = os.path.join(
+                self.backup_manager["backup_dir"], f"{backup_name}.tar.gz"
+            )
 
             # 백업 생성
             with tarfile.open(backup_file, "w:gz") as tar:
                 # 수동으로 파일 추가 (exclude 대신)
                 for root, dirs, files in os.walk("."):
                     # 백업 디렉토리와 tar.gz 파일 제외
-                    dirs[:] = [d for d in dirs if d != "backups" and not d.endswith(".tar.gz")]
+                    dirs[:] = [
+                        d for d in dirs if d != "backups" and not d.endswith(".tar.gz")
+                    ]
 
                     for file in files:
                         if not file.endswith(".tar.gz"):

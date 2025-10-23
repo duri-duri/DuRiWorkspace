@@ -91,7 +91,9 @@ class Phase10IntegrationTest:
             collaboration_mode=AICollaborationMode.COLLABORATIVE,
         )
 
-        logger.info(f"협력 해결 결과: AGI 점수 {integration_result.overall_agi_score:.2f}")
+        logger.info(
+            f"협력 해결 결과: AGI 점수 {integration_result.overall_agi_score:.2f}"
+        )
 
         # 결과 저장
         self.test_results.append(
@@ -119,7 +121,9 @@ class Phase10IntegrationTest:
 
         logger.info(f"현재 AGI 수준: {self.advanced_ai_system.current_agi_level:.2f}")
         logger.info(f"목표 AGI 수준: {self.advanced_ai_system.target_agi_level:.2f}")
-        logger.info(f"AGI 개선 속도: {self.advanced_ai_system.agi_improvement_rate:.3f}")
+        logger.info(
+            f"AGI 개선 속도: {self.advanced_ai_system.agi_improvement_rate:.3f}"
+        )
 
         # 결과 저장
         self.test_results.append(
@@ -302,7 +306,9 @@ class Phase10IntegrationTest:
         # 위험 예측 테스트
         risk_context = {"business_domain": "신기술 도입", "time_horizon": "2년"}
 
-        risks = await self.future_engine.forecast_risks(context=risk_context, time_horizon="1년")
+        risks = await self.future_engine.forecast_risks(
+            context=risk_context, time_horizon="1년"
+        )
 
         logger.info(f"예측된 위험: {len(risks)}개")
 
@@ -313,7 +319,9 @@ class Phase10IntegrationTest:
         report = {
             "test_summary": {
                 "total_tests": len(self.test_results),
-                "test_types": list(set(result["test_type"] for result in self.test_results)),
+                "test_types": list(
+                    set(result["test_type"] for result in self.test_results)
+                ),
                 "timestamp": datetime.now().isoformat(),
             },
             "engine_performance": {

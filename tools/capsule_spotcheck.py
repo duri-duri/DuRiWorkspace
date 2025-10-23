@@ -28,7 +28,9 @@ def spotcheck_capsules():
 
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
         # 캡슐 샘플링
-        cur.execute("SELECT capsule FROM answer_ledger ORDER BY created_at DESC LIMIT 1000")
+        cur.execute(
+            "SELECT capsule FROM answer_ledger ORDER BY created_at DESC LIMIT 1000"
+        )
         capsules = [row["capsule"] for row in cur.fetchall()]
 
         # 샘플 크기: max(200, 총응답의 0.5%)
@@ -64,8 +66,12 @@ def replay_capsule_from_dict(capsule):
     x = [
         1 if capsule["core"]["tag"] else 0,  # core_hit
         max((d.get("sim", 0) for d in capsule["rag"]), default=0),  # similarity
-        max((1.0 / (1 + d.get("age_days", 0)) for d in capsule["rag"]), default=0),  # recency
-        max((d.get("sim", 0) > 0 and 1 or 0 for d in capsule["rag"]), default=0),  # provenance
+        max(
+            (1.0 / (1 + d.get("age_days", 0)) for d in capsule["rag"]), default=0
+        ),  # recency
+        max(
+            (d.get("sim", 0) > 0 and 1 or 0 for d in capsule["rag"]), default=0
+        ),  # provenance
     ]
 
     # 확률 계산

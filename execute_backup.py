@@ -34,7 +34,9 @@ def main():
 
     # 현재 디렉토리 확인
     if not os.path.exists("docker-compose.yml"):
-        print("❌ docker-compose.yml을 찾을 수 없습니다. 올바른 디렉토리에서 실행하세요.")
+        print(
+            "❌ docker-compose.yml을 찾을 수 없습니다. 올바른 디렉토리에서 실행하세요."
+        )
         sys.exit(1)
 
     # 백업 파일명 생성

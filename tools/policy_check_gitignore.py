@@ -25,7 +25,9 @@ def load_gitignore(file_path):
     """gitignore 파일 로드"""
     try:
         with open(file_path, "r", encoding="utf-8") as f:
-            lines = [line.strip() for line in f if line.strip() and not line.startswith("#")]
+            lines = [
+                line.strip() for line in f if line.strip() and not line.startswith("#")
+            ]
         return lines
     except Exception as e:
         print(f"[ERROR] Failed to load {file_path}: {e}")

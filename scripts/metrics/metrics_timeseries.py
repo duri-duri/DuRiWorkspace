@@ -87,7 +87,9 @@ def pick_value(
 
 
 def export_prom(tsv_path: str) -> str:
-    cp = subprocess.run(["bash", PROM_EXPORT, tsv_path], check=True, text=True, capture_output=True)
+    cp = subprocess.run(
+        ["bash", PROM_EXPORT, tsv_path], check=True, text=True, capture_output=True
+    )
     return cp.stdout
 
 
@@ -153,10 +155,14 @@ def main():
         when = dt.datetime.utcfromtimestamp(epoch)
         date = when.date().isoformat()
 
-        ndcg = pick_value(samples, "duri_ndcg_at_k", {"k": args.k, "scope": "all", "domain": "ALL"})
+        ndcg = pick_value(
+            samples, "duri_ndcg_at_k", {"k": args.k, "scope": "all", "domain": "ALL"}
+        )
         mrr = pick_value(samples, "duri_mrr", {"scope": "all", "domain": "ALL"})
         recall = pick_value(
-            samples, "duri_oracle_recall_at_k", {"k": args.k, "scope": "all", "domain": "ALL"}
+            samples,
+            "duri_oracle_recall_at_k",
+            {"k": args.k, "scope": "all", "domain": "ALL"},
         )
         guard = pick_value(samples, "duri_guard_last_exit_code", {})  # optional
         up = pick_value(samples, "duri_exporter_up", {})  # optional
@@ -202,7 +208,9 @@ def main():
         rows[-1]["ndcg_dod"] = delta(rows[-1]["ndcg_k"], rows[-2]["ndcg_k"])
         rows[-1]["mrr_dod"] = delta(rows[-1]["mrr"], rows[-2]["mrr"])
     if len(rows) > args.period:
-        rows[-1]["ndcg_wow"] = delta(rows[-1]["ndcg_k"], rows[-1 - args.period]["ndcg_k"])
+        rows[-1]["ndcg_wow"] = delta(
+            rows[-1]["ndcg_k"], rows[-1 - args.period]["ndcg_k"]
+        )
         rows[-1]["mrr_wow"] = delta(rows[-1]["mrr"], rows[-1 - args.period]["mrr"])
         # WoW % 변화율 (분모 0/None 방지)
         base_n = rows[-1 - args.period]["ndcg_k"]

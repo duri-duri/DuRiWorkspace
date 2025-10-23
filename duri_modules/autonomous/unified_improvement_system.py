@@ -150,14 +150,18 @@ class UnifiedImprovementSystem:
             logger.error(f"❌ 통합 개선 실행 오류: {e}")
             return self._create_error_result(str(e), time.time() - start_time)
 
-    def _execute_conversation_improvement(self, context: Dict[str, Any]) -> Dict[str, Any]:
+    def _execute_conversation_improvement(
+        self, context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """대화 품질 개선 실행"""
         try:
             logger.info("💬 대화 품질 개선 시작")
 
             # 평가 결과에서 개선 제안 분석
             evaluation_result = context.get("evaluation", {})
-            actions = self.conversation_improver.analyze_improvement_suggestions(evaluation_result)
+            actions = self.conversation_improver.analyze_improvement_suggestions(
+                evaluation_result
+            )
 
             if not actions:
                 return {
@@ -166,7 +170,9 @@ class UnifiedImprovementSystem:
                 }
 
             # 개선 루프 실행
-            improvement_result = self.strategy_loop_runner.start_improvement_loop(evaluation_result)
+            improvement_result = self.strategy_loop_runner.start_improvement_loop(
+                evaluation_result
+            )
 
             # 학습 인사이트 생성
             insights = self.strategy_loop_runner.get_learning_insights()
@@ -221,9 +227,13 @@ class UnifiedImprovementSystem:
                 "applied_improvements": len(applied_improvements),
                 "applied_improvements_details": applied_improvements,
                 "meta_learning_data": {
-                    "performance_patterns": len(meta_learning_data.performance_patterns),
+                    "performance_patterns": len(
+                        meta_learning_data.performance_patterns
+                    ),
                     "error_patterns": len(meta_learning_data.error_patterns),
-                    "learning_strategy_updates": len(meta_learning_data.learning_strategy_updates),
+                    "learning_strategy_updates": len(
+                        meta_learning_data.learning_strategy_updates
+                    ),
                 },
             }
 
@@ -251,7 +261,9 @@ class UnifiedImprovementSystem:
             # 학습 전략 업데이트
             strategy_updates = []
             if meta_learning_result:
-                strategy_updates.append({"type": "meta_learning", "result": meta_learning_result})
+                strategy_updates.append(
+                    {"type": "meta_learning", "result": meta_learning_result}
+                )
 
             return {
                 "status": "success",
@@ -325,13 +337,19 @@ class UnifiedImprovementSystem:
 
             # 학습 전략 개선 점수
             if learning_improvements.get("status") == "success":
-                learn_score = 0.8 if learning_improvements.get("meta_learning_executed") else 0.0
+                learn_score = (
+                    0.8 if learning_improvements.get("meta_learning_executed") else 0.0
+                )
                 scores.append(learn_score)
                 weights.append(0.2)
 
             # 진화 방향 개선 점수
             if evolution_improvements.get("status") == "success":
-                evo_score = 0.8 if evolution_improvements.get("auto_improvement_executed") else 0.0
+                evo_score = (
+                    0.8
+                    if evolution_improvements.get("auto_improvement_executed")
+                    else 0.0
+                )
                 scores.append(evo_score)
                 weights.append(0.2)
 
@@ -339,7 +357,8 @@ class UnifiedImprovementSystem:
             if scores and weights:
                 total_weight = sum(weights)
                 weighted_score = (
-                    sum(score * weight for score, weight in zip(scores, weights)) / total_weight
+                    sum(score * weight for score, weight in zip(scores, weights))
+                    / total_weight
                 )
                 return round(weighted_score, 3)
             else:
@@ -363,7 +382,8 @@ class UnifiedImprovementSystem:
                 "successful_improvements": 0,
                 "failed_improvements": 0,
                 "improvement_categories": {
-                    "conversation": conversation_improvements.get("status") == "success",
+                    "conversation": conversation_improvements.get("status")
+                    == "success",
                     "system": system_improvements.get("status") == "success",
                     "learning": learning_improvements.get("status") == "success",
                     "evolution": evolution_improvements.get("status") == "success",
@@ -390,7 +410,9 @@ class UnifiedImprovementSystem:
                 )
 
             if system_improvements.get("status") == "success":
-                summary["total_improvements"] += system_improvements.get("applied_improvements", 0)
+                summary["total_improvements"] += system_improvements.get(
+                    "applied_improvements", 0
+                )
                 summary["successful_improvements"] += system_improvements.get(
                     "applied_improvements", 0
                 )
@@ -439,7 +461,9 @@ class UnifiedImprovementSystem:
             "strategy_loop_status": self.strategy_loop_runner.get_strategy_status(),
         }
 
-    def get_improvement_history(self, limit: int = 10) -> List[UnifiedImprovementResult]:
+    def get_improvement_history(
+        self, limit: int = 10
+    ) -> List[UnifiedImprovementResult]:
         """개선 히스토리 조회"""
         return self.improvement_history[-limit:]
 
@@ -450,10 +474,12 @@ class UnifiedImprovementSystem:
 
         total_executions = len(self.improvement_history)
         average_score = (
-            sum(result.overall_score for result in self.improvement_history) / total_executions
+            sum(result.overall_score for result in self.improvement_history)
+            / total_executions
         )
         average_execution_time = (
-            sum(result.execution_time for result in self.improvement_history) / total_executions
+            sum(result.execution_time for result in self.improvement_history)
+            / total_executions
         )
 
         return {

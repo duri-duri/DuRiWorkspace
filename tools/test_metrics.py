@@ -75,11 +75,17 @@ def serve_metrics(
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--serve", action="store_true", help="서버 모드(프로세스 유지)")
-    parser.add_argument("--demo-load", action="store_true", help="동일 프로세스에서 지속 로드 생성")
+    parser.add_argument(
+        "--demo-load", action="store_true", help="동일 프로세스에서 지속 로드 생성"
+    )
     parser.add_argument("--port", type=int, default=int(os.getenv("PROM_PORT", "9108")))
     parser.add_argument("--interval", type=float, default=0.2, help="로드 간격(초)")
-    parser.add_argument("--min", dest="min_s", type=float, default=0.05, help="작업 최소(초)")
-    parser.add_argument("--max", dest="max_s", type=float, default=0.25, help="작업 최대(초)")
+    parser.add_argument(
+        "--min", dest="min_s", type=float, default=0.05, help="작업 최소(초)"
+    )
+    parser.add_argument(
+        "--max", dest="max_s", type=float, default=0.25, help="작업 최대(초)"
+    )
     args = parser.parse_args()
 
     if args.serve:

@@ -115,7 +115,9 @@ def test_self_improvement_sequence():
     print(f"✅ 자기개선 시퀀스 실행 완료:")
     print(f"  - 업데이트된 신념 수: {evolution_result.get('beliefs_updated', 0)}")
     print(f"  - 업데이트된 규칙 수: {evolution_result.get('rules_updated', 0)}")
-    print(f"  - 업데이트된 행동 패턴 수: {evolution_result.get('behaviors_updated', 0)}")
+    print(
+        f"  - 업데이트된 행동 패턴 수: {evolution_result.get('behaviors_updated', 0)}"
+    )
     print(f"  - 진화 단계 수: {evolution_result.get('evolution_steps', 0)}")
 
     return evolution_result

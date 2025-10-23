@@ -99,7 +99,9 @@ class ABCModuleMeta(ABCMeta):
 
         # BaseModule을 상속받는 클래스인지 확인 (BaseModule 자체는 제외)
         if name != "BaseModule" and (
-            any(issubclass(base, BaseModule) for base in bases if isinstance(base, type))
+            any(
+                issubclass(base, BaseModule) for base in bases if isinstance(base, type)
+            )
             or BaseModule in bases
         ):
 
@@ -126,9 +128,13 @@ class ABCModuleMeta(ABCMeta):
                     )
 
                     if success:
-                        logger.info(f"✅ 모듈 자동 등록 완료 (메타클래스): {module_name}")
+                        logger.info(
+                            f"✅ 모듈 자동 등록 완료 (메타클래스): {module_name}"
+                        )
                     else:
-                        logger.warning(f"⚠️ 모듈 자동 등록 실패 (메타클래스): {module_name}")
+                        logger.warning(
+                            f"⚠️ 모듈 자동 등록 실패 (메타클래스): {module_name}"
+                        )
 
                 except Exception as e:
                     logger.error(
@@ -425,7 +431,9 @@ class ModuleRegistry:
                 if module_name in self.modules:
                     results[module_name] = await self.load_module(module_name)
 
-            logger.info(f"✅ 모든 모듈 로드 완료: {sum(results.values())}/{len(results)} 성공")
+            logger.info(
+                f"✅ 모든 모듈 로드 완료: {sum(results.values())}/{len(results)} 성공"
+            )
             return results
 
         except Exception as e:
@@ -444,7 +452,9 @@ class ModuleRegistry:
                 if module_name in self.modules:
                     results[module_name] = await self.initialize_module(module_name)
 
-            logger.info(f"✅ 모든 모듈 초기화 완료: {sum(results.values())}/{len(results)} 성공")
+            logger.info(
+                f"✅ 모든 모듈 초기화 완료: {sum(results.values())}/{len(results)} 성공"
+            )
             return results
 
         except Exception as e:
@@ -473,7 +483,9 @@ class ModuleRegistry:
         for name, info in self.modules.items():
             for dep in info.dependencies:
                 if dep not in self.modules:
-                    errors.append(f"모듈 '{name}'의 의존성 '{dep}'가 등록되지 않았습니다")
+                    errors.append(
+                        f"모듈 '{name}'의 의존성 '{dep}'가 등록되지 않았습니다"
+                    )
 
         if self.dependency_graph.has_cycle():
             errors.append("의존성 사이클이 감지되었습니다")
@@ -490,7 +502,9 @@ async def test_module_registry():
     logger.info("🧪 모듈 레지스트리 테스트 시작")
 
     # 테스트용 모듈 클래스 (데코레이터 방식)
-    @register_module(name="test_module", dependencies=[], priority=ModulePriority.NORMAL)
+    @register_module(
+        name="test_module", dependencies=[], priority=ModulePriority.NORMAL
+    )
     class TestModule(BaseModule):
         async def initialize(self):
             self._initialized = True

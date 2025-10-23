@@ -222,7 +222,9 @@ class LearningEngine:
             process.output_data = output_data
             process.performance_score = await self._calculate_process_score(process)
 
-            logger.info(f"학습 프로세스 완료: {process_id} (점수: {process.performance_score:.2f})")
+            logger.info(
+                f"학습 프로세스 완료: {process_id} (점수: {process.performance_score:.2f})"
+            )
             return output_data
 
         except Exception as e:
@@ -231,7 +233,9 @@ class LearningEngine:
             logger.error(f"학습 프로세스 실패: {process_id} - {e}")
             return {}
 
-    async def _execute_process_by_type(self, process: LearningProcess) -> Dict[str, Any]:
+    async def _execute_process_by_type(
+        self, process: LearningProcess
+    ) -> Dict[str, Any]:
         """프로세스 타입에 따른 실행"""
         if process.process_type == LearningProcessType.CONTINUOUS:
             return await self._execute_continuous_learning(process)
@@ -246,7 +250,9 @@ class LearningEngine:
         else:
             return {"error": "알 수 없는 프로세스 타입"}
 
-    async def _execute_continuous_learning(self, process: LearningProcess) -> Dict[str, Any]:
+    async def _execute_continuous_learning(
+        self, process: LearningProcess
+    ) -> Dict[str, Any]:
         """지속적 학습 실행"""
         # 지속적 학습 로직 구현
         return {
@@ -256,7 +262,9 @@ class LearningEngine:
             "efficiency_score": 0.85,
         }
 
-    async def _execute_adaptive_learning(self, process: LearningProcess) -> Dict[str, Any]:
+    async def _execute_adaptive_learning(
+        self, process: LearningProcess
+    ) -> Dict[str, Any]:
         """적응적 학습 실행"""
         # 적응적 학습 로직 구현
         return {
@@ -276,7 +284,9 @@ class LearningEngine:
             "strategy_optimizations": ["최적화 1", "최적화 2"],
         }
 
-    async def _execute_self_directed_learning(self, process: LearningProcess) -> Dict[str, Any]:
+    async def _execute_self_directed_learning(
+        self, process: LearningProcess
+    ) -> Dict[str, Any]:
         """자기 주도적 학습 실행"""
         # 자기 주도적 학습 로직 구현
         return {
@@ -286,7 +296,9 @@ class LearningEngine:
             "learning_goals": ["학습 목표 1", "학습 목표 2"],
         }
 
-    async def _execute_cognitive_meta_learning(self, process: LearningProcess) -> Dict[str, Any]:
+    async def _execute_cognitive_meta_learning(
+        self, process: LearningProcess
+    ) -> Dict[str, Any]:
         """인지 메타 학습 실행"""
         # 인지 메타 학습 로직 구현
         return {
@@ -321,7 +333,9 @@ class LearningEngine:
 
             # 평균 지속시간 업데이트
             total_duration = sum(
-                s.duration.total_seconds() for s in self.completed_sessions if s.duration
+                s.duration.total_seconds()
+                for s in self.completed_sessions
+                if s.duration
             )
             self.performance_metrics["average_session_duration"] = total_duration / len(
                 self.completed_sessions
@@ -363,6 +377,8 @@ class LearningEngine:
         cutoff_date = datetime.now() - timedelta(days=days)
 
         # 완료된 세션에서 오래된 것들 제거
-        self.completed_sessions = [s for s in self.completed_sessions if s.created_at > cutoff_date]
+        self.completed_sessions = [
+            s for s in self.completed_sessions if s.created_at > cutoff_date
+        ]
 
         logger.info(f"오래된 세션 정리 완료 (기준: {days}일 전)")

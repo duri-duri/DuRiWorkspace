@@ -70,7 +70,9 @@ def coherence_score(text_tokens: List[str]) -> float:
         "these",
         "those",
     }
-    anchor_ratio = len([t for t in text_tokens if t in anchors]) / max(1, len(text_tokens))
+    anchor_ratio = len([t for t in text_tokens if t in anchors]) / max(
+        1, len(text_tokens)
+    )
     # Bigram churn: too random progression lowers score
     bg = list(ngrams(text_tokens, 2))
     churn = 0.0

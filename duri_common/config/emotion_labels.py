@@ -13,7 +13,9 @@ class EmotionLevel(IntEnum):
     """감정 레벨 열거형"""
 
     LEVEL_1 = 1  # Basic emotions (primary emotions)
-    LEVEL_2 = 2  # Secondary emotions (more complex, often combinations of basic emotions)
+    LEVEL_2 = (
+        2  # Secondary emotions (more complex, often combinations of basic emotions)
+    )
     LEVEL_3 = 3  # Tertiary emotions (most complex, often context-dependent)
     UNKNOWN = 0  # Unknown or invalid emotions
 

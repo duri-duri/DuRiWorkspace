@@ -134,7 +134,9 @@ async def test_individual_systems():
             from unified_performance_optimizer import \
                 unified_performance_optimizer
 
-            performance_summary = await unified_performance_optimizer.get_performance_summary()
+            performance_summary = (
+                await unified_performance_optimizer.get_performance_summary()
+            )
             results["unified_performance"] = {
                 "status": "success",
                 "efficiency_score": performance_summary.get("current_metrics", {}).get(
@@ -253,7 +255,9 @@ async def test_system_integration():
             await asyncio.sleep(2)
 
             # 성능 요약 확인
-            performance_summary = await unified_performance_optimizer.get_performance_summary()
+            performance_summary = (
+                await unified_performance_optimizer.get_performance_summary()
+            )
             memory_summary = await memory_optimization_system.get_memory_summary()
 
             integration_results["performance_memory_integration"] = {
@@ -288,7 +292,9 @@ async def test_system_integration():
                 await asyncio.sleep(0.1)
                 return "통합 테스트 완료"
 
-            task_id = await async_optimization_system.submit_task("통합 테스트 작업", test_task())
+            task_id = await async_optimization_system.submit_task(
+                "통합 테스트 작업", test_task()
+            )
             results = await async_optimization_system.execute_tasks()
 
             integration_results["async_integration"] = {

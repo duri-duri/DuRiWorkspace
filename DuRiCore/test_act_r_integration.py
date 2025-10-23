@@ -68,9 +68,15 @@ async def test_act_r_integration():
     logger.info(
         f"   ACT-R 병렬 처리: {performance_metrics.get('act_r_parallel_processing', False)}"
     )
-    logger.info(f"   병렬 효율성: {performance_metrics.get('parallel_efficiency', 0.0):.1f}%")
-    logger.info(f"   성능 향상률: {performance_metrics.get('performance_improvement', 0.0):.1f}%")
-    logger.info(f"   목표 향상률: {performance_metrics.get('target_improvement', 23.0):.1f}%")
+    logger.info(
+        f"   병렬 효율성: {performance_metrics.get('parallel_efficiency', 0.0):.1f}%"
+    )
+    logger.info(
+        f"   성능 향상률: {performance_metrics.get('performance_improvement', 0.0):.1f}%"
+    )
+    logger.info(
+        f"   목표 향상률: {performance_metrics.get('target_improvement', 23.0):.1f}%"
+    )
     logger.info(f"   성공률: {performance_metrics.get('success_rate', 0.0):.1f}%")
 
     # 목표 달성 여부 확인
@@ -151,7 +157,9 @@ async def main():
 
     # 최종 결과 요약
     logger.info("📋 최종 테스트 결과 요약:")
-    logger.info(f"   통합 테스트 성공: {'✅' if integration_result['target_achieved'] else '❌'}")
+    logger.info(
+        f"   통합 테스트 성공: {'✅' if integration_result['target_achieved'] else '❌'}"
+    )
     logger.info(f"   평균 실행 시간: {integration_result['average_time']:.3f}초")
     logger.info(
         f"   성능 향상률: {integration_result['performance_metrics']['performance_improvement']:.1f}%"

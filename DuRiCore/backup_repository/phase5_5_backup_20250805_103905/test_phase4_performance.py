@@ -294,7 +294,9 @@ class Phase4PerformanceTester:
 
         for query in search_queries:
             try:
-                similar_memories = self.vector_store.search_similar_memories(query, limit=3)
+                similar_memories = self.vector_store.search_similar_memories(
+                    query, limit=3
+                )
                 results["total_searches"] += 1
                 logger.info(f"벡터 검색 결과: {len(similar_memories)}개")
 
@@ -303,7 +305,9 @@ class Phase4PerformanceTester:
 
         total_time = time.time() - start_time
         results["average_search_time"] = (
-            total_time / results["total_searches"] if results["total_searches"] > 0 else 0
+            total_time / results["total_searches"]
+            if results["total_searches"] > 0
+            else 0
         )
 
         self.test_results["vector_store"] = results
@@ -355,7 +359,9 @@ class Phase4PerformanceTester:
                 }
             )
 
-            logger.info(f"배치 {i//100}: 메모리 사용량 = {current_memory['rss_mb']:.2f}MB")
+            logger.info(
+                f"배치 {i//100}: 메모리 사용량 = {current_memory['rss_mb']:.2f}MB"
+            )
 
         final_memory = self.get_memory_usage()
 
@@ -494,8 +500,12 @@ class Phase4PerformanceTester:
             total = llm_results["total_requests"]
             successful = llm_results["successful_requests"]
 
-            summary["llm_interface"]["success_rate"] = successful / total if total > 0 else 0
-            summary["llm_interface"]["average_response_time"] = llm_results["average_response_time"]
+            summary["llm_interface"]["success_rate"] = (
+                successful / total if total > 0 else 0
+            )
+            summary["llm_interface"]["average_response_time"] = llm_results[
+                "average_response_time"
+            ]
             summary["llm_interface"]["cache_hit_rate"] = llm_results["cache_hit_rate"]
 
         # 메모리 매니저 요약
@@ -503,8 +513,12 @@ class Phase4PerformanceTester:
             mm_results = self.test_results["memory_manager"]
             total = mm_results["total_queries"]
 
-            summary["memory_manager"]["success_rate"] = 1.0  # 모든 쿼리가 성공했다고 가정
-            summary["memory_manager"]["average_query_time"] = mm_results["average_query_time"]
+            summary["memory_manager"][
+                "success_rate"
+            ] = 1.0  # 모든 쿼리가 성공했다고 가정
+            summary["memory_manager"]["average_query_time"] = mm_results[
+                "average_query_time"
+            ]
             summary["memory_manager"]["cache_hit_rate"] = mm_results["cache_hit_rate"]
 
         # 벡터 스토어 요약
@@ -513,15 +527,21 @@ class Phase4PerformanceTester:
             total = vs_results["total_searches"]
 
             summary["vector_store"]["success_rate"] = 1.0  # 모든 검색이 성공했다고 가정
-            summary["vector_store"]["average_search_time"] = vs_results["average_search_time"]
+            summary["vector_store"]["average_search_time"] = vs_results[
+                "average_search_time"
+            ]
 
         # 메모리 사용량 요약
         if "memory_usage" in self.test_results:
             mu_results = self.test_results["memory_usage"]
-            summary["memory_usage"]["memory_increase_mb"] = mu_results["memory_increase_mb"]
+            summary["memory_usage"]["memory_increase_mb"] = mu_results[
+                "memory_increase_mb"
+            ]
 
             # 최대 메모리 사용량 계산
-            peak_memory = max(sample["memory"]["rss_mb"] for sample in mu_results["memory_samples"])
+            peak_memory = max(
+                sample["memory"]["rss_mb"] for sample in mu_results["memory_samples"]
+            )
             summary["memory_usage"]["peak_memory_mb"] = peak_memory
 
         # 전체 요약

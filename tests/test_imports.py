@@ -42,7 +42,9 @@ def test_core_imports():
                 except ImportError:
                     pass
             if log_utils is None:
-                print("⚠️ log_utils module not found in any expected location - skipping")
+                print(
+                    "⚠️ log_utils module not found in any expected location - skipping"
+                )
 
         import duri_core.app.api
         import duri_core.app.logic
@@ -162,7 +164,9 @@ def test_absolute_imports_regression():
 
                 for pattern in problematic_patterns:
                     if pattern in content:
-                        failed_imports.append(f"{module_name}: Found relative import '{pattern}'")
+                        failed_imports.append(
+                            f"{module_name}: Found relative import '{pattern}'"
+                        )
 
         except ImportError as e:
             failed_imports.append(f"{module_name}: Import failed - {e}")

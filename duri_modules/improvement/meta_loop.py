@@ -30,10 +30,14 @@ class MetaLoopSystem:
         # 개선된 응답에 대한 새로운 평가
         from ..evaluation.evaluator import chatgpt_evaluator
 
-        new_evaluation = chatgpt_evaluator.evaluate_response(improved_response, user_question)
+        new_evaluation = chatgpt_evaluator.evaluate_response(
+            improved_response, user_question
+        )
 
         # 개선 효과 분석
-        improvement_analysis = self._analyze_improvement_effect(original_evaluation, new_evaluation)
+        improvement_analysis = self._analyze_improvement_effect(
+            original_evaluation, new_evaluation
+        )
 
         # 메타 평가 결과
         meta_result = {
@@ -48,8 +52,12 @@ class MetaLoopSystem:
         self.meta_evaluation_history.append(meta_result)
 
         print(f"✅ 메타 루프: 개선 효과 평가 완료")
-        print(f"   📈 전체 개선도: {improvement_analysis.get('overall_improvement', 0):.3f}")
-        print(f"   🎯 개선된 영역: {len(improvement_analysis.get('improved_dimensions', []))}개")
+        print(
+            f"   📈 전체 개선도: {improvement_analysis.get('overall_improvement', 0):.3f}"
+        )
+        print(
+            f"   🎯 개선된 영역: {len(improvement_analysis.get('improved_dimensions', []))}개"
+        )
 
         return meta_result
 
@@ -89,7 +97,9 @@ class MetaLoopSystem:
         total_original = sum(original_scores.values())
         total_new = sum(new_scores.values())
         overall_improvement = (
-            (total_new - total_original) / len(original_scores) if original_scores else 0
+            (total_new - total_original) / len(original_scores)
+            if original_scores
+            else 0
         )
 
         # 개선 성공 여부 판단
@@ -105,7 +115,9 @@ class MetaLoopSystem:
             "total_new_score": total_new,
         }
 
-    def generate_improvement_feedback(self, meta_result: Dict[str, Any]) -> Dict[str, Any]:
+    def generate_improvement_feedback(
+        self, meta_result: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """개선 피드백 생성"""
 
         analysis = meta_result.get("improvement_analysis", {})
@@ -128,7 +140,9 @@ class MetaLoopSystem:
             feedback["recommendations"].append(
                 "개선이 기대에 미치지 못했습니다. 다른 접근 방법을 시도해보세요."
             )
-            feedback["lessons_learned"].append("이번 개선 방법은 효과적이지 않았습니다.")
+            feedback["lessons_learned"].append(
+                "이번 개선 방법은 효과적이지 않았습니다."
+            )
 
         # 개선된 영역 분석
         improved_dims = analysis.get("improved_dimensions", [])
@@ -159,7 +173,9 @@ class MetaLoopSystem:
             if result.get("improvement_analysis", {}).get("improvement_success", False)
         )
 
-        success_rate = successful_improvements / total_evaluations if total_evaluations > 0 else 0
+        success_rate = (
+            successful_improvements / total_evaluations if total_evaluations > 0 else 0
+        )
 
         # 평균 개선도
         avg_improvement = (

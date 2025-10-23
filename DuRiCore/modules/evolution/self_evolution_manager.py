@@ -55,7 +55,8 @@ class SelfEvolutionManager:
                 with open(self.evolution_file, "r", encoding="utf-8") as f:
                     data = json.load(f)
                     self.evolution_steps = [
-                        EvolutionStep(**step) for step in data.get("evolution_steps", [])
+                        EvolutionStep(**step)
+                        for step in data.get("evolution_steps", [])
                     ]
 
             # 핵심 신념 로드
@@ -320,7 +321,9 @@ class SelfEvolutionManager:
                     elif isinstance(insight, dict):
                         confidence_impact = insight.get("confidence_impact", 0.0)
 
-                    behavior_key = f"behavior_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+                    behavior_key = (
+                        f"behavior_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+                    )
                     behavior_value = {
                         "insight_id": (
                             getattr(insight, "judgment_trace_id", "unknown")
@@ -362,8 +365,11 @@ class SelfEvolutionManager:
                 timestamp=datetime.now().isoformat(),
                 step_type="belief_update",
                 description=f"{len(beliefs_to_update)}개 핵심 신념 업데이트",
-                impact_score=sum(b["priority"] for b in beliefs_to_update) / len(beliefs_to_update),
-                previous_state={"beliefs_count": len(self.core_beliefs) - len(beliefs_to_update)},
+                impact_score=sum(b["priority"] for b in beliefs_to_update)
+                / len(beliefs_to_update),
+                previous_state={
+                    "beliefs_count": len(self.core_beliefs) - len(beliefs_to_update)
+                },
                 new_state={"beliefs_count": len(self.core_beliefs)},
                 trigger_source="reflection_insights",
             )
@@ -376,8 +382,11 @@ class SelfEvolutionManager:
                 timestamp=datetime.now().isoformat(),
                 step_type="rule_update",
                 description=f"{len(rules_to_update)}개 판단 규칙 업데이트",
-                impact_score=sum(r["priority"] for r in rules_to_update) / len(rules_to_update),
-                previous_state={"rules_count": len(self.judgment_rules) - len(rules_to_update)},
+                impact_score=sum(r["priority"] for r in rules_to_update)
+                / len(rules_to_update),
+                previous_state={
+                    "rules_count": len(self.judgment_rules) - len(rules_to_update)
+                },
                 new_state={"rules_count": len(self.judgment_rules)},
                 trigger_source="reflection_insights",
             )
@@ -392,7 +401,8 @@ class SelfEvolutionManager:
                 description=f"{len(updated_behaviors)}개 행동 패턴 업데이트",
                 impact_score=0.5,  # 기본 영향도
                 previous_state={
-                    "behaviors_count": len(self.behavior_patterns) - len(updated_behaviors)
+                    "behaviors_count": len(self.behavior_patterns)
+                    - len(updated_behaviors)
                 },
                 new_state={"behaviors_count": len(self.behavior_patterns)},
                 trigger_source="reflection_insights",
@@ -413,13 +423,16 @@ class SelfEvolutionManager:
                 len(self.evolution_steps[-10:]) if self.evolution_steps else 0
             ),
             "average_impact_score": (
-                sum(step.impact_score for step in self.evolution_steps) / len(self.evolution_steps)
+                sum(step.impact_score for step in self.evolution_steps)
+                / len(self.evolution_steps)
                 if self.evolution_steps
                 else 0
             ),
         }
 
-    def apply_updated_beliefs_to_judgment(self, context: str, judgment_data: Dict) -> Dict:
+    def apply_updated_beliefs_to_judgment(
+        self, context: str, judgment_data: Dict
+    ) -> Dict:
         """업데이트된 신념을 바탕으로 판단을 적용합니다."""
         # 최신 신념들을 검토하여 판단에 반영
         relevant_beliefs = []
@@ -430,7 +443,9 @@ class SelfEvolutionManager:
                 relevant_beliefs.append(belief_value)
 
         # 관련 신념들을 바탕으로 판단 조정
-        adjusted_judgment = self._adjust_judgment_with_beliefs(judgment_data, relevant_beliefs)
+        adjusted_judgment = self._adjust_judgment_with_beliefs(
+            judgment_data, relevant_beliefs
+        )
 
         return adjusted_judgment
 
@@ -454,13 +469,17 @@ class SelfEvolutionManager:
             return adjusted_judgment
 
         # 신념들의 평균 신뢰도 영향 계산
-        total_impact = sum(belief.get("confidence_impact", 0.0) for belief in relevant_beliefs)
+        total_impact = sum(
+            belief.get("confidence_impact", 0.0) for belief in relevant_beliefs
+        )
         average_impact = total_impact / len(relevant_beliefs)
 
         # 판단 신뢰도 조정
         if "confidence_level" in adjusted_judgment:
             current_confidence = adjusted_judgment["confidence_level"]
-            adjusted_confidence = max(0.0, min(1.0, current_confidence + average_impact * 0.1))
+            adjusted_confidence = max(
+                0.0, min(1.0, current_confidence + average_impact * 0.1)
+            )
             adjusted_judgment["confidence_level"] = adjusted_confidence
 
         # 신념 기반 판단 메타데이터 추가

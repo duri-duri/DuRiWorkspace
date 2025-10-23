@@ -36,7 +36,9 @@ async def test_reasoning_engine_modules():
             context_type="test", input_data={"key1": "value1", "key2": "value2"}
         )
 
-        result = await inference_engine.perform_inference(context, InferenceType.DEDUCTIVE)
+        result = await inference_engine.perform_inference(
+            context, InferenceType.DEDUCTIVE
+        )
         logger.info(f"Inference Engine 테스트 성공: {result.confidence:.2f}")
 
         # Logic Processor 테스트
@@ -48,7 +50,9 @@ async def test_reasoning_engine_modules():
             "rule2": {"premises": ["D"], "conclusion": "E", "confidence": 0.7},
         }
 
-        analysis = await logic_processor.process_logic(input_data, LogicType.PROPOSITIONAL)
+        analysis = await logic_processor.process_logic(
+            input_data, LogicType.PROPOSITIONAL
+        )
         logger.info(f"Logic Processor 테스트 성공: {analysis.consistency_score:.2f}")
 
         # Decision Maker 테스트
@@ -76,8 +80,12 @@ async def test_reasoning_engine_modules():
             ),
         ]
         options = [
-            DecisionOption(option_id="o1", name="Option 1", description="Test option 1"),
-            DecisionOption(option_id="o2", name="Option 2", description="Test option 2"),
+            DecisionOption(
+                option_id="o1", name="Option 1", description="Test option 1"
+            ),
+            DecisionOption(
+                option_id="o2", name="Option 2", description="Test option 2"
+            ),
         ]
         decision_context = DecisionContext(
             context_id="test_context",
@@ -126,9 +134,15 @@ async def test_reasoning_strategies_modules():
 
         inductive_reasoning = InductiveReasoning()
         observations = [
-            InductiveObservation(observation_id="o1", content="Observation 1", confidence=0.8),
-            InductiveObservation(observation_id="o2", content="Observation 2", confidence=0.7),
-            InductiveObservation(observation_id="o3", content="Observation 3", confidence=0.9),
+            InductiveObservation(
+                observation_id="o1", content="Observation 1", confidence=0.8
+            ),
+            InductiveObservation(
+                observation_id="o2", content="Observation 2", confidence=0.7
+            ),
+            InductiveObservation(
+                observation_id="o3", content="Observation 3", confidence=0.9
+            ),
         ]
 
         analysis = await inductive_reasoning.perform_inductive_reasoning(
@@ -153,7 +167,9 @@ async def test_reasoning_strategies_modules():
         analysis = await abductive_reasoning.perform_abductive_reasoning(
             observations, AbductiveType.SIMPLE
         )
-        logger.info(f"Abductive Reasoning 테스트 성공: {analysis.explanatory_power:.2f}")
+        logger.info(
+            f"Abductive Reasoning 테스트 성공: {analysis.explanatory_power:.2f}"
+        )
 
         logger.info("=== 추론 전략 모듈 테스트 완료 ===")
         return True
@@ -187,8 +203,12 @@ async def test_reasoning_optimization_modules():
             ),
         ]
 
-        analysis = await optimizer.optimize_reasoning(targets, OptimizationType.PERFORMANCE)
-        logger.info(f"Reasoning Optimizer 테스트 성공: {analysis.overall_improvement:.2f}")
+        analysis = await optimizer.optimize_reasoning(
+            targets, OptimizationType.PERFORMANCE
+        )
+        logger.info(
+            f"Reasoning Optimizer 테스트 성공: {analysis.overall_improvement:.2f}"
+        )
 
         logger.info("=== 추론 최적화 모듈 테스트 완료 ===")
         return True

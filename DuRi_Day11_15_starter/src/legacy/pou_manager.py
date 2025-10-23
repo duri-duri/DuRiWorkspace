@@ -62,8 +62,12 @@ class PoUManager:
         logger = logging.getLogger("pou_manager")
         logger.setLevel(logging.INFO)
 
-        handler = logging.FileHandler(f"pou_manager_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log")
-        formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+        handler = logging.FileHandler(
+            f"pou_manager_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
+        )
+        formatter = logging.Formatter(
+            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        )
         handler.setFormatter(formatter)
         logger.addHandler(handler)
 
@@ -182,11 +186,15 @@ class PoUManager:
         dashboard = {
             "timestamp": datetime.now().isoformat(),
             "total_domains": len(self.domains),
-            "active_pilots": len([s for s in self.pou_statuses.values() if s.status == "running"]),
+            "active_pilots": len(
+                [s for s in self.pou_statuses.values() if s.status == "running"]
+            ),
             "completed_pilots": len(
                 [s for s in self.pou_statuses.values() if s.status == "completed"]
             ),
-            "failed_pilots": len([s for s in self.pou_statuses.values() if s.status == "failed"]),
+            "failed_pilots": len(
+                [s for s in self.pou_statuses.values() if s.status == "failed"]
+            ),
             "overall_status": "healthy",
             "domains": {},
             "summary": {
@@ -213,7 +221,9 @@ class PoUManager:
                     "performance_score": status.performance_score,
                     "error_count": status.error_count,
                     "start_time": status.start_time.isoformat(),
-                    "end_time": (status.end_time.isoformat() if status.end_time else None),
+                    "end_time": (
+                        status.end_time.isoformat() if status.end_time else None
+                    ),
                     "last_update": status.last_update.isoformat(),
                     "metrics": {
                         "total_sessions": metrics.total_sessions,
@@ -234,9 +244,9 @@ class PoUManager:
             dashboard["summary"]["avg_quality_score"] = sum(
                 s.quality_score for s in statuses
             ) / len(statuses)
-            dashboard["summary"]["avg_safety_score"] = sum(s.safety_score for s in statuses) / len(
-                statuses
-            )
+            dashboard["summary"]["avg_safety_score"] = sum(
+                s.safety_score for s in statuses
+            ) / len(statuses)
             dashboard["summary"]["avg_performance_score"] = sum(
                 s.performance_score for s in statuses
             ) / len(statuses)
@@ -297,11 +307,17 @@ class PoUManager:
         # 리스크 평가
         for domain, data in dashboard["domains"].items():
             if data["error_count"] > 10:
-                report["risk_assessment"]["high_risk"].append(f"{domain} 도메인 높은 오류율")
+                report["risk_assessment"]["high_risk"].append(
+                    f"{domain} 도메인 높은 오류율"
+                )
             elif data["error_count"] > 5:
-                report["risk_assessment"]["medium_risk"].append(f"{domain} 도메인 중간 오류율")
+                report["risk_assessment"]["medium_risk"].append(
+                    f"{domain} 도메인 중간 오류율"
+                )
             else:
-                report["risk_assessment"]["low_risk"].append(f"{domain} 도메인 낮은 오류율")
+                report["risk_assessment"]["low_risk"].append(
+                    f"{domain} 도메인 낮은 오류율"
+                )
 
         return report
 
@@ -327,7 +343,9 @@ def main():
             performance = 85 + (hash(domain) % 15)
             error_count = hash(domain) % 3
 
-            manager.update_pou_progress(domain, progress, quality, safety, performance, error_count)
+            manager.update_pou_progress(
+                domain, progress, quality, safety, performance, error_count
+            )
             time.sleep(0.1)  # 시뮬레이션 지연
 
         # PoU 파일럿 완료

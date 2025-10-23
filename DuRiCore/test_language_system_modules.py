@@ -79,7 +79,9 @@ async def test_language_system_modules():
                         "description": test_case["description"],
                         "success": True,
                         "integration_score": result.integration_score,
-                        "processing_time": result.system_performance.get("processing_time", 0),
+                        "processing_time": result.system_performance.get(
+                            "processing_time", 0
+                        ),
                     }
                 )
 
@@ -104,12 +106,12 @@ async def test_language_system_modules():
         logger.info(f"실패: {len(failed_tests)}")
 
         if successful_tests:
-            avg_integration_score = sum(r["integration_score"] for r in successful_tests) / len(
-                successful_tests
-            )
-            avg_processing_time = sum(r["processing_time"] for r in successful_tests) / len(
-                successful_tests
-            )
+            avg_integration_score = sum(
+                r["integration_score"] for r in successful_tests
+            ) / len(successful_tests)
+            avg_processing_time = sum(
+                r["processing_time"] for r in successful_tests
+            ) / len(successful_tests)
             logger.info(f"평균 통합 점수: {avg_integration_score:.2f}")
             logger.info(f"평균 처리 시간: {avg_processing_time:.2f}초")
 

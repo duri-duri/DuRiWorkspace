@@ -333,15 +333,19 @@ class DuRiOrchestrator:
                     attention_context
                 )
 
-                judgment_results = await self.parallel_processor.execute_judgment_parallel(
-                    judgment_tasks
+                judgment_results = (
+                    await self.parallel_processor.execute_judgment_parallel(
+                        judgment_tasks
+                    )
                 )
                 judgment_result = judgment_results[0] if judgment_results else None
 
                 # LIDA 판단 결과와 병렬 처리 결과 통합
                 if judgment_result and isinstance(judgment_result, dict):
                     judgment_result["lida_attention"] = lida_judgment
-                    judgment_result["human_like_accuracy"] = lida_judgment.get("accuracy", 0.0)
+                    judgment_result["human_like_accuracy"] = lida_judgment.get(
+                        "accuracy", 0.0
+                    )
 
                 logger.info(f"✅ LIDA + 병렬 판단 결과: {judgment_result}")
             elif self.parallel_processor:
@@ -356,8 +360,10 @@ class DuRiOrchestrator:
                     lambda: self._evaluate_priority(),
                 ]
 
-                judgment_results = await self.parallel_processor.execute_judgment_parallel(
-                    judgment_tasks
+                judgment_results = (
+                    await self.parallel_processor.execute_judgment_parallel(
+                        judgment_tasks
+                    )
                 )
                 judgment_result = judgment_results[0] if judgment_results else None
                 logger.info(f"✅ 병렬 판단 결과: {judgment_result}")
@@ -394,7 +400,9 @@ class DuRiOrchestrator:
                     lambda: self._prepare_response(),
                 ]
 
-                action_results = await self.parallel_processor.execute_action_parallel(action_tasks)
+                action_results = await self.parallel_processor.execute_action_parallel(
+                    action_tasks
+                )
                 action_result = action_results[0] if action_results else None
                 logger.info(f"✅ 병렬 행동 결과: {action_result}")
             else:
@@ -430,8 +438,10 @@ class DuRiOrchestrator:
                     lambda: self._plan_next_steps(),
                 ]
 
-                feedback_results = await self.parallel_processor.execute_feedback_parallel(
-                    feedback_tasks
+                feedback_results = (
+                    await self.parallel_processor.execute_feedback_parallel(
+                        feedback_tasks
+                    )
                 )
                 feedback_result = feedback_results[0] if feedback_results else None
                 logger.info(f"✅ 병렬 피드백 결과: {feedback_result}")
@@ -685,8 +695,12 @@ class DuRiOrchestrator:
                 {
                     "act_r_parallel_processing": True,
                     "parallel_efficiency": parallel_report.get("efficiency", 0.0),
-                    "performance_improvement": parallel_report.get("current_improvement", 0.0),
-                    "target_improvement": parallel_report.get("target_improvement", 23.0),
+                    "performance_improvement": parallel_report.get(
+                        "current_improvement", 0.0
+                    ),
+                    "target_improvement": parallel_report.get(
+                        "target_improvement", 23.0
+                    ),
                     "baseline_time": parallel_report.get("baseline_time", 0.104),
                     "target_time": parallel_report.get("target_time", 0.08),
                     "success_rate": parallel_report.get("success_rate", 0.0),
@@ -712,8 +726,12 @@ class DuRiOrchestrator:
                 {
                     "lida_attention_system": True,
                     "attention_accuracy": attention_report.get("current_accuracy", 0.0),
-                    "accuracy_improvement": attention_report.get("accuracy_improvement", 0.0),
-                    "target_accuracy_improvement": attention_report.get("target_improvement", 15.0),
+                    "accuracy_improvement": attention_report.get(
+                        "accuracy_improvement", 0.0
+                    ),
+                    "target_accuracy_improvement": attention_report.get(
+                        "target_improvement", 15.0
+                    ),
                     "attention_state": attention_report.get("attention_state", {}),
                     "total_attention_tasks": attention_report.get("total_tasks", 0),
                 }
@@ -754,7 +772,9 @@ class DuRiOrchestrator:
     def generate_status_report(self) -> Dict[str, Any]:
         """상태 리포트 생성"""
         return {
-            "orchestrator_status": ("active" if self.execution_loop_active else "inactive"),
+            "orchestrator_status": (
+                "active" if self.execution_loop_active else "inactive"
+            ),
             "system_count": len(self.systems),
             "active_systems": sum(
                 1 for status in self.system_status.values() if status.status == "active"

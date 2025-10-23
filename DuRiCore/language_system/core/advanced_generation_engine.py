@@ -79,16 +79,22 @@ class AdvancedLanguageGenerationEngine:
                     enhanced_context
                 )
             elif generation_type == LanguageGenerationType.EMOTIONAL_EXPRESSION:
-                generated_text = await self.emotional_generator.generate_emotional_expression(
-                    enhanced_context
+                generated_text = (
+                    await self.emotional_generator.generate_emotional_expression(
+                        enhanced_context
+                    )
                 )
             elif generation_type == LanguageGenerationType.CONTEXTUAL_GENERATION:
-                generated_text = await self.contextual_generator.generate_contextual_text(
-                    enhanced_context
+                generated_text = (
+                    await self.contextual_generator.generate_contextual_text(
+                        enhanced_context
+                    )
                 )
             elif generation_type == LanguageGenerationType.MULTILINGUAL_GENERATION:
-                generated_text = await self.multilingual_generator.generate_multilingual_text(
-                    enhanced_context
+                generated_text = (
+                    await self.multilingual_generator.generate_multilingual_text(
+                        enhanced_context
+                    )
                 )
             elif generation_type == LanguageGenerationType.CREATIVE_WRITING:
                 generated_text = await self.creative_generator.generate_creative_text(
@@ -100,18 +106,24 @@ class AdvancedLanguageGenerationEngine:
                 )
 
             # 감정적 표현 분석
-            emotional_expression = await self.emotional_generator.analyze_emotional_expression(
-                generated_text
+            emotional_expression = (
+                await self.emotional_generator.analyze_emotional_expression(
+                    generated_text
+                )
             )
 
             # 맥락 관련성 평가 (의미 분석 결과 반영)
-            contextual_relevance = await self.contextual_generator.evaluate_contextual_relevance(
-                generated_text, enhanced_context
+            contextual_relevance = (
+                await self.contextual_generator.evaluate_contextual_relevance(
+                    generated_text, enhanced_context
+                )
             )
 
             # 다국어 지원
-            multilingual_support = await self.multilingual_generator.get_multilingual_support(
-                generated_text, enhanced_context
+            multilingual_support = (
+                await self.multilingual_generator.get_multilingual_support(
+                    generated_text, enhanced_context
+                )
             )
 
             # 신뢰도 계산 (의미 분석 결과 반영)
@@ -151,7 +163,9 @@ class AdvancedLanguageGenerationEngine:
         """생성 신뢰도 계산 (의미 분석 결과 반영)"""
         try:
             # 텍스트 품질 평가
-            text_quality = min(1.0, len(generated_text.strip()) / 100.0)  # 기본 품질 점수
+            text_quality = min(
+                1.0, len(generated_text.strip()) / 100.0
+            )  # 기본 품질 점수
 
             # 감정적 표현 평가
             emotion_quality = 1.0 if emotional_expression else 0.5
@@ -165,16 +179,22 @@ class AdvancedLanguageGenerationEngine:
                 # 키 컨셉 반영
                 key_concepts = context.get("key_concepts", [])
                 if key_concepts:
-                    semantic_quality = min(1.0, semantic_quality + len(key_concepts) * 0.1)
+                    semantic_quality = min(
+                        1.0, semantic_quality + len(key_concepts) * 0.1
+                    )
 
                 # 학습 통찰 반영
                 learning_insights = context.get("learning_insights", [])
                 if learning_insights:
-                    semantic_quality = min(1.0, semantic_quality + len(learning_insights) * 0.1)
+                    semantic_quality = min(
+                        1.0, semantic_quality + len(learning_insights) * 0.1
+                    )
 
                 # 의미 분석 신뢰도 반영
                 semantic_confidence = context.get("semantic_confidence", 0.5)
-                semantic_quality = min(1.0, semantic_quality + semantic_confidence * 0.2)
+                semantic_quality = min(
+                    1.0, semantic_quality + semantic_confidence * 0.2
+                )
 
             # 통합 신뢰도 (의미 분석 가중치 추가)
             confidence = (

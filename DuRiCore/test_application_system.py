@@ -127,7 +127,9 @@ async def test_creative_writing(app_system: ApplicationSystem):
             print(f"      창작물: {result.solution}")
             print(f"      신뢰도: {result.confidence_score:.2f}")
             print(f"      실행시간: {result.execution_time:.2f}초")
-            print(f"      창의성 점수: {result.performance_metrics.get('creativity', 0):.2f}")
+            print(
+                f"      창의성 점수: {result.performance_metrics.get('creativity', 0):.2f}"
+            )
 
         except Exception as e:
             print(f"   {i}. ❌ 오류: {e}")
@@ -204,7 +206,9 @@ async def test_domain_detection(app_system: ApplicationSystem):
             print(f"   {i}. ❌ 오류: {e}")
 
     accuracy = correct_detections / total_tests * 100
-    print(f"\n   📊 도메인 감지 정확도: {accuracy:.1f}% ({correct_detections}/{total_tests})")
+    print(
+        f"\n   📊 도메인 감지 정확도: {accuracy:.1f}% ({correct_detections}/{total_tests})"
+    )
 
 
 async def test_integration(app_system: ApplicationSystem):
@@ -216,12 +220,16 @@ async def test_integration(app_system: ApplicationSystem):
 
         print(f"      응용 시스템 상태: {status['application_system']['status']}")
         print(f"      모듈 수: {status['application_system']['modules_count']}")
-        print(f"      성능 기록 수: {status['application_system']['performance_history_count']}")
+        print(
+            f"      성능 기록 수: {status['application_system']['performance_history_count']}"
+        )
 
         # 통합 시스템 상태 확인
         integrated_status = status["integrated_systems"]
         active_systems = sum(
-            1 for system in integrated_status.values() if system.get("status") == "active"
+            1
+            for system in integrated_status.values()
+            if system.get("status") == "active"
         )
         total_systems = len(integrated_status)
 
@@ -336,7 +344,9 @@ async def test_comprehensive_scenarios():
             if detected_domain in expected_domains:
                 print(f"   ✅ 도메인 감지 정확")
             else:
-                print(f"   ⚠️  도메인 감지 차이 (예상: {[d.value for d in expected_domains]})")
+                print(
+                    f"   ⚠️  도메인 감지 차이 (예상: {[d.value for d in expected_domains]})"
+                )
 
         except Exception as e:
             print(f"   ❌ 시나리오 처리 오류: {e}")

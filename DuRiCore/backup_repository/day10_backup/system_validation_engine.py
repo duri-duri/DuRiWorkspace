@@ -115,7 +115,9 @@ class SystemValidationEngine:
 
         logger.info("시스템 검증 엔진 초기화 완료")
 
-    async def validate_system_quality(self, quality_data: Dict[str, Any]) -> QualityReport:
+    async def validate_system_quality(
+        self, quality_data: Dict[str, Any]
+    ) -> QualityReport:
         """시스템 품질 검증"""
         report_id = f"quality_{int(time.time())}_{uuid.uuid4().hex[:8]}"
         start_time = time.time()
@@ -138,7 +140,9 @@ class SystemValidationEngine:
             quality_issues = self._identify_quality_issues(quality_results)
 
             # 권장사항 생성
-            recommendations = await self._generate_quality_recommendations(quality_results)
+            recommendations = await self._generate_quality_recommendations(
+                quality_results
+            )
 
             validation_time = time.time() - start_time
 
@@ -156,7 +160,9 @@ class SystemValidationEngine:
             )
 
             self.quality_history.append(result)
-            logger.info(f"시스템 품질 검증 완료: {report_id}, 전체 품질: {overall_quality:.2%}")
+            logger.info(
+                f"시스템 품질 검증 완료: {report_id}, 전체 품질: {overall_quality:.2%}"
+            )
 
             return result
 
@@ -175,7 +181,9 @@ class SystemValidationEngine:
                 systems_failed=0,
             )
 
-    async def verify_performance_standards(self, standards_data: Dict[str, Any]) -> StandardsReport:
+    async def verify_performance_standards(
+        self, standards_data: Dict[str, Any]
+    ) -> StandardsReport:
         """성능 기준 검증"""
         report_id = f"standards_{int(time.time())}_{uuid.uuid4().hex[:8]}"
         start_time = time.time()
@@ -193,11 +201,15 @@ class SystemValidationEngine:
             )
 
             # 기준 준수 분석
-            standards_compliance = self._calculate_standards_compliance(standards_results)
+            standards_compliance = self._calculate_standards_compliance(
+                standards_results
+            )
             compliance_issues = self._identify_compliance_issues(standards_results)
 
             # 개선 제안 생성
-            improvement_suggestions = await self._generate_standards_improvements(standards_results)
+            improvement_suggestions = await self._generate_standards_improvements(
+                standards_results
+            )
 
             validation_time = time.time() - start_time
 
@@ -236,7 +248,9 @@ class SystemValidationEngine:
                 standards_failed=0,
             )
 
-    async def assess_system_stability(self, stability_data: Dict[str, Any]) -> StabilityReport:
+    async def assess_system_stability(
+        self, stability_data: Dict[str, Any]
+    ) -> StabilityReport:
         """안정성 검증"""
         report_id = f"stability_{int(time.time())}_{uuid.uuid4().hex[:8]}"
         start_time = time.time()
@@ -259,7 +273,9 @@ class SystemValidationEngine:
             stability_issues = self._identify_stability_issues(stability_results)
 
             # 권장사항 생성
-            recommendations = await self._generate_stability_recommendations(stability_results)
+            recommendations = await self._generate_stability_recommendations(
+                stability_results
+            )
 
             validation_time = time.time() - start_time
 
@@ -277,7 +293,9 @@ class SystemValidationEngine:
             )
 
             self.stability_history.append(result)
-            logger.info(f"안정성 검증 완료: {report_id}, 전체 안정성: {overall_stability:.2%}")
+            logger.info(
+                f"안정성 검증 완료: {report_id}, 전체 안정성: {overall_stability:.2%}"
+            )
 
             return result
 
@@ -313,14 +331,22 @@ class SystemValidationEngine:
 
             # 최종 점수 계산
             quality_score = quality_report.overall_quality if quality_report else 0.0
-            performance_score = standards_report.standards_compliance if standards_report else 0.0
-            stability_score = stability_report.overall_stability if stability_report else 0.0
+            performance_score = (
+                standards_report.standards_compliance if standards_report else 0.0
+            )
+            stability_score = (
+                stability_report.overall_stability if stability_report else 0.0
+            )
 
             # 전체 검증 점수
-            overall_score = quality_score * 0.4 + performance_score * 0.3 + stability_score * 0.3
+            overall_score = (
+                quality_score * 0.4 + performance_score * 0.3 + stability_score * 0.3
+            )
 
             # 배포 준비도 평가
-            deployment_readiness = overall_score >= self.validation_config["deployment_threshold"]
+            deployment_readiness = (
+                overall_score >= self.validation_config["deployment_threshold"]
+            )
 
             # 검증 요약
             validation_summary = {
@@ -329,7 +355,9 @@ class SystemValidationEngine:
                     "systems_validated": (
                         quality_report.systems_validated if quality_report else 0
                     ),
-                    "systems_passed": (quality_report.systems_passed if quality_report else 0),
+                    "systems_passed": (
+                        quality_report.systems_passed if quality_report else 0
+                    ),
                 },
                 "performance_validation": {
                     "score": performance_score,
@@ -345,7 +373,9 @@ class SystemValidationEngine:
                     "systems_validated": (
                         stability_report.systems_validated if stability_report else 0
                     ),
-                    "systems_stable": (stability_report.systems_stable if stability_report else 0),
+                    "systems_stable": (
+                        stability_report.systems_stable if stability_report else 0
+                    ),
                 },
             }
 
@@ -375,7 +405,9 @@ class SystemValidationEngine:
             )
 
             self.final_history.append(result)
-            logger.info(f"최종 검증 보고서 생성 완료: {report_id}, 전체 점수: {overall_score:.2%}")
+            logger.info(
+                f"최종 검증 보고서 생성 완료: {report_id}, 전체 점수: {overall_score:.2%}"
+            )
 
             return result
 
@@ -423,7 +455,9 @@ class SystemValidationEngine:
 
         return results
 
-    def _calculate_overall_quality(self, quality_results: List[Dict[str, Any]]) -> float:
+    def _calculate_overall_quality(
+        self, quality_results: List[Dict[str, Any]]
+    ) -> float:
         """전체 품질 계산"""
         if not quality_results:
             return 0.0
@@ -431,7 +465,9 @@ class SystemValidationEngine:
         quality_scores = [r["quality_score"] for r in quality_results]
         return statistics.mean(quality_scores)
 
-    def _analyze_quality_metrics(self, quality_results: List[Dict[str, Any]]) -> Dict[str, float]:
+    def _analyze_quality_metrics(
+        self, quality_results: List[Dict[str, Any]]
+    ) -> Dict[str, float]:
         """품질 메트릭 분석"""
         metrics = {}
 
@@ -456,7 +492,9 @@ class SystemValidationEngine:
 
         return metrics
 
-    def _identify_quality_issues(self, quality_results: List[Dict[str, Any]]) -> List[str]:
+    def _identify_quality_issues(
+        self, quality_results: List[Dict[str, Any]]
+    ) -> List[str]:
         """품질 문제 식별"""
         issues = []
 
@@ -512,7 +550,9 @@ class SystemValidationEngine:
 
         return results
 
-    def _calculate_standards_compliance(self, standards_results: Dict[str, bool]) -> float:
+    def _calculate_standards_compliance(
+        self, standards_results: Dict[str, bool]
+    ) -> float:
         """기준 준수율 계산"""
         if not standards_results:
             return 0.0
@@ -520,7 +560,9 @@ class SystemValidationEngine:
         passed_standards = len([r for r in standards_results.values() if r])
         return passed_standards / len(standards_results)
 
-    def _identify_compliance_issues(self, standards_results: Dict[str, bool]) -> List[str]:
+    def _identify_compliance_issues(
+        self, standards_results: Dict[str, bool]
+    ) -> List[str]:
         """준수 문제 식별"""
         issues = []
 
@@ -537,7 +579,9 @@ class SystemValidationEngine:
         improvements = []
 
         # 미준수 기준 기반 개선 제안
-        failed_standards = [name for name, passed in standards_results.items() if not passed]
+        failed_standards = [
+            name for name, passed in standards_results.items() if not passed
+        ]
 
         for standard_name in failed_standards:
             improvements.append(f"기준 {standard_name} 준수 개선 필요")
@@ -571,7 +615,9 @@ class SystemValidationEngine:
 
         return results
 
-    def _calculate_overall_stability(self, stability_results: List[Dict[str, Any]]) -> float:
+    def _calculate_overall_stability(
+        self, stability_results: List[Dict[str, Any]]
+    ) -> float:
         """전체 안정성 계산"""
         if not stability_results:
             return 0.0
@@ -602,13 +648,17 @@ class SystemValidationEngine:
 
         return metrics
 
-    def _identify_stability_issues(self, stability_results: List[Dict[str, Any]]) -> List[str]:
+    def _identify_stability_issues(
+        self, stability_results: List[Dict[str, Any]]
+    ) -> List[str]:
         """안정성 문제 식별"""
         issues = []
 
         for result in stability_results:
             if not result["stable"]:
-                issues.append(f"시스템 {result['system']}: 안정성 부족 ({result['uptime']:.2%})")
+                issues.append(
+                    f"시스템 {result['system']}: 안정성 부족 ({result['uptime']:.2%})"
+                )
 
             if result["error_rate"] > 0.03:
                 issues.append(
@@ -715,7 +765,9 @@ async def main():
         "systems": ["advanced_feature_engine", "intelligent_automation_system"],
     }
 
-    standards_report = await validation_engine.verify_performance_standards(standards_data)
+    standards_report = await validation_engine.verify_performance_standards(
+        standards_data
+    )
     print(f"기준 검증 보고서: {standards_report.report_id}")
     print(f"기준 준수율: {standards_report.standards_compliance:.2%}")
     print(f"검증된 기준: {standards_report.standards_checked}개")
@@ -756,7 +808,9 @@ async def main():
     print(f"품질 점수: {final_report.quality_score:.2%}")
     print(f"성능 점수: {final_report.performance_score:.2%}")
     print(f"안정성 점수: {final_report.stability_score:.2%}")
-    print(f"배포 준비도: {'준비됨' if final_report.deployment_readiness else '준비 안됨'}")
+    print(
+        f"배포 준비도: {'준비됨' if final_report.deployment_readiness else '준비 안됨'}"
+    )
 
     # 5. 검증 결과 요약
     print("\n=== 시스템 검증 엔진 테스트 완료 ===")
@@ -764,7 +818,9 @@ async def main():
     print(f"성능 기준 준수율: {standards_report.standards_compliance:.2%}")
     print(f"안정성 점수: {stability_report.overall_stability:.2%}")
     print(f"전체 검증 점수: {final_report.overall_validation_score:.2%}")
-    print(f"배포 준비도: {'준비됨' if final_report.deployment_readiness else '준비 안됨'}")
+    print(
+        f"배포 준비도: {'준비됨' if final_report.deployment_readiness else '준비 안됨'}"
+    )
 
     # 결과 저장
     results = {

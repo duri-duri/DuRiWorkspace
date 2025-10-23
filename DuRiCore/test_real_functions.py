@@ -152,7 +152,9 @@ async def test_complete_loop():
         }
 
         logger.info("✅ 전체 루프 테스트 완료")
-        logger.info(f"전체 결과: {json.dumps(complete_result, indent=2, ensure_ascii=False)}")
+        logger.info(
+            f"전체 결과: {json.dumps(complete_result, indent=2, ensure_ascii=False)}"
+        )
 
         return complete_result
 

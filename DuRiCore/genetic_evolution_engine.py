@@ -109,7 +109,9 @@ class GeneticEvolutionEngine:
 
         logger.info("Genetic Evolution Engine 초기화 완료")
 
-    async def generate_population(self, seed: str, size: int) -> List[GeneticIndividual]:
+    async def generate_population(
+        self, seed: str, size: int
+    ) -> List[GeneticIndividual]:
         """다양한 코드 구조 생성"""
         try:
             logger.info(f"🧬 인구 생성 시작: 크기={size}")
@@ -162,12 +164,14 @@ class GeneticEvolutionEngine:
             fitness_scores = {}
 
             # 성능 지표
-            fitness_scores[FitnessMetric.PERFORMANCE] = await self._evaluate_performance_fitness(
-                tree
+            fitness_scores[FitnessMetric.PERFORMANCE] = (
+                await self._evaluate_performance_fitness(tree)
             )
 
             # 복잡도 지표
-            fitness_scores[FitnessMetric.COMPLEXITY] = await self._evaluate_complexity_fitness(tree)
+            fitness_scores[FitnessMetric.COMPLEXITY] = (
+                await self._evaluate_complexity_fitness(tree)
+            )
 
             # 유지보수성 지표
             fitness_scores[FitnessMetric.MAINTAINABILITY] = (
@@ -175,13 +179,13 @@ class GeneticEvolutionEngine:
             )
 
             # 신뢰성 지표
-            fitness_scores[FitnessMetric.RELIABILITY] = await self._evaluate_reliability_fitness(
-                tree
+            fitness_scores[FitnessMetric.RELIABILITY] = (
+                await self._evaluate_reliability_fitness(tree)
             )
 
             # 적응성 지표
-            fitness_scores[FitnessMetric.ADAPTABILITY] = await self._evaluate_adaptability_fitness(
-                tree
+            fitness_scores[FitnessMetric.ADAPTABILITY] = (
+                await self._evaluate_adaptability_fitness(tree)
             )
 
             # 가중 평균으로 최종 적합도 계산
@@ -200,7 +204,9 @@ class GeneticEvolutionEngine:
             candidate.fitness_score = final_fitness
             candidate.metadata["fitness_breakdown"] = fitness_scores
 
-            logger.info(f"✅ 적합도 평가 완료: {candidate.individual_id} = {final_fitness:.3f}")
+            logger.info(
+                f"✅ 적합도 평가 완료: {candidate.individual_id} = {final_fitness:.3f}"
+            )
 
             return final_fitness
 
@@ -219,9 +225,9 @@ class GeneticEvolutionEngine:
 
             # 엘리트 개체 보존
             elite_size = min(self.config.elite_size, len(top_candidates))
-            elite_candidates = sorted(top_candidates, key=lambda x: x.fitness_score, reverse=True)[
-                :elite_size
-            ]
+            elite_candidates = sorted(
+                top_candidates, key=lambda x: x.fitness_score, reverse=True
+            )[:elite_size]
 
             for elite in elite_candidates:
                 elite_copy = copy.deepcopy(elite)
@@ -230,7 +236,10 @@ class GeneticEvolutionEngine:
 
             # 교차 및 변이로 새 개체 생성
             while len(new_population) < self.config.population_size:
-                if random.random() < self.config.crossover_rate and len(top_candidates) >= 2:
+                if (
+                    random.random() < self.config.crossover_rate
+                    and len(top_candidates) >= 2
+                ):
                     # 교차
                     parent1, parent2 = random.sample(top_candidates, 2)
                     child_structure = await self._crossover_structures(
@@ -248,7 +257,9 @@ class GeneticEvolutionEngine:
                 else:
                     # 변이
                     parent = random.choice(top_candidates)
-                    mutated_structure = await self._mutate_structure(parent.code_structure)
+                    mutated_structure = await self._mutate_structure(
+                        parent.code_structure
+                    )
 
                     child = GeneticIndividual(
                         individual_id=f"mutant_{int(time.time() * 1000)}_{len(new_population)}",
@@ -268,7 +279,9 @@ class GeneticEvolutionEngine:
             logger.error(f"교차 및 변이 실패: {e}")
             return top_candidates
 
-    async def evolve_capabilities(self, seed_code: str, target_goal: str) -> EvolutionResult:
+    async def evolve_capabilities(
+        self, seed_code: str, target_goal: str
+    ) -> EvolutionResult:
         """능력 진화 실행"""
         try:
             logger.info(f"🚀 능력 진화 시작: 목표={target_goal}")
@@ -293,7 +306,9 @@ class GeneticEvolutionEngine:
             for generation in range(self.config.max_generations):
                 self.current_generation = generation
 
-                logger.info(f"🔄 세대 {generation + 1}/{self.config.max_generations} 시작")
+                logger.info(
+                    f"🔄 세대 {generation + 1}/{self.config.max_generations} 시작"
+                )
 
                 # 현재 세대의 최고 개체 찾기
                 best_individual = max(self.population, key=lambda x: x.fitness_score)
@@ -319,7 +334,9 @@ class GeneticEvolutionEngine:
 
                 # 목표 달성 검사
                 if best_individual.fitness_score >= self.config.fitness_threshold:
-                    logger.info(f"🎯 목표 달성! 적합도: {best_individual.fitness_score:.3f}")
+                    logger.info(
+                        f"🎯 목표 달성! 적합도: {best_individual.fitness_score:.3f}"
+                    )
                     break
 
                 # 수렴 검사

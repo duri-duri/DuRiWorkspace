@@ -66,7 +66,9 @@ class ConversationalGenerator:
     def _generate_request_response(self, context: Dict[str, Any]) -> str:
         """요청 응답 생성"""
         try:
-            return "네, 도와드리겠습니다. 어떤 도움이 필요하신지 구체적으로 말씀해 주세요."
+            return (
+                "네, 도와드리겠습니다. 어떤 도움이 필요하신지 구체적으로 말씀해 주세요."
+            )
         except Exception as e:
             self.logger.error(f"요청 응답 생성 중 오류: {e}")
             return "도움을 드리겠습니다. 구체적으로 말씀해 주세요."

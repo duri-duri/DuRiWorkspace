@@ -84,7 +84,9 @@ def eval_J(evaluator, cfg, preset, metrics_dict):
     import json
     import tempfile
 
-    with tempfile.NamedTemporaryFile("w", delete=False, suffix=".json", encoding="utf-8") as tf:
+    with tempfile.NamedTemporaryFile(
+        "w", delete=False, suffix=".json", encoding="utf-8"
+    ) as tf:
         json.dump(metrics_dict, tf)
         tmp = tf.name
     try:

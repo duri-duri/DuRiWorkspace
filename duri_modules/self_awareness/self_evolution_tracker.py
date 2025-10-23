@@ -84,7 +84,9 @@ class SelfEvolutionTracker:
                 performance_score=current_metrics["performance_score"],
                 learning_efficiency=current_metrics["learning_efficiency"],
                 autonomy_level=current_metrics["autonomy_level"],
-                problem_solving_capability=current_metrics["problem_solving_capability"],
+                problem_solving_capability=current_metrics[
+                    "problem_solving_capability"
+                ],
                 evolution_stage=self.evolution_stages[self.current_stage],
                 improvement_rate=current_metrics["improvement_rate"],
             )
@@ -117,7 +119,9 @@ class SelfEvolutionTracker:
             logger.error(f"진화 추적 오류: {e}")
             return {"status": "error", "error": str(e)}
 
-    def _calculate_current_metrics(self, interaction_data: Dict[str, Any]) -> Dict[str, float]:
+    def _calculate_current_metrics(
+        self, interaction_data: Dict[str, Any]
+    ) -> Dict[str, float]:
         """현재 성능 지표 계산"""
         try:
             # 기본 지표 추출
@@ -152,7 +156,9 @@ class SelfEvolutionTracker:
             return 0.0
 
         try:
-            recent_scores = [metric.performance_score for metric in self.evolution_history[-5:]]
+            recent_scores = [
+                metric.performance_score for metric in self.evolution_history[-5:]
+            ]
             if len(recent_scores) < 2:
                 return 0.0
 
@@ -160,7 +166,9 @@ class SelfEvolutionTracker:
             improvements = []
             for i in range(1, len(recent_scores)):
                 if recent_scores[i - 1] > 0:
-                    improvement = (recent_scores[i] - recent_scores[i - 1]) / recent_scores[i - 1]
+                    improvement = (
+                        recent_scores[i] - recent_scores[i - 1]
+                    ) / recent_scores[i - 1]
                     improvements.append(improvement)
 
             return sum(improvements) / len(improvements) if improvements else 0.0
@@ -199,13 +207,19 @@ class SelfEvolutionTracker:
             recent_metrics = self.evolution_history[-10:]  # 최근 10개 지표
 
             # 성능 트렌드
-            performance_trend = self._calculate_trend([m.performance_score for m in recent_metrics])
+            performance_trend = self._calculate_trend(
+                [m.performance_score for m in recent_metrics]
+            )
 
             # 학습 효율성 트렌드
-            learning_trend = self._calculate_trend([m.learning_efficiency for m in recent_metrics])
+            learning_trend = self._calculate_trend(
+                [m.learning_efficiency for m in recent_metrics]
+            )
 
             # 자율성 트렌드
-            autonomy_trend = self._calculate_trend([m.autonomy_level for m in recent_metrics])
+            autonomy_trend = self._calculate_trend(
+                [m.autonomy_level for m in recent_metrics]
+            )
 
             # 진화 속도
             evolution_speed = self._calculate_evolution_speed()

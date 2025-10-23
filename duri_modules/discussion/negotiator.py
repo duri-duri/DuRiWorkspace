@@ -49,12 +49,16 @@ class DuRiChatGPTDiscussion:
         discussion["final_consensus"] = self._reach_consensus(discussion)
 
         # 실행 항목 생성
-        discussion["action_items"] = self._generate_action_items(discussion["final_consensus"])
+        discussion["action_items"] = self._generate_action_items(
+            discussion["final_consensus"]
+        )
 
         # 논의 기록 저장
         self.discussion_history.append(discussion)
 
-        print(f"✅ DuRi-ChatGPT 논의 완료: 합의 수준 {discussion['agreement_level']:.2f}")
+        print(
+            f"✅ DuRi-ChatGPT 논의 완료: 합의 수준 {discussion['agreement_level']:.2f}"
+        )
 
         return discussion
 
@@ -86,7 +90,8 @@ class DuRiChatGPTDiscussion:
         additional_suggestions = []
         for chatgpt_sug in chatgpt_suggestions:
             if not any(
-                self._similar_improvements(duri_imp, chatgpt_sug) for duri_imp in duri_improvements
+                self._similar_improvements(duri_imp, chatgpt_sug)
+                for duri_imp in duri_improvements
             ):
                 additional_suggestions.append(
                     {
@@ -186,7 +191,9 @@ class DuRiChatGPTDiscussion:
 
         return consensus
 
-    def _generate_implementation_plan(self, consensus: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def _generate_implementation_plan(
+        self, consensus: Dict[str, Any]
+    ) -> List[Dict[str, Any]]:
         """구현 계획 생성"""
         plan = []
 

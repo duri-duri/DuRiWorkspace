@@ -78,14 +78,18 @@ async def health_check():
         async with httpx.AsyncClient() as client:
             # Brain 노드 상태 확인
             try:
-                brain_response = await client.get(f"{BRAIN_NODE_URL}/health", timeout=2.0)
+                brain_response = await client.get(
+                    f"{BRAIN_NODE_URL}/health", timeout=2.0
+                )
                 node_status.brain_healthy = brain_response.status_code == 200
             except:
                 node_status.brain_healthy = False
 
             # Evolution 노드 상태 확인
             try:
-                evolution_response = await client.get(f"{EVOLUTION_NODE_URL}/health", timeout=2.0)
+                evolution_response = await client.get(
+                    f"{EVOLUTION_NODE_URL}/health", timeout=2.0
+                )
                 node_status.evolution_healthy = evolution_response.status_code == 200
             except:
                 node_status.evolution_healthy = False
@@ -122,7 +126,9 @@ async def process_conversation(request: ConversationRequest):
         metadata = request.metadata or {}
 
         if not user_input or not duri_response:
-            raise HTTPException(status_code=400, detail="user_input과 duri_response가 필요합니다")
+            raise HTTPException(
+                status_code=400, detail="user_input과 duri_response가 필요합니다"
+            )
 
         logger.info(
             f"🔄 최적화된 대화 처리 시작: {len(user_input)}자 입력, {len(duri_response)}자 응답"
@@ -378,7 +384,9 @@ async def analyze_emotion(text: str = ""):
                 "primary_emotion": analysis.primary_emotion.value,
                 "intensity": analysis.intensity.value,
                 "confidence": analysis.confidence,
-                "secondary_emotions": [emotion.value for emotion in analysis.secondary_emotions],
+                "secondary_emotions": [
+                    emotion.value for emotion in analysis.secondary_emotions
+                ],
                 "bias_detected": analysis.bias_detected.value,
                 "meta_cognition": analysis.meta_cognition,
                 "timestamp": analysis.timestamp,
@@ -409,7 +417,9 @@ async def analyze_emotion_post(request: dict):
                 "primary_emotion": analysis.primary_emotion.value,
                 "intensity": analysis.intensity.value,
                 "confidence": analysis.confidence,
-                "secondary_emotions": [emotion.value for emotion in analysis.secondary_emotions],
+                "secondary_emotions": [
+                    emotion.value for emotion in analysis.secondary_emotions
+                ],
                 "bias_detected": analysis.bias_detected.value,
                 "meta_cognition": analysis.meta_cognition,
                 "timestamp": analysis.timestamp,

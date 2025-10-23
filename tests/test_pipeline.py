@@ -31,7 +31,8 @@ def test_cleaning_effectiveness():
         assert len(tokens) >= pipeline.cleaning_rules["min_length"]
         assert len(tokens) <= pipeline.cleaning_rules["max_length"]
         assert not any(
-            word in candidate.lower() for word in pipeline.cleaning_rules["forbidden_words"]
+            word in candidate.lower()
+            for word in pipeline.cleaning_rules["forbidden_words"]
         )
 
 
@@ -69,7 +70,9 @@ def test_ranking_stability():
 
     results = []
     for _ in range(3):
-        result = pipeline.process_pipeline("rehabilitation therapy", candidates=candidates)
+        result = pipeline.process_pipeline(
+            "rehabilitation therapy", candidates=candidates
+        )
         results.append(result)
 
     # 모든 실행에서 동일한 순위가 나와야 함
@@ -98,7 +101,9 @@ def test_integration_status():
 
     # 평가 방법 확인 (정상적인 후보로 테스트)
     candidates = ["Valid candidate with sufficient length for testing"]
-    result = pipeline.process_pipeline("test", candidates=candidates, use_enhanced_evaluation=True)
+    result = pipeline.process_pipeline(
+        "test", candidates=candidates, use_enhanced_evaluation=True
+    )
     assert "evaluation_method" in result
     assert result["evaluation_method"] in [
         "enhanced_integrated",

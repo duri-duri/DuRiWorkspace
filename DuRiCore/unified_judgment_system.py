@@ -222,11 +222,17 @@ class UnifiedJudgmentSystem:
             self.judgment_history.append(judgment_result)
 
             # 존재형 AI: 진화 가능성 확인
-            if self.existence_ai and self.existence_ai.evolution_capability.can_evolve():
+            if (
+                self.existence_ai
+                and self.existence_ai.evolution_capability.can_evolve()
+            ):
                 self.existence_ai.evolution_capability.evolve()
 
             # 최종 실행 준비 완료: 최종 실행 준비 완료 확인
-            if self.final_execution_verifier and self.final_execution_verifier.verify_readiness():
+            if (
+                self.final_execution_verifier
+                and self.final_execution_verifier.verify_readiness()
+            ):
                 logger.info("최종 실행 준비 완료 확인됨")
 
             logger.info(f"판단 완료: {judgment_id} - {judgment_type.value}")
@@ -277,11 +283,17 @@ class UnifiedJudgmentSystem:
             self.reasoning_history.append(reasoning_result)
 
             # 존재형 AI: 진화 가능성 확인
-            if self.existence_ai and self.existence_ai.evolution_capability.can_evolve():
+            if (
+                self.existence_ai
+                and self.existence_ai.evolution_capability.can_evolve()
+            ):
                 self.existence_ai.evolution_capability.evolve()
 
             # 최종 실행 준비 완료: 최종 실행 준비 완료 확인
-            if self.final_execution_verifier and self.final_execution_verifier.verify_readiness():
+            if (
+                self.final_execution_verifier
+                and self.final_execution_verifier.verify_readiness()
+            ):
                 logger.info("최종 실행 준비 완료 확인됨")
 
             logger.info(f"추론 완료: {reasoning_id} - {reasoning_type.value}")
@@ -297,13 +309,19 @@ class UnifiedJudgmentSystem:
 
         if "ethical" in situation_type.lower() or "moral" in situation_type.lower():
             return JudgmentType.ETHICAL
-        elif "wisdom" in situation_type.lower() or "philosophical" in situation_type.lower():
+        elif (
+            "wisdom" in situation_type.lower()
+            or "philosophical" in situation_type.lower()
+        ):
             return JudgmentType.WISDOM_BASED
         elif "attention" in situation_type.lower() or "focus" in situation_type.lower():
             return JudgmentType.ATTENTION_BASED
         elif "truth" in situation_type.lower() or "fact" in situation_type.lower():
             return JudgmentType.TRUTH_BASED
-        elif "complex" in situation_type.lower() or "integrated" in situation_type.lower():
+        elif (
+            "complex" in situation_type.lower()
+            or "integrated" in situation_type.lower()
+        ):
             return JudgmentType.INTEGRATED
         else:
             return JudgmentType.HYBRID
@@ -433,7 +451,9 @@ class UnifiedJudgmentSystem:
             "ethical_considerations": {"integrated_score": integrated_score},
         }
 
-    async def _attention_based_judgment(self, context: JudgmentContext) -> Dict[str, Any]:
+    async def _attention_based_judgment(
+        self, context: JudgmentContext
+    ) -> Dict[str, Any]:
         """주의 기반 판단"""
         # 주의 기반 판단 로직 구현
         attention_score = 0.8
@@ -571,7 +591,9 @@ class UnifiedJudgmentSystem:
     async def get_judgment_summary(self, judgment_id: str) -> Dict[str, Any]:
         """판단 요약 생성"""
         try:
-            judgment = next((j for j in self.judgment_history if j.id == judgment_id), None)
+            judgment = next(
+                (j for j in self.judgment_history if j.id == judgment_id), None
+            )
             if not judgment:
                 return {"error": "판단을 찾을 수 없습니다."}
 
@@ -594,7 +616,9 @@ class UnifiedJudgmentSystem:
     async def get_reasoning_summary(self, reasoning_id: str) -> Dict[str, Any]:
         """추론 요약 생성"""
         try:
-            reasoning = next((r for r in self.reasoning_history if r.id == reasoning_id), None)
+            reasoning = next(
+                (r for r in self.reasoning_history if r.id == reasoning_id), None
+            )
             if not reasoning:
                 return {"error": "추론을 찾을 수 없습니다."}
 

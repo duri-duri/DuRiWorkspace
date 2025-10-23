@@ -115,7 +115,9 @@ class SimplePhase4Test:
 
             total_time = time.time() - start_time
             results["average_query_time"] = (
-                total_time / results["total_queries"] if results["total_queries"] > 0 else 0
+                total_time / results["total_queries"]
+                if results["total_queries"] > 0
+                else 0
             )
 
             self.test_results["memory_manager"] = results
@@ -196,7 +198,9 @@ class SimplePhase4Test:
 
             total_time = time.time() - start_time
             results["average_search_time"] = (
-                total_time / results["total_searches"] if results["total_searches"] > 0 else 0
+                total_time / results["total_searches"]
+                if results["total_searches"] > 0
+                else 0
             )
 
             self.test_results["vector_store"] = results
@@ -261,7 +265,11 @@ class SimplePhase4Test:
             "test_timestamp": datetime.now().isoformat(),
             "total_tests": len(self.test_results),
             "successful_tests": len(
-                [r for r in self.test_results.values() if "successful" in r or "total_stored" in r]
+                [
+                    r
+                    for r in self.test_results.values()
+                    if "successful" in r or "total_stored" in r
+                ]
             ),
             "failed_tests": 0,
             "performance_metrics": {},
@@ -270,21 +278,21 @@ class SimplePhase4Test:
         # 성능 메트릭 계산
         for test_name, results in self.test_results.items():
             if "average_response_time" in results:
-                summary["performance_metrics"][f"{test_name}_avg_response_time"] = results[
-                    "average_response_time"
-                ]
+                summary["performance_metrics"][f"{test_name}_avg_response_time"] = (
+                    results["average_response_time"]
+                )
             if "average_query_time" in results:
                 summary["performance_metrics"][f"{test_name}_avg_query_time"] = results[
                     "average_query_time"
                 ]
             if "average_search_time" in results:
-                summary["performance_metrics"][f"{test_name}_avg_search_time"] = results[
-                    "average_search_time"
-                ]
+                summary["performance_metrics"][f"{test_name}_avg_search_time"] = (
+                    results["average_search_time"]
+                )
             if "average_operation_time" in results:
-                summary["performance_metrics"][f"{test_name}_avg_operation_time"] = results[
-                    "average_operation_time"
-                ]
+                summary["performance_metrics"][f"{test_name}_avg_operation_time"] = (
+                    results["average_operation_time"]
+                )
 
         return summary
 

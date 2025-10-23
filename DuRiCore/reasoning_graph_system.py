@@ -111,7 +111,9 @@ class ReasoningGraphBuilder:
         nodes.update(philosophical_nodes)
 
         # 3. 추론 엣지 생성
-        reasoning_edges = self._create_reasoning_edges(nodes, situation, philosophical_arguments)
+        reasoning_edges = self._create_reasoning_edges(
+            nodes, situation, philosophical_arguments
+        )
         edges.update(reasoning_edges)
 
         # 4. 결론 노드 추가
@@ -136,7 +138,9 @@ class ReasoningGraphBuilder:
         logger.info(f"추론 그래프 구축 완료: {len(nodes)} 노드, {len(edges)} 엣지")
         return reasoning_graph
 
-    def _create_situation_nodes(self, situation: str, semantic_context) -> Dict[str, ReasoningNode]:
+    def _create_situation_nodes(
+        self, situation: str, semantic_context
+    ) -> Dict[str, ReasoningNode]:
         """상황 분석 노드 생성"""
         nodes = {}
 
@@ -186,7 +190,9 @@ class ReasoningGraphBuilder:
 
         # 가치 충돌 노드들
         value_conflicts = (
-            semantic_context.value_conflicts if hasattr(semantic_context, "value_conflicts") else []
+            semantic_context.value_conflicts
+            if hasattr(semantic_context, "value_conflicts")
+            else []
         )
         for i, conflict in enumerate(value_conflicts):
             conflict_node = ReasoningNode(
@@ -196,7 +202,9 @@ class ReasoningGraphBuilder:
                 confidence=0.7,
                 source="Value Conflict Analysis",
                 metadata={
-                    "conflict_type": (conflict.value if hasattr(conflict, "value") else conflict)
+                    "conflict_type": (
+                        conflict.value if hasattr(conflict, "value") else conflict
+                    )
                 },
             )
             nodes[conflict_node.node_id] = conflict_node
@@ -221,7 +229,9 @@ class ReasoningGraphBuilder:
                 source="Kantian Reasoning",
                 metadata={
                     "reasoning_type": "kantian",
-                    "strength": (kantian.strength if hasattr(kantian, "strength") else 0.5),
+                    "strength": (
+                        kantian.strength if hasattr(kantian, "strength") else 0.5
+                    ),
                 },
             )
             nodes[kantian_node.node_id] = kantian_node
@@ -234,11 +244,17 @@ class ReasoningGraphBuilder:
                 node_id=f"node_{self.node_counter}",
                 node_type=NodeType.INFERENCE,
                 content=f"공리주의 분석: {utilitarian.final_conclusion if hasattr(utilitarian, 'final_conclusion') else '분석 없음'}",
-                confidence=(utilitarian.strength if hasattr(utilitarian, "strength") else 0.5),
+                confidence=(
+                    utilitarian.strength if hasattr(utilitarian, "strength") else 0.5
+                ),
                 source="Utilitarian Reasoning",
                 metadata={
                     "reasoning_type": "utilitarian",
-                    "strength": (utilitarian.strength if hasattr(utilitarian, "strength") else 0.5),
+                    "strength": (
+                        utilitarian.strength
+                        if hasattr(utilitarian, "strength")
+                        else 0.5
+                    ),
                 },
             )
             nodes[utilitarian_node.node_id] = utilitarian_node
@@ -274,7 +290,9 @@ class ReasoningGraphBuilder:
 
         # 상황 분석 → 철학적 분석 연결
         situation_nodes = [n for n in nodes.values() if n.node_type == NodeType.PREMISE]
-        philosophical_nodes = [n for n in nodes.values() if n.node_type == NodeType.INFERENCE]
+        philosophical_nodes = [
+            n for n in nodes.values() if n.node_type == NodeType.INFERENCE
+        ]
 
         for situation_node in situation_nodes:
             for philosophical_node in philosophical_nodes:
@@ -408,7 +426,9 @@ class LogicalInferenceEngine:
         """논리 연산자 초기화"""
         return {"and": "∧", "or": "∨", "not": "¬", "implies": "→", "iff": "↔"}
 
-    async def apply_logical_inference(self, premises: List[str], conclusion: str) -> Dict[str, Any]:
+    async def apply_logical_inference(
+        self, premises: List[str], conclusion: str
+    ) -> Dict[str, Any]:
         """논리적 추론 적용"""
         logger.info(f"논리적 추론 시작: {len(premises)} 전제")
 
@@ -429,7 +449,9 @@ class LogicalInferenceEngine:
             "counter_examples": validity_check["counter_examples"],
         }
 
-    def _check_inference_validity(self, premises: List[str], conclusion: str) -> Dict[str, Any]:
+    def _check_inference_validity(
+        self, premises: List[str], conclusion: str
+    ) -> Dict[str, Any]:
         """추론 유효성 검사"""
         validity_result = {"is_valid": True, "reasoning": "", "counter_examples": []}
 
@@ -492,7 +514,9 @@ class LogicalInferenceEngine:
 
         return False
 
-    def _calculate_inference_strength(self, premises: List[str], conclusion: str) -> float:
+    def _calculate_inference_strength(
+        self, premises: List[str], conclusion: str
+    ) -> float:
         """추론 강도 계산"""
         strength = 0.5  # 기본값
 
@@ -563,7 +587,9 @@ class ReasoningGraphAnalyzer:
         graph_analysis = self._analyze_graph_structure(reasoning_graph)
 
         # 4. 추론 품질 평가
-        quality_assessment = self._assess_reasoning_quality(reasoning_graph, inference_results)
+        quality_assessment = self._assess_reasoning_quality(
+            reasoning_graph, inference_results
+        )
 
         return {
             "reasoning_graph": reasoning_graph,
@@ -586,12 +612,16 @@ class ReasoningGraphAnalyzer:
         # 노드 유형 분포
         for node in graph.nodes.values():
             node_type = node.node_type.value
-            analysis["node_types"][node_type] = analysis["node_types"].get(node_type, 0) + 1
+            analysis["node_types"][node_type] = (
+                analysis["node_types"].get(node_type, 0) + 1
+            )
 
         # 엣지 유형 분포
         for edge in graph.edges.values():
             edge_type = edge.edge_type.value
-            analysis["edge_types"][edge_type] = analysis["edge_types"].get(edge_type, 0) + 1
+            analysis["edge_types"][edge_type] = (
+                analysis["edge_types"].get(edge_type, 0) + 1
+            )
 
         # 연결성 계산
         if len(graph.nodes) > 1:
@@ -634,7 +664,9 @@ class ReasoningGraphAnalyzer:
 
         # 강도 (엣지의 평균 강도)
         edge_strengths = [edge.strength for edge in graph.edges.values()]
-        quality["strength"] = sum(edge_strengths) / len(edge_strengths) if edge_strengths else 0.0
+        quality["strength"] = (
+            sum(edge_strengths) / len(edge_strengths) if edge_strengths else 0.0
+        )
 
         # 종합 품질
         quality["overall_quality"] = (
@@ -707,7 +739,9 @@ async def test_reasoning_graph_system():
 
     print(f"\n🔗 추론 엣지 상세:")
     for edge_id, edge in reasoning_graph.edges.items():
-        print(f"  • {edge_id}: {edge.source_node} → {edge.target_node} (강도: {edge.strength:.2f})")
+        print(
+            f"  • {edge_id}: {edge.source_node} → {edge.target_node} (강도: {edge.strength:.2f})"
+        )
 
     print(f"\n{'='*70}")
     print("=== 추론 그래프 시스템 테스트 완료 (Day 5) ===")

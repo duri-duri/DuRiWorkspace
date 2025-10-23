@@ -230,10 +230,14 @@ class EnhancedObjectiveEvaluator:
 
         return len(violations) == 0, violations
 
-    def evaluate(self, metrics: Metrics, preset_name: str = "balanced") -> ObjectiveResult:
+    def evaluate(
+        self, metrics: Metrics, preset_name: str = "balanced"
+    ) -> ObjectiveResult:
         """목적함수 평가"""
         # 가중치 로드
-        weights = self.config["weights"].get(preset_name, self.config["weights"]["balanced"])
+        weights = self.config["weights"].get(
+            preset_name, self.config["weights"]["balanced"]
+        )
 
         # 유틸리티 계산
         utilities = self._calculate_utilities(metrics)
@@ -306,7 +310,9 @@ class EnhancedObjectiveEvaluator:
             report += f"- **{preset_name}**: J = {result.J:.4f} {status}\n"
 
         # 최적 프리셋 찾기
-        optimal_preset, optimal_result = self.find_optimal_preset(results["balanced"].metrics)
+        optimal_preset, optimal_result = self.find_optimal_preset(
+            results["balanced"].metrics
+        )
 
         report += f"""
 ## 권장 프리셋

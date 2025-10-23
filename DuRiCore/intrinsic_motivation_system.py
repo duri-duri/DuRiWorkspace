@@ -143,7 +143,8 @@ class IntrinsicMotivationSystem:
             # 새로움 평가
             novelty = self._calculate_novelty(experience)
             self.motivation_state.curiosity_metrics.novelty_seeking = (
-                self.motivation_state.curiosity_metrics.novelty_seeking * 0.8 + novelty * 0.2
+                self.motivation_state.curiosity_metrics.novelty_seeking * 0.8
+                + novelty * 0.2
             )
 
             # 복잡성 선호도 평가
@@ -156,7 +157,8 @@ class IntrinsicMotivationSystem:
             # 탐구 욕구 평가
             exploration = self._calculate_exploration_drive(experience)
             self.motivation_state.curiosity_metrics.exploration_drive = (
-                self.motivation_state.curiosity_metrics.exploration_drive * 0.8 + exploration * 0.2
+                self.motivation_state.curiosity_metrics.exploration_drive * 0.8
+                + exploration * 0.2
             )
 
             # 질문 생성 능력 평가
@@ -187,7 +189,8 @@ class IntrinsicMotivationSystem:
             # 숙달 지향성 평가
             mastery = self._calculate_mastery_orientation(performance)
             self.motivation_state.achievement_metrics.mastery_orientation = (
-                self.motivation_state.achievement_metrics.mastery_orientation * 0.8 + mastery * 0.2
+                self.motivation_state.achievement_metrics.mastery_orientation * 0.8
+                + mastery * 0.2
             )
 
             # 성과 개선 평가
@@ -200,19 +203,22 @@ class IntrinsicMotivationSystem:
             # 기술 개발 평가
             skill_dev = self._calculate_skill_development(performance)
             self.motivation_state.achievement_metrics.skill_development = (
-                self.motivation_state.achievement_metrics.skill_development * 0.8 + skill_dev * 0.2
+                self.motivation_state.achievement_metrics.skill_development * 0.8
+                + skill_dev * 0.2
             )
 
             # 목표 설정 능력 평가
             goal_setting = self._calculate_goal_setting(performance)
             self.motivation_state.achievement_metrics.goal_setting = (
-                self.motivation_state.achievement_metrics.goal_setting * 0.8 + goal_setting * 0.2
+                self.motivation_state.achievement_metrics.goal_setting * 0.8
+                + goal_setting * 0.2
             )
 
             # 지속성 평가
             persistence = self._calculate_persistence(performance)
             self.motivation_state.achievement_metrics.persistence = (
-                self.motivation_state.achievement_metrics.persistence * 0.8 + persistence * 0.2
+                self.motivation_state.achievement_metrics.persistence * 0.8
+                + persistence * 0.2
             )
 
             self.motivation_state.last_update = datetime.now()
@@ -260,7 +266,9 @@ class IntrinsicMotivationSystem:
                 )
 
             # 성취욕 기반 목표
-            achievement_level = self.motivation_state.achievement_metrics.overall_achievement
+            achievement_level = (
+                self.motivation_state.achievement_metrics.overall_achievement
+            )
             if achievement_level > 0.6:
                 goals.append(
                     LearningGoal(
@@ -325,7 +333,9 @@ class IntrinsicMotivationSystem:
             logger.error(f"자발적 학습 목표 생성 실패: {e}")
             return []
 
-    async def adjust_goal_priorities(self, goals: List[LearningGoal]) -> List[LearningGoal]:
+    async def adjust_goal_priorities(
+        self, goals: List[LearningGoal]
+    ) -> List[LearningGoal]:
         """목표 우선순위 동적 조정"""
         try:
             for goal in goals:
@@ -337,7 +347,9 @@ class IntrinsicMotivationSystem:
 
                 # 호기심 기반 조정
                 if goal.motivation == "호기심":
-                    curiosity_level = self.motivation_state.curiosity_metrics.overall_curiosity
+                    curiosity_level = (
+                        self.motivation_state.curiosity_metrics.overall_curiosity
+                    )
                     if curiosity_level > 0.9:
                         goal.priority *= 1.3  # 호기심이 높으면 우선순위 높임
 
@@ -367,7 +379,9 @@ class IntrinsicMotivationSystem:
         try:
             # 현재 동기 상태 평가
             curiosity_level = self.motivation_state.curiosity_metrics.overall_curiosity
-            achievement_level = self.motivation_state.achievement_metrics.overall_achievement
+            achievement_level = (
+                self.motivation_state.achievement_metrics.overall_achievement
+            )
 
             # 자발적 목표 생성
             if curiosity_level > 0.7 or achievement_level > 0.6:
@@ -518,7 +532,9 @@ class IntrinsicMotivationSystem:
         """숙달 지향성 계산"""
         return random.uniform(0.5, 0.9)
 
-    def _calculate_performance_improvement(self, performance: Dict[str, float]) -> float:
+    def _calculate_performance_improvement(
+        self, performance: Dict[str, float]
+    ) -> float:
         """성과 개선 계산"""
         return random.uniform(0.4, 0.8)
 
@@ -539,7 +555,9 @@ class IntrinsicMotivationSystem:
         return {
             "curiosity_metrics": asdict(self.motivation_state.curiosity_metrics),
             "achievement_metrics": asdict(self.motivation_state.achievement_metrics),
-            "current_goals": [asdict(goal) for goal in self.motivation_state.current_goals],
+            "current_goals": [
+                asdict(goal) for goal in self.motivation_state.current_goals
+            ],
             "last_update": self.motivation_state.last_update.isoformat(),
         }
 

@@ -156,16 +156,22 @@ class EvolutionSystem:
             evolution_score = await self._calculate_evolution_score(current_state)
 
             # 능력 개선 평가
-            capabilities_improved = await self._evaluate_capability_improvements(current_state)
+            capabilities_improved = await self._evaluate_capability_improvements(
+                current_state
+            )
 
             # 적응 수준 평가
             adaptation_level = await self._evaluate_adaptation_level(current_state)
 
             # 혁신 능력 평가
-            innovation_capacity = await self._evaluate_innovation_capacity(current_state)
+            innovation_capacity = await self._evaluate_innovation_capacity(
+                current_state
+            )
 
             # 변환 정도 평가
-            transformation_degree = await self._evaluate_transformation_degree(current_state)
+            transformation_degree = await self._evaluate_transformation_degree(
+                current_state
+            )
 
             # 진화 단계 결정
             current_stage = await self._determine_evolution_stage(evolution_score)
@@ -192,16 +198,22 @@ class EvolutionSystem:
             logger.error(f"진화 진행도 평가 실패: {e}")
             return await self._create_default_evolution_progress()
 
-    async def adapt_to_environment(self, environmental_changes: Dict[str, Any]) -> AdaptationResult:
+    async def adapt_to_environment(
+        self, environmental_changes: Dict[str, Any]
+    ) -> AdaptationResult:
         """환경에 적응"""
         try:
             start_time = time.time()
 
             # 환경 변화 분석
-            change_analysis = await self._analyze_environmental_changes(environmental_changes)
+            change_analysis = await self._analyze_environmental_changes(
+                environmental_changes
+            )
 
             # 적응 전략 생성
-            adaptation_strategies = await self._generate_adaptation_strategies(change_analysis)
+            adaptation_strategies = await self._generate_adaptation_strategies(
+                change_analysis
+            )
 
             # 적응 실행
             adaptation_success = await self._execute_adaptation(adaptation_strategies)
@@ -225,7 +237,9 @@ class EvolutionSystem:
                 confidence_score=confidence_score,
             )
 
-            logger.info(f"환경 적응 완료: 성공={adaptation_success}, 점수={adaptation_score:.3f}")
+            logger.info(
+                f"환경 적응 완료: 성공={adaptation_success}, 점수={adaptation_score:.3f}"
+            )
 
             return adaptation_result
 
@@ -233,7 +247,9 @@ class EvolutionSystem:
             logger.error(f"환경 적응 실패: {e}")
             return await self._create_failed_adaptation_result()
 
-    async def evolve_capabilities(self, target_capabilities: List[str]) -> EvolutionResult:
+    async def evolve_capabilities(
+        self, target_capabilities: List[str]
+    ) -> EvolutionResult:
         """능력 진화"""
         try:
             start_time = time.time()
@@ -242,7 +258,9 @@ class EvolutionSystem:
             evolution_type = await self._determine_evolution_type(target_capabilities)
 
             # 진화 계획 수립
-            evolution_plan = await self._create_evolution_plan(target_capabilities, evolution_type)
+            evolution_plan = await self._create_evolution_plan(
+                target_capabilities, evolution_type
+            )
 
             # 진화 실행
             evolution_success = await self._execute_evolution(evolution_plan)
@@ -263,7 +281,9 @@ class EvolutionSystem:
             )
 
             # 성공률 계산
-            success_rate = await self._calculate_success_rate(evolution_success, evolution_plan)
+            success_rate = await self._calculate_success_rate(
+                evolution_success, evolution_plan
+            )
 
             # 안정성 점수 계산
             stability_score = await self._calculate_stability_score(
@@ -280,7 +300,9 @@ class EvolutionSystem:
                 stability_score=stability_score,
             )
 
-            logger.info(f"능력 진화 완료: 유형={evolution_type.value}, 점수={evolution_score:.3f}")
+            logger.info(
+                f"능력 진화 완료: 유형={evolution_type.value}, 점수={evolution_score:.3f}"
+            )
 
             return evolution_result
 
@@ -299,18 +321,24 @@ class EvolutionSystem:
             current_analysis = await self._analyze_current_strategy(current_strategy)
 
             # 최적화 기회 식별
-            optimization_opportunities = await self._identify_optimization_opportunities(
-                current_analysis
+            optimization_opportunities = (
+                await self._identify_optimization_opportunities(current_analysis)
             )
 
             # 최적화된 전략 생성
-            optimized_strategy = await self._generate_optimized_strategy(optimization_opportunities)
+            optimized_strategy = await self._generate_optimized_strategy(
+                optimization_opportunities
+            )
 
             # 전략 효과성 평가
-            effectiveness = await self._evaluate_strategy_effectiveness(optimized_strategy)
+            effectiveness = await self._evaluate_strategy_effectiveness(
+                optimized_strategy
+            )
 
             # 성공 확률 계산
-            success_probability = await self._calculate_success_probability(optimized_strategy)
+            success_probability = await self._calculate_success_probability(
+                optimized_strategy
+            )
 
             # 위험 수준 평가
             risk_level = await self._evaluate_risk_level(optimized_strategy)
@@ -368,7 +396,9 @@ class EvolutionSystem:
             logger.error(f"진화 점수 계산 실패: {e}")
             return 0.0
 
-    async def _evaluate_capability_improvements(self, current_state: Dict[str, Any]) -> List[str]:
+    async def _evaluate_capability_improvements(
+        self, current_state: Dict[str, Any]
+    ) -> List[str]:
         """능력 개선 평가"""
         try:
             capabilities = current_state.get("capabilities", {})
@@ -393,14 +423,18 @@ class EvolutionSystem:
             if not adaptation_metrics:
                 return 0.5  # 기본값
 
-            adaptation_score = sum(adaptation_metrics.values()) / len(adaptation_metrics)
+            adaptation_score = sum(adaptation_metrics.values()) / len(
+                adaptation_metrics
+            )
             return min(1.0, max(0.0, adaptation_score))
 
         except Exception as e:
             logger.error(f"적응 수준 평가 실패: {e}")
             return 0.0
 
-    async def _evaluate_innovation_capacity(self, current_state: Dict[str, Any]) -> float:
+    async def _evaluate_innovation_capacity(
+        self, current_state: Dict[str, Any]
+    ) -> float:
         """혁신 능력 평가"""
         try:
             context = current_state.get("context", {})
@@ -409,14 +443,18 @@ class EvolutionSystem:
             if not innovation_metrics:
                 return 0.5  # 기본값
 
-            innovation_score = sum(innovation_metrics.values()) / len(innovation_metrics)
+            innovation_score = sum(innovation_metrics.values()) / len(
+                innovation_metrics
+            )
             return min(1.0, max(0.0, innovation_score))
 
         except Exception as e:
             logger.error(f"혁신 능력 평가 실패: {e}")
             return 0.0
 
-    async def _evaluate_transformation_degree(self, current_state: Dict[str, Any]) -> float:
+    async def _evaluate_transformation_degree(
+        self, current_state: Dict[str, Any]
+    ) -> float:
         """변환 정도 평가"""
         try:
             history = current_state.get("history", [])
@@ -427,20 +465,25 @@ class EvolutionSystem:
             # 최근 진화 기록 분석
             recent_evolutions = history[-10:] if len(history) > 10 else history
             transformation_scores = [
-                evolution.get("transformation_score", 0.0) for evolution in recent_evolutions
+                evolution.get("transformation_score", 0.0)
+                for evolution in recent_evolutions
             ]
 
             if not transformation_scores:
                 return 0.0
 
-            transformation_degree = sum(transformation_scores) / len(transformation_scores)
+            transformation_degree = sum(transformation_scores) / len(
+                transformation_scores
+            )
             return min(1.0, max(0.0, transformation_degree))
 
         except Exception as e:
             logger.error(f"변환 정도 평가 실패: {e}")
             return 0.0
 
-    async def _determine_evolution_stage(self, evolution_score: float) -> EvolutionStage:
+    async def _determine_evolution_stage(
+        self, evolution_score: float
+    ) -> EvolutionStage:
         """진화 단계 결정"""
         if evolution_score < 0.2:
             return EvolutionStage.AWARENESS
@@ -494,7 +537,9 @@ class EvolutionSystem:
                 "adaptation_required": False,
             }
 
-    async def _generate_adaptation_strategies(self, change_analysis: Dict[str, Any]) -> List[str]:
+    async def _generate_adaptation_strategies(
+        self, change_analysis: Dict[str, Any]
+    ) -> List[str]:
         """적응 전략 생성"""
         try:
             strategies = []
@@ -583,7 +628,9 @@ class EvolutionSystem:
             logger.error(f"신뢰도 점수 계산 실패: {e}")
             return 0.5
 
-    async def _determine_evolution_type(self, target_capabilities: List[str]) -> EvolutionType:
+    async def _determine_evolution_type(
+        self, target_capabilities: List[str]
+    ) -> EvolutionType:
         """진화 유형 결정"""
         try:
             if len(target_capabilities) > 5:
@@ -624,7 +671,9 @@ class EvolutionSystem:
 
             # 진화 실행 시뮬레이션
             success_rate = 0.85  # 기본 성공률
-            evolution_type = evolution_plan.get("evolution_type", EvolutionType.ADAPTIVE)
+            evolution_type = evolution_plan.get(
+                "evolution_type", EvolutionType.ADAPTIVE
+            )
 
             if evolution_type == EvolutionType.TRANSFORMATIVE:
                 success_rate *= 0.8
@@ -688,7 +737,9 @@ class EvolutionSystem:
     ) -> float:
         """능력 기반 진화 점수 계산"""
         try:
-            total_improvement = len(new_capabilities) * 0.3 + len(improved_capabilities) * 0.2
+            total_improvement = (
+                len(new_capabilities) * 0.3 + len(improved_capabilities) * 0.2
+            )
             evolution_score = min(1.0, total_improvement)
 
             return evolution_score
@@ -816,7 +867,9 @@ class EvolutionSystem:
             logger.error(f"최적화된 전략 생성 실패: {e}")
             return await self._create_default_survival_strategy()
 
-    async def _evaluate_strategy_effectiveness(self, strategy: SurvivalStrategy) -> float:
+    async def _evaluate_strategy_effectiveness(
+        self, strategy: SurvivalStrategy
+    ) -> float:
         """전략 효과성 평가"""
         try:
             base_effectiveness = 0.8
@@ -925,7 +978,9 @@ async def main():
 
     # 환경 적응
     environmental_changes = {"magnitude": 0.5, "direction": "positive"}
-    adaptation_result = await evolution_system.adapt_to_environment(environmental_changes)
+    adaptation_result = await evolution_system.adapt_to_environment(
+        environmental_changes
+    )
     print(f"적응 결과: {adaptation_result.adaptation_success}")
 
     # 능력 진화

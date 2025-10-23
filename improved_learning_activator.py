@@ -342,7 +342,9 @@ class ImprovedLearningActivator:
         if result["success"]:
             print("   ✅ 통합 학습 시스템 활성화 완료")
         else:
-            print(f"   ❌ 통합 학습 시스템 활성화 실패: {result.get('error', '알 수 없는 오류')}")
+            print(
+                f"   ❌ 통합 학습 시스템 활성화 실패: {result.get('error', '알 수 없는 오류')}"
+            )
 
         # 2. 자율 학습 시스템 활성화
         print("\n2️⃣ 자율 학습 시스템 활성화 중...")
@@ -351,7 +353,9 @@ class ImprovedLearningActivator:
         if result["success"]:
             print("   ✅ 자율 학습 시스템 활성화 완료")
         else:
-            print(f"   ❌ 자율 학습 시스템 활성화 실패: {result.get('error', '알 수 없는 오류')}")
+            print(
+                f"   ❌ 자율 학습 시스템 활성화 실패: {result.get('error', '알 수 없는 오류')}"
+            )
 
         # 3. 학습 루프 매니저 활성화
         print("\n3️⃣ 학습 루프 매니저 활성화 중...")
@@ -360,7 +364,9 @@ class ImprovedLearningActivator:
         if result["success"]:
             print("   ✅ 학습 루프 매니저 활성화 완료")
         else:
-            print(f"   ❌ 학습 루프 매니저 활성화 실패: {result.get('error', '알 수 없는 오류')}")
+            print(
+                f"   ❌ 학습 루프 매니저 활성화 실패: {result.get('error', '알 수 없는 오류')}"
+            )
 
         # 4. 실시간 학습 시스템 활성화
         print("\n4️⃣ 실시간 학습 시스템 활성화 중...")
@@ -369,7 +375,9 @@ class ImprovedLearningActivator:
         if result["success"]:
             print("   ✅ 실시간 학습 시스템 활성화 완료")
         else:
-            print(f"   ❌ 실시간 학습 시스템 활성화 실패: {result.get('error', '알 수 없는 오류')}")
+            print(
+                f"   ❌ 실시간 학습 시스템 활성화 실패: {result.get('error', '알 수 없는 오류')}"
+            )
 
         # 시스템 상태 검증
         print("\n🔍 시스템 상태 검증 중...")
@@ -475,7 +483,9 @@ class ImprovedLearningActivator:
                 status_icon = "🔴"
                 status_text = "문제"
 
-            print(f"  {status_icon} {system_name}: {status_text} (실행 시간: {runtime_str})")
+            print(
+                f"  {status_icon} {system_name}: {status_text} (실행 시간: {runtime_str})"
+            )
 
             # 추가 정보 표시
             if "session_count" in health:

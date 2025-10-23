@@ -238,7 +238,9 @@ class DuRiLearningLoopChecker:
 
         # 1. 기존 루프가 있는 경우
         if self.existing_loops:
-            recommendations.append("✅ 기존 학습 루프가 존재합니다. 중복 생성을 피하세요.")
+            recommendations.append(
+                "✅ 기존 학습 루프가 존재합니다. 중복 생성을 피하세요."
+            )
 
             # 활성 루프 확인
             active_loops = [loop for loop in self.existing_loops if loop.is_active]
@@ -247,7 +249,9 @@ class DuRiLearningLoopChecker:
                     f"🔄 현재 {len(active_loops)}개의 활성 학습 루프가 실행 중입니다."
                 )
             else:
-                recommendations.append("⏸️ 모든 학습 루프가 비활성 상태입니다. 필요시 활성화하세요.")
+                recommendations.append(
+                    "⏸️ 모든 학습 루프가 비활성 상태입니다. 필요시 활성화하세요."
+                )
 
         # 2. 중복 함수가 있는 경우
         if self.duplicate_functions:
@@ -279,7 +283,9 @@ class DuRiLearningLoopChecker:
 
         structure_analysis = {
             "total_loops": len(self.existing_loops),
-            "active_loops": len([loop for loop in self.existing_loops if loop.is_active]),
+            "active_loops": len(
+                [loop for loop in self.existing_loops if loop.is_active]
+            ),
             "loop_types": [loop.type for loop in self.existing_loops],
             "total_functions": sum(len(loop.functions) for loop in self.existing_loops),
             "duplicate_functions": len(self.duplicate_functions),
@@ -375,4 +381,6 @@ if __name__ == "__main__":
     sys.path.append(".")
 
     result = check_duRi_learning_loops()
-    print(f"\n🎯 최종 결과: {'⚠️ 중복 발견' if result.has_duplicates else '✅ 중복 없음'}")
+    print(
+        f"\n🎯 최종 결과: {'⚠️ 중복 발견' if result.has_duplicates else '✅ 중복 없음'}"
+    )

@@ -89,7 +89,9 @@ def test_memory_normalization():
     """메모리 타입 정규화를 테스트합니다."""
     # 기본 테스트
     assert normalize_memory_type("learning") == MemoryType.LEARNING_EXPERIENCE
-    assert normalize_memory_type("LEARNING_EXPERIENCE") == MemoryType.LEARNING_EXPERIENCE
+    assert (
+        normalize_memory_type("LEARNING_EXPERIENCE") == MemoryType.LEARNING_EXPERIENCE
+    )
     assert normalize_memory_type("Learn_Exp") == MemoryType.LEARNING_EXPERIENCE
     assert normalize_memory_type("CREATIVITY") == MemoryType.CREATIVITY
     assert normalize_memory_type(MemoryType.GOAL) == MemoryType.GOAL

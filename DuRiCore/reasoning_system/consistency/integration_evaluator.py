@@ -59,7 +59,9 @@ class IntegrationEvaluator:
 
         assessment = IntegrationAssessment(
             assessment_id=assessment_id,
-            knowledge_sources=[str(source.get("id", "unknown")) for source in knowledge_sources],
+            knowledge_sources=[
+                str(source.get("id", "unknown")) for source in knowledge_sources
+            ],
             integration_score=integration_score,
             coherence_score=coherence_score,
             completeness_score=completeness_score,
@@ -73,7 +75,9 @@ class IntegrationEvaluator:
         self.evaluation_history.append(assessment)
         return assessment
 
-    async def _calculate_integration_score(self, knowledge_sources: List[Dict[str, Any]]) -> float:
+    async def _calculate_integration_score(
+        self, knowledge_sources: List[Dict[str, Any]]
+    ) -> float:
         """통합 점수 계산"""
         if len(knowledge_sources) < 2:
             return 1.0
@@ -88,7 +92,9 @@ class IntegrationEvaluator:
 
         return np.mean(integration_scores) if integration_scores else 0.0
 
-    async def _calculate_coherence_score(self, knowledge_sources: List[Dict[str, Any]]) -> float:
+    async def _calculate_coherence_score(
+        self, knowledge_sources: List[Dict[str, Any]]
+    ) -> float:
         """일관성 점수 계산"""
         if len(knowledge_sources) < 2:
             return 1.0
@@ -103,7 +109,9 @@ class IntegrationEvaluator:
 
         return np.mean(coherence_scores) if coherence_scores else 0.0
 
-    async def _calculate_completeness_score(self, knowledge_sources: List[Dict[str, Any]]) -> float:
+    async def _calculate_completeness_score(
+        self, knowledge_sources: List[Dict[str, Any]]
+    ) -> float:
         """완성도 점수 계산"""
         completeness_scores = []
         for source in knowledge_sources:
@@ -112,7 +120,9 @@ class IntegrationEvaluator:
 
         return np.mean(completeness_scores) if completeness_scores else 0.0
 
-    async def _calculate_consistency_score(self, knowledge_sources: List[Dict[str, Any]]) -> float:
+    async def _calculate_consistency_score(
+        self, knowledge_sources: List[Dict[str, Any]]
+    ) -> float:
         """일관성 점수 계산"""
         if len(knowledge_sources) < 2:
             return 1.0
@@ -140,7 +150,9 @@ class IntegrationEvaluator:
 
         return len(common_keys) / len(total_keys)
 
-    async def _calculate_coherence(self, source1: Dict[str, Any], source2: Dict[str, Any]) -> float:
+    async def _calculate_coherence(
+        self, source1: Dict[str, Any], source2: Dict[str, Any]
+    ) -> float:
         """일관성 계산"""
         # 간단한 일관성 계산
         common_keys = set(source1.keys()) & set(source2.keys())

@@ -235,7 +235,9 @@ async def test_expression_styles():
 
         results = []
         for style in styles:
-            result = await engine.express_judgment(judgment_data=judgment_data, style=style)
+            result = await engine.express_judgment(
+                judgment_data=judgment_data, style=style
+            )
             results.append(result)
 
             logger.info(f"   - {style.value} 스타일: {result.expression_text}")
@@ -265,7 +267,9 @@ async def test_convenience_function():
         }
 
         # 편의 함수 사용
-        expression = await express_duri_judgment(judgment_data=judgment_data, style="casual")
+        expression = await express_duri_judgment(
+            judgment_data=judgment_data, style="casual"
+        )
 
         logger.info(f"✅ 편의 함수 테스트 완료:")
         logger.info(f"   - 표현: {expression}")

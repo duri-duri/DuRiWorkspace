@@ -176,7 +176,9 @@ class CognitiveResourceAllocator:
             for module in active_modules:
                 # 모듈별 우선순위에 따른 자원 분배
                 if module in ["SelfReflection", "GrowthLoop", "JudgmentTrace"]:
-                    allocation[module] = base_allocation * 1.5  # 핵심 모듈은 더 많은 자원
+                    allocation[module] = (
+                        base_allocation * 1.5
+                    )  # 핵심 모듈은 더 많은 자원
                 else:
                     allocation[module] = base_allocation
 
@@ -269,7 +271,9 @@ class SelfReflection:
                 "status": "synchronized",
             }
 
-            instance.thought_flow.register_stream("self_reflection_sync", reflection_summary)
+            instance.thought_flow.register_stream(
+                "self_reflection_sync", reflection_summary
+            )
 
             print(
                 f"✅ 자가 반성 동기화 완료: {reflection_result.get('new_insights', 0)}개 통찰 생성"
@@ -305,7 +309,9 @@ class GrowthLoop:
         print(f"🌱 성장 루프 트리거 시작 (소스: {source})")
 
         try:
-            evolution_result = instance.evolution_manager.execute_self_improvement_sequence()
+            evolution_result = (
+                instance.evolution_manager.execute_self_improvement_sequence()
+            )
 
             growth_summary = {
                 "source": source,
@@ -370,7 +376,9 @@ class JudgmentTrace:
                 "visualization_type": "judgment_trace_analysis",
             }
 
-            instance.thought_flow.register_stream("judgment_visualization", visualization_data)
+            instance.thought_flow.register_stream(
+                "judgment_visualization", visualization_data
+            )
 
             print(f"✅ 판단 시각화 완료: {len(recent_traces)}개 최근 기록 분석")
 
@@ -498,9 +506,15 @@ def run(tag="strategic_judgment"):
     print(f"⚙️ 활성화된 모듈: {len(execution_summary['active_modules'])}개")
     print(f"🔋 자원 분배: {len(execution_summary['resource_allocation'])}개 모듈")
     print(f"🗺️ 프리페치: {len(execution_summary['active_modules'])}개 모듈")
-    print(f"🪞 자가 반성: {execution_summary['reflection_result'].get('status', 'unknown')}")
-    print(f"🌱 성장 루프: {execution_summary['growth_result'].get('status', 'unknown')}")
-    print(f"🔍 판단 시각화: {execution_summary['visualization_result'].get('status', 'unknown')}")
+    print(
+        f"🪞 자가 반성: {execution_summary['reflection_result'].get('status', 'unknown')}"
+    )
+    print(
+        f"🌱 성장 루프: {execution_summary['growth_result'].get('status', 'unknown')}"
+    )
+    print(
+        f"🔍 판단 시각화: {execution_summary['visualization_result'].get('status', 'unknown')}"
+    )
     print(f"🎯 실행 상태: {execution_summary['execution_status']}")
     print("=" * 60)
 
