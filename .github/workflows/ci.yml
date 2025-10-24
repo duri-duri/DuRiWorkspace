@@ -9,56 +9,33 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    env:
-      SUBMODULES_TOKEN: ${{ secrets.SUBMODULES_TOKEN }}   # 전 스텝에 주입
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          submodules: false
-          persist-credentials: false  # 중요: 기본 GH 토큰 자격증명 억제
-
       - name: Verify PAT presence
         run: |
-          test -n "${SUBMODULES_TOKEN}" || (echo "SUBMODULES_TOKEN is empty" && exit 1)
+          test -n "${{ secrets.SUBMODULES_TOKEN }}" || { echo "SUBMODULES_TOKEN is empty"; exit 1; }
 
-      - name: Auth for private legacy submodules (HTTPS via PAT)
-        # 조직 경로만 PAT로 rewrite (더 안전)
-        run: |
-          git config --global url."https://x-access-token:${SUBMODULES_TOKEN}@github.com/duri-duri/".insteadOf "https://github.com/duri-duri/"
-
-      - name: Verify PAT can read org repos
-        run: |
-          set -e
-          git ls-remote https://github.com/duri-duri/duri_core.git >/dev/null
-          git ls-remote https://github.com/duri-duri/duri_brain.git >/dev/null
-          git ls-remote https://github.com/duri-duri/duri_evolution.git >/dev/null
-          git ls-remote https://github.com/duri-duri/duri_control.git >/dev/null
-          echo "✅ PAT can read all org repos"
-
-      - name: Init legacy submodules only
-        run: |
-          git submodule set-url duri_core_legacy      https://github.com/duri-duri/duri_core.git
-          git submodule set-url duri_brain_legacy     https://github.com/duri-duri/duri_brain.git
-          git submodule set-url duri_evolution_legacy https://github.com/duri-duri/duri_evolution.git
-          git submodule set-url duri_control_legacy   https://github.com/duri-duri/duri_control.git
-          git submodule sync --recursive
-          git submodule update --init --recursive --checkout duri_*_legacy
+      - name: Checkout (with PAT & submodules)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          token: ${{ secrets.SUBMODULES_TOKEN }}
+          submodules: recursive
 
       - name: Detect relevant changes
         id: detect
         run: |
           set -euo pipefail
-          BASE=${{ github.event.pull_request.base.sha }}
-          HEAD=${{ github.event.pull_request.head.sha }}
+          BASE="${{ github.event.pull_request.base.sha || github.sha }}"
+          HEAD="${{ github.event.pull_request.head.sha || github.sha }}"
           CHANGED=$(git diff --name-only "$BASE" "$HEAD" -- \
-            'DuRiCore/**' 'src/**' 'tests/**' 'docker/**' 'scripts/**' 'requirements*.txt' | xargs -r)
-          if [ -z "$CHANGED" ]; then
-            echo "run=false" >> "$GITHUB_OUTPUT"
-            echo "🟡 No relevant code changes, skipping tests."
-          else
+            'DuRiCore/**' 'src/**' 'tests/**' 'docker/**' 'scripts/**' 'requirements*.txt' 2>/dev/null | xargs -r)
+          if [ -n "$CHANGED" ]; then
             echo "run=true" >> "$GITHUB_OUTPUT"
             echo "🧩 Changed files: $CHANGED"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "🟡 No relevant code changes, skipping tests."
           fi
 
       - name: Set up Python
