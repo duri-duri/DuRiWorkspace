@@ -11,7 +11,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
+        with:
+          fetch-depth: 0
+          submodules: false   # 기본은 끔
+
+      - name: Init legacy submodules only
+        run: |
+          git submodule update --init --recursive --checkout \
+            duri_core_legacy duri_brain_legacy duri_evolution_legacy duri_control_legacy
 
       - name: Detect relevant changes
         id: detect
