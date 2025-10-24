@@ -1,0 +1,14 @@
+name: phase-2 Suites
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Compatibility shim for legacy phase-2 Suites check"
