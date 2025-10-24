@@ -9,24 +9,34 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      SUBMODULES_TOKEN: ${{ secrets.SUBMODULES_TOKEN }}
     steps:
-      - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
+      - name: Verify PAT presence
+        run: test -n "${SUBMODULES_TOKEN}" || { echo "SUBMODULES_TOKEN is empty"; exit 1; }
+
+      - name: Checkout (with submodules)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          token: ${{ secrets.SUBMODULES_TOKEN }}
+          submodules: true  # ✅ duri_core_legacy updated to 59039e9 (orphaned submodule removed)
 
       - name: Detect relevant changes
         id: detect
         run: |
           set -euo pipefail
-          BASE=${{ github.event.pull_request.base.sha }}
-          HEAD=${{ github.event.pull_request.head.sha }}
+          BASE="${{ github.event.pull_request.base.sha || github.sha }}"
+          HEAD="${{ github.event.pull_request.head.sha || github.sha }}"
           CHANGED=$(git diff --name-only "$BASE" "$HEAD" -- \
-            'DuRiCore/**' 'src/**' 'tests/**' 'docker/**' 'scripts/**' 'requirements*.txt' | xargs -r)
-          if [ -z "$CHANGED" ]; then
-            echo "run=false" >> "$GITHUB_OUTPUT"
-            echo "🟡 No relevant code changes, skipping tests."
-          else
+            'DuRiCore/**' 'src/**' 'tests/**' 'docker/**' 'scripts/**' 'requirements*.txt' 2>/dev/null | xargs -r)
+          if [ -n "$CHANGED" ]; then
             echo "run=true" >> "$GITHUB_OUTPUT"
             echo "🧩 Changed files: $CHANGED"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "🟡 No relevant code changes, skipping tests."
           fi
 
       - name: Set up Python
