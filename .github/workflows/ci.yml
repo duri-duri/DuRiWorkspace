@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
           token: ${{ secrets.SUBMODULES_TOKEN }}
-          submodules: recursive
+          submodules: true  # Non-recursive: only init top-level legacy submodules
 
       - name: Detect relevant changes
         id: detect
