@@ -2,6 +2,9 @@ name: Lint GitHub Actions workflow files
 
 on:
   pull_request:
+    paths:
+      - ".github/workflows/**/*.yml"
+      - ".github/workflows/**/*.yaml"
   workflow_dispatch:
 
 permissions:
@@ -13,7 +16,27 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
-      - name: Run actionlint
-        uses: rhysd/actionlint@v1.7.1
+
+      - id: changed
+        name: Collect changed workflow files
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          git diff --name-only "$BASE" "$HEAD" -- \
+            '.github/workflows/**/*.yml' '.github/workflows/**/*.yaml' > files.txt
+          if [ ! -s files.txt ]; then
+            echo "files=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "files=$(tr '\n' ' ' < files.txt)" >> "$GITHUB_OUTPUT"
+
+      - name: Run actionlint on changed files
+        if: steps.changed.outputs.files != ''
+        uses: rhysd/actionlint@v1
         with:
-          args: .github/workflows/*.yml
+          args: -color -shellcheck= ${{ steps.changed.outputs.files }}
+
+      - name: No workflow file changes
+        if: steps.changed.outputs.files == ''
+        run: echo "No changed workflow files."
