@@ -14,14 +14,14 @@ jobs:
         with:
           fetch-depth: 0
           submodules: false
-          persist-credentials: true
+          persist-credentials: false  # 중요: 기본 GH 토큰 자격증명 억제
 
-      - name: Auth for legacy submodules (HTTPS)
+      - name: Auth for private legacy submodules (HTTPS via PAT)
+        # 모든 https://github.com/... 호출을 PAT로 rewrite
         run: |
-          git config --global http.https://github.com/.extraheader \
-            "AUTHORIZATION: basic $(printf "x-access-token:%s" "$GITHUB_TOKEN" | base64 -w0)"
+          git config --global url."https://x-access-token:${SUBMODULES_TOKEN}@github.com/".insteadOf "https://github.com/"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SUBMODULES_TOKEN: ${{ secrets.SUBMODULES_TOKEN }}
 
       - name: Init legacy submodules only
         run: |
@@ -29,6 +29,7 @@ jobs:
           git submodule set-url duri_brain_legacy     https://github.com/duri-duri/duri_brain.git
           git submodule set-url duri_evolution_legacy https://github.com/duri-duri/duri_evolution.git
           git submodule set-url duri_control_legacy   https://github.com/duri-duri/duri_control.git
+          git submodule sync --recursive
           git submodule update --init --recursive --checkout duri_*_legacy
 
       - name: Detect relevant changes
