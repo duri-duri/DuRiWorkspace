@@ -55,3 +55,58 @@ path-allow: duri_archive/**
 .pre-commit-config.yaml
 .github/workflows/pre-commit.yml
 .githooks/pre-commit
+# 모든 Markdown 문서 허용
+\.md$
+.github/workflows/automerge-ops.yml
+# ----- Insight Engine (β) scaffold -----
+insight/
+tests/test_insight_engine.py
+docs/insight/spec.md
+scripts/run_insight.sh
+.github/workflows/insight-ci.yml
+# ----- Prompt Pipeline v1 -----
+insight/pipeline.py
+scripts/insight_dataset_clean.py
+tests/test_pipeline.py
+
+# ----- Cache/Log files (ignore) -----
+__pycache__/
+.*\.pyc$
+.*\.pyo$
+.*\.log$
+
+# --- insight engine + pipeline scaffold ---
+insight/
+scripts/run_insight.sh
+scripts/insight_dataset_clean.py
+tests/test_pipeline.py
+docs/insight/spec.md
+.github/workflows/insight-ci.yml
+
+# ----- Phase 19: 메트릭 리포트 CI -----
+insight/metrics.py
+insight/cli.py
+tests/test_metrics.py
+.github/workflows/insight-metrics-report.yml
+
+# ----- 서브모듈 포인터 변경 허용 -----
+^duri_core$
+^duri_brain$
+^duri_control$
+^duri_evolution$
+^duri_all_scripts$
+
+# ----- Phase 19-2: 샘플셋 리그/회귀 -----
+samplesets/
+baselines/
+.github/workflows/insight-league.yml
+
+# ----- Phase 19-3: 회귀 배지 -----
+public/
+tmp/
+
+# ----- Phase 20: repo automation & DX -----
+^\.github/workflows/enable-auto-merge\.yml$
+^\.vscode/keybindings\.json$
+^\.vscode/settings\.json$
+^pyrightconfig\.json$

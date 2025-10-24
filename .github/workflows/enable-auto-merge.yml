@@ -1,0 +1,26 @@
+name: Enable Auto-merge
+
+on:
+  pull_request:
+    types: [labeled, synchronize, opened]
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  enable-auto-merge:
+    if: contains(github.event.pull_request.labels.*.name, 'automerge')
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Enable Auto-merge
+        uses: peter-evans/enable-pull-request-automerge@v3
+        with:
+          merge-method: squash
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Log Auto-merge Status
+        run: |
+          echo "✅ Auto-merge enabled for PR #${{ github.event.pull_request.number }}"
+          echo "🔗 PR URL: ${{ github.event.pull_request.html_url }}"
