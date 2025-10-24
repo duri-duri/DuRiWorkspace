@@ -17,8 +17,14 @@ jobs:
 
       - name: Init legacy submodules only
         run: |
-          git submodule update --init --recursive --checkout \
-            duri_core_legacy duri_brain_legacy duri_evolution_legacy duri_control_legacy
+          # CI에서 항상 HTTPS로 덮어쓰기
+          git submodule set-url duri_core_legacy      https://github.com/duri-duri/duri_core.git
+          git submodule set-url duri_brain_legacy     https://github.com/duri-duri/duri_brain.git
+          git submodule set-url duri_evolution_legacy https://github.com/duri-duri/duri_evolution.git
+          git submodule set-url duri_control_legacy   https://github.com/duri-duri/duri_control.git
+
+          # 레거시만 init
+          git submodule update --init --recursive --checkout duri_*_legacy
 
       - name: Detect relevant changes
         id: detect
