@@ -15,22 +15,13 @@ jobs:
       - name: Verify PAT presence
         run: test -n "${SUBMODULES_TOKEN}" || { echo "SUBMODULES_TOKEN is empty"; exit 1; }
 
-      - name: Checkout (no submodules)
+      - name: Checkout (with submodules)
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: false
-          submodules: false  # Avoid recursive foreach on old duri_core commits
-
-      - name: PAT auth for org (HTTPS)
-        run: |
-          git config --global url."https://x-access-token:${SUBMODULES_TOKEN}@github.com/duri-duri/".insteadOf "https://github.com/duri-duri/"
-
-      - name: Init only top-level legacy submodules (non-recursive)
-        run: |
-          set -euxo pipefail
-          git submodule sync -- 'duri_*_legacy'
-          git -c submodule.recurse=false submodule update --init --depth 1 -- 'duri_*_legacy'
+          token: ${{ secrets.SUBMODULES_TOKEN }}
+          submodules: true  # ✅ duri_core_legacy updated to 59039e9 (orphaned submodule removed)
 
       - name: Detect relevant changes
         id: detect
