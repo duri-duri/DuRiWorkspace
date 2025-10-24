@@ -7,16 +7,8 @@ DuRi 추론 시스템 - 일관성 강화 모듈
 """
 
 from .integration_evaluator import IntegrationAssessment, IntegrationEvaluator
-from .knowledge_conflict import (
-    ConflictResolutionStrategy,
-    KnowledgeConflict,
-    KnowledgeConflictResolver,
-)
-from .logical_connectivity import (
-    LogicalConnection,
-    LogicalConnectionType,
-    LogicalConnectivityValidator,
-)
+from .knowledge_conflict import ConflictResolutionStrategy, KnowledgeConflict, KnowledgeConflictResolver
+from .logical_connectivity import LogicalConnection, LogicalConnectionType, LogicalConnectivityValidator
 
 __all__ = [
     "LogicalConnectivityValidator",

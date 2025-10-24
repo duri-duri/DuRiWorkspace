@@ -3,10 +3,10 @@
 로그 파일 관리 유틸리티
 """
 
-from datetime import datetime, timedelta
 import glob
 import json
 import os
+from datetime import datetime, timedelta
 from typing import Any, Dict, List
 
 from duri_common.config.config import Config
@@ -126,9 +126,7 @@ class LogManager:
 
         return stats
 
-    def get_date_range_stats(
-        self, start_date: str, end_date: str
-    ) -> List[Dict[str, Any]]:
+    def get_date_range_stats(self, start_date: str, end_date: str) -> List[Dict[str, Any]]:
         """
         날짜 범위의 로그 통계 조회
 
@@ -266,14 +264,10 @@ def main():
             print(f"실패: {stats['error_count']}개")
             print(f"평균 처리시간: {stats['avg_processing_time']:.3f}초")
         elif args.start_date and args.end_date:
-            stats_list = log_manager.get_date_range_stats(
-                args.start_date, args.end_date
-            )
+            stats_list = log_manager.get_date_range_stats(args.start_date, args.end_date)
             print(f"=== {args.start_date} ~ {args.end_date} 로그 통계 ===")
             for stats in stats_list:
-                print(
-                    f"{stats['date']}: 요청 {stats['total_requests']}개, 응답 {stats['total_responses']}개"
-                )
+                print(f"{stats['date']}: 요청 {stats['total_requests']}개, 응답 {stats['total_responses']}개")
         else:
             print("--date 또는 --start-date, --end-date를 지정해주세요.")
 

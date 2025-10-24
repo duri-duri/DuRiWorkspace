@@ -8,12 +8,11 @@ DuRi 백업 자동화 시스템
     python3 auto-backup.py 백업백업백업 "중요 시스템 완성"
 """
 
-from datetime import datetime
 import logging
-import os
-from pathlib import Path
 import subprocess
 import sys
+from datetime import datetime
+from pathlib import Path
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO, format="%(levelname)s:%(message)s")

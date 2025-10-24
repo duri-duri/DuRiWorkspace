@@ -10,17 +10,13 @@ DuRiCore Phase 2-3: 지식 통합 시스템 (Knowledge Integration System)
 - 지식 접근성 최적화
 """
 
-import asyncio
-from collections import defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-import json
 import logging
 import time
-from typing import Any, Dict, List, Optional, Tuple, Union
-
-import numpy as np
+from collections import defaultdict
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -138,9 +134,7 @@ class KnowledgeIntegrationSystem:
         integration_method: IntegrationMethod = IntegrationMethod.HIERARCHICAL,
     ) -> str:
         """지식 통합"""
-        session_id = (
-            f"integration_session_{int(time.time())}_{integration_method.value}"
-        )
+        session_id = f"integration_session_{int(time.time())}_{integration_method.value}"
         start_time = datetime.now()
 
         try:
@@ -163,24 +157,16 @@ class KnowledgeIntegrationSystem:
                 return ""
 
             # 지식 통합 실행
-            integrated_content = await self._create_integrated_knowledge(
-                sources, integration_method
-            )
+            integrated_content = await self._create_integrated_knowledge(sources, integration_method)
 
             # 품질 평가
             coherence_score = await self._calculate_coherence_score(integrated_content)
-            completeness_score = await self._calculate_completeness_score(
-                integrated_content, sources
-            )
-            accessibility_score = await self._calculate_accessibility_score(
-                integrated_content
-            )
+            completeness_score = await self._calculate_completeness_score(integrated_content, sources)
+            accessibility_score = await self._calculate_accessibility_score(integrated_content)
 
             # 통합된 지식 생성
             knowledge_id = f"knowledge_{int(time.time())}_{integration_method.value}"
-            quality = self._assess_knowledge_quality(
-                coherence_score, completeness_score, accessibility_score
-            )
+            quality = self._assess_knowledge_quality(coherence_score, completeness_score, accessibility_score)
 
             integrated_knowledge = IntegratedKnowledge(
                 knowledge_id=knowledge_id,
@@ -206,9 +192,7 @@ class KnowledgeIntegrationSystem:
             # 성능 메트릭 업데이트
             await self._update_performance_metrics(integrated_knowledge)
 
-            logger.info(
-                f"지식 통합 완료: {knowledge_id} (일관성: {coherence_score:.2f})"
-            )
+            logger.info(f"지식 통합 완료: {knowledge_id} (일관성: {coherence_score:.2f})")
             return knowledge_id
 
         except Exception as e:
@@ -230,9 +214,7 @@ class KnowledgeIntegrationSystem:
         else:
             return await self._default_integration(sources)
 
-    async def _hierarchical_integration(
-        self, sources: List[KnowledgeSource]
-    ) -> Dict[str, Any]:
+    async def _hierarchical_integration(self, sources: List[KnowledgeSource]) -> Dict[str, Any]:
         """계층적 통합"""
         integrated_content = {"hierarchy": {}, "relationships": {}, "metadata": {}}
 
@@ -253,9 +235,7 @@ class KnowledgeIntegrationSystem:
 
         return integrated_content
 
-    async def _network_integration(
-        self, sources: List[KnowledgeSource]
-    ) -> Dict[str, Any]:
+    async def _network_integration(self, sources: List[KnowledgeSource]) -> Dict[str, Any]:
         """네트워크 통합"""
         integrated_content = {"nodes": [], "edges": [], "network_structure": {}}
 
@@ -281,9 +261,7 @@ class KnowledgeIntegrationSystem:
 
         return integrated_content
 
-    async def _semantic_integration(
-        self, sources: List[KnowledgeSource]
-    ) -> Dict[str, Any]:
+    async def _semantic_integration(self, sources: List[KnowledgeSource]) -> Dict[str, Any]:
         """시맨틱 통합"""
         integrated_content = {
             "semantic_entities": [],
@@ -303,9 +281,7 @@ class KnowledgeIntegrationSystem:
 
         return integrated_content
 
-    async def _hybrid_integration(
-        self, sources: List[KnowledgeSource]
-    ) -> Dict[str, Any]:
+    async def _hybrid_integration(self, sources: List[KnowledgeSource]) -> Dict[str, Any]:
         """하이브리드 통합"""
         # 계층적 통합과 네트워크 통합의 조합
         hierarchical_content = await self._hierarchical_integration(sources)
@@ -319,9 +295,7 @@ class KnowledgeIntegrationSystem:
 
         return integrated_content
 
-    async def _default_integration(
-        self, sources: List[KnowledgeSource]
-    ) -> Dict[str, Any]:
+    async def _default_integration(self, sources: List[KnowledgeSource]) -> Dict[str, Any]:
         """기본 통합"""
         integrated_content = {"sources": [], "combined_content": {}, "metadata": {}}
 
@@ -336,9 +310,7 @@ class KnowledgeIntegrationSystem:
 
         return integrated_content
 
-    async def _calculate_coherence_score(
-        self, integrated_content: Dict[str, Any]
-    ) -> float:
+    async def _calculate_coherence_score(self, integrated_content: Dict[str, Any]) -> float:
         """일관성 점수 계산"""
         # 기본 일관성 점수 계산
         coherence_score = 0.7  # 기본값
@@ -376,9 +348,7 @@ class KnowledgeIntegrationSystem:
 
         return adjusted_completeness
 
-    async def _calculate_accessibility_score(
-        self, integrated_content: Dict[str, Any]
-    ) -> float:
+    async def _calculate_accessibility_score(self, integrated_content: Dict[str, Any]) -> float:
         """접근성 점수 계산"""
         # 기본 접근성 점수
         accessibility_score = 0.8
@@ -405,9 +375,7 @@ class KnowledgeIntegrationSystem:
     ) -> KnowledgeQuality:
         """지식 품질 평가"""
         # 종합 품질 점수 계산
-        overall_quality = (
-            coherence_score + completeness_score + accessibility_score
-        ) / 3.0
+        overall_quality = (coherence_score + completeness_score + accessibility_score) / 3.0
 
         if overall_quality >= 0.8:
             return KnowledgeQuality.EXCELLENT
@@ -418,39 +386,29 @@ class KnowledgeIntegrationSystem:
         else:
             return KnowledgeQuality.POOR
 
-    async def _update_performance_metrics(
-        self, integrated_knowledge: IntegratedKnowledge
-    ):
+    async def _update_performance_metrics(self, integrated_knowledge: IntegratedKnowledge):
         """성능 메트릭 업데이트"""
         self.performance_metrics["total_integrations"] += 1
 
         # 평균 점수 업데이트
         all_coherence_scores = [k.coherence_score for k in self.integrated_knowledge]
-        all_completeness_scores = [
-            k.completeness_score for k in self.integrated_knowledge
-        ]
-        all_accessibility_scores = [
-            k.accessibility_score for k in self.integrated_knowledge
-        ]
+        all_completeness_scores = [k.completeness_score for k in self.integrated_knowledge]
+        all_accessibility_scores = [k.accessibility_score for k in self.integrated_knowledge]
 
         if all_coherence_scores:
-            self.performance_metrics["average_coherence"] = sum(
-                all_coherence_scores
-            ) / len(all_coherence_scores)
+            self.performance_metrics["average_coherence"] = sum(all_coherence_scores) / len(all_coherence_scores)
 
         if all_completeness_scores:
-            self.performance_metrics["average_completeness"] = sum(
+            self.performance_metrics["average_completeness"] = sum(all_completeness_scores) / len(
                 all_completeness_scores
-            ) / len(all_completeness_scores)
+            )
 
         if all_accessibility_scores:
-            self.performance_metrics["average_accessibility"] = sum(
+            self.performance_metrics["average_accessibility"] = sum(all_accessibility_scores) / len(
                 all_accessibility_scores
-            ) / len(all_accessibility_scores)
+            )
 
-    async def get_integrated_knowledge(
-        self, knowledge_id: str
-    ) -> Optional[Dict[str, Any]]:
+    async def get_integrated_knowledge(self, knowledge_id: str) -> Optional[Dict[str, Any]]:
         """통합된 지식 조회"""
         for knowledge in self.integrated_knowledge:
             if knowledge.knowledge_id == knowledge_id:
@@ -474,15 +432,9 @@ class KnowledgeIntegrationSystem:
         # 최근 통합 분석
         recent_integrations = self.integrated_knowledge[-10:]  # 최근 10개
 
-        avg_coherence = sum(k.coherence_score for k in recent_integrations) / len(
-            recent_integrations
-        )
-        avg_completeness = sum(k.completeness_score for k in recent_integrations) / len(
-            recent_integrations
-        )
-        avg_accessibility = sum(
-            k.accessibility_score for k in recent_integrations
-        ) / len(recent_integrations)
+        avg_coherence = sum(k.coherence_score for k in recent_integrations) / len(recent_integrations)
+        avg_completeness = sum(k.completeness_score for k in recent_integrations) / len(recent_integrations)
+        avg_accessibility = sum(k.accessibility_score for k in recent_integrations) / len(recent_integrations)
 
         # 통합 방법별 통계
         method_stats = defaultdict(lambda: {"count": 0, "avg_quality": 0.0})
@@ -490,9 +442,7 @@ class KnowledgeIntegrationSystem:
             method = knowledge.integration_method.value
             method_stats[method]["count"] += 1
             method_stats[method]["avg_quality"] += (
-                knowledge.coherence_score
-                + knowledge.completeness_score
-                + knowledge.accessibility_score
+                knowledge.coherence_score + knowledge.completeness_score + knowledge.accessibility_score
             ) / 3.0
 
         for method in method_stats:

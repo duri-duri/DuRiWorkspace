@@ -7,7 +7,7 @@ Day41~43: PoU Pilot Metrics Rollup
 import argparse
 import json
 import pathlib
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 # 도메인별 P95 타임아웃 기준 (ms)
 P95_TIMEOUT_THRESHOLDS = {"medical": 1500, "rehab": 1200, "coding": 2000}
@@ -60,9 +60,7 @@ def calculate_metrics(logs: List[Dict[str, Any]]) -> Dict[str, Any]:
     total_entries = len(task_logs)
 
     # 에러율 계산
-    error_count = sum(
-        1 for log in task_logs if log.get("metrics", {}).get("error_count", 0) > 0
-    )
+    error_count = sum(1 for log in task_logs if log.get("metrics", {}).get("error_count", 0) > 0)
     p_error = error_count / total_entries if total_entries > 0 else 0
 
     # 타임아웃율 계산 (도메인별 임계값 적용)
@@ -86,9 +84,7 @@ def calculate_metrics(logs: List[Dict[str, Any]]) -> Dict[str, Any]:
             # 0~100을 0~1로 정규화
             explain_scores.append(metrics["quality_score"] / 100.0)
 
-    explain_score = (
-        (sum(explain_scores) / len(explain_scores)) if explain_scores else None
-    )
+    explain_score = (sum(explain_scores) / len(explain_scores)) if explain_scores else None
 
     return {
         "p_error": round(p_error, 4),

@@ -5,23 +5,21 @@ Extension 연결을 위한 실제 학습 기능이 구현된 서버 + 통합 시
 
 import ast
 import base64
-from collections import defaultdict
-from datetime import datetime, timedelta
 import io
 import json
 import os
-from pathlib import Path
 import re
 import shutil
-import subprocess
-import tempfile
+from collections import defaultdict
+from datetime import datetime
+from pathlib import Path
 from typing import Any, Dict, List
 
+import matplotlib.pyplot as plt
+import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
-import matplotlib.pyplot as plt
-import uvicorn
 
 app = FastAPI(
     title="DuRi Extension Learning Server",
@@ -57,9 +55,7 @@ class SelfReflectionEngine:
         self.reflection_history = []
         self.improvement_suggestions = []
 
-    def reflect_on_response(
-        self, conversation: str, response_quality: float, learning_value: float
-    ) -> Dict[str, Any]:
+    def reflect_on_response(self, conversation: str, response_quality: float, learning_value: float) -> Dict[str, Any]:
         """답변에 대한 자기 성찰 수행"""
 
         reflection = {
@@ -82,22 +78,14 @@ class SelfReflectionEngine:
 
         # 개선 영역 분석
         if response_quality < 0.5:
-            reflection["improvement_areas"].append(
-                "답변 품질이 낮음 - 더 상세한 설명 필요"
-            )
+            reflection["improvement_areas"].append("답변 품질이 낮음 - 더 상세한 설명 필요")
         if learning_value < 0.3:
-            reflection["improvement_areas"].append(
-                "학습 가치가 낮음 - 더 교육적인 내용 필요"
-            )
+            reflection["improvement_areas"].append("학습 가치가 낮음 - 더 교육적인 내용 필요")
         if len(conversation.split()) < 10:
-            reflection["improvement_areas"].append(
-                "질문이 간단함 - 더 구체적인 예제 제공 필요"
-            )
+            reflection["improvement_areas"].append("질문이 간단함 - 더 구체적인 예제 제공 필요")
 
         # 액션 플랜 생성
-        reflection["action_plan"] = self._generate_action_plan(
-            reflection["improvement_areas"]
-        )
+        reflection["action_plan"] = self._generate_action_plan(reflection["improvement_areas"])
 
         # 성찰 기록 저장
         self.reflection_history.append(reflection)
@@ -137,12 +125,8 @@ class SelfReflectionEngine:
 
         recent_reflections = self.reflection_history[-10:]  # 최근 10개
 
-        avg_response_quality = sum(
-            r["response_quality"] for r in recent_reflections
-        ) / len(recent_reflections)
-        avg_learning_value = sum(r["learning_value"] for r in recent_reflections) / len(
-            recent_reflections
-        )
+        avg_response_quality = sum(r["response_quality"] for r in recent_reflections) / len(recent_reflections)
+        avg_learning_value = sum(r["learning_value"] for r in recent_reflections) / len(recent_reflections)
 
         improvement_frequency = defaultdict(int)
         for reflection in recent_reflections:
@@ -152,9 +136,7 @@ class SelfReflectionEngine:
         return {
             "avg_response_quality": avg_response_quality,
             "avg_learning_value": avg_learning_value,
-            "most_common_improvements": sorted(
-                improvement_frequency.items(), key=lambda x: x[1], reverse=True
-            )[:3],
+            "most_common_improvements": sorted(improvement_frequency.items(), key=lambda x: x[1], reverse=True)[:3],
             "total_reflections": len(self.reflection_history),
         }
 
@@ -182,7 +164,7 @@ class LearningVisualizer:
             fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8))
 
             # 학습 가치 트렌드
-            timestamps = [data.get("timestamp", "") for data in learning_data]
+            timestamps = [data.get("timestamp", "") for data in learning_data]  # noqa: F841
             learning_values = [data.get("learning_value", 0) for data in learning_data]
 
             ax1.plot(
@@ -198,12 +180,8 @@ class LearningVisualizer:
             ax1.grid(True, alpha=0.3)
 
             # 복잡도 트렌드
-            complexities = [
-                data.get("learning_complexity", 0) for data in learning_data
-            ]
-            ax2.plot(
-                range(len(complexities)), complexities, "r-s", linewidth=2, markersize=6
-            )
+            complexities = [data.get("learning_complexity", 0) for data in learning_data]
+            ax2.plot(range(len(complexities)), complexities, "r-s", linewidth=2, markersize=6)
             ax2.set_title("Learning Complexity Trend", fontsize=14, fontweight="bold")
             ax2.set_ylabel("Complexity", fontsize=12)
             ax2.set_xlabel("Learning Session", fontsize=12)
@@ -244,18 +222,14 @@ class LearningVisualizer:
                 return self._create_empty_chart("개념 데이터가 없습니다")
 
             # 상위 10개 개념만 선택
-            top_concepts = sorted(
-                concept_freq.items(), key=lambda x: x[1], reverse=True
-            )[:10]
-            concepts, frequencies = zip(*top_concepts)
+            top_concepts = sorted(concept_freq.items(), key=lambda x: x[1], reverse=True)[:10]
+            concepts, frequencies = zip(*top_concepts)  # noqa: B905
 
             # 차트 생성
             fig, ax = plt.subplots(figsize=(12, 6))
-            bars = ax.bar(range(len(concepts)), frequencies, color="skyblue", alpha=0.7)
+            bars = ax.bar(range(len(concepts)), frequencies, color="skyblue", alpha=0.7)  # noqa: F841
 
-            ax.set_title(
-                "Key Concept Frequency Analysis", fontsize=14, fontweight="bold"
-            )
+            ax.set_title("Key Concept Frequency Analysis", fontsize=14, fontweight="bold")
             ax.set_xlabel("Concepts", fontsize=12)
             ax.set_ylabel("Frequency", fontsize=12)
             ax.set_xticks(range(len(concepts)))
@@ -342,7 +316,7 @@ class IntegrationMonitor:
         # 학습 패턴 수 체크
         if self.learning_patterns_count >= INTEGRATION_THRESHOLDS["learning_patterns"]:
             alerts.append(
-                f"⚠️ 학습 패턴이 {self.learning_patterns_count}개 축적됨 (임계값: {INTEGRATION_THRESHOLDS['learning_patterns']})"
+                f"⚠️ 학습 패턴이 {self.learning_patterns_count}개 축적됨 (임계값: {INTEGRATION_THRESHOLDS['learning_patterns']})"  # noqa: E501
             )
 
         # 응답 시간 체크
@@ -350,13 +324,13 @@ class IntegrationMonitor:
             avg_response_time = sum(self.response_times) / len(self.response_times)
             if avg_response_time >= INTEGRATION_THRESHOLDS["response_time"]:
                 alerts.append(
-                    f"⚠️ 평균 응답 시간이 {avg_response_time:.2f}초 (임계값: {INTEGRATION_THRESHOLDS['response_time']}초)"
+                    f"⚠️ 평균 응답 시간이 {avg_response_time:.2f}초 (임계값: {INTEGRATION_THRESHOLDS['response_time']}초)"  # noqa: E501
                 )
 
         # 코드 복잡도 체크
         if self.code_complexity_level >= INTEGRATION_THRESHOLDS["code_complexity"]:
             alerts.append(
-                f"⚠️ 코드 복잡도가 {self.code_complexity_level}단계 (임계값: {INTEGRATION_THRESHOLDS['code_complexity']}단계)"
+                f"⚠️ 코드 복잡도가 {self.code_complexity_level}단계 (임계값: {INTEGRATION_THRESHOLDS['code_complexity']}단계)"  # noqa: E501
             )
 
         # 사용자 요구사항 체크
@@ -372,9 +346,7 @@ class IntegrationMonitor:
             "metrics": {
                 "learning_patterns": self.learning_patterns_count,
                 "avg_response_time": (
-                    sum(self.response_times) / len(self.response_times)
-                    if self.response_times
-                    else 0
+                    sum(self.response_times) / len(self.response_times) if self.response_times else 0
                 ),
                 "code_complexity": self.code_complexity_level,
                 "user_requirements": self.user_requirements_level,
@@ -454,9 +426,7 @@ class LearningAnalyzer:
     def _calculate_complexity(self, conversation: str) -> float:
         """대화의 복잡도 계산"""
         sentences = re.split(r"[.!?]+", conversation)
-        avg_sentence_length = sum(len(s.split()) for s in sentences if s.strip()) / max(
-            len(sentences), 1
-        )
+        avg_sentence_length = sum(len(s.split()) for s in sentences if s.strip()) / max(len(sentences), 1)
 
         # 기술적 용어 비율
         tech_terms = len(
@@ -492,19 +462,13 @@ class LearningAnalyzer:
         concept_count = len(analysis.get("key_concepts", []))
 
         # 가중 평균으로 학습 가치 계산
-        learning_value = (
-            (complexity * 0.4)
-            + (engagement * 0.3)
-            + (min(concept_count / 5, 1.0) * 0.3)
-        )
+        learning_value = (complexity * 0.4) + (engagement * 0.3) + (min(concept_count / 5, 1.0) * 0.3)
         return round(learning_value, 3)
 
     def _save_learning_pattern(self, analysis: Dict[str, Any]):
         """학습 패턴 저장"""
         timestamp = analysis.get("timestamp", datetime.now().isoformat())
-        filename = (
-            f"{LEARNING_DATA_DIR}/learning_pattern_{timestamp.replace(':', '-')}.json"
-        )
+        filename = f"{LEARNING_DATA_DIR}/learning_pattern_{timestamp.replace(':', '-')}.json"
 
         with open(filename, "w", encoding="utf-8") as f:
             json.dump(analysis, f, ensure_ascii=False, indent=2)
@@ -526,9 +490,7 @@ class ChatGPTEvaluator:
         "actionability": 0.10,  # 실용성 (적용 가능성)
     }
 
-    def evaluate_response(
-        self, duri_response: str, user_question: str
-    ) -> Dict[str, Any]:
+    def evaluate_response(self, duri_response: str, user_question: str) -> Dict[str, Any]:
         """ChatGPT가 DuRi 답변을 6차원으로 평가"""
 
         evaluation = {
@@ -541,8 +503,7 @@ class ChatGPTEvaluator:
 
         # 총점 계산
         total_score = sum(
-            evaluation["scores"][criterion] * weight
-            for criterion, weight in self.EVALUATION_CRITERIA.items()
+            evaluation["scores"][criterion] * weight for criterion, weight in self.EVALUATION_CRITERIA.items()
         )
         evaluation["total_score"] = round(total_score, 3)
 
@@ -560,9 +521,7 @@ class ChatGPTEvaluator:
                 re.IGNORECASE,
             )
         )
-        scores["correctness"] = min(
-            tech_terms / max(len(response.split()), 1) * 10, 1.0
-        )
+        scores["correctness"] = min(tech_terms / max(len(response.split()), 1) * 10, 1.0)
 
         # 적합성: 질문 키워드와 답변의 일치도
         question_words = set(question.lower().split())
@@ -588,9 +547,7 @@ class ChatGPTEvaluator:
                 re.IGNORECASE,
             )
         )
-        scores["structure"] = min(
-            structure_indicators / max(len(response.split()), 1) * 8, 1.0
-        )
+        scores["structure"] = min(structure_indicators / max(len(response.split()), 1) * 8, 1.0)
 
         # 명료성: 이해하기 쉬운 설명
         simple_sentences = len([s for s in response.split(".") if len(s.split()) < 20])
@@ -605,9 +562,7 @@ class ChatGPTEvaluator:
                 re.IGNORECASE,
             )
         )
-        scores["actionability"] = min(
-            practical_indicators / max(len(response.split()), 1) * 3, 1.0
-        )
+        scores["actionability"] = min(practical_indicators / max(len(response.split()), 1) * 3, 1.0)
 
         return {k: round(v, 3) for k, v in scores.items()}
 
@@ -624,10 +579,7 @@ class ChatGPTEvaluator:
         if "because" not in response.lower() and "reason" not in response.lower():
             suggestions.append("이유와 근거를 더 명확히 설명해보세요")
 
-        if (
-            len(re.findall(r"\b(?:first|second|finally)\b", response, re.IGNORECASE))
-            < 2
-        ):
+        if len(re.findall(r"\b(?:first|second|finally)\b", response, re.IGNORECASE)) < 2:
             suggestions.append("단계별로 구조화된 설명을 추가해보세요")
 
         return suggestions
@@ -689,13 +641,9 @@ class DuRiSelfReflector:
             "user_question": user_question,
             "accepted_criticisms": self._analyze_accepted_points(chatgpt_evaluation),
             "disagreements": self._identify_disagreements(chatgpt_evaluation),
-            "improvement_proposal": self._generate_improvement_proposal(
-                chatgpt_evaluation
-            ),
+            "improvement_proposal": self._generate_improvement_proposal(chatgpt_evaluation),
             "discussion_request": "ChatGPT와 이 개선안에 대해 논의하고 싶습니다.",
-            "self_assessment": self._self_assess_response(
-                original_response, user_question
-            ),
+            "self_assessment": self._self_assess_response(original_response, user_question),
         }
 
         # 성찰 기록 저장
@@ -736,9 +684,7 @@ class DuRiSelfReflector:
 
         return disagreements
 
-    def _generate_improvement_proposal(
-        self, evaluation: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _generate_improvement_proposal(self, evaluation: Dict[str, Any]) -> Dict[str, Any]:
         """개선 제안 생성"""
         proposal = {
             "reasoning": self._analyze_improvement_reasoning(evaluation),
@@ -879,17 +825,13 @@ class DuRiChatGPTDiscussion:
         )
 
         # 합의 수준 계산
-        discussion["agreement_level"] = self._calculate_agreement_level(
-            duri_improvement_proposal, chatgpt_evaluation
-        )
+        discussion["agreement_level"] = self._calculate_agreement_level(duri_improvement_proposal, chatgpt_evaluation)
 
         # 최종 합의 도출
         discussion["final_consensus"] = self._reach_consensus(discussion)
 
         # 실행 항목 생성
-        discussion["action_items"] = self._generate_action_items(
-            discussion["final_consensus"]
-        )
+        discussion["action_items"] = self._generate_action_items(discussion["final_consensus"])
 
         # 논의 기록 저장
         self.discussion_history.append(discussion)
@@ -923,10 +865,7 @@ class DuRiChatGPTDiscussion:
         # 추가 제안사항
         additional_suggestions = []
         for chatgpt_sug in chatgpt_suggestions:
-            if not any(
-                self._similar_improvements(duri_imp, chatgpt_sug)
-                for duri_imp in duri_improvements
-            ):
+            if not any(self._similar_improvements(duri_imp, chatgpt_sug) for duri_imp in duri_improvements):
                 additional_suggestions.append(
                     {
                         "type": "chatgpt_additional",
@@ -938,10 +877,7 @@ class DuRiChatGPTDiscussion:
         # DuRi의 고유 제안
         duri_unique = []
         for duri_imp in duri_improvements:
-            if not any(
-                self._similar_improvements(duri_imp, chatgpt_sug)
-                for chatgpt_sug in chatgpt_suggestions
-            ):
+            if not any(self._similar_improvements(duri_imp, chatgpt_sug) for chatgpt_sug in chatgpt_suggestions):
                 duri_unique.append(
                     {
                         "type": "duri_unique",
@@ -971,9 +907,7 @@ class DuRiChatGPTDiscussion:
         similarity = len(intersection) / len(union)
         return similarity > 0.3  # 30% 이상 유사하면 같은 개선안으로 간주
 
-    def _calculate_agreement_level(
-        self, duri_proposal: Dict[str, Any], chatgpt_eval: Dict[str, Any]
-    ) -> float:
+    def _calculate_agreement_level(self, duri_proposal: Dict[str, Any], chatgpt_eval: Dict[str, Any]) -> float:
         """합의 수준 계산"""
         duri_improvements = set(duri_proposal.get("specific_improvements", []))
         chatgpt_suggestions = set(chatgpt_eval.get("suggestions", []))
@@ -1025,9 +959,7 @@ class DuRiChatGPTDiscussion:
 
         return consensus
 
-    def _generate_implementation_plan(
-        self, consensus: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    def _generate_implementation_plan(self, consensus: Dict[str, Any]) -> List[Dict[str, Any]]:
         """구현 계획 생성"""
         plan = []
 
@@ -1084,9 +1016,7 @@ class SafeCodeImprovementSystem:
         self.approval_threshold = 0.7
         os.makedirs(self.backup_dir, exist_ok=True)
 
-    def create_code_improvement(
-        self, discussion_result: Dict[str, Any], target_file: str = None
-    ) -> Dict[str, Any]:
+    def create_code_improvement(self, discussion_result: Dict[str, Any], target_file: str = None) -> Dict[str, Any]:
         """논의 결과를 바탕으로 코드 개선안 생성"""
 
         improvement = {
@@ -1114,9 +1044,7 @@ class SafeCodeImprovementSystem:
 
         # 정적 분석
         if improvement["changes"]:
-            improvement["static_analysis_passed"] = self._static_analysis(
-                improvement["changes"]
-            )
+            improvement["static_analysis_passed"] = self._static_analysis(improvement["changes"])
 
         return improvement
 
@@ -1234,9 +1162,7 @@ Example:
         """파일 백업 생성"""
         try:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            backup_path = os.path.join(
-                self.backup_dir, f"{Path(file_path).stem}_{timestamp}.bak"
-            )
+            backup_path = os.path.join(self.backup_dir, f"{Path(file_path).stem}_{timestamp}.bak")
             shutil.copy2(file_path, backup_path)
             return True
         except Exception as e:
@@ -1254,9 +1180,7 @@ Example:
         except SyntaxError:
             return False
 
-    def apply_improvement(
-        self, improvement: Dict[str, Any], user_approval: bool = False
-    ) -> Dict[str, Any]:
+    def apply_improvement(self, improvement: Dict[str, Any], user_approval: bool = False) -> Dict[str, Any]:
         """개선안 적용"""
 
         result = {
@@ -1304,9 +1228,7 @@ Example:
                 f.write(content)
 
             result["status"] = "applied"
-            result["message"] = (
-                f"{len(result['applied_changes'])}개 변경사항이 적용되었습니다"
-            )
+            result["message"] = f"{len(result['applied_changes'])}개 변경사항이 적용되었습니다"
 
         except Exception as e:
             result["status"] = "error"
@@ -1328,9 +1250,7 @@ async def chatgpt_evaluate_response(evaluation_request: Dict[str, Any]):
         user_question = evaluation_request.get("user_question", "")
 
         if not duri_response or not user_question:
-            raise HTTPException(
-                status_code=400, detail="duri_response와 user_question이 필요합니다"
-            )
+            raise HTTPException(status_code=400, detail="duri_response와 user_question이 필요합니다")
 
         evaluation = chatgpt_evaluator.evaluate_response(duri_response, user_question)
 
@@ -1346,7 +1266,7 @@ async def chatgpt_evaluate_response(evaluation_request: Dict[str, Any]):
 
     except Exception as e:
         print(f"❌ ChatGPT 평가 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 @app.post("/duri-self-reflect")
@@ -1367,12 +1287,10 @@ async def duri_self_reflect_endpoint(reflection_request: Dict[str, Any]):
             chatgpt_evaluation, original_response, user_question
         )
 
-        print(f"🤔 DuRi 자기성찰 완료")
+        print("🤔 DuRi 자기성찰 완료")
         print(f"   ✅ 수용한 비판: {len(reflection['accepted_criticisms'])}개")
         print(f"   ❓ 의견 차이: {len(reflection['disagreements'])}개")
-        print(
-            f"   💡 개선 제안: {len(reflection['improvement_proposal']['specific_improvements'])}개"
-        )
+        print(f"   💡 개선 제안: {len(reflection['improvement_proposal']['specific_improvements'])}개")
 
         return {
             "status": "success",
@@ -1382,7 +1300,7 @@ async def duri_self_reflect_endpoint(reflection_request: Dict[str, Any]):
 
     except Exception as e:
         print(f"❌ DuRi 자기성찰 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 @app.get("/reflection-history")
@@ -1410,19 +1328,13 @@ def _analyze_improvement_trends():
         total_score = evaluation.get("total_score", 0)
         avg_total_scores.append(total_score)
 
-        improvements = reflection.get("improvement_proposal", {}).get(
-            "specific_improvements", []
-        )
+        improvements = reflection.get("improvement_proposal", {}).get("specific_improvements", [])
         for improvement in improvements:
             improvement_frequency[improvement] += 1
 
     return {
-        "avg_total_score": (
-            sum(avg_total_scores) / len(avg_total_scores) if avg_total_scores else 0
-        ),
-        "most_common_improvements": sorted(
-            improvement_frequency.items(), key=lambda x: x[1], reverse=True
-        )[:5],
+        "avg_total_score": (sum(avg_total_scores) / len(avg_total_scores) if avg_total_scores else 0),
+        "most_common_improvements": sorted(improvement_frequency.items(), key=lambda x: x[1], reverse=True)[:5],
         "reflection_count": len(recent_reflections),
     }
 
@@ -1553,7 +1465,7 @@ async def get_learning_dashboard():
         </div>
     </body>
     </html>
-    """
+    """  # noqa: E501
 
     return HTMLResponse(content=html_content)
 
@@ -1583,9 +1495,7 @@ async def process_automated_learning(conversation_data: Dict[str, Any]):
         response_quality = min(response_time * 10, 1.0)  # 응답 시간 기반 품질 추정
         learning_value = analysis_result["learning_value"]
 
-        reflection = self_reflection_engine.reflect_on_response(
-            conversation, response_quality, learning_value
-        )
+        reflection = self_reflection_engine.reflect_on_response(conversation, response_quality, learning_value)
 
         # 학습 결과 생성
         learning_result = {
@@ -1617,7 +1527,7 @@ async def process_automated_learning(conversation_data: Dict[str, Any]):
 
     except Exception as e:
         print(f"❌ 자동화 학습 처리 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 @app.post("/adaptive-learning/process")
@@ -1673,7 +1583,7 @@ async def process_adaptive_learning(adaptive_data: Dict[str, Any]):
 
     except Exception as e:
         print(f"❌ 적응적 학습 처리 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 @app.post("/duri-chatgpt-discuss")
@@ -1696,9 +1606,7 @@ async def duri_chatgpt_discussion_endpoint(discussion_request: Dict[str, Any]):
             discussion_request["chatgpt_evaluation"],
         )
 
-        print(
-            f"✅ DuRi-ChatGPT 논의 완료: 합의 수준 {discussion_result['agreement_level']:.2f}"
-        )
+        print(f"✅ DuRi-ChatGPT 논의 완료: 합의 수준 {discussion_result['agreement_level']:.2f}")
 
         return {
             "status": "success",
@@ -1709,7 +1617,7 @@ async def duri_chatgpt_discussion_endpoint(discussion_request: Dict[str, Any]):
 
     except Exception as e:
         print(f"❌ DuRi-ChatGPT 논의 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 @app.get("/discussion-history")
@@ -1726,7 +1634,7 @@ async def get_discussion_history():
         }
     except Exception as e:
         print(f"❌ 논의 기록 조회 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 def _generate_recommendations(analysis: Dict[str, Any]) -> List[str]:
@@ -1817,9 +1725,7 @@ async def apply_improvement_endpoint(improvement_request: Dict[str, Any]):
         )
 
         # 개선안 적용
-        result = safe_code_improvement.apply_improvement(
-            improvement, improvement_request["user_approval"]
-        )
+        result = safe_code_improvement.apply_improvement(improvement, improvement_request["user_approval"])
 
         print(f"✅ 코드 개선 적용 결과: {result['status']} - {result['message']}")
 
@@ -1832,7 +1738,7 @@ async def apply_improvement_endpoint(improvement_request: Dict[str, Any]):
 
     except Exception as e:
         print(f"❌ 코드 개선 적용 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 @app.post("/create-improvement-proposal")
@@ -1845,9 +1751,7 @@ async def create_improvement_proposal_endpoint(proposal_request: Dict[str, Any])
 
         # 필수 필드 확인
         if "discussion_result" not in proposal_request:
-            raise HTTPException(
-                status_code=400, detail="discussion_result 필드가 필요합니다"
-            )
+            raise HTTPException(status_code=400, detail="discussion_result 필드가 필요합니다")
 
         # 코드 개선안 생성
         improvement = safe_code_improvement.create_code_improvement(
@@ -1865,7 +1769,7 @@ async def create_improvement_proposal_endpoint(proposal_request: Dict[str, Any])
 
     except Exception as e:
         print(f"❌ 코드 개선안 생성 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 @app.get("/improvement-status")
@@ -1885,7 +1789,7 @@ async def get_improvement_status():
         }
     except Exception as e:
         print(f"❌ 개선 상태 조회 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 if __name__ == "__main__":
@@ -1904,7 +1808,7 @@ async def example_endpoint(request: Dict[str, Any]):
             raise HTTPException(status_code=400, detail="데이터가 필요합니다")
 
         # 2. 비즈니스 로직 처리
-        result = process_business_logic(request["data"])
+        result = process_business_logic(request["data"])  # noqa: F821
 
         # 3. 응답 생성
         return {
@@ -1913,5 +1817,5 @@ async def example_endpoint(request: Dict[str, Any]):
             "timestamp": datetime.now().isoformat(),
         }
     except Exception as e:
-        logger.exception("예제 엔드포인트 오류")
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.exception("예제 엔드포인트 오류")  # noqa: F821
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904

@@ -5,21 +5,19 @@ Goal Stack 시스템이 통합 시스템 매니저에 제대로 통합되었는�
 """
 
 import asyncio
-from datetime import datetime
 import json
 import logging
 import time
-from typing import Any, Dict, List
+from datetime import datetime
+from typing import Any, Dict
 
-from goal_stack_system import GoalPriority, GoalStackSystem, GoalStatus, GoalType
+from goal_stack_system import GoalPriority, GoalStackSystem, GoalType
 
 # 테스트 대상 시스템들
 from integrated_system_manager import IntegratedSystemManager
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -49,9 +47,7 @@ class GoalStackIntegrationTest:
             try:
                 result = await test_suite()
                 self.test_results.append(result)
-                logger.info(
-                    f"테스트 완료: {result['test_name']} - 성공: {result['success']}"
-                )
+                logger.info(f"테스트 완료: {result['test_name']} - 성공: {result['success']}")
             except Exception as e:
                 error_result = {
                     "test_name": test_suite.__name__,
@@ -89,7 +85,7 @@ class GoalStackIntegrationTest:
             )
 
             # 2. 하위목표 생성 테스트
-            sub_goal = self.goal_stack_system.create_sub_goal(
+            sub_goal = self.goal_stack_system.create_sub_goal(  # noqa: F841
                 parent_goal_id=goal1.id,
                 name="요구사항 분석",
                 description="프로젝트 요구사항을 분석합니다",
@@ -140,7 +136,7 @@ class GoalStackIntegrationTest:
             goal_stack_system = self.integrated_manager.goal_stack_system
 
             # 목표 생성
-            goal = goal_stack_system.create_goal(
+            goal = goal_stack_system.create_goal(  # noqa: F841
                 name="통합 테스트 목표",
                 description="통합 시스템 테스트를 위한 목표",
                 goal_type=GoalType.ACHIEVEMENT,
@@ -154,9 +150,7 @@ class GoalStackIntegrationTest:
                 "emotion": {"type": "excited", "intensity": 0.7},
             }
 
-            goal_result = await self.integrated_manager._execute_goal_stack_system(
-                context
-            )
+            goal_result = await self.integrated_manager._execute_goal_stack_system(context)
 
             # 검증
             assert "active_goals" in goal_result, "활성 목표 정보 없음"
@@ -214,9 +208,7 @@ class GoalStackIntegrationTest:
             priority_scores = []
 
             for goal in goals:
-                score = self.goal_stack_system.calculate_goal_priority_score(
-                    goal, context
-                )
+                score = self.goal_stack_system.calculate_goal_priority_score(goal, context)
                 priority_scores.append(
                     {
                         "goal_name": goal.name,
@@ -226,9 +218,7 @@ class GoalStackIntegrationTest:
                 )
 
             # 우선순위별 정렬 확인
-            sorted_scores = sorted(
-                priority_scores, key=lambda x: x["score"], reverse=True
-            )
+            sorted_scores = sorted(priority_scores, key=lambda x: x["score"], reverse=True)
 
             # 검증
             assert len(priority_scores) == len(goals), "우선순위 점수 계산 실패"
@@ -261,7 +251,7 @@ class GoalStackIntegrationTest:
 
         try:
             # 충돌이 발생할 수 있는 목표들 생성
-            conflict_goal1 = self.goal_stack_system.create_goal(
+            conflict_goal1 = self.goal_stack_system.create_goal(  # noqa: F841
                 name="충돌 목표 1",
                 description="리소스 충돌 테스트",
                 goal_type=GoalType.ACHIEVEMENT,
@@ -269,7 +259,7 @@ class GoalStackIntegrationTest:
                 resources=["time", "energy"],
             )
 
-            conflict_goal2 = self.goal_stack_system.create_goal(
+            conflict_goal2 = self.goal_stack_system.create_goal(  # noqa: F841
                 name="충돌 목표 2",
                 description="리소스 충돌 테스트",
                 goal_type=GoalType.ACHIEVEMENT,
@@ -315,21 +305,21 @@ class GoalStackIntegrationTest:
 
         try:
             # 다양한 유형의 목표 생성
-            achievement_goal = self.goal_stack_system.create_goal(
+            achievement_goal = self.goal_stack_system.create_goal(  # noqa: F841
                 name="달성 목표",
                 description="달성형 목표 테스트",
                 goal_type=GoalType.ACHIEVEMENT,
                 priority=GoalPriority.HIGH,
             )
 
-            learning_goal = self.goal_stack_system.create_goal(
+            learning_goal = self.goal_stack_system.create_goal(  # noqa: F841
                 name="학습 목표",
                 description="학습형 목표 테스트",
                 goal_type=GoalType.LEARNING,
                 priority=GoalPriority.MEDIUM,
             )
 
-            creative_goal = self.goal_stack_system.create_goal(
+            creative_goal = self.goal_stack_system.create_goal(  # noqa: F841
                 name="창의적 목표",
                 description="창의형 목표 테스트",
                 goal_type=GoalType.CREATIVE,
@@ -339,9 +329,7 @@ class GoalStackIntegrationTest:
             # 목표별 행동 추천 테스트
             context = {"available_resources": ["time", "energy", "creativity"]}
 
-            achievement_action = self.goal_stack_system.get_next_action_recommendation(
-                context
-            )
+            achievement_action = self.goal_stack_system.get_next_action_recommendation(context)
 
             # 검증
             assert "action" in achievement_action, "행동 추천에 action 필드 없음"
@@ -429,9 +417,7 @@ class GoalStackIntegrationTest:
                 "total_tests": total_tests,
                 "successful_tests": successful_tests,
                 "failed_tests": failed_tests,
-                "success_rate": (
-                    (successful_tests / total_tests * 100) if total_tests > 0 else 0
-                ),
+                "success_rate": ((successful_tests / total_tests * 100) if total_tests > 0 else 0),
                 "total_duration": total_duration,
                 "timestamp": datetime.now().isoformat(),
             },
@@ -451,19 +437,13 @@ class GoalStackIntegrationTest:
             print("\n실패한 테스트들:")
             for result in self.test_results:
                 if not result["success"]:
-                    print(
-                        f"  - {result['test_name']}: {result.get('error', 'Unknown error')}"
-                    )
+                    print(f"  - {result['test_name']}: {result.get('error', 'Unknown error')}")
 
         # 결과를 파일로 저장
-        with open(
-            "goal_stack_integration_test_results.json", "w", encoding="utf-8"
-        ) as f:
+        with open("goal_stack_integration_test_results.json", "w", encoding="utf-8") as f:
             json.dump(summary, f, ensure_ascii=False, indent=2)
 
-        logger.info(
-            "테스트 결과가 goal_stack_integration_test_results.json에 저장되었습니다."
-        )
+        logger.info("테스트 결과가 goal_stack_integration_test_results.json에 저장되었습니다.")
         return summary
 
 

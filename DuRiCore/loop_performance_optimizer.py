@@ -5,16 +5,13 @@ DuRiCore Phase 5 Day 6 - 루프 성능 최적화 시스템
 """
 
 import asyncio
+import logging
+import random
+import time
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-import json
-import logging
-import math
-import random
-import statistics
-import time
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 
@@ -110,9 +107,7 @@ class LoopPerformanceOptimizer:
 
         logger.info("루프 성능 최적화 시스템 초기화 완료")
 
-    async def identify_bottlenecks(
-        self, loop_metrics: Dict[str, Any]
-    ) -> List[Bottleneck]:
+    async def identify_bottlenecks(self, loop_metrics: Dict[str, Any]) -> List[Bottleneck]:
         """병목 지점 식별"""
         try:
             logger.info("병목 지점 식별 시작")
@@ -129,9 +124,7 @@ class LoopPerformanceOptimizer:
 
                     severity = (threshold - current_value) / threshold
                     impact_score = severity * 0.8  # 영향도 점수
-                    optimization_potential = min(
-                        1.0, (threshold - current_value) * 2
-                    )  # 최적화 잠재력
+                    optimization_potential = min(1.0, (threshold - current_value) * 2)  # 최적화 잠재력
 
                     bottleneck = Bottleneck(
                         bottleneck_id=bottleneck_id,
@@ -157,9 +150,7 @@ class LoopPerformanceOptimizer:
             logger.error(f"병목 지점 식별 실패: {e}")
             return []
 
-    async def optimize_system_connections(
-        self, connection_analysis: Dict[str, Any]
-    ) -> OptimizationResult:
+    async def optimize_system_connections(self, connection_analysis: Dict[str, Any]) -> OptimizationResult:
         """시스템 간 연결 최적화"""
         try:
             start_time = time.time()
@@ -168,14 +159,10 @@ class LoopPerformanceOptimizer:
             logger.info("시스템 간 연결 최적화 시작")
 
             # 연결 분석 결과에 따른 최적화 전략 수립
-            optimization_strategy = await self._create_connection_optimization_strategy(
-                connection_analysis
-            )
+            optimization_strategy = await self._create_connection_optimization_strategy(connection_analysis)
 
             # 최적화 실행
-            optimization_success = await self._execute_connection_optimization(
-                optimization_strategy
-            )
+            optimization_success = await self._execute_connection_optimization(optimization_strategy)
 
             if optimization_success:
                 # 성능 개선 측정
@@ -203,21 +190,15 @@ class LoopPerformanceOptimizer:
                 )
 
             self.optimization_history.append(result)
-            logger.info(
-                f"시스템 간 연결 최적화 완료: {result.performance_improvement:.3f}"
-            )
+            logger.info(f"시스템 간 연결 최적화 완료: {result.performance_improvement:.3f}")
 
             return result
 
         except Exception as e:
             logger.error(f"시스템 간 연결 최적화 실패: {e}")
-            return await self._create_failed_optimization_result(
-                OptimizationType.INTEGRATION
-            )
+            return await self._create_failed_optimization_result(OptimizationType.INTEGRATION)
 
-    async def improve_data_flow(
-        self, flow_analysis: Dict[str, Any]
-    ) -> OptimizationResult:
+    async def improve_data_flow(self, flow_analysis: Dict[str, Any]) -> OptimizationResult:
         """데이터 흐름 개선"""
         try:
             start_time = time.time()
@@ -226,14 +207,10 @@ class LoopPerformanceOptimizer:
             logger.info("데이터 흐름 개선 시작")
 
             # 데이터 흐름 분석 결과에 따른 개선 전략 수립
-            improvement_strategy = await self._create_data_flow_improvement_strategy(
-                flow_analysis
-            )
+            improvement_strategy = await self._create_data_flow_improvement_strategy(flow_analysis)
 
             # 개선 실행
-            improvement_success = await self._execute_data_flow_improvement(
-                improvement_strategy
-            )
+            improvement_success = await self._execute_data_flow_improvement(improvement_strategy)
 
             if improvement_success:
                 # 성능 개선 측정
@@ -267,13 +244,9 @@ class LoopPerformanceOptimizer:
 
         except Exception as e:
             logger.error(f"데이터 흐름 개선 실패: {e}")
-            return await self._create_failed_optimization_result(
-                OptimizationType.INTEGRATION
-            )
+            return await self._create_failed_optimization_result(OptimizationType.INTEGRATION)
 
-    async def validate_optimization_effects(
-        self, optimization_results: List[OptimizationResult]
-    ) -> Dict[str, Any]:
+    async def validate_optimization_effects(self, optimization_results: List[OptimizationResult]) -> Dict[str, Any]:
         """최적화 효과 검증"""
         try:
             logger.info("최적화 효과 검증 시작")
@@ -281,11 +254,7 @@ class LoopPerformanceOptimizer:
             validation_results = {
                 "total_optimizations": len(optimization_results),
                 "successful_optimizations": len(
-                    [
-                        r
-                        for r in optimization_results
-                        if r.status == OptimizationStatus.COMPLETED
-                    ]
+                    [r for r in optimization_results if r.status == OptimizationStatus.COMPLETED]
                 ),
                 "average_improvement": 0.0,
                 "stability_impact": 0.0,
@@ -296,54 +265,34 @@ class LoopPerformanceOptimizer:
             if optimization_results:
                 # 성능 개선 평균 계산
                 improvements = [
-                    r.performance_improvement
-                    for r in optimization_results
-                    if r.status == OptimizationStatus.COMPLETED
+                    r.performance_improvement for r in optimization_results if r.status == OptimizationStatus.COMPLETED
                 ]
                 if improvements:
-                    validation_results["average_improvement"] = sum(improvements) / len(
-                        improvements
-                    )
+                    validation_results["average_improvement"] = sum(improvements) / len(improvements)
 
                 # 안정성 영향 평균 계산
                 stability_impacts = [
-                    r.stability_impact
-                    for r in optimization_results
-                    if r.status == OptimizationStatus.COMPLETED
+                    r.stability_impact for r in optimization_results if r.status == OptimizationStatus.COMPLETED
                 ]
                 if stability_impacts:
-                    validation_results["stability_impact"] = sum(
-                        stability_impacts
-                    ) / len(stability_impacts)
+                    validation_results["stability_impact"] = sum(stability_impacts) / len(stability_impacts)
 
                 # 롤백 필요성 확인
-                rollback_needed = any(
-                    r.performance_improvement < self.rollback_threshold
-                    for r in optimization_results
-                )
+                rollback_needed = any(r.performance_improvement < self.rollback_threshold for r in optimization_results)
                 if rollback_needed:
                     validation_results["rollback_count"] = len(
-                        [
-                            r
-                            for r in optimization_results
-                            if r.performance_improvement < self.rollback_threshold
-                        ]
+                        [r for r in optimization_results if r.performance_improvement < self.rollback_threshold]
                     )
 
                 # 검증 신뢰도 계산
                 success_rate = (
-                    validation_results["successful_optimizations"]
-                    / validation_results["total_optimizations"]
+                    validation_results["successful_optimizations"] / validation_results["total_optimizations"]
                 )
                 avg_improvement = validation_results["average_improvement"]
 
-                validation_results["validation_confidence"] = (
-                    success_rate * 0.7 + min(1.0, avg_improvement * 5) * 0.3
-                )
+                validation_results["validation_confidence"] = success_rate * 0.7 + min(1.0, avg_improvement * 5) * 0.3
 
-            logger.info(
-                f"최적화 효과 검증 완료: 평균 개선 {validation_results['average_improvement']:.3f}"
-            )
+            logger.info(f"최적화 효과 검증 완료: 평균 개선 {validation_results['average_improvement']:.3f}")
 
             return validation_results
 
@@ -369,14 +318,10 @@ class LoopPerformanceOptimizer:
             logger.info(f"{system_name} 시스템 최적화 시작")
 
             # 시스템별 최적화 전략 수립
-            optimization_strategy = await self._create_system_specific_strategy(
-                system_name, performance_metrics
-            )
+            optimization_strategy = await self._create_system_specific_strategy(system_name, performance_metrics)
 
             # 최적화 실행
-            optimization_success = await self._execute_system_optimization(
-                system_name, optimization_strategy
-            )
+            optimization_success = await self._execute_system_optimization(system_name, optimization_strategy)
 
             if optimization_success:
                 # 성능 개선 측정
@@ -404,17 +349,13 @@ class LoopPerformanceOptimizer:
                 )
 
             self.optimization_history.append(result)
-            logger.info(
-                f"{system_name} 시스템 최적화 완료: {result.performance_improvement:.3f}"
-            )
+            logger.info(f"{system_name} 시스템 최적화 완료: {result.performance_improvement:.3f}")
 
             return result
 
         except Exception as e:
             logger.error(f"{system_name} 시스템 최적화 실패: {e}")
-            return await self._create_failed_optimization_result(
-                OptimizationType(system_name)
-            )
+            return await self._create_failed_optimization_result(OptimizationType(system_name))
 
     async def generate_optimization_report(
         self,
@@ -428,34 +369,22 @@ class LoopPerformanceOptimizer:
             # 통계 계산
             total_optimizations = len(optimization_results)
             successful_optimizations = len(
-                [
-                    r
-                    for r in optimization_results
-                    if r.status == OptimizationStatus.COMPLETED
-                ]
+                [r for r in optimization_results if r.status == OptimizationStatus.COMPLETED]
             )
 
             # 평균 개선도 계산
             improvements = [
-                r.performance_improvement
-                for r in optimization_results
-                if r.status == OptimizationStatus.COMPLETED
+                r.performance_improvement for r in optimization_results if r.status == OptimizationStatus.COMPLETED
             ]
-            average_improvement = (
-                sum(improvements) / len(improvements) if improvements else 0.0
-            )
+            average_improvement = sum(improvements) / len(improvements) if improvements else 0.0
 
             # 해결된 병목 지점
-            resolved_bottlenecks = [
-                b.bottleneck_id for b in bottlenecks if b.optimization_potential > 0.5
-            ]
+            resolved_bottlenecks = [b.bottleneck_id for b in bottlenecks if b.optimization_potential > 0.5]
 
             # 새로운 병목 지점 (시뮬레이션)
             new_bottlenecks = []
             if random.random() < 0.3:  # 30% 확률로 새로운 병목 지점 발생
-                new_bottlenecks = [
-                    f"new_bottleneck_{i}" for i in range(random.randint(1, 2))
-                ]
+                new_bottlenecks = [f"new_bottleneck_{i}" for i in range(random.randint(1, 2))]
 
             # 권장사항 생성
             recommendations = await self._generate_optimization_recommendations(
@@ -473,9 +402,7 @@ class LoopPerformanceOptimizer:
                 created_at=datetime.now(),
             )
 
-            logger.info(
-                f"최적화 보고서 생성 완료: {successful_optimizations}/{total_optimizations} 성공"
-            )
+            logger.info(f"최적화 보고서 생성 완료: {successful_optimizations}/{total_optimizations} 성공")
 
             return report
 
@@ -484,9 +411,7 @@ class LoopPerformanceOptimizer:
             return await self._create_failed_optimization_report()
 
     # 헬퍼 메서드들
-    async def _create_connection_optimization_strategy(
-        self, connection_analysis: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _create_connection_optimization_strategy(self, connection_analysis: Dict[str, Any]) -> Dict[str, Any]:
         """연결 최적화 전략 수립"""
         try:
             strategy = {
@@ -510,9 +435,7 @@ class LoopPerformanceOptimizer:
                 strategy["target_connections"].append("action_evolution")
                 strategy["optimization_methods"].append("feedback_loop_optimization")
 
-            strategy["expected_improvement"] = (
-                len(strategy["optimization_methods"]) * 0.08
-            )
+            strategy["expected_improvement"] = len(strategy["optimization_methods"]) * 0.08
 
             return strategy
 
@@ -542,9 +465,7 @@ class LoopPerformanceOptimizer:
             logger.error(f"연결 최적화 실행 실패: {e}")
             return False
 
-    async def _create_data_flow_improvement_strategy(
-        self, flow_analysis: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _create_data_flow_improvement_strategy(self, flow_analysis: Dict[str, Any]) -> Dict[str, Any]:
         """데이터 흐름 개선 전략 수립"""
         try:
             strategy = {
@@ -558,9 +479,7 @@ class LoopPerformanceOptimizer:
 
             if flow_efficiency < 0.9:
                 strategy["target_flows"].append("input_processing")
-                strategy["improvement_methods"].append(
-                    "data_preprocessing_optimization"
-                )
+                strategy["improvement_methods"].append("data_preprocessing_optimization")
 
             if flow_efficiency < 0.85:
                 strategy["target_flows"].append("intermediate_processing")
@@ -570,9 +489,7 @@ class LoopPerformanceOptimizer:
                 strategy["target_flows"].append("output_generation")
                 strategy["improvement_methods"].append("response_optimization")
 
-            strategy["expected_improvement"] = (
-                len(strategy["improvement_methods"]) * 0.06
-            )
+            strategy["expected_improvement"] = len(strategy["improvement_methods"]) * 0.06
 
             return strategy
 
@@ -615,37 +532,19 @@ class LoopPerformanceOptimizer:
 
             # 시스템별 최적화 전략
             if system_name == "memory":
-                strategy["target_components"].extend(
-                    ["memory_retrieval", "memory_storage"]
-                )
-                strategy["optimization_methods"].extend(
-                    ["cache_optimization", "index_optimization"]
-                )
+                strategy["target_components"].extend(["memory_retrieval", "memory_storage"])
+                strategy["optimization_methods"].extend(["cache_optimization", "index_optimization"])
             elif system_name == "judgment":
-                strategy["target_components"].extend(
-                    ["situation_analysis", "decision_making"]
-                )
-                strategy["optimization_methods"].extend(
-                    ["algorithm_optimization", "model_refinement"]
-                )
+                strategy["target_components"].extend(["situation_analysis", "decision_making"])
+                strategy["optimization_methods"].extend(["algorithm_optimization", "model_refinement"])
             elif system_name == "action":
-                strategy["target_components"].extend(
-                    ["action_generation", "action_execution"]
-                )
-                strategy["optimization_methods"].extend(
-                    ["execution_optimization", "resource_management"]
-                )
+                strategy["target_components"].extend(["action_generation", "action_execution"])
+                strategy["optimization_methods"].extend(["execution_optimization", "resource_management"])
             elif system_name == "evolution":
-                strategy["target_components"].extend(
-                    ["pattern_analysis", "evolution_execution"]
-                )
-                strategy["optimization_methods"].extend(
-                    ["learning_optimization", "adaptation_enhancement"]
-                )
+                strategy["target_components"].extend(["pattern_analysis", "evolution_execution"])
+                strategy["optimization_methods"].extend(["learning_optimization", "adaptation_enhancement"])
 
-            strategy["expected_improvement"] = (
-                len(strategy["optimization_methods"]) * 0.1
-            )
+            strategy["expected_improvement"] = len(strategy["optimization_methods"]) * 0.1
 
             return strategy
 
@@ -657,9 +556,7 @@ class LoopPerformanceOptimizer:
                 "expected_improvement": 0.0,
             }
 
-    async def _execute_system_optimization(
-        self, system_name: str, strategy: Dict[str, Any]
-    ) -> bool:
+    async def _execute_system_optimization(self, system_name: str, strategy: Dict[str, Any]) -> bool:
         """시스템 최적화 실행"""
         try:
             # 시뮬레이션된 시스템 최적화
@@ -669,9 +566,7 @@ class LoopPerformanceOptimizer:
                 # 최적화 효과 시뮬레이션
                 for method in strategy["optimization_methods"]:
                     improvement = random.uniform(0.08, 0.20)
-                    logger.info(
-                        f"{system_name} 시스템 최적화 {method} 완료: {improvement:.3f}"
-                    )
+                    logger.info(f"{system_name} 시스템 최적화 {method} 완료: {improvement:.3f}")
 
             return success
 
@@ -693,9 +588,7 @@ class LoopPerformanceOptimizer:
             if average_improvement < 0.05:
                 recommendations.append("Increase optimization aggressiveness")
             elif average_improvement > 0.15:
-                recommendations.append(
-                    "Consider more conservative optimization approach"
-                )
+                recommendations.append("Consider more conservative optimization approach")
 
             # 병목 지점 관련 권장사항
             high_severity_bottlenecks = [b for b in bottlenecks if b.severity > 0.5]
@@ -703,9 +596,7 @@ class LoopPerformanceOptimizer:
                 recommendations.append("Prioritize high-severity bottleneck resolution")
 
             # 안정성 관련 권장사항
-            failed_optimizations = [
-                r for r in optimization_results if r.status == OptimizationStatus.FAILED
-            ]
+            failed_optimizations = [r for r in optimization_results if r.status == OptimizationStatus.FAILED]
             if len(failed_optimizations) > len(optimization_results) * 0.3:
                 recommendations.append("Improve optimization success rate")
 
@@ -715,9 +606,7 @@ class LoopPerformanceOptimizer:
             logger.error(f"최적화 권장사항 생성 실패: {e}")
             return ["Continue monitoring optimization performance"]
 
-    async def _create_failed_optimization_result(
-        self, optimization_type: OptimizationType
-    ) -> OptimizationResult:
+    async def _create_failed_optimization_result(self, optimization_type: OptimizationType) -> OptimizationResult:
         """실패한 최적화 결과 생성"""
         return OptimizationResult(
             result_id=f"failed_opt_{int(time.time())}",
@@ -772,9 +661,7 @@ async def test_loop_performance_optimizer():
             "connection_issues": ["memory_judgment_delay", "action_evolution_latency"],
         }
 
-        connection_optimization = await optimizer.optimize_system_connections(
-            connection_analysis
-        )
+        connection_optimization = await optimizer.optimize_system_connections(connection_analysis)
         logger.info(f"연결 최적화 결과: {connection_optimization}")
 
         # 데이터 흐름 개선 테스트
@@ -789,9 +676,7 @@ async def test_loop_performance_optimizer():
 
         # 특정 시스템 최적화 테스트
         logger.info("특정 시스템 최적화 테스트 시작")
-        memory_optimization = await optimizer.optimize_specific_system(
-            "memory", loop_metrics
-        )
+        memory_optimization = await optimizer.optimize_specific_system("memory", loop_metrics)
         logger.info(f"메모리 시스템 최적화 결과: {memory_optimization}")
 
         # 최적화 효과 검증 테스트
@@ -801,16 +686,12 @@ async def test_loop_performance_optimizer():
             flow_improvement,
             memory_optimization,
         ]
-        validation_result = await optimizer.validate_optimization_effects(
-            optimization_results
-        )
+        validation_result = await optimizer.validate_optimization_effects(optimization_results)
         logger.info(f"최적화 효과 검증 결과: {validation_result}")
 
         # 최적화 보고서 생성 테스트
         logger.info("최적화 보고서 생성 테스트 시작")
-        optimization_report = await optimizer.generate_optimization_report(
-            optimization_results, bottlenecks
-        )
+        optimization_report = await optimizer.generate_optimization_report(optimization_results, bottlenecks)
         logger.info(f"최적화 보고서: {optimization_report}")
 
         logger.info("루프 성능 최적화 테스트 완료")

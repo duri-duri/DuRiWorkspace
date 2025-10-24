@@ -4,10 +4,9 @@ DuRi 맥락 이해 시스템
 대화 흐름, 주제 추적, 감정 추정, 사용자 목표 예측
 """
 
-from datetime import datetime
-import json
 import re
-from typing import Any, Dict, List, Optional
+from datetime import datetime
+from typing import Any, Dict, List
 
 
 class ContextAnalyzer:
@@ -40,9 +39,7 @@ class ContextAnalyzer:
             "problem_solving": ["문제", "해결", "개선", "수정", "고치"],
         }
 
-    def analyze_conversation_context(
-        self, conversation_history: List[Dict]
-    ) -> Dict[str, Any]:
+    def analyze_conversation_context(self, conversation_history: List[Dict]) -> Dict[str, Any]:
         """
         대화 맥락을 종합적으로 분석
 
@@ -71,9 +68,7 @@ class ContextAnalyzer:
         flow_analysis = self._analyze_conversation_flow(recent_conversations)
 
         # 5. 신뢰도 계산
-        confidence = self._calculate_confidence(
-            topic_analysis, emotion_analysis, intent_analysis
-        )
+        confidence = self._calculate_confidence(topic_analysis, emotion_analysis, intent_analysis)
 
         return {
             "topic": topic_analysis["primary_topic"],
@@ -84,9 +79,7 @@ class ContextAnalyzer:
             "intent_confidence": intent_analysis["confidence"],
             "conversation_flow": flow_analysis,
             "confidence": confidence,
-            "context_summary": self._generate_context_summary(
-                topic_analysis, emotion_analysis, intent_analysis
-            ),
+            "context_summary": self._generate_context_summary(topic_analysis, emotion_analysis, intent_analysis),
             "timestamp": datetime.now().isoformat(),
         }
 
@@ -94,10 +87,7 @@ class ContextAnalyzer:
         """주제 분석"""
         topic_scores = {}
         all_text = " ".join(
-            [
-                conv.get("user_input", "") + " " + conv.get("duri_response", "")
-                for conv in conversations
-            ]
+            [conv.get("user_input", "") + " " + conv.get("duri_response", "") for conv in conversations]
         )
 
         # 각 주제별 키워드 매칭
@@ -123,10 +113,7 @@ class ContextAnalyzer:
         """감정 분석"""
         emotion_scores = {}
         all_text = " ".join(
-            [
-                conv.get("user_input", "") + " " + conv.get("duri_response", "")
-                for conv in conversations
-            ]
+            [conv.get("user_input", "") + " " + conv.get("duri_response", "") for conv in conversations]
         )
 
         # 각 감정별 지표 매칭
@@ -145,9 +132,7 @@ class ContextAnalyzer:
         confidence = min(total_indicators / max(total_words, 1) * 10, 1.0)
 
         return {
-            "primary_emotion": (
-                primary_emotion[0] if primary_emotion[1] > 0 else "neutral"
-            ),
+            "primary_emotion": (primary_emotion[0] if primary_emotion[1] > 0 else "neutral"),
             "emotion_scores": emotion_scores,
             "confidence": confidence,
         }
@@ -156,10 +141,7 @@ class ContextAnalyzer:
         """의도 분석"""
         intent_scores = {}
         all_text = " ".join(
-            [
-                conv.get("user_input", "") + " " + conv.get("duri_response", "")
-                for conv in conversations
-            ]
+            [conv.get("user_input", "") + " " + conv.get("duri_response", "") for conv in conversations]
         )
 
         # 각 의도별 패턴 매칭
@@ -192,24 +174,16 @@ class ContextAnalyzer:
         recent_inputs = [conv.get("user_input", "") for conv in conversations[-3:]]
 
         # 질문 패턴 분석
-        question_count = sum(
-            1
-            for text in recent_inputs
-            if "?" in text or "어떻게" in text or "왜" in text
-        )
+        question_count = sum(1 for text in recent_inputs if "?" in text or "어떻게" in text or "왜" in text)
 
         # 명령 패턴 분석
         command_count = sum(
-            1
-            for text in recent_inputs
-            if any(word in text for word in ["해줘", "해보자", "시작", "진행"])
+            1 for text in recent_inputs if any(word in text for word in ["해줘", "해보자", "시작", "진행"])
         )
 
         # 설명 요청 패턴 분석
         explanation_count = sum(
-            1
-            for text in recent_inputs
-            if any(word in text for word in ["설명", "이해", "알기", "배우"])
+            1 for text in recent_inputs if any(word in text for word in ["설명", "이해", "알기", "배우"])
         )
 
         # 흐름 타입 결정
@@ -229,9 +203,7 @@ class ContextAnalyzer:
             "explanation_ratio": explanation_count / len(recent_inputs),
         }
 
-    def _calculate_confidence(
-        self, topic_analysis: Dict, emotion_analysis: Dict, intent_analysis: Dict
-    ) -> float:
+    def _calculate_confidence(self, topic_analysis: Dict, emotion_analysis: Dict, intent_analysis: Dict) -> float:
         """전체 맥락 분석 신뢰도 계산"""
         # 각 분석의 신뢰도 가중 평균
         topic_confidence = min(len(topic_analysis["subtopics"]) / 3, 1.0)
@@ -239,15 +211,11 @@ class ContextAnalyzer:
         intent_confidence = intent_analysis["confidence"]
 
         # 가중 평균 (감정과 의도에 더 높은 가중치)
-        confidence = (
-            topic_confidence * 0.3 + emotion_confidence * 0.4 + intent_confidence * 0.3
-        )
+        confidence = topic_confidence * 0.3 + emotion_confidence * 0.4 + intent_confidence * 0.3
 
         return min(confidence, 1.0)
 
-    def _generate_context_summary(
-        self, topic_analysis: Dict, emotion_analysis: Dict, intent_analysis: Dict
-    ) -> str:
+    def _generate_context_summary(self, topic_analysis: Dict, emotion_analysis: Dict, intent_analysis: Dict) -> str:
         """맥락 요약 생성"""
         topic = topic_analysis["primary_topic"]
         emotion = emotion_analysis["primary_emotion"]
@@ -262,9 +230,7 @@ class ContextAnalyzer:
             "priorities": f"사용자는 {emotion}한 판단으로 우선순위에 대한 {intent}를 결정하려 합니다.",
         }
 
-        return summary_templates.get(
-            topic, f"사용자는 {emotion}한 상태에서 {intent} 의도를 보여줍니다."
-        )
+        return summary_templates.get(topic, f"사용자는 {emotion}한 상태에서 {intent} 의도를 보여줍니다.")
 
     def _get_default_context(self) -> Dict[str, Any]:
         """기본 맥락 반환"""

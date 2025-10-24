@@ -22,7 +22,7 @@ class DuRiChatGPTDiscussion:
     ) -> Dict[str, Any]:
         """DuRi의 개선안에 대한 ChatGPT와의 논의 시작"""
 
-        print(f"📥 DuRi-ChatGPT 논의 시작")
+        print("📥 DuRi-ChatGPT 논의 시작")
 
         discussion = {
             "timestamp": datetime.now().isoformat(),
@@ -41,24 +41,18 @@ class DuRiChatGPTDiscussion:
         )
 
         # 합의 수준 계산
-        discussion["agreement_level"] = self._calculate_agreement_level(
-            duri_improvement_proposal, chatgpt_evaluation
-        )
+        discussion["agreement_level"] = self._calculate_agreement_level(duri_improvement_proposal, chatgpt_evaluation)
 
         # 최종 합의 도출
         discussion["final_consensus"] = self._reach_consensus(discussion)
 
         # 실행 항목 생성
-        discussion["action_items"] = self._generate_action_items(
-            discussion["final_consensus"]
-        )
+        discussion["action_items"] = self._generate_action_items(discussion["final_consensus"])
 
         # 논의 기록 저장
         self.discussion_history.append(discussion)
 
-        print(
-            f"✅ DuRi-ChatGPT 논의 완료: 합의 수준 {discussion['agreement_level']:.2f}"
-        )
+        print(f"✅ DuRi-ChatGPT 논의 완료: 합의 수준 {discussion['agreement_level']:.2f}")
 
         return discussion
 
@@ -89,10 +83,7 @@ class DuRiChatGPTDiscussion:
         # 추가 제안사항
         additional_suggestions = []
         for chatgpt_sug in chatgpt_suggestions:
-            if not any(
-                self._similar_improvements(duri_imp, chatgpt_sug)
-                for duri_imp in duri_improvements
-            ):
+            if not any(self._similar_improvements(duri_imp, chatgpt_sug) for duri_imp in duri_improvements):
                 additional_suggestions.append(
                     {
                         "type": "chatgpt_additional",
@@ -104,10 +95,7 @@ class DuRiChatGPTDiscussion:
         # DuRi의 고유 제안
         duri_unique = []
         for duri_imp in duri_improvements:
-            if not any(
-                self._similar_improvements(duri_imp, chatgpt_sug)
-                for chatgpt_sug in chatgpt_suggestions
-            ):
+            if not any(self._similar_improvements(duri_imp, chatgpt_sug) for chatgpt_sug in chatgpt_suggestions):
                 duri_unique.append(
                     {
                         "type": "duri_unique",
@@ -137,9 +125,7 @@ class DuRiChatGPTDiscussion:
         similarity = len(intersection) / len(union)
         return similarity > 0.3  # 30% 이상 유사하면 같은 개선안으로 간주
 
-    def _calculate_agreement_level(
-        self, duri_proposal: Dict[str, Any], chatgpt_eval: Dict[str, Any]
-    ) -> float:
+    def _calculate_agreement_level(self, duri_proposal: Dict[str, Any], chatgpt_eval: Dict[str, Any]) -> float:
         """합의 수준 계산"""
         duri_improvements = set(duri_proposal.get("specific_improvements", []))
         chatgpt_suggestions = set(chatgpt_eval.get("suggestions", []))
@@ -191,9 +177,7 @@ class DuRiChatGPTDiscussion:
 
         return consensus
 
-    def _generate_implementation_plan(
-        self, consensus: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    def _generate_implementation_plan(self, consensus: Dict[str, Any]) -> List[Dict[str, Any]]:
         """구현 계획 생성"""
         plan = []
 

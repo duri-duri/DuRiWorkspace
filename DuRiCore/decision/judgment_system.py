@@ -9,7 +9,7 @@ import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from learning.strategic_learning_engine import StrategicLearningEngine
+from learning.strategic_learning_engine import StrategicLearningEngine  # noqa: E402
 
 
 class JudgmentSystem:

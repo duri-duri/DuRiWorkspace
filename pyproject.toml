@@ -1,4 +1,38 @@
-[tool.black]
-line-length = 100
-target-version = ["py310"]
-extend-exclude = "\\.reports|artifacts|vendor"
+[tool.ruff]
+target-version = "py310"
+line-length = 120
+respect-gitignore = true
+extend-exclude = [
+  "DuRiCore/backup_repository",
+  "DuRi_Day11_15_starter",
+  ".venv", "build", "dist"
+]
+
+[tool.ruff.lint]
+# E/F=pycodestyle/pyflakes, I=isort, B=bugbear
+select = ["E", "F", "I", "B"]
+# 1단계: 레거시 소음은 우선 무시, 이후 래칫로 줄여감
+extend-ignore = ["B007", "B019", "B025"]
+per-file-ignores = { "tests/**" = ["B007"], "tools/**" = ["B007"] }
+
+[tool.ruff.format]
+# ruff formatter = black 대체. (블랙 유지 원하면 이 섹션/훅은 빼고 black --check 만 남겨도 OK)
+
+[tool.mutmut]
+paths_to_mutate = ["duri_core", "duri_brain", "duri_evolution"]
+tests_dir = "tests"
+runner = "python -m pytest tests/test_imports.py -q"
+backup = false
+dict_synonyms = "dict,mapping"
+
+[tool.radon]
+cc_threshold = "C"  # B 이상이면 경고, C부터 실패
+mi_min = 65         # 유지보수성 지수 최소
+show_complexity = true
+show_closures = true
+
+[tool.xenon]
+max-absolute = "B"
+max-modules = "B"
+max-average = "B"
+exclude = ["tests/", "var/", ".duri/", "DuRiCore/backup_repository/"]

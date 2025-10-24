@@ -8,17 +8,16 @@
 import importlib
 import os
 import sys
-import tempfile
 import time
 
 # 환경변수 설정 및 모듈 리로드
 os.environ["LOG_SAMPLE_SEED"] = "42"
-import DuRiCore.duri_logging.decorators as dec
+import DuRiCore.duri_logging.decorators as dec  # noqa: E402
 
 importlib.reload(dec)  # 오래된 버전 캐싱 차단
 
 # 로깅 시스템 초기화
-from DuRiCore.duri_logging.setup import setup_logging
+from DuRiCore.duri_logging.setup import setup_logging  # noqa: E402
 
 setup_logging()
 
@@ -73,14 +72,10 @@ def test_sampling_patch_complete():
             print(f"sampled_function 관련 로그 라인 수: {len(sampled_lines)}")
 
             if 4 <= len(sampled_lines) <= 15:
-                print(
-                    f"✅ PASS: 로그 라인 수 {len(sampled_lines)}가 예상 범위(4~15) 내"
-                )
+                print(f"✅ PASS: 로그 라인 수 {len(sampled_lines)}가 예상 범위(4~15) 내")
                 return True
             else:
-                print(
-                    f"❌ FAIL: 로그 라인 수 {len(sampled_lines)}가 예상 범위(4~15) 밖"
-                )
+                print(f"❌ FAIL: 로그 라인 수 {len(sampled_lines)}가 예상 범위(4~15) 밖")
                 return False
     else:
         print("❌ FAIL: 로그 파일이 생성되지 않음")

@@ -6,9 +6,9 @@ DuRi 초기 학습 데이터 주입 스크립트
 성공/실패 케이스를 혼합한 초기 데이터를 주입합니다.
 """
 
-from datetime import datetime, timedelta
 import logging
 import random
+from datetime import datetime, timedelta
 from typing import Any, Dict, List
 
 from duri_brain.learning.auto_retrospector import get_auto_retrospector
@@ -17,9 +17,7 @@ from duri_brain.learning.auto_retrospector import get_auto_retrospector
 from duri_core.memory.memory_sync import get_memory_sync
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -214,15 +212,11 @@ class LearningDataInitializer:
         failure_count = self.initial_data_count - success_count
 
         # 성공 케이스 선택
-        selected_success = random.sample(
-            success_cases, min(success_count, len(success_cases))
-        )
+        selected_success = random.sample(success_cases, min(success_count, len(success_cases)))
         experiences.extend(selected_success)
 
         # 실패 케이스 선택
-        selected_failure = random.sample(
-            failure_cases, min(failure_count, len(failure_cases))
-        )
+        selected_failure = random.sample(failure_cases, min(failure_count, len(failure_cases)))
         experiences.extend(selected_failure)
 
         # 시간대 분산을 위한 타임스탬프 추가
@@ -241,9 +235,7 @@ class LearningDataInitializer:
             # 기존 데이터 확인
             existing_experiences = self.memory_sync.get_recent_experiences(limit=50)
             if len(existing_experiences) > 10:
-                logger.warning(
-                    f"이미 {len(existing_experiences)}개의 경험 데이터가 존재합니다."
-                )
+                logger.warning(f"이미 {len(existing_experiences)}개의 경험 데이터가 존재합니다.")
                 return {
                     "status": "warning",
                     "message": f"이미 {len(existing_experiences)}개의 경험 데이터가 존재합니다.",
@@ -266,9 +258,7 @@ class LearningDataInitializer:
             analysis_result = self.auto_retrospector.run_comprehensive_analysis()
 
             logger.info(f"✅ 초기 데이터 주입 완료: {injected_count}개")
-            logger.info(
-                f"📊 초기 분석 결과 - 성공률: {analysis_result.get('success_rate', 0):.2%}"
-            )
+            logger.info(f"📊 초기 분석 결과 - 성공률: {analysis_result.get('success_rate', 0):.2%}")
 
             return {
                 "status": "success",
@@ -294,9 +284,7 @@ class LearningDataInitializer:
 
             # 학습률 계산
             if experiences:
-                success_count = sum(
-                    1 for e in experiences if e.get("outcome") == "success"
-                )
+                success_count = sum(1 for e in experiences if e.get("outcome") == "success")
                 learning_rate = success_count / len(experiences)
             else:
                 learning_rate = 0.0
@@ -330,7 +318,7 @@ def main():
     # 초기 데이터 주입
     result = initializer.inject_initial_data()
 
-    print(f"\n📊 주입 결과:")
+    print("\n📊 주입 결과:")
     print(f"  상태: {result['status']}")
     print(f"  주입된 데이터 수: {result['injected_count']}개")
     print(f"  메시지: {result['message']}")
@@ -339,7 +327,7 @@ def main():
         # 학습 시스템 검증
         verification = initializer.verify_learning_system()
 
-        print(f"\n🔍 시스템 검증 결과:")
+        print("\n🔍 시스템 검증 결과:")
         print(f"  경험 데이터 수: {verification['experience_count']}개")
         print(f"  학습률: {verification['learning_rate']:.2%}")
         print(f"  시스템 준비 완료: {'✅' if verification['system_ready'] else '❌'}")

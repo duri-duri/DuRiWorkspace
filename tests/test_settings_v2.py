@@ -1,6 +1,4 @@
 import json
-import os
-import tempfile
 
 from duri_common.settings import DuRiSettings, get_settings
 
@@ -89,6 +87,6 @@ def test_unknown_key_rejected(monkeypatch):
     monkeypatch.setenv("DURI__UNKNOWN_KEY", "x")
     try:
         DuRiSettings()
-        assert False, "unknown key should fail"
+        assert False, "unknown key should fail"  # noqa: B011
     except Exception:
         assert True

@@ -10,7 +10,7 @@ import time
 # 경로 설정
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "."))
 
-from duri_core.core.metrics import observe_phase
+from duri_core.core.metrics import observe_phase  # noqa: E402
 
 
 def generate_samples():

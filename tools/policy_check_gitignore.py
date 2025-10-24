@@ -4,9 +4,8 @@
 storage_policy.yml과 .gitignore의 일치성을 검증
 """
 
-import os
-from pathlib import Path
 import sys
+from pathlib import Path
 
 import yaml
 
@@ -25,9 +24,7 @@ def load_gitignore(file_path):
     """gitignore 파일 로드"""
     try:
         with open(file_path, "r", encoding="utf-8") as f:
-            lines = [
-                line.strip() for line in f if line.strip() and not line.startswith("#")
-            ]
+            lines = [line.strip() for line in f if line.strip() and not line.startswith("#")]
         return lines
     except Exception as e:
         print(f"[ERROR] Failed to load {file_path}: {e}")
@@ -99,7 +96,7 @@ def main():
     missing, extra = check_pattern_consistency(policy_patterns, gitignore_patterns)
 
     # 결과 출력
-    print(f"\n📊 검증 결과:")
+    print("\n📊 검증 결과:")
     print(f"  - 정책 파일: {policy_file}")
     print(f"  - .gitignore: {gitignore_file}")
     print(f"  - 정책 추적 패턴: {len(policy_patterns[0])}개")
@@ -107,21 +104,21 @@ def main():
     print(f"  - .gitignore 패턴: {len(gitignore_patterns)}개")
 
     if missing:
-        print(f"\n❌ .gitignore에 누락된 패턴:")
+        print("\n❌ .gitignore에 누락된 패턴:")
         for pattern in missing:
             print(f"    - {pattern}")
 
     if extra:
-        print(f"\n⚠️  .gitignore에 추가된 패턴:")
+        print("\n⚠️  .gitignore에 추가된 패턴:")
         for pattern in extra:
             print(f"    - {pattern}")
 
     if not missing and not extra:
-        print(f"\n✅ 정책 일치성 검증 통과!")
-        print(f"   모든 패턴이 정확히 일치합니다.")
+        print("\n✅ 정책 일치성 검증 통과!")
+        print("   모든 패턴이 정확히 일치합니다.")
         return 0
     else:
-        print(f"\n❌ 정책 일치성 검증 실패!")
+        print("\n❌ 정책 일치성 검증 실패!")
         if missing:
             print(f"   누락된 패턴: {len(missing)}개")
         if extra:

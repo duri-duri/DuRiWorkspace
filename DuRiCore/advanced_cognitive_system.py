@@ -4,22 +4,20 @@ DuRi 고급 인지 시스템
 상황 감지, 모듈 라우팅, 자원 분배, 프리페치를 통합하는 시스템
 """
 
-from datetime import datetime
-import json
 import os
 import sys
-from typing import Any, Dict, List, Optional
+from datetime import datetime
+from typing import Any, Dict, List
 
 # DuRiCore 모듈 경로 추가
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from modules.evolution.self_evolution_manager import SelfEvolutionManager
-from modules.integrated_learning_system import IntegratedLearningSystem
-from modules.judgment_system.judgment_trace_logger import JudgmentTraceLogger
-from modules.thought_flow.du_ri_thought_flow import DuRiThoughtFlow
+from modules.evolution.self_evolution_manager import SelfEvolutionManager  # noqa: E402
+from modules.judgment_system.judgment_trace_logger import JudgmentTraceLogger  # noqa: E402
+from modules.thought_flow.du_ri_thought_flow import DuRiThoughtFlow  # noqa: E402
 
 # 📦 핵심 모듈 임포트 (현재 구현된 시스템에 맞게 수정)
-from modules.thought_flow.self_reflection_loop import SelfReflectionLoop
+from modules.thought_flow.self_reflection_loop import SelfReflectionLoop  # noqa: E402
 
 
 class ContextSentinel:
@@ -177,9 +175,7 @@ class CognitiveResourceAllocator:
             for module in active_modules:
                 # 모듈별 우선순위에 따른 자원 분배
                 if module in ["SelfReflection", "GrowthLoop", "JudgmentTrace"]:
-                    allocation[module] = (
-                        base_allocation * 1.5
-                    )  # 핵심 모듈은 더 많은 자원
+                    allocation[module] = base_allocation * 1.5  # 핵심 모듈은 더 많은 자원
                 else:
                     allocation[module] = base_allocation
 
@@ -272,13 +268,9 @@ class SelfReflection:
                 "status": "synchronized",
             }
 
-            instance.thought_flow.register_stream(
-                "self_reflection_sync", reflection_summary
-            )
+            instance.thought_flow.register_stream("self_reflection_sync", reflection_summary)
 
-            print(
-                f"✅ 자가 반성 동기화 완료: {reflection_result.get('new_insights', 0)}개 통찰 생성"
-            )
+            print(f"✅ 자가 반성 동기화 완료: {reflection_result.get('new_insights', 0)}개 통찰 생성")
 
             return reflection_summary
 
@@ -310,9 +302,7 @@ class GrowthLoop:
         print(f"🌱 성장 루프 트리거 시작 (소스: {source})")
 
         try:
-            evolution_result = (
-                instance.evolution_manager.execute_self_improvement_sequence()
-            )
+            evolution_result = instance.evolution_manager.execute_self_improvement_sequence()
 
             growth_summary = {
                 "source": source,
@@ -323,9 +313,7 @@ class GrowthLoop:
 
             instance.thought_flow.register_stream("growth_loop_trigger", growth_summary)
 
-            print(
-                f"✅ 성장 루프 트리거 완료: {evolution_result.get('evolution_steps', 0)}개 진화 단계"
-            )
+            print(f"✅ 성장 루프 트리거 완료: {evolution_result.get('evolution_steps', 0)}개 진화 단계")
 
             return growth_summary
 
@@ -377,9 +365,7 @@ class JudgmentTrace:
                 "visualization_type": "judgment_trace_analysis",
             }
 
-            instance.thought_flow.register_stream(
-                "judgment_visualization", visualization_data
-            )
+            instance.thought_flow.register_stream("judgment_visualization", visualization_data)
 
             print(f"✅ 판단 시각화 완료: {len(recent_traces)}개 최근 기록 분석")
 
@@ -497,7 +483,7 @@ def run(tag="strategic_judgment"):
         "execution_status": "completed",
     }
 
-    print(f"\n[END] Cognitive system run complete.\n")
+    print("\n[END] Cognitive system run complete.\n")
     print("=" * 60)
     print("🎉 고급 인지 시스템 실행 완료!")
     print("=" * 60)
@@ -507,15 +493,9 @@ def run(tag="strategic_judgment"):
     print(f"⚙️ 활성화된 모듈: {len(execution_summary['active_modules'])}개")
     print(f"🔋 자원 분배: {len(execution_summary['resource_allocation'])}개 모듈")
     print(f"🗺️ 프리페치: {len(execution_summary['active_modules'])}개 모듈")
-    print(
-        f"🪞 자가 반성: {execution_summary['reflection_result'].get('status', 'unknown')}"
-    )
-    print(
-        f"🌱 성장 루프: {execution_summary['growth_result'].get('status', 'unknown')}"
-    )
-    print(
-        f"🔍 판단 시각화: {execution_summary['visualization_result'].get('status', 'unknown')}"
-    )
+    print(f"🪞 자가 반성: {execution_summary['reflection_result'].get('status', 'unknown')}")
+    print(f"🌱 성장 루프: {execution_summary['growth_result'].get('status', 'unknown')}")
+    print(f"🔍 판단 시각화: {execution_summary['visualization_result'].get('status', 'unknown')}")
     print(f"🎯 실행 상태: {execution_summary['execution_status']}")
     print("=" * 60)
 
@@ -537,10 +517,10 @@ def main():
     result = run("strategic_judgment")
 
     if result.get("execution_status") == "completed":
-        print(f"\n✅ 고급 인지 시스템 성공!")
+        print("\n✅ 고급 인지 시스템 성공!")
         return True
     else:
-        print(f"\n❌ 고급 인지 시스템 실패!")
+        print("\n❌ 고급 인지 시스템 실패!")
         return False
 
 

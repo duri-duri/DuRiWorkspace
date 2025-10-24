@@ -177,9 +177,7 @@ class TestComposite:
         """커스텀 가중치"""
         scores = {"a": 0.5, "b": 0.7, "c": 0.9}
         weights = {"a": 0.2, "b": 0.3, "c": 0.5}
-        assert composite(scores, weights) == pytest.approx(
-            0.5 * 0.2 + 0.7 * 0.3 + 0.9 * 0.5
-        )
+        assert composite(scores, weights) == pytest.approx(0.5 * 0.2 + 0.7 * 0.3 + 0.9 * 0.5)
 
     def test_empty_scores(self):
         """빈 점수"""

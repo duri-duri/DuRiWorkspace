@@ -1,60 +1,86 @@
-version: "3.9"
 
 services:
   duri_core:
     build:
-      context: ./duri_core
+      context: .
+      dockerfile: docker/Dockerfile.core
     container_name: duri_core_container
     ports:
       - "8080:8080"
     volumes:
-      - ./duri_core:/app/duri_core
-      - ./duri_common:/app/duri_common:ro
-      - ./.env:/app/.env
       - ./logs:/app/logs
-    working_dir: /app/duri_core
+      - ./config:/app/config
+      - ./.env:/app/.env
     environment:
       - PORT=8080
-      - PYTHONPATH=/app/duri_core:/app/duri_common
+      - PYTHONPATH=/app:/app/duri_common
+    depends_on:
+      - duri-postgres
+      - duri-redis
     restart: unless-stopped
+    mem_limit: 2g
 
   duri_brain:
     build:
-      context: ./duri_brain
+      context: .
+      dockerfile: docker/Dockerfile.brain
     container_name: duri_brain_container
     ports:
       - "8081:8081"
     volumes:
-      - ./duri_brain/duri_brain:/app/duri_brain
-      - ./duri_brain/wait-for-postgres.sh:/app/wait-for-postgres.sh    # 추가
-      - ./duri_core:/app/duri_core
-      - ./duri_common:/app/duri_common:ro
-      - ./.env:/app/.env
       - ./logs:/app/logs
-    working_dir: /app/duri_brain
+      - ./config:/app/config
+      - ./.env:/app/.env
     environment:
       - PORT=8081
-      - PYTHONPATH=/app/duri_brain:/app/duri_core:/app/duri_common
-    command: ["bash", "/app/wait-for-postgres.sh"]
+      - PYTHONPATH=/app:/app/duri_common
+    depends_on:
+      - duri-postgres
+      - duri-redis
     restart: unless-stopped
+    mem_limit: 2g
 
   duri_evolution:
     build:
-      context: ./duri_evolution
+      context: .
+      dockerfile: docker/Dockerfile.evolution
     container_name: duri_evolution_container
     ports:
       - "8082:8082"
     volumes:
-      - ./duri_evolution/app:/app/duri_evolution
-      - ./duri_evolution/wait-for-postgres.sh:/app/wait-for-postgres.sh    # 추가
-      - ./duri_core:/app/duri_core
-      - ./duri_common:/app/duri_common:ro
-      - ./.env:/app/.env
       - ./logs:/app/logs
-    working_dir: /app/duri_evolution
+      - ./config:/app/config
+      - ./.env:/app/.env
     environment:
       - PORT=8082
-      - PYTHONPATH=/app/duri_evolution:/app/duri_core:/app/duri_common
+      - PYTHONPATH=/app:/app/duri_core
+    depends_on:
+      - duri-postgres
+      - duri-redis
+    restart: unless-stopped
+    mem_limit: 1g
+
+  duri_control:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.control
+    container_name: duri_control_container
+    ports:
+      - "8083:8083"
+    volumes:
+      - ./logs:/app/logs
+      - ./config:/app/config
+      - ./.env:/app/.env
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./duri_control/wait-for-postgres.sh:/app/wait-for-postgres.sh:ro
+    environment:
+      - PORT=8083
+      - PYTHONPATH=/app:/app/duri_common
+    env_file:
+      - .env
+    depends_on:
+      - duri-postgres
+      - duri-redis
     command: ["bash", "/app/wait-for-postgres.sh"]
     restart: unless-stopped
 
@@ -70,9 +96,21 @@ services:
       - "5432:5432"
     volumes:
       - duri_postgres_data:/var/lib/postgresql/data
+    mem_limit: 1g
+
+  duri-redis:
+    image: redis:7-alpine
+    container_name: duri-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - duri_redis_data:/data
+    mem_limit: 512m
 
 volumes:
   duri_postgres_data:
+  duri_redis_data:
 
 networks:
   default:

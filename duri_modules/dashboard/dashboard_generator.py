@@ -4,9 +4,7 @@ DuRi 대시보드 생성 시스템
 """
 
 from datetime import datetime
-import json
-import os
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 
 class DashboardGenerator:
@@ -304,7 +302,7 @@ class DashboardGenerator:
     </script>
 </body>
 </html>
-        """
+        """  # noqa: E501
 
         # 대시보드 파일 저장
         with open(self.dashboard_path, "w", encoding="utf-8") as f:
@@ -351,9 +349,7 @@ class DashboardGenerator:
             current_value = metric_data.get("current_value", 0)
             trend = metric_data.get("trend", "stable")
 
-            trend_icon = (
-                "➡️" if trend == "stable" else "📈" if trend == "improving" else "📉"
-            )
+            trend_icon = "➡️" if trend == "stable" else "📈" if trend == "improving" else "📉"
 
             html += f"""
                 <div class="metric">

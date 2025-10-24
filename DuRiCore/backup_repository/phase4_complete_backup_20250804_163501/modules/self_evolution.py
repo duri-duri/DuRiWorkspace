@@ -4,9 +4,9 @@ DuRiCore - 자기 진화 엔진
 LLM 기반 자기 분석 및 개선 능력 구현
 """
 
+import logging
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-import logging
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np

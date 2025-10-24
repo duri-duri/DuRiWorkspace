@@ -4,13 +4,12 @@ Day 9 Gate: Alert Latency & Reliability Measurement
 Enhanced version with comprehensive metrics collection
 """
 
-from datetime import datetime
 import json
 import os
-from pathlib import Path
 import random
 import sys
-import time
+from datetime import datetime
+from pathlib import Path
 
 
 def measure_latency(seed=17, mode="normal"):

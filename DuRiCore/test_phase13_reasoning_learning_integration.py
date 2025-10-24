@@ -8,18 +8,18 @@ Phase 13에서 구현된 reasoning + learning 통합 시스템의
 """
 
 import asyncio
-from datetime import datetime
 import json
 import logging
 import time
-from typing import Any, Dict, List
+from datetime import datetime
+from typing import Any, Dict
 
 # 테스트 대상 모듈 import
 try:
     from phase13_reasoning_learning_integration import (
-        IntegrationPhase,
-        IntegrationResult,
-        IntegrationStatus,
+        IntegrationPhase,  # noqa: F401
+        IntegrationResult,  # noqa: F401
+        IntegrationStatus,  # noqa: F401
         ReasoningLearningIntegrationSystem,
     )
 except ImportError as e:
@@ -27,9 +27,7 @@ except ImportError as e:
     exit(1)
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -62,9 +60,7 @@ class Phase13TestRunner:
 
         # 전체 결과 종합
         total_tests = len(test_results)
-        passed_tests = sum(
-            1 for result in test_results.values() if result.get("success", False)
-        )
+        passed_tests = sum(1 for result in test_results.values() if result.get("success", False))
 
         overall_result = {
             "phase": "Phase 13",
@@ -72,9 +68,7 @@ class Phase13TestRunner:
             "total_tests": total_tests,
             "passed_tests": passed_tests,
             "failed_tests": total_tests - passed_tests,
-            "success_rate": (
-                (passed_tests / total_tests) * 100 if total_tests > 0 else 0
-            ),
+            "success_rate": ((passed_tests / total_tests) * 100 if total_tests > 0 else 0),
             "test_results": test_results,
             "execution_time": time.time() - self.test_start_time,
             "timestamp": datetime.now().isoformat(),
@@ -133,9 +127,7 @@ class Phase13TestRunner:
             }
 
             # 통합 실행 흐름 실행
-            result = await self.integration_system.execute_integration_flow(
-                test_input, test_context
-            )
+            result = await self.integration_system.execute_integration_flow(test_input, test_context)
 
             # 결과 검증
             if result.success:
@@ -154,9 +146,7 @@ class Phase13TestRunner:
                     },
                 }
             else:
-                logger.error(
-                    f"❌ Reasoning + Learning 통합 실패: {result.error_message}"
-                )
+                logger.error(f"❌ Reasoning + Learning 통합 실패: {result.error_message}")
                 return {
                     "test_name": "Reasoning + Learning 통합",
                     "success": False,
@@ -189,9 +179,7 @@ class Phase13TestRunner:
             }
 
             # 통합 실행 흐름 실행
-            result = await self.integration_system.execute_integration_flow(
-                test_input, test_context
-            )
+            result = await self.integration_system.execute_integration_flow(test_input, test_context)
 
             # 피드백 루프 검증
             if result.success and result.feedback_loop_count > 0:
@@ -242,9 +230,7 @@ class Phase13TestRunner:
             }
 
             # 통합 실행 흐름 실행
-            result = await self.integration_system.execute_integration_flow(
-                test_input, test_context
-            )
+            result = await self.integration_system.execute_integration_flow(test_input, test_context)
 
             # 최적화 검증
             if result.success and result.optimization_applied:
@@ -317,9 +303,7 @@ class Phase13TestRunner:
             invalid_context = {}
 
             # 통합 실행 흐름 실행
-            result = await self.integration_system.execute_integration_flow(
-                invalid_input, invalid_context
-            )
+            result = await self.integration_system.execute_integration_flow(invalid_input, invalid_context)
 
             # 에러 처리 검증
             if not result.success and result.error_message:
@@ -363,9 +347,7 @@ async def main():
     print("=" * 80)
     print(f"🎯 Phase: {results['phase']}")
     print(f"📝 설명: {results['description']}")
-    print(
-        f"📈 성공률: {results['success_rate']:.1f}% ({results['passed_tests']}/{results['total_tests']})"
-    )
+    print(f"📈 성공률: {results['success_rate']:.1f}% ({results['passed_tests']}/{results['total_tests']})")
     print(f"⏱️ 실행 시간: {results['execution_time']:.3f}초")
     print(f"🕒 타임스탬프: {results['timestamp']}")
 

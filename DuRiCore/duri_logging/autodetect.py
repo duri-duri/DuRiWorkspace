@@ -6,7 +6,6 @@ DuRi 모듈 자동 감지 시스템
 """
 
 import re
-from typing import Optional
 
 # DuRi 모듈 규칙 (우선순위 고정 - 긴 패턴이 앞에)
 RAW_RULES = [
@@ -108,9 +107,7 @@ def test_autodetect():
 
     for logger_name, expected in test_cases:
         result = infer_component(logger_name)
-        assert (
-            result == expected
-        ), f"Expected {expected} for {logger_name}, got {result}"
+        assert result == expected, f"Expected {expected} for {logger_name}, got {result}"
 
     # 경로 테스트
     path_test_cases = [

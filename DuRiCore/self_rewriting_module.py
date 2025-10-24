@@ -15,22 +15,19 @@ DuRi Phase Ω: Self-Rewriting Module
 
 import ast
 import asyncio
-from dataclasses import dataclass, field
-from datetime import datetime
 import difflib
-from enum import Enum
-import json
 import logging
 import os
 import shutil
 import tempfile
 import time
-from typing import Any, Dict, List, Optional, Tuple, Union
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -141,9 +138,7 @@ class SelfRewritingModule:
             bug_potential = await self._calculate_bug_potential(tree)
 
             # 개선 기회 식별
-            improvement_opportunities = await self._identify_improvement_opportunities(
-                tree, code_content
-            )
+            improvement_opportunities = await self._identify_improvement_opportunities(tree, code_content)
 
             assessment = CodeAssessment(
                 module_path=module_path,
@@ -155,7 +150,7 @@ class SelfRewritingModule:
             )
 
             logger.info(
-                f"✅ 코드 평가 완료: 복잡도={complexity_score:.2f}, 성능={performance_score:.2f}, 유지보수성={maintainability_score:.2f}"
+                f"✅ 코드 평가 완료: 복잡도={complexity_score:.2f}, 성능={performance_score:.2f}, 유지보수성={maintainability_score:.2f}"  # noqa: E501
             )
 
             return assessment
@@ -164,9 +159,7 @@ class SelfRewritingModule:
             logger.error(f"코드 평가 실패: {e}")
             return await self._create_default_assessment(module_path)
 
-    async def generate_alternative(
-        self, current_logic: str, assessment: CodeAssessment
-    ) -> RewriteProposal:
+    async def generate_alternative(self, current_logic: str, assessment: CodeAssessment) -> RewriteProposal:
         """개선된 로직 제안"""
         try:
             logger.info("🎯 개선된 로직 제안 시작")
@@ -175,19 +168,13 @@ class SelfRewritingModule:
             rewrite_type = await self._determine_rewrite_type(assessment)
 
             # 개선된 코드 생성
-            proposed_code = await self._generate_improved_code(
-                current_logic, rewrite_type, assessment
-            )
+            proposed_code = await self._generate_improved_code(current_logic, rewrite_type, assessment)
 
             # 개선 설명 생성
-            improvement_description = await self._generate_improvement_description(
-                rewrite_type, assessment
-            )
+            improvement_description = await self._generate_improvement_description(rewrite_type, assessment)
 
             # 예상 영향도 계산
-            expected_impact = await self._calculate_expected_impact(
-                rewrite_type, assessment
-            )
+            expected_impact = await self._calculate_expected_impact(rewrite_type, assessment)
 
             # 위험 수준 계산
             risk_level = await self._calculate_risk_level(rewrite_type, proposed_code)
@@ -203,9 +190,7 @@ class SelfRewritingModule:
                 risk_level=risk_level,
             )
 
-            logger.info(
-                f"✅ 개선된 로직 제안 완료: 유형={rewrite_type.value}, 영향도={expected_impact:.2f}"
-            )
+            logger.info(f"✅ 개선된 로직 제안 완료: 유형={rewrite_type.value}, 영향도={expected_impact:.2f}")
 
             return proposal
 
@@ -264,7 +249,7 @@ class SelfRewritingModule:
                     error_message="테스트 실패로 인한 롤백",
                 )
 
-                logger.warning(f"⚠️ 자가 수정 실패: 테스트 실패로 롤백됨")
+                logger.warning("⚠️ 자가 수정 실패: 테스트 실패로 롤백됨")
 
             # 결과 기록
             self.rewrite_history.append(result)
@@ -290,11 +275,7 @@ class SelfRewritingModule:
                     complexity_metrics["functions"] += 1
                 elif isinstance(node, ast.ClassDef):
                     complexity_metrics["classes"] += 1
-                elif (
-                    isinstance(node, ast.If)
-                    or isinstance(node, ast.For)
-                    or isinstance(node, ast.While)
-                ):
+                elif isinstance(node, ast.If) or isinstance(node, ast.For) or isinstance(node, ast.While):
                     complexity_metrics["nested_levels"] += 1
 
             # 복잡도 점수 계산 (0-1, 낮을수록 좋음)
@@ -378,9 +359,7 @@ class SelfRewritingModule:
             logger.error(f"버그 잠재성 계산 실패: {e}")
             return 0.3
 
-    async def _identify_improvement_opportunities(
-        self, tree: ast.AST, code_content: str
-    ) -> List[str]:
+    async def _identify_improvement_opportunities(self, tree: ast.AST, code_content: str) -> List[str]:
         """개선 기회 식별"""
         opportunities = []
 
@@ -388,9 +367,7 @@ class SelfRewritingModule:
             # 복잡한 함수 식별
             for node in ast.walk(tree):
                 if isinstance(node, ast.FunctionDef) and len(node.body) > 10:
-                    opportunities.append(
-                        f"함수 '{node.name}' 리팩토링 필요 (너무 복잡함)"
-                    )
+                    opportunities.append(f"함수 '{node.name}' 리팩토링 필요 (너무 복잡함)")
 
             # 중복 코드 식별
             if code_content.count("def ") > 10:
@@ -455,9 +432,7 @@ class SelfRewritingModule:
         # 실제 구현에서는 구조 재구성 로직 적용
         return code
 
-    async def _generate_improvement_description(
-        self, rewrite_type: RewriteType, assessment: CodeAssessment
-    ) -> str:
+    async def _generate_improvement_description(self, rewrite_type: RewriteType, assessment: CodeAssessment) -> str:
         """개선 설명 생성"""
         descriptions = {
             RewriteType.LOGIC_IMPROVEMENT: "로직 개선을 통한 코드 품질 향상",
@@ -469,9 +444,7 @@ class SelfRewritingModule:
 
         return descriptions.get(rewrite_type, "일반적인 코드 개선")
 
-    async def _calculate_expected_impact(
-        self, rewrite_type: RewriteType, assessment: CodeAssessment
-    ) -> float:
+    async def _calculate_expected_impact(self, rewrite_type: RewriteType, assessment: CodeAssessment) -> float:
         """예상 영향도 계산"""
         base_impact = 0.5
 
@@ -482,9 +455,7 @@ class SelfRewritingModule:
 
         return min(1.0, max(0.0, base_impact))
 
-    async def _calculate_risk_level(
-        self, rewrite_type: RewriteType, proposed_code: str
-    ) -> float:
+    async def _calculate_risk_level(self, rewrite_type: RewriteType, proposed_code: str) -> float:
         """위험 수준 계산"""
         base_risk = 0.3
 
@@ -584,9 +555,7 @@ class SelfRewritingModule:
             improvement_opportunities=[],
         )
 
-    async def _create_default_proposal(
-        self, current_logic: str, assessment: CodeAssessment
-    ) -> RewriteProposal:
+    async def _create_default_proposal(self, current_logic: str, assessment: CodeAssessment) -> RewriteProposal:
         """기본 제안 생성"""
         return RewriteProposal(
             proposal_id=f"default_proposal_{int(time.time() * 1000)}",
@@ -599,9 +568,7 @@ class SelfRewritingModule:
             risk_level=0.1,
         )
 
-    async def _create_failed_result(
-        self, target_file: str, error_message: str
-    ) -> RewriteResult:
+    async def _create_failed_result(self, target_file: str, error_message: str) -> RewriteResult:
         """실패 결과 생성"""
         return RewriteResult(
             success=False,
@@ -639,13 +606,13 @@ async def main():
     print("🧠 Self-Rewriting Module 테스트 결과")
     print("=" * 80)
 
-    print(f"\n📊 코드 평가:")
+    print("\n📊 코드 평가:")
     print(f"  - 복잡도 점수: {assessment.complexity_score:.2f}")
     print(f"  - 성능 점수: {assessment.performance_score:.2f}")
     print(f"  - 유지보수성 점수: {assessment.maintainability_score:.2f}")
     print(f"  - 버그 잠재성: {assessment.bug_potential:.2f}")
 
-    print(f"\n🎯 개선 제안:")
+    print("\n🎯 개선 제안:")
     print(f"  - 재작성 유형: {proposal.rewrite_type.value}")
     print(f"  - 예상 영향도: {proposal.expected_impact:.2f}")
     print(f"  - 위험 수준: {proposal.risk_level:.2f}")

@@ -11,15 +11,12 @@ DuRi Phase 1-3 Week 3 Day 9 - 고급 AI 기능 시스템
 """
 
 import asyncio
-from collections import defaultdict, deque
-from concurrent.futures import ThreadPoolExecutor
+import logging
+import time
+from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime
-import json
-import logging
-import threading
-import time
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 import numpy as np
 
@@ -101,9 +98,7 @@ class AdvancedPatternRecognition:
         if "text" in data:
             features["text_length"] = len(data["text"])
             features["word_count"] = len(data["text"].split())
-            features["avg_word_length"] = np.mean(
-                [len(word) for word in data["text"].split()]
-            )
+            features["avg_word_length"] = np.mean([len(word) for word in data["text"].split()])
 
         # 수치 특징 추출
         if "numerical_data" in data:
@@ -145,9 +140,7 @@ class AdvancedPatternRecognition:
 
         return best_pattern
 
-    def calculate_similarity(
-        self, features1: Dict[str, Any], features2: Dict[str, Any]
-    ) -> float:
+    def calculate_similarity(self, features1: Dict[str, Any], features2: Dict[str, Any]) -> float:
         """특징 간 유사도 계산"""
         if not features1 or not features2:
             return 0.0
@@ -176,9 +169,7 @@ class AdvancedPatternRecognition:
 
         return np.mean(similarities) if similarities else 0.0
 
-    def learn_pattern(
-        self, data: Dict[str, Any], pattern_type: str, name: str, description: str
-    ):
+    def learn_pattern(self, data: Dict[str, Any], pattern_type: str, name: str, description: str):
         """새로운 패턴 학습"""
         features = self.extract_features(data)
         pattern_id = f"pattern_{len(self.patterns) + 1}"
@@ -212,9 +203,7 @@ class CreativeProblemSolver:
         ]
         self.solution_cache = {}
 
-    def solve_problem(
-        self, problem_description: str, constraints: Dict[str, Any] = None
-    ) -> ProblemSolution:
+    def solve_problem(self, problem_description: str, constraints: Dict[str, Any] = None) -> ProblemSolution:
         """창의적 문제 해결"""
         problem_id = f"problem_{int(time.time())}"
 
@@ -226,9 +215,7 @@ class CreativeProblemSolver:
         # 창의적 기법 적용
         solutions = []
         for technique in self.creativity_techniques:
-            solution = self.apply_creativity_technique(
-                problem_description, technique, constraints
-            )
+            solution = self.apply_creativity_technique(problem_description, technique, constraints)
             if solution:
                 solutions.append(solution)
 
@@ -265,9 +252,7 @@ class CreativeProblemSolver:
 
         return None
 
-    def brainstorming(
-        self, problem: str, constraints: Dict[str, Any] = None
-    ) -> Dict[str, Any]:
+    def brainstorming(self, problem: str, constraints: Dict[str, Any] = None) -> Dict[str, Any]:
         """브레인스토밍 기법"""
         ideas = [
             f"문제를 다른 관점에서 접근: {problem}",
@@ -284,9 +269,7 @@ class CreativeProblemSolver:
             "steps": ideas,
         }
 
-    def analogical_thinking(
-        self, problem: str, constraints: Dict[str, Any] = None
-    ) -> Dict[str, Any]:
+    def analogical_thinking(self, problem: str, constraints: Dict[str, Any] = None) -> Dict[str, Any]:
         """유추적 사고 기법"""
         analogies = [
             f"자연 현상과의 유추: {problem}",
@@ -302,9 +285,7 @@ class CreativeProblemSolver:
             "steps": analogies,
         }
 
-    def reverse_thinking(
-        self, problem: str, constraints: Dict[str, Any] = None
-    ) -> Dict[str, Any]:
+    def reverse_thinking(self, problem: str, constraints: Dict[str, Any] = None) -> Dict[str, Any]:
         """역발상 기법"""
         reverse_ideas = [
             f"문제의 반대 상황 고려: {problem}",
@@ -320,9 +301,7 @@ class CreativeProblemSolver:
             "steps": reverse_ideas,
         }
 
-    def combinatorial_thinking(
-        self, problem: str, constraints: Dict[str, Any] = None
-    ) -> Dict[str, Any]:
+    def combinatorial_thinking(self, problem: str, constraints: Dict[str, Any] = None) -> Dict[str, Any]:
         """조합적 사고 기법"""
         combinations = [
             f"기존 해결책들의 조합: {problem}",
@@ -338,9 +317,7 @@ class CreativeProblemSolver:
             "steps": combinations,
         }
 
-    def systemic_thinking(
-        self, problem: str, constraints: Dict[str, Any] = None
-    ) -> Dict[str, Any]:
+    def systemic_thinking(self, problem: str, constraints: Dict[str, Any] = None) -> Dict[str, Any]:
         """시스템적 사고 기법"""
         systemic_approaches = [
             f"전체 시스템 관점에서 접근: {problem}",
@@ -425,9 +402,7 @@ class AdaptiveDecisionMaker:
         else:
             return "optimization"
 
-    def execute_decision_model(
-        self, model: str, context: DecisionContext
-    ) -> Dict[str, Any]:
+    def execute_decision_model(self, model: str, context: DecisionContext) -> Dict[str, Any]:
         """의사결정 모델 실행"""
         if model == "binary_decision":
             return self.binary_decision(context)
@@ -493,9 +468,7 @@ class AdaptiveDecisionMaker:
         for option in context.available_options:
             score = self.calculate_option_score(option, context)
             # 추가 최적화 가중치 적용
-            optimized_score = score * self.calculate_optimization_weight(
-                option, context
-            )
+            optimized_score = score * self.calculate_optimization_weight(option, context)
             option_scores[option] = optimized_score
 
         best_option = max(option_scores, key=option_scores.get)
@@ -527,7 +500,7 @@ class AdaptiveDecisionMaker:
         return {
             "selected_option": selected_option,
             "confidence": 0.5,
-            "reasoning": f"기본 의사결정: 첫 번째 옵션 선택",
+            "reasoning": "기본 의사결정: 첫 번째 옵션 선택",
             "alternatives": context.available_options,
         }
 
@@ -551,9 +524,7 @@ class AdaptiveDecisionMaker:
 
         # 리스크 고려
         if context.risk_factors:
-            risk_penalty = (
-                len([rf for rf in context.risk_factors if rf in option.lower()]) * 0.1
-            )
+            risk_penalty = len([rf for rf in context.risk_factors if rf in option.lower()]) * 0.1
             score -= risk_penalty
 
         return max(0.0, min(1.0, score))
@@ -570,17 +541,13 @@ class AdaptiveDecisionMaker:
 
         return True
 
-    def calculate_optimization_weight(
-        self, option: str, context: DecisionContext
-    ) -> float:
+    def calculate_optimization_weight(self, option: str, context: DecisionContext) -> float:
         """최적화 가중치 계산"""
         weight = 1.0
 
         # 추가 최적화 로직
         if context.preferences:
-            preference_match = sum(
-                1 for pref in context.preferences if pref in option.lower()
-            )
+            preference_match = sum(1 for pref in context.preferences if pref in option.lower())
             weight += preference_match * 0.1
 
         return weight
@@ -607,9 +574,7 @@ class IntelligentInferenceEngine:
         self.reasoning_patterns = {}
         self.confidence_threshold = 0.6
 
-    def infer(
-        self, input_data: Dict[str, Any], inference_type: str = "general"
-    ) -> InferenceResult:
+    def infer(self, input_data: Dict[str, Any], inference_type: str = "general") -> InferenceResult:
         """지능형 추론"""
         inference_id = f"inference_{int(time.time())}"
 
@@ -784,9 +749,7 @@ class AdvancedAISystem:
                 "processing_time": time.time() - start_time,
             }
 
-    async def handle_pattern_recognition(
-        self, request_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def handle_pattern_recognition(self, request_data: Dict[str, Any]) -> Dict[str, Any]:
         """패턴 인식 처리"""
         data = request_data.get("data", {})
         pattern = self.pattern_recognition.recognize_pattern(data)
@@ -798,9 +761,7 @@ class AdvancedAISystem:
             "status": "success",
         }
 
-    async def handle_problem_solving(
-        self, request_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def handle_problem_solving(self, request_data: Dict[str, Any]) -> Dict[str, Any]:
         """문제 해결 처리"""
         problem_description = request_data.get("problem_description", "")
         constraints = request_data.get("constraints", {})
@@ -815,9 +776,7 @@ class AdvancedAISystem:
             "status": "success",
         }
 
-    async def handle_decision_making(
-        self, request_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def handle_decision_making(self, request_data: Dict[str, Any]) -> Dict[str, Any]:
         """의사결정 처리"""
         context_data = request_data.get("context", {})
 
@@ -853,9 +812,7 @@ class AdvancedAISystem:
             "status": "success",
         }
 
-    async def handle_general_request(
-        self, request_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def handle_general_request(self, request_data: Dict[str, Any]) -> Dict[str, Any]:
         """일반 요청 처리"""
         return {
             "type": "general",
@@ -912,9 +869,7 @@ async def test_advanced_ai_system():
         "sequence": ["A", "B", "C", "A", "B"],
     }
 
-    pattern_result = await ai_system.process_request(
-        {"type": "pattern_recognition", "data": pattern_data}
-    )
+    pattern_result = await ai_system.process_request({"type": "pattern_recognition", "data": pattern_data})
     print(f"패턴 인식 결과: {pattern_result}")
 
     # 2. 문제 해결 테스트

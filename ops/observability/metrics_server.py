@@ -2,10 +2,10 @@
 """
 DuRi 메트릭 서버 (독립 실행)
 """
-from http.server import BaseHTTPRequestHandler, HTTPServer
 import os
 import threading
 import time
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
 from prometheus_client import REGISTRY, generate_latest
 

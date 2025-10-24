@@ -3,20 +3,20 @@
 모듈화된 DuRi 자가진화 AI 시스템
 """
 
-from datetime import datetime
 import os
 import sys
+from datetime import datetime
 from typing import Any, Dict
 
+import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
 
 # 모듈 경로 추가
 sys.path.append(os.path.join(os.path.dirname(__file__), "duri_modules"))
 
 # 모듈화된 시스템 import
-from duri_modules import (
+from duri_modules import (  # noqa: E402
     chatgpt_evaluator,
     conversation_store,
     duri_chatgpt_discussion,
@@ -61,14 +61,10 @@ async def chatgpt_evaluate_response(evaluation_request: Dict[str, Any]):
         user_question = evaluation_request.get("user_question", "")
 
         if not duri_response or not user_question:
-            raise HTTPException(
-                status_code=400, detail="duri_response와 user_question이 필요합니다"
-            )
+            raise HTTPException(status_code=400, detail="duri_response와 user_question이 필요합니다")
 
         # 모듈화된 평가 시스템 사용
-        evaluation_result = chatgpt_evaluator.evaluate_response(
-            duri_response, user_question
-        )
+        evaluation_result = chatgpt_evaluator.evaluate_response(duri_response, user_question)
 
         return {
             "status": "success",
@@ -78,7 +74,7 @@ async def chatgpt_evaluate_response(evaluation_request: Dict[str, Any]):
 
     except Exception as e:
         print(f"❌ ChatGPT 평가 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 @app.post("/duri-self-reflect")
@@ -108,16 +104,14 @@ async def duri_self_reflect_endpoint(reflection_request: Dict[str, Any]):
 
     except Exception as e:
         print(f"❌ DuRi 자기성찰 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 @app.post("/duri-chatgpt-discuss")
 async def duri_chatgpt_discussion_endpoint(discussion_request: Dict[str, Any]):
     """DuRi-ChatGPT 논의 (모듈화된 버전)"""
     try:
-        duri_improvement_proposal = discussion_request.get(
-            "duri_improvement_proposal", {}
-        )
+        duri_improvement_proposal = discussion_request.get("duri_improvement_proposal", {})
         chatgpt_evaluation = discussion_request.get("chatgpt_evaluation", {})
 
         if not duri_improvement_proposal or not chatgpt_evaluation:
@@ -127,9 +121,7 @@ async def duri_chatgpt_discussion_endpoint(discussion_request: Dict[str, Any]):
             )
 
         # 모듈화된 논의 시스템 사용
-        discussion_result = duri_chatgpt_discussion.initiate_discussion(
-            duri_improvement_proposal, chatgpt_evaluation
-        )
+        discussion_result = duri_chatgpt_discussion.initiate_discussion(duri_improvement_proposal, chatgpt_evaluation)
 
         return {
             "status": "success",
@@ -140,7 +132,7 @@ async def duri_chatgpt_discussion_endpoint(discussion_request: Dict[str, Any]):
 
     except Exception as e:
         print(f"❌ DuRi-ChatGPT 논의 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 @app.post("/capture-conversation")
@@ -152,21 +144,15 @@ async def capture_conversation_endpoint(conversation_data: Dict[str, Any]):
         metadata = conversation_data.get("metadata", {})
 
         if not user_input or not duri_response:
-            raise HTTPException(
-                status_code=400, detail="user_input과 duri_response가 필요합니다"
-            )
+            raise HTTPException(status_code=400, detail="user_input과 duri_response가 필요합니다")
 
         # 대화 데이터 저장
-        conversation_id = conversation_store.store_conversation(
-            user_input, duri_response, metadata
-        )
+        conversation_id = conversation_store.store_conversation(user_input, duri_response, metadata)
 
         # 자동 학습 루프 시작 (선택적)
         if conversation_data.get("auto_learn", False):
             # ChatGPT 평가
-            evaluation_result = chatgpt_evaluator.evaluate_response(
-                duri_response, user_input
-            )
+            evaluation_result = chatgpt_evaluator.evaluate_response(duri_response, user_input)
 
             # DuRi 자기성찰
             reflection_result = duri_self_reflector.reflect_on_chatgpt_feedback(
@@ -198,7 +184,7 @@ async def capture_conversation_endpoint(conversation_data: Dict[str, Any]):
 
     except Exception as e:
         print(f"❌ 대화 저장 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 @app.get("/conversation-history")
@@ -214,7 +200,7 @@ async def get_conversation_history(limit: int = 20):
         }
     except Exception as e:
         print(f"❌ 대화 기록 조회 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 @app.get("/learning-statistics")
@@ -232,7 +218,7 @@ async def get_learning_statistics():
         }
     except Exception as e:
         print(f"❌ 학습 통계 조회 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 @app.get("/module-status")

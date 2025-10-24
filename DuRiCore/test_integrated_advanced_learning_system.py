@@ -7,10 +7,10 @@ DuRi Phase 1-3 Week 3 Day 13 - 통합 고급 학습 시스템 테스트
 """
 
 import asyncio
-from datetime import datetime
 import json
 import logging
 import time
+from datetime import datetime
 from typing import Any, Dict, List
 
 # 테스트 대상 시스템 import
@@ -20,17 +20,15 @@ try:
         IntegratedAdvancedLearningSystem,
         KnowledgeEvolutionSystem,
         KnowledgeIntegrationSystem,
-        KnowledgeSource,
+        KnowledgeSource,  # noqa: F401
         LearningEfficiencyOptimizer,
-        LearningEvolutionType,
+        LearningEvolutionType,  # noqa: F401
     )
 except ImportError as e:
     logging.error(f"시스템 import 실패: {e}")
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -57,9 +55,7 @@ class AdvancedLearningSystemTester:
         knowledge_evolution_result = await self._test_knowledge_evolution_system()
 
         # 4. 학습 효율성 최적화 테스트
-        efficiency_optimization_result = (
-            await self._test_learning_efficiency_optimizer()
-        )
+        efficiency_optimization_result = await self._test_learning_efficiency_optimizer()
 
         # 5. 지식 통합 시스템 테스트
         knowledge_integration_result = await self._test_knowledge_integration_system()
@@ -95,9 +91,7 @@ class AdvancedLearningSystemTester:
             ),
         }
 
-        logger.info(
-            f"=== Day 13 고급 학습 시스템 종합 테스트 완료 (소요시간: {total_time:.2f}초) ==="
-        )
+        logger.info(f"=== Day 13 고급 학습 시스템 종합 테스트 완료 (소요시간: {total_time:.2f}초) ===")
         return comprehensive_result
 
     async def _test_basic_functionality(self) -> Dict[str, Any]:
@@ -158,7 +152,7 @@ class AdvancedLearningSystemTester:
             }
 
             logger.info(
-                f"✅ 지속적 학습 엔진 테스트 성공 (지식: {len(session.knowledge_gained)}개, 통찰: {len(session.insights_discovered)}개)"
+                f"✅ 지속적 학습 엔진 테스트 성공 (지식: {len(session.knowledge_gained)}개, 통찰: {len(session.insights_discovered)}개)"  # noqa: E501
             )
             return result
 
@@ -192,9 +186,7 @@ class AdvancedLearningSystemTester:
             }
 
             # 지식 진화 실행
-            evolution = await system.evolve_knowledge(
-                original_knowledge, new_information
-            )
+            evolution = await system.evolve_knowledge(original_knowledge, new_information)
 
             result = {
                 "status": "success",
@@ -206,9 +198,7 @@ class AdvancedLearningSystemTester:
                 "message": "지식 진화 시스템 테스트 성공",
             }
 
-            logger.info(
-                f"✅ 지식 진화 시스템 테스트 성공 (진화 요인: {len(evolution.evolution_factors)}개)"
-            )
+            logger.info(f"✅ 지식 진화 시스템 테스트 성공 (진화 요인: {len(evolution.evolution_factors)}개)")
             return result
 
         except Exception as e:
@@ -227,10 +217,7 @@ class AdvancedLearningSystemTester:
             optimizer = LearningEfficiencyOptimizer()
 
             # 테스트 세션 생성
-            from integrated_advanced_learning_system import (
-                ContinuousLearningSession,
-                LearningEvolutionType,
-            )
+            from integrated_advanced_learning_system import ContinuousLearningSession, LearningEvolutionType
 
             test_session = ContinuousLearningSession(
                 session_id="test_session",
@@ -259,15 +246,11 @@ class AdvancedLearningSystemTester:
                 "retention_score": efficiency.retention_score,
                 "application_score": efficiency.application_score,
                 "overall_efficiency": efficiency.overall_efficiency,
-                "optimization_suggestions_count": len(
-                    efficiency.optimization_suggestions
-                ),
+                "optimization_suggestions_count": len(efficiency.optimization_suggestions),
                 "message": "학습 효율성 최적화 테스트 성공",
             }
 
-            logger.info(
-                f"✅ 학습 효율성 최적화 테스트 성공 (전체 효율성: {efficiency.overall_efficiency:.2f})"
-            )
+            logger.info(f"✅ 학습 효율성 최적화 테스트 성공 (전체 효율성: {efficiency.overall_efficiency:.2f})")
             return result
 
         except Exception as e:
@@ -293,9 +276,7 @@ class AdvancedLearningSystemTester:
             ]
 
             # 지식 통합 실행
-            integration = await system.integrate_knowledge(
-                source_knowledge, "hierarchical"
-            )
+            integration = await system.integrate_knowledge(source_knowledge, "hierarchical")
 
             result = {
                 "status": "success",
@@ -307,9 +288,7 @@ class AdvancedLearningSystemTester:
                 "message": "지식 통합 시스템 테스트 성공",
             }
 
-            logger.info(
-                f"✅ 지식 통합 시스템 테스트 성공 (일관성: {integration.coherence_score:.2f})"
-            )
+            logger.info(f"✅ 지식 통합 시스템 테스트 성공 (일관성: {integration.coherence_score:.2f})")
             return result
 
         except Exception as e:
@@ -328,7 +307,7 @@ class AdvancedLearningSystemTester:
             # 테스트 컨텍스트
             test_context = {
                 "type": "comprehensive",
-                "content": "Day 13 고급 학습 시스템의 통합 기능 테스트 - 지속적 학습, 지식 진화, 효율성 최적화, 지식 통합을 포함한 종합적인 학습 시스템",
+                "content": "Day 13 고급 학습 시스템의 통합 기능 테스트 - 지속적 학습, 지식 진화, 효율성 최적화, 지식 통합을 포함한 종합적인 학습 시스템",  # noqa: E501
                 "difficulty": 0.8,
                 "domain": "integrated",
             }
@@ -343,18 +322,14 @@ class AdvancedLearningSystemTester:
                 "evolution_progress": result.evolution_progress,
                 "efficiency_improvement": result.efficiency_improvement,
                 "integration_success": result.integration_success,
-                "continuous_learning_sessions_count": len(
-                    result.continuous_learning_sessions
-                ),
+                "continuous_learning_sessions_count": len(result.continuous_learning_sessions),
                 "knowledge_evolutions_count": len(result.knowledge_evolutions),
                 "learning_efficiencies_count": len(result.learning_efficiencies),
                 "knowledge_integrations_count": len(result.knowledge_integrations),
                 "message": "통합 시스템 테스트 성공",
             }
 
-            logger.info(
-                f"✅ 통합 시스템 테스트 성공 (전체 학습 점수: {result.overall_learning_score:.2f})"
-            )
+            logger.info(f"✅ 통합 시스템 테스트 성공 (전체 학습 점수: {result.overall_learning_score:.2f})")
             return test_result
 
         except Exception as e:
@@ -410,7 +385,7 @@ class AdvancedLearningSystemTester:
             }
 
             logger.info(
-                f"✅ 성능 테스트 성공 (평균 실행시간: {total_time/len(test_contexts):.2f}초, 평균 점수: {average_score:.2f})"
+                f"✅ 성능 테스트 성공 (평균 실행시간: {total_time/len(test_contexts):.2f}초, 평균 점수: {average_score:.2f})"  # noqa: E501
             )
             return performance_result
 
@@ -418,13 +393,9 @@ class AdvancedLearningSystemTester:
             logger.error(f"❌ 성능 테스트 실패: {e}")
             return {"status": "error", "error": str(e), "message": "성능 테스트 실패"}
 
-    def _calculate_overall_success_rate(
-        self, test_results: List[Dict[str, Any]]
-    ) -> float:
+    def _calculate_overall_success_rate(self, test_results: List[Dict[str, Any]]) -> float:
         """전체 성공률 계산"""
-        successful_tests = sum(
-            1 for result in test_results if result.get("status") == "success"
-        )
+        successful_tests = sum(1 for result in test_results if result.get("status") == "success")
         total_tests = len(test_results)
 
         return successful_tests / total_tests if total_tests > 0 else 0.0
@@ -433,9 +404,7 @@ class AdvancedLearningSystemTester:
         """테스트 결과 저장"""
         if filename is None:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            filename = (
-                f"test_results_integrated_advanced_learning_system_{timestamp}.json"
-            )
+            filename = f"test_results_integrated_advanced_learning_system_{timestamp}.json"
 
         try:
             with open(filename, "w", encoding="utf-8") as f:

@@ -4,9 +4,9 @@ DuRiCore - 감정 엔진
 LLM 기반 감정 분석 및 공감 능력 구현
 """
 
+import logging
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-import logging
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np

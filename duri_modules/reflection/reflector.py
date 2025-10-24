@@ -22,7 +22,7 @@ class DuRiSelfReflector:
     ) -> Dict[str, Any]:
         """ChatGPT 평가에 대한 DuRi의 자기성찰"""
 
-        print(f"🤔 DuRi 자기성찰 시작")
+        print("🤔 DuRi 자기성찰 시작")
 
         reflection = {
             "timestamp": datetime.now().isoformat(),
@@ -37,37 +37,27 @@ class DuRiSelfReflector:
         }
 
         # 수용한 비판 분석
-        reflection["accepted_criticisms"] = self._analyze_accepted_points(
-            chatgpt_evaluation
-        )
+        reflection["accepted_criticisms"] = self._analyze_accepted_points(chatgpt_evaluation)
 
         # 의견 차이 분석
         reflection["disagreements"] = self._identify_disagreements(chatgpt_evaluation)
 
         # 개선안 생성
-        reflection["improvement_proposal"] = self._generate_improvement_proposal(
-            chatgpt_evaluation
-        )
+        reflection["improvement_proposal"] = self._generate_improvement_proposal(chatgpt_evaluation)
 
         # 논의 요청
-        reflection["discussion_request"] = (
-            "ChatGPT와 이 개선안에 대해 논의하고 싶습니다."
-        )
+        reflection["discussion_request"] = "ChatGPT와 이 개선안에 대해 논의하고 싶습니다."
 
         # 자기 평가
-        reflection["self_assessment"] = self._self_assess_response(
-            original_response, user_question
-        )
+        reflection["self_assessment"] = self._self_assess_response(original_response, user_question)
 
         # 성찰 기록 저장
         self.reflection_history.append(reflection)
 
-        print(f"🤔 DuRi 자기성찰 완료")
+        print("🤔 DuRi 자기성찰 완료")
         print(f"   ✅ 수용한 비판: {len(reflection['accepted_criticisms'])}개")
         print(f"   ❓ 의견 차이: {len(reflection['disagreements'])}개")
-        print(
-            f"   💡 개선 제안: {len(reflection['improvement_proposal'].get('specific_improvements', []))}개"
-        )
+        print(f"   💡 개선 제안: {len(reflection['improvement_proposal'].get('specific_improvements', []))}개")
 
         return reflection
 
@@ -75,9 +65,7 @@ class DuRiSelfReflector:
         self, user_input: str, duri_response: str, chatgpt_evaluation: Dict[str, Any]
     ) -> Dict[str, Any]:
         """대화에 대한 자기성찰"""
-        return self.reflect_on_chatgpt_feedback(
-            chatgpt_evaluation, duri_response, user_input
-        )
+        return self.reflect_on_chatgpt_feedback(chatgpt_evaluation, duri_response, user_input)
 
     def _analyze_accepted_points(self, evaluation: Dict[str, Any]) -> List[str]:
         """수용한 비판 분석"""
@@ -116,9 +104,7 @@ class DuRiSelfReflector:
 
         return disagreements
 
-    def _generate_improvement_proposal(
-        self, evaluation: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _generate_improvement_proposal(self, evaluation: Dict[str, Any]) -> Dict[str, Any]:
         """개선안 생성"""
         proposal = {
             "reasoning": "",
@@ -132,9 +118,7 @@ class DuRiSelfReflector:
         proposal["reasoning"] = self._analyze_improvement_reasoning(evaluation)
 
         # 구체적 개선사항
-        proposal["specific_improvements"] = self._generate_specific_improvements(
-            evaluation
-        )
+        proposal["specific_improvements"] = self._generate_specific_improvements(evaluation)
 
         # 코드 예제 제안
         proposal["code_examples"] = self._suggest_code_examples(evaluation)
@@ -150,7 +134,7 @@ class DuRiSelfReflector:
     def _analyze_improvement_reasoning(self, evaluation: Dict[str, Any]) -> str:
         """개선 이유 분석"""
         scores = evaluation.get("scores", {})
-        critical_issues = evaluation.get("critical_issues", [])
+        critical_issues = evaluation.get("critical_issues", [])  # noqa: F841
 
         if scores.get("actionability", 0) < 0.3:
             return "실용적인 예제와 코드가 부족하여 개선이 필요합니다"
@@ -222,17 +206,13 @@ class DuRiSelfReflector:
             "response_length": len(response.split()),
             "technical_depth": 0,
             "has_examples": "코드" in response or "예제" in response,
-            "has_structure": any(
-                indicator in response for indicator in ["1.", "2.", "단계"]
-            ),
+            "has_structure": any(indicator in response for indicator in ["1.", "2.", "단계"]),
             "self_score": 0.0,
         }
 
         # 기술적 깊이 평가
         tech_keywords = ["API", "HTTP", "JSON", "async", "await", "FastAPI", "Flask"]
-        tech_count = sum(
-            1 for keyword in tech_keywords if keyword.lower() in response.lower()
-        )
+        tech_count = sum(1 for keyword in tech_keywords if keyword.lower() in response.lower())
         assessment["technical_depth"] = tech_count
 
         # 자기 점수 계산

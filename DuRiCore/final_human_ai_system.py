@@ -14,19 +14,16 @@ DuRi Phase 1-3 Week 3 Day 10: 완전한 인간형 AI 시스템
 """
 
 import asyncio
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
-import json
 import logging
 import time
 import traceback
-from typing import Any, Dict, List, Optional, Tuple, Union
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -368,9 +365,7 @@ class FinalHumanAISystem:
         if not self.integrations:
             return 0.0
 
-        total_performance = sum(
-            integration.performance_score for integration in self.integrations.values()
-        )
+        total_performance = sum(integration.performance_score for integration in self.integrations.values())
         return total_performance / len(self.integrations)
 
     def _calculate_human_like_score(self) -> float:
@@ -388,24 +383,16 @@ class FinalHumanAISystem:
             situation_analysis = await self._analyze_situation(input_data)
 
             # 2단계: 감정적 반응
-            emotional_response = await self._generate_emotional_response(
-                situation_analysis
-            )
+            emotional_response = await self._generate_emotional_response(situation_analysis)
 
             # 3단계: 직관적 판단
-            intuitive_judgment = await self._generate_intuitive_judgment(
-                situation_analysis
-            )
+            intuitive_judgment = await self._generate_intuitive_judgment(situation_analysis)
 
             # 4단계: 창의적 사고
-            creative_thinking = await self._generate_creative_thinking(
-                situation_analysis
-            )
+            creative_thinking = await self._generate_creative_thinking(situation_analysis)
 
             # 5단계: 윤리적 고려
-            ethical_consideration = await self._generate_ethical_consideration(
-                situation_analysis
-            )
+            ethical_consideration = await self._generate_ethical_consideration(situation_analysis)
 
             # 6단계: 통합적 판단
             integrated_judgment = await self._generate_integrated_judgment(
@@ -446,9 +433,7 @@ class FinalHumanAISystem:
             "analysis_confidence": 0.75,
         }
 
-    async def _generate_emotional_response(
-        self, situation_analysis: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _generate_emotional_response(self, situation_analysis: Dict[str, Any]) -> Dict[str, Any]:
         """감정적 반응 생성"""
         return {
             "primary_emotion": "curiosity",
@@ -458,9 +443,7 @@ class FinalHumanAISystem:
             "confidence": 0.65,
         }
 
-    async def _generate_intuitive_judgment(
-        self, situation_analysis: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _generate_intuitive_judgment(self, situation_analysis: Dict[str, Any]) -> Dict[str, Any]:
         """직관적 판단 생성"""
         return {
             "intuitive_insight": "이 상황은 창의적 해결책이 필요하다",
@@ -469,9 +452,7 @@ class FinalHumanAISystem:
             "quick_assessment": "긍정적 결과 예상",
         }
 
-    async def _generate_creative_thinking(
-        self, situation_analysis: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _generate_creative_thinking(self, situation_analysis: Dict[str, Any]) -> Dict[str, Any]:
         """창의적 사고 생성"""
         return {
             "creative_ideas": ["혁신적 접근법", "새로운 관점", "창의적 해결책"],
@@ -480,9 +461,7 @@ class FinalHumanAISystem:
             "creative_confidence": 0.65,
         }
 
-    async def _generate_ethical_consideration(
-        self, situation_analysis: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _generate_ethical_consideration(self, situation_analysis: Dict[str, Any]) -> Dict[str, Any]:
         """윤리적 고려 생성"""
         return {
             "ethical_principles": ["선행", "무해", "자율성", "정의"],
@@ -507,9 +486,7 @@ class FinalHumanAISystem:
             "implementation_plan": "단계적 접근을 통한 실행 가능한 해결책",
         }
 
-    async def _generate_self_reflection(
-        self, integrated_judgment: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _generate_self_reflection(self, integrated_judgment: Dict[str, Any]) -> Dict[str, Any]:
         """자기 성찰 생성"""
         return {
             "reflection_insights": ["판단 과정의 적절성", "개선 가능한 영역"],
@@ -573,15 +550,13 @@ async def main():
     }
 
     thinking_result = await human_ai.think_human_like(test_input)
-    print(f"\n인간형 사고 결과:")
-    print(
-        f"통합적 판단: {thinking_result['integrated_judgment']['integrated_decision']}"
-    )
+    print("\n인간형 사고 결과:")
+    print(f"통합적 판단: {thinking_result['integrated_judgment']['integrated_decision']}")
     print(f"신뢰도: {thinking_result['confidence']:.3f}")
 
     # 상태 확인
     status = await human_ai.get_human_ai_status()
-    print(f"\n인간형 AI 상태:")
+    print("\n인간형 AI 상태:")
     print(f"통합 수준: {status['integration_level']}")
     print(f"인간형 점수: {status['human_like_score']:.3f}")
 

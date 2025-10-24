@@ -4,14 +4,10 @@ DuRiCore Phase 5 Day 3 - 상황 분석 엔진
 입력 데이터 분석, 컨텍스트 추출, 상황 패턴 인식 시스템
 """
 
-from dataclasses import dataclass
-from datetime import datetime
-from enum import Enum
-import json
 import logging
-import math
-import re
-from typing import Any, Dict, List, Optional, Tuple
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 
@@ -135,9 +131,7 @@ class SituationAnalyzer:
 
         logger.info("상황 분석 엔진 초기화 완료")
 
-    async def analyze_situation(
-        self, input_data: Dict[str, Any], context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def analyze_situation(self, input_data: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
         """상황 분석 (주 메서드)"""
         try:
             # 1. 입력 데이터 분석
@@ -147,9 +141,7 @@ class SituationAnalyzer:
             context_elements = await self._extract_context_elements(context)
 
             # 3. 상황 패턴 인식
-            situation_pattern = await self._recognize_situation_pattern(
-                input_data, context
-            )
+            situation_pattern = await self._recognize_situation_pattern(input_data, context)
 
             # 4. 위험도 평가
             risk_level = await self._assess_risk_level(input_data, context)
@@ -161,9 +153,7 @@ class SituationAnalyzer:
             complexity_score = await self._calculate_complexity(input_data, context)
 
             # 7. 신뢰도 계산
-            confidence = await self._calculate_analysis_confidence(
-                data_analysis, context_elements, situation_pattern
-            )
+            confidence = await self._calculate_analysis_confidence(data_analysis, context_elements, situation_pattern)
 
             return {
                 "situation_type": situation_pattern.pattern_type,
@@ -202,9 +192,7 @@ class SituationAnalyzer:
             analysis = {
                 "data_type": type(input_data).__name__,
                 "data_size": len(str(input_data)),
-                "key_fields": (
-                    list(input_data.keys()) if isinstance(input_data, dict) else []
-                ),
+                "key_fields": (list(input_data.keys()) if isinstance(input_data, dict) else []),
                 "complexity": self._calculate_data_complexity(input_data),
                 "quality_score": self._assess_data_quality(input_data),
                 "content_analysis": self._analyze_content(input_data),
@@ -216,9 +204,7 @@ class SituationAnalyzer:
             logger.error(f"입력 데이터 분석 오류: {e}")
             return {"error": str(e)}
 
-    async def _extract_context_elements(
-        self, context: Dict[str, Any]
-    ) -> List[ContextElement]:
+    async def _extract_context_elements(self, context: Dict[str, Any]) -> List[ContextElement]:
         """컨텍스트 요소 추출"""
         try:
             elements = []
@@ -277,15 +263,11 @@ class SituationAnalyzer:
 
                         # 위험 요소 확인
                         risk_keywords = pattern_info["risk_factors"]
-                        risk_factors = [
-                            kw for kw in risk_keywords if kw in content_lower
-                        ]
+                        risk_factors = [kw for kw in risk_keywords if kw in content_lower]
 
                         # 긴급도 지표 확인
                         urgency_keywords = pattern_info["urgency_indicators"]
-                        urgency_indicators = [
-                            kw for kw in urgency_keywords if kw in content_lower
-                        ]
+                        urgency_indicators = [kw for kw in urgency_keywords if kw in content_lower]
 
                         # 컨텍스트 지표 확인
                         context_indicators = self._extract_context_indicators(context)
@@ -314,9 +296,7 @@ class SituationAnalyzer:
                 urgency_indicators=[],
             )
 
-    async def _assess_risk_level(
-        self, input_data: Dict[str, Any], context: Dict[str, Any]
-    ) -> float:
+    async def _assess_risk_level(self, input_data: Dict[str, Any], context: Dict[str, Any]) -> float:
         """위험도 평가"""
         try:
             risk_score = 0.0
@@ -362,9 +342,7 @@ class SituationAnalyzer:
             logger.error(f"위험도 평가 오류: {e}")
             return 0.5
 
-    async def _assess_urgency_level(
-        self, input_data: Dict[str, Any], context: Dict[str, Any]
-    ) -> float:
+    async def _assess_urgency_level(self, input_data: Dict[str, Any], context: Dict[str, Any]) -> float:
         """긴급도 평가"""
         try:
             urgency_score = 0.0
@@ -414,9 +392,7 @@ class SituationAnalyzer:
             logger.error(f"긴급도 평가 오류: {e}")
             return 0.5
 
-    async def _calculate_complexity(
-        self, input_data: Dict[str, Any], context: Dict[str, Any]
-    ) -> float:
+    async def _calculate_complexity(self, input_data: Dict[str, Any], context: Dict[str, Any]) -> float:
         """복잡도 계산"""
         try:
             complexity = 0.0
@@ -462,9 +438,7 @@ class SituationAnalyzer:
             logger.error(f"복잡도 계산 오류: {e}")
             return 0.5
 
-    async def _identify_key_factors(
-        self, input_data: Dict[str, Any], context: Dict[str, Any]
-    ) -> List[str]:
+    async def _identify_key_factors(self, input_data: Dict[str, Any], context: Dict[str, Any]) -> List[str]:
         """핵심 요소 식별"""
         try:
             factors = []
@@ -521,9 +495,7 @@ class SituationAnalyzer:
 
             # 컨텍스트 요소 기반 신뢰도
             if context_elements:
-                avg_confidence = sum(
-                    elem.confidence for elem in context_elements
-                ) / len(context_elements)
+                avg_confidence = sum(elem.confidence for elem in context_elements) / len(context_elements)
                 confidence += avg_confidence * 0.2
 
             # 패턴 신뢰도
@@ -548,7 +520,7 @@ class SituationAnalyzer:
                 return min(1.0, len(data) / 20)
             else:
                 return 0.1
-        except:
+        except:  # noqa: E722
             return 0.5
 
     def _assess_data_quality(self, data: Any) -> float:
@@ -562,7 +534,7 @@ class SituationAnalyzer:
                 return 0.7
             else:
                 return 0.5
-        except:
+        except:  # noqa: E722
             return 0.5
 
     def _analyze_content(self, data: Any) -> Dict[str, Any]:
@@ -573,12 +545,10 @@ class SituationAnalyzer:
                 "length": len(content),
                 "word_count": len(content.split()),
                 "has_numbers": any(char.isdigit() for char in content),
-                "has_special_chars": any(
-                    not char.isalnum() and not char.isspace() for char in content
-                ),
+                "has_special_chars": any(not char.isalnum() and not char.isspace() for char in content),
             }
             return analysis
-        except:
+        except:  # noqa: E722
             return {}
 
     def _calculate_context_importance(self, key: str, value: Any) -> float:
@@ -599,7 +569,7 @@ class SituationAnalyzer:
                     importance -= 0.1
 
             return max(0.0, min(1.0, importance))
-        except:
+        except:  # noqa: E722
             return 0.5
 
     def _categorize_context_element(self, key: str, value: Any) -> str:
@@ -617,7 +587,7 @@ class SituationAnalyzer:
                 return "memory"
             else:
                 return "general"
-        except:
+        except:  # noqa: E722
             return "general"
 
     def _calculate_context_confidence(self, key: str, value: Any) -> float:
@@ -634,7 +604,7 @@ class SituationAnalyzer:
                 confidence += 0.1
 
             return min(1.0, confidence)
-        except:
+        except:  # noqa: E722
             return 0.5
 
     def _extract_context_indicators(self, context: Dict[str, Any]) -> List[str]:
@@ -650,7 +620,7 @@ class SituationAnalyzer:
                         indicators.append(f"{key}:low_priority")
 
             return indicators
-        except:
+        except:  # noqa: E722
             return []
 
 
@@ -708,9 +678,7 @@ async def test_situation_analyzer():
         print(f"\n테스트 케이스 {i+1}:")
         print(f"입력: {test_case['input']['content'][:50]}...")
 
-        result = await analyzer.analyze_situation(
-            test_case["input"], test_case["context"]
-        )
+        result = await analyzer.analyze_situation(test_case["input"], test_case["context"])
 
         print(f"상황 타입: {result['situation_type']}")
         print(f"위험도: {result['risk_level']:.3f}")

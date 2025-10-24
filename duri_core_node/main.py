@@ -3,32 +3,32 @@
 DuRi Core Node - API Gateway
 포트 8080에서 사용자 요청을 받아 Brain과 Evolution 노드로 라우팅
 """
-import asyncio
-from datetime import datetime
+
 import time
+from datetime import datetime
 from typing import Any, Dict, Optional
 
-from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import HTMLResponse
 import httpx
-from pydantic import BaseModel
 import uvicorn
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import HTMLResponse
+from pydantic import BaseModel
 
 # DuRi 로깅 시스템 초기화
 from DuRiCore.bootstrap import bootstrap_logging
 
 bootstrap_logging()
 
-import logging
+import logging  # noqa: E402
 
 logger = logging.getLogger(__name__)
 
-from cognitive_bandwidth_manager import cognitive_bandwidth_manager
-from enhanced_emotion_filter import enhanced_emotion_filter
-from growth_level_system import growth_level_system
+from cognitive_bandwidth_manager import cognitive_bandwidth_manager  # noqa: E402
+from enhanced_emotion_filter import enhanced_emotion_filter  # noqa: E402
+from growth_level_system import growth_level_system  # noqa: E402
 
 # 성능 최적화 임포트
-from performance_optimizer import LoadBalancer, PerformanceOptimizer
+from performance_optimizer import LoadBalancer, PerformanceOptimizer  # noqa: E402
 
 app = FastAPI(title="DuRi Core Node", version="1.0.0")
 
@@ -79,30 +79,22 @@ async def health_check():
         async with httpx.AsyncClient() as client:
             # Brain 노드 상태 확인
             try:
-                brain_response = await client.get(
-                    f"{BRAIN_NODE_URL}/health", timeout=2.0
-                )
+                brain_response = await client.get(f"{BRAIN_NODE_URL}/health", timeout=2.0)
                 node_status.brain_healthy = brain_response.status_code == 200
-            except:
+            except:  # noqa: E722
                 node_status.brain_healthy = False
 
             # Evolution 노드 상태 확인
             try:
-                evolution_response = await client.get(
-                    f"{EVOLUTION_NODE_URL}/health", timeout=2.0
-                )
+                evolution_response = await client.get(f"{EVOLUTION_NODE_URL}/health", timeout=2.0)
                 node_status.evolution_healthy = evolution_response.status_code == 200
-            except:
+            except:  # noqa: E722
                 node_status.evolution_healthy = False
 
         node_status.last_check = datetime.now().isoformat()
 
         return {
-            "status": (
-                "healthy"
-                if (node_status.brain_healthy and node_status.evolution_healthy)
-                else "degraded"
-            ),
+            "status": ("healthy" if (node_status.brain_healthy and node_status.evolution_healthy) else "degraded"),
             "timestamp": datetime.now().isoformat(),
             "nodes": {
                 "brain": {"url": BRAIN_NODE_URL, "healthy": node_status.brain_healthy},
@@ -115,7 +107,7 @@ async def health_check():
 
     except Exception as e:
         logger.error(f"헬스 체크 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 @app.post("/conversation/process")
@@ -127,25 +119,17 @@ async def process_conversation(request: ConversationRequest):
         metadata = request.metadata or {}
 
         if not user_input or not duri_response:
-            raise HTTPException(
-                status_code=400, detail="user_input과 duri_response가 필요합니다"
-            )
+            raise HTTPException(status_code=400, detail="user_input과 duri_response가 필요합니다")
 
-        logger.info(
-            f"🔄 최적화된 대화 처리 시작: {len(user_input)}자 입력, {len(duri_response)}자 응답"
-        )
+        logger.info(f"🔄 최적화된 대화 처리 시작: {len(user_input)}자 입력, {len(duri_response)}자 응답")
 
         # 성장 레벨 시스템을 통한 자극-반응 처리
         growth_result = growth_level_system.process_stimulus(user_input, duri_response)
 
         # 성능 최적화를 통한 처리
-        optimized_result = await performance_optimizer.optimize_request(
-            user_input, duri_response, metadata
-        )
+        optimized_result = await performance_optimizer.optimize_request(user_input, duri_response, metadata)
 
-        logger.info(
-            f"✅ 최적화된 대화 처리 완료: 점수 {optimized_result.get('integrated_score', 0):.3f}"
-        )
+        logger.info(f"✅ 최적화된 대화 처리 완료: 점수 {optimized_result.get('integrated_score', 0):.3f}")
 
         # 성장 레벨 시스템 결과 추가
         final_result = {
@@ -163,12 +147,10 @@ async def process_conversation(request: ConversationRequest):
 
     except Exception as e:
         logger.error(f"❌ 최적화된 대화 처리 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
-async def _call_brain_node(
-    user_input: str, duri_response: str, metadata: Dict[str, Any]
-) -> Dict[str, Any]:
+async def _call_brain_node(user_input: str, duri_response: str, metadata: Dict[str, Any]) -> Dict[str, Any]:
     """Brain 노드 호출"""
     try:
         async with httpx.AsyncClient() as client:
@@ -224,9 +206,7 @@ async def _call_evolution_node(
         return {"error": str(e)}
 
 
-def _integrate_results(
-    brain_result: Dict[str, Any], evolution_result: Dict[str, Any]
-) -> Dict[str, Any]:
+def _integrate_results(brain_result: Dict[str, Any], evolution_result: Dict[str, Any]) -> Dict[str, Any]:
     """Brain과 Evolution 결과 통합"""
     try:
         # 통합 점수 계산
@@ -265,7 +245,7 @@ async def get_dashboard():
 
     except Exception as e:
         logger.error(f"대시보드 생성 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 @app.get("/performance")
@@ -285,7 +265,7 @@ async def get_performance_metrics():
 
     except Exception as e:
         logger.error(f"성능 메트릭 조회 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 @app.post("/performance/clear-cache")
@@ -301,7 +281,7 @@ async def clear_cache():
 
     except Exception as e:
         logger.error(f"캐시 클리어 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 @app.get("/growth/status")
@@ -320,7 +300,7 @@ async def get_growth_status():
 
     except Exception as e:
         logger.error(f"성장 상태 조회 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 @app.get("/bandwidth/status")
@@ -342,7 +322,7 @@ async def get_bandwidth_status():
 
     except Exception as e:
         logger.error(f"대역폭 상태 조회 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 @app.post("/bandwidth/update-level")
@@ -364,7 +344,7 @@ async def update_bandwidth_level(request: dict):
 
     except Exception as e:
         logger.error(f"대역폭 레벨 업데이트 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 @app.get("/emotion/analyze")
@@ -385,9 +365,7 @@ async def analyze_emotion(text: str = ""):
                 "primary_emotion": analysis.primary_emotion.value,
                 "intensity": analysis.intensity.value,
                 "confidence": analysis.confidence,
-                "secondary_emotions": [
-                    emotion.value for emotion in analysis.secondary_emotions
-                ],
+                "secondary_emotions": [emotion.value for emotion in analysis.secondary_emotions],
                 "bias_detected": analysis.bias_detected.value,
                 "meta_cognition": analysis.meta_cognition,
                 "timestamp": analysis.timestamp,
@@ -396,7 +374,7 @@ async def analyze_emotion(text: str = ""):
 
     except Exception as e:
         logger.error(f"감정 분석 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 @app.post("/emotion/analyze")
@@ -418,9 +396,7 @@ async def analyze_emotion_post(request: dict):
                 "primary_emotion": analysis.primary_emotion.value,
                 "intensity": analysis.intensity.value,
                 "confidence": analysis.confidence,
-                "secondary_emotions": [
-                    emotion.value for emotion in analysis.secondary_emotions
-                ],
+                "secondary_emotions": [emotion.value for emotion in analysis.secondary_emotions],
                 "bias_detected": analysis.bias_detected.value,
                 "meta_cognition": analysis.meta_cognition,
                 "timestamp": analysis.timestamp,
@@ -429,7 +405,7 @@ async def analyze_emotion_post(request: dict):
 
     except Exception as e:
         logger.error(f"감정 분석 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 @app.get("/emotion/status")
@@ -444,9 +420,7 @@ async def get_emotion_status():
             "emotion_filter": {
                 "active": enhanced_emotion_filter.active,
                 "current_emotion": (
-                    enhanced_emotion_filter.current_emotion.value
-                    if enhanced_emotion_filter.current_emotion
-                    else None
+                    enhanced_emotion_filter.current_emotion.value if enhanced_emotion_filter.current_emotion else None
                 ),
                 "emotion_weight": enhanced_emotion_filter.get_emotion_weight(),
                 "recommendations": recommendations,
@@ -464,7 +438,7 @@ async def get_emotion_status():
 
     except Exception as e:
         logger.error(f"감정 상태 조회 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 @app.post("/growth/stimulus")
@@ -492,7 +466,7 @@ async def process_growth_stimulus(request: ConversationRequest):
 
     except Exception as e:
         logger.error(f"성장 자극 처리 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 if __name__ == "__main__":

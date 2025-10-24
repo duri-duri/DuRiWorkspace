@@ -7,10 +7,7 @@ DuRi 로깅 시스템 통합 테스트
 
 import logging
 import os
-import random
 import sys
-import time
-from typing import Any, Dict, List
 
 # DuRiCore 경로 추가
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
@@ -168,7 +165,6 @@ def test_sampling_functionality():
     print("🔍 샘플링 기능 테스트 시작...")
 
     import os
-    import random
 
     from DuRiCore.duri_logging.decorators import log_calls
     from DuRiCore.duri_logging.setup import setup_logging

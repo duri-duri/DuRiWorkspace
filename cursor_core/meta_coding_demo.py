@@ -4,13 +4,10 @@ DuRi 메타-코딩 시스템 실제 작동 데모
 DuRi가 자기 자신의 코드를 분석하고 개선하는 과정을 실제로 보여줍니다.
 """
 
-import os
-import sys
 import time
-from typing import Any, Dict
 
 # DuRi 메타-코딩 시스템 임포트
-from learning_diagnostics import DuRiSelfGrowthManager, self_growth_manager
+from learning_diagnostics import self_growth_manager
 
 
 def demonstrate_duRi_self_analysis():
@@ -50,11 +47,9 @@ def demonstrate_duRi_self_analysis():
         time.sleep(0.1)
         return "테스트 성공"
 
-    before_metrics = self_growth_manager.performance_scorer.measure_performance(
-        test_function
-    )
+    before_metrics = self_growth_manager.performance_scorer.measure_performance(test_function)
 
-    print(f"✅ 성능 측정 완료:")
+    print("✅ 성능 측정 완료:")
     print(f"   - 응답 시간: {before_metrics.response_time:.3f}초")
     print(f"   - 메모리 사용량: {before_metrics.resource_usage:.2f}MB")
     print(f"   - 종합 점수: {before_metrics.overall_score:.2f}")
@@ -67,13 +62,9 @@ def demonstrate_duRi_self_analysis():
     print("   - 예상 효과 계산")
     print()
 
-    improvement_plan = (
-        self_growth_manager.improvement_strategist.generate_improvement_plan(
-            analysis_result
-        )
-    )
+    improvement_plan = self_growth_manager.improvement_strategist.generate_improvement_plan(analysis_result)
 
-    print(f"✅ 개선 계획 수립 완료:")
+    print("✅ 개선 계획 수립 완료:")
     print(f"   - 대상 모듈: {improvement_plan['target_module']}")
     print(f"   - 우선순위: {improvement_plan['priority']}")
     print(f"   - 전략 수: {len(improvement_plan['strategies'])}개")
@@ -99,15 +90,13 @@ def demonstrate_duRi_self_analysis():
     print("   - 결과 평가")
     print()
 
-    after_metrics = self_growth_manager.performance_scorer.measure_performance(
-        test_function
+    after_metrics = self_growth_manager.performance_scorer.measure_performance(test_function)
+
+    improvement_rate = (after_metrics.overall_score - before_metrics.overall_score) / max(
+        before_metrics.overall_score, 0.01
     )
 
-    improvement_rate = (
-        after_metrics.overall_score - before_metrics.overall_score
-    ) / max(before_metrics.overall_score, 0.01)
-
-    print(f"✅ 개선 결과:")
+    print("✅ 개선 결과:")
     print(f"   - 개선 전 점수: {before_metrics.overall_score:.2f}")
     print(f"   - 개선 후 점수: {after_metrics.overall_score:.2f}")
     print(f"   - 개선률: {improvement_rate:.2%}")
@@ -126,7 +115,7 @@ def demonstrate_duRi_self_analysis():
 
     growth_stats = self_growth_manager.meta_logger.get_growth_statistics()
 
-    print(f"✅ 학습 결과 저장 완료:")
+    print("✅ 학습 결과 저장 완료:")
     print(f"   - 총 시도 횟수: {growth_stats['total_attempts']}")
     print(f"   - 성공률: {growth_stats['success_rate']:.2%}")
     print(f"   - 평균 개선률: {growth_stats['avg_improvement']:.2%}")
@@ -142,7 +131,7 @@ def demonstrate_duRi_self_analysis():
 
     system_status = self_growth_manager.get_system_status()
 
-    print(f"✅ 시스템 상태:")
+    print("✅ 시스템 상태:")
     print(f"   - 총 분석 횟수: {system_status['total_analyses']}")
     print(f"   - 총 성능 테스트: {system_status['total_performance_tests']}")
     print(f"   - 총 개선 계획: {system_status['total_improvement_plans']}")
@@ -237,7 +226,7 @@ def demonstrate_actual_analysis():
         elif isinstance(node, ast.FunctionDef):
             complexity += 1
 
-    print(f"📊 분석 결과:")
+    print("📊 분석 결과:")
     print(f"   - 함수 수: {function_count}")
     print(f"   - 클래스 수: {class_count}")
     print(f"   - 복잡도: {complexity}")
@@ -251,7 +240,7 @@ def demonstrate_actual_analysis():
     if function_count > 5:
         suggestions.append("함수가 많습니다. 모듈화를 고려하세요.")
 
-    print(f"💡 개선 제안:")
+    print("💡 개선 제안:")
     for i, suggestion in enumerate(suggestions, 1):
         print(f"   {i}. {suggestion}")
 

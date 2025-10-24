@@ -5,16 +5,13 @@ DuRiCore Phase 5.5.3 - 전략적 사고 시스템
 """
 
 import asyncio
+import logging
+import random
+import time
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from enum import Enum
-import json
-import logging
-import math
-import random
-import statistics
-import time
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -141,9 +138,7 @@ class StrategicThinkingSystem:
             timeline = await self._create_timeline(objectives)
 
             # 자원 요구사항 분석
-            resource_requirements = await self._analyze_resource_requirements(
-                strategies
-            )
+            resource_requirements = await self._analyze_resource_requirements(strategies)
 
             # 리스크 평가
             risk_assessment = await self._assess_risks(strategies, context)
@@ -199,9 +194,7 @@ class StrategicThinkingSystem:
             logger.error(f"리스크 관리 실패: {e}")
             return []
 
-    async def optimize_resources(
-        self, context: Dict[str, Any]
-    ) -> List[ResourceOptimization]:
+    async def optimize_resources(self, context: Dict[str, Any]) -> List[ResourceOptimization]:
         """자원 최적화"""
         try:
             optimizations = []
@@ -210,15 +203,11 @@ class StrategicThinkingSystem:
             current_resources = await self._analyze_current_resources(context)
 
             # 최적화 기회 식별
-            optimization_opportunities = (
-                await self._identify_optimization_opportunities(current_resources)
-            )
+            optimization_opportunities = await self._identify_optimization_opportunities(current_resources)
 
             # 각 기회에 대한 최적화 계획 수립
             for opportunity in optimization_opportunities:
-                optimization = await self._create_optimization_plan(
-                    opportunity, context
-                )
+                optimization = await self._create_optimization_plan(opportunity, context)
                 if optimization:
                     optimizations.append(optimization)
 
@@ -256,9 +245,7 @@ class StrategicThinkingSystem:
             objectives = []
 
             # 상황에 따른 목표 설정
-            if situation_analysis.get("current_state") != situation_analysis.get(
-                "desired_state"
-            ):
+            if situation_analysis.get("current_state") != situation_analysis.get("desired_state"):
                 objectives.append("현재 상태에서 목표 상태로 전환")
 
             if situation_analysis.get("opportunities"):
@@ -276,9 +263,7 @@ class StrategicThinkingSystem:
             logger.warning(f"목표 설정 실패: {e}")
             return self._generate_dynamic_objectives(situation_analysis)
 
-    def _generate_dynamic_objectives(
-        self, situation_analysis: Dict[str, Any]
-    ) -> List[str]:
+    def _generate_dynamic_objectives(self, situation_analysis: Dict[str, Any]) -> List[str]:
         """동적 목표 생성 - 상황 분석 기반"""
         try:
             objectives = []
@@ -319,9 +304,7 @@ class StrategicThinkingSystem:
             # 위협 기반 목표
             threats = situation_analysis.get("threats", [])
             if threats:
-                objectives.extend(
-                    [f"{threats[0]} 대응 및 완화", "리스크 관리 강화", "안정성 확보"]
-                )
+                objectives.extend([f"{threats[0]} 대응 및 완화", "리스크 관리 강화", "안정성 확보"])
 
             # 환경 변화 기반 목표
             environmental_changes = situation_analysis.get("environmental_changes", [])
@@ -332,37 +315,25 @@ class StrategicThinkingSystem:
             resource_status = situation_analysis.get("resource_status", {})
             if resource_status:
                 if resource_status.get("availability", 0) < 0.5:
-                    objectives.extend(
-                        ["자원 효율성 극대화", "대안 자원 개발", "비용 최적화"]
-                    )
+                    objectives.extend(["자원 효율성 극대화", "대안 자원 개발", "비용 최적화"])
                 elif resource_status.get("availability", 0) > 0.8:
-                    objectives.extend(
-                        ["자원 활용 극대화", "투자 기회 포착", "성장 가속화"]
-                    )
+                    objectives.extend(["자원 활용 극대화", "투자 기회 포착", "성장 가속화"])
 
             # 시장 상황 기반 목표
             market_conditions = situation_analysis.get("market_conditions", {})
             if market_conditions:
                 if market_conditions.get("competition_level", 0) > 0.7:
-                    objectives.extend(
-                        ["경쟁 우위 확보", "차별화 전략", "고객 충성도 강화"]
-                    )
+                    objectives.extend(["경쟁 우위 확보", "차별화 전략", "고객 충성도 강화"])
                 elif market_conditions.get("growth_potential", 0) > 0.8:
                     objectives.extend(["시장 확장", "신규 영역 진출", "성장 동력 확보"])
 
-            return (
-                objectives
-                if objectives
-                else ["전략적 목표 달성", "지속적 개선", "가치 창출"]
-            )
+            return objectives if objectives else ["전략적 목표 달성", "지속적 개선", "가치 창출"]
 
         except Exception as e:
             logger.error(f"동적 목표 생성 중 오류: {e}")
             return ["전략적 목표 달성", "지속적 개선", "가치 창출"]
 
-    async def _develop_strategies(
-        self, objectives: List[str], situation_analysis: Dict[str, Any]
-    ) -> List[str]:
+    async def _develop_strategies(self, objectives: List[str], situation_analysis: Dict[str, Any]) -> List[str]:
         """전략 수립"""
         try:
             strategies = []
@@ -387,9 +358,7 @@ class StrategicThinkingSystem:
             logger.warning(f"전략 수립 실패: {e}")
             return self._generate_dynamic_strategies(objectives, situation_analysis)
 
-    def _generate_dynamic_strategies(
-        self, objectives: List[str], situation_analysis: Dict[str, Any]
-    ) -> List[str]:
+    def _generate_dynamic_strategies(self, objectives: List[str], situation_analysis: Dict[str, Any]) -> List[str]:
         """동적 전략 생성 - 목표 및 상황 분석 기반"""
         try:
             strategies = []
@@ -397,70 +366,44 @@ class StrategicThinkingSystem:
             # 목표별 전략
             for objective in objectives:
                 if "전환" in objective or "변화" in objective:
-                    strategies.extend(
-                        ["점진적 전환 전략", "단계별 목표 설정", "변화 관리 체계"]
-                    )
+                    strategies.extend(["점진적 전환 전략", "단계별 목표 설정", "변화 관리 체계"])
                 elif "기회" in objective or "포착" in objective:
-                    strategies.extend(
-                        ["기회 포착 및 활용", "시장 선점 전략", "신속한 의사결정"]
-                    )
+                    strategies.extend(["기회 포착 및 활용", "시장 선점 전략", "신속한 의사결정"])
                 elif "위협" in objective or "대응" in objective:
-                    strategies.extend(
-                        ["위험 완화 전략", "대안 경로 개발", "방어적 포지셔닝"]
-                    )
+                    strategies.extend(["위험 완화 전략", "대안 경로 개발", "방어적 포지셔닝"])
                 elif "약점" in objective or "보완" in objective:
-                    strategies.extend(
-                        ["역량 강화 전략", "외부 자원 활용", "개선 프로세스"]
-                    )
+                    strategies.extend(["역량 강화 전략", "외부 자원 활용", "개선 프로세스"])
                 elif "강점" in objective or "활용" in objective:
-                    strategies.extend(
-                        ["핵심 역량 집중", "차별화 전략", "경쟁 우위 확보"]
-                    )
+                    strategies.extend(["핵심 역량 집중", "차별화 전략", "경쟁 우위 확보"])
                 elif "효율성" in objective or "최적화" in objective:
-                    strategies.extend(
-                        ["프로세스 최적화", "자원 효율성 극대화", "비용 절감 전략"]
-                    )
+                    strategies.extend(["프로세스 최적화", "자원 효율성 극대화", "비용 절감 전략"])
                 elif "성장" in objective or "확장" in objective:
-                    strategies.extend(
-                        ["시장 확장 전략", "신규 영역 진출", "성장 동력 확보"]
-                    )
+                    strategies.extend(["시장 확장 전략", "신규 영역 진출", "성장 동력 확보"])
 
             # 상황별 전략
             market_conditions = situation_analysis.get("market_conditions", {})
             if market_conditions:
                 competition_level = market_conditions.get("competition_level", 0.5)
                 if competition_level > 0.7:
-                    strategies.extend(
-                        ["차별화 전략", "고객 충성도 강화", "브랜드 가치 향상"]
-                    )
+                    strategies.extend(["차별화 전략", "고객 충성도 강화", "브랜드 가치 향상"])
                 elif competition_level < 0.3:
-                    strategies.extend(
-                        ["시장 선점 전략", "규모의 경제 활용", "표준화 전략"]
-                    )
+                    strategies.extend(["시장 선점 전략", "규모의 경제 활용", "표준화 전략"])
 
             # 자원 상황별 전략
             resource_status = situation_analysis.get("resource_status", {})
             if resource_status:
                 availability = resource_status.get("availability", 0.5)
                 if availability < 0.4:
-                    strategies.extend(
-                        ["자원 효율성 극대화", "대안 자원 개발", "협력 파트너십"]
-                    )
+                    strategies.extend(["자원 효율성 극대화", "대안 자원 개발", "협력 파트너십"])
                 elif availability > 0.8:
-                    strategies.extend(
-                        ["자원 활용 극대화", "투자 기회 포착", "성장 가속화"]
-                    )
+                    strategies.extend(["자원 활용 극대화", "투자 기회 포착", "성장 가속화"])
 
             # 환경 변화별 전략
             environmental_changes = situation_analysis.get("environmental_changes", [])
             if environmental_changes:
                 strategies.extend(["적응적 전략", "유연성 확보", "지속가능성 강화"])
 
-            return (
-                strategies
-                if strategies
-                else ["상황 적응적 전략", "지속적 개선", "가치 창출"]
-            )
+            return strategies if strategies else ["상황 적응적 전략", "지속적 개선", "가치 창출"]
 
         except Exception as e:
             logger.error(f"동적 전략 생성 중 오류: {e}")
@@ -500,9 +443,7 @@ class StrategicThinkingSystem:
             for i, objective in enumerate(objectives):
                 # 각 목표별로 단계적 타임라인 설정
                 timeline[f"phase_{i+1}_start"] = current_time + timedelta(days=30 * i)
-                timeline[f"phase_{i+1}_end"] = current_time + timedelta(
-                    days=30 * (i + 1)
-                )
+                timeline[f"phase_{i+1}_end"] = current_time + timedelta(days=30 * (i + 1))
 
             timeline["overall_end"] = current_time + timedelta(days=365)  # 1년 계획
 
@@ -515,9 +456,7 @@ class StrategicThinkingSystem:
                 "end": datetime.now() + timedelta(days=365),
             }
 
-    async def _analyze_resource_requirements(
-        self, strategies: List[str]
-    ) -> Dict[str, Any]:
+    async def _analyze_resource_requirements(self, strategies: List[str]) -> Dict[str, Any]:
         """자원 요구사항 분석"""
         try:
             requirements = {
@@ -552,9 +491,7 @@ class StrategicThinkingSystem:
                 "time_resources": [],
             }
 
-    async def _assess_risks(
-        self, strategies: List[str], context: Dict[str, Any]
-    ) -> Dict[str, RiskLevel]:
+    async def _assess_risks(self, strategies: List[str], context: Dict[str, Any]) -> Dict[str, RiskLevel]:
         """리스크 평가"""
         try:
             risk_assessment = {}
@@ -608,29 +545,17 @@ class StrategicThinkingSystem:
             # 목표별 성공 기준
             for objective in objectives:
                 if "전환" in objective or "변화" in objective:
-                    criteria.extend(
-                        ["전환 완료율 90% 이상", "변화 수용도 85% 이상", "안정화 달성"]
-                    )
+                    criteria.extend(["전환 완료율 90% 이상", "변화 수용도 85% 이상", "안정화 달성"])
                 elif "기회" in objective or "포착" in objective:
-                    criteria.extend(
-                        ["기회 활용률 80% 이상", "시장 점유율 증가", "수익성 개선"]
-                    )
+                    criteria.extend(["기회 활용률 80% 이상", "시장 점유율 증가", "수익성 개선"])
                 elif "위협" in objective or "대응" in objective:
-                    criteria.extend(
-                        ["리스크 완화율 90% 이상", "안정성 확보", "대응 체계 구축"]
-                    )
+                    criteria.extend(["리스크 완화율 90% 이상", "안정성 확보", "대응 체계 구축"])
                 elif "약점" in objective or "보완" in objective:
-                    criteria.extend(
-                        ["약점 개선율 75% 이상", "역량 강화 달성", "성과 향상"]
-                    )
+                    criteria.extend(["약점 개선율 75% 이상", "역량 강화 달성", "성과 향상"])
                 elif "강점" in objective or "활용" in objective:
-                    criteria.extend(
-                        ["강점 활용률 95% 이상", "경쟁 우위 확보", "가치 창출"]
-                    )
+                    criteria.extend(["강점 활용률 95% 이상", "경쟁 우위 확보", "가치 창출"])
                 elif "효율성" in objective or "최적화" in objective:
-                    criteria.extend(
-                        ["효율성 개선율 20% 이상", "비용 절감 달성", "자원 활용도 향상"]
-                    )
+                    criteria.extend(["효율성 개선율 20% 이상", "비용 절감 달성", "자원 활용도 향상"])
                 elif "성장" in objective or "확장" in objective:
                     criteria.extend(["성장률 달성", "시장 확장 성공", "신규 영역 진출"])
 
@@ -671,9 +596,7 @@ class StrategicThinkingSystem:
             logger.warning(f"리스크 식별 실패: {e}")
             return []
 
-    async def _assess_single_risk(
-        self, risk: Dict[str, Any], context: Dict[str, Any]
-    ) -> Optional[RiskAssessment]:
+    async def _assess_single_risk(self, risk: Dict[str, Any], context: Dict[str, Any]) -> Optional[RiskAssessment]:
         """단일 리스크 평가"""
         try:
             # 리스크 수준 결정
@@ -722,15 +645,11 @@ class StrategicThinkingSystem:
             # 리스크 유형별 전략
             risk_type = risk["type"]
             if risk_type == "market_risk":
-                strategies.extend(
-                    ["시장 다각화", "고객 포트폴리오 확대", "가격 전략 조정"]
-                )
+                strategies.extend(["시장 다각화", "고객 포트폴리오 확대", "가격 전략 조정"])
             elif risk_type == "operational_risk":
                 strategies.extend(["프로세스 표준화", "품질 관리 강화", "인력 교육"])
             elif risk_type == "financial_risk":
-                strategies.extend(
-                    ["자금 유동성 확보", "비용 구조 최적화", "수익성 개선"]
-                )
+                strategies.extend(["자금 유동성 확보", "비용 구조 최적화", "수익성 개선"])
             elif risk_type == "technology_risk":
                 strategies.extend(["기술 투자 확대", "백업 시스템 구축", "보안 강화"])
             elif risk_type == "regulatory_risk":
@@ -752,9 +671,7 @@ class StrategicThinkingSystem:
             logger.warning(f"완화 전략 생성 실패: {e}")
             return self._generate_dynamic_mitigation_strategies(risk)
 
-    def _generate_dynamic_mitigation_strategies(
-        self, risk: Dict[str, Any]
-    ) -> List[str]:
+    def _generate_dynamic_mitigation_strategies(self, risk: Dict[str, Any]) -> List[str]:
         """동적 완화 전략 생성 - 리스크 분석 기반"""
         try:
             strategies = []
@@ -762,9 +679,7 @@ class StrategicThinkingSystem:
             # 리스크 수준별 전략
             risk_score = risk["probability"] * risk["impact"]
             if risk_score > 0.8:
-                strategies.extend(
-                    ["긴급 대응 체계", "전문가 자문 활용", "대안 경로 개발"]
-                )
+                strategies.extend(["긴급 대응 체계", "전문가 자문 활용", "대안 경로 개발"])
             elif risk_score > 0.6:
                 strategies.extend(["체계적 완화 계획", "단계적 대응", "모니터링 강화"])
             elif risk_score > 0.3:
@@ -880,29 +795,17 @@ class StrategicThinkingSystem:
             # 리스크 유형별 특화 지표
             risk_type = risk["type"]
             if "market" in risk_type:
-                indicators.extend(
-                    ["market_share_trend", "customer_satisfaction", "revenue_growth"]
-                )
+                indicators.extend(["market_share_trend", "customer_satisfaction", "revenue_growth"])
             elif "operational" in risk_type:
-                indicators.extend(
-                    ["operational_efficiency", "quality_metrics", "productivity_trends"]
-                )
+                indicators.extend(["operational_efficiency", "quality_metrics", "productivity_trends"])
             elif "financial" in risk_type:
-                indicators.extend(
-                    ["cash_flow_monitoring", "profitability_trends", "cost_efficiency"]
-                )
+                indicators.extend(["cash_flow_monitoring", "profitability_trends", "cost_efficiency"])
             elif "technology" in risk_type:
-                indicators.extend(
-                    ["system_performance", "security_metrics", "technology_adoption"]
-                )
+                indicators.extend(["system_performance", "security_metrics", "technology_adoption"])
             elif "regulatory" in risk_type:
-                indicators.extend(
-                    ["compliance_status", "policy_changes", "regulatory_impact"]
-                )
+                indicators.extend(["compliance_status", "policy_changes", "regulatory_impact"])
             elif "competitive" in risk_type:
-                indicators.extend(
-                    ["competitive_position", "market_dynamics", "innovation_metrics"]
-                )
+                indicators.extend(["competitive_position", "market_dynamics", "innovation_metrics"])
 
             return indicators
 
@@ -910,9 +813,7 @@ class StrategicThinkingSystem:
             logger.warning(f"모니터링 지표 생성 실패: {e}")
             return self._generate_dynamic_monitoring_indicators(risk)
 
-    def _generate_dynamic_monitoring_indicators(
-        self, risk: Dict[str, Any]
-    ) -> List[str]:
+    def _generate_dynamic_monitoring_indicators(self, risk: Dict[str, Any]) -> List[str]:
         """동적 모니터링 지표 생성 - 리스크 분석 기반"""
         try:
             indicators = []
@@ -947,9 +848,7 @@ class StrategicThinkingSystem:
             logger.error(f"동적 모니터링 지표 생성 중 오류: {e}")
             return ["상황 적응적 모니터링 지표"]
 
-    async def _create_risk_monitoring_plan(
-        self, risk_assessments: List[RiskAssessment]
-    ):
+    async def _create_risk_monitoring_plan(self, risk_assessments: List[RiskAssessment]):
         """리스크 모니터링 계획 수립"""
         try:
             # 리스크 모니터링 계획 생성
@@ -958,9 +857,7 @@ class StrategicThinkingSystem:
         except Exception as e:
             logger.warning(f"리스크 모니터링 계획 수립 실패: {e}")
 
-    async def _analyze_current_resources(
-        self, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _analyze_current_resources(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """현재 자원 사용량 분석"""
         try:
             resources = {
@@ -976,9 +873,7 @@ class StrategicThinkingSystem:
             logger.warning(f"현재 자원 분석 실패: {e}")
             return {}
 
-    async def _identify_optimization_opportunities(
-        self, current_resources: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    async def _identify_optimization_opportunities(self, current_resources: Dict[str, Any]) -> List[Dict[str, Any]]:
         """최적화 기회 식별"""
         try:
             opportunities = []
@@ -989,8 +884,7 @@ class StrategicThinkingSystem:
                         "resource_type": resource_type,
                         "current_utilization": utilization,
                         "optimal_utilization": self.optimal_resource_utilization,
-                        "improvement_potential": utilization
-                        - self.optimal_resource_utilization,
+                        "improvement_potential": utilization - self.optimal_resource_utilization,
                     }
                     opportunities.append(opportunity)
 
@@ -1012,9 +906,9 @@ class StrategicThinkingSystem:
             # 구현 계획 생성
             implementation_plan = [
                 f"{opportunity['resource_type']} 사용량 모니터링",
-                f"최적화 알고리즘 적용",
-                f"자동 조정 시스템 구현",
-                f"성과 측정 및 검증",
+                "최적화 알고리즘 적용",
+                "자동 조정 시스템 구현",
+                "성과 측정 및 검증",
             ]
 
             # 예상 효과
@@ -1042,9 +936,7 @@ class StrategicThinkingSystem:
             logger.warning(f"최적화 계획 수립 실패: {e}")
             return None
 
-    async def _predict_optimization_effects(
-        self, optimizations: List[ResourceOptimization]
-    ):
+    async def _predict_optimization_effects(self, optimizations: List[ResourceOptimization]):
         """최적화 효과 예측"""
         try:
             total_efficiency_gain = sum(opt.efficiency_gains for opt in optimizations)

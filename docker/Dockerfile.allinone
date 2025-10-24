@@ -36,6 +36,7 @@ RUN echo "fastapi==0.104.1" > /app/requirements_allinone.txt && \
     echo "flask==3.0.0" >> /app/requirements_allinone.txt && \
     echo "flask-cors==4.0.0" >> /app/requirements_allinone.txt && \
     echo "gunicorn==21.2.0" >> /app/requirements_allinone.txt
+    echo "pydantic-settings==2.1.0" >> /app/requirements_allinone.txt
 
 # 의존성 설치
 RUN pip install --no-cache-dir -r /app/requirements_allinone.txt

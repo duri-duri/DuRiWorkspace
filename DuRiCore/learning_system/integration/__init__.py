@@ -9,11 +9,11 @@ DuRiCore Phase 2-3: 학습 시스템 Integration 모듈
 from .knowledge_integration import (
     IntegratedKnowledge,
     IntegrationMethod,
-    IntegrationSession as KnowledgeIntegrationSession,
     KnowledgeIntegrationSystem,
     KnowledgeQuality,
     KnowledgeSource,
 )
+from .knowledge_integration import IntegrationSession as KnowledgeIntegrationSession
 from .learning_integration import (
     IntegratedLearningResult,
     IntegrationSession,

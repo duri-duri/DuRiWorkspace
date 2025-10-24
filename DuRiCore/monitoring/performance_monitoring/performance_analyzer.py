@@ -10,19 +10,16 @@ DuRiCore Phase 2-4: 성능 분석 모듈
 - 성능 최적화 제안
 """
 
-import asyncio
-from collections import defaultdict, deque
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-import json
 import logging
 import statistics
 import time
-from typing import Any, Dict, List, Optional, Tuple, Union
 import uuid
+from collections import defaultdict
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
-import numpy as np
 from scipy import stats
 
 # 로깅 설정
@@ -141,15 +138,11 @@ class PerformanceAnalyzer:
 
         logger.info("성능 분석기 초기화 완료")
 
-    async def analyze_trends(
-        self, metrics: List[Any], metric_name: str
-    ) -> Optional[PerformanceTrend]:
+    async def analyze_trends(self, metrics: List[Any], metric_name: str) -> Optional[PerformanceTrend]:
         """트렌드 분석"""
         try:
             if len(metrics) < self.analysis_config["min_data_points"]:
-                logger.warning(
-                    f"트렌드 분석을 위한 데이터가 부족합니다: {len(metrics)}개"
-                )
+                logger.warning(f"트렌드 분석을 위한 데이터가 부족합니다: {len(metrics)}개")
                 return None
 
             # 시간과 값 추출
@@ -160,9 +153,7 @@ class PerformanceAnalyzer:
             time_nums = [(t - timestamps[0]).total_seconds() for t in timestamps]
 
             # 선형 회귀 분석
-            slope, intercept, r_value, p_value, std_err = stats.linregress(
-                time_nums, values
-            )
+            slope, intercept, r_value, p_value, std_err = stats.linregress(time_nums, values)
             r_squared = r_value**2
 
             # 트렌드 방향 결정
@@ -203,9 +194,7 @@ class PerformanceAnalyzer:
             logger.error(f"트렌드 분석 실패: {e}")
             return None
 
-    async def detect_patterns(
-        self, metrics: List[Any], metric_name: str
-    ) -> List[PerformancePattern]:
+    async def detect_patterns(self, metrics: List[Any], metric_name: str) -> List[PerformancePattern]:
         """패턴 감지"""
         try:
             patterns = []
@@ -217,23 +206,17 @@ class PerformanceAnalyzer:
             timestamps = [m.timestamp for m in metrics]
 
             # 1. 주기성 패턴 감지
-            periodic_pattern = await self._detect_periodic_pattern(
-                values, timestamps, metric_name
-            )
+            periodic_pattern = await self._detect_periodic_pattern(values, timestamps, metric_name)
             if periodic_pattern:
                 patterns.append(periodic_pattern)
 
             # 2. 계절성 패턴 감지
-            seasonal_pattern = await self._detect_seasonal_pattern(
-                values, timestamps, metric_name
-            )
+            seasonal_pattern = await self._detect_seasonal_pattern(values, timestamps, metric_name)
             if seasonal_pattern:
                 patterns.append(seasonal_pattern)
 
             # 3. 이상 패턴 감지
-            anomaly_pattern = await self._detect_anomaly_pattern(
-                values, timestamps, metric_name
-            )
+            anomaly_pattern = await self._detect_anomaly_pattern(values, timestamps, metric_name)
             if anomaly_pattern:
                 patterns.append(anomaly_pattern)
 
@@ -247,9 +230,7 @@ class PerformanceAnalyzer:
             logger.error(f"패턴 감지 실패: {e}")
             return []
 
-    async def predict_performance(
-        self, metrics: List[Any], metric_name: str
-    ) -> Optional[PerformancePrediction]:
+    async def predict_performance(self, metrics: List[Any], metric_name: str) -> Optional[PerformancePrediction]:
         """성능 예측"""
         try:
             if len(metrics) < self.analysis_config["min_data_points"]:
@@ -260,14 +241,10 @@ class PerformanceAnalyzer:
 
             # 간단한 선형 예측
             time_nums = [(t - timestamps[0]).total_seconds() for t in timestamps]
-            slope, intercept, r_value, p_value, std_err = stats.linregress(
-                time_nums, values
-            )
+            slope, intercept, r_value, p_value, std_err = stats.linregress(time_nums, values)
 
             # 예측 시간 계산
-            prediction_time = (
-                timestamps[-1] + self.analysis_config["prediction_horizon"]
-            )
+            prediction_time = timestamps[-1] + self.analysis_config["prediction_horizon"]
             prediction_time_num = (prediction_time - timestamps[0]).total_seconds()
 
             # 예측값 계산
@@ -289,9 +266,7 @@ class PerformanceAnalyzer:
             self.predictions.append(prediction)
             self.performance_metrics["total_predictions_made"] += 1
 
-            logger.info(
-                f"성능 예측 완료: {prediction.prediction_id} ({predicted_value:.2f})"
-            )
+            logger.info(f"성능 예측 완료: {prediction.prediction_id} ({predicted_value:.2f})")
             return prediction
 
         except Exception as e:
@@ -318,7 +293,7 @@ class PerformanceAnalyzer:
                     suggestion_id=f"sugg_{int(time.time())}_{uuid.uuid4().hex[:8]}",
                     suggestion_type="performance_improvement",
                     suggestion_title=f"{metric_name} 성능 개선",
-                    suggestion_description=f"{metric_name}의 성능이 평균 대비 20% 이상 저하되었습니다. 최적화가 필요합니다.",
+                    suggestion_description=f"{metric_name}의 성능이 평균 대비 20% 이상 저하되었습니다. 최적화가 필요합니다.",  # noqa: E501
                     expected_improvement=0.2,
                     implementation_difficulty="medium",
                     priority="high",
@@ -360,10 +335,7 @@ class PerformanceAnalyzer:
                 return None
 
             # FFT를 사용한 주기성 분석 (간단한 구현)
-            time_diffs = [
-                (timestamps[i] - timestamps[i - 1]).total_seconds()
-                for i in range(1, len(timestamps))
-            ]
+            time_diffs = [(timestamps[i] - timestamps[i - 1]).total_seconds() for i in range(1, len(timestamps))]
             avg_time_diff = statistics.mean(time_diffs)
 
             # 간단한 주기성 검사
@@ -401,15 +373,11 @@ class PerformanceAnalyzer:
 
             # 시간대별 변동성 계산
             hourly_std = {
-                hour: statistics.stdev(vals) if len(vals) > 1 else 0
-                for hour, vals in hourly_averages.items()
+                hour: statistics.stdev(vals) if len(vals) > 1 else 0 for hour, vals in hourly_averages.items()
             }
 
             # 계절성 검사
-            if (
-                len(hourly_std) > 6
-                and max(hourly_std.values()) > min(hourly_std.values()) * 2
-            ):
+            if len(hourly_std) > 6 and max(hourly_std.values()) > min(hourly_std.values()) * 2:
                 return PerformancePattern(
                     pattern_id=f"pattern_{int(time.time())}_{uuid.uuid4().hex[:8]}",
                     pattern_type="seasonal",
@@ -480,44 +448,24 @@ class PerformanceAnalyzer:
             }
 
             # 최근 트렌드
-            recent_trends = [
-                t
-                for t in self.trends
-                if not metric_name or t.metric_name == metric_name
-            ]
-            report["recent_trends"] = [
-                self._trend_to_dict(t) for t in recent_trends[-5:]
-            ]
+            recent_trends = [t for t in self.trends if not metric_name or t.metric_name == metric_name]
+            report["recent_trends"] = [self._trend_to_dict(t) for t in recent_trends[-5:]]
 
             # 최근 패턴
-            recent_patterns = [
-                p
-                for p in self.patterns
-                if not metric_name or p.metric_name == metric_name
-            ]
-            report["recent_patterns"] = [
-                self._pattern_to_dict(p) for p in recent_patterns[-5:]
-            ]
+            recent_patterns = [p for p in self.patterns if not metric_name or p.metric_name == metric_name]
+            report["recent_patterns"] = [self._pattern_to_dict(p) for p in recent_patterns[-5:]]
 
             # 최근 예측
             recent_predictions = [
-                pred
-                for pred in self.predictions
-                if not metric_name or pred.metric_name == metric_name
+                pred for pred in self.predictions if not metric_name or pred.metric_name == metric_name
             ]
-            report["recent_predictions"] = [
-                self._prediction_to_dict(pred) for pred in recent_predictions[-5:]
-            ]
+            report["recent_predictions"] = [self._prediction_to_dict(pred) for pred in recent_predictions[-5:]]
 
             # 최근 제안
             recent_suggestions = [
-                s
-                for s in self.optimization_suggestions
-                if not metric_name or metric_name in s.affected_metrics
+                s for s in self.optimization_suggestions if not metric_name or metric_name in s.affected_metrics
             ]
-            report["recent_suggestions"] = [
-                self._suggestion_to_dict(s) for s in recent_suggestions[-5:]
-            ]
+            report["recent_suggestions"] = [self._suggestion_to_dict(s) for s in recent_suggestions[-5:]]
 
             return report
 

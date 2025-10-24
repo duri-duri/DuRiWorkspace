@@ -1,5 +1,3 @@
-import pytest
-
 from insight.pipeline import PromptPipeline
 
 
@@ -30,10 +28,7 @@ def test_cleaning_effectiveness():
         tokens = candidate.split()  # 간단한 토큰화
         assert len(tokens) >= pipeline.cleaning_rules["min_length"]
         assert len(tokens) <= pipeline.cleaning_rules["max_length"]
-        assert not any(
-            word in candidate.lower()
-            for word in pipeline.cleaning_rules["forbidden_words"]
-        )
+        assert not any(word in candidate.lower() for word in pipeline.cleaning_rules["forbidden_words"])
 
 
 def test_empty_input_exception():
@@ -70,9 +65,7 @@ def test_ranking_stability():
 
     results = []
     for _ in range(3):
-        result = pipeline.process_pipeline(
-            "rehabilitation therapy", candidates=candidates
-        )
+        result = pipeline.process_pipeline("rehabilitation therapy", candidates=candidates)
         results.append(result)
 
     # 모든 실행에서 동일한 순위가 나와야 함
@@ -82,12 +75,8 @@ def test_ranking_stability():
     # 상위안이 존재해야 함
     assert len(results[0]["rankings"]) > 0
     # 점수 비교 (enhanced_evaluation 결과 구조에 맞게)
-    first_score = results[0]["rankings"][0].get(
-        "combined_score", results[0]["rankings"][0].get("score", 0)
-    )
-    last_score = results[0]["rankings"][-1].get(
-        "combined_score", results[0]["rankings"][-1].get("score", 0)
-    )
+    first_score = results[0]["rankings"][0].get("combined_score", results[0]["rankings"][0].get("score", 0))
+    last_score = results[0]["rankings"][-1].get("combined_score", results[0]["rankings"][-1].get("score", 0))
     assert first_score >= last_score
 
 
@@ -101,9 +90,7 @@ def test_integration_status():
 
     # 평가 방법 확인 (정상적인 후보로 테스트)
     candidates = ["Valid candidate with sufficient length for testing"]
-    result = pipeline.process_pipeline(
-        "test", candidates=candidates, use_enhanced_evaluation=True
-    )
+    result = pipeline.process_pipeline("test", candidates=candidates, use_enhanced_evaluation=True)
     assert "evaluation_method" in result
     assert result["evaluation_method"] in [
         "enhanced_integrated",
@@ -122,9 +109,7 @@ def test_enhanced_evaluation():
     ]
 
     # 향상된 평가 실행
-    result = pipeline.process_pipeline(
-        "rehabilitation therapy", candidates=candidates, use_enhanced_evaluation=True
-    )
+    result = pipeline.process_pipeline("rehabilitation therapy", candidates=candidates, use_enhanced_evaluation=True)
 
     # 결과 구조 확인
     assert "rankings" in result

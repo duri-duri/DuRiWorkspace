@@ -9,7 +9,8 @@
 - ideal_relevant    # 쿼리당 이상적 관련 문서 수(옵션: 없으면 is_correct 합으로 대체)
 사용:
   python3 scripts/metrics/compute_metrics.py --in .reports/train/day64/LATEST.tsv --k 3 --out .reports/metrics/day66_metrics.tsv
-"""
+"""  # noqa: E501
+
 import argparse
 import collections
 import csv
@@ -19,9 +20,7 @@ import sys
 
 
 def ndcg_at_k(labels, k):
-    gains = [
-        (1.0 / math.log2(i + 2)) if labels[i] == 1 else 0.0 for i in range(min(k, len(labels)))
-    ]
+    gains = [(1.0 / math.log2(i + 2)) if labels[i] == 1 else 0.0 for i in range(min(k, len(labels)))]
     dcg = sum(gains)
     ideal = sorted(labels, reverse=True)
     igains = [(1.0 / math.log2(i + 2)) if ideal[i] == 1 else 0.0 for i in range(min(k, len(ideal)))]

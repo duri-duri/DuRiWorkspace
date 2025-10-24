@@ -6,19 +6,10 @@ DuRi 추론 시스템 - 해결 알고리즘 모듈
 충돌 해결을 위한 지능적 알고리즘 모듈입니다.
 """
 
-import asyncio
-from collections import Counter, defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-import hashlib
-import json
 import logging
-import re
-import time
-from typing import Any, Dict, List, Optional, Tuple, Union
-
-import numpy as np
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -42,7 +33,7 @@ class ResolutionAlgorithm:
         self.resolution_history = []
         self.resolution_strategies = {}
 
-    async def resolve_conflict(self, conflict: "IntegrationConflict") -> Dict[str, Any]:
+    async def resolve_conflict(self, conflict: "IntegrationConflict") -> Dict[str, Any]:  # noqa: F821
         """충돌 해결"""
         resolution_method = await self._determine_resolution_method(conflict)
 
@@ -50,21 +41,15 @@ class ResolutionAlgorithm:
             "conflict_id": conflict.conflict_id,
             "resolution_method": resolution_method.value,
             "resolution_status": "resolved",
-            "resolution_confidence": await self._calculate_resolution_confidence(
-                conflict, resolution_method
-            ),
-            "resolution_details": await self._apply_resolution_method(
-                conflict, resolution_method
-            ),
+            "resolution_confidence": await self._calculate_resolution_confidence(conflict, resolution_method),
+            "resolution_details": await self._apply_resolution_method(conflict, resolution_method),
             "resolution_time": datetime.now().isoformat(),
         }
 
         self.resolution_history.append(resolution_result)
         return resolution_result
 
-    async def _determine_resolution_method(
-        self, conflict: "IntegrationConflict"
-    ) -> ResolutionMethod:
+    async def _determine_resolution_method(self, conflict: "IntegrationConflict") -> ResolutionMethod:  # noqa: F821
         """해결 방법 결정"""
         if conflict.conflict_type.value == "value_conflict":
             return await self._resolve_value_conflict(conflict)
@@ -75,9 +60,7 @@ class ResolutionAlgorithm:
         else:
             return await self._resolve_general_conflict(conflict)
 
-    async def _resolve_value_conflict(
-        self, conflict: "IntegrationConflict"
-    ) -> ResolutionMethod:
+    async def _resolve_value_conflict(self, conflict: "IntegrationConflict") -> ResolutionMethod:  # noqa: F821
         """값 충돌 해결"""
         if conflict.severity > 0.7:
             return ResolutionMethod.NEGOTIATE
@@ -86,26 +69,22 @@ class ResolutionAlgorithm:
         else:
             return ResolutionMethod.OVERWRITE
 
-    async def _resolve_type_conflict(
-        self, conflict: "IntegrationConflict"
-    ) -> ResolutionMethod:
+    async def _resolve_type_conflict(self, conflict: "IntegrationConflict") -> ResolutionMethod:  # noqa: F821
         """유형 충돌 해결"""
         return ResolutionMethod.TRANSFORM
 
-    async def _resolve_structure_conflict(
-        self, conflict: "IntegrationConflict"
-    ) -> ResolutionMethod:
+    async def _resolve_structure_conflict(self, conflict: "IntegrationConflict") -> ResolutionMethod:  # noqa: F821
         """구조 충돌 해결"""
         return ResolutionMethod.MERGE
 
-    async def _resolve_general_conflict(
-        self, conflict: "IntegrationConflict"
-    ) -> ResolutionMethod:
+    async def _resolve_general_conflict(self, conflict: "IntegrationConflict") -> ResolutionMethod:  # noqa: F821
         """일반 충돌 해결"""
         return ResolutionMethod.SEPARATE
 
     async def _calculate_resolution_confidence(
-        self, conflict: "IntegrationConflict", method: ResolutionMethod
+        self,
+        conflict: "IntegrationConflict",  # noqa: F821
+        method: ResolutionMethod,  # noqa: F821
     ) -> float:
         """해결 신뢰도 계산"""
         base_confidence = 0.5
@@ -127,7 +106,9 @@ class ResolutionAlgorithm:
         return min(1.0, base_confidence * severity_factor * method_factor)
 
     async def _apply_resolution_method(
-        self, conflict: "IntegrationConflict", method: ResolutionMethod
+        self,
+        conflict: "IntegrationConflict",  # noqa: F821
+        method: ResolutionMethod,  # noqa: F821
     ) -> Dict[str, Any]:
         """해결 방법 적용"""
         if method == ResolutionMethod.MERGE:

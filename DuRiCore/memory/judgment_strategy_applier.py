@@ -3,11 +3,10 @@
 DuRi 판단 전략 적용 시스템 - judgment_advice_database.json을 기반으로 판단 전략을 동적으로 적용
 """
 
-from datetime import datetime
 import json
 import logging
 import os
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -29,22 +28,16 @@ class JudgmentStrategyApplier:
             if os.path.exists(self.database_path):
                 with open(self.database_path, "r", encoding="utf-8") as f:
                     data = json.load(f)
-                    logger.info(
-                        f"판단 전략 데이터베이스 로드 완료: {len(data.get('judgment_strategies', []))}개 전략"
-                    )
+                    logger.info(f"판단 전략 데이터베이스 로드 완료: {len(data.get('judgment_strategies', []))}개 전략")
                     return data
             else:
-                logger.warning(
-                    f"판단 전략 데이터베이스가 존재하지 않음: {self.database_path}"
-                )
+                logger.warning(f"판단 전략 데이터베이스가 존재하지 않음: {self.database_path}")
                 return {"judgment_strategies": [], "metadata": {}}
         except Exception as e:
             logger.error(f"판단 전략 데이터베이스 로드 실패: {e}")
             return {"judgment_strategies": [], "metadata": {}}
 
-    def find_matching_strategy(
-        self, context: Dict[str, Any]
-    ) -> Optional[Dict[str, Any]]:
+    def find_matching_strategy(self, context: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         """
         컨텍스트와 일치하는 판단 전략 찾기
 
@@ -71,9 +64,7 @@ class JudgmentStrategyApplier:
                         best_match = strategy
 
             if best_match:
-                logger.info(
-                    f"판단 전략 매칭 성공: {best_match['id']} (점수: {best_score:.2f})"
-                )
+                logger.info(f"판단 전략 매칭 성공: {best_match['id']} (점수: {best_score:.2f})")
                 return best_match
             else:
                 logger.debug("일치하는 판단 전략 없음")
@@ -125,9 +116,7 @@ class JudgmentStrategyApplier:
             logger.warning(f"매칭 점수 계산 실패: {e}")
             return 0.0
 
-    def apply_strategy(
-        self, context: Dict[str, Any], judgment_result: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def apply_strategy(self, context: Dict[str, Any], judgment_result: Dict[str, Any]) -> Dict[str, Any]:
         """
         판단 전략을 적용하여 판단 결과를 개선
 
@@ -150,9 +139,7 @@ class JudgmentStrategyApplier:
                 improved_result["strategy_id"] = strategy["id"]
                 improved_result["strategy_success_rate"] = strategy["success_rate"]
 
-                logger.info(
-                    f"판단 전략 적용: {strategy['id']} - {strategy['improvement']}"
-                )
+                logger.info(f"판단 전략 적용: {strategy['id']} - {strategy['improvement']}")
 
                 # 전략 사용 횟수 업데이트 (향후 구현)
                 self._update_strategy_usage(strategy["id"])

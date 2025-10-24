@@ -5,13 +5,11 @@ DuRi 사고 추론 그래프 시스템 (Day 5)
 """
 
 import asyncio
-from dataclasses import asdict, dataclass
-from datetime import datetime
-from enum import Enum
-import json
 import logging
 import re
-from typing import Any, Dict, List, Optional, Set, Tuple
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any, Dict, List
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -111,9 +109,7 @@ class ReasoningGraphBuilder:
         nodes.update(philosophical_nodes)
 
         # 3. 추론 엣지 생성
-        reasoning_edges = self._create_reasoning_edges(
-            nodes, situation, philosophical_arguments
-        )
+        reasoning_edges = self._create_reasoning_edges(nodes, situation, philosophical_arguments)
         edges.update(reasoning_edges)
 
         # 4. 결론 노드 추가
@@ -138,9 +134,7 @@ class ReasoningGraphBuilder:
         logger.info(f"추론 그래프 구축 완료: {len(nodes)} 노드, {len(edges)} 엣지")
         return reasoning_graph
 
-    def _create_situation_nodes(
-        self, situation: str, semantic_context
-    ) -> Dict[str, ReasoningNode]:
+    def _create_situation_nodes(self, situation: str, semantic_context) -> Dict[str, ReasoningNode]:
         """상황 분석 노드 생성"""
         nodes = {}
 
@@ -148,18 +142,12 @@ class ReasoningGraphBuilder:
         situation_type_node = ReasoningNode(
             node_id=f"node_{self.node_counter}",
             node_type=NodeType.PREMISE,
-            content=f"상황 유형: {semantic_context.situation_type.value if hasattr(semantic_context, 'situation_type') else 'unknown'}",
-            confidence=(
-                semantic_context.confidence_score
-                if hasattr(semantic_context, "confidence_score")
-                else 0.5
-            ),
+            content=f"상황 유형: {semantic_context.situation_type.value if hasattr(semantic_context, 'situation_type') else 'unknown'}",  # noqa: E501
+            confidence=(semantic_context.confidence_score if hasattr(semantic_context, "confidence_score") else 0.5),
             source="Semantic Analysis",
             metadata={
                 "situation_type": (
-                    semantic_context.situation_type.value
-                    if hasattr(semantic_context, "situation_type")
-                    else "unknown"
+                    semantic_context.situation_type.value if hasattr(semantic_context, "situation_type") else "unknown"
                 )
             },
         )
@@ -171,29 +159,15 @@ class ReasoningGraphBuilder:
             node_id=f"node_{self.node_counter}",
             node_type=NodeType.PREMISE,
             content=f"의도: {semantic_context.intent.value if hasattr(semantic_context, 'intent') else 'unknown'}",
-            confidence=(
-                semantic_context.confidence_score
-                if hasattr(semantic_context, "confidence_score")
-                else 0.5
-            ),
+            confidence=(semantic_context.confidence_score if hasattr(semantic_context, "confidence_score") else 0.5),
             source="Intent Analysis",
-            metadata={
-                "intent": (
-                    semantic_context.intent.value
-                    if hasattr(semantic_context, "intent")
-                    else "unknown"
-                )
-            },
+            metadata={"intent": (semantic_context.intent.value if hasattr(semantic_context, "intent") else "unknown")},
         )
         nodes[intent_node.node_id] = intent_node
         self.node_counter += 1
 
         # 가치 충돌 노드들
-        value_conflicts = (
-            semantic_context.value_conflicts
-            if hasattr(semantic_context, "value_conflicts")
-            else []
-        )
+        value_conflicts = semantic_context.value_conflicts if hasattr(semantic_context, "value_conflicts") else []
         for i, conflict in enumerate(value_conflicts):
             conflict_node = ReasoningNode(
                 node_id=f"node_{self.node_counter}",
@@ -201,20 +175,14 @@ class ReasoningGraphBuilder:
                 content=f"가치 충돌 {i+1}: {conflict.value if hasattr(conflict, 'value') else conflict}",
                 confidence=0.7,
                 source="Value Conflict Analysis",
-                metadata={
-                    "conflict_type": (
-                        conflict.value if hasattr(conflict, "value") else conflict
-                    )
-                },
+                metadata={"conflict_type": (conflict.value if hasattr(conflict, "value") else conflict)},
             )
             nodes[conflict_node.node_id] = conflict_node
             self.node_counter += 1
 
         return nodes
 
-    def _create_philosophical_nodes(
-        self, philosophical_arguments: Dict[str, Any]
-    ) -> Dict[str, ReasoningNode]:
+    def _create_philosophical_nodes(self, philosophical_arguments: Dict[str, Any]) -> Dict[str, ReasoningNode]:
         """철학적 논증 노드 생성"""
         nodes = {}
 
@@ -224,14 +192,12 @@ class ReasoningGraphBuilder:
             kantian_node = ReasoningNode(
                 node_id=f"node_{self.node_counter}",
                 node_type=NodeType.INFERENCE,
-                content=f"칸트적 분석: {kantian.final_conclusion if hasattr(kantian, 'final_conclusion') else '분석 없음'}",
+                content=f"칸트적 분석: {kantian.final_conclusion if hasattr(kantian, 'final_conclusion') else '분석 없음'}",  # noqa: E501
                 confidence=kantian.strength if hasattr(kantian, "strength") else 0.5,
                 source="Kantian Reasoning",
                 metadata={
                     "reasoning_type": "kantian",
-                    "strength": (
-                        kantian.strength if hasattr(kantian, "strength") else 0.5
-                    ),
+                    "strength": (kantian.strength if hasattr(kantian, "strength") else 0.5),
                 },
             )
             nodes[kantian_node.node_id] = kantian_node
@@ -243,18 +209,12 @@ class ReasoningGraphBuilder:
             utilitarian_node = ReasoningNode(
                 node_id=f"node_{self.node_counter}",
                 node_type=NodeType.INFERENCE,
-                content=f"공리주의 분석: {utilitarian.final_conclusion if hasattr(utilitarian, 'final_conclusion') else '분석 없음'}",
-                confidence=(
-                    utilitarian.strength if hasattr(utilitarian, "strength") else 0.5
-                ),
+                content=f"공리주의 분석: {utilitarian.final_conclusion if hasattr(utilitarian, 'final_conclusion') else '분석 없음'}",  # noqa: E501
+                confidence=(utilitarian.strength if hasattr(utilitarian, "strength") else 0.5),
                 source="Utilitarian Reasoning",
                 metadata={
                     "reasoning_type": "utilitarian",
-                    "strength": (
-                        utilitarian.strength
-                        if hasattr(utilitarian, "strength")
-                        else 0.5
-                    ),
+                    "strength": (utilitarian.strength if hasattr(utilitarian, "strength") else 0.5),
                 },
             )
             nodes[utilitarian_node.node_id] = utilitarian_node
@@ -290,9 +250,7 @@ class ReasoningGraphBuilder:
 
         # 상황 분석 → 철학적 분석 연결
         situation_nodes = [n for n in nodes.values() if n.node_type == NodeType.PREMISE]
-        philosophical_nodes = [
-            n for n in nodes.values() if n.node_type == NodeType.INFERENCE
-        ]
+        philosophical_nodes = [n for n in nodes.values() if n.node_type == NodeType.INFERENCE]
 
         for situation_node in situation_nodes:
             for philosophical_node in philosophical_nodes:
@@ -356,9 +314,7 @@ class ReasoningGraphBuilder:
 
         return conclusion_nodes
 
-    def _calculate_graph_confidence(
-        self, nodes: Dict[str, ReasoningNode], edges: Dict[str, ReasoningEdge]
-    ) -> float:
+    def _calculate_graph_confidence(self, nodes: Dict[str, ReasoningNode], edges: Dict[str, ReasoningEdge]) -> float:
         """그래프 신뢰도 계산"""
         if not nodes:
             return 0.0
@@ -378,9 +334,7 @@ class ReasoningGraphBuilder:
         overall_confidence = (avg_node_confidence + avg_edge_strength) / 2
         return min(max(overall_confidence, 0.0), 1.0)
 
-    def _calculate_graph_complexity(
-        self, nodes: Dict[str, ReasoningNode], edges: Dict[str, ReasoningEdge]
-    ) -> float:
+    def _calculate_graph_complexity(self, nodes: Dict[str, ReasoningNode], edges: Dict[str, ReasoningEdge]) -> float:
         """그래프 복잡도 계산"""
         complexity = 0.0
 
@@ -426,9 +380,7 @@ class LogicalInferenceEngine:
         """논리 연산자 초기화"""
         return {"and": "∧", "or": "∨", "not": "¬", "implies": "→", "iff": "↔"}
 
-    async def apply_logical_inference(
-        self, premises: List[str], conclusion: str
-    ) -> Dict[str, Any]:
+    async def apply_logical_inference(self, premises: List[str], conclusion: str) -> Dict[str, Any]:
         """논리적 추론 적용"""
         logger.info(f"논리적 추론 시작: {len(premises)} 전제")
 
@@ -449,9 +401,7 @@ class LogicalInferenceEngine:
             "counter_examples": validity_check["counter_examples"],
         }
 
-    def _check_inference_validity(
-        self, premises: List[str], conclusion: str
-    ) -> Dict[str, Any]:
+    def _check_inference_validity(self, premises: List[str], conclusion: str) -> Dict[str, Any]:
         """추론 유효성 검사"""
         validity_result = {"is_valid": True, "reasoning": "", "counter_examples": []}
 
@@ -490,9 +440,7 @@ class LogicalInferenceEngine:
         for i, premise1 in enumerate(premises):
             for premise2 in premises[i + 1 :]:
                 if self._are_contradictory(premise1, premise2):
-                    consistency_result["contradictions"].append(
-                        {"premise1": premise1, "premise2": premise2}
-                    )
+                    consistency_result["contradictions"].append({"premise1": premise1, "premise2": premise2})
                     consistency_result["is_consistent"] = False
 
         return consistency_result
@@ -507,16 +455,12 @@ class LogicalInferenceEngine:
         ]
 
         for pattern1, pattern2 in contradiction_patterns:
-            if any(word in premise1 for word in pattern1) and any(
-                word in premise2 for word in pattern2
-            ):
+            if any(word in premise1 for word in pattern1) and any(word in premise2 for word in pattern2):
                 return True
 
         return False
 
-    def _calculate_inference_strength(
-        self, premises: List[str], conclusion: str
-    ) -> float:
+    def _calculate_inference_strength(self, premises: List[str], conclusion: str) -> float:
         """추론 강도 계산"""
         strength = 0.5  # 기본값
 
@@ -560,36 +504,22 @@ class ReasoningGraphAnalyzer:
         logger.info(f"추론 과정 분석 시작: {situation}")
 
         # 1. 추론 그래프 구축
-        reasoning_graph = self.graph_builder.build_reasoning_chain(
-            situation, semantic_context, philosophical_arguments
-        )
+        reasoning_graph = self.graph_builder.build_reasoning_chain(situation, semantic_context, philosophical_arguments)
 
         # 2. 논리적 추론 적용
-        premises = [
-            node.content
-            for node in reasoning_graph.nodes.values()
-            if node.node_type == NodeType.PREMISE
-        ]
-        conclusions = [
-            node.content
-            for node in reasoning_graph.nodes.values()
-            if node.node_type == NodeType.CONCLUSION
-        ]
+        premises = [node.content for node in reasoning_graph.nodes.values() if node.node_type == NodeType.PREMISE]
+        conclusions = [node.content for node in reasoning_graph.nodes.values() if node.node_type == NodeType.CONCLUSION]
 
         inference_results = []
         for conclusion in conclusions:
-            inference_result = await self.inference_engine.apply_logical_inference(
-                premises, conclusion
-            )
+            inference_result = await self.inference_engine.apply_logical_inference(premises, conclusion)
             inference_results.append(inference_result)
 
         # 3. 그래프 분석
         graph_analysis = self._analyze_graph_structure(reasoning_graph)
 
         # 4. 추론 품질 평가
-        quality_assessment = self._assess_reasoning_quality(
-            reasoning_graph, inference_results
-        )
+        quality_assessment = self._assess_reasoning_quality(reasoning_graph, inference_results)
 
         return {
             "reasoning_graph": reasoning_graph,
@@ -612,22 +542,16 @@ class ReasoningGraphAnalyzer:
         # 노드 유형 분포
         for node in graph.nodes.values():
             node_type = node.node_type.value
-            analysis["node_types"][node_type] = (
-                analysis["node_types"].get(node_type, 0) + 1
-            )
+            analysis["node_types"][node_type] = analysis["node_types"].get(node_type, 0) + 1
 
         # 엣지 유형 분포
         for edge in graph.edges.values():
             edge_type = edge.edge_type.value
-            analysis["edge_types"][edge_type] = (
-                analysis["edge_types"].get(edge_type, 0) + 1
-            )
+            analysis["edge_types"][edge_type] = analysis["edge_types"].get(edge_type, 0) + 1
 
         # 연결성 계산
         if len(graph.nodes) > 1:
-            analysis["connectivity"] = len(graph.edges) / (
-                len(graph.nodes) * (len(graph.nodes) - 1)
-            )
+            analysis["connectivity"] = len(graph.edges) / (len(graph.nodes) * (len(graph.nodes) - 1))
 
         # 깊이 계산 (간단한 추정)
         analysis["depth"] = min(len(graph.nodes) // 3, 5)
@@ -648,9 +572,7 @@ class ReasoningGraphAnalyzer:
 
         # 논리적 일관성
         valid_inferences = sum(1 for result in inference_results if result["is_valid"])
-        quality["logical_consistency"] = (
-            valid_inferences / len(inference_results) if inference_results else 0.0
-        )
+        quality["logical_consistency"] = valid_inferences / len(inference_results) if inference_results else 0.0
 
         # 완전성 (모든 노드 유형이 포함되었는지)
         node_types = set(node.node_type for node in graph.nodes.values())
@@ -658,15 +580,11 @@ class ReasoningGraphAnalyzer:
 
         # 명확성 (노드의 평균 신뢰도)
         node_confidences = [node.confidence for node in graph.nodes.values()]
-        quality["clarity"] = (
-            sum(node_confidences) / len(node_confidences) if node_confidences else 0.0
-        )
+        quality["clarity"] = sum(node_confidences) / len(node_confidences) if node_confidences else 0.0
 
         # 강도 (엣지의 평균 강도)
         edge_strengths = [edge.strength for edge in graph.edges.values()]
-        quality["strength"] = (
-            sum(edge_strengths) / len(edge_strengths) if edge_strengths else 0.0
-        )
+        quality["strength"] = sum(edge_strengths) / len(edge_strengths) if edge_strengths else 0.0
 
         # 종합 품질
         quality["overall_quality"] = (
@@ -718,7 +636,7 @@ async def test_reasoning_graph_system():
     graph_analysis = analysis_result["graph_analysis"]
     quality_assessment = analysis_result["quality_assessment"]
 
-    print(f"\n📊 추론 그래프 분석:")
+    print("\n📊 추론 그래프 분석:")
     print(f"  • 노드 수: {graph_analysis['node_count']}")
     print(f"  • 엣지 수: {graph_analysis['edge_count']}")
     print(f"  • 노드 유형: {graph_analysis['node_types']}")
@@ -726,22 +644,20 @@ async def test_reasoning_graph_system():
     print(f"  • 연결성: {graph_analysis['connectivity']:.2f}")
     print(f"  • 깊이: {graph_analysis['depth']}")
 
-    print(f"\n🎯 추론 품질 평가:")
+    print("\n🎯 추론 품질 평가:")
     print(f"  • 종합 품질: {quality_assessment['overall_quality']:.2f}")
     print(f"  • 논리적 일관성: {quality_assessment['logical_consistency']:.2f}")
     print(f"  • 완전성: {quality_assessment['completeness']:.2f}")
     print(f"  • 명확성: {quality_assessment['clarity']:.2f}")
     print(f"  • 강도: {quality_assessment['strength']:.2f}")
 
-    print(f"\n🔍 추론 노드 상세:")
+    print("\n🔍 추론 노드 상세:")
     for node_id, node in reasoning_graph.nodes.items():
         print(f"  • {node_id}: {node.content} (신뢰도: {node.confidence:.2f})")
 
-    print(f"\n🔗 추론 엣지 상세:")
+    print("\n🔗 추론 엣지 상세:")
     for edge_id, edge in reasoning_graph.edges.items():
-        print(
-            f"  • {edge_id}: {edge.source_node} → {edge.target_node} (강도: {edge.strength:.2f})"
-        )
+        print(f"  • {edge_id}: {edge.source_node} → {edge.target_node} (강도: {edge.strength:.2f})")
 
     print(f"\n{'='*70}")
     print("=== 추론 그래프 시스템 테스트 완료 (Day 5) ===")

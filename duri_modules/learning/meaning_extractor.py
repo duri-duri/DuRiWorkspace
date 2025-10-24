@@ -3,10 +3,10 @@
 DuRi 의미 분해기 (Meaning Extractor)
 대화와 행동을 구조화된 의미로 변환
 """
-from datetime import datetime
-import json
+
 import logging
 import re
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
@@ -44,9 +44,7 @@ class MeaningExtractor:
             "상": [r"복잡", r"어려운", r"고급", r"전문", r"심화"],
         }
 
-    def extract_meaning(
-        self, user_input: str, duri_response: str, context: Optional[Dict] = None
-    ) -> Dict[str, Any]:
+    def extract_meaning(self, user_input: str, duri_response: str, context: Optional[Dict] = None) -> Dict[str, Any]:
         """대화의 의미를 추출"""
         try:
             # 기본 정보
@@ -90,9 +88,7 @@ class MeaningExtractor:
             next_actions = self._suggest_next_actions(meaning)
             meaning["next_actions"] = next_actions
 
-            logger.info(
-                f"의미 추출 완료: {intent} -> {topic} (난이도: {difficulty}, 성공: {success})"
-            )
+            logger.info(f"의미 추출 완료: {intent} -> {topic} (난이도: {difficulty}, 성공: {success})")
 
             return meaning
 
@@ -193,9 +189,7 @@ class MeaningExtractor:
             # 기본: 응답이 있고 의미가 있는가?
             return len(duri_response) > 20
 
-    def _extract_lesson(
-        self, user_input: str, duri_response: str, success: bool
-    ) -> str:
+    def _extract_lesson(self, user_input: str, duri_response: str, success: bool) -> str:
         """교훈 추출"""
         if success:
             # 성공한 경우: 무엇이 효과적이었는가?
@@ -252,9 +246,7 @@ class MeaningExtractor:
 
         return actions
 
-    def _create_fallback_meaning(
-        self, user_input: str, duri_response: str
-    ) -> Dict[str, Any]:
+    def _create_fallback_meaning(self, user_input: str, duri_response: str) -> Dict[str, Any]:
         """오류 시 기본 의미 생성"""
         return {
             "timestamp": datetime.now().isoformat(),
@@ -270,9 +262,7 @@ class MeaningExtractor:
             "next_actions": ["오류 로그 확인 및 시스템 점검"],
         }
 
-    def batch_extract(
-        self, conversations: List[Dict[str, str]]
-    ) -> List[Dict[str, Any]]:
+    def batch_extract(self, conversations: List[Dict[str, str]]) -> List[Dict[str, Any]]:
         """여러 대화의 의미를 일괄 추출"""
         meanings = []
 
@@ -291,14 +281,8 @@ class MeaningExtractor:
             return {"error": "분석할 대화가 없습니다"}
 
         total_conversations = len(meanings)
-        successful_conversations = sum(
-            1 for m in meanings if m.get("is_success", False)
-        )
-        success_rate = (
-            successful_conversations / total_conversations
-            if total_conversations > 0
-            else 0
-        )
+        successful_conversations = sum(1 for m in meanings if m.get("is_success", False))
+        success_rate = successful_conversations / total_conversations if total_conversations > 0 else 0
 
         # 주제별 분포
         topics = {}

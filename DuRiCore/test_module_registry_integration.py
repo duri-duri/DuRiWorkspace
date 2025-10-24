@@ -8,16 +8,14 @@ DuRi 모듈 레지스트리 통합 테스트
 
 import asyncio
 import logging
-from pathlib import Path
 import sys
+from pathlib import Path
 
 # 현재 디렉토리를 sys.path에 추가
 sys.path.append(str(Path(__file__).parent))
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -98,7 +96,7 @@ async def test_system_adapters():
     logger.info("🧪 시스템 어댑터 테스트 시작")
 
     try:
-        from system_adapters import SystemAdapterFactory, wrap_existing_systems
+        from system_adapters import SystemAdapterFactory
 
         # 테스트용 시스템 클래스
         class TestJudgmentSystem:
@@ -111,9 +109,7 @@ async def test_system_adapters():
 
         # 어댑터 생성 테스트
         test_judgment = TestJudgmentSystem()
-        judgment_adapter = SystemAdapterFactory.create_adapter(
-            "judgment_system", test_judgment
-        )
+        judgment_adapter = SystemAdapterFactory.create_adapter("judgment_system", test_judgment)
 
         if judgment_adapter:
             # 초기화 테스트

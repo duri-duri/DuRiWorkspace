@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 import json
-import pathlib
-import re
 import sys
 
 import yaml
@@ -14,7 +12,7 @@ def load_rules(path="tools/failure_patterns.yml"):
         if "rules" not in data:
             data["rules"] = []
         return data
-    except Exception as e:
+    except Exception:
         return {"rules": []}
 
 

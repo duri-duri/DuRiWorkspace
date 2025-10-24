@@ -36,11 +36,11 @@ from .core.learning_optimization import (
 from .integration.knowledge_integration import (
     IntegratedKnowledge,
     IntegrationMethod,
-    IntegrationSession as KnowledgeIntegrationSession,
     KnowledgeIntegrationSystem,
-    KnowledgeQuality as IntegrationKnowledgeQuality,
     KnowledgeSource,
 )
+from .integration.knowledge_integration import IntegrationSession as KnowledgeIntegrationSession
+from .integration.knowledge_integration import KnowledgeQuality as IntegrationKnowledgeQuality
 
 # Integration 모듈
 from .integration.learning_integration import (
@@ -65,27 +65,27 @@ from .monitoring.learning_monitor import (
 from .monitoring.learning_monitoring import (
     LearningIssue,
     LearningIssueType,
-    LearningMonitoringSystem as AdvancedLearningMonitoringSystem,
     LearningPrediction,
     MonitoringLevel,
     OptimizationRecommendation,
 )
+from .monitoring.learning_monitoring import LearningMonitoringSystem as AdvancedLearningMonitoringSystem
 from .strategies.adaptive_learning import (
     AdaptationResult,
     AdaptationType,
     AdaptiveLearningStrategy,
     LearningData,
     LearningModel,
-    LearningResult as AdaptiveLearningResult,
     LearningStatus,
     LearningType,
 )
+from .strategies.adaptive_learning import LearningResult as AdaptiveLearningResult
 from .strategies.cognitive_meta_learning import (
     CognitiveMetaLearningMetrics,
     CognitiveMetaLearningState,
     CognitiveMetaLearningStrategy,
     LearningEfficiency,
-    LearningPattern,
+    LearningPattern,  # noqa: F811
     LearningStrategy,
     MetaLearningProcess,
     MetaLearningStage,

@@ -6,12 +6,11 @@ DuRi 학습 시스템 활성화 스크립트
 """
 
 import asyncio
-from datetime import datetime
 import logging
 import os
 import sys
-import time
-from typing import Any, Dict, List
+from datetime import datetime
+from typing import Any, Dict
 
 # 프로젝트 루트를 Python 경로에 추가
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -116,9 +115,7 @@ class LearningSystemActivator:
     async def activate_learning_loop_manager(self) -> Dict[str, Any]:
         """학습 루프 매니저 활성화"""
         try:
-            from duri_brain.learning.learning_loop_manager import (
-                get_learning_loop_manager,
-            )
+            from duri_brain.learning.learning_loop_manager import get_learning_loop_manager
 
             learning_loop_manager = get_learning_loop_manager()
 
@@ -166,9 +163,7 @@ class LearningSystemActivator:
                 {
                     "name": "실시간 학습 시스템",
                     "session_id": (
-                        realtime_learner.current_session.session_id
-                        if realtime_learner.current_session
-                        else "N/A"
+                        realtime_learner.current_session.session_id if realtime_learner.current_session else "N/A"
                     ),
                     "status": "활성화됨",
                     "start_time": datetime.now(),
@@ -196,9 +191,7 @@ class LearningSystemActivator:
         if result["success"]:
             print("   ✅ 통합 학습 시스템 활성화 완료")
         else:
-            print(
-                f"   ❌ 통합 학습 시스템 활성화 실패: {result.get('error', '알 수 없는 오류')}"
-            )
+            print(f"   ❌ 통합 학습 시스템 활성화 실패: {result.get('error', '알 수 없는 오류')}")
 
         # 2. 자율 학습 시스템 활성화
         print("\n2️⃣ 자율 학습 시스템 활성화 중...")
@@ -207,9 +200,7 @@ class LearningSystemActivator:
         if result["success"]:
             print("   ✅ 자율 학습 시스템 활성화 완료")
         else:
-            print(
-                f"   ❌ 자율 학습 시스템 활성화 실패: {result.get('error', '알 수 없는 오류')}"
-            )
+            print(f"   ❌ 자율 학습 시스템 활성화 실패: {result.get('error', '알 수 없는 오류')}")
 
         # 3. 학습 루프 매니저 활성화
         print("\n3️⃣ 학습 루프 매니저 활성화 중...")
@@ -218,9 +209,7 @@ class LearningSystemActivator:
         if result["success"]:
             print("   ✅ 학습 루프 매니저 활성화 완료")
         else:
-            print(
-                f"   ❌ 학습 루프 매니저 활성화 실패: {result.get('error', '알 수 없는 오류')}"
-            )
+            print(f"   ❌ 학습 루프 매니저 활성화 실패: {result.get('error', '알 수 없는 오류')}")
 
         # 4. 실시간 학습 시스템 활성화
         print("\n4️⃣ 실시간 학습 시스템 활성화 중...")
@@ -229,17 +218,13 @@ class LearningSystemActivator:
         if result["success"]:
             print("   ✅ 실시간 학습 시스템 활성화 완료")
         else:
-            print(
-                f"   ❌ 실시간 학습 시스템 활성화 실패: {result.get('error', '알 수 없는 오류')}"
-            )
+            print(f"   ❌ 실시간 학습 시스템 활성화 실패: {result.get('error', '알 수 없는 오류')}")
 
         # 결과 요약
         print("\n📊 활성화 결과 요약")
         print("-" * 30)
 
-        successful_activations = sum(
-            1 for result in activation_results.values() if result["success"]
-        )
+        successful_activations = sum(1 for result in activation_results.values() if result["success"])
         total_systems = len(activation_results)
 
         for system_name, result in activation_results.items():
@@ -252,9 +237,7 @@ class LearningSystemActivator:
             print("\n🎉 모든 학습 시스템이 성공적으로 활성화되었습니다!")
             print("이제 DuRi가 자가학습을 시작합니다.")
         elif successful_activations > 0:
-            print(
-                f"\n⚠️ 일부 학습 시스템만 활성화되었습니다. ({successful_activations}/{total_systems})"
-            )
+            print(f"\n⚠️ 일부 학습 시스템만 활성화되었습니다. ({successful_activations}/{total_systems})")
         else:
             print("\n🚨 모든 학습 시스템 활성화에 실패했습니다.")
 

@@ -5,14 +5,13 @@ Vector DB 연동, LLM 호출 최적화, 메모리 사용량 분석
 """
 
 import asyncio
-from datetime import datetime
 import json
 import logging
 import os
-
 # DuRiCore 모듈 import
 import sys
 import time
+from datetime import datetime
 from typing import Any, Dict, List
 
 import psutil
@@ -24,22 +23,22 @@ sys.path.insert(0, os.path.join(current_dir, "DuRiCore"))
 
 try:
     from DuRiCore.memory.vector_store import VectorMemoryStore
-    from DuRiCore.utils.llm_interface import AsyncLLMInterface, LLMProvider, QueryType
+    from DuRiCore.utils.llm_interface import (AsyncLLMInterface, LLMProvider,
+                                              QueryType)
     from DuRiCore.utils.memory_manager import MemoryManager, MemoryQuery
 except ImportError:
     try:
         # 대체 import 경로
         from memory.vector_store import VectorMemoryStore
-        from utils.llm_interface import AsyncLLMInterface, LLMProvider, QueryType
+
+        from utils.llm_interface import (AsyncLLMInterface, LLMProvider,
+                                         QueryType)
         from utils.memory_manager import MemoryManager, MemoryQuery
     except ImportError:
         # 직접 import
         from DuRiCore.memory.vector_store import VectorMemoryStore
-        from DuRiCore.utils.llm_interface import (
-            AsyncLLMInterface,
-            LLMProvider,
-            QueryType,
-        )
+        from DuRiCore.utils.llm_interface import (AsyncLLMInterface,
+                                                  LLMProvider, QueryType)
         from DuRiCore.utils.memory_manager import MemoryManager, MemoryQuery
 
 # 로깅 설정

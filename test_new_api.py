@@ -4,10 +4,6 @@ DuRiCore 새로운 API 테스트
 FastAPI 분리 완료 후 API 테스트
 """
 
-import json
-import time
-from typing import Any, Dict
-
 import requests
 
 # API 기본 URL
@@ -66,9 +62,7 @@ def test_emotion_api():
         print(f"입력: {test_case['text']}")
 
         try:
-            response = requests.post(
-                f"{BASE_URL}/api/v1/emotion/analyze", json=test_case
-            )
+            response = requests.post(f"{BASE_URL}/api/v1/emotion/analyze", json=test_case)
             print(f"상태 코드: {response.status_code}")
 
             if response.status_code == 200:
@@ -99,12 +93,12 @@ def test_learning_api():
     # 학습 처리 테스트
     test_cases = [
         {
-            "content": "인공지능에 대한 깊이 있는 텍스트를 읽었습니다. 머신러닝과 딥러닝의 차이점을 이해하게 되었고, 실제 응용 사례들도 배웠습니다.",
+            "content": "인공지능에 대한 깊이 있는 텍스트를 읽었습니다. 머신러닝과 딥러닝의 차이점을 이해하게 되었고, 실제 응용 사례들도 배웠습니다.",  # noqa: E501
             "learning_type": "text",
             "context": {"complexity": "high", "domain": "technology"},
         },
         {
-            "content": "가족과 함께 영화를 보면서 아이의 반응을 관찰했습니다. 아이가 어떤 장면에서 웃고, 어떤 장면에서 집중하는지 알 수 있었습니다.",
+            "content": "가족과 함께 영화를 보면서 아이의 반응을 관찰했습니다. 아이가 어떤 장면에서 웃고, 어떤 장면에서 집중하는지 알 수 있었습니다.",  # noqa: E501
             "learning_type": "family",
             "context": {
                 "family_members": ["parent", "child"],
@@ -118,9 +112,7 @@ def test_learning_api():
         print(f"콘텐츠: {test_case['content'][:50]}...")
 
         try:
-            response = requests.post(
-                f"{BASE_URL}/api/v1/learning/process", json=test_case
-            )
+            response = requests.post(f"{BASE_URL}/api/v1/learning/process", json=test_case)
             print(f"상태 코드: {response.status_code}")
 
             if response.status_code == 200:
@@ -152,11 +144,11 @@ def test_ethical_api():
     # 윤리 분석 테스트
     test_cases = [
         {
-            "situation": "친구가 시험에서 부정행위를 했는데, 이를 고발해야 할지 망설이고 있습니다. 친구를 보호하고 싶지만, 공정성도 중요합니다.",
+            "situation": "친구가 시험에서 부정행위를 했는데, 이를 고발해야 할지 망설이고 있습니다. 친구를 보호하고 싶지만, 공정성도 중요합니다.",  # noqa: E501
             "context": {"complexity": "medium", "stakeholders": 2},
         },
         {
-            "situation": "환경을 위해 자동차 대신 대중교통을 이용하는 것이 좋지만, 시간이 오래 걸려서 불편합니다. 개인의 편의와 공공의 이익 사이에서 갈등합니다.",
+            "situation": "환경을 위해 자동차 대신 대중교통을 이용하는 것이 좋지만, 시간이 오래 걸려서 불편합니다. 개인의 편의와 공공의 이익 사이에서 갈등합니다.",  # noqa: E501
             "context": {"complexity": "medium", "stakeholders": 2},
         },
     ]
@@ -166,9 +158,7 @@ def test_ethical_api():
         print(f"상황: {test_case['situation'][:50]}...")
 
         try:
-            response = requests.post(
-                f"{BASE_URL}/api/v1/ethical/analyze", json=test_case
-            )
+            response = requests.post(f"{BASE_URL}/api/v1/ethical/analyze", json=test_case)
             print(f"상태 코드: {response.status_code}")
 
             if response.status_code == 200:
@@ -199,9 +189,7 @@ def test_evolution_api():
 
     # 자기 진화 분석 테스트
     try:
-        response = requests.post(
-            f"{BASE_URL}/api/v1/evolution/analyze", json={"context": {"test": True}}
-        )
+        response = requests.post(f"{BASE_URL}/api/v1/evolution/analyze", json={"context": {"test": True}})
         print(f"상태 코드: {response.status_code}")
 
         if response.status_code == 200:
@@ -259,9 +247,7 @@ def test_health_api():
             engines = data.get("engines", {})
             print(f"등록된 엔진: {len(engines)}개")
             for engine_name, engine_info in engines.items():
-                print(
-                    f"  - {engine_info.get('name')}: {engine_info.get('description')}"
-                )
+                print(f"  - {engine_info.get('name')}: {engine_info.get('description')}")
     except Exception as e:
         print(f"엔진 정보 조회 오류: {e}")
 

@@ -14,15 +14,15 @@ DuRiCore Phase 5 Day 10 - 시스템 검증 엔진
 """
 
 import asyncio
-from dataclasses import asdict, dataclass
-from datetime import datetime
 import json
 import logging
 import random
 import statistics
 import time
-from typing import Any, Dict, List, Optional, Tuple
 import uuid
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from typing import Any, Dict, List, Optional, Tuple
 
 # 로깅 설정
 logging.basicConfig(

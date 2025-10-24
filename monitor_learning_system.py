@@ -7,20 +7,19 @@ CPU, 메모리, 학습률, 경험 데이터 수, 전략 변경 횟수를 추적�
 """
 
 import asyncio
-from datetime import datetime, timedelta
 import json
 import logging
-import time
+from datetime import datetime
 from typing import Any, Dict, List
 
 import psutil
 
-from DuRiCore.unified_learning_system import get_unified_learning_system
 from duri_brain.learning.auto_retrospector import get_auto_retrospector
 
 # DuRi 모듈 import
 from duri_core.memory.memory_sync import get_memory_sync
 from duri_modules.autonomous.duri_autonomous_core import get_duri_autonomous_core
+from DuRiCore.unified_learning_system import get_unified_learning_system
 
 # 로깅 설정
 logging.basicConfig(
@@ -96,9 +95,7 @@ class LearningSystemMonitor:
 
             # 학습률 계산
             if experiences:
-                success_count = sum(
-                    1 for e in experiences if e.get("outcome") == "success"
-                )
+                success_count = sum(1 for e in experiences if e.get("outcome") == "success")
                 learning_rate = success_count / len(experiences)
             else:
                 learning_rate = 0.0
@@ -109,11 +106,7 @@ class LearningSystemMonitor:
 
             # 자율 학습 상태
             autonomous_status = {
-                "is_active": (
-                    self.autonomous_core.is_active
-                    if hasattr(self.autonomous_core, "is_active")
-                    else False
-                ),
+                "is_active": (self.autonomous_core.is_active if hasattr(self.autonomous_core, "is_active") else False),
                 "continuous_learner_active": (
                     hasattr(self.autonomous_core, "continuous_learner")
                     and self.autonomous_core.continuous_learner.is_active
@@ -195,20 +188,16 @@ class LearningSystemMonitor:
     ):
         """상태 대시보드 출력"""
         print("\n" + "=" * 80)
-        print(
-            f"🔍 DuRi 학습 시스템 모니터링 - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
-        )
+        print(f"🔍 DuRi 학습 시스템 모니터링 - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         print("=" * 80)
 
         # 시스템 상태
         print("\n📊 시스템 상태:")
         print(f"  CPU 사용률: {system_metrics['cpu_usage']:.1f}%")
         print(
-            f"  메모리 사용률: {system_metrics['memory_usage']:.1f}% (사용 가능: {system_metrics['memory_available']:.1f}GB)"
+            f"  메모리 사용률: {system_metrics['memory_usage']:.1f}% (사용 가능: {system_metrics['memory_available']:.1f}GB)"  # noqa: E501
         )
-        print(
-            f"  디스크 사용률: {system_metrics['disk_usage']:.1f}% (여유 공간: {system_metrics['disk_free']:.1f}GB)"
-        )
+        print(f"  디스크 사용률: {system_metrics['disk_usage']:.1f}% (여유 공간: {system_metrics['disk_free']:.1f}GB)")
 
         # 학습 상태
         print("\n🧠 학습 시스템 상태:")
@@ -220,12 +209,8 @@ class LearningSystemMonitor:
         # 자율 학습 상태
         autonomous_status = learning_metrics["autonomous_status"]
         print(f"  자율 학습 활성화: {'✅' if autonomous_status['is_active'] else '❌'}")
-        print(
-            f"  연속 학습: {'✅' if autonomous_status['continuous_learner_active'] else '❌'}"
-        )
-        print(
-            f"  실시간 학습: {'✅' if autonomous_status['realtime_learner_active'] else '❌'}"
-        )
+        print(f"  연속 학습: {'✅' if autonomous_status['continuous_learner_active'] else '❌'}")
+        print(f"  실시간 학습: {'✅' if autonomous_status['realtime_learner_active'] else '❌'}")
 
         # 알림
         if alerts:
@@ -277,9 +262,7 @@ class LearningSystemMonitor:
     def export_monitoring_data(self, filename: str = None):
         """모니터링 데이터 내보내기"""
         if filename is None:
-            filename = (
-                f"learning_monitor_data_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-            )
+            filename = f"learning_monitor_data_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
 
         try:
             with open(filename, "w", encoding="utf-8") as f:

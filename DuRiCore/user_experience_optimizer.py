@@ -5,16 +5,14 @@ DuRiCore Phase 5 Day 8 - 사용자 경험 최적화기
 """
 
 import asyncio
-from dataclasses import dataclass
-from datetime import datetime
-from enum import Enum
-import json
 import logging
-import math
 import random
 import statistics
 import time
-from typing import Any, Dict, List, Optional, Tuple, Union
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -158,9 +156,7 @@ class UserExperienceOptimizer:
             optimization_type = await self._determine_optimization_type(analysis_result)
 
             # 개선 데이터 생성
-            improvement_data = await self._generate_improvement_data(
-                optimization_type, analysis_result
-            )
+            improvement_data = await self._generate_improvement_data(optimization_type, analysis_result)
 
             # UI 개선 객체 생성
             ui_improvement = UIImprovement(
@@ -169,9 +165,7 @@ class UserExperienceOptimizer:
                 target_elements=improvement_data.get("target_elements", []),
                 improvement_data=improvement_data,
                 expected_impact=improvement_data.get("expected_impact", 0.0),
-                implementation_effort=improvement_data.get(
-                    "implementation_effort", 0.0
-                ),
+                implementation_effort=improvement_data.get("implementation_effort", 0.0),
                 created_at=datetime.now(),
             )
 
@@ -186,9 +180,7 @@ class UserExperienceOptimizer:
             logger.error(f"UI 최적화 실패: {str(e)}")
             raise
 
-    async def analyze_user_behavior(
-        self, behavior_data: List[Dict[str, Any]]
-    ) -> BehaviorAnalysis:
+    async def analyze_user_behavior(self, behavior_data: List[Dict[str, Any]]) -> BehaviorAnalysis:
         """사용자 행동 분석"""
         try:
             self.optimization_status = OptimizationStatus.ANALYZING
@@ -207,9 +199,7 @@ class UserExperienceOptimizer:
             recommendations = await self._generate_behavior_recommendations(insights)
 
             # 신뢰도 점수 계산
-            confidence_score = await self._calculate_behavior_confidence(
-                patterns_identified
-            )
+            confidence_score = await self._calculate_behavior_confidence(patterns_identified)
 
             # 행동 분석 객체 생성
             behavior_analysis = BehaviorAnalysis(
@@ -233,9 +223,7 @@ class UserExperienceOptimizer:
             logger.error(f"행동 분석 실패: {str(e)}")
             raise
 
-    async def generate_ux_improvements(
-        self, analysis_result: BehaviorAnalysis
-    ) -> List[UXImprovement]:
+    async def generate_ux_improvements(self, analysis_result: BehaviorAnalysis) -> List[UXImprovement]:
         """UX 개선 제안 생성"""
         try:
             self.optimization_status = OptimizationStatus.ANALYZING
@@ -247,9 +235,7 @@ class UserExperienceOptimizer:
             # 개선 제안 생성
             ux_improvements = []
             for area in improvement_areas:
-                improvement = await self._generate_single_improvement(
-                    area, analysis_result
-                )
+                improvement = await self._generate_single_improvement(area, analysis_result)
                 if improvement:
                     ux_improvements.append(improvement)
 
@@ -267,9 +253,7 @@ class UserExperienceOptimizer:
             logger.error(f"UX 개선 제안 생성 실패: {str(e)}")
             raise
 
-    async def validate_ux_enhancements(
-        self, improvement_data: Dict[str, Any]
-    ) -> ValidationReport:
+    async def validate_ux_enhancements(self, improvement_data: Dict[str, Any]) -> ValidationReport:
         """UX 향상 효과 검증"""
         try:
             self.optimization_status = OptimizationStatus.VALIDATING
@@ -282,9 +266,7 @@ class UserExperienceOptimizer:
             usability_score = await self._measure_usability_score(improvement_data)
 
             # 성능 영향 측정
-            performance_impact = await self._measure_performance_impact(
-                improvement_data
-            )
+            performance_impact = await self._measure_performance_impact(improvement_data)
 
             # 검증 상태 결정
             validation_status = await self._determine_validation_status(
@@ -333,9 +315,7 @@ class UserExperienceOptimizer:
         await asyncio.sleep(0.1)
         return analysis_result
 
-    async def _determine_optimization_type(
-        self, analysis_result: Dict[str, Any]
-    ) -> UIOptimizationType:
+    async def _determine_optimization_type(self, analysis_result: Dict[str, Any]) -> UIOptimizationType:
         """최적화 타입 결정"""
         scores = list(analysis_result.values())
         min_score = min(scores)
@@ -366,9 +346,7 @@ class UserExperienceOptimizer:
         await asyncio.sleep(0.1)
         return improvement_data
 
-    async def _convert_behavior_data(
-        self, behavior_data: List[Dict[str, Any]]
-    ) -> List[UserBehavior]:
+    async def _convert_behavior_data(self, behavior_data: List[Dict[str, Any]]) -> List[UserBehavior]:
         """행동 데이터 변환"""
         user_behaviors = []
 
@@ -386,9 +364,7 @@ class UserExperienceOptimizer:
 
         return user_behaviors
 
-    async def _identify_behavior_patterns(
-        self, user_behaviors: List[UserBehavior]
-    ) -> List[Dict[str, Any]]:
+    async def _identify_behavior_patterns(self, user_behaviors: List[UserBehavior]) -> List[Dict[str, Any]]:
         """행동 패턴 식별"""
         patterns = []
 
@@ -406,9 +382,7 @@ class UserExperienceOptimizer:
         await asyncio.sleep(0.1)
         return patterns
 
-    async def _generate_behavior_insights(
-        self, patterns: List[Dict[str, Any]]
-    ) -> List[str]:
+    async def _generate_behavior_insights(self, patterns: List[Dict[str, Any]]) -> List[str]:
         """행동 인사이트 생성"""
         insights = [
             "사용자들이 주로 상단 네비게이션을 사용합니다",
@@ -420,9 +394,7 @@ class UserExperienceOptimizer:
         await asyncio.sleep(0.1)
         return insights
 
-    async def _generate_behavior_recommendations(
-        self, insights: List[str]
-    ) -> List[str]:
+    async def _generate_behavior_recommendations(self, insights: List[str]) -> List[str]:
         """행동 권장사항 생성"""
         recommendations = [
             "네비게이션 구조를 단순화하세요",
@@ -434,9 +406,7 @@ class UserExperienceOptimizer:
         await asyncio.sleep(0.1)
         return recommendations
 
-    async def _calculate_behavior_confidence(
-        self, patterns: List[Dict[str, Any]]
-    ) -> float:
+    async def _calculate_behavior_confidence(self, patterns: List[Dict[str, Any]]) -> float:
         """행동 신뢰도 계산"""
         if not patterns:
             return 0.0
@@ -444,9 +414,7 @@ class UserExperienceOptimizer:
         confidences = [pattern.get("confidence", 0.0) for pattern in patterns]
         return statistics.mean(confidences)
 
-    async def _identify_improvement_areas(
-        self, analysis_result: BehaviorAnalysis
-    ) -> List[Dict[str, Any]]:
+    async def _identify_improvement_areas(self, analysis_result: BehaviorAnalysis) -> List[Dict[str, Any]]:
         """개선 영역 식별"""
         areas = [
             {
@@ -493,9 +461,7 @@ class UserExperienceOptimizer:
         await asyncio.sleep(0.05)
         return improvement
 
-    async def _measure_user_satisfaction(
-        self, improvement_data: Dict[str, Any]
-    ) -> float:
+    async def _measure_user_satisfaction(self, improvement_data: Dict[str, Any]) -> float:
         """사용자 만족도 측정"""
         # 실제 구현에서는 사용자 설문조사나 피드백 데이터를 분석
         satisfaction = random.uniform(0.7, 0.95)
@@ -509,9 +475,7 @@ class UserExperienceOptimizer:
         await asyncio.sleep(0.1)
         return usability
 
-    async def _measure_performance_impact(
-        self, improvement_data: Dict[str, Any]
-    ) -> float:
+    async def _measure_performance_impact(self, improvement_data: Dict[str, Any]) -> float:
         """성능 영향 측정"""
         # 실제 구현에서는 성능 메트릭을 분석
         impact = random.uniform(0.8, 1.2)
@@ -592,9 +556,7 @@ async def test_user_experience_optimizer():
     print(f"\nUX 개선 제안 생성 완료: {len(ux_improvements)}개")
 
     for improvement in ux_improvements[:3]:  # 상위 3개만 출력
-        print(
-            f"- {improvement.improvement_type.value}: {improvement.improvement_description}"
-        )
+        print(f"- {improvement.improvement_type.value}: {improvement.improvement_description}")
         print(f"  우선순위: {improvement.priority_score:.2f}")
 
     # UX 향상 효과 검증 테스트

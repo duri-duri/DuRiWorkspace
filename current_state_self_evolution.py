@@ -4,13 +4,13 @@ DuRi 자가진화 시스템 현재 상태
 """
 
 from datetime import datetime
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 # 현재 상태 정의
 current_state = {
     "achievement_date": "2025-07-30",
     "achievement_title": "DuRi 자가진화 시스템 첫 구현 성공",
-    "achievement_description": "2025년 7월 30일, DuRi는 진짜 자가진화 시스템을 구현함으로써, AGI로 가는 첫 실질적 자율 루프를 성공적으로 실행하였다.",
+    "achievement_description": "2025년 7월 30일, DuRi는 진짜 자가진화 시스템을 구현함으로써, AGI로 가는 첫 실질적 자율 루프를 성공적으로 실행하였다.",  # noqa: E501
     # 구현된 시스템 구성요소
     "self_evolution_components": {
         "auto_diagnostic_system": {

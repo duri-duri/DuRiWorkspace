@@ -2,10 +2,9 @@ from __future__ import annotations
 
 import dataclasses
 import json
-import math
-from pathlib import Path
 import statistics
-from typing import Any, Dict, Iterable, List, Optional, Tuple
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
 import yaml  # pyyaml 필요
 
@@ -38,10 +37,7 @@ class SampleSet:
 
 def load_sampleset(path: Path) -> SampleSet:
     d = yaml.safe_load(Path(path).read_text(encoding="utf-8"))
-    groups = {
-        g["id"]: GroupCfg(id=g["id"], weight=float(g.get("weight", 1.0)))
-        for g in d.get("groups", [])
-    }
+    groups = {g["id"]: GroupCfg(id=g["id"], weight=float(g.get("weight", 1.0))) for g in d.get("groups", [])}
     samples: List[Sample] = []
     for s in d.get("samples", []):
         samples.append(
@@ -51,8 +47,7 @@ def load_sampleset(path: Path) -> SampleSet:
                 prompt=s.get("prompt"),
                 references=[str(r) for r in (s.get("references") or [])],
                 candidates=[
-                    {"tag": c.get("tag", "default"), "text": c.get("text", "")}
-                    for c in (s.get("candidates") or [])
+                    {"tag": c.get("tag", "default"), "text": c.get("text", "")} for c in (s.get("candidates") or [])
                 ],
             )
         )
@@ -80,9 +75,7 @@ def load_outputs_jsonl(path: Optional[Path]) -> Dict[str, Dict[str, Any]]:
     return out
 
 
-def _pick_candidate(
-    sample: Sample, outputs: Dict[str, Dict[str, Any]]
-) -> Tuple[str, str]:
+def _pick_candidate(sample: Sample, outputs: Dict[str, Dict[str, Any]]) -> Tuple[str, str]:
     """returns (tag, text). priority: external outputs > built-in candidate(baseline) > first candidate > ''"""
     if sample.id in outputs:
         o = outputs[sample.id]
@@ -95,9 +88,7 @@ def _pick_candidate(
     return "none", ""
 
 
-def evaluate_league(
-    sampleset: SampleSet, outputs_path: Optional[Path], run_name: str = "current"
-) -> Dict[str, Any]:
+def evaluate_league(sampleset: SampleSet, outputs_path: Optional[Path], run_name: str = "current") -> Dict[str, Any]:
     outs = load_outputs_jsonl(outputs_path)
     per_sample = []
     group_scores: Dict[str, List[float]] = {}
@@ -142,18 +133,10 @@ def evaluate_league(
             "name": run_name,
         },
         "overall": {
-            "avg_composite": (
-                float(sum(overall_scores) / len(overall_scores))
-                if overall_scores
-                else 0.0
-            ),
+            "avg_composite": (float(sum(overall_scores) / len(overall_scores)) if overall_scores else 0.0),
             "min": float(min(overall_scores)) if overall_scores else 0.0,
             "max": float(max(overall_scores)) if overall_scores else 0.0,
-            "std": (
-                float(statistics.pstdev(overall_scores))
-                if len(overall_scores) > 1
-                else 0.0
-            ),
+            "std": (float(statistics.pstdev(overall_scores)) if len(overall_scores) > 1 else 0.0),
         },
         "by_group": groups,
         "results": per_sample,
@@ -163,13 +146,11 @@ def evaluate_league(
 
 def save_md_table(report: Dict[str, Any]) -> str:
     lines = []
-    lines.append(
-        f"# 📊 League Report — {report['sampleset']['name']} ({report['run']['name']})"
-    )
+    lines.append(f"# 📊 League Report — {report['sampleset']['name']} ({report['run']['name']})")
     o = report["overall"]
     lines += [
         "",
-        f"- **Avg**: `{o['avg_composite']:.3f}`  •  **Min**: `{o['min']:.3f}`  •  **Max**: `{o['max']:.3f}`  •  **Std**: `{o['std']:.3f}`",
+        f"- **Avg**: `{o['avg_composite']:.3f}`  •  **Min**: `{o['min']:.3f}`  •  **Max**: `{o['max']:.3f}`  •  **Std**: `{o['std']:.3f}`",  # noqa: E501
         "",
         "## Group Averages",
         "",
@@ -180,9 +161,7 @@ def save_md_table(report: Dict[str, Any]) -> str:
         lines.append(f"| `{g['group']}` | {g['count']} | `{g['avg_composite']:.3f}` |")
 
     # Top/Bottom
-    results = sorted(
-        report["results"], key=lambda x: x["composite_score"], reverse=True
-    )
+    results = sorted(report["results"], key=lambda x: x["composite_score"], reverse=True)
     head = results[:5]
     tail = results[-5:] if len(results) > 5 else []
 
@@ -190,9 +169,7 @@ def save_md_table(report: Dict[str, Any]) -> str:
         txt = r["text"]
         if len(txt) > 60:
             txt = txt[:60] + "..."
-        return (
-            f"| `{r['id']}` | `{r['group']}` | `{r['composite_score']:.3f}` | `{txt}` |"
-        )
+        return f"| `{r['id']}` | `{r['group']}` | `{r['composite_score']:.3f}` | `{txt}` |"
 
     lines += ["", "## Top 5", "", "| ID | Group | Score | Text |", "|---|---|---:|---|"]
     for r in head:
@@ -265,7 +242,7 @@ def regression_md(summary: Dict[str, Any]) -> str:
     lines += [
         "## Overall",
         "",
-        f"- Baseline: `{o['baseline']:.3f}`  •  Current: `{o['current']:.3f}`  •  Δ: `{o['delta']:.3f}`  •  Threshold: `{o['threshold']:.3f}`",
+        f"- Baseline: `{o['baseline']:.3f}`  •  Current: `{o['current']:.3f}`  •  Δ: `{o['delta']:.3f}`  •  Threshold: `{o['threshold']:.3f}`",  # noqa: E501
         "",
         "## By Group",
         "",
@@ -273,9 +250,7 @@ def regression_md(summary: Dict[str, Any]) -> str:
         "|---|---:|---:|---:|",
     ]
     for r in s["by_group"]:
-        lines.append(
-            f"| `{r['group']}` | `{r['baseline']:.3f}` | `{r['current']:.3f}` | `{r['delta']:.3f}` |"
-        )
+        lines.append(f"| `{r['group']}` | `{r['baseline']:.3f}` | `{r['current']:.3f}` | `{r['delta']:.3f}` |")
     lines += [
         "",
         f"**Worst group drop:** `{s['worst_group_drop']:.3f}`  •  **Group threshold:** `{s['threshold_group']:.3f}`",

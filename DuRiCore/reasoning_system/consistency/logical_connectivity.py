@@ -6,17 +6,11 @@ DuRi 추론 시스템 - 논리적 연결성 검증 모듈
 추론 과정의 논리적 일관성을 검증하는 모듈입니다.
 """
 
-import asyncio
-from collections import Counter, defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-import hashlib
-import json
 import logging
-import re
 import time
-from typing import Any, Dict, List, Optional, Tuple, Union
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
 import numpy as np
 
@@ -56,9 +50,7 @@ class LogicalConnectivityValidator:
         self.connection_patterns = {}
         self.validation_history = []
 
-    async def validate_logical_connections(
-        self, reasoning_steps: List[Dict[str, Any]]
-    ) -> List[LogicalConnection]:
+    async def validate_logical_connections(self, reasoning_steps: List[Dict[str, Any]]) -> List[LogicalConnection]:
         """논리적 연결 검증"""
         connections = []
 
@@ -88,9 +80,7 @@ class LogicalConnectivityValidator:
         strength = await self._calculate_connection_strength(prev_step, current_step)
 
         # 연결 신뢰도 계산
-        confidence = await self._calculate_connection_confidence(
-            prev_step, current_step
-        )
+        confidence = await self._calculate_connection_confidence(prev_step, current_step)
 
         # 연결 증거 수집
         evidence = await self._collect_connection_evidence(prev_step, current_step)
@@ -116,17 +106,13 @@ class LogicalConnectivityValidator:
         # 기본적으로 개념적 연결로 설정
         return LogicalConnectionType.CONCEPTUAL
 
-    async def _calculate_connection_strength(
-        self, prev_step: Dict[str, Any], current_step: Dict[str, Any]
-    ) -> float:
+    async def _calculate_connection_strength(self, prev_step: Dict[str, Any], current_step: Dict[str, Any]) -> float:
         """연결 강도 계산"""
         # 유사도 기반 강도 계산
         similarity = await self._calculate_similarity(prev_step, current_step)
         return similarity
 
-    async def _calculate_similarity(
-        self, step1: Dict[str, Any], step2: Dict[str, Any]
-    ) -> float:
+    async def _calculate_similarity(self, step1: Dict[str, Any], step2: Dict[str, Any]) -> float:
         """단계 간 유사도 계산"""
         # 간단한 유사도 계산 (실제로는 더 복잡한 알고리즘 사용)
         common_keys = set(step1.keys()) & set(step2.keys())
@@ -135,9 +121,7 @@ class LogicalConnectivityValidator:
 
         similarities = []
         for key in common_keys:
-            if isinstance(step1[key], (str, int, float)) and isinstance(
-                step2[key], (str, int, float)
-            ):
+            if isinstance(step1[key], (str, int, float)) and isinstance(step2[key], (str, int, float)):
                 if step1[key] == step2[key]:
                     similarities.append(1.0)
                 else:
@@ -145,9 +129,7 @@ class LogicalConnectivityValidator:
 
         return np.mean(similarities) if similarities else 0.0
 
-    async def _calculate_connection_confidence(
-        self, prev_step: Dict[str, Any], current_step: Dict[str, Any]
-    ) -> float:
+    async def _calculate_connection_confidence(self, prev_step: Dict[str, Any], current_step: Dict[str, Any]) -> float:
         """연결 신뢰도 계산"""
         # 기본 신뢰도 계산
         base_confidence = 0.5
@@ -160,9 +142,7 @@ class LogicalConnectivityValidator:
 
         return min(1.0, base_confidence * completeness_factor)
 
-    async def _collect_connection_evidence(
-        self, prev_step: Dict[str, Any], current_step: Dict[str, Any]
-    ) -> List[str]:
+    async def _collect_connection_evidence(self, prev_step: Dict[str, Any], current_step: Dict[str, Any]) -> List[str]:
         """연결 증거 수집"""
         evidence = []
 

@@ -5,20 +5,15 @@
 """
 
 import asyncio
-from datetime import datetime
 import logging
-import time
-from typing import Any, Dict
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 # 모듈 import
-from duri_modules.data.conversation_logger import conversation_logger
-from duri_modules.unified.unified_conversation_processor import unified_processor
+from duri_modules.data.conversation_logger import conversation_logger  # noqa: E402
+from duri_modules.unified.unified_conversation_processor import unified_processor  # noqa: E402
 
 
 async def test_conversation_logging():
@@ -27,9 +22,7 @@ async def test_conversation_logging():
         logger.info("🧠 대화 로그 수집 시스템 테스트 시작")
 
         # 1. 대화 세션 시작
-        conversation_id = conversation_logger.start_conversation(
-            "test_conversation_001"
-        )
+        conversation_id = conversation_logger.start_conversation("test_conversation_001")
         logger.info(f"✅ 대화 세션 시작: {conversation_id}")
 
         # 2. 여러 대화 교환 로그
@@ -52,7 +45,7 @@ async def test_conversation_logging():
             },
             {
                 "user_input": "예시 코드를 보여줘",
-                "duri_response": "numbers = [3, 1, 4, 1, 5]; numbers.sort() # 원본 변경\nsorted_numbers = sorted(numbers) # 새 리스트 생성",
+                "duri_response": "numbers = [3, 1, 4, 1, 5]; numbers.sort() # 원본 변경\nsorted_numbers = sorted(numbers) # 새 리스트 생성",  # noqa: E501
                 "response_time": 1.5,
                 "success": True,
                 "learning_patterns": ["example_based_learning", "code_demonstration"],
@@ -179,14 +172,14 @@ def print_statistics_summary(statistics):
     # 진화 패턴
     evolution_patterns = statistics.get("evolution_patterns", {})
     if evolution_patterns:
-        print(f"\n진화 패턴:")
+        print("\n진화 패턴:")
         for pattern, count in evolution_patterns.items():
             print(f"  • {pattern}: {count}회")
 
     # 최근 트렌드
     recent_trends = statistics.get("recent_trends", {})
     if recent_trends:
-        print(f"\n최근 트렌드:")
+        print("\n최근 트렌드:")
         for trend, status in recent_trends.items():
             print(f"  • {trend}: {status}")
 
@@ -215,9 +208,7 @@ async def main():
             if statistics:
                 print_statistics_summary(statistics)
         else:
-            print(
-                f"❌ 대화 로그 수집 테스트 실패: {log_test_result.get('error', '알 수 없는 오류')}"
-            )
+            print(f"❌ 대화 로그 수집 테스트 실패: {log_test_result.get('error', '알 수 없는 오류')}")
 
         # 2. 통합 처리 시스템 연동 테스트
         print("\n2️⃣ 통합 처리 시스템 연동 테스트")
@@ -229,21 +220,17 @@ async def main():
             # 세션 결과 출력
             session_result = integration_test_result.get("session_result", {})
             if session_result.get("status") == "success":
-                print(
-                    f"✅ 세션 종료 성공: {session_result.get('evolution_log', {}).get('conversation_id', 'N/A')}"
-                )
+                print(f"✅ 세션 종료 성공: {session_result.get('evolution_log', {}).get('conversation_id', 'N/A')}")
 
             # 진화 인사이트 출력
             evolution_insights = integration_test_result.get("evolution_insights", {})
             if evolution_insights.get("status") == "success":
                 insights_data = evolution_insights.get("evolution_insights", {})
                 print(
-                    f"✅ 진화 인사이트 생성: {insights_data.get('evolution_summary', {}).get('total_conversations', 0)}개 대화 분석"
+                    f"✅ 진화 인사이트 생성: {insights_data.get('evolution_summary', {}).get('total_conversations', 0)}개 대화 분석"  # noqa: E501
                 )
         else:
-            print(
-                f"❌ 통합 처리 시스템 연동 테스트 실패: {integration_test_result.get('error', '알 수 없는 오류')}"
-            )
+            print(f"❌ 통합 처리 시스템 연동 테스트 실패: {integration_test_result.get('error', '알 수 없는 오류')}")
 
         # 전체 테스트 결과 요약
         print("\n" + "=" * 80)
@@ -264,9 +251,7 @@ async def main():
             else:
                 print(f"❌ {test_name}: 실패")
 
-        print(
-            f"\n📊 성공률: {success_count}/{len(tests)} ({success_count/len(tests)*100:.1f}%)"
-        )
+        print(f"\n📊 성공률: {success_count}/{len(tests)} ({success_count/len(tests)*100:.1f}%)")
 
         if success_count == len(tests):
             print("🎉 모든 테스트가 성공했습니다!")

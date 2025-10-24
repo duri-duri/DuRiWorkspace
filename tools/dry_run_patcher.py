@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 import json
-from pathlib import Path
 import shutil
-import subprocess
 import sys
 import tempfile
+from pathlib import Path
 
 
 class DryRunPatcher:

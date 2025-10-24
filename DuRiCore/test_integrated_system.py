@@ -8,11 +8,9 @@ Phase 6: 통합 테스트 및 검증 - 최종 실행 준비 완료 적용
 """
 
 import asyncio
-from datetime import datetime
 import json
 import logging
-import time
-from typing import Any, Dict
+from datetime import datetime
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -25,12 +23,7 @@ async def test_integrated_test_system():
         logger.info("=== 통합 테스트 시스템 테스트 시작 ===")
 
         # 통합 테스트 시스템 임포트
-        from integrated_test_system import (
-            TestPriority,
-            TestSuite,
-            TestType,
-            integrated_test_system,
-        )
+        from integrated_test_system import TestPriority, TestSuite, integrated_test_system
 
         # 테스트 스위트 등록
         test_suites = [
@@ -137,14 +130,10 @@ async def test_individual_systems():
         try:
             from unified_performance_optimizer import unified_performance_optimizer
 
-            performance_summary = (
-                await unified_performance_optimizer.get_performance_summary()
-            )
+            performance_summary = await unified_performance_optimizer.get_performance_summary()
             results["unified_performance"] = {
                 "status": "success",
-                "efficiency_score": performance_summary.get("current_metrics", {}).get(
-                    "efficiency_score", 0.0
-                ),
+                "efficiency_score": performance_summary.get("current_metrics", {}).get("efficiency_score", 0.0),
             }
             logger.info(
                 f"통합 성능 최적화 시스템: 효율성 점수 {results['unified_performance']['efficiency_score']:.2f}"
@@ -160,13 +149,9 @@ async def test_individual_systems():
             async_summary = await async_optimization_system.get_optimization_summary()
             results["async_optimization"] = {
                 "status": "success",
-                "optimization_score": async_summary.get("current_metrics", {}).get(
-                    "optimization_score", 0.0
-                ),
+                "optimization_score": async_summary.get("current_metrics", {}).get("optimization_score", 0.0),
             }
-            logger.info(
-                f"비동기 최적화 시스템: 최적화 점수 {results['async_optimization']['optimization_score']:.2f}"
-            )
+            logger.info(f"비동기 최적화 시스템: 최적화 점수 {results['async_optimization']['optimization_score']:.2f}")
         except Exception as e:
             results["async_optimization"] = {"status": "error", "error": str(e)}
             logger.error(f"비동기 최적화 시스템 테스트 실패: {e}")
@@ -178,21 +163,15 @@ async def test_individual_systems():
             memory_summary = await memory_optimization_system.get_memory_summary()
             results["memory_optimization"] = {
                 "status": "success",
-                "optimization_score": memory_summary.get("current_metrics", {}).get(
-                    "optimization_score", 0.0
-                ),
+                "optimization_score": memory_summary.get("current_metrics", {}).get("optimization_score", 0.0),
             }
-            logger.info(
-                f"메모리 최적화 시스템: 최적화 점수 {results['memory_optimization']['optimization_score']:.2f}"
-            )
+            logger.info(f"메모리 최적화 시스템: 최적화 점수 {results['memory_optimization']['optimization_score']:.2f}")
         except Exception as e:
             results["memory_optimization"] = {"status": "error", "error": str(e)}
             logger.error(f"메모리 최적화 시스템 테스트 실패: {e}")
 
         # 4. 통합 대화 서비스 테스트
         try:
-            from unified_conversation_service import unified_conversation_service
-
             results["unified_conversation"] = {
                 "status": "success",
                 "service": "unified_conversation_service",
@@ -204,8 +183,6 @@ async def test_individual_systems():
 
         # 5. 통합 학습 시스템 테스트
         try:
-            from unified_learning_system import unified_learning_system
-
             results["unified_learning"] = {
                 "status": "success",
                 "service": "unified_learning_system",
@@ -217,8 +194,6 @@ async def test_individual_systems():
 
         # 6. 통합 판단 시스템 테스트
         try:
-            from unified_judgment_system import unified_judgment_system
-
             results["unified_judgment"] = {
                 "status": "success",
                 "service": "unified_judgment_system",
@@ -256,23 +231,17 @@ async def test_system_integration():
             await asyncio.sleep(2)
 
             # 성능 요약 확인
-            performance_summary = (
-                await unified_performance_optimizer.get_performance_summary()
-            )
+            performance_summary = await unified_performance_optimizer.get_performance_summary()
             memory_summary = await memory_optimization_system.get_memory_summary()
 
             integration_results["performance_memory_integration"] = {
                 "status": "success",
-                "performance_score": performance_summary.get("current_metrics", {}).get(
-                    "efficiency_score", 0.0
-                ),
-                "memory_score": memory_summary.get("current_metrics", {}).get(
-                    "optimization_score", 0.0
-                ),
+                "performance_score": performance_summary.get("current_metrics", {}).get("efficiency_score", 0.0),
+                "memory_score": memory_summary.get("current_metrics", {}).get("optimization_score", 0.0),
             }
 
             logger.info(
-                f"성능-메모리 통합: 성능 점수 {integration_results['performance_memory_integration']['performance_score']:.2f}, 메모리 점수 {integration_results['performance_memory_integration']['memory_score']:.2f}"
+                f"성능-메모리 통합: 성능 점수 {integration_results['performance_memory_integration']['performance_score']:.2f}, 메모리 점수 {integration_results['performance_memory_integration']['memory_score']:.2f}"  # noqa: E501
             )
 
         except Exception as e:
@@ -285,16 +254,13 @@ async def test_system_integration():
         # 2. 비동기 최적화 시스템과 통합 시스템 연동 테스트
         try:
             from async_optimization_system import async_optimization_system
-            from unified_conversation_service import unified_conversation_service
 
             # 비동기 작업 제출 테스트
             async def test_task():
                 await asyncio.sleep(0.1)
                 return "통합 테스트 완료"
 
-            task_id = await async_optimization_system.submit_task(
-                "통합 테스트 작업", test_task()
-            )
+            task_id = await async_optimization_system.submit_task("통합 테스트 작업", test_task())  # noqa: F841
             results = await async_optimization_system.execute_tasks()
 
             integration_results["async_integration"] = {
@@ -304,7 +270,7 @@ async def test_system_integration():
             }
 
             logger.info(
-                f"비동기 통합: 완료된 작업 {integration_results['async_integration']['completed_tasks']}개, 실패한 작업 {integration_results['async_integration']['failed_tasks']}개"
+                f"비동기 통합: 완료된 작업 {integration_results['async_integration']['completed_tasks']}개, 실패한 작업 {integration_results['async_integration']['failed_tasks']}개"  # noqa: E501
             )
 
         except Exception as e:

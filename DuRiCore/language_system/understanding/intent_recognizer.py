@@ -10,10 +10,10 @@ DuRi 언어 이해 시스템 - 의도 인식기
 - 감정표현 의도 인식
 """
 
-from dataclasses import dataclass
 import logging
 import re
-from typing import Any, Dict, List
+from dataclasses import dataclass
+from typing import Any, Dict
 
 logger = logging.getLogger(__name__)
 
@@ -43,9 +43,7 @@ class IntentRecognizer:
         }
         self.logger.info("의도 인식기 초기화 완료")
 
-    async def recognize_intent(
-        self, text: str, context: Dict[str, Any] = None
-    ) -> Dict[str, Any]:
+    async def recognize_intent(self, text: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
         """의도 인식"""
         try:
             intent_scores = {}
@@ -59,11 +57,7 @@ class IntentRecognizer:
                 intent_scores[intent] = score
 
             # 주요 의도 결정
-            primary_intent = (
-                max(intent_scores.items(), key=lambda x: x[1])[0]
-                if intent_scores
-                else "일반"
-            )
+            primary_intent = max(intent_scores.items(), key=lambda x: x[1])[0] if intent_scores else "일반"
 
             return {
                 "primary_intent": primary_intent,

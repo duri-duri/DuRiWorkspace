@@ -6,17 +6,11 @@ DuRi 추론 시스템 - 성능 모니터링 모듈
 실시간 성능 모니터링 및 조정 모듈입니다.
 """
 
-import asyncio
-from collections import Counter, defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-import hashlib
-import json
 import logging
-import re
 import time
-from typing import Any, Dict, List, Optional, Tuple, Union
+from dataclasses import dataclass, field
+from datetime import datetime
+from typing import Any, Dict
 
 import numpy as np
 
@@ -47,9 +41,7 @@ class PerformanceMonitor:
         self.metrics_history = []
         self.performance_trends = {}
 
-    async def monitor_performance(
-        self, session_id: str, performance_data: Dict[str, Any]
-    ) -> PerformanceMetrics:
+    async def monitor_performance(self, session_id: str, performance_data: Dict[str, Any]) -> PerformanceMetrics:
         """성능 모니터링"""
         metrics_id = f"metrics_{int(time.time())}"
 
@@ -133,9 +125,7 @@ class PerformanceMonitor:
 
         trends = {
             "average_efficiency": np.mean([m.efficiency_score for m in recent_metrics]),
-            "average_execution_time": np.mean(
-                [m.execution_time for m in recent_metrics]
-            ),
+            "average_execution_time": np.mean([m.execution_time for m in recent_metrics]),
             "average_memory_usage": np.mean([m.memory_usage for m in recent_metrics]),
             "average_cpu_usage": np.mean([m.cpu_usage for m in recent_metrics]),
             "average_throughput": np.mean([m.throughput for m in recent_metrics]),

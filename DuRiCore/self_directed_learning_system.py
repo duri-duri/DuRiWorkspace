@@ -15,17 +15,14 @@ DuRi 30일 진화 계획 - Day 6: 자발적 학습 시스템
 """
 
 import asyncio
-from collections import defaultdict, deque
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-import json
 import logging
 import random
 import time
-from typing import Any, Dict, List, Optional, Tuple, Union
-
-import numpy as np
+from collections import defaultdict
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
 
 # 기존 시스템들 import
 try:
@@ -34,15 +31,13 @@ try:
     from emotional_thinking_system import EmotionalThinkingSystem
     from inner_thinking_system import InnerThinkingSystem
     from intuitive_thinking_system import IntuitiveThinkingSystem
-    from meta_cognition_system import MetaCognitionLevel, MetaCognitionSystem
+    from meta_cognition_system import MetaCognitionLevel, MetaCognitionSystem  # noqa: F401
     from phase_omega_integration import DuRiPhaseOmega
 except ImportError as e:
     logging.warning(f"일부 기존 시스템 import 실패: {e}")
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -190,9 +185,7 @@ class SelfDirectedLearningSystem:
         self.learning_history: List[SelfDirectedLearningResult] = []
         self.current_goals: List[LearningGoal] = []
         self.learning_patterns: Dict[str, Any] = defaultdict(list)
-        self.curiosity_profile: Dict[LearningDomain, float] = {
-            domain: 0.5 for domain in LearningDomain
-        }
+        self.curiosity_profile: Dict[LearningDomain, float] = {domain: 0.5 for domain in LearningDomain}
 
         # 학습 통계
         self.total_learning_sessions = 0
@@ -201,9 +194,7 @@ class SelfDirectedLearningSystem:
 
         logger.info("자발적 학습 시스템 초기화 완료")
 
-    async def start_self_directed_learning(
-        self, context: Dict[str, Any] = None
-    ) -> SelfDirectedLearningResult:
+    async def start_self_directed_learning(self, context: Dict[str, Any] = None) -> SelfDirectedLearningResult:
         """자발적 학습 세션 시작"""
         if context is None:
             context = {}
@@ -216,19 +207,13 @@ class SelfDirectedLearningSystem:
             curiosity_triggers = await self._generate_curiosity_triggers(context)
 
             # 2. 자발적 문제 발견
-            discovered_problems = await self._discover_problems(
-                context, curiosity_triggers
-            )
+            discovered_problems = await self._discover_problems(context, curiosity_triggers)
 
             # 3. 학습 목표 자동 설정
-            learning_goals = await self._set_learning_goals(
-                context, discovered_problems
-            )
+            learning_goals = await self._set_learning_goals(context, discovered_problems)
 
             # 4. 자기 주도적 학습 루프
-            learning_activities, learning_outcomes = await self._execute_learning_loop(
-                context, learning_goals
-            )
+            learning_activities, learning_outcomes = await self._execute_learning_loop(context, learning_goals)
 
             # 5. 결과 종합
             result = await self._compile_learning_result(
@@ -263,9 +248,7 @@ class SelfDirectedLearningSystem:
                 error_message=str(e),
             )
 
-    async def _generate_curiosity_triggers(
-        self, context: Dict[str, Any]
-    ) -> List[CuriosityTrigger]:
+    async def _generate_curiosity_triggers(self, context: Dict[str, Any]) -> List[CuriosityTrigger]:
         """호기심 기반 탐구 트리거 생성"""
         triggers = []
 
@@ -397,9 +380,7 @@ class SelfDirectedLearningSystem:
             base_duration = timedelta(minutes=30)
             complexity_multiplier = 1 + problem.complexity
             proficiency_multiplier = 1 + target_proficiency
-            estimated_duration = (
-                base_duration * complexity_multiplier * proficiency_multiplier
-            )
+            estimated_duration = base_duration * complexity_multiplier * proficiency_multiplier
 
             # 목표 기술명 생성
             skill_names = {
@@ -468,9 +449,7 @@ class SelfDirectedLearningSystem:
 
         return activities, outcomes
 
-    async def _execute_goal_learning(
-        self, goal: LearningGoal, context: Dict[str, Any]
-    ) -> List[LearningActivity]:
+    async def _execute_goal_learning(self, goal: LearningGoal, context: Dict[str, Any]) -> List[LearningActivity]:
         """개별 목표에 대한 학습 실행"""
         activities = []
 
@@ -531,9 +510,7 @@ class SelfDirectedLearningSystem:
 
         return activities
 
-    async def _generate_learning_insights(
-        self, goal: LearningGoal, phase: LearningPhase
-    ) -> List[str]:
+    async def _generate_learning_insights(self, goal: LearningGoal, phase: LearningPhase) -> List[str]:
         """학습 통찰 생성"""
         insights = []
 
@@ -542,27 +519,27 @@ class SelfDirectedLearningSystem:
             LearningPhase.EXPLORATION: [
                 f"{goal.target_skill}의 기본 구조와 원리 발견",
                 f"{goal.domain.value} 영역에서의 새로운 관점 획득",
-                f"학습 목표의 복잡성과 깊이 인식",
+                "학습 목표의 복잡성과 깊이 인식",
             ],
             LearningPhase.INVESTIGATION: [
                 f"{goal.target_skill}의 세부 메커니즘 이해",
-                f"기존 지식과의 연결점 발견",
-                f"학습 방법의 효율성 개선 방안 발견",
+                "기존 지식과의 연결점 발견",
+                "학습 방법의 효율성 개선 방안 발견",
             ],
             LearningPhase.EXPERIMENTATION: [
                 f"{goal.target_skill}의 실제 적용 가능성 확인",
-                f"실험을 통한 새로운 발견",
-                f"학습 과정에서의 예상치 못한 통찰",
+                "실험을 통한 새로운 발견",
+                "학습 과정에서의 예상치 못한 통찰",
             ],
             LearningPhase.INTEGRATION: [
                 f"{goal.target_skill}과 기존 능력의 조화로운 통합",
-                f"전체적 인식 체계의 확장",
-                f"학습 내용의 체계적 정리와 구조화",
+                "전체적 인식 체계의 확장",
+                "학습 내용의 체계적 정리와 구조화",
             ],
             LearningPhase.APPLICATION: [
                 f"{goal.target_skill}의 실제 효과 검증",
-                f"적용 과정에서의 추가 개선점 발견",
-                f"학습 성과의 구체적 확인",
+                "적용 과정에서의 추가 개선점 발견",
+                "학습 성과의 구체적 확인",
             ],
         }
 
@@ -574,7 +551,7 @@ class SelfDirectedLearningSystem:
         # 추가 통찰 생성
         additional_insights = [
             f"{goal.target_skill} 학습을 통한 자기 성찰 기회",
-            f"학습 과정에서의 메타 인식 능력 향상",
+            "학습 과정에서의 메타 인식 능력 향상",
             f"{goal.domain.value} 영역에서의 성장 가능성 발견",
         ]
 
@@ -588,17 +565,11 @@ class SelfDirectedLearningSystem:
     ) -> LearningOutcome:
         """학습 성과 평가"""
         # 전체 활동의 평균 참여도와 진행도 계산
-        avg_engagement = sum(
-            activity.engagement_level for activity in activities
-        ) / len(activities)
-        avg_progress = sum(activity.progress_score for activity in activities) / len(
-            activities
-        )
+        avg_engagement = sum(activity.engagement_level for activity in activities) / len(activities)
+        avg_progress = sum(activity.progress_score for activity in activities) / len(activities)
 
         # 기술 향상도 계산
-        skill_improvement = min(
-            goal.target_proficiency, avg_progress * goal.target_proficiency
-        )
+        skill_improvement = min(goal.target_proficiency, avg_progress * goal.target_proficiency)
 
         # 획득한 지식과 통찰 수집
         knowledge_gained = []
@@ -636,23 +607,19 @@ class SelfDirectedLearningSystem:
     ) -> SelfDirectedLearningResult:
         """학습 결과 종합"""
         # 총 학습 시간 계산
-        total_learning_time = sum(
-            (activity.duration for activity in learning_activities), timedelta()
-        )
+        total_learning_time = sum((activity.duration for activity in learning_activities), timedelta())
 
         # 평균 참여도 계산
         if learning_activities:
-            average_engagement = sum(
-                activity.engagement_level for activity in learning_activities
-            ) / len(learning_activities)
+            average_engagement = sum(activity.engagement_level for activity in learning_activities) / len(
+                learning_activities
+            )
         else:
             average_engagement = 0.0
 
         # 전체 진행도 계산
         if learning_outcomes:
-            overall_progress = sum(
-                outcome.skill_improvement for outcome in learning_outcomes
-            ) / len(learning_outcomes)
+            overall_progress = sum(outcome.skill_improvement for outcome in learning_outcomes) / len(learning_outcomes)
         else:
             overall_progress = 0.0
 
@@ -681,14 +648,8 @@ class SelfDirectedLearningSystem:
             (result.total_learning_time for result in self.learning_history),
             timedelta(),
         )
-        avg_engagement = (
-            sum((result.average_engagement for result in self.learning_history))
-            / total_sessions
-        )
-        avg_progress = (
-            sum((result.overall_progress for result in self.learning_history))
-            / total_sessions
-        )
+        avg_engagement = sum((result.average_engagement for result in self.learning_history)) / total_sessions
+        avg_progress = sum((result.overall_progress for result in self.learning_history)) / total_sessions
 
         # 영역별 학습 분포
         domain_distribution = defaultdict(int)
@@ -744,7 +705,7 @@ async def test_self_directed_learning_system():
     result = await learning_system.start_self_directed_learning(context)
 
     # 결과 출력
-    print(f"\n=== 자발적 학습 세션 결과 ===")
+    print("\n=== 자발적 학습 세션 결과 ===")
     print(f"세션 ID: {result.session_id}")
     print(f"성공 여부: {result.success}")
     print(f"총 학습 시간: {result.total_learning_time}")
@@ -753,37 +714,27 @@ async def test_self_directed_learning_system():
 
     print(f"\n=== 호기심 트리거 ({len(result.curiosity_triggers)}개) ===")
     for trigger in result.curiosity_triggers:
-        print(
-            f"- {trigger.domain.value}: {trigger.description} (강도: {trigger.intensity:.2f})"
-        )
+        print(f"- {trigger.domain.value}: {trigger.description} (강도: {trigger.intensity:.2f})")
 
     print(f"\n=== 발견된 문제 ({len(result.discovered_problems)}개) ===")
     for problem in result.discovered_problems:
-        print(
-            f"- {problem.domain.value}: {problem.description} (복잡도: {problem.complexity:.2f})"
-        )
+        print(f"- {problem.domain.value}: {problem.description} (복잡도: {problem.complexity:.2f})")
 
     print(f"\n=== 학습 목표 ({len(result.learning_goals)}개) ===")
     for goal in result.learning_goals:
-        print(
-            f"- {goal.target_skill}: {goal.description} (우선순위: {goal.priority:.2f})"
-        )
+        print(f"- {goal.target_skill}: {goal.description} (우선순위: {goal.priority:.2f})")
 
     print(f"\n=== 학습 활동 ({len(result.learning_activities)}개) ===")
     for activity in result.learning_activities:
-        print(
-            f"- {activity.phase.value}: {activity.description} (참여도: {activity.engagement_level:.2f})"
-        )
+        print(f"- {activity.phase.value}: {activity.description} (참여도: {activity.engagement_level:.2f})")
 
     print(f"\n=== 학습 성과 ({len(result.learning_outcomes)}개) ===")
     for outcome in result.learning_outcomes:
-        print(
-            f"- 기술 향상도: {outcome.skill_improvement:.2f}, 자신감 향상: {outcome.confidence_boost:.2f}"
-        )
+        print(f"- 기술 향상도: {outcome.skill_improvement:.2f}, 자신감 향상: {outcome.confidence_boost:.2f}")
 
     # 학습 요약 정보
     summary = await learning_system.get_learning_summary()
-    print(f"\n=== 학습 요약 ===")
+    print("\n=== 학습 요약 ===")
     print(f"총 세션 수: {summary['total_sessions']}")
     print(f"총 학습 시간: {summary['total_learning_time']}")
     print(f"평균 참여도: {summary['average_engagement']}")

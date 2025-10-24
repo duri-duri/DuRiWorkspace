@@ -4,16 +4,16 @@ API Test Script for DuRi Emotion Processing System
 """
 
 import argparse
-from datetime import datetime
 import json
 import sys
 import time
-from typing import Dict, List, Optional
+from datetime import datetime
+from typing import Dict, Optional
 
 import requests
 
 from duri_common.config.config import Config
-from duri_common.config.emotion_labels import ALL_EMOTIONS, get_all_emotions
+from duri_common.config.emotion_labels import ALL_EMOTIONS
 
 # 설정 로드
 config = Config()
@@ -30,16 +30,12 @@ class EmotionAPITester:
             base_url (str): API 기본 URL
             timeout (int): 요청 타임아웃 (초)
         """
-        self.base_url = base_url or config.get_local_emotion_url().replace(
-            "/emotion", ""
-        )
+        self.base_url = base_url or config.get_local_emotion_url().replace("/emotion", "")
         self.timeout = timeout
         self.session = requests.Session()
 
         # 기본 헤더 설정
-        self.session.headers.update(
-            {"Content-Type": "application/json", "User-Agent": "DuRi-API-Tester/1.0"}
-        )
+        self.session.headers.update({"Content-Type": "application/json", "User-Agent": "DuRi-API-Tester/1.0"})
 
     def test_health(self) -> bool:
         """헬스 체크 테스트"""
@@ -71,9 +67,7 @@ class EmotionAPITester:
             print(f"❌ 인덱스 페이지 오류: {e}")
             return False
 
-    def send_emotion(
-        self, emotion: str, intensity: float = 0.8, **kwargs
-    ) -> Optional[Dict]:
+    def send_emotion(self, emotion: str, intensity: float = 0.8, **kwargs) -> Optional[Dict]:
         """
         감정 데이터 전송
 
@@ -93,9 +87,7 @@ class EmotionAPITester:
         }
 
         try:
-            response = self.session.post(
-                f"{self.base_url}/emotion", json=payload, timeout=self.timeout
-            )
+            response = self.session.post(f"{self.base_url}/emotion", json=payload, timeout=self.timeout)
 
             if response.status_code == 200:
                 data = response.json()
@@ -145,7 +137,7 @@ class EmotionAPITester:
 
     def test_custom_emotion(self, emotion: str, intensity: float = 0.8) -> None:
         """사용자 정의 감정 테스트"""
-        print(f"\n=== 사용자 정의 감정 테스트 ===")
+        print("\n=== 사용자 정의 감정 테스트 ===")
         self.send_emotion(emotion, intensity)
 
     def test_stress(self, count: int = 50, delay: float = 0.1) -> None:
@@ -166,7 +158,7 @@ class EmotionAPITester:
         duration = end_time - start_time
         success_rate = (success_count / count) * 100
 
-        print(f"\n📊 스트레스 테스트 결과:")
+        print("\n📊 스트레스 테스트 결과:")
         print(f"   총 요청: {count}")
         print(f"   성공: {success_count}")
         print(f"   실패: {count - success_count}")
@@ -198,9 +190,7 @@ class EmotionAPITester:
         # 존재하지 않는 엔드포인트
         print("\n3. 존재하지 않는 엔드포인트 테스트:")
         try:
-            response = self.session.get(
-                f"{self.base_url}/nonexistent", timeout=self.timeout
-            )
+            response = self.session.get(f"{self.base_url}/nonexistent", timeout=self.timeout)
             print(f"응답: HTTP {response.status_code}")
         except Exception as e:
             print(f"오류: {e}")
@@ -219,7 +209,7 @@ class EmotionAPITester:
                 success_count += 1
             time.sleep(0.5)  # 0.5초 대기
 
-        print(f"\n📊 모든 감정 테스트 결과:")
+        print("\n📊 모든 감정 테스트 결과:")
         print(f"   총 감정: {total_count}")
         print(f"   성공: {success_count}")
         print(f"   실패: {total_count - success_count}")
@@ -259,17 +249,11 @@ def main():
         help="테스트 타입",
     )
 
-    parser.add_argument(
-        "--emotion", "-e", default="curious", help="감정 (기본값: curious)"
-    )
+    parser.add_argument("--emotion", "-e", default="curious", help="감정 (기본값: curious)")
 
-    parser.add_argument(
-        "--intensity", "-i", type=float, default=0.8, help="강도 (기본값: 0.8)"
-    )
+    parser.add_argument("--intensity", "-i", type=float, default=0.8, help="강도 (기본값: 0.8)")
 
-    parser.add_argument(
-        "--count", "-c", type=int, default=10, help="테스트 횟수 (기본값: 10)"
-    )
+    parser.add_argument("--count", "-c", type=int, default=10, help="테스트 횟수 (기본값: 10)")
 
     parser.add_argument(
         "--delay",
@@ -279,13 +263,9 @@ def main():
         help="요청 간 대기 시간 (초, 기본값: 1.0)",
     )
 
-    parser.add_argument(
-        "--url", "-u", help="API 기본 URL (기본값: 환경변수에서 가져옴)"
-    )
+    parser.add_argument("--url", "-u", help="API 기본 URL (기본값: 환경변수에서 가져옴)")
 
-    parser.add_argument(
-        "--timeout", "-t", type=int, default=10, help="요청 타임아웃 (초, 기본값: 10)"
-    )
+    parser.add_argument("--timeout", "-t", type=int, default=10, help="요청 타임아웃 (초, 기본값: 10)")
 
     parser.add_argument("--verbose", "-v", action="store_true", help="상세 출력")
 
@@ -294,7 +274,7 @@ def main():
     # 테스터 초기화
     tester = EmotionAPITester(base_url=args.url, timeout=args.timeout)
 
-    print(f"🚀 DuRi Emotion API 테스트 시작")
+    print("🚀 DuRi Emotion API 테스트 시작")
     print(f"📍 API URL: {tester.base_url}")
     print(f"⏱️  타임아웃: {args.timeout}초")
     print("=" * 50)

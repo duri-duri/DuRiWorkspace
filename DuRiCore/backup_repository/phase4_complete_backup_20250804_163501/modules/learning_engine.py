@@ -4,9 +4,9 @@ DuRiCore - 학습 엔진
 12개 학습 모듈 통합: LLM 기반 학습 처리
 """
 
+import logging
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-import logging
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np

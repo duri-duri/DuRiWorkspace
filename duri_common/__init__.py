@@ -1,7 +1,8 @@
-from .config import load_env
-from .logging import get_logger
-from .metrics import prom_counter, prom_gauge
-from .settings import DuRiSettings, settings, get_settings
+# duri_common package
+from duri_common.app_logging import get_logger
+from duri_common.config import load_env
+from duri_common.metrics import prom_counter, prom_gauge
+from duri_common.settings import DuRiSettings, get_settings, settings
 
 __all__ = [
     "get_logger",

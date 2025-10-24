@@ -1,11 +1,9 @@
 import argparse
 import collections
-import datetime
 import json
-import sys
 
-from jsonschema import validate
 import yaml
+from jsonschema import validate
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--family", required=True)
@@ -33,7 +31,7 @@ for r in rels:
     if r["type"] == "parent_of":
         adj[r["src"]].append(r["dst"])
         indeg[r["dst"]] += 1
-from collections import deque
+from collections import deque  # noqa: E402
 
 deg = {u: 0 for u in members}
 for u, vs in adj.items():
@@ -54,12 +52,12 @@ sib = {(r["src"], r["dst"]) for r in rels if r["type"] == "sibling_of"}
 for a, b in list(sib):
     assert (b, a) in sib
 
-from collections import Counter
+from collections import Counter  # noqa: E402
 
 pc = Counter([r["dst"] for r in rels if r["type"] == "parent_of"])
 assert all(v <= 2 for v in pc.values())
 
-from datetime import date, timedelta
+from datetime import date, timedelta  # noqa: E402
 
 as_of = date.fromisoformat(fam["as_of"])
 assert (date.today() - as_of) <= timedelta(days=fam.get("review_after_days", 180))

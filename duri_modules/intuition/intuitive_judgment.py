@@ -4,9 +4,9 @@ DuRi 직관적 판단 트리거 시스템
 논리 이전에 빠른 의사결정을 유도하는 인간형 반응 경로
 """
 
-from datetime import datetime
 import re
-from typing import Any, Dict, List, Optional, Tuple
+from datetime import datetime
+from typing import Any, Dict, List, Optional
 
 
 class IntuitiveJudgment:
@@ -97,9 +97,7 @@ class IntuitiveJudgment:
             "collaborative": ["함께", "협력", "상의", "논의", "합의"],
         }
 
-    def trigger_intuitive_response(
-        self, user_input: str, context: Dict[str, Any]
-    ) -> Optional[Dict[str, Any]]:
+    def trigger_intuitive_response(self, user_input: str, context: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         """
         직관적 판단 트리거
 
@@ -138,9 +136,7 @@ class IntuitiveJudgment:
                     return pattern_type
         return None
 
-    def _select_contextual_response(
-        self, pattern_type: str, context: Dict[str, Any]
-    ) -> str:
+    def _select_contextual_response(self, pattern_type: str, context: Dict[str, Any]) -> str:
         """맥락 기반 응답 선택"""
         responses = self.intuitive_responses.get(pattern_type, [])
 
@@ -152,59 +148,39 @@ class IntuitiveJudgment:
         context_intent = context.get("intent", "general")
 
         # 감정과 의도에 따른 응답 필터링
-        filtered_responses = self._filter_responses_by_context(
-            responses, context_emotion, context_intent
-        )
+        filtered_responses = self._filter_responses_by_context(responses, context_emotion, context_intent)
 
         if filtered_responses:
             return filtered_responses[0]  # 첫 번째 필터링된 응답 선택
         else:
             return responses[0]  # 기본 응답 선택
 
-    def _filter_responses_by_context(
-        self, responses: List[str], emotion: str, intent: str
-    ) -> List[str]:
+    def _filter_responses_by_context(self, responses: List[str], emotion: str, intent: str) -> List[str]:
         """맥락에 따른 응답 필터링"""
         filtered = []
 
         for response in responses:
             # 감정에 따른 필터링
-            if emotion == "focused" and any(
-                word in response for word in ["우선", "먼저", "기본"]
-            ):
+            if emotion == "focused" and any(word in response for word in ["우선", "먼저", "기본"]):
                 filtered.append(response)
-            elif emotion == "excited" and any(
-                word in response for word in ["훌륭", "성공", "완벽"]
-            ):
+            elif emotion == "excited" and any(word in response for word in ["훌륭", "성공", "완벽"]):
                 filtered.append(response)
-            elif emotion == "analytical" and any(
-                word in response for word in ["분석", "이해", "학습"]
-            ):
+            elif emotion == "analytical" and any(word in response for word in ["분석", "이해", "학습"]):
                 filtered.append(response)
-            elif emotion == "frustrated" and any(
-                word in response for word in ["차근차근", "단계별", "조심"]
-            ):
+            elif emotion == "frustrated" and any(word in response for word in ["차근차근", "단계별", "조심"]):
                 filtered.append(response)
             else:
                 # 의도에 따른 필터링
-                if intent == "planning" and any(
-                    word in response for word in ["순서", "계획", "단계"]
-                ):
+                if intent == "planning" and any(word in response for word in ["순서", "계획", "단계"]):
                     filtered.append(response)
-                elif intent == "implementation" and any(
-                    word in response for word in ["구현", "실행", "시작"]
-                ):
+                elif intent == "implementation" and any(word in response for word in ["구현", "실행", "시작"]):
                     filtered.append(response)
-                elif intent == "learning" and any(
-                    word in response for word in ["배우", "이해", "학습"]
-                ):
+                elif intent == "learning" and any(word in response for word in ["배우", "이해", "학습"]):
                     filtered.append(response)
 
         return filtered if filtered else responses
 
-    def _calculate_intuitive_confidence(
-        self, pattern_type: str, context: Dict[str, Any]
-    ) -> float:
+    def _calculate_intuitive_confidence(self, pattern_type: str, context: Dict[str, Any]) -> float:
         """직관적 판단 신뢰도 계산"""
         base_confidence = 0.7  # 기본 신뢰도
 
@@ -223,15 +199,11 @@ class IntuitiveJudgment:
         pattern_conf = pattern_confidence.get(pattern_type, 0.7)
 
         # 최종 신뢰도 계산 (가중 평균)
-        final_confidence = (
-            base_confidence * 0.4 + context_confidence * 0.3 + pattern_conf * 0.3
-        )
+        final_confidence = base_confidence * 0.4 + context_confidence * 0.3 + pattern_conf * 0.3
 
         return min(final_confidence, 1.0)
 
-    def _generate_intuitive_reasoning(
-        self, pattern_type: str, context: Dict[str, Any]
-    ) -> str:
+    def _generate_intuitive_reasoning(self, pattern_type: str, context: Dict[str, Any]) -> str:
         """직관적 판단 근거 생성"""
         reasoning_templates = {
             "priority_decision": "사용자가 우선순위를 결정하려고 하므로, 가장 효율적인 순서를 제안했습니다.",
@@ -241,9 +213,7 @@ class IntuitiveJudgment:
             "creative_insight": "창의적인 아이디어를 발견하여, 혁신적 접근을 장려했습니다.",
         }
 
-        base_reasoning = reasoning_templates.get(
-            pattern_type, "직관적 판단을 통해 적절한 응답을 선택했습니다."
-        )
+        base_reasoning = reasoning_templates.get(pattern_type, "직관적 판단을 통해 적절한 응답을 선택했습니다.")
 
         # 맥락 정보 추가
         emotion = context.get("emotion", "neutral")
@@ -253,9 +223,7 @@ class IntuitiveJudgment:
 
         return base_reasoning + context_addition
 
-    def should_trigger_intuition(
-        self, user_input: str, context: Dict[str, Any]
-    ) -> bool:
+    def should_trigger_intuition(self, user_input: str, context: Dict[str, Any]) -> bool:
         """직관적 판단을 트리거해야 하는지 결정"""
         # 1. 직관적 패턴 매칭
         if self._match_intuitive_pattern(user_input):

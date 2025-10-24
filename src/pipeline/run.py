@@ -4,9 +4,8 @@ import argparse
 import hashlib
 import json
 import os
-from pathlib import Path
-import sys
 import time
+from pathlib import Path
 
 import yaml
 
@@ -75,9 +74,7 @@ def main():
 
     # 콘솔 요약
     primary = cfg["metrics"]["primary"]
-    print(
-        f"[OK] Day{args.day} VAR={args.variant} {primary}={results.get(primary)} p={results.get('p_value')}"
-    )
+    print(f"[OK] Day{args.day} VAR={args.variant} {primary}={results.get(primary)} p={results.get('p_value')}")
 
 
 if __name__ == "__main__":

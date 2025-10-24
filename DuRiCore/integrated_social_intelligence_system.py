@@ -5,31 +5,27 @@ DuRiCore Day 11 - 통합 사회적 지능 시스템
 """
 
 import asyncio
-from collections import defaultdict, deque
-from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
-from enum import Enum
-import json
 import logging
-import math
-import random
 import statistics
 import time
-from typing import Any, Dict, List, Optional, Tuple, Union
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List
 
 # 기존 시스템들 import
 try:
     from social_intelligence_engine import (
-        EmotionType,
-        SocialContextType,
+        EmotionType,  # noqa: F401
+        SocialContextType,  # noqa: F401
         SocialIntelligenceEngine,
-        SocialIntelligenceLevel,
+        SocialIntelligenceLevel,  # noqa: F401
     )
     from social_intelligence_system import (
-        AdaptationLevel,
-        ContextComplexity,
+        AdaptationLevel,  # noqa: F401
+        ContextComplexity,  # noqa: F401
         SocialIntelligenceSystem,
-        SocialIntelligenceType,
+        SocialIntelligenceType,  # noqa: F401
     )
 except ImportError:
     # 기존 시스템이 없는 경우를 위한 fallback
@@ -42,9 +38,7 @@ class IntegratedSocialIntelligenceType(Enum):
     """통합 사회적 지능 타입"""
 
     SOCIAL_CONTEXT_UNDERSTANDING = "social_context_understanding"  # 사회적 맥락 이해
-    HUMAN_INTERACTION_OPTIMIZATION = (
-        "human_interaction_optimization"  # 인간 상호작용 최적화
-    )
+    HUMAN_INTERACTION_OPTIMIZATION = "human_interaction_optimization"  # 인간 상호작용 최적화
     SOCIAL_ADAPTATION = "social_adaptation"  # 사회적 적응
     COLLABORATION_COOPERATION = "collaboration_cooperation"  # 협력 및 협업
 
@@ -157,9 +151,7 @@ class IntegratedSocialIntelligenceSystem:
 
         logger.info("🧠 통합 사회적 지능 시스템 초기화 완료")
 
-    async def understand_social_context(
-        self, context: Dict[str, Any]
-    ) -> SocialContextUnderstanding:
+    async def understand_social_context(self, context: Dict[str, Any]) -> SocialContextUnderstanding:
         """사회적 맥락 이해"""
         try:
             logger.info("사회적 맥락 이해 시작")
@@ -168,9 +160,7 @@ class IntegratedSocialIntelligenceSystem:
             context_type = "일반적"
             if self.social_engine:
                 try:
-                    social_context = await self.social_engine.understand_social_context(
-                        context
-                    )
+                    social_context = await self.social_engine.understand_social_context(context)
                     if social_context and hasattr(social_context, "context_type"):
                         if hasattr(social_context.context_type, "value"):
                             context_type = social_context.context_type.value
@@ -228,9 +218,7 @@ class IntegratedSocialIntelligenceSystem:
             logger.error(f"사회적 맥락 이해 실패: {e}")
             return await self._create_empty_social_context_understanding()
 
-    async def optimize_human_interaction(
-        self, interaction_context: Dict[str, Any]
-    ) -> HumanInteractionOptimization:
+    async def optimize_human_interaction(self, interaction_context: Dict[str, Any]) -> HumanInteractionOptimization:
         """인간 상호작용 최적화"""
         try:
             logger.info("인간 상호작용 최적화 시작")
@@ -243,9 +231,7 @@ class IntegratedSocialIntelligenceSystem:
 
             if self.social_engine:
                 try:
-                    interaction = await self.social_engine.optimize_human_interaction(
-                        interaction_context
-                    )
+                    interaction = await self.social_engine.optimize_human_interaction(interaction_context)
                     if interaction:
                         if hasattr(interaction, "interaction_type"):
                             interaction_type = interaction.interaction_type
@@ -257,42 +243,24 @@ class IntegratedSocialIntelligenceSystem:
                             interaction_quality = interaction.interaction_quality
                 except Exception as e:
                     logger.warning(f"기존 시스템 활용 실패: {e}")
-                    interaction_type = await self._analyze_interaction_type(
-                        interaction_context
-                    )
-                    participants = await self._identify_participants(
-                        interaction_context
-                    )
-                    communication_style = await self._analyze_communication_style(
-                        interaction_context
-                    )
-                    interaction_quality = await self._assess_interaction_quality(
-                        interaction_context
-                    )
+                    interaction_type = await self._analyze_interaction_type(interaction_context)
+                    participants = await self._identify_participants(interaction_context)
+                    communication_style = await self._analyze_communication_style(interaction_context)
+                    interaction_quality = await self._assess_interaction_quality(interaction_context)
             else:
-                interaction_type = await self._analyze_interaction_type(
-                    interaction_context
-                )
+                interaction_type = await self._analyze_interaction_type(interaction_context)
                 participants = await self._identify_participants(interaction_context)
-                communication_style = await self._analyze_communication_style(
-                    interaction_context
-                )
-                interaction_quality = await self._assess_interaction_quality(
-                    interaction_context
-                )
+                communication_style = await self._analyze_communication_style(interaction_context)
+                interaction_quality = await self._assess_interaction_quality(interaction_context)
 
             # 감정적 공감 분석
-            emotional_empathy = await self._analyze_emotional_empathy(
-                interaction_context
-            )
+            emotional_empathy = await self._analyze_emotional_empathy(interaction_context)
 
             # 사회적 거리감 분석
             social_distance = await self._analyze_social_distance(interaction_context)
 
             # 협력 수준 분석
-            cooperation_level = await self._analyze_cooperation_level(
-                interaction_context
-            )
+            cooperation_level = await self._analyze_cooperation_level(interaction_context)
 
             # 최적화 제안 생성
             optimization_suggestions = await self._generate_optimization_suggestions(
@@ -325,9 +293,7 @@ class IntegratedSocialIntelligenceSystem:
             logger.error(f"인간 상호작용 최적화 실패: {e}")
             return await self._create_empty_human_interaction_optimization()
 
-    async def adapt_socially(
-        self, environment_context: Dict[str, Any]
-    ) -> SocialAdaptation:
+    async def adapt_socially(self, environment_context: Dict[str, Any]) -> SocialAdaptation:
         """사회적 적응"""
         try:
             logger.info("사회적 적응 시작")
@@ -336,9 +302,7 @@ class IntegratedSocialIntelligenceSystem:
             environment_type = await self._analyze_environment_type(environment_context)
 
             # 적응 전략 개발
-            adaptation_strategy = await self._develop_adaptation_strategy(
-                environment_context
-            )
+            adaptation_strategy = await self._develop_adaptation_strategy(environment_context)
 
             # 역할 인식
             role_recognition = await self._recognize_role(environment_context)
@@ -379,42 +343,28 @@ class IntegratedSocialIntelligenceSystem:
             logger.error(f"사회적 적응 실패: {e}")
             return await self._create_empty_social_adaptation()
 
-    async def collaborate_and_cooperate(
-        self, collaboration_context: Dict[str, Any]
-    ) -> CollaborationCooperation:
+    async def collaborate_and_cooperate(self, collaboration_context: Dict[str, Any]) -> CollaborationCooperation:
         """협력 및 협업"""
         try:
             logger.info("협력 및 협업 시작")
 
             # 협력 타입 분석
-            collaboration_type = await self._analyze_collaboration_type(
-                collaboration_context
-            )
+            collaboration_type = await self._analyze_collaboration_type(collaboration_context)
 
             # 참여자 식별
-            participants = await self._identify_collaboration_participants(
-                collaboration_context
-            )
+            participants = await self._identify_collaboration_participants(collaboration_context)
 
             # 팀워크 효율성 분석
-            teamwork_efficiency = await self._analyze_teamwork_efficiency(
-                collaboration_context
-            )
+            teamwork_efficiency = await self._analyze_teamwork_efficiency(collaboration_context)
 
             # 갈등 해결 능력 분석
-            conflict_resolution = await self._analyze_conflict_resolution(
-                collaboration_context
-            )
+            conflict_resolution = await self._analyze_conflict_resolution(collaboration_context)
 
             # 의사소통 효과성 분석
-            communication_effectiveness = (
-                await self._analyze_communication_effectiveness(collaboration_context)
-            )
+            communication_effectiveness = await self._analyze_communication_effectiveness(collaboration_context)
 
             # 리더십 적절성 분석
-            leadership_appropriateness = await self._analyze_leadership_appropriateness(
-                collaboration_context
-            )
+            leadership_appropriateness = await self._analyze_leadership_appropriateness(collaboration_context)
 
             # 협력 품질 분석
             collaboration_quality = await self._analyze_collaboration_quality(
@@ -453,43 +403,28 @@ class IntegratedSocialIntelligenceSystem:
 
             # 사회적 맥락 이해 점수
             if self.social_context_understandings:
-                context_scores = [
-                    u.understanding_confidence
-                    for u in self.social_context_understandings
-                ]
+                context_scores = [u.understanding_confidence for u in self.social_context_understandings]
                 scores.append(
-                    statistics.mean(context_scores)
-                    * self.integration_weights["social_context_understanding"]
+                    statistics.mean(context_scores) * self.integration_weights["social_context_understanding"]
                 )
 
             # 인간 상호작용 최적화 점수
             if self.human_interaction_optimizations:
-                interaction_scores = [
-                    o.interaction_quality for o in self.human_interaction_optimizations
-                ]
+                interaction_scores = [o.interaction_quality for o in self.human_interaction_optimizations]
                 scores.append(
-                    statistics.mean(interaction_scores)
-                    * self.integration_weights["human_interaction_optimization"]
+                    statistics.mean(interaction_scores) * self.integration_weights["human_interaction_optimization"]
                 )
 
             # 사회적 적응 점수
             if self.social_adaptations:
-                adaptation_scores = [
-                    a.adaptation_effectiveness for a in self.social_adaptations
-                ]
-                scores.append(
-                    statistics.mean(adaptation_scores)
-                    * self.integration_weights["social_adaptation"]
-                )
+                adaptation_scores = [a.adaptation_effectiveness for a in self.social_adaptations]
+                scores.append(statistics.mean(adaptation_scores) * self.integration_weights["social_adaptation"])
 
             # 협력 및 협업 점수
             if self.collaboration_cooperations:
-                collaboration_scores = [
-                    c.collaboration_quality for c in self.collaboration_cooperations
-                ]
+                collaboration_scores = [c.collaboration_quality for c in self.collaboration_cooperations]
                 scores.append(
-                    statistics.mean(collaboration_scores)
-                    * self.integration_weights["collaboration_cooperation"]
+                    statistics.mean(collaboration_scores) * self.integration_weights["collaboration_cooperation"]
                 )
 
             # 통합 점수 계산
@@ -562,9 +497,7 @@ class IntegratedSocialIntelligenceSystem:
 
         return cultural_factors if cultural_factors else ["일반문화"]
 
-    async def _analyze_power_dynamics(
-        self, context: Dict[str, Any]
-    ) -> Dict[str, float]:
+    async def _analyze_power_dynamics(self, context: Dict[str, Any]) -> Dict[str, float]:
         """권력 역학 분석"""
         power_dynamics = {}
         context_text = str(context).lower()
@@ -604,9 +537,7 @@ class IntegratedSocialIntelligenceSystem:
         else:
             return "일반적"
 
-    async def _analyze_relationship_patterns(
-        self, context: Dict[str, Any]
-    ) -> Dict[str, str]:
+    async def _analyze_relationship_patterns(self, context: Dict[str, Any]) -> Dict[str, str]:
         """관계 패턴 분석"""
         patterns = {}
         context_text = str(context).lower()
@@ -824,9 +755,7 @@ class IntegratedSocialIntelligenceSystem:
 
         return max(0.0, min(1.0, speed))
 
-    async def _analyze_adaptation_effectiveness(
-        self, strategy: str, context: Dict[str, Any]
-    ) -> float:
+    async def _analyze_adaptation_effectiveness(self, strategy: str, context: Dict[str, Any]) -> float:
         """적응 효과성 분석"""
         effectiveness = 0.5
 
@@ -849,9 +778,7 @@ class IntegratedSocialIntelligenceSystem:
         else:
             return "일반 협력"
 
-    async def _identify_collaboration_participants(
-        self, context: Dict[str, Any]
-    ) -> List[str]:
+    async def _identify_collaboration_participants(self, context: Dict[str, Any]) -> List[str]:
         """협력 참여자 식별"""
         participants = []
         context_text = str(context).lower()
@@ -889,9 +816,7 @@ class IntegratedSocialIntelligenceSystem:
 
         return min(1.0, resolution)
 
-    async def _analyze_communication_effectiveness(
-        self, context: Dict[str, Any]
-    ) -> float:
+    async def _analyze_communication_effectiveness(self, context: Dict[str, Any]) -> float:
         """의사소통 효과성 분석"""
         effectiveness = 0.5
         context_text = str(context).lower()
@@ -903,9 +828,7 @@ class IntegratedSocialIntelligenceSystem:
 
         return min(1.0, effectiveness)
 
-    async def _analyze_leadership_appropriateness(
-        self, context: Dict[str, Any]
-    ) -> float:
+    async def _analyze_leadership_appropriateness(self, context: Dict[str, Any]) -> float:
         """리더십 적절성 분석"""
         appropriateness = 0.5
         context_text = str(context).lower()
@@ -926,10 +849,7 @@ class IntegratedSocialIntelligenceSystem:
     ) -> float:
         """협력 품질 분석"""
         quality = (
-            teamwork_efficiency
-            + conflict_resolution
-            + communication_effectiveness
-            + leadership_appropriateness
+            teamwork_efficiency + conflict_resolution + communication_effectiveness + leadership_appropriateness
         ) / 4
         return min(1.0, quality)
 
@@ -1003,9 +923,7 @@ class IntegratedSocialIntelligenceSystem:
             "version": "1.0.0",
             "status": "정상 운영",
             "total_context_understandings": len(self.social_context_understandings),
-            "total_interaction_optimizations": len(
-                self.human_interaction_optimizations
-            ),
+            "total_interaction_optimizations": len(self.human_interaction_optimizations),
             "total_social_adaptations": len(self.social_adaptations),
             "total_collaborations": len(self.collaboration_cooperations),
             "integration_weights": self.integration_weights,
@@ -1073,9 +991,7 @@ async def test_integrated_social_intelligence_system():
         status = system.get_system_status()
         logger.info(f"   - 시스템 상태: {status['status']}")
         logger.info(f"   - 총 맥락 이해: {status['total_context_understandings']}")
-        logger.info(
-            f"   - 총 상호작용 최적화: {status['total_interaction_optimizations']}"
-        )
+        logger.info(f"   - 총 상호작용 최적화: {status['total_interaction_optimizations']}")
         logger.info(f"   - 총 사회적 적응: {status['total_social_adaptations']}")
         logger.info(f"   - 총 협력: {status['total_collaborations']}")
 
@@ -1111,9 +1027,7 @@ if __name__ == "__main__":
         print(f"   - 통합 사회적 지능 점수: {result['integrated_score']:.2f}")
         print(f"   - 사회적 성숙도 수준: {result['maturity_level'].value}")
         print(f"   - 총 맥락 이해: {result['status']['total_context_understandings']}")
-        print(
-            f"   - 총 상호작용 최적화: {result['status']['total_interaction_optimizations']}"
-        )
+        print(f"   - 총 상호작용 최적화: {result['status']['total_interaction_optimizations']}")
         print(f"   - 총 사회적 적응: {result['status']['total_social_adaptations']}")
         print(f"   - 총 협력: {result['status']['total_collaborations']}")
     else:

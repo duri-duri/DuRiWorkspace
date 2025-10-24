@@ -5,14 +5,14 @@ DuRiCore Phase 5 Day 5 - 학습 패턴 분석 시스템
 """
 
 import asyncio
-from dataclasses import dataclass
-from datetime import datetime
-from enum import Enum
 import json
 import logging
 import math
 import statistics
 import time
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)

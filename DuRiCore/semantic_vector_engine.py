@@ -5,13 +5,11 @@ DuRi 의미 벡터 엔진 (Phase 1-1 Day 1)
 """
 
 import asyncio
-from dataclasses import dataclass
-from datetime import datetime
-from enum import Enum
-import json
 import logging
 import re
-from typing import Any, Dict, List, Optional, Tuple
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any, Dict, List, Tuple
 
 import numpy as np
 
@@ -624,9 +622,7 @@ class SemanticVectorEngine:
             },
         )
 
-        logger.info(
-            f"의미 벡터 인코딩 완료: 차원={self.vector_dimension}, 신뢰도={confidence:.2f}"
-        )
+        logger.info(f"의미 벡터 인코딩 완료: 차원={self.vector_dimension}, 신뢰도={confidence:.2f}")
         return semantic_vector
 
     def _preprocess_text(self, text: str) -> str:
@@ -671,16 +667,12 @@ class SemanticVectorEngine:
         matched_keywords = {}
 
         for category, keywords in self.semantic_patterns.items():
-            score, matched_in_category = self._optimized_keyword_matching(
-                text, keywords
-            )
+            score, matched_in_category = self._optimized_keyword_matching(text, keywords)
             matched_keywords[category] = matched_in_category
 
             # 정규화 (0.0-1.0)
             if keywords:
-                normalized_score = min(
-                    score / len(keywords), 1.0
-                ) * category_weights.get(category, 1.0)
+                normalized_score = min(score / len(keywords), 1.0) * category_weights.get(category, 1.0)
 
                 # 카테고리별 점수 할당
                 if category == "ethical_keywords":
@@ -694,9 +686,7 @@ class SemanticVectorEngine:
                         "유출",
                         "침해",
                     ]
-                    privacy_score = sum(
-                        1.0 for kw in privacy_keywords if kw in text
-                    ) / len(privacy_keywords)
+                    privacy_score = sum(1.0 for kw in privacy_keywords if kw in text) / len(privacy_keywords)
                     features["privacy_score"] = min(privacy_score, 1.0)
                 elif category == "conflict_keywords":
                     features["conflict_score"] = normalized_score
@@ -744,13 +734,11 @@ class SemanticVectorEngine:
             "종합적",
             "포괄적",
         ]
-        special_complexity_score = sum(
-            1.0 for kw in special_complexity_keywords if kw in text
-        ) / len(special_complexity_keywords)
+        special_complexity_score = sum(1.0 for kw in special_complexity_keywords if kw in text) / len(
+            special_complexity_keywords
+        )
         if special_complexity_score > 0:
-            features["complexity_score"] = max(
-                features["complexity_score"], special_complexity_score * 0.8
-            )
+            features["complexity_score"] = max(features["complexity_score"], special_complexity_score * 0.8)
 
         # 특별한 일반성 키워드 매칭
         special_general_keywords = [
@@ -762,13 +750,11 @@ class SemanticVectorEngine:
             "일반적",
             "일상적",
         ]
-        special_general_score = sum(
-            1.0 for kw in special_general_keywords if kw in text
-        ) / len(special_general_keywords)
+        special_general_score = sum(1.0 for kw in special_general_keywords if kw in text) / len(
+            special_general_keywords
+        )
         if special_general_score > 0:
-            features["general_score"] = max(
-                features["general_score"], special_general_score * 0.8
-            )
+            features["general_score"] = max(features["general_score"], special_general_score * 0.8)
 
         # 디버깅 정보 추가
         features["_debug_matched_keywords"] = matched_keywords
@@ -776,9 +762,7 @@ class SemanticVectorEngine:
 
         return features
 
-    def _optimized_keyword_matching(
-        self, text: str, keywords: List[str]
-    ) -> Tuple[float, List[str]]:
+    def _optimized_keyword_matching(self, text: str, keywords: List[str]) -> Tuple[float, List[str]]:
         """Day 4: 최적화된 키워드 매칭"""
         score = 0.0
         matched = []
@@ -871,26 +855,18 @@ class SemanticVectorEngine:
             base_confidence = 0.0
 
         # Day 4: 키워드 매칭 강도에 따른 보정 강화
-        keyword_matches = sum(
-            1
-            for score in features.values()
-            if isinstance(score, (int, float)) and score > 0
-        )
+        keyword_matches = sum(1 for score in features.values() if isinstance(score, (int, float)) and score > 0)
         keyword_bonus = min(keyword_matches * 0.15, 0.4)  # Day 4: 보너스 증가
 
         # Day 4: 복잡성 키워드 매칭 시 추가 보너스 강화
         complexity_bonus = 0.0
         if features.get("complexity_score", 0.0) > 0.3:
-            complexity_bonus = min(
-                features["complexity_score"] * 0.3, 0.3
-            )  # Day 4: 보너스 증가
+            complexity_bonus = min(features["complexity_score"] * 0.3, 0.3)  # Day 4: 보너스 증가
 
         # Day 4: 일반적 상황 키워드 매칭 시 기본 보너스 강화
         general_bonus = 0.0
         if features.get("general_score", 0.0) > 0.0:
-            general_bonus = min(
-                features["general_score"] * 0.2, 0.2
-            )  # Day 4: 보너스 증가
+            general_bonus = min(features["general_score"] * 0.2, 0.2)  # Day 4: 보너스 증가
 
         # Day 4: 윤리적 요소 강도에 따른 보너스
         ethical_bonus = 0.0
@@ -929,9 +905,7 @@ class SemanticVectorEngine:
 
         return min(final_confidence, 0.8)  # Day 4: 상한 0.8로 제한
 
-    def _adjust_weights_dynamically(
-        self, features: Dict[str, float], context: Dict[str, Any]
-    ) -> Dict[str, float]:
+    def _adjust_weights_dynamically(self, features: Dict[str, float], context: Dict[str, Any]) -> Dict[str, float]:
         """Day 4: 상황별 가중치 동적 조정"""
         base_weights = {
             "ethical_score": 0.2,
@@ -983,9 +957,7 @@ class SemanticVectorEngine:
 
         return base_weights
 
-    def _calculate_context_based_confidence(
-        self, features: Dict[str, float], context: Dict[str, Any]
-    ) -> float:
+    def _calculate_context_based_confidence(self, features: Dict[str, float], context: Dict[str, Any]) -> float:
         """Day 5: 컨텍스트 기반 신뢰도 계산 (고도화)"""
         base_confidence = self._calculate_encoding_confidence(features)
 
@@ -1043,9 +1015,7 @@ class SemanticVectorEngine:
             context_bonus += 0.1
 
         # Day 5: 상황의 명확성에 따른 보정
-        total_feature_score = sum(
-            float(v) for v in features.values() if isinstance(v, (int, float))
-        )
+        total_feature_score = sum(float(v) for v in features.values() if isinstance(v, (int, float)))
         if total_feature_score > 2.0:
             context_bonus += 0.1  # 명확한 상황에 대한 보너스
 
@@ -1064,38 +1034,24 @@ class SemanticVectorEngine:
 
         # Day 3: 복잡성 점수와 일반성 점수를 먼저 확인
         complexity_score = semantic_vector.vector[75:90].mean()
-        general_score = semantic_vector.metadata.get("semantic_features", {}).get(
-            "general_score", 0.0
-        )
+        general_score = semantic_vector.metadata.get("semantic_features", {}).get("general_score", 0.0)
 
         # 디버깅 정보 출력
-        logger.info(
-            f"복잡성 점수: {complexity_score:.3f}, 일반성 점수: {general_score:.3f}"
-        )
+        logger.info(f"복잡성 점수: {complexity_score:.3f}, 일반성 점수: {general_score:.3f}")
 
         # 복잡성 점수가 높고 일반성 점수가 낮으면 복잡한 문제로 분류
         if complexity_score > 0.3 and general_score < 0.2:
-            logger.info(
-                f"복잡성 점수가 높음 ({complexity_score:.3f}), 복잡한 문제로 분류"
-            )
+            logger.info(f"복잡성 점수가 높음 ({complexity_score:.3f}), 복잡한 문제로 분류")
             return SemanticFrame.COMPLEX_PROBLEM
 
         # 일반성 점수가 높고 다른 점수들이 낮으면 일반적 상황으로 분류
-        if (
-            general_score > 0.3
-            and complexity_score < 0.2
-            and semantic_vector.vector[0:75].mean() < 0.2
-        ):
-            logger.info(
-                f"일반성 점수가 높음 ({general_score:.3f}), 일반적 상황으로 분류"
-            )
+        if general_score > 0.3 and complexity_score < 0.2 and semantic_vector.vector[0:75].mean() < 0.2:
+            logger.info(f"일반성 점수가 높음 ({general_score:.3f}), 일반적 상황으로 분류")
             return SemanticFrame.GENERAL_SITUATION
 
         # 기존 유사도 기반 매칭
         for frame, frame_vector in self.semantic_frames.items():
-            similarity = self._calculate_cosine_similarity(
-                semantic_vector.vector, frame_vector
-            )
+            similarity = self._calculate_cosine_similarity(semantic_vector.vector, frame_vector)
 
             # Day 3: 복잡한 문제 프레임에 대한 추가 보정
             if frame == SemanticFrame.COMPLEX_PROBLEM and complexity_score > 0.2:
@@ -1109,14 +1065,10 @@ class SemanticVectorEngine:
                 best_similarity = similarity
                 best_match = frame
 
-        logger.info(
-            f"최적 매칭 프레임: {best_match.value}, 유사도: {best_similarity:.3f}"
-        )
+        logger.info(f"최적 매칭 프레임: {best_match.value}, 유사도: {best_similarity:.3f}")
         return best_match
 
-    def _calculate_cosine_similarity(
-        self, vector1: np.ndarray, vector2: np.ndarray
-    ) -> float:
+    def _calculate_cosine_similarity(self, vector1: np.ndarray, vector2: np.ndarray) -> float:
         """코사인 유사도 계산"""
         dot_product = np.dot(vector1, vector2)
         norm1 = np.linalg.norm(vector1)
@@ -1127,15 +1079,11 @@ class SemanticVectorEngine:
 
         return dot_product / (norm1 * norm2)
 
-    def estimate_confidence(
-        self, semantic_vector: SemanticVector, matched_frame: SemanticFrame
-    ) -> float:
+    def estimate_confidence(self, semantic_vector: SemanticVector, matched_frame: SemanticFrame) -> float:
         """신뢰도 추정 - Day 5 고도화된 방식 (정량적 질적 점프)"""
         # 벡터의 신뢰도와 프레임 매칭 유사도를 결합
         frame_vector = self.semantic_frames[matched_frame]
-        similarity = self._calculate_cosine_similarity(
-            semantic_vector.vector, frame_vector
-        )
+        similarity = self._calculate_cosine_similarity(semantic_vector.vector, frame_vector)
 
         # Day 5: 프레임별 가중치 정규화 (모든 프레임이 동등한 기회를 가지도록)
         frame_weights = {
@@ -1159,9 +1107,7 @@ class SemanticVectorEngine:
         confidence = (context_confidence * 0.7 + similarity * 0.3) * weight
 
         # Day 5: 프레임별 정규화 로직 도입
-        frame_normalization = self._calculate_frame_normalization(
-            matched_frame, features, similarity
-        )
+        frame_normalization = self._calculate_frame_normalization(matched_frame, features, similarity)
         confidence *= frame_normalization
 
         # Day 5: 복잡성 프레임일 때 추가 보정 (강화)
@@ -1278,9 +1224,7 @@ class SemanticVectorEngine:
 
         return normalization_factor
 
-    def _normalize_context_bonus(
-        self, confidence: float, features: Dict[str, float], context: Dict[str, Any]
-    ) -> float:
+    def _normalize_context_bonus(self, confidence: float, features: Dict[str, float], context: Dict[str, Any]) -> float:
         """Day 5: 컨텍스트 보너스 정규화 (과도한 보정 방지)"""
         # 컨텍스트 보너스 점수 계산
         context_bonus = 0.0
@@ -1433,7 +1377,7 @@ async def test_semantic_vector_engine():
     test_situations = [
         # 윤리적 딜레마 상황들
         {
-            "situation": "회사의 AI 시스템이 고객 데이터를 분석하여 개인화된 서비스를 제공하지만, 개인정보 보호에 대한 우려가 제기되고 있습니다.",
+            "situation": "회사의 AI 시스템이 고객 데이터를 분석하여 개인화된 서비스를 제공하지만, 개인정보 보호에 대한 우려가 제기되고 있습니다.",  # noqa: E501
             "expected_frame": "ethical_dilemma",
             "description": "개인정보 보호 윤리적 딜레마",
         },
@@ -1471,7 +1415,7 @@ async def test_semantic_vector_engine():
         },
         # 복잡한 문제 상황들
         {
-            "situation": "다양한 이해관계자들이 참여하는 복잡한 프로젝트에서 여러 관점을 통합하여 해결책을 찾아야 하는 상황입니다.",
+            "situation": "다양한 이해관계자들이 참여하는 복잡한 프로젝트에서 여러 관점을 통합하여 해결책을 찾아야 하는 상황입니다.",  # noqa: E501
             "expected_frame": "complex_problem",
             "description": "다면적 복잡 문제",
         },
@@ -1531,9 +1475,7 @@ async def test_semantic_vector_engine():
         status_icon = "✅" if is_correct else "❌"
         confidence_icon = "🔥" if is_high_confidence else "⚠️"
 
-        print(
-            f"   {status_icon} 매칭된 프레임: {matched_frame} (예상: {expected_frame})"
-        )
+        print(f"   {status_icon} 매칭된 프레임: {matched_frame} (예상: {expected_frame})")
         print(f"   {confidence_icon} 신뢰도: {confidence:.3f}")
         print(f"   📈 의미적 유사도: {similarity:.3f}")
         print(f"   🧠 벡터 차원: {result['situation_vector'].dimension}")
@@ -1549,13 +1491,9 @@ async def test_semantic_vector_engine():
     print("📊 테스트 결과 요약")
     print("=" * 80)
     print(f"🎯 정확도: {accuracy:.1f}% ({correct_classifications}/{total_tests})")
-    print(
-        f"🔥 높은 신뢰도 비율: {high_confidence_rate:.1f}% ({high_confidence_tests}/{total_tests})"
-    )
+    print(f"🔥 높은 신뢰도 비율: {high_confidence_rate:.1f}% ({high_confidence_tests}/{total_tests})")
     print(f"📈 평균 신뢰도: {avg_confidence:.3f}")
-    print(
-        f"📊 신뢰도 범위: {min(confidence_scores):.3f} - {max(confidence_scores):.3f}"
-    )
+    print(f"📊 신뢰도 범위: {min(confidence_scores):.3f} - {max(confidence_scores):.3f}")
 
     # 성능 평가
     if accuracy >= 80 and avg_confidence >= 0.4:

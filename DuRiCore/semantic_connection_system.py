@@ -11,16 +11,14 @@ DuRi 의미 기반 노드 연결 시스템 - Phase 1-3 Week 3 Day 5
 """
 
 import asyncio
-from collections import defaultdict, deque
-from dataclasses import asdict, dataclass, field
-from datetime import datetime
-from enum import Enum
-import heapq
-import json
 import logging
 import random
 import re
-from typing import Any, Dict, List, Optional, Set, Tuple
+from collections import defaultdict
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional, Set
 
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -371,9 +369,7 @@ class SemanticConnectionGenerator:
         strength = random.uniform(*strength_range) * similarity
 
         # 추론 생성
-        reasoning = self._generate_connection_reasoning(
-            source_node, target_node, edge_type, similarity
-        )
+        reasoning = self._generate_connection_reasoning(source_node, target_node, edge_type, similarity)
 
         # 엣지 생성
         edge_id = f"semantic_edge_{source_node.node_id}_{target_node.node_id}_{int(datetime.now().timestamp())}"
@@ -443,10 +439,7 @@ class SemanticConnectionGenerator:
                 "inference",
             ]:
                 return EdgeType.CHALLENGES
-            elif (
-                source_type in ["premise", "evidence"]
-                and target_type == "counter_argument"
-            ):
+            elif source_type in ["premise", "evidence"] and target_type == "counter_argument":
                 return EdgeType.CHALLENGES
             else:
                 return EdgeType.CHALLENGES
@@ -485,9 +478,7 @@ class SemanticConnectionGenerator:
             ],
         }
 
-        templates = reasoning_templates.get(
-            edge_type, [f"{edge_type.value}: {{source}} -> {{target}}"]
-        )
+        templates = reasoning_templates.get(edge_type, [f"{edge_type.value}: {{source}} -> {{target}}"])
         template = random.choice(templates)
 
         return template.format(
@@ -517,9 +508,7 @@ class ConnectionOptimizer:
             "balance_optimization": {"weight": 0.1, "description": "균형 최적화"},
         }
 
-    async def optimize_connections(
-        self, graph: "DynamicReasoningGraph"
-    ) -> Dict[str, Any]:
+    async def optimize_connections(self, graph: "DynamicReasoningGraph") -> Dict[str, Any]:
         """연결 최적화"""
         logger.info(f"연결 최적화 시작: {len(graph.edges)}개 엣지")
 
@@ -547,18 +536,12 @@ class ConnectionOptimizer:
         optimization_results["optimized_edges"].extend(balance_optimized)
 
         # 최적화 메트릭 계산
-        optimization_results["optimization_metrics"] = (
-            await self._calculate_optimization_metrics(graph)
-        )
+        optimization_results["optimization_metrics"] = await self._calculate_optimization_metrics(graph)
 
-        logger.info(
-            f"연결 최적화 완료: {len(optimization_results['optimized_edges'])}개 최적화됨"
-        )
+        logger.info(f"연결 최적화 완료: {len(optimization_results['optimized_edges'])}개 최적화됨")
         return optimization_results
 
-    async def _optimize_edge_strengths(
-        self, graph: "DynamicReasoningGraph"
-    ) -> List[str]:
+    async def _optimize_edge_strengths(self, graph: "DynamicReasoningGraph") -> List[str]:
         """엣지 강도 최적화"""
         optimized_edges = []
 
@@ -575,9 +558,7 @@ class ConnectionOptimizer:
 
         return optimized_edges
 
-    async def _optimize_similarity_based_connections(
-        self, graph: "DynamicReasoningGraph"
-    ) -> List[str]:
+    async def _optimize_similarity_based_connections(self, graph: "DynamicReasoningGraph") -> List[str]:
         """유사도 기반 연결 최적화"""
         optimized_edges = []
 
@@ -621,9 +602,7 @@ class ConnectionOptimizer:
                 for target_id, target_node in graph.nodes.items():
                     if target_id != node_id:
                         # 간단한 유사도 계산
-                        similarity = await self._calculate_simple_similarity(
-                            node.content, target_node.content
-                        )
+                        similarity = await self._calculate_simple_similarity(node.content, target_node.content)
                         if similarity > best_similarity:
                             best_similarity = similarity
                             best_target = target_id
@@ -656,11 +635,7 @@ class ConnectionOptimizer:
             node_connections[edge.target_node] += 1
 
         # 연결이 너무 많거나 적은 노드 조정
-        avg_connections = (
-            sum(node_connections.values()) / len(node_connections)
-            if node_connections
-            else 0
-        )
+        avg_connections = sum(node_connections.values()) / len(node_connections) if node_connections else 0
 
         for node_id, connection_count in node_connections.items():
             if connection_count > avg_connections * 2:
@@ -673,34 +648,22 @@ class ConnectionOptimizer:
 
         return optimized_edges
 
-    async def _calculate_optimization_metrics(
-        self, graph: "DynamicReasoningGraph"
-    ) -> Dict[str, float]:
+    async def _calculate_optimization_metrics(self, graph: "DynamicReasoningGraph") -> Dict[str, float]:
         """최적화 메트릭 계산"""
         metrics = {}
 
         # 평균 강도
         edge_strengths = [edge.strength for edge in graph.edges.values()]
-        metrics["avg_strength"] = (
-            sum(edge_strengths) / len(edge_strengths) if edge_strengths else 0.0
-        )
+        metrics["avg_strength"] = sum(edge_strengths) / len(edge_strengths) if edge_strengths else 0.0
 
         # 평균 유사도
         edge_similarities = [edge.semantic_similarity for edge in graph.edges.values()]
-        metrics["avg_similarity"] = (
-            sum(edge_similarities) / len(edge_similarities)
-            if edge_similarities
-            else 0.0
-        )
+        metrics["avg_similarity"] = sum(edge_similarities) / len(edge_similarities) if edge_similarities else 0.0
 
         # 연결성
         total_nodes = len(graph.nodes)
         total_edges = len(graph.edges)
-        metrics["connectivity"] = (
-            total_edges / (total_nodes * (total_nodes - 1) / 2)
-            if total_nodes > 1
-            else 0.0
-        )
+        metrics["connectivity"] = total_edges / (total_nodes * (total_nodes - 1) / 2) if total_nodes > 1 else 0.0
 
         # 강도 표준편차 (낮을수록 균형적)
         if edge_strengths:
@@ -740,9 +703,7 @@ class ConnectionValidator:
             "connection_efficiency": {"weight": 0.2, "description": "연결 효율성"},
         }
 
-    async def validate_connections(
-        self, graph: "DynamicReasoningGraph"
-    ) -> Dict[str, Any]:
+    async def validate_connections(self, graph: "DynamicReasoningGraph") -> Dict[str, Any]:
         """연결 검증"""
         logger.info(f"연결 검증 시작: {len(graph.edges)}개 엣지")
 
@@ -760,14 +721,10 @@ class ConnectionValidator:
 
         # 종합 검증 점수
         overall_score = (
-            connection_quality
-            * self.validation_criteria["connection_quality"]["weight"]
-            + semantic_coherence
-            * self.validation_criteria["semantic_coherence"]["weight"]
-            + structural_balance
-            * self.validation_criteria["structural_balance"]["weight"]
-            + connection_efficiency
-            * self.validation_criteria["connection_efficiency"]["weight"]
+            connection_quality * self.validation_criteria["connection_quality"]["weight"]
+            + semantic_coherence * self.validation_criteria["semantic_coherence"]["weight"]
+            + structural_balance * self.validation_criteria["structural_balance"]["weight"]
+            + connection_efficiency * self.validation_criteria["connection_efficiency"]["weight"]
         )
 
         return {
@@ -779,28 +736,20 @@ class ConnectionValidator:
             "validation_details": {
                 "total_edges": len(graph.edges),
                 "avg_strength": (
-                    sum(edge.strength for edge in graph.edges.values())
-                    / len(graph.edges)
-                    if graph.edges
-                    else 0.0
+                    sum(edge.strength for edge in graph.edges.values()) / len(graph.edges) if graph.edges else 0.0
                 ),
                 "avg_similarity": (
-                    sum(edge.semantic_similarity for edge in graph.edges.values())
-                    / len(graph.edges)
+                    sum(edge.semantic_similarity for edge in graph.edges.values()) / len(graph.edges)
                     if graph.edges
                     else 0.0
                 ),
                 "connectivity": (
-                    len(graph.edges) / (len(graph.nodes) * (len(graph.nodes) - 1) / 2)
-                    if len(graph.nodes) > 1
-                    else 0.0
+                    len(graph.edges) / (len(graph.nodes) * (len(graph.nodes) - 1) / 2) if len(graph.nodes) > 1 else 0.0
                 ),
             },
         }
 
-    async def _evaluate_connection_quality(
-        self, graph: "DynamicReasoningGraph"
-    ) -> float:
+    async def _evaluate_connection_quality(self, graph: "DynamicReasoningGraph") -> float:
         """연결 품질 평가"""
         if not graph.edges:
             return 0.0
@@ -809,16 +758,12 @@ class ConnectionValidator:
         quality_scores = []
         for edge in graph.edges.values():
             # 강도와 유사도가 일치하는 정도
-            strength_similarity_match = 1.0 - abs(
-                edge.strength - edge.semantic_similarity
-            )
+            strength_similarity_match = 1.0 - abs(edge.strength - edge.semantic_similarity)
             quality_scores.append(strength_similarity_match)
 
         return sum(quality_scores) / len(quality_scores)
 
-    async def _evaluate_semantic_coherence(
-        self, graph: "DynamicReasoningGraph"
-    ) -> float:
+    async def _evaluate_semantic_coherence(self, graph: "DynamicReasoningGraph") -> float:
         """의미적 일관성 평가"""
         if not graph.edges:
             return 0.0
@@ -827,9 +772,7 @@ class ConnectionValidator:
         similarities = [edge.semantic_similarity for edge in graph.edges.values()]
         return sum(similarities) / len(similarities)
 
-    async def _evaluate_structural_balance(
-        self, graph: "DynamicReasoningGraph"
-    ) -> float:
+    async def _evaluate_structural_balance(self, graph: "DynamicReasoningGraph") -> float:
         """구조적 균형 평가"""
         if not graph.nodes:
             return 0.0
@@ -854,9 +797,7 @@ class ConnectionValidator:
         )
         return balance_score
 
-    async def _evaluate_connection_efficiency(
-        self, graph: "DynamicReasoningGraph"
-    ) -> float:
+    async def _evaluate_connection_efficiency(self, graph: "DynamicReasoningGraph") -> float:
         """연결 효율성 평가"""
         if not graph.nodes:
             return 0.0
@@ -873,9 +814,7 @@ class ConnectionValidator:
 
         # 적절한 연결성 (너무 많거나 적으면 비효율적)
         optimal_connectivity = 0.3  # 30% 연결성이 최적
-        efficiency = (
-            1.0 - abs(connectivity_ratio - optimal_connectivity) / optimal_connectivity
-        )
+        efficiency = 1.0 - abs(connectivity_ratio - optimal_connectivity) / optimal_connectivity
         efficiency = max(0.0, efficiency)
 
         return efficiency
@@ -890,18 +829,10 @@ async def test_semantic_connection_system():
 
     # 초기 노드들 생성
     initial_nodes = {
-        "node1": DynamicReasoningNode(
-            "node1", NodeType.PREMISE, "윤리적 행동은 옳다", 0.8, "test"
-        ),
-        "node2": DynamicReasoningNode(
-            "node2", NodeType.INFERENCE, "윤리적 행동 분석: 도덕적 의무", 0.7, "test"
-        ),
-        "node3": DynamicReasoningNode(
-            "node3", NodeType.CONCLUSION, "윤리적 행동 필요: 최종 판단", 0.9, "test"
-        ),
-        "node4": DynamicReasoningNode(
-            "node4", NodeType.EVIDENCE, "윤리적 행동의 증거: 사회적 이익", 0.8, "test"
-        ),
+        "node1": DynamicReasoningNode("node1", NodeType.PREMISE, "윤리적 행동은 옳다", 0.8, "test"),
+        "node2": DynamicReasoningNode("node2", NodeType.INFERENCE, "윤리적 행동 분석: 도덕적 의무", 0.7, "test"),
+        "node3": DynamicReasoningNode("node3", NodeType.CONCLUSION, "윤리적 행동 필요: 최종 판단", 0.9, "test"),
+        "node4": DynamicReasoningNode("node4", NodeType.EVIDENCE, "윤리적 행동의 증거: 사회적 이익", 0.8, "test"),
         "node5": DynamicReasoningNode(
             "node5",
             NodeType.COUNTER_ARGUMENT,
@@ -913,14 +844,14 @@ async def test_semantic_connection_system():
 
     graph.nodes = initial_nodes
 
-    print(f"\n📊 초기 그래프 상태:")
+    print("\n📊 초기 그래프 상태:")
     print(f"  • 노드 수: {len(graph.nodes)}")
     print(f"  • 엣지 수: {len(graph.edges)}")
 
     # 1. 의미적 유사도 계산 테스트
     similarity_engine = SemanticSimilarityEngine()
 
-    print(f"\n🔍 의미적 유사도 계산 테스트:")
+    print("\n🔍 의미적 유사도 계산 테스트:")
     test_pairs = [
         ("node1", "node2"),
         ("node1", "node3"),
@@ -931,43 +862,39 @@ async def test_semantic_connection_system():
     for node1_id, node2_id in test_pairs:
         node1 = graph.nodes[node1_id]
         node2 = graph.nodes[node2_id]
-        similarity = await similarity_engine.calculate_semantic_similarity(
-            node1.content, node2.content
-        )
+        similarity = await similarity_engine.calculate_semantic_similarity(node1.content, node2.content)
         print(f"  • {node1_id} ↔ {node2_id}: {similarity:.3f}")
 
     # 2. 의미 기반 연결 생성 테스트
     connection_generator = SemanticConnectionGenerator()
 
-    print(f"\n🔗 의미 기반 연결 생성 테스트:")
+    print("\n🔗 의미 기반 연결 생성 테스트:")
     for node_id, node in graph.nodes.items():
-        connections = await connection_generator.generate_semantic_connections(
-            graph, node, 3
-        )
+        connections = await connection_generator.generate_semantic_connections(graph, node, 3)
 
         if connections:
             print(f"  • {node_id} 연결 생성: {len(connections)}개")
             for connection in connections:
                 graph.edges[connection.edge_id] = connection
                 print(
-                    f"    - {connection.source_node} → {connection.target_node} ({connection.edge_type.value}, 강도: {connection.strength:.2f})"
+                    f"    - {connection.source_node} → {connection.target_node} ({connection.edge_type.value}, 강도: {connection.strength:.2f})"  # noqa: E501
                 )
 
     # 3. 연결 최적화 테스트
     optimizer = ConnectionOptimizer()
 
-    print(f"\n⚙️ 연결 최적화 테스트:")
+    print("\n⚙️ 연결 최적화 테스트:")
     optimization_results = await optimizer.optimize_connections(graph)
 
     print(f"  • 최적화된 엣지 수: {len(optimization_results['optimized_edges'])}")
-    print(f"  • 최적화 메트릭:")
+    print("  • 최적화 메트릭:")
     for metric, value in optimization_results["optimization_metrics"].items():
         print(f"    - {metric}: {value:.3f}")
 
     # 4. 연결 검증 테스트
     validator = ConnectionValidator()
 
-    print(f"\n📊 연결 검증 테스트:")
+    print("\n📊 연결 검증 테스트:")
     validation_results = await validator.validate_connections(graph)
 
     print(f"  • 종합 검증 점수: {validation_results['overall_score']:.3f}")
@@ -977,7 +904,7 @@ async def test_semantic_connection_system():
     print(f"  • 연결 효율성: {validation_results['connection_efficiency']:.3f}")
 
     # 5. 최종 그래프 상태
-    print(f"\n📊 최종 그래프 상태:")
+    print("\n📊 최종 그래프 상태:")
     print(f"  • 노드 수: {len(graph.nodes)}")
     print(f"  • 엣지 수: {len(graph.edges)} (증가: {len(graph.edges) - 0})")
 
@@ -986,18 +913,14 @@ async def test_semantic_connection_system():
     for edge in graph.edges.values():
         edge_types[edge.edge_type.value] += 1
 
-    print(f"  • 엣지 유형별 분포:")
+    print("  • 엣지 유형별 분포:")
     for edge_type, count in edge_types.items():
         print(f"    - {edge_type}: {count}개")
 
     # 평균 강도와 유사도
     if graph.edges:
-        avg_strength = sum(edge.strength for edge in graph.edges.values()) / len(
-            graph.edges
-        )
-        avg_similarity = sum(
-            edge.semantic_similarity for edge in graph.edges.values()
-        ) / len(graph.edges)
+        avg_strength = sum(edge.strength for edge in graph.edges.values()) / len(graph.edges)
+        avg_similarity = sum(edge.semantic_similarity for edge in graph.edges.values()) / len(graph.edges)
         print(f"  • 평균 강도: {avg_strength:.3f}")
         print(f"  • 평균 유사도: {avg_similarity:.3f}")
 

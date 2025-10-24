@@ -6,19 +6,12 @@ DuRi 추론 시스템 - 우선순위 시스템 모듈
 지식 통합의 우선순위를 결정하는 모듈입니다.
 """
 
-import asyncio
-from collections import Counter, defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-import hashlib
-import json
 import logging
-import re
 import time
-from typing import Any, Dict, List, Optional, Tuple, Union
-
-import numpy as np
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -68,9 +61,7 @@ class IntegrationPrioritySystem:
 
         return priority_items
 
-    async def _calculate_element_priority(
-        self, element: Dict[str, Any]
-    ) -> IntegrationPriorityItem:
+    async def _calculate_element_priority(self, element: Dict[str, Any]) -> IntegrationPriorityItem:
         """요소 우선순위 계산"""
         priority_id = f"priority_{int(time.time())}_{hash(str(element))}"
         element_id = str(element.get("id", "unknown"))
@@ -112,9 +103,7 @@ class IntegrationPrioritySystem:
 
         return min(1.0, score)
 
-    async def _determine_priority_level(
-        self, priority_score: float
-    ) -> IntegrationPriority:
+    async def _determine_priority_level(self, priority_score: float) -> IntegrationPriority:
         """우선순위 수준 결정"""
         if priority_score >= 0.8:
             return IntegrationPriority.CRITICAL

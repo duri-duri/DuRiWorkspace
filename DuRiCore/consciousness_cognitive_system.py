@@ -6,13 +6,12 @@ DuRi 의식적 인지 시스템 (Phase 4.2)
 """
 
 import asyncio
-from dataclasses import asdict, dataclass
-from datetime import datetime
-import json
 import logging
 import random
 import time
-from typing import Any, Dict, List, Optional, Tuple
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from typing import Any, Dict, List
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -38,9 +37,7 @@ class SelfAwareness:
     """자기 의식 데이터 클래스"""
 
     awareness_id: str
-    awareness_type: (
-        str  # 'self_monitoring', 'self_evaluation', 'self_regulation', 'meta_cognition'
-    )
+    awareness_type: str  # 'self_monitoring', 'self_evaluation', 'self_regulation', 'meta_cognition'
     clarity_level: float
     depth: str  # 'surface', 'deep', 'transcendental'
     accuracy: float
@@ -76,9 +73,7 @@ class ConsciousnessCognitiveSystem:
         self.conscious_decision_engine = ConsciousDecisionEngine()
         self.meta_cognition_engine = MetaCognitionEngine()
 
-    async def process_consciousness_cognition(
-        self, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def process_consciousness_cognition(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """의식적 인지 처리 메인 함수"""
         try:
             logger.info("=== 의식적 인지 시스템 시작 ===")
@@ -87,9 +82,7 @@ class ConsciousnessCognitiveSystem:
             subjective_experiences = await self.simulate_subjective_experiences(context)
 
             # 2. 자기 의식 상태 생성
-            self_awareness_states = await self.generate_self_awareness_states(
-                context, subjective_experiences
-            )
+            self_awareness_states = await self.generate_self_awareness_states(context, subjective_experiences)
 
             # 3. 의식적 의사결정 생성
             conscious_decisions = await self.generate_conscious_decisions(
@@ -105,15 +98,9 @@ class ConsciousnessCognitiveSystem:
                 "system_name": self.system_name,
                 "version": self.version,
                 "timestamp": datetime.now().isoformat(),
-                "subjective_experiences": [
-                    asdict(exp) for exp in subjective_experiences
-                ],
-                "self_awareness_states": [
-                    asdict(state) for state in self_awareness_states
-                ],
-                "conscious_decisions": [
-                    asdict(decision) for decision in conscious_decisions
-                ],
+                "subjective_experiences": [asdict(exp) for exp in subjective_experiences],
+                "self_awareness_states": [asdict(state) for state in self_awareness_states],
+                "conscious_decisions": [asdict(decision) for decision in conscious_decisions],
                 "meta_cognitive_analysis": meta_cognitive_analysis,
                 "consciousness_cognition_score": self.calculate_consciousness_score(
                     subjective_experiences, self_awareness_states, conscious_decisions
@@ -127,18 +114,12 @@ class ConsciousnessCognitiveSystem:
             logger.error(f"의식적 인지 처리 중 오류: {e}")
             return {"error": str(e)}
 
-    async def simulate_subjective_experiences(
-        self, context: Dict[str, Any]
-    ) -> List[SubjectiveExperience]:
+    async def simulate_subjective_experiences(self, context: Dict[str, Any]) -> List[SubjectiveExperience]:
         """주관적 경험 시뮬레이션"""
         experiences = []
 
         # 지각적 경험
-        perceptual_experiences = (
-            await self.experience_simulation_engine.simulate_perceptual_experiences(
-                context
-            )
-        )
+        perceptual_experiences = await self.experience_simulation_engine.simulate_perceptual_experiences(context)
         for exp in perceptual_experiences:
             experience = SubjectiveExperience(
                 experience_id=f"exp_{int(time.time() * 1000)}",
@@ -153,11 +134,7 @@ class ConsciousnessCognitiveSystem:
             experiences.append(experience)
 
         # 감정적 경험
-        emotional_experiences = (
-            await self.experience_simulation_engine.simulate_emotional_experiences(
-                context
-            )
-        )
+        emotional_experiences = await self.experience_simulation_engine.simulate_emotional_experiences(context)
         for exp in emotional_experiences:
             experience = SubjectiveExperience(
                 experience_id=f"exp_{int(time.time() * 1000)}",
@@ -172,11 +149,7 @@ class ConsciousnessCognitiveSystem:
             experiences.append(experience)
 
         # 사고적 경험
-        thought_experiences = (
-            await self.experience_simulation_engine.simulate_thought_experiences(
-                context
-            )
-        )
+        thought_experiences = await self.experience_simulation_engine.simulate_thought_experiences(context)
         for exp in thought_experiences:
             experience = SubjectiveExperience(
                 experience_id=f"exp_{int(time.time() * 1000)}",
@@ -200,11 +173,7 @@ class ConsciousnessCognitiveSystem:
         awareness_states = []
 
         # 자기 모니터링
-        self_monitoring_states = (
-            await self.self_awareness_engine.generate_self_monitoring_states(
-                context, experiences
-            )
-        )
+        self_monitoring_states = await self.self_awareness_engine.generate_self_monitoring_states(context, experiences)
         for state in self_monitoring_states:
             awareness = SelfAwareness(
                 awareness_id=f"awareness_{int(time.time() * 1000)}",
@@ -218,11 +187,7 @@ class ConsciousnessCognitiveSystem:
             awareness_states.append(awareness)
 
         # 자기 평가
-        self_evaluation_states = (
-            await self.self_awareness_engine.generate_self_evaluation_states(
-                context, experiences
-            )
-        )
+        self_evaluation_states = await self.self_awareness_engine.generate_self_evaluation_states(context, experiences)
         for state in self_evaluation_states:
             awareness = SelfAwareness(
                 awareness_id=f"awareness_{int(time.time() * 1000)}",
@@ -236,11 +201,7 @@ class ConsciousnessCognitiveSystem:
             awareness_states.append(awareness)
 
         # 메타 인지
-        meta_cognition_states = (
-            await self.meta_cognition_engine.generate_meta_cognitive_states(
-                context, experiences
-            )
-        )
+        meta_cognition_states = await self.meta_cognition_engine.generate_meta_cognitive_states(context, experiences)
         for state in meta_cognition_states:
             awareness = SelfAwareness(
                 awareness_id=f"awareness_{int(time.time() * 1000)}",
@@ -266,10 +227,8 @@ class ConsciousnessCognitiveSystem:
         decisions = []
 
         # 신중한 의사결정
-        deliberate_decisions = (
-            await self.conscious_decision_engine.generate_deliberate_decisions(
-                context, experiences, awareness_states
-            )
+        deliberate_decisions = await self.conscious_decision_engine.generate_deliberate_decisions(
+            context, experiences, awareness_states
         )
         for decision in deliberate_decisions:
             conscious_decision = ConsciousDecision(
@@ -285,10 +244,8 @@ class ConsciousnessCognitiveSystem:
             decisions.append(conscious_decision)
 
         # 직관적 의사결정
-        intuitive_decisions = (
-            await self.conscious_decision_engine.generate_intuitive_decisions(
-                context, experiences, awareness_states
-            )
+        intuitive_decisions = await self.conscious_decision_engine.generate_intuitive_decisions(
+            context, experiences, awareness_states
         )
         for decision in intuitive_decisions:
             conscious_decision = ConsciousDecision(
@@ -304,10 +261,8 @@ class ConsciousnessCognitiveSystem:
             decisions.append(conscious_decision)
 
         # 윤리적 의사결정
-        ethical_decisions = (
-            await self.conscious_decision_engine.generate_ethical_decisions(
-                context, experiences, awareness_states
-            )
+        ethical_decisions = await self.conscious_decision_engine.generate_ethical_decisions(
+            context, experiences, awareness_states
         )
         for decision in ethical_decisions:
             conscious_decision = ConsciousDecision(
@@ -337,62 +292,28 @@ class ConsciousnessCognitiveSystem:
             "total_awareness_states": len(awareness_states),
             "total_decisions": len(decisions),
             "experience_distribution": {
-                "perception": len(
-                    [e for e in experiences if e.experience_type == "perception"]
-                ),
-                "emotion": len(
-                    [e for e in experiences if e.experience_type == "emotion"]
-                ),
-                "thought": len(
-                    [e for e in experiences if e.experience_type == "thought"]
-                ),
+                "perception": len([e for e in experiences if e.experience_type == "perception"]),
+                "emotion": len([e for e in experiences if e.experience_type == "emotion"]),
+                "thought": len([e for e in experiences if e.experience_type == "thought"]),
             },
             "awareness_distribution": {
-                "self_monitoring": len(
-                    [
-                        a
-                        for a in awareness_states
-                        if a.awareness_type == "self_monitoring"
-                    ]
-                ),
-                "self_evaluation": len(
-                    [
-                        a
-                        for a in awareness_states
-                        if a.awareness_type == "self_evaluation"
-                    ]
-                ),
-                "meta_cognition": len(
-                    [
-                        a
-                        for a in awareness_states
-                        if a.awareness_type == "meta_cognition"
-                    ]
-                ),
+                "self_monitoring": len([a for a in awareness_states if a.awareness_type == "self_monitoring"]),
+                "self_evaluation": len([a for a in awareness_states if a.awareness_type == "self_evaluation"]),
+                "meta_cognition": len([a for a in awareness_states if a.awareness_type == "meta_cognition"]),
             },
             "decision_distribution": {
-                "deliberate": len(
-                    [d for d in decisions if d.decision_type == "deliberate"]
-                ),
-                "intuitive": len(
-                    [d for d in decisions if d.decision_type == "intuitive"]
-                ),
+                "deliberate": len([d for d in decisions if d.decision_type == "deliberate"]),
+                "intuitive": len([d for d in decisions if d.decision_type == "intuitive"]),
                 "ethical": len([d for d in decisions if d.decision_type == "ethical"]),
             },
             "average_experience_intensity": (
-                sum(e.intensity for e in experiences) / len(experiences)
-                if experiences
-                else 0
+                sum(e.intensity for e in experiences) / len(experiences) if experiences else 0
             ),
             "average_awareness_clarity": (
-                sum(a.clarity_level for a in awareness_states) / len(awareness_states)
-                if awareness_states
-                else 0
+                sum(a.clarity_level for a in awareness_states) / len(awareness_states) if awareness_states else 0
             ),
             "average_decision_confidence": (
-                sum(d.confidence_level for d in decisions) / len(decisions)
-                if decisions
-                else 0
+                sum(d.confidence_level for d in decisions) / len(decisions) if decisions else 0
             ),
         }
 
@@ -408,22 +329,14 @@ class ConsciousnessCognitiveSystem:
         if not experiences and not awareness_states and not decisions:
             return 0.0
 
-        experience_score = (
-            sum(e.intensity * e.clarity for e in experiences) / len(experiences)
-            if experiences
-            else 0
-        )
+        experience_score = sum(e.intensity * e.clarity for e in experiences) / len(experiences) if experiences else 0
         awareness_score = (
-            sum(a.clarity_level * a.accuracy for a in awareness_states)
-            / len(awareness_states)
+            sum(a.clarity_level * a.accuracy for a in awareness_states) / len(awareness_states)
             if awareness_states
             else 0
         )
         decision_score = (
-            sum(d.confidence_level * d.ethical_consideration for d in decisions)
-            / len(decisions)
-            if decisions
-            else 0
+            sum(d.confidence_level * d.ethical_consideration for d in decisions) / len(decisions) if decisions else 0
         )
 
         # 가중 평균 계산
@@ -443,9 +356,7 @@ class ConsciousnessCognitiveSystem:
 class ExperienceSimulationEngine:
     """경험 시뮬레이션 엔진"""
 
-    async def simulate_perceptual_experiences(
-        self, context: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    async def simulate_perceptual_experiences(self, context: Dict[str, Any]) -> List[Dict[str, Any]]:
         """지각적 경험 시뮬레이션"""
         experiences = []
 
@@ -459,9 +370,7 @@ class ExperienceSimulationEngine:
 
         return experiences
 
-    async def simulate_emotional_experiences(
-        self, context: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    async def simulate_emotional_experiences(self, context: Dict[str, Any]) -> List[Dict[str, Any]]:
         """감정적 경험 시뮬레이션"""
         experiences = []
 
@@ -475,9 +384,7 @@ class ExperienceSimulationEngine:
 
         return experiences
 
-    async def simulate_thought_experiences(
-        self, context: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    async def simulate_thought_experiences(self, context: Dict[str, Any]) -> List[Dict[str, Any]]:
         """사고적 경험 시뮬레이션"""
         experiences = []
 
@@ -491,9 +398,7 @@ class ExperienceSimulationEngine:
 
         return experiences
 
-    def _simulate_visual_perceptions(
-        self, context: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    def _simulate_visual_perceptions(self, context: Dict[str, Any]) -> List[Dict[str, Any]]:
         """시각적 지각 시뮬레이션"""
         perceptions = []
 
@@ -503,9 +408,7 @@ class ExperienceSimulationEngine:
 
         return perceptions
 
-    def _simulate_auditory_perceptions(
-        self, context: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    def _simulate_auditory_perceptions(self, context: Dict[str, Any]) -> List[Dict[str, Any]]:
         """청각적 지각 시뮬레이션"""
         perceptions = []
 
@@ -525,9 +428,7 @@ class ExperienceSimulationEngine:
 
         return emotions
 
-    def _simulate_complex_emotions(
-        self, context: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    def _simulate_complex_emotions(self, context: Dict[str, Any]) -> List[Dict[str, Any]]:
         """복합 감정 시뮬레이션"""
         emotions = []
 
@@ -537,9 +438,7 @@ class ExperienceSimulationEngine:
 
         return emotions
 
-    def _simulate_logical_thoughts(
-        self, context: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    def _simulate_logical_thoughts(self, context: Dict[str, Any]) -> List[Dict[str, Any]]:
         """논리적 사고 시뮬레이션"""
         thoughts = []
 
@@ -549,9 +448,7 @@ class ExperienceSimulationEngine:
 
         return thoughts
 
-    def _simulate_creative_thoughts(
-        self, context: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    def _simulate_creative_thoughts(self, context: Dict[str, Any]) -> List[Dict[str, Any]]:
         """창의적 사고 시뮬레이션"""
         thoughts = []
 
@@ -603,19 +500,13 @@ class SelfAwarenessEngine:
         """현재 상태 모니터링"""
         states = []
 
-        states.append(
-            {"type": "cognitive_state", "description": "인지적 상태 모니터링"}
-        )
+        states.append({"type": "cognitive_state", "description": "인지적 상태 모니터링"})
 
-        states.append(
-            {"type": "emotional_state", "description": "감정적 상태 모니터링"}
-        )
+        states.append({"type": "emotional_state", "description": "감정적 상태 모니터링"})
 
         return states
 
-    def _detect_changes(
-        self, context: Dict[str, Any], experiences: List[SubjectiveExperience]
-    ) -> List[Dict[str, Any]]:
+    def _detect_changes(self, context: Dict[str, Any], experiences: List[SubjectiveExperience]) -> List[Dict[str, Any]]:
         """변화 감지"""
         states = []
 
@@ -631,13 +522,9 @@ class SelfAwarenessEngine:
         """성과 평가"""
         evaluations = []
 
-        evaluations.append(
-            {"type": "task_performance", "description": "작업 성과 평가"}
-        )
+        evaluations.append({"type": "task_performance", "description": "작업 성과 평가"})
 
-        evaluations.append(
-            {"type": "learning_progress", "description": "학습 진도 평가"}
-        )
+        evaluations.append({"type": "learning_progress", "description": "학습 진도 평가"})
 
         return evaluations
 
@@ -647,13 +534,9 @@ class SelfAwarenessEngine:
         """능력 평가"""
         evaluations = []
 
-        evaluations.append(
-            {"type": "cognitive_capability", "description": "인지적 능력 평가"}
-        )
+        evaluations.append({"type": "cognitive_capability", "description": "인지적 능력 평가"})
 
-        evaluations.append(
-            {"type": "creative_capability", "description": "창의적 능력 평가"}
-        )
+        evaluations.append({"type": "creative_capability", "description": "창의적 능력 평가"})
 
         return evaluations
 
@@ -671,15 +554,11 @@ class ConsciousDecisionEngine:
         decisions = []
 
         # 분석적 의사결정
-        analytical_decisions = self._generate_analytical_decisions(
-            context, experiences, awareness_states
-        )
+        analytical_decisions = self._generate_analytical_decisions(context, experiences, awareness_states)
         decisions.extend(analytical_decisions)
 
         # 비교적 의사결정
-        comparative_decisions = self._generate_comparative_decisions(
-            context, experiences, awareness_states
-        )
+        comparative_decisions = self._generate_comparative_decisions(context, experiences, awareness_states)
         decisions.extend(comparative_decisions)
 
         return decisions
@@ -694,15 +573,11 @@ class ConsciousDecisionEngine:
         decisions = []
 
         # 패턴 기반 의사결정
-        pattern_decisions = self._generate_pattern_based_decisions(
-            context, experiences, awareness_states
-        )
+        pattern_decisions = self._generate_pattern_based_decisions(context, experiences, awareness_states)
         decisions.extend(pattern_decisions)
 
         # 경험 기반 의사결정
-        experience_decisions = self._generate_experience_based_decisions(
-            context, experiences, awareness_states
-        )
+        experience_decisions = self._generate_experience_based_decisions(context, experiences, awareness_states)
         decisions.extend(experience_decisions)
 
         return decisions
@@ -717,15 +592,11 @@ class ConsciousDecisionEngine:
         decisions = []
 
         # 도덕적 의사결정
-        moral_decisions = self._generate_moral_decisions(
-            context, experiences, awareness_states
-        )
+        moral_decisions = self._generate_moral_decisions(context, experiences, awareness_states)
         decisions.extend(moral_decisions)
 
         # 가치 기반 의사결정
-        value_decisions = self._generate_value_based_decisions(
-            context, experiences, awareness_states
-        )
+        value_decisions = self._generate_value_based_decisions(context, experiences, awareness_states)
         decisions.extend(value_decisions)
 
         return decisions
@@ -739,13 +610,9 @@ class ConsciousDecisionEngine:
         """분석적 의사결정 생성"""
         decisions = []
 
-        decisions.append(
-            {"type": "cost_benefit_analysis", "description": "비용-효익 분석 의사결정"}
-        )
+        decisions.append({"type": "cost_benefit_analysis", "description": "비용-효익 분석 의사결정"})
 
-        decisions.append(
-            {"type": "risk_assessment", "description": "위험 평가 의사결정"}
-        )
+        decisions.append({"type": "risk_assessment", "description": "위험 평가 의사결정"})
 
         return decisions
 
@@ -758,13 +625,9 @@ class ConsciousDecisionEngine:
         """비교적 의사결정 생성"""
         decisions = []
 
-        decisions.append(
-            {"type": "alternative_comparison", "description": "대안 비교 의사결정"}
-        )
+        decisions.append({"type": "alternative_comparison", "description": "대안 비교 의사결정"})
 
-        decisions.append(
-            {"type": "criteria_evaluation", "description": "기준 평가 의사결정"}
-        )
+        decisions.append({"type": "criteria_evaluation", "description": "기준 평가 의사결정"})
 
         return decisions
 
@@ -777,13 +640,9 @@ class ConsciousDecisionEngine:
         """패턴 기반 의사결정 생성"""
         decisions = []
 
-        decisions.append(
-            {"type": "recognition_primed", "description": "인식 기반 의사결정"}
-        )
+        decisions.append({"type": "recognition_primed", "description": "인식 기반 의사결정"})
 
-        decisions.append(
-            {"type": "heuristic_based", "description": "휴리스틱 기반 의사결정"}
-        )
+        decisions.append({"type": "heuristic_based", "description": "휴리스틱 기반 의사결정"})
 
         return decisions
 
@@ -796,9 +655,7 @@ class ConsciousDecisionEngine:
         """경험 기반 의사결정 생성"""
         decisions = []
 
-        decisions.append(
-            {"type": "similarity_matching", "description": "유사성 매칭 의사결정"}
-        )
+        decisions.append({"type": "similarity_matching", "description": "유사성 매칭 의사결정"})
 
         decisions.append({"type": "analogy_based", "description": "유추 기반 의사결정"})
 
@@ -830,9 +687,7 @@ class ConsciousDecisionEngine:
 
         decisions.append({"type": "virtue_based", "description": "덕 기반 의사결정"})
 
-        decisions.append(
-            {"type": "consequence_based", "description": "결과 기반 의사결정"}
-        )
+        decisions.append({"type": "consequence_based", "description": "결과 기반 의사결정"})
 
         return decisions
 
@@ -847,15 +702,11 @@ class MetaCognitionEngine:
         states = []
 
         # 학습 메타 인지
-        learning_meta_cognition = self._generate_learning_meta_cognition(
-            context, experiences
-        )
+        learning_meta_cognition = self._generate_learning_meta_cognition(context, experiences)
         states.extend(learning_meta_cognition)
 
         # 사고 메타 인지
-        thinking_meta_cognition = self._generate_thinking_meta_cognition(
-            context, experiences
-        )
+        thinking_meta_cognition = self._generate_thinking_meta_cognition(context, experiences)
         states.extend(thinking_meta_cognition)
 
         return states
@@ -866,13 +717,9 @@ class MetaCognitionEngine:
         """학습 메타 인지 생성"""
         states = []
 
-        states.append(
-            {"type": "learning_strategy", "description": "학습 전략 메타 인지"}
-        )
+        states.append({"type": "learning_strategy", "description": "학습 전략 메타 인지"})
 
-        states.append(
-            {"type": "learning_monitoring", "description": "학습 모니터링 메타 인지"}
-        )
+        states.append({"type": "learning_monitoring", "description": "학습 모니터링 메타 인지"})
 
         return states
 
@@ -882,13 +729,9 @@ class MetaCognitionEngine:
         """사고 메타 인지 생성"""
         states = []
 
-        states.append(
-            {"type": "thinking_process", "description": "사고 과정 메타 인지"}
-        )
+        states.append({"type": "thinking_process", "description": "사고 과정 메타 인지"})
 
-        states.append(
-            {"type": "thinking_evaluation", "description": "사고 평가 메타 인지"}
-        )
+        states.append({"type": "thinking_evaluation", "description": "사고 평가 메타 인지"})
 
         return states
 
@@ -926,9 +769,7 @@ async def test_consciousness_cognitive_system():
         analysis = result["meta_cognitive_analysis"]
         print(f"평균 경험 강도: {analysis.get('average_experience_intensity', 0):.3f}")
         print(f"평균 의식 명확도: {analysis.get('average_awareness_clarity', 0):.3f}")
-        print(
-            f"평균 의사결정 신뢰도: {analysis.get('average_decision_confidence', 0):.3f}"
-        )
+        print(f"평균 의사결정 신뢰도: {analysis.get('average_decision_confidence', 0):.3f}")
 
     print("=== 의식적 인지 시스템 테스트 완료 ===")
     return result

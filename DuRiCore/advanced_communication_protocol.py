@@ -12,22 +12,18 @@ DuRi Phase 6.2.2.2 - 모듈간 통신 프로토콜 (40% 통신 효율성 향상 
 """
 
 import asyncio
-from concurrent.futures import ThreadPoolExecutor
-from dataclasses import asdict, dataclass
-from datetime import datetime
-from enum import Enum
-import json
 import logging
 import queue
 import threading
 import time
-from typing import Any, Callable, Dict, List, Optional, Type
 import uuid
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
+from typing import Any, Callable, Dict, List, Optional
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -115,11 +111,7 @@ class AdvancedCommunicationProtocol:
                     # 연결 상태 확인
                     for module_name, connection in self.module_connections.items():
                         last_heartbeat = connection.get("last_heartbeat")
-                        if (
-                            last_heartbeat
-                            and (current_time - last_heartbeat).seconds
-                            > self.connection_timeout
-                        ):
+                        if last_heartbeat and (current_time - last_heartbeat).seconds > self.connection_timeout:
                             logger.warning(f"⚠️  연결 타임아웃: {module_name}")
                             if self.auto_recovery_enabled:
                                 self._attempt_recovery(module_name)
@@ -184,9 +176,7 @@ class AdvancedCommunicationProtocol:
             self.performance_metrics["total_messages"] += 1
             self.performance_metrics["message_queue_size"] = self.message_queue.qsize()
 
-            logger.info(
-                f"📤 메시지 전송: {from_module} → {to_module} ({message_type.value})"
-            )
+            logger.info(f"📤 메시지 전송: {from_module} → {to_module} ({message_type.value})")
             return message.id
 
         except Exception as e:
@@ -210,15 +200,10 @@ class AdvancedCommunicationProtocol:
                         self.performance_metrics["failed_messages"] += 1
 
                         # 재시도 로직
-                        if (
-                            self.auto_retry_enabled
-                            and message.retry_count < message.max_retries
-                        ):
+                        if self.auto_retry_enabled and message.retry_count < message.max_retries:
                             message.retry_count += 1
                             self.message_queue.put((priority, time.time(), message))
-                            logger.warning(
-                                f"🔄 메시지 재시도: {message.id} (시도 {message.retry_count})"
-                            )
+                            logger.warning(f"🔄 메시지 재시도: {message.id} (시도 {message.retry_count})")
 
                 await asyncio.sleep(0.01)  # 10ms 대기
 
@@ -278,9 +263,7 @@ class AdvancedCommunicationProtocol:
                     correlation_id=message.id,
                 )
 
-                self.message_queue.put(
-                    (5 - response_message.priority.value, time.time(), response_message)
-                )
+                self.message_queue.put((5 - response_message.priority.value, time.time(), response_message))
 
                 # 성능 메트릭 업데이트
                 self.module_connections[message.to_module]["message_count"] += 1
@@ -337,9 +320,7 @@ class AdvancedCommunicationProtocol:
 
             # 연결 상태 업데이트
             if message.from_module in self.module_connections:
-                self.module_connections[message.from_module][
-                    "last_heartbeat"
-                ] = datetime.now()
+                self.module_connections[message.from_module]["last_heartbeat"] = datetime.now()
 
             return True
 
@@ -368,9 +349,7 @@ class AdvancedCommunicationProtocol:
                 correlation_id=message.id,
             )
 
-            self.message_queue.put(
-                (5 - response_message.priority.value, time.time(), response_message)
-            )
+            self.message_queue.put((5 - response_message.priority.value, time.time(), response_message))
 
             logger.info(f"✅ 동기화 완료: {message.id}")
             return True
@@ -422,9 +401,7 @@ class AdvancedCommunicationProtocol:
 
     def _update_performance_metrics(self):
         """성능 메트릭 업데이트"""
-        active_connections = sum(
-            1 for conn in self.module_connections.values() if conn["status"] == "active"
-        )
+        active_connections = sum(1 for conn in self.module_connections.values() if conn["status"] == "active")
 
         # 평균 응답 시간 계산
         if self.message_history:
@@ -435,14 +412,10 @@ class AdvancedCommunicationProtocol:
                     msg1 = recent_messages[i]
                     msg2 = recent_messages[i + 1]
                     if msg2.correlation_id == msg1.id:
-                        response_time = (
-                            msg2.timestamp - msg1.timestamp
-                        ).total_seconds()
+                        response_time = (msg2.timestamp - msg1.timestamp).total_seconds()
                         response_times.append(response_time)
 
-            avg_response_time = (
-                sum(response_times) / len(response_times) if response_times else 0.0
-            )
+            avg_response_time = sum(response_times) / len(response_times) if response_times else 0.0
         else:
             avg_response_time = 0.0
 
@@ -459,8 +432,7 @@ class AdvancedCommunicationProtocol:
         self._update_performance_metrics()
 
         success_rate = (
-            self.performance_metrics["successful_messages"]
-            / max(self.performance_metrics["total_messages"], 1)
+            self.performance_metrics["successful_messages"] / max(self.performance_metrics["total_messages"], 1)
         ) * 100
 
         return {
@@ -487,9 +459,7 @@ class AutoRecoverySystem:
         self.recovery_strategies[error_type] = strategy
         logger.info(f"🔄 복구 전략 등록: {error_type}")
 
-    async def attempt_recovery(
-        self, module_name: str, error_type: str, error_details: Any
-    ) -> bool:
+    async def attempt_recovery(self, module_name: str, error_type: str, error_details: Any) -> bool:
         """복구 시도"""
         try:
             if error_type in self.recovery_strategies:
@@ -646,15 +616,11 @@ async def test_advanced_communication_protocol():
     logger.info(f"   이벤트 메시지 ID: {event_id}")
 
     # 하트비트 메시지 전송
-    heartbeat_id = await protocol.send_message(
-        "module_1", "module_2", MessageType.HEARTBEAT, {"status": "ping"}
-    )
+    heartbeat_id = await protocol.send_message("module_1", "module_2", MessageType.HEARTBEAT, {"status": "ping"})
     logger.info(f"   하트비트 메시지 ID: {heartbeat_id}")
 
     # 동기화 메시지 전송
-    sync_id = await protocol.send_message(
-        "module_1", "module_2", MessageType.SYNC, {"sync_type": "status"}
-    )
+    sync_id = await protocol.send_message("module_1", "module_2", MessageType.SYNC, {"sync_type": "status"})
     logger.info(f"   동기화 메시지 ID: {sync_id}")
 
     # 메시지 큐 처리 시작
@@ -666,7 +632,7 @@ async def test_advanced_communication_protocol():
 
     # 성능 리포트
     report = protocol.get_performance_report()
-    logger.info(f"📈 성능 리포트:")
+    logger.info("📈 성능 리포트:")
     logger.info(f"   총 메시지 수: {report['metrics']['total_messages']}")
     logger.info(f"   성공률: {report['success_rate']:.1f}%")
     logger.info(f"   활성 연결 수: {report['active_connections']}")

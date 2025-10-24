@@ -1,4 +1,3 @@
-import re
 import subprocess as sp
 
 

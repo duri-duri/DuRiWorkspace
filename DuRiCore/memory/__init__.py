@@ -7,13 +7,7 @@ DuRiCore Phase 2-5: 메모리 패키지
 """
 
 # Memory Manager 모듈
-from .memory_manager.memory_allocator import (
-    MemoryAllocation,
-    MemoryAllocator,
-    MemoryBlock,
-    MemoryStatus,
-    MemoryType,
-)
+from .memory_manager.memory_allocator import MemoryAllocation, MemoryAllocator, MemoryBlock, MemoryStatus, MemoryType
 
 # Memory Optimization 모듈
 from .memory_optimization.memory_optimizer import (
@@ -25,13 +19,7 @@ from .memory_optimization.memory_optimizer import (
 )
 
 # Memory Sync 모듈
-from .memory_sync.memory_synchronizer import (
-    MemoryConflict,
-    MemorySynchronizer,
-    SyncOperation,
-    SyncStatus,
-    SyncType,
-)
+from .memory_sync.memory_synchronizer import MemoryConflict, MemorySynchronizer, SyncOperation, SyncStatus, SyncType
 
 # 패키지 버전
 __version__ = "2.5.0"

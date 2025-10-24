@@ -1,6 +1,5 @@
 import pathlib
 import re
-import sys
 
 PKG = "duri_finale"
 root = pathlib.Path(__file__).resolve().parents[1]

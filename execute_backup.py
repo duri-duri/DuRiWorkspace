@@ -34,9 +34,7 @@ def main():
 
     # 현재 디렉토리 확인
     if not os.path.exists("docker-compose.yml"):
-        print(
-            "❌ docker-compose.yml을 찾을 수 없습니다. 올바른 디렉토리에서 실행하세요."
-        )
+        print("❌ docker-compose.yml을 찾을 수 없습니다. 올바른 디렉토리에서 실행하세요.")
         sys.exit(1)
 
     # 백업 파일명 생성
@@ -71,7 +69,7 @@ def main():
     else:
         print("⚠️ 제외 파일 목록을 찾을 수 없습니다. 기본 설정으로 백업합니다.")
         success = run_command(
-            f"tar --exclude='*.tar.gz' --exclude='*.zip' --exclude='.git' --exclude='__pycache__' --exclude='*.log' --exclude='logs' --exclude='.env' -czf '{backup_name}' .",
+            f"tar --exclude='*.tar.gz' --exclude='*.zip' --exclude='.git' --exclude='__pycache__' --exclude='*.log' --exclude='logs' --exclude='.env' -czf '{backup_name}' .",  # noqa: E501
             "백업 파일 생성",
         )
 
@@ -83,9 +81,7 @@ def main():
 
     # 4. 백업 파일 크기 확인
     if os.path.exists(backup_name):
-        size_result = subprocess.run(
-            f"du -h '{backup_name}'", shell=True, capture_output=True, text=True
-        )
+        size_result = subprocess.run(f"du -h '{backup_name}'", shell=True, capture_output=True, text=True)
         if size_result.returncode == 0:
             size = size_result.stdout.strip().split()[0]
             print(f"📊 백업 파일 크기: {size}")
@@ -99,9 +95,7 @@ def main():
 
     # 5. 백업 파일 무결성 확인
     print("🔍 백업 파일 무결성 확인 중...")
-    integrity_success = run_command(
-        f"tar -tzf '{backup_name}' > /dev/null", "백업 파일 무결성 검사"
-    )
+    integrity_success = run_command(f"tar -tzf '{backup_name}' > /dev/null", "백업 파일 무결성 검사")
 
     if integrity_success:
         print("✅ 백업 파일이 정상적으로 생성되었습니다.")
@@ -127,7 +121,7 @@ def main():
             try:
                 file_size = os.path.getsize(file)
                 print(f"  - {file} ({file_size:,} bytes)")
-            except:
+            except:  # noqa: E722
                 print(f"  - {file}")
     else:
         print("  백업 파일이 없습니다.")

@@ -4,10 +4,10 @@ DuRiCore - NLP 기반 감정 임베딩 모듈
 실제 AI 기능: 규칙 기반 → NLP 기반 감정 분석
 """
 
-from dataclasses import dataclass
-from enum import Enum
 import logging
 import re
+from dataclasses import dataclass
+from enum import Enum
 from typing import Any, Dict, List, Tuple
 
 logger = logging.getLogger(__name__)

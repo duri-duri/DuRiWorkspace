@@ -10,13 +10,11 @@ DuRi 언어 시스템 - 통합 언어 이해 및 생성 시스템
 - 성능 모니터링
 """
 
-from collections import defaultdict
-from dataclasses import dataclass
-from datetime import datetime
-import json
 import logging
 import time
-from typing import Any, Dict, List, Optional
+from collections import defaultdict
+from datetime import datetime
+from typing import Any, Dict
 
 from .advanced_generation_engine import AdvancedLanguageGenerationEngine
 from .data_structures import (
@@ -64,19 +62,13 @@ class IntegratedLanguageUnderstandingGenerationSystem:
                 text = "일반적인 대화"
 
             # 2. 심층 언어 이해
-            understanding_result = (
-                await self.deep_understanding_engine.understand_language(text, context)
-            )
+            understanding_result = await self.deep_understanding_engine.understand_language(text, context)
 
             # 3. 고급 언어 생성 (의미 분석 결과가 언어 생성 가중치에 제대로 반영되도록 연결 보강)
             generation_context = {
                 "intent": understanding_result.intent,
                 "emotion": understanding_result.emotional_tone,
-                "topic": (
-                    understanding_result.key_concepts[0]
-                    if understanding_result.key_concepts
-                    else "일반"
-                ),
+                "topic": (understanding_result.key_concepts[0] if understanding_result.key_concepts else "일반"),
                 "context_type": understanding_result.context_meaning,
                 "keywords": understanding_result.key_concepts,
                 "learning_insights": understanding_result.learning_insights,  # 의미 분석 결과 추가
@@ -92,9 +84,7 @@ class IntegratedLanguageUnderstandingGenerationSystem:
             )
 
             # 4. 통합 분석 (integration_score 계산식 재조정 및 0.0~1.0 정규화 적용)
-            integration_score = self._calculate_integration_score(
-                understanding_result, generation_result
-            )
+            integration_score = self._calculate_integration_score(understanding_result, generation_result)
 
             # 5. 성능 메트릭 업데이트
             processing_time = time.time() - start_time
@@ -131,17 +121,13 @@ class IntegratedLanguageUnderstandingGenerationSystem:
         """통합 점수 계산 (재조정 및 0.0~1.0 정규화 적용)"""
         try:
             # 이해 점수 (0.0~1.0 정규화)
-            understanding_score = max(
-                0.0, min(1.0, understanding_result.confidence_score)
-            )
+            understanding_score = max(0.0, min(1.0, understanding_result.confidence_score))
 
             # 생성 점수 (0.0~1.0 정규화)
             generation_score = max(0.0, min(1.0, generation_result.confidence_score))
 
             # 맥락 관련성 점수 (0.0~1.0 정규화)
-            contextual_score = max(
-                0.0, min(1.0, generation_result.contextual_relevance)
-            )
+            contextual_score = max(0.0, min(1.0, generation_result.contextual_relevance))
 
             # 의미 분석 결과 반영 (새로운 가중치 추가)
             semantic_score = 0.0
@@ -170,9 +156,7 @@ class IntegratedLanguageUnderstandingGenerationSystem:
             self.logger.error(f"통합 점수 계산 실패: {e}")
             return 0.5  # 기본값 반환
 
-    def _update_performance_metrics(
-        self, processing_time: float, integration_score: float
-    ):
+    def _update_performance_metrics(self, processing_time: float, integration_score: float):
         """성능 메트릭 업데이트 (division by zero 예외 방지)"""
         try:
             self.performance_metrics["total_processing_time"] += processing_time
@@ -187,9 +171,7 @@ class IntegratedLanguageUnderstandingGenerationSystem:
                 )
 
                 # 평균 통합 점수 계산 (division by zero 예외 방지)
-                current_avg = self.performance_metrics.get(
-                    "average_integration_score", 0.0
-                )
+                current_avg = self.performance_metrics.get("average_integration_score", 0.0)
                 self.performance_metrics["average_integration_score"] = (
                     current_avg * current_count + integration_score
                 ) / new_count
@@ -199,9 +181,7 @@ class IntegratedLanguageUnderstandingGenerationSystem:
         except Exception as e:
             self.logger.error(f"성능 메트릭 업데이트 실패: {e}")
             # 기본값 설정
-            self.performance_metrics["request_count"] = (
-                self.performance_metrics.get("request_count", 0) + 1
-            )
+            self.performance_metrics["request_count"] = self.performance_metrics.get("request_count", 0) + 1
             self.performance_metrics["average_processing_time"] = processing_time
             self.performance_metrics["average_integration_score"] = integration_score
 

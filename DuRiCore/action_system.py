@@ -5,14 +5,12 @@ DuRiCore Phase 5 Day 4 - 행동 시스템
 """
 
 import asyncio
+import logging
+import time
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-import json
-import logging
-import math
-import time
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -143,18 +141,14 @@ class ActionSystem:
             available_resources = ["cpu", "memory", "network", "storage"]
             constraints = {"time_limit": 30.0, "resource_limit": 0.8}
 
-            action_plan = await self.generate_action_plan(
-                decision_result, available_resources, constraints
-            )
+            action_plan = await self.generate_action_plan(decision_result, available_resources, constraints)
 
             # 행동 실행
             action_execution = await self.execute_action(action_plan)
 
             # 결과 분석
             expected_outcome = {"success": True, "completion": 1.0}
-            action_result = await self.analyze_action_result(
-                action_execution, expected_outcome
-            )
+            action_result = await self.analyze_action_result(action_execution, expected_outcome)
 
             return {
                 "success": True,
@@ -181,18 +175,14 @@ class ActionSystem:
             # 1. 실제 행동 계획 수립
             available_resources = ["cpu", "memory", "network", "storage", "learning"]
             constraints = {"time_limit": 5.0, "resource_limit": 0.9}
-            action_plan = self._real_generate_action_plan(
-                decision, available_resources, constraints
-            )
+            action_plan = self._real_generate_action_plan(decision, available_resources, constraints)
 
             # 2. 실제 실행
             action_execution = self._real_execute_action(action_plan)
 
             # 3. 실제 결과 분석
             expected_outcome = {"success": True, "performance_improvement": 0.15}
-            action_result = self._real_analyze_action_result(
-                action_execution, expected_outcome
-            )
+            action_result = self._real_analyze_action_result(action_execution, expected_outcome)
 
             return {
                 "phase": "action",
@@ -250,9 +240,7 @@ class ActionSystem:
     ) -> ActionPlan:
         """의사결정 결과 기반 행동 계획 생성"""
         try:
-            return await self.action_generator.generate_plan(
-                decision_result, available_resources, constraints
-            )
+            return await self.action_generator.generate_plan(decision_result, available_resources, constraints)
         except Exception as e:
             logger.error(f"행동 계획 생성 실패: {e}")
             raise
@@ -281,16 +269,12 @@ class ActionSystem:
     ) -> ActionResult:
         """행동 결과 분석"""
         try:
-            return await self.result_analyzer.analyze_result(
-                action_execution, expected_outcome
-            )
+            return await self.result_analyzer.analyze_result(action_execution, expected_outcome)
         except Exception as e:
             logger.error(f"행동 결과 분석 실패: {e}")
             raise
 
-    async def optimize_behavior_patterns(
-        self, action_results: List[ActionResult]
-    ) -> List[BehaviorPattern]:
+    async def optimize_behavior_patterns(self, action_results: List[ActionResult]) -> List[BehaviorPattern]:
         """행동 패턴 최적화"""
         try:
             # 패턴 분석
@@ -305,9 +289,7 @@ class ActionSystem:
             logger.error(f"행동 패턴 최적화 실패: {e}")
             raise
 
-    async def _analyze_behavior_patterns(
-        self, action_results: List[ActionResult]
-    ) -> List[BehaviorPattern]:
+    async def _analyze_behavior_patterns(self, action_results: List[ActionResult]) -> List[BehaviorPattern]:
         """행동 패턴 분석"""
         patterns = []
 
@@ -348,9 +330,7 @@ class ActionSystem:
 
         return patterns
 
-    async def _optimize_patterns(
-        self, patterns: List[BehaviorPattern]
-    ) -> List[BehaviorPattern]:
+    async def _optimize_patterns(self, patterns: List[BehaviorPattern]) -> List[BehaviorPattern]:
         """패턴 최적화"""
         optimized_patterns = []
 
@@ -408,8 +388,8 @@ class ActionSystem:
         """실제 행동 계획 생성"""
         try:
             decision = decision_result.get("decision", "wait")
-            reasoning = decision_result.get("reasoning", "")
-            confidence = decision_result.get("confidence", 0.5)
+            reasoning = decision_result.get("reasoning", "")  # noqa: F841
+            confidence = decision_result.get("confidence", 0.5)  # noqa: F841
 
             # 의사결정에 따른 행동 계획 생성
             if decision == "proceed":
@@ -593,12 +573,10 @@ class ActionSystem:
         except Exception as e:
             return {"status": "error", "message": str(e), "impact": "negative"}
 
-    def _execute_conditional_action(
-        self, action_plan: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _execute_conditional_action(self, action_plan: Dict[str, Any]) -> Dict[str, Any]:
         """조건부 실행 행동"""
         try:
-            description = action_plan.get("description", "")
+            description = action_plan.get("description", "")  # noqa: F841
 
             # 조건 확인 시뮬레이션
             import time
@@ -627,7 +605,7 @@ class ActionSystem:
     def _execute_default_action(self, action_plan: Dict[str, Any]) -> Dict[str, Any]:
         """기본 실행 행동"""
         try:
-            description = action_plan.get("description", "")
+            description = action_plan.get("description", "")  # noqa: F841
 
             import time
 
@@ -652,22 +630,16 @@ class ActionSystem:
             duration = action_execution.get("actual_duration", 0.0)
 
             # 효과성 평가
-            effectiveness_score = self._calculate_effectiveness_score(
-                status, result, expected_outcome
-            )
+            effectiveness_score = self._calculate_effectiveness_score(status, result, expected_outcome)
 
             # 효율성 평가
-            efficiency_score = self._calculate_efficiency_score(
-                duration, action_execution
-            )
+            efficiency_score = self._calculate_efficiency_score(duration, action_execution)
 
             # 학습 포인트 추출
             learning_points = self._extract_learning_points_real(action_execution)
 
             # 개선 제안
-            improvement_suggestions = self._generate_improvement_suggestions_real(
-                effectiveness_score, efficiency_score
-            )
+            improvement_suggestions = self._generate_improvement_suggestions_real(effectiveness_score, efficiency_score)
 
             # 다음 행동 제안
             next_actions = self._suggest_next_actions_real(effectiveness_score, result)
@@ -722,9 +694,7 @@ class ActionSystem:
 
         return min(1.0, max(0.0, base_score))
 
-    def _calculate_efficiency_score(
-        self, duration: float, action_execution: Dict[str, Any]
-    ) -> float:
+    def _calculate_efficiency_score(self, duration: float, action_execution: Dict[str, Any]) -> float:
         """효율성 점수 계산"""
         estimated_duration = 2.0  # 기본 예상 시간
 
@@ -737,9 +707,7 @@ class ActionSystem:
         else:
             return 0.3
 
-    def _extract_learning_points_real(
-        self, action_execution: Dict[str, Any]
-    ) -> List[str]:
+    def _extract_learning_points_real(self, action_execution: Dict[str, Any]) -> List[str]:
         """실제 학습 포인트 추출"""
         learning_points = []
 
@@ -761,9 +729,7 @@ class ActionSystem:
 
         return learning_points
 
-    def _generate_improvement_suggestions_real(
-        self, effectiveness_score: float, efficiency_score: float
-    ) -> List[str]:
+    def _generate_improvement_suggestions_real(self, effectiveness_score: float, efficiency_score: float) -> List[str]:
         """실제 개선 제안 생성"""
         suggestions = []
 
@@ -784,9 +750,7 @@ class ActionSystem:
 
         return suggestions
 
-    def _suggest_next_actions_real(
-        self, effectiveness_score: float, result: Dict[str, Any]
-    ) -> List[str]:
+    def _suggest_next_actions_real(self, effectiveness_score: float, result: Dict[str, Any]) -> List[str]:
         """실제 다음 행동 제안"""
         next_actions = []
 
@@ -863,9 +827,7 @@ class ActionGenerator:
         risk_factors = await self._identify_risk_factors(decision_result)
 
         # 4. 성공 기준 정의
-        success_criteria = await self._define_success_criteria(
-            action_type, decision_result
-        )
+        success_criteria = await self._define_success_criteria(action_type, decision_result)
 
         # 5. 행동 계획 생성
         action_id = f"action_{int(time.time())}_{hash(description) % 10000}"
@@ -883,9 +845,7 @@ class ActionGenerator:
             created_at=datetime.now(),
         )
 
-    async def _determine_action_type(
-        self, decision_result: Dict[str, Any]
-    ) -> ActionType:
+    async def _determine_action_type(self, decision_result: Dict[str, Any]) -> ActionType:
         """행동 타입 결정"""
         urgency = decision_result.get("urgency_level", 0.0)
         complexity = decision_result.get("complexity_score", 0.0)
@@ -899,9 +859,7 @@ class ActionGenerator:
         else:
             return ActionType.CONDITIONAL
 
-    async def _calculate_priority(
-        self, decision_result: Dict[str, Any], constraints: Dict[str, Any]
-    ) -> ActionPriority:
+    async def _calculate_priority(self, decision_result: Dict[str, Any], constraints: Dict[str, Any]) -> ActionPriority:
         """우선순위 계산"""
         urgency = decision_result.get("urgency_level", 0.0)
         importance = decision_result.get("importance", 0.0)
@@ -938,9 +896,7 @@ class ActionGenerator:
         else:
             return f"일반 행동 실행: {decision} - {reasoning}"
 
-    async def _estimate_duration(
-        self, action_type: ActionType, decision_result: Dict[str, Any]
-    ) -> float:
+    async def _estimate_duration(self, action_type: ActionType, decision_result: Dict[str, Any]) -> float:
         """소요 시간 추정"""
         base_duration = {
             ActionType.IMMEDIATE: 60.0,
@@ -952,9 +908,7 @@ class ActionGenerator:
         complexity = decision_result.get("complexity_score", 0.5)
         return base_duration[action_type] * (1 + complexity)
 
-    async def _select_resources(
-        self, action_type: ActionType, available_resources: List[str]
-    ) -> List[str]:
+    async def _select_resources(self, action_type: ActionType, available_resources: List[str]) -> List[str]:
         """필요 리소스 선택"""
         if action_type == ActionType.IMMEDIATE:
             return ["cpu", "memory"]
@@ -965,9 +919,7 @@ class ActionGenerator:
         else:
             return ["cpu", "memory", "storage"]
 
-    async def _identify_dependencies(
-        self, decision_result: Dict[str, Any]
-    ) -> List[str]:
+    async def _identify_dependencies(self, decision_result: Dict[str, Any]) -> List[str]:
         """의존성 식별"""
         dependencies = []
 
@@ -980,9 +932,7 @@ class ActionGenerator:
 
         return dependencies
 
-    async def _identify_risk_factors(
-        self, decision_result: Dict[str, Any]
-    ) -> List[str]:
+    async def _identify_risk_factors(self, decision_result: Dict[str, Any]) -> List[str]:
         """위험 요소 식별"""
         risk_factors = []
 
@@ -994,9 +944,7 @@ class ActionGenerator:
 
         return risk_factors
 
-    async def _define_success_criteria(
-        self, action_type: ActionType, decision_result: Dict[str, Any]
-    ) -> List[str]:
+    async def _define_success_criteria(self, action_type: ActionType, decision_result: Dict[str, Any]) -> List[str]:
         """성공 기준 정의"""
         criteria = []
 
@@ -1054,9 +1002,7 @@ class ActionExecutor:
             # 실행 완료
             execution.status = ActionStatus.COMPLETED
             execution.end_time = datetime.now()
-            execution.actual_duration = (
-                execution.end_time - execution.start_time
-            ).total_seconds()
+            execution.actual_duration = (execution.end_time - execution.start_time).total_seconds()
             execution.progress = 100.0
             execution.current_step = "완료"
 
@@ -1074,9 +1020,7 @@ class ActionExecutor:
 
         return execution
 
-    async def _execute_immediate(
-        self, action_plan: ActionPlan, execution: ActionExecution
-    ) -> Dict[str, Any]:
+    async def _execute_immediate(self, action_plan: ActionPlan, execution: ActionExecution) -> Dict[str, Any]:
         """즉시 실행"""
         execution.logs.append("즉시 실행 시작")
         execution.current_step = "즉시 실행"
@@ -1097,9 +1041,7 @@ class ActionExecutor:
             "metrics": {"response_time": 0.2, "accuracy": 0.95, "efficiency": 0.9},
         }
 
-    async def _execute_scheduled(
-        self, action_plan: ActionPlan, execution: ActionExecution
-    ) -> Dict[str, Any]:
+    async def _execute_scheduled(self, action_plan: ActionPlan, execution: ActionExecution) -> Dict[str, Any]:
         """예약 실행"""
         execution.logs.append("예약 실행 시작")
         execution.current_step = "예약 실행"
@@ -1123,9 +1065,7 @@ class ActionExecutor:
             },
         }
 
-    async def _execute_conditional(
-        self, action_plan: ActionPlan, execution: ActionExecution
-    ) -> Dict[str, Any]:
+    async def _execute_conditional(self, action_plan: ActionPlan, execution: ActionExecution) -> Dict[str, Any]:
         """조건부 실행"""
         execution.logs.append("조건부 실행 시작")
         execution.current_step = "조건 확인"
@@ -1154,9 +1094,7 @@ class ActionExecutor:
             },
         }
 
-    async def _execute_recurring(
-        self, action_plan: ActionPlan, execution: ActionExecution
-    ) -> Dict[str, Any]:
+    async def _execute_recurring(self, action_plan: ActionPlan, execution: ActionExecution) -> Dict[str, Any]:
         """반복 실행"""
         execution.logs.append("반복 실행 시작")
         execution.current_step = "반복 실행"
@@ -1189,14 +1127,10 @@ class ActionResultAnalyzer:
             "learning": ["knowledge_gain", "skill_improvement", "pattern_recognition"],
         }
 
-    async def analyze_result(
-        self, action_execution: ActionExecution, expected_outcome: Dict[str, Any]
-    ) -> ActionResult:
+    async def analyze_result(self, action_execution: ActionExecution, expected_outcome: Dict[str, Any]) -> ActionResult:
         """행동 결과 분석"""
         # 1. 효과성 평가
-        effectiveness_score = await self._evaluate_effectiveness(
-            action_execution, expected_outcome
-        )
+        effectiveness_score = await self._evaluate_effectiveness(action_execution, expected_outcome)
 
         # 2. 효율성 평가
         efficiency_score = await self._evaluate_efficiency(action_execution)
@@ -1210,9 +1144,7 @@ class ActionResultAnalyzer:
         )
 
         # 5. 다음 행동 제안
-        next_actions = await self._suggest_next_actions(
-            action_execution, effectiveness_score
-        )
+        next_actions = await self._suggest_next_actions(action_execution, effectiveness_score)
 
         # 6. 성공 여부 판단
         success = effectiveness_score > 0.7 and efficiency_score > 0.6
@@ -1239,9 +1171,7 @@ class ActionResultAnalyzer:
     ) -> float:
         """효과성 평가"""
         # 실행 성공 여부
-        success_factor = (
-            1.0 if action_execution.status == ActionStatus.COMPLETED else 0.0
-        )
+        success_factor = 1.0 if action_execution.status == ActionStatus.COMPLETED else 0.0
 
         # 목표 달성도 (시뮬레이션)
         goal_achievement = 0.85 if success_factor > 0 else 0.0
@@ -1253,12 +1183,7 @@ class ActionResultAnalyzer:
         impact_measure = 0.8 if action_execution.progress == 100.0 else 0.5
 
         # 가중 평균
-        effectiveness = (
-            success_factor * 0.4
-            + goal_achievement * 0.3
-            + quality_score * 0.2
-            + impact_measure * 0.1
-        )
+        effectiveness = success_factor * 0.4 + goal_achievement * 0.3 + quality_score * 0.2 + impact_measure * 0.1
 
         return min(effectiveness, 1.0)
 
@@ -1271,23 +1196,17 @@ class ActionResultAnalyzer:
         time_efficiency = 1.0 / (1.0 + action_execution.actual_duration / 60.0)
 
         # 리소스 효율성 (시뮬레이션)
-        resource_efficiency = (
-            0.85 if action_execution.status == ActionStatus.COMPLETED else 0.5
-        )
+        resource_efficiency = 0.85 if action_execution.status == ActionStatus.COMPLETED else 0.5
 
         # 비용 효율성 (시뮬레이션)
         cost_efficiency = 0.9 if len(action_execution.errors) == 0 else 0.6
 
         # 가중 평균
-        efficiency = (
-            time_efficiency * 0.4 + resource_efficiency * 0.4 + cost_efficiency * 0.2
-        )
+        efficiency = time_efficiency * 0.4 + resource_efficiency * 0.4 + cost_efficiency * 0.2
 
         return min(efficiency, 1.0)
 
-    async def _extract_learning_points(
-        self, action_execution: ActionExecution
-    ) -> List[str]:
+    async def _extract_learning_points(self, action_execution: ActionExecution) -> List[str]:
         """학습 포인트 추출"""
         learning_points = []
 
@@ -1330,9 +1249,7 @@ class ActionResultAnalyzer:
 
         return suggestions
 
-    async def _suggest_next_actions(
-        self, action_execution: ActionExecution, effectiveness_score: float
-    ) -> List[str]:
+    async def _suggest_next_actions(self, action_execution: ActionExecution, effectiveness_score: float) -> List[str]:
         """다음 행동 제안"""
         next_actions = []
 
@@ -1372,7 +1289,7 @@ async def test_action_system():
         constraints={"time_limit": 300},
     )
 
-    print(f"생성된 행동 계획:")
+    print("생성된 행동 계획:")
     print(f"- 행동 ID: {action_plan.action_id}")
     print(f"- 행동 타입: {action_plan.action_type.value}")
     print(f"- 우선순위: {action_plan.priority.value}")
@@ -1384,7 +1301,7 @@ async def test_action_system():
     print("\n2. 행동 실행 테스트")
     action_execution = await action_system.execute_action(action_plan)
 
-    print(f"실행 결과:")
+    print("실행 결과:")
     print(f"- 상태: {action_execution.status.value}")
     print(f"- 진행률: {action_execution.progress:.1f}%")
     print(f"- 실제 소요시간: {action_execution.actual_duration:.1f}초")
@@ -1398,7 +1315,7 @@ async def test_action_system():
         action_execution, expected_outcome={"goal": "긴급 상황 해결", "quality": "높음"}
     )
 
-    print(f"분석 결과:")
+    print("분석 결과:")
     print(f"- 성공 여부: {action_result.success}")
     print(f"- 효과성 점수: {action_result.effectiveness_score:.3f}")
     print(f"- 효율성 점수: {action_result.efficiency_score:.3f}")
@@ -1410,7 +1327,7 @@ async def test_action_system():
     print("\n4. 행동 패턴 최적화 테스트")
     behavior_patterns = await action_system.optimize_behavior_patterns([action_result])
 
-    print(f"최적화된 패턴:")
+    print("최적화된 패턴:")
     for pattern in behavior_patterns:
         print(f"- 패턴 ID: {pattern.pattern_id}")
         print(f"- 패턴 타입: {pattern.pattern_type}")

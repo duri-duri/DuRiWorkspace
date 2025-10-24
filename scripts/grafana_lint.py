@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import glob
 import json
-import re
 import sys
 
 from jsonschema import ValidationError, validate

@@ -13,8 +13,8 @@ DuRi 의존성 그래프 시스템
 - 의존성 분석
 """
 
-from collections import defaultdict, deque
 import logging
+from collections import defaultdict, deque
 from typing import Dict, List, Set
 
 logger = logging.getLogger(__name__)
@@ -178,9 +178,7 @@ class DependencyGraph:
         return {
             "total_modules": total_modules,
             "total_dependencies": total_dependencies,
-            "average_dependencies": (
-                total_dependencies / total_modules if total_modules > 0 else 0
-            ),
+            "average_dependencies": (total_dependencies / total_modules if total_modules > 0 else 0),
             "in_degree_distribution": dict(in_degree_dist),
             "out_degree_distribution": dict(out_degree_dist),
             "has_cycle": self.has_cycle(),

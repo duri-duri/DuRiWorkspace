@@ -9,10 +9,8 @@ DuRi 추론 시스템 - 동적 추론 엔진
 - 복잡성 계산 및 데이터 유형 분석
 """
 
-from dataclasses import dataclass
-from datetime import datetime
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from ..data_structures import ReasoningContext, ReasoningType
 
@@ -34,9 +32,7 @@ class DynamicReasoningEngine:
         }
         self.logger.info("동적 추론 엔진 초기화 완료")
 
-    async def adapt_reasoning_approach(
-        self, context: ReasoningContext, input_data: Dict[str, Any]
-    ) -> ReasoningType:
+    async def adapt_reasoning_approach(self, context: ReasoningContext, input_data: Dict[str, Any]) -> ReasoningType:
         """상황에 따라 추론 방식 자동 조정"""
         try:
             # 컨텍스트별 추론 방식 매핑
@@ -76,14 +72,10 @@ class DynamicReasoningEngine:
             }
 
             # 기본 추론 방식 선택
-            base_reasoning_types = context_mapping.get(
-                context, [ReasoningType.INTEGRATED]
-            )
+            base_reasoning_types = context_mapping.get(context, [ReasoningType.INTEGRATED])
 
             # 입력 데이터 분석을 통한 적응
-            adapted_type = self._analyze_input_for_adaptation(
-                input_data, base_reasoning_types
-            )
+            adapted_type = self._analyze_input_for_adaptation(input_data, base_reasoning_types)
 
             return adapted_type
         except Exception as e:
@@ -122,11 +114,7 @@ class DynamicReasoningEngine:
             complexity_factors = {
                 "data_size": len(str(input_data)) / 1000,
                 "nested_levels": self._count_nested_levels(input_data),
-                "diversity": (
-                    len(set(str(v) for v in input_data.values())) / len(input_data)
-                    if input_data
-                    else 0
-                ),
+                "diversity": (len(set(str(v) for v in input_data.values())) / len(input_data) if input_data else 0),
             }
 
             return sum(complexity_factors.values()) / len(complexity_factors)
@@ -139,21 +127,13 @@ class DynamicReasoningEngine:
         try:
             if isinstance(data, dict):
                 return (
-                    max(
-                        self._count_nested_levels(v, current_level + 1)
-                        for v in data.values()
-                    )
+                    max(self._count_nested_levels(v, current_level + 1) for v in data.values())
                     if data
                     else current_level
                 )
             elif isinstance(data, list):
                 return (
-                    max(
-                        self._count_nested_levels(item, current_level + 1)
-                        for item in data
-                    )
-                    if data
-                    else current_level
+                    max(self._count_nested_levels(item, current_level + 1) for item in data) if data else current_level
                 )
             else:
                 return current_level
@@ -193,15 +173,9 @@ class DynamicReasoningEngine:
 
             data_str = str(input_data).lower()
 
-            emotional_count = sum(
-                1 for keyword in emotional_keywords if keyword in data_str
-            )
-            creative_count = sum(
-                1 for keyword in creative_keywords if keyword in data_str
-            )
-            logical_count = sum(
-                1 for keyword in logical_keywords if keyword in data_str
-            )
+            emotional_count = sum(1 for keyword in emotional_keywords if keyword in data_str)
+            creative_count = sum(1 for keyword in creative_keywords if keyword in data_str)
+            logical_count = sum(1 for keyword in logical_keywords if keyword in data_str)
 
             if emotional_count > max(creative_count, logical_count):
                 return "emotional"

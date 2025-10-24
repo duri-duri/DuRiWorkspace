@@ -15,9 +15,7 @@ class UnifiedLearningEvolutionService:
         self.evolve = evolve
         # 기존 통합 학습 시스템 활용
         try:
-            from DuRiCore.unified_learning_system import (
-                UnifiedLearningSystem as ExistingSystem,
-            )
+            from DuRiCore.unified_learning_system import UnifiedLearningSystem as ExistingSystem
 
             self.existing_system = ExistingSystem()
         except ImportError:

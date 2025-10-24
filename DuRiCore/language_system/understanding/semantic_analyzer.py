@@ -9,10 +9,10 @@ DuRi 언어 이해 시스템 - 의미 분석기
 - 학습 통찰 추출
 """
 
-from collections import Counter
-from dataclasses import dataclass
 import logging
 import re
+from collections import Counter
+from dataclasses import dataclass
 from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
@@ -35,9 +35,7 @@ class SemanticAnalyzer:
         self.logger = logging.getLogger(__name__)
         self.logger.info("의미 분석기 초기화 완료")
 
-    async def analyze_semantics(
-        self, text: str, context: Dict[str, Any] = None
-    ) -> Dict[str, Any]:
+    async def analyze_semantics(self, text: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
         """의미 분석"""
         try:
             # 키워드 추출
@@ -65,9 +63,7 @@ class SemanticAnalyzer:
             # 기본 키워드 추출 (실제로는 더 정교한 NLP 기법 사용)
             words = text.split()
             word_freq = Counter(words)
-            keywords = [
-                word for word, freq in word_freq.most_common(5) if len(word) > 1
-            ]
+            keywords = [word for word, freq in word_freq.most_common(5) if len(word) > 1]
             return keywords
         except Exception as e:
             self.logger.error(f"키워드 추출 중 오류: {e}")
@@ -94,9 +90,7 @@ class SemanticAnalyzer:
             self.logger.error(f"핵심 개념 추출 중 오류: {e}")
             return []
 
-    def _extract_learning_insights(
-        self, text: str, context: Dict[str, Any] = None
-    ) -> List[str]:
+    def _extract_learning_insights(self, text: str, context: Dict[str, Any] = None) -> List[str]:
         """학습 통찰 추출"""
         try:
             insights = []

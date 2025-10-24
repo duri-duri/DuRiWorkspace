@@ -3,18 +3,16 @@
 DuRi 판단 추적 시스템 - 판단과 판단 이유를 기록하여 학습 및 자기반성에 활용
 """
 
-from datetime import datetime
 import json
 import logging
 import os
-from typing import Any, Dict, List, Optional
+from datetime import datetime
+from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)
 
 
-def record_judgment_trace(
-    context: Dict[str, Any], judgment: Dict[str, Any], reason: Optional[str] = None
-) -> None:
+def record_judgment_trace(context: Dict[str, Any], judgment: Dict[str, Any], reason: Optional[str] = None) -> None:
     """
     DuRi의 판단 흐름과 그 이유를 기록하여 학습 및 자기반성에 활용
 

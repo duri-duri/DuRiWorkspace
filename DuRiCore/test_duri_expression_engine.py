@@ -8,16 +8,14 @@ DuRiExpressionEngine 테스트
 
 import asyncio
 import logging
-from pathlib import Path
 import sys
+from pathlib import Path
 
 # 현재 디렉토리를 sys.path에 추가
 sys.path.append(str(Path(__file__).parent))
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -42,11 +40,9 @@ async def test_judgment_expression():
         }
 
         # 표현 생성
-        result = await engine.express_judgment(
-            judgment_data=judgment_data, style=ExpressionStyle.CASUAL
-        )
+        result = await engine.express_judgment(judgment_data=judgment_data, style=ExpressionStyle.CASUAL)
 
-        logger.info(f"✅ 판단 결과 표현 생성 완료:")
+        logger.info("✅ 판단 결과 표현 생성 완료:")
         logger.info(f"   - 표현: {result.expression_text}")
         logger.info(f"   - 신뢰도: {result.confidence}")
         logger.info(f"   - 스타일: {result.style.value}")
@@ -94,11 +90,9 @@ async def test_thought_flow_expression():
         }
 
         # 표현 생성
-        result = await engine.express_judgment(
-            thought_flow=thought_flow, style=ExpressionStyle.EMPATHETIC
-        )
+        result = await engine.express_judgment(thought_flow=thought_flow, style=ExpressionStyle.EMPATHETIC)
 
-        logger.info(f"✅ 사고 흐름 표현 생성 완료:")
+        logger.info("✅ 사고 흐름 표현 생성 완료:")
         logger.info(f"   - 표현: {result.expression_text}")
         logger.info(f"   - 신뢰도: {result.confidence}")
         logger.info(f"   - 스타일: {result.style.value}")
@@ -134,11 +128,9 @@ async def test_decision_tree_expression():
         }
 
         # 표현 생성
-        result = await engine.express_judgment(
-            decision_tree=decision_tree, style=ExpressionStyle.FORMAL
-        )
+        result = await engine.express_judgment(decision_tree=decision_tree, style=ExpressionStyle.FORMAL)
 
-        logger.info(f"✅ 결정 트리 표현 생성 완료:")
+        logger.info("✅ 결정 트리 표현 생성 완료:")
         logger.info(f"   - 표현: {result.expression_text}")
         logger.info(f"   - 신뢰도: {result.confidence}")
         logger.info(f"   - 스타일: {result.style.value}")
@@ -186,7 +178,7 @@ async def test_integrated_expression():
             style=ExpressionStyle.CASUAL,
         )
 
-        logger.info(f"✅ 통합 표현 생성 완료:")
+        logger.info("✅ 통합 표현 생성 완료:")
         logger.info(f"   - 표현: {result.expression_text}")
         logger.info(f"   - 신뢰도: {result.confidence}")
         logger.info(f"   - 스타일: {result.style.value}")
@@ -230,9 +222,7 @@ async def test_expression_styles():
 
         results = []
         for style in styles:
-            result = await engine.express_judgment(
-                judgment_data=judgment_data, style=style
-            )
+            result = await engine.express_judgment(judgment_data=judgment_data, style=style)
             results.append(result)
 
             logger.info(f"   - {style.value} 스타일: {result.expression_text}")
@@ -262,11 +252,9 @@ async def test_convenience_function():
         }
 
         # 편의 함수 사용
-        expression = await express_duri_judgment(
-            judgment_data=judgment_data, style="casual"
-        )
+        expression = await express_duri_judgment(judgment_data=judgment_data, style="casual")
 
-        logger.info(f"✅ 편의 함수 테스트 완료:")
+        logger.info("✅ 편의 함수 테스트 완료:")
         logger.info(f"   - 표현: {expression}")
 
         return "DuRi:" in expression

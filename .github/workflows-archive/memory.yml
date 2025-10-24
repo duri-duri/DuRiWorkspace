@@ -26,7 +26,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Import Core
-        env: { DURI_TOKEN: ${{ secrets.DURI_TOKEN }}, DURI_ENDPOINT: ${{ secrets.DURI_ENDPOINT }} }
+        env:
+          DURI_TOKEN: ${{ secrets.DURI_TOKEN }}
+          DURI_ENDPOINT: ${{ secrets.DURI_ENDPOINT }}
         run: |
           test -s core.bundle.tar.zst && test -s MERKLE.txt && test -s HASH.txt
           curl -fsS -H "Authorization: Bearer $DURI_TOKEN" \

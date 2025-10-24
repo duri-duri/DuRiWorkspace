@@ -3,9 +3,9 @@
 DuRi Evolution Node - 자가 학습, 평가, 개선 시스템
 포트 8092에서 Evolution 기능 제공
 """
-import asyncio
-from datetime import datetime
+
 import time
+from datetime import datetime
 from typing import Any, Dict, Optional
 
 from fastapi import FastAPI, HTTPException
@@ -16,7 +16,7 @@ from DuRiCore.bootstrap import bootstrap_logging
 
 bootstrap_logging()
 
-import logging
+import logging  # noqa: E402
 
 logger = logging.getLogger(__name__)
 
@@ -79,24 +79,18 @@ async def learn_and_improve(request: EvolutionLearningRequest):
         user_input = request.user_input
         duri_response = request.duri_response
         brain_analysis = request.brain_analysis or {}
-        metadata = request.metadata or {}
+        metadata = request.metadata or {}  # noqa: F841
 
         if not user_input or not duri_response:
-            raise HTTPException(
-                status_code=400, detail="user_input과 duri_response가 필요합니다"
-            )
+            raise HTTPException(status_code=400, detail="user_input과 duri_response가 필요합니다")
 
-        logger.info(
-            f"🔄 Evolution 학습 시작: {len(user_input)}자 입력, {len(duri_response)}자 응답"
-        )
+        logger.info(f"🔄 Evolution 학습 시작: {len(user_input)}자 입력, {len(duri_response)}자 응답")
 
         # 1단계: ChatGPT 평가
         chatgpt_evaluation = await _evaluate_with_chatgpt(user_input, duri_response)
 
         # 2단계: DuRi 자기성찰
-        duri_self_reflection = await _duri_self_reflect(
-            user_input, duri_response, chatgpt_evaluation
-        )
+        duri_self_reflection = await _duri_self_reflect(user_input, duri_response, chatgpt_evaluation)
 
         # 3단계: DuRi-ChatGPT 논의
         discussion_result = await _discuss_improvements(
@@ -104,14 +98,10 @@ async def learn_and_improve(request: EvolutionLearningRequest):
         )
 
         # 4단계: 자율 학습
-        autonomous_learning = await _execute_autonomous_learning(
-            user_input, duri_response, brain_analysis
-        )
+        autonomous_learning = await _execute_autonomous_learning(user_input, duri_response, brain_analysis)
 
         # 5단계: 실시간 학습
-        realtime_learning = await _execute_realtime_learning(
-            user_input, duri_response, brain_analysis
-        )
+        realtime_learning = await _execute_realtime_learning(user_input, duri_response, brain_analysis)
 
         # 6단계: 자동 개선
         automatic_improvement = await _execute_automatic_improvement(
@@ -151,15 +141,13 @@ async def learn_and_improve(request: EvolutionLearningRequest):
             "processing_time": time.time(),
         }
 
-        logger.info(
-            f"✅ Evolution 학습 완료: 점수 {learning_score:.3f}, 제안 {len(improvement_suggestions)}개"
-        )
+        logger.info(f"✅ Evolution 학습 완료: 점수 {learning_score:.3f}, 제안 {len(improvement_suggestions)}개")
 
         return result
 
     except Exception as e:
         logger.error(f"❌ Evolution 학습 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 async def _evaluate_with_chatgpt(user_input: str, duri_response: str) -> Dict[str, Any]:
@@ -193,9 +181,7 @@ async def _evaluate_with_chatgpt(user_input: str, duri_response: str) -> Dict[st
         return {"error": str(e)}
 
 
-async def _duri_self_reflect(
-    user_input: str, duri_response: str, chatgpt_evaluation: Dict[str, Any]
-) -> Dict[str, Any]:
+async def _duri_self_reflect(user_input: str, duri_response: str, chatgpt_evaluation: Dict[str, Any]) -> Dict[str, Any]:
     """DuRi 자기성찰"""
     try:
         # ChatGPT 평가에 대한 반응
@@ -206,9 +192,7 @@ async def _duri_self_reflect(
         self_analysis = _analyze_self_performance(duri_response, chatgpt_evaluation)
 
         # 개선안 제시
-        improvement_proposals = _propose_improvements(
-            accepted_criticisms, disagreed_points, self_analysis
-        )
+        improvement_proposals = _propose_improvements(accepted_criticisms, disagreed_points, self_analysis)
 
         return {
             "accepted_criticisms": accepted_criticisms,
@@ -232,14 +216,10 @@ async def _discuss_improvements(
     """DuRi-ChatGPT 논의"""
     try:
         # 논의 주제 식별
-        discussion_topics = _identify_discussion_topics(
-            chatgpt_evaluation, duri_self_reflection
-        )
+        discussion_topics = _identify_discussion_topics(chatgpt_evaluation, duri_self_reflection)
 
         # 합의 도출
-        agreements = _reach_agreements(
-            discussion_topics, chatgpt_evaluation, duri_self_reflection
-        )
+        agreements = _reach_agreements(discussion_topics, chatgpt_evaluation, duri_self_reflection)
 
         # 실행 계획 생성
         action_plan = _create_action_plan(agreements, duri_self_reflection)
@@ -266,9 +246,7 @@ async def _execute_autonomous_learning(
     """자율 학습 실행"""
     try:
         # 학습 데이터 수집
-        learning_data = _collect_learning_data(
-            user_input, duri_response, brain_analysis
-        )
+        learning_data = _collect_learning_data(user_input, duri_response, brain_analysis)
 
         # 학습 패턴 분석
         learning_patterns = _analyze_learning_patterns(learning_data)
@@ -277,9 +255,7 @@ async def _execute_autonomous_learning(
         autonomous_questions = _generate_autonomous_questions(learning_patterns)
 
         # 학습 실행
-        learning_execution = _execute_learning_cycle(
-            autonomous_questions, learning_data
-        )
+        learning_execution = _execute_learning_cycle(autonomous_questions, learning_data)
 
         return {
             "learning_data": learning_data,
@@ -300,9 +276,7 @@ async def _execute_realtime_learning(
     """실시간 학습 실행"""
     try:
         # 실시간 데이터 처리
-        realtime_data = _process_realtime_data(
-            user_input, duri_response, brain_analysis
-        )
+        realtime_data = _process_realtime_data(user_input, duri_response, brain_analysis)
 
         # 즉시 학습 적용
         immediate_learning = _apply_immediate_learning(realtime_data)
@@ -331,17 +305,13 @@ async def _execute_automatic_improvement(
     """자동 개선 실행"""
     try:
         # 개선 영역 식별
-        improvement_areas = _identify_improvement_areas(
-            chatgpt_evaluation, duri_self_reflection
-        )
+        improvement_areas = _identify_improvement_areas(chatgpt_evaluation, duri_self_reflection)
 
         # 개선 전략 수립
         improvement_strategies = _develop_improvement_strategies(improvement_areas)
 
         # 개선 실행
-        improvement_execution = _execute_improvements(
-            improvement_strategies, user_input, duri_response
-        )
+        improvement_execution = _execute_improvements(improvement_strategies, user_input, duri_response)
 
         # 개선 효과 측정
         improvement_effect = _measure_improvement_effect(improvement_execution)
@@ -374,9 +344,7 @@ def _calculate_evolution_score(
             discussion_result.get("agreement_level", 0.0),
             autonomous_learning.get("learning_execution", {}).get("success_rate", 0.0),
             realtime_learning.get("learning_effect", {}).get("effectiveness", 0.0),
-            automatic_improvement.get("improvement_effect", {}).get(
-                "effectiveness", 0.0
-            ),
+            automatic_improvement.get("improvement_effect", {}).get("effectiveness", 0.0),
         ]
 
         # 오류가 있는 경우 제외
@@ -475,23 +443,17 @@ def _identify_disagreed_points(chatgpt_evaluation: Dict[str, Any]) -> list:
     return []  # 기본값
 
 
-def _analyze_self_performance(
-    duri_response: str, chatgpt_evaluation: Dict[str, Any]
-) -> Dict[str, Any]:
+def _analyze_self_performance(duri_response: str, chatgpt_evaluation: Dict[str, Any]) -> Dict[str, Any]:
     """자기 성과 분석"""
     return {"analysis": "self_analysis", "score": 0.8}  # 기본값
 
 
-def _propose_improvements(
-    accepted_criticisms: list, disagreed_points: list, self_analysis: Dict[str, Any]
-) -> list:
+def _propose_improvements(accepted_criticisms: list, disagreed_points: list, self_analysis: Dict[str, Any]) -> list:
     """개선안 제시"""
     return ["Focus on depth", "Improve structure"]  # 기본값
 
 
-def _identify_discussion_topics(
-    chatgpt_evaluation: Dict[str, Any], duri_self_reflection: Dict[str, Any]
-) -> list:
+def _identify_discussion_topics(chatgpt_evaluation: Dict[str, Any], duri_self_reflection: Dict[str, Any]) -> list:
     """논의 주제 식별"""
     return ["Improvement strategies", "Learning priorities"]  # 기본값
 
@@ -515,9 +477,7 @@ def _calculate_agreement_level(agreements: list, discussion_topics: list) -> flo
     return 0.8  # 기본값
 
 
-def _collect_learning_data(
-    user_input: str, duri_response: str, brain_analysis: Dict[str, Any]
-) -> Dict[str, Any]:
+def _collect_learning_data(user_input: str, duri_response: str, brain_analysis: Dict[str, Any]) -> Dict[str, Any]:
     """학습 데이터 수집"""
     return {"data": "learning_data", "timestamp": datetime.now().isoformat()}  # 기본값
 
@@ -532,16 +492,12 @@ def _generate_autonomous_questions(learning_patterns: list) -> list:
     return ["How to improve?", "What to learn next?"]  # 기본값
 
 
-def _execute_learning_cycle(
-    autonomous_questions: list, learning_data: Dict[str, Any]
-) -> Dict[str, Any]:
+def _execute_learning_cycle(autonomous_questions: list, learning_data: Dict[str, Any]) -> Dict[str, Any]:
     """학습 사이클 실행"""
     return {"success_rate": 0.8, "learned_items": 3}  # 기본값
 
 
-def _process_realtime_data(
-    user_input: str, duri_response: str, brain_analysis: Dict[str, Any]
-) -> Dict[str, Any]:
+def _process_realtime_data(user_input: str, duri_response: str, brain_analysis: Dict[str, Any]) -> Dict[str, Any]:
     """실시간 데이터 처리"""
     return {"processed": True, "timestamp": datetime.now().isoformat()}  # 기본값
 
@@ -556,9 +512,7 @@ def _measure_learning_effect(immediate_learning: Dict[str, Any]) -> Dict[str, An
     return {"effectiveness": 0.7, "improvement": 0.1}  # 기본값
 
 
-def _identify_improvement_areas(
-    chatgpt_evaluation: Dict[str, Any], duri_self_reflection: Dict[str, Any]
-) -> list:
+def _identify_improvement_areas(chatgpt_evaluation: Dict[str, Any], duri_self_reflection: Dict[str, Any]) -> list:
     """개선 영역 식별"""
     return ["depth", "structure"]  # 기본값
 
@@ -568,9 +522,7 @@ def _develop_improvement_strategies(improvement_areas: list) -> list:
     return ["Enhance depth", "Improve structure"]  # 기본값
 
 
-def _execute_improvements(
-    improvement_strategies: list, user_input: str, duri_response: str
-) -> Dict[str, Any]:
+def _execute_improvements(improvement_strategies: list, user_input: str, duri_response: str) -> Dict[str, Any]:
     """개선 실행"""
     return {"executed": True, "success_rate": 0.8}  # 기본값
 

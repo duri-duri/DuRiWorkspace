@@ -1,6 +1,6 @@
-from collections import Counter
 import math
 import re
+from collections import Counter
 from typing import Any, Dict, List, Optional
 
 
@@ -109,9 +109,7 @@ def bleu_like(candidate: str, references: List[str], n: int = 4) -> float:
     for ref in references:
         ref_tokens = tokenize(ref)
         for i in range(1, n + 1):
-            ref_ngrams.extend(
-                [tuple(ref_tokens[j : j + i]) for j in range(len(ref_tokens) - i + 1)]
-            )
+            ref_ngrams.extend([tuple(ref_tokens[j : j + i]) for j in range(len(ref_tokens) - i + 1)])
 
     if not ref_ngrams:
         return 0.0
@@ -121,10 +119,7 @@ def bleu_like(candidate: str, references: List[str], n: int = 4) -> float:
     # 후보의 n-gram과 매칭
     precision_scores = []
     for i in range(1, n + 1):
-        candidate_ngrams = [
-            tuple(candidate_tokens[j : j + i])
-            for j in range(len(candidate_tokens) - i + 1)
-        ]
+        candidate_ngrams = [tuple(candidate_tokens[j : j + i]) for j in range(len(candidate_tokens) - i + 1)]
         if not candidate_ngrams:
             continue
 
@@ -147,9 +142,7 @@ def bleu_like(candidate: str, references: List[str], n: int = 4) -> float:
     if not non_zero_precisions:
         return 0.0
 
-    geometric_mean = math.exp(
-        sum(math.log(p) for p in non_zero_precisions) / len(non_zero_precisions)
-    )
+    geometric_mean = math.exp(sum(math.log(p) for p in non_zero_precisions) / len(non_zero_precisions))
 
     # Brevity penalty
     candidate_length = len(candidate_tokens)
@@ -170,9 +163,7 @@ def bleu_like(candidate: str, references: List[str], n: int = 4) -> float:
     return geometric_mean * brevity_penalty
 
 
-def composite(
-    scores: Dict[str, float], weights: Optional[Dict[str, float]] = None
-) -> float:
+def composite(scores: Dict[str, float], weights: Optional[Dict[str, float]] = None) -> float:
     """
     가중합으로 복합 점수 계산
 
@@ -249,9 +240,7 @@ def evaluate_candidates(
 
     results = []
     for i, candidate in enumerate(candidates):
-        eval_result = evaluate_text(
-            candidate, references, weights, detailed=True
-        )  # 항상 상세 점수 포함
+        eval_result = evaluate_text(candidate, references, weights, detailed=True)  # 항상 상세 점수 포함
         results.append(
             {
                 "index": i,

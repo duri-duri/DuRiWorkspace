@@ -94,9 +94,7 @@ def get_logger(name: str, component: Optional[str] = None) -> ContextAdapter:
     return adapter
 
 
-def get_logger_for_module(
-    module_name: str, component: Optional[str] = None
-) -> ContextAdapter:
+def get_logger_for_module(module_name: str, component: Optional[str] = None) -> ContextAdapter:
     """
     모듈 이름으로 로거를 생성합니다.
 

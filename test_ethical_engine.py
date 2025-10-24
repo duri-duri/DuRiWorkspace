@@ -4,14 +4,13 @@
 4개 윤리 모듈 통합 테스트
 """
 
-from datetime import datetime
 import os
 import sys
 
 # DuRiCore 모듈 임포트를 위한 경로 추가
 sys.path.append(os.path.join(os.path.dirname(__file__), "DuRiCore"))
 
-from DuRiCore.DuRiCore.modules.ethical_reasoning import EthicalReasoningEngine
+from DuRiCore.DuRiCore.modules.ethical_reasoning import EthicalReasoningEngine  # noqa: E402
 
 
 def test_ethical_engine():
@@ -22,7 +21,7 @@ def test_ethical_engine():
     # 테스트 케이스들
     test_cases = [
         {
-            "situation": "회사에서 비밀 정보를 알게 되었는데, 이 정보가 공개되면 회사에 큰 피해가 있을 것 같습니다. 하지만 이 정보를 숨기는 것이 윤리적으로 옳은지 의문이 듭니다.",
+            "situation": "회사에서 비밀 정보를 알게 되었는데, 이 정보가 공개되면 회사에 큰 피해가 있을 것 같습니다. 하지만 이 정보를 숨기는 것이 윤리적으로 옳은지 의문이 듭니다.",  # noqa: E501
             "context": {
                 "dilemma_description": "비밀 정보 공개 여부",
                 "complexity": "high",
@@ -31,7 +30,7 @@ def test_ethical_engine():
             },
         },
         {
-            "situation": "친구가 시험에서 부정행위를 했는데, 이를 고발해야 할지 망설이고 있습니다. 친구를 보호하고 싶지만, 공정성도 중요합니다.",
+            "situation": "친구가 시험에서 부정행위를 했는데, 이를 고발해야 할지 망설이고 있습니다. 친구를 보호하고 싶지만, 공정성도 중요합니다.",  # noqa: E501
             "context": {
                 "dilemma_description": "친구 부정행위 고발",
                 "complexity": "medium",
@@ -40,7 +39,7 @@ def test_ethical_engine():
             },
         },
         {
-            "situation": "환경을 위해 자동차 대신 대중교통을 이용하는 것이 좋지만, 시간이 오래 걸려서 불편합니다. 개인의 편의와 공공의 이익 사이에서 갈등합니다.",
+            "situation": "환경을 위해 자동차 대신 대중교통을 이용하는 것이 좋지만, 시간이 오래 걸려서 불편합니다. 개인의 편의와 공공의 이익 사이에서 갈등합니다.",  # noqa: E501
             "context": {
                 "dilemma_description": "개인 편의 vs 공공 이익",
                 "complexity": "medium",
@@ -49,7 +48,7 @@ def test_ethical_engine():
             },
         },
         {
-            "situation": "인공지능이 인간의 일자리를 대체할 것이라는 우려가 있습니다. 기술 발전의 이익과 사회적 비용 사이의 균형을 어떻게 맞춰야 할까요?",
+            "situation": "인공지능이 인간의 일자리를 대체할 것이라는 우려가 있습니다. 기술 발전의 이익과 사회적 비용 사이의 균형을 어떻게 맞춰야 할까요?",  # noqa: E501
             "context": {
                 "dilemma_description": "AI 발전과 일자리 문제",
                 "complexity": "high",
@@ -58,7 +57,7 @@ def test_ethical_engine():
             },
         },
         {
-            "situation": "가족의 생명을 구하기 위해 거짓말을 해야 하는 상황입니다. 진실의 가치와 생명의 가치 중 어느 것이 더 중요한가요?",
+            "situation": "가족의 생명을 구하기 위해 거짓말을 해야 하는 상황입니다. 진실의 가치와 생명의 가치 중 어느 것이 더 중요한가요?",  # noqa: E501
             "context": {
                 "dilemma_description": "진실 vs 생명",
                 "complexity": "high",
@@ -74,9 +73,7 @@ def test_ethical_engine():
         print(f"맥락: {test_case['context']}")
 
         # 윤리 분석 실행
-        result = ethical_engine.analyze_ethical_dilemma(
-            test_case["situation"], test_case["context"]
-        )
+        result = ethical_engine.analyze_ethical_dilemma(test_case["situation"], test_case["context"])
 
         print(f"윤리 딜레마: {result.ethical_dilemma}")
         print(f"윤리 점수: {result.ethical_score:.2f}")
@@ -91,7 +88,7 @@ def test_ethical_engine():
 
     # 윤리 통계 출력
     stats = ethical_engine.get_ethical_stats()
-    print(f"\n📊 윤리 통계:")
+    print("\n📊 윤리 통계:")
     print(f"  - 총 윤리 분석: {stats['total_ethical_analyses']}")
     print(f"  - 평균 윤리 점수: {stats['average_ethical_score']:.2f}")
     print(f"  - 가장 일반적인 원칙: {stats['most_common_principle']}")
@@ -142,9 +139,7 @@ def test_individual_systems():
     print("\n--- 사회적 지능 시스템 ---")
     social_intelligence = SocialIntelligenceService()
     social_result = social_intelligence.process_conversation(
-        {
-            "input": "친구들과 함께 협력하여 문제를 해결했습니다. 대화를 통해 서로를 이해할 수 있었습니다."
-        }
+        {"input": "친구들과 함께 협력하여 문제를 해결했습니다. 대화를 통해 서로를 이해할 수 있었습니다."}
     )
     print(f"사회적 점수: {social_result['social_score']:.2f}")
     print(f"상호작용 타입: {social_result['social_dynamics']['interaction_type']}")
@@ -162,17 +157,17 @@ def test_ethical_scenarios():
     scenarios = [
         {
             "name": "트롤리 딜레마",
-            "situation": "기차가 다섯 명의 사람을 향해 달려오고 있습니다. 레버를 당기면 기차가 다른 선로로 바뀌어 한 명만 죽게 됩니다. 레버를 당겨야 할까요?",
+            "situation": "기차가 다섯 명의 사람을 향해 달려오고 있습니다. 레버를 당기면 기차가 다른 선로로 바뀌어 한 명만 죽게 됩니다. 레버를 당겨야 할까요?",  # noqa: E501
             "context": {"complexity": "high", "stakeholders": 6, "novelty": "medium"},
         },
         {
             "name": "의료 윤리",
-            "situation": "환자가 생명을 구하기 위해 수술이 필요하지만, 수술 비용을 감당할 수 없습니다. 의사로서 어떻게 해야 할까요?",
+            "situation": "환자가 생명을 구하기 위해 수술이 필요하지만, 수술 비용을 감당할 수 없습니다. 의사로서 어떻게 해야 할까요?",  # noqa: E501
             "context": {"complexity": "high", "stakeholders": 4, "novelty": "medium"},
         },
         {
             "name": "기업 윤리",
-            "situation": "회사에서 환경 오염을 줄이기 위해 비용을 투자해야 하지만, 이로 인해 이익이 줄어들어 직원들을 해고해야 할 수도 있습니다.",
+            "situation": "회사에서 환경 오염을 줄이기 위해 비용을 투자해야 하지만, 이로 인해 이익이 줄어들어 직원들을 해고해야 할 수도 있습니다.",  # noqa: E501
             "context": {"complexity": "high", "stakeholders": 5, "novelty": "medium"},
         },
     ]
@@ -181,9 +176,7 @@ def test_ethical_scenarios():
         print(f"\n--- {scenario['name']} ---")
         print(f"상황: {scenario['situation']}")
 
-        result = ethical_engine.analyze_ethical_dilemma(
-            scenario["situation"], scenario["context"]
-        )
+        result = ethical_engine.analyze_ethical_dilemma(scenario["situation"], scenario["context"])
 
         print(f"윤리 점수: {result.ethical_score:.2f}")
         print(f"신뢰도: {result.confidence:.2f}")

@@ -18,7 +18,7 @@ from fastapi.middleware.cors import CORSMiddleware
 sys.path.append(os.path.join(os.path.dirname(__file__), "duri_modules"))
 
 # 모듈화된 시스템 import
-from duri_modules import (
+from duri_modules import (  # noqa: E402
     chatgpt_evaluator,
     conversation_store,
     dashboard_generator,
@@ -62,9 +62,7 @@ def track_performance(endpoint_name: str):
                 raise
             finally:
                 response_time = time.time() - start_time
-                performance_tracker.track_request(
-                    endpoint_name, response_time, success, error_message
-                )
+                performance_tracker.track_request(endpoint_name, response_time, success, error_message)
 
         return wrapper
 
@@ -101,14 +99,10 @@ async def chatgpt_evaluate_response(evaluation_request: Dict[str, Any]):
         user_question = evaluation_request.get("user_question", "")
 
         if not duri_response or not user_question:
-            raise HTTPException(
-                status_code=400, detail="duri_response와 user_question이 필요합니다"
-            )
+            raise HTTPException(status_code=400, detail="duri_response와 user_question이 필요합니다")
 
         # 모듈화된 평가 시스템 사용
-        evaluation_result = chatgpt_evaluator.evaluate_response(
-            duri_response, user_question
-        )
+        evaluation_result = chatgpt_evaluator.evaluate_response(duri_response, user_question)
 
         # 학습 메트릭 추적
         performance_tracker.track_learning_metric(
@@ -125,7 +119,7 @@ async def chatgpt_evaluate_response(evaluation_request: Dict[str, Any]):
 
     except Exception as e:
         print(f"❌ ChatGPT 평가 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 @app.post("/duri-self-reflect")
@@ -149,11 +143,7 @@ async def duri_self_reflect_endpoint(reflection_request: Dict[str, Any]):
         )
 
         # 학습 메트릭 추적
-        improvement_count = len(
-            reflection_result.get("improvement_proposal", {}).get(
-                "specific_improvements", []
-            )
-        )
+        improvement_count = len(reflection_result.get("improvement_proposal", {}).get("specific_improvements", []))
         performance_tracker.track_learning_metric(
             "improvement_suggestions",
             improvement_count,
@@ -168,7 +158,7 @@ async def duri_self_reflect_endpoint(reflection_request: Dict[str, Any]):
 
     except Exception as e:
         print(f"❌ DuRi 자기성찰 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 @app.post("/capture-conversation")
@@ -181,19 +171,13 @@ async def capture_conversation_endpoint(conversation_data: Dict[str, Any]):
         metadata = conversation_data.get("metadata", {})
 
         if not user_input or not duri_response:
-            raise HTTPException(
-                status_code=400, detail="user_input과 duri_response가 필요합니다"
-            )
+            raise HTTPException(status_code=400, detail="user_input과 duri_response가 필요합니다")
 
         # 대화 데이터 저장
-        conversation_id = conversation_store.store_conversation(
-            user_input, duri_response, metadata
-        )
+        conversation_id = conversation_store.store_conversation(user_input, duri_response, metadata)
 
         # 학습 메트릭 추적
-        learning_value = conversation_store._calculate_learning_value(
-            user_input, duri_response
-        )
+        learning_value = conversation_store._calculate_learning_value(user_input, duri_response)
         performance_tracker.track_learning_metric(
             "conversation_learning_value",
             learning_value,
@@ -207,19 +191,15 @@ async def capture_conversation_endpoint(conversation_data: Dict[str, Any]):
             print(f"🔄 자동 학습 루프 시작: {conversation_id}")
 
             # 1단계: ChatGPT 평가
-            evaluation_result = chatgpt_evaluator.evaluate_response(
-                duri_response, user_input
-            )
-            print(
-                f"   📊 ChatGPT 평가 완료: 총점 {evaluation_result.get('total_score', 0):.3f}"
-            )
+            evaluation_result = chatgpt_evaluator.evaluate_response(duri_response, user_input)
+            print(f"   📊 ChatGPT 평가 완료: 총점 {evaluation_result.get('total_score', 0):.3f}")
 
             # 2단계: DuRi 자기성찰
             reflection_result = duri_self_reflector.reflect_on_chatgpt_feedback(
                 evaluation_result, duri_response, user_input
             )
             print(
-                f"   🤔 DuRi 자기성찰 완료: {len(reflection_result.get('improvement_proposal', {}).get('specific_improvements', []))}개 개선안"
+                f"   🤔 DuRi 자기성찰 완료: {len(reflection_result.get('improvement_proposal', {}).get('specific_improvements', []))}개 개선안"  # noqa: E501
             )
 
             # 3단계: DuRi-ChatGPT 논의 (선택적)
@@ -228,9 +208,7 @@ async def capture_conversation_endpoint(conversation_data: Dict[str, Any]):
                 discussion_result = duri_chatgpt_discussion.initiate_discussion(
                     reflection_result.get("improvement_proposal", {}), evaluation_result
                 )
-                print(
-                    f"   📥 DuRi-ChatGPT 논의 완료: 합의 수준 {discussion_result.get('agreement_level', 0):.2f}"
-                )
+                print(f"   📥 DuRi-ChatGPT 논의 완료: 합의 수준 {discussion_result.get('agreement_level', 0):.2f}")
 
             # 4단계: 학습 결과 저장 및 메타 루프 준비
             learning_data = {
@@ -251,9 +229,7 @@ async def capture_conversation_endpoint(conversation_data: Dict[str, Any]):
                     "conversation_id": conversation_id,
                     "evaluation_score": evaluation_result.get("total_score", 0),
                     "improvement_count": len(
-                        reflection_result.get("improvement_proposal", {}).get(
-                            "specific_improvements", []
-                        )
+                        reflection_result.get("improvement_proposal", {}).get("specific_improvements", [])
                     ),
                 },
             )
@@ -266,9 +242,7 @@ async def capture_conversation_endpoint(conversation_data: Dict[str, Any]):
                 "learning_summary": {
                     "evaluation_score": evaluation_result.get("total_score", 0),
                     "improvement_suggestions": len(
-                        reflection_result.get("improvement_proposal", {}).get(
-                            "specific_improvements", []
-                        )
+                        reflection_result.get("improvement_proposal", {}).get("specific_improvements", [])
                     ),
                     "discussion_held": discussion_result is not None,
                     "cycle_completed": True,
@@ -285,7 +259,7 @@ async def capture_conversation_endpoint(conversation_data: Dict[str, Any]):
 
     except Exception as e:
         print(f"❌ 대화 저장 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 @app.get("/performance-summary")
@@ -300,7 +274,7 @@ async def get_performance_summary():
         }
     except Exception as e:
         print(f"❌ 성능 요약 조회 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 @app.get("/system-health")
@@ -315,7 +289,7 @@ async def get_system_health():
         }
     except Exception as e:
         print(f"❌ 시스템 건강도 조회 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 @app.get("/learning-statistics")
@@ -333,7 +307,7 @@ async def get_learning_statistics():
         }
     except Exception as e:
         print(f"❌ 학습 통계 조회 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 @app.post("/meta-evaluate-improvement")
@@ -380,7 +354,7 @@ async def meta_evaluate_improvement_endpoint(meta_request: Dict[str, Any]):
 
     except Exception as e:
         print(f"❌ 메타 평가 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 @app.get("/meta-learning-statistics")
@@ -396,7 +370,7 @@ async def get_meta_learning_statistics():
         }
     except Exception as e:
         print(f"❌ 메타 학습 통계 조회 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 @app.get("/dashboard")
@@ -409,9 +383,7 @@ async def get_dashboard():
         meta_stats = meta_loop_system.get_meta_learning_statistics()
 
         # 대시보드 생성
-        dashboard_path = dashboard_generator.generate_dashboard(
-            performance_summary, learning_stats, meta_stats
-        )
+        dashboard_path = dashboard_generator.generate_dashboard(performance_summary, learning_stats, meta_stats)
 
         return {
             "status": "success",
@@ -422,7 +394,7 @@ async def get_dashboard():
         }
     except Exception as e:
         print(f"❌ 대시보드 생성 오류: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))  # noqa: B904
 
 
 if __name__ == "__main__":

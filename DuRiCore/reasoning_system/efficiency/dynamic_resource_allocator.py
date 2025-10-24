@@ -6,19 +6,12 @@ DuRi 추론 시스템 - 동적 리소스 할당 모듈
 처리량과 품질에 따른 동적 리소스 할당 모듈입니다.
 """
 
-import asyncio
-from collections import Counter, defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-import hashlib
-import json
 import logging
-import re
 import time
-from typing import Any, Dict, List, Optional, Tuple, Union
-
-import numpy as np
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -73,9 +66,7 @@ class DynamicResourceAllocator:
 
         for resource_type in ResourceType:
             if resource_type.value in requirements:
-                allocation = await self._allocate_resource(
-                    resource_type, requirements, strategy
-                )
+                allocation = await self._allocate_resource(resource_type, requirements, strategy)
                 if allocation:
                     allocations.append(allocation)
 
@@ -94,12 +85,8 @@ class DynamicResourceAllocator:
         if max_available <= 0:
             return None
 
-        allocated_amount = await self._calculate_allocation(
-            required_amount, max_available, strategy
-        )
-        utilization_rate = (
-            allocated_amount / max_available if max_available > 0 else 0.0
-        )
+        allocated_amount = await self._calculate_allocation(required_amount, max_available, strategy)
+        utilization_rate = allocated_amount / max_available if max_available > 0 else 0.0
         priority = await self._determine_priority(resource_type, strategy)
 
         allocation = ResourceAllocation(
@@ -145,9 +132,7 @@ class DynamicResourceAllocator:
             # 적응적: 요구량과 가용량의 중간값
             return min(required, max_available * 0.8)
 
-    async def _determine_priority(
-        self, resource_type: ResourceType, strategy: OptimizationStrategy
-    ) -> int:
+    async def _determine_priority(self, resource_type: ResourceType, strategy: OptimizationStrategy) -> int:
         """우선순위 결정"""
         base_priorities = {
             ResourceType.CPU: 3,

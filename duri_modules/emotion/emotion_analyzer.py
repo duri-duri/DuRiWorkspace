@@ -4,9 +4,9 @@ DuRi 감정 인식 및 적응 모듈
 맥락 정보에서 감정을 추론하고, 반응에 감정적 뉘앙스를 추가
 """
 
-from datetime import datetime
 import re
-from typing import Any, Dict, List, Optional, Tuple
+from datetime import datetime
+from typing import Any, Dict, Optional
 
 
 class EmotionAnalyzer:
@@ -132,9 +132,7 @@ class EmotionAnalyzer:
             },
         }
 
-    def analyze_user_emotion(
-        self, text: str, context: Optional[Dict[str, Any]] = None
-    ) -> Dict[str, Any]:
+    def analyze_user_emotion(self, text: str, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """
         사용자 감정 분석
 
@@ -163,14 +161,10 @@ class EmotionAnalyzer:
         intensity = self._calculate_emotion_intensity(text, primary_emotion[0])
 
         # 6. 신뢰도 계산
-        confidence = self._calculate_emotion_confidence(
-            emotion_scores, structure_analysis
-        )
+        confidence = self._calculate_emotion_confidence(emotion_scores, structure_analysis)
 
         return {
-            "primary_emotion": (
-                primary_emotion[0] if primary_emotion[1] > 0 else "neutral"
-            ),
+            "primary_emotion": (primary_emotion[0] if primary_emotion[1] > 0 else "neutral"),
             "emotion_scores": emotion_scores,
             "intensity": intensity,
             "confidence": confidence,
@@ -211,13 +205,9 @@ class EmotionAnalyzer:
             "exclamation_count": len(re.findall(r"!+", text)),
             "question_count": len(re.findall(r"\?+", text)),
             "emphasis_count": len(re.findall(r"\*\*|__|~~", text)),
-            "urgency_indicators": len(
-                [word for word in self.emotion_indicators["urgency"] if word in text]
-            ),
+            "urgency_indicators": len([word for word in self.emotion_indicators["urgency"] if word in text]),
             "text_length": len(text),
-            "sentence_count": len(text.split("."))
-            + len(text.split("!"))
-            + len(text.split("?")),
+            "sentence_count": len(text.split(".")) + len(text.split("!")) + len(text.split("?")),
         }
 
         # 구조적 감정 지표
@@ -238,9 +228,7 @@ class EmotionAnalyzer:
 
         return analysis
 
-    def _adjust_for_context(
-        self, emotion_scores: Dict[str, float], context: Dict[str, Any]
-    ) -> Dict[str, float]:
+    def _adjust_for_context(self, emotion_scores: Dict[str, float], context: Dict[str, Any]) -> Dict[str, float]:
         """맥락 정보에 따른 감정 점수 조정"""
         adjusted_scores = emotion_scores.copy()
 
@@ -293,15 +281,10 @@ class EmotionAnalyzer:
 
         # 강도 키워드 확인
         intensity_keywords = self.emotion_keywords[primary_emotion]["intensity"]
-        intensity_count = sum(
-            len(re.findall(keyword, text, re.IGNORECASE))
-            for keyword in intensity_keywords
-        )
+        intensity_count = sum(len(re.findall(keyword, text, re.IGNORECASE)) for keyword in intensity_keywords)
 
         # 최종 강도 계산
-        final_intensity = (
-            base_intensity + (intensity_count * 0.1) + (text_length_factor * 0.2)
-        )
+        final_intensity = base_intensity + (intensity_count * 0.1) + (text_length_factor * 0.2)
 
         return min(final_intensity, 1.0)
 
@@ -364,9 +347,7 @@ class EmotionAnalyzer:
             "timestamp": datetime.now().isoformat(),
         }
 
-    def _adjust_response_for_context(
-        self, template: Dict[str, Any], context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _adjust_response_for_context(self, template: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
         """맥락에 따른 응답 조정"""
         adjusted_template = template.copy()
 

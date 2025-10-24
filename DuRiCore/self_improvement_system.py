@@ -5,20 +5,15 @@ DuRiCore Phase 5.5.3 - 자기 개선 시스템
 """
 
 import asyncio
-from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
-from enum import Enum
-import json
 import logging
-import math
-import random
 import time
-from typing import Any, Dict, List, Optional, Tuple
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -94,29 +89,19 @@ class SelfImprovementSystem:
             start_time = time.time()
 
             # 1. 현재 성능 분석
-            performance_analysis = await self.performance_tracker.analyze_performance(
-                current_performance
-            )
+            performance_analysis = await self.performance_tracker.analyze_performance(current_performance)
 
             # 2. 개선 영역 식별
-            improvement_areas = await self._identify_improvement_areas(
-                performance_analysis, target_metrics
-            )
+            improvement_areas = await self._identify_improvement_areas(performance_analysis, target_metrics)
 
             # 3. 개선 전략 수립
-            improvement_strategy = await self.improvement_planner.create_strategy(
-                improvement_areas
-            )
+            improvement_strategy = await self.improvement_planner.create_strategy(improvement_areas)
 
             # 4. 최적화 실행
-            optimization_result = await self.optimization_engine.optimize(
-                current_performance, improvement_strategy
-            )
+            optimization_result = await self.optimization_engine.optimize(current_performance, improvement_strategy)
 
             # 5. 개선 결과 평가
-            improvement_score = self._calculate_improvement_score(
-                performance_analysis, optimization_result
-            )
+            improvement_score = self._calculate_improvement_score(performance_analysis, optimization_result)
 
             # 6. 학습 점수 계산
             learning_points = await self.learning_analyzer.extract_learning_points(
@@ -124,17 +109,11 @@ class SelfImprovementSystem:
             )
 
             # 7. 다음 개선 계획 수립
-            next_improvements = await self._plan_next_improvements(
-                improvement_score, optimization_result
-            )
+            next_improvements = await self._plan_next_improvements(improvement_score, optimization_result)
 
             result = ImprovementResult(
-                improvement_type=improvement_strategy.get(
-                    "type", ImprovementType.PERFORMANCE
-                ),
-                priority=improvement_strategy.get(
-                    "priority", ImprovementPriority.MEDIUM
-                ),
+                improvement_type=improvement_strategy.get("type", ImprovementType.PERFORMANCE),
+                priority=improvement_strategy.get("priority", ImprovementPriority.MEDIUM),
                 improvement_score=improvement_score,
                 before_metrics=performance_analysis.get("metrics", {}),
                 after_metrics=optimization_result.get("metrics", {}),
@@ -288,9 +267,7 @@ class SelfImprovementSystem:
             logger.error(f"신뢰도 향상 계산 실패: {e}")
             return 0.0
 
-    async def _plan_next_improvements(
-        self, improvement_score: float, optimization_result: Dict[str, Any]
-    ) -> List[str]:
+    async def _plan_next_improvements(self, improvement_score: float, optimization_result: Dict[str, Any]) -> List[str]:
         """다음 개선 계획 수립"""
         try:
             next_improvements = []
@@ -315,9 +292,7 @@ class SelfImprovementSystem:
 
         except Exception as e:
             logger.error(f"다음 개선 계획 수립 실패: {e}")
-            return self._generate_dynamic_improvement_plan(
-                improvement_score, optimization_result
-            )
+            return self._generate_dynamic_improvement_plan(improvement_score, optimization_result)
 
     def _generate_dynamic_improvement_plan(
         self, improvement_score: float, optimization_result: Dict[str, Any]
@@ -328,13 +303,9 @@ class SelfImprovementSystem:
 
             # 개선 점수 기반 계획
             if improvement_score > 0.8:
-                improvements.extend(
-                    ["고급 최적화 전략", "혁신적 개선 방법", "선도적 기술 도입"]
-                )
+                improvements.extend(["고급 최적화 전략", "혁신적 개선 방법", "선도적 기술 도입"])
             elif improvement_score > 0.6:
-                improvements.extend(
-                    ["체계적 개선 프로세스", "단계적 최적화", "지속적 개선 체계"]
-                )
+                improvements.extend(["체계적 개선 프로세스", "단계적 최적화", "지속적 개선 체계"])
             elif improvement_score > 0.4:
                 improvements.extend(["기본 개선 강화", "핵심 영역 집중", "안정적 성장"])
             else:
@@ -366,9 +337,7 @@ class SelfImprovementSystem:
             # 학습 포인트 기반 계획
             learning_points = optimization_result.get("learning_points", [])
             if learning_points:
-                improvements.extend(
-                    ["학습 내용 적용", "경험 기반 개선", "지식 통합 활용"]
-                )
+                improvements.extend(["학습 내용 적용", "경험 기반 개선", "지식 통합 활용"])
 
             # 다음 단계 기반 계획
             next_steps = optimization_result.get("next_steps", [])
@@ -383,11 +352,7 @@ class SelfImprovementSystem:
                     elif "optimization" in step:
                         improvements.append("최적화 심화")
 
-            return (
-                improvements
-                if improvements
-                else ["지속적 개선", "성과 향상", "발전 추구"]
-            )
+            return improvements if improvements else ["지속적 개선", "성과 향상", "발전 추구"]
 
         except Exception as e:
             logger.error(f"동적 개선 계획 생성 중 오류: {e}")
@@ -404,11 +369,7 @@ class SelfImprovementSystem:
             "status": "active",
             "improvement_count": len(self.improvement_history),
             "average_improvement_score": self._calculate_average_improvement_score(),
-            "last_improvement": (
-                self.improvement_history[-1].created_at
-                if self.improvement_history
-                else None
-            ),
+            "last_improvement": (self.improvement_history[-1].created_at if self.improvement_history else None),
         }
 
     def _calculate_average_improvement_score(self) -> float:
@@ -423,9 +384,7 @@ class SelfImprovementSystem:
 class PerformanceTracker:
     """성능 추적기"""
 
-    async def analyze_performance(
-        self, current_performance: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def analyze_performance(self, current_performance: Dict[str, Any]) -> Dict[str, Any]:
         """성능 분석"""
         try:
             analysis = {
@@ -499,9 +458,7 @@ class OptimizationEngine:
     ) -> Dict[str, Any]:
         """최적화 실행"""
         try:
-            optimization_type = improvement_strategy.get(
-                "type", ImprovementType.PERFORMANCE
-            )
+            optimization_type = improvement_strategy.get("type", ImprovementType.PERFORMANCE)
 
             # 최적화 실행
             if optimization_type == ImprovementType.PERFORMANCE:
@@ -525,20 +482,14 @@ class OptimizationEngine:
                 "remaining_areas": [],
             }
 
-    async def _optimize_performance(
-        self, current_performance: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _optimize_performance(self, current_performance: Dict[str, Any]) -> Dict[str, Any]:
         """성능 최적화"""
         try:
             # 응답 시간 개선
-            improved_response_time = max(
-                current_performance.get("response_time", 0.5) * 0.8, 0.2
-            )
+            improved_response_time = max(current_performance.get("response_time", 0.5) * 0.8, 0.2)
 
             # 효율성 개선
-            improved_efficiency = min(
-                current_performance.get("efficiency", 0.6) * 1.2, 0.95
-            )
+            improved_efficiency = min(current_performance.get("efficiency", 0.6) * 1.2, 0.95)
 
             changes = [
                 "응답 시간 최적화 적용",
@@ -566,20 +517,14 @@ class OptimizationEngine:
                 "remaining_areas": [],
             }
 
-    async def _optimize_efficiency(
-        self, current_performance: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _optimize_efficiency(self, current_performance: Dict[str, Any]) -> Dict[str, Any]:
         """효율성 최적화"""
         try:
             # 효율성 개선
-            improved_efficiency = min(
-                current_performance.get("efficiency", 0.6) * 1.3, 0.9
-            )
+            improved_efficiency = min(current_performance.get("efficiency", 0.6) * 1.3, 0.9)
 
             # 응답 시간도 함께 개선
-            improved_response_time = max(
-                current_performance.get("response_time", 0.5) * 0.9, 0.3
-            )
+            improved_response_time = max(current_performance.get("response_time", 0.5) * 0.9, 0.3)
 
             changes = ["알고리즘 효율성 개선", "자원 사용 최적화", "병렬 처리 적용"]
 
@@ -603,20 +548,14 @@ class OptimizationEngine:
                 "remaining_areas": [],
             }
 
-    async def _optimize_accuracy(
-        self, current_performance: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _optimize_accuracy(self, current_performance: Dict[str, Any]) -> Dict[str, Any]:
         """정확도 최적화"""
         try:
             # 정확도 개선
-            improved_accuracy = min(
-                current_performance.get("accuracy", 0.7) * 1.15, 0.95
-            )
+            improved_accuracy = min(current_performance.get("accuracy", 0.7) * 1.15, 0.95)
 
             # 신뢰성도 함께 개선
-            improved_reliability = min(
-                current_performance.get("reliability", 0.8) * 1.1, 0.95
-            )
+            improved_reliability = min(current_performance.get("reliability", 0.8) * 1.1, 0.95)
 
             changes = [
                 "정확도 검증 메커니즘 강화",
@@ -644,15 +583,11 @@ class OptimizationEngine:
                 "remaining_areas": [],
             }
 
-    async def _optimize_reliability(
-        self, current_performance: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _optimize_reliability(self, current_performance: Dict[str, Any]) -> Dict[str, Any]:
         """신뢰성 최적화"""
         try:
             # 신뢰성 개선
-            improved_reliability = min(
-                current_performance.get("reliability", 0.8) * 1.2, 0.98
-            )
+            improved_reliability = min(current_performance.get("reliability", 0.8) * 1.2, 0.98)
 
             # 정확도도 함께 개선
             improved_accuracy = min(current_performance.get("accuracy", 0.7) * 1.1, 0.9)
@@ -679,9 +614,7 @@ class OptimizationEngine:
                 "remaining_areas": [],
             }
 
-    async def _optimize_general(
-        self, current_performance: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _optimize_general(self, current_performance: Dict[str, Any]) -> Dict[str, Any]:
         """일반 최적화"""
         try:
             # 모든 지표 개선
@@ -741,9 +674,7 @@ class LearningAnalyzer:
 
         except Exception as e:
             logger.error(f"학습 점수 추출 실패: {e}")
-            return self._generate_dynamic_learning_points(
-                performance_analysis, optimization_result
-            )
+            return self._generate_dynamic_learning_points(performance_analysis, optimization_result)
 
     def _generate_dynamic_learning_points(
         self, performance_analysis: Dict[str, Any], optimization_result: Dict[str, Any]
@@ -819,15 +750,9 @@ class LearningAnalyzer:
             # 변화 사항 기반 학습
             changes = optimization_result.get("changes", [])
             if changes:
-                learning_points.extend(
-                    ["최적화 기법 학습", "성능 개선 방법론 습득", "변화 관리 기법"]
-                )
+                learning_points.extend(["최적화 기법 학습", "성능 개선 방법론 습득", "변화 관리 기법"])
 
-            return (
-                learning_points
-                if learning_points
-                else ["지속적 학습", "개선 기법 습득", "발전 추구"]
-            )
+            return learning_points if learning_points else ["지속적 학습", "개선 기법 습득", "발전 추구"]
 
         except Exception as e:
             logger.error(f"동적 학습 점수 생성 중 오류: {e}")
@@ -837,9 +762,7 @@ class LearningAnalyzer:
 class ImprovementPlanner:
     """개선 계획 수립기"""
 
-    async def create_strategy(
-        self, improvement_areas: List[Dict[str, Any]]
-    ) -> Dict[str, Any]:
+    async def create_strategy(self, improvement_areas: List[Dict[str, Any]]) -> Dict[str, Any]:
         """개선 전략 수립"""
         try:
             if not improvement_areas:
@@ -851,9 +774,7 @@ class ImprovementPlanner:
 
             # 우선순위가 높은 영역 선택
             high_priority_areas = [
-                area
-                for area in improvement_areas
-                if area.get("priority") == ImprovementPriority.HIGH
+                area for area in improvement_areas if area.get("priority") == ImprovementPriority.HIGH
             ]
 
             if high_priority_areas:
@@ -895,9 +816,7 @@ async def main():
     }
 
     # 자기 개선 실행
-    improvement_result = await self_improvement_system.analyze_and_improve(
-        test_performance
-    )
+    improvement_result = await self_improvement_system.analyze_and_improve(test_performance)
 
     # 결과 출력
     print("\n=== 자기 개선 시스템 테스트 결과 ===")

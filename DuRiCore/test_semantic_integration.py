@@ -5,11 +5,11 @@ DuRiCore Phase 6.2.6 - 시맨틱 지식 연결망 통합 테스트
 """
 
 import asyncio
-from datetime import datetime
 import json
 import logging
 import time
-from typing import Any, Dict, List
+from datetime import datetime
+from typing import Any, Dict
 
 from enhanced_memory_system import EnhancedMemorySystem
 from integrated_system_manager import IntegratedSystemManager
@@ -18,9 +18,7 @@ from integrated_system_manager import IntegratedSystemManager
 from semantic_knowledge_graph import ConceptType, InferenceType, SemanticKnowledgeGraph
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -97,7 +95,7 @@ class SemanticIntegrationTest:
         }
 
         # 결과 출력
-        print(f"\n=== 시맨틱 지식 연결망 통합 테스트 결과 ===")
+        print("\n=== 시맨틱 지식 연결망 통합 테스트 결과 ===")
         print(f"총 테스트 수: {total_tests}")
         print(f"성공한 테스트: {successful_tests}")
         print(f"실패한 테스트: {total_tests - successful_tests}")
@@ -105,28 +103,22 @@ class SemanticIntegrationTest:
         print(f"총 소요 시간: {total_duration:.3f}초")
 
         if failed_tests := [r for r in self.test_results if not r["success"]]:
-            print(f"\n실패한 테스트들:")
+            print("\n실패한 테스트들:")
             for result in failed_tests:
-                print(
-                    f"  - {result['test_name']}: {result.get('error', '알 수 없는 오류')}"
-                )
+                print(f"  - {result['test_name']}: {result.get('error', '알 수 없는 오류')}")
 
         # 결과를 파일로 저장
         with open("semantic_integration_test_results.json", "w", encoding="utf-8") as f:
             json.dump(summary, f, ensure_ascii=False, indent=2)
 
-        logger.info(
-            "테스트 결과가 semantic_integration_test_results.json에 저장되었습니다."
-        )
+        logger.info("테스트 결과가 semantic_integration_test_results.json에 저장되었습니다.")
         return summary
 
     async def test_semantic_basic_functionality(self) -> bool:
         """시맨틱 기본 기능 테스트"""
         try:
             # 기본 개념 추가
-            concept_id = await self.semantic_graph.add_concept(
-                "테스트 개념", ConceptType.ENTITY, "테스트용 개념"
-            )
+            concept_id = await self.semantic_graph.add_concept("테스트 개념", ConceptType.ENTITY, "테스트용 개념")
 
             if not concept_id:
                 return False
@@ -166,9 +158,7 @@ class SemanticIntegrationTest:
 
             concept_ids = []
             for name, concept_type, description in concepts:
-                concept_id = await self.semantic_graph.add_concept(
-                    name, concept_type, description
-                )
+                concept_id = await self.semantic_graph.add_concept(name, concept_type, description)
                 if concept_id:
                     concept_ids.append(concept_id)
 
@@ -176,9 +166,7 @@ class SemanticIntegrationTest:
                 return False
 
             # 개념 유사도 분석
-            similarity = await self.semantic_graph.analyze_semantic_similarity(
-                "사람", "동물"
-            )
+            similarity = await self.semantic_graph.analyze_semantic_similarity("사람", "동물")
 
             if similarity < 0.0 or similarity > 1.0:
                 return False
@@ -203,9 +191,7 @@ class SemanticIntegrationTest:
 
             edge_ids = []
             for source, target, inference_type, confidence in inferences:
-                edge_id = await self.semantic_graph.add_inference(
-                    source, target, inference_type, confidence
-                )
+                edge_id = await self.semantic_graph.add_inference(source, target, inference_type, confidence)
                 if edge_id:
                     edge_ids.append(edge_id)
 
@@ -228,23 +214,17 @@ class SemanticIntegrationTest:
         """시맨틱 경로 찾기 테스트"""
         try:
             # 경로 찾기 테스트
-            path_result = await self.semantic_graph.find_semantic_path(
-                "사람", "이동", 3
-            )
+            path_result = await self.semantic_graph.find_semantic_path("사람", "이동", 3)
 
             if not path_result:
                 # 경로가 없어도 정상 (개념이 충분하지 않을 수 있음)
                 return True
 
             # 경로 정보 확인
-            if not hasattr(path_result, "source_concept") or not hasattr(
-                path_result, "target_concept"
-            ):
+            if not hasattr(path_result, "source_concept") or not hasattr(path_result, "target_concept"):
                 return False
 
-            if not hasattr(path_result, "total_confidence") or not hasattr(
-                path_result, "path_length"
-            ):
+            if not hasattr(path_result, "total_confidence") or not hasattr(path_result, "path_length"):
                 return False
 
             return True
@@ -299,18 +279,14 @@ class SemanticIntegrationTest:
                 return False
 
             # 시맨틱 경로 찾기
-            path_result = await self.memory_system.find_semantic_path(
-                "메모리 테스트 개념", "관련 개념", 3
-            )
+            path_result = await self.memory_system.find_semantic_path("메모리 테스트 개념", "관련 개념", 3)
 
             # 경로가 없어도 정상 (개념이 충분하지 않을 수 있음)
             if path_result and not path_result.get("success", False):
                 return False
 
             # 시맨틱 지식 추론
-            inferences = await self.memory_system.infer_semantic_knowledge(
-                "메모리 테스트 개념"
-            )
+            inferences = await self.memory_system.infer_semantic_knowledge("메모리 테스트 개념")
 
             if not isinstance(inferences, list):
                 return False
@@ -384,7 +360,7 @@ async def main():
     results = await test_runner.run_all_tests()
 
     # 결과 출력
-    print(f"\n=== 최종 테스트 결과 ===")
+    print("\n=== 최종 테스트 결과 ===")
     print(f"성공률: {results['success_rate']:.1f}%")
     print(f"총 소요 시간: {results['total_duration']:.3f}초")
 

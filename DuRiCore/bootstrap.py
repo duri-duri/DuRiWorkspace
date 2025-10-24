@@ -78,12 +78,7 @@ def bootstrap_with_context(
 
     # 컨텍스트 설정
     try:
-        from .duri_logging.context import (
-            set_learning_session_id,
-            set_phase,
-            set_request_id,
-            set_session_id,
-        )
+        from .duri_logging.context import set_learning_session_id, set_phase, set_request_id, set_session_id
 
         if request_id:
             set_request_id(request_id)

@@ -5,16 +5,16 @@
 새로운 로그 파일 생성 + 샘플링 검증
 """
 
-from datetime import datetime
 import importlib
 import logging
 import os
 import sys
 import time
+from datetime import datetime
 
 # 환경변수 설정 및 모듈 리로드
 os.environ["LOG_SAMPLE_SEED"] = "42"
-import DuRiCore.duri_logging.decorators as dec
+import DuRiCore.duri_logging.decorators as dec  # noqa: E402
 
 importlib.reload(dec)  # 오래된 버전 캐싱 차단
 
@@ -73,11 +73,11 @@ def test_sampling_patch_final():
             # n=50, p=0.2의 95% CI: 약 5~15회 (더 관대한 범위)
             if 5 <= sampled_calls <= 15:
                 print(f"✅ PASS: 로깅된 호출 수 {sampled_calls}가 예상 범위(5~15) 내")
-                print(f"예상: n=50, p=0.2의 95% CI ≈ 5~15회")
+                print("예상: n=50, p=0.2의 95% CI ≈ 5~15회")
                 return True
             else:
                 print(f"❌ FAIL: 로깅된 호출 수 {sampled_calls}가 예상 범위(5~15) 밖")
-                print(f"예상: n=50, p=0.2의 95% CI ≈ 5~15회")
+                print("예상: n=50, p=0.2의 95% CI ≈ 5~15회")
                 return False
     else:
         print("❌ FAIL: 로그 파일이 생성되지 않음")

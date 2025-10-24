@@ -34,7 +34,7 @@ compare_ge() {
 }
 
 lock_and_stamp() {
-  local name="$1" log="var/logs/loop_${name}.log" lock="var/locks/${name}.lock"
+  local name="${1:-unknown}" log="var/logs/loop_${name}.log" lock="var/locks/${name}.lock"
   mkdir -p var/locks var/logs
   umask 027   # 민감 로그 world-readable 방지
   exec 201>"$lock"; flock -n 201 || exit 0

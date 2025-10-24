@@ -3,19 +3,15 @@ Test suite for DuRi common emotion modules.
 Tests core functionality of EmotionVector and emotion handlers.
 """
 
-from datetime import datetime
 import json
 import os
-from unittest.mock import MagicMock, mock_open, patch
+from datetime import datetime
+from unittest.mock import mock_open, patch
 
 import pytest
 from pytest import approx
 
-from duri_core.common.emotion_handlers import (
-    EmotionDeltaHandler,
-    EmotionLogger,
-    EmotionTransmitter,
-)
+from duri_core.common.emotion_handlers import EmotionDeltaHandler, EmotionLogger, EmotionTransmitter
 from duri_core.common.emotion_vector import EmotionVector
 
 
@@ -84,9 +80,7 @@ class TestEmotionLogger:
 
         logger.log_change(old_vector, new_vector)
 
-        log_file = os.path.join(
-            temp_dir, datetime.now().strftime("%Y-%m-%d"), "emotion_change_log.json"
-        )
+        log_file = os.path.join(temp_dir, datetime.now().strftime("%Y-%m-%d"), "emotion_change_log.json")
 
         assert os.path.exists(log_file)
         with open(log_file, "r") as f:

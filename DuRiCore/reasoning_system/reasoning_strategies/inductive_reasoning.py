@@ -9,12 +9,11 @@ DuRi 추론 시스템 - 귀납적 추론 모듈
 - 확률적 결론 도출
 """
 
-import asyncio
+import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-import logging
-from typing import Any, Dict, List, Optional, Set, Tuple, Union
+from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 
@@ -109,9 +108,7 @@ class InductiveReasoning:
             generalizations = self._create_generalizations(patterns, inductive_type)
 
             # 분석 수행
-            analysis = self._analyze_inductive_reasoning(
-                patterns, generalizations, inductive_type
-            )
+            analysis = self._analyze_inductive_reasoning(patterns, generalizations, inductive_type)
 
             # 성능 메트릭 업데이트
             processing_time = (datetime.now() - start_time).total_seconds()
@@ -128,9 +125,7 @@ class InductiveReasoning:
                 }
             )
 
-            self.logger.info(
-                f"귀납적 추론 완료: {inductive_type.value}, 패턴 강도: {analysis.pattern_strength:.2f}"
-            )
+            self.logger.info(f"귀납적 추론 완료: {inductive_type.value}, 패턴 강도: {analysis.pattern_strength:.2f}")
             return analysis
 
         except Exception as e:
@@ -168,9 +163,7 @@ class InductiveReasoning:
             self.logger.error(f"패턴 분석 중 오류: {e}")
             return []
 
-    def _enumerative_pattern_analysis(
-        self, observations: List[InductiveObservation]
-    ) -> List[InductivePattern]:
+    def _enumerative_pattern_analysis(self, observations: List[InductiveObservation]) -> List[InductivePattern]:
         """열거적 패턴 분석"""
         patterns = []
 
@@ -185,9 +178,7 @@ class InductiveReasoning:
 
             # 패턴 생성
             for content, group_observations in content_groups.items():
-                if (
-                    len(group_observations) > 1
-                ):  # 2개 이상의 관찰이 있어야 패턴으로 간주
+                if len(group_observations) > 1:  # 2개 이상의 관찰이 있어야 패턴으로 간주
                     pattern = InductivePattern(
                         pattern_id=f"enumerative_pattern_{len(patterns)}",
                         pattern_type="enumerative",
@@ -203,9 +194,7 @@ class InductiveReasoning:
             self.logger.error(f"열거적 패턴 분석 중 오류: {e}")
             return []
 
-    def _statistical_pattern_analysis(
-        self, observations: List[InductiveObservation]
-    ) -> List[InductivePattern]:
+    def _statistical_pattern_analysis(self, observations: List[InductiveObservation]) -> List[InductivePattern]:
         """통계적 패턴 분석"""
         patterns = []
 
@@ -226,9 +215,7 @@ class InductiveReasoning:
             # 통계적 패턴 생성
             for content, frequency in frequency_distribution.items():
                 if frequency > 1:  # 2회 이상 나타난 경우만 패턴으로 간주
-                    related_observations = [
-                        obs for obs in observations if obs.content.lower() == content
-                    ]
+                    related_observations = [obs for obs in observations if obs.content.lower() == content]
                     pattern = InductivePattern(
                         pattern_id=f"statistical_pattern_{len(patterns)}",
                         pattern_type="statistical",
@@ -244,9 +231,7 @@ class InductiveReasoning:
             self.logger.error(f"통계적 패턴 분석 중 오류: {e}")
             return []
 
-    def _analogical_pattern_analysis(
-        self, observations: List[InductiveObservation]
-    ) -> List[InductivePattern]:
+    def _analogical_pattern_analysis(self, observations: List[InductiveObservation]) -> List[InductivePattern]:
         """유추적 패턴 분석"""
         patterns = []
 
@@ -261,10 +246,7 @@ class InductiveReasoning:
                         # 기존 그룹에 추가하거나 새 그룹 생성
                         added_to_group = False
                         for group in similarity_groups:
-                            if any(
-                                self._calculate_similarity(obs1, group_obs) > 0.7
-                                for group_obs in group
-                            ):
+                            if any(self._calculate_similarity(obs1, group_obs) > 0.7 for group_obs in group):
                                 group.extend([obs1, obs2])
                                 added_to_group = True
                                 break
@@ -290,9 +272,7 @@ class InductiveReasoning:
             self.logger.error(f"유추적 패턴 분석 중 오류: {e}")
             return []
 
-    def _causal_pattern_analysis(
-        self, observations: List[InductiveObservation]
-    ) -> List[InductivePattern]:
+    def _causal_pattern_analysis(self, observations: List[InductiveObservation]) -> List[InductivePattern]:
         """인과적 패턴 분석"""
         patterns = []
 
@@ -323,9 +303,7 @@ class InductiveReasoning:
             self.logger.error(f"인과적 패턴 분석 중 오류: {e}")
             return []
 
-    def _predictive_pattern_analysis(
-        self, observations: List[InductiveObservation]
-    ) -> List[InductivePattern]:
+    def _predictive_pattern_analysis(self, observations: List[InductiveObservation]) -> List[InductivePattern]:
         """예측적 패턴 분석"""
         patterns = []
 
@@ -358,9 +336,7 @@ class InductiveReasoning:
             self.logger.error(f"예측적 패턴 분석 중 오류: {e}")
             return []
 
-    def _general_pattern_analysis(
-        self, observations: List[InductiveObservation]
-    ) -> List[InductivePattern]:
+    def _general_pattern_analysis(self, observations: List[InductiveObservation]) -> List[InductivePattern]:
         """일반 패턴 분석"""
         patterns = []
 
@@ -382,9 +358,7 @@ class InductiveReasoning:
             self.logger.error(f"일반 패턴 분석 중 오류: {e}")
             return []
 
-    def _calculate_similarity(
-        self, obs1: InductiveObservation, obs2: InductiveObservation
-    ) -> float:
+    def _calculate_similarity(self, obs1: InductiveObservation, obs2: InductiveObservation) -> float:
         """유사도 계산"""
         try:
             # 간단한 유사도 계산 (실제로는 더 복잡한 알고리즘이 필요)
@@ -407,9 +381,7 @@ class InductiveReasoning:
             self.logger.error(f"유사도 계산 중 오류: {e}")
             return 0.0
 
-    def _is_causally_related(
-        self, obs1: InductiveObservation, obs2: InductiveObservation
-    ) -> bool:
+    def _is_causally_related(self, obs1: InductiveObservation, obs2: InductiveObservation) -> bool:
         """인과 관계 확인"""
         try:
             # 간단한 인과 관계 확인 (실제로는 더 복잡한 분석이 필요)
@@ -436,9 +408,7 @@ class InductiveReasoning:
             self.logger.error(f"인과 관계 확인 중 오류: {e}")
             return False
 
-    def _is_predictive_related(
-        self, obs1: InductiveObservation, obs2: InductiveObservation
-    ) -> bool:
+    def _is_predictive_related(self, obs1: InductiveObservation, obs2: InductiveObservation) -> bool:
         """예측 관계 확인"""
         try:
             # 간단한 예측 관계 확인
@@ -475,9 +445,7 @@ class InductiveReasoning:
             for pattern in patterns:
                 if pattern.observations:
                     # 패턴 기반 일반화 생성
-                    generalization = self._create_generalization_from_pattern(
-                        pattern, inductive_type
-                    )
+                    generalization = self._create_generalization_from_pattern(pattern, inductive_type)
                     generalizations.append(generalization)
 
             return generalizations
@@ -496,15 +464,23 @@ class InductiveReasoning:
 
             # 일반화 내용 생성
             if inductive_type == InductiveType.ENUMERATIVE:
-                generalization_content = f"관찰된 {len(pattern.observations)}개 사례에서 공통적으로 나타나는 패턴: {contents[0]}"
+                generalization_content = (
+                    f"관찰된 {len(pattern.observations)}개 사례에서 공통적으로 나타나는 패턴: {contents[0]}"
+                )
             elif inductive_type == InductiveType.STATISTICAL:
                 generalization_content = f"통계적으로 {pattern.strength:.1%}의 확률로 나타나는 패턴: {contents[0]}"
             elif inductive_type == InductiveType.ANALOGICAL:
-                generalization_content = f"유사한 특성을 가진 {len(pattern.observations)}개 사례에서 발견된 패턴: {contents[0]}"
+                generalization_content = (
+                    f"유사한 특성을 가진 {len(pattern.observations)}개 사례에서 발견된 패턴: {contents[0]}"
+                )
             elif inductive_type == InductiveType.CAUSAL:
-                generalization_content = f"인과 관계가 추정되는 {len(pattern.observations)}개 사례에서 발견된 패턴: {contents[0]}"
+                generalization_content = (
+                    f"인과 관계가 추정되는 {len(pattern.observations)}개 사례에서 발견된 패턴: {contents[0]}"
+                )
             elif inductive_type == InductiveType.PREDICTIVE:
-                generalization_content = f"예측 가능한 {len(pattern.observations)}개 사례에서 발견된 패턴: {contents[0]}"
+                generalization_content = (
+                    f"예측 가능한 {len(pattern.observations)}개 사례에서 발견된 패턴: {contents[0]}"
+                )
             else:
                 generalization_content = f"일반적인 패턴: {contents[0]}"
 
@@ -560,9 +536,7 @@ class InductiveReasoning:
             pattern_strength = self._analyze_pattern_strength(patterns)
 
             # 일반화 신뢰도 분석
-            generalization_confidence = self._analyze_generalization_confidence(
-                generalizations
-            )
+            generalization_confidence = self._analyze_generalization_confidence(generalizations)
 
             # 통계적 유의성 분석
             statistical_significance = self._analyze_statistical_significance(patterns)
@@ -571,9 +545,7 @@ class InductiveReasoning:
             issues = self._identify_issues(patterns, generalizations)
 
             # 개선 제안
-            suggestions = self._generate_suggestions(
-                patterns, generalizations, inductive_type
-            )
+            suggestions = self._generate_suggestions(patterns, generalizations, inductive_type)
 
             return InductiveAnalysis(
                 pattern_strength=pattern_strength,
@@ -610,9 +582,7 @@ class InductiveReasoning:
             self.logger.error(f"패턴 강도 분석 중 오류: {e}")
             return 0.0
 
-    def _analyze_generalization_confidence(
-        self, generalizations: List[InductiveGeneralization]
-    ) -> float:
+    def _analyze_generalization_confidence(self, generalizations: List[InductiveGeneralization]) -> float:
         """일반화 신뢰도 분석"""
         try:
             if not generalizations:
@@ -628,9 +598,7 @@ class InductiveReasoning:
             self.logger.error(f"일반화 신뢰도 분석 중 오류: {e}")
             return 0.0
 
-    def _analyze_statistical_significance(
-        self, patterns: List[InductivePattern]
-    ) -> float:
+    def _analyze_statistical_significance(self, patterns: List[InductivePattern]) -> float:
         """통계적 유의성 분석"""
         try:
             if not patterns:
@@ -672,13 +640,9 @@ class InductiveReasoning:
                 issues.append(f"강도가 낮은 패턴이 {len(weak_patterns)}개 있습니다.")
 
             # 일반화 신뢰도가 낮은 경우
-            low_confidence_generations = [
-                gen for gen in generalizations if gen.confidence < 0.5
-            ]
+            low_confidence_generations = [gen for gen in generalizations if gen.confidence < 0.5]
             if low_confidence_generations:
-                issues.append(
-                    f"신뢰도가 낮은 일반화가 {len(low_confidence_generations)}개 있습니다."
-                )
+                issues.append(f"신뢰도가 낮은 일반화가 {len(low_confidence_generations)}개 있습니다.")
 
             return issues
 
@@ -703,18 +667,12 @@ class InductiveReasoning:
             # 패턴 강도가 낮은 경우
             weak_patterns = [pattern for pattern in patterns if pattern.strength < 0.3]
             if weak_patterns:
-                suggestions.append(
-                    "패턴의 강도를 높이기 위해 더 많은 관련 관찰을 수집하세요."
-                )
+                suggestions.append("패턴의 강도를 높이기 위해 더 많은 관련 관찰을 수집하세요.")
 
             # 일반화 신뢰도가 낮은 경우
-            low_confidence_generations = [
-                gen for gen in generalizations if gen.confidence < 0.5
-            ]
+            low_confidence_generations = [gen for gen in generalizations if gen.confidence < 0.5]
             if low_confidence_generations:
-                suggestions.append(
-                    "일반화의 신뢰도를 높이기 위해 더 많은 지지 관찰을 수집하세요."
-                )
+                suggestions.append("일반화의 신뢰도를 높이기 위해 더 많은 지지 관찰을 수집하세요.")
 
             # 귀납 유형별 제안
             if inductive_type == InductiveType.ENUMERATIVE:
@@ -724,9 +682,7 @@ class InductiveReasoning:
             elif inductive_type == InductiveType.ANALOGICAL:
                 suggestions.append("유추적 귀납을 위해 유사성 기준을 명확히 하세요.")
             elif inductive_type == InductiveType.CAUSAL:
-                suggestions.append(
-                    "인과적 귀납을 위해 인과 관계를 실험적으로 검증하세요."
-                )
+                suggestions.append("인과적 귀납을 위해 인과 관계를 실험적으로 검증하세요.")
             elif inductive_type == InductiveType.PREDICTIVE:
                 suggestions.append("예측적 귀납을 위해 시간적 순서를 고려하세요.")
 
@@ -736,9 +692,7 @@ class InductiveReasoning:
             self.logger.error(f"개선 제안 생성 중 오류: {e}")
             return [f"제안 생성 오류: {str(e)}"]
 
-    def _update_performance_metrics(
-        self, analysis: InductiveAnalysis, processing_time: float
-    ):
+    def _update_performance_metrics(self, analysis: InductiveAnalysis, processing_time: float):
         """성능 메트릭 업데이트"""
         self.performance_metrics["total_reasonings"] += 1
         if analysis.pattern_strength > 0.5 and analysis.generalization_confidence > 0.5:
@@ -753,9 +707,9 @@ class InductiveReasoning:
         ) / self.performance_metrics["total_reasonings"]
 
         # 평균 일반화 신뢰도 업데이트
-        total_confidence = self.performance_metrics[
-            "average_generalization_confidence"
-        ] * (self.performance_metrics["total_reasonings"] - 1)
+        total_confidence = self.performance_metrics["average_generalization_confidence"] * (
+            self.performance_metrics["total_reasonings"] - 1
+        )
         self.performance_metrics["average_generalization_confidence"] = (
             total_confidence + analysis.generalization_confidence
         ) / self.performance_metrics["total_reasonings"]

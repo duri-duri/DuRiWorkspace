@@ -15,20 +15,19 @@ Phase 14에서 구현된 커서 통합 시스템의 기능을 테스트하는 �
 """
 
 import asyncio
-from datetime import datetime
 import json
 import logging
 import time
-from typing import Any, Dict, List
+from datetime import datetime
 
 # Phase 14 시스템 import
 try:
     from phase14_cursor_integration import (
-        CursorContext,
+        CursorContext,  # noqa: F401
         CursorIntegrationSystem,
-        CursorPhase,
-        CursorResult,
-        CursorStatus,
+        CursorPhase,  # noqa: F401
+        CursorResult,  # noqa: F401
+        CursorStatus,  # noqa: F401
     )
 except ImportError as e:
     print(f"❌ Phase 14 시스템 import 실패: {e}")
@@ -239,14 +238,14 @@ class Phase14TestRunner:
             user_id = "test_user"
 
             # 첫 번째 입력으로 컨텍스트 생성
-            result1 = await cursor_system.process_user_input(
+            result1 = await cursor_system.process_user_input(  # noqa: F841
                 user_input="첫 번째 메시지입니다.",
                 session_id=session_id,
                 user_id=user_id,
             )
 
             # 두 번째 입력으로 기존 컨텍스트 사용
-            result2 = await cursor_system.process_user_input(
+            result2 = await cursor_system.process_user_input(  # noqa: F841
                 user_input="두 번째 메시지입니다.",
                 session_id=session_id,
                 user_id=user_id,
@@ -308,7 +307,7 @@ class Phase14TestRunner:
 
             for i, test_input in enumerate(test_inputs):
                 start_time = time.time()
-                result = await cursor_system.process_user_input(
+                result = await cursor_system.process_user_input(  # noqa: F841
                     user_input=test_input,
                     session_id=f"perf_test_{i}",
                     user_id="test_user",
@@ -330,9 +329,7 @@ class Phase14TestRunner:
             print(f"  📊 최대 응답 시간: {max_response_time:.3f}초")
             print(f"  📊 최소 응답 시간: {min_response_time:.3f}초")
             print(f"  📊 총 요청 수: {metrics['total_requests']}")
-            print(
-                f"  📊 성공률: {metrics['successful_requests']/metrics['total_requests']*100:.1f}%"
-            )
+            print(f"  📊 성공률: {metrics['successful_requests']/metrics['total_requests']*100:.1f}%")
 
             # 성능 기준 평가
             if avg_response_time < 2.0 and max_response_time < 5.0:
@@ -341,7 +338,7 @@ class Phase14TestRunner:
                     {
                         "test_name": "성능 테스트",
                         "status": "성공",
-                        "message": f"평균 응답 시간: {avg_response_time:.3f}초, 최대 응답 시간: {max_response_time:.3f}초",
+                        "message": f"평균 응답 시간: {avg_response_time:.3f}초, 최대 응답 시간: {max_response_time:.3f}초",  # noqa: E501
                     }
                 )
             else:
@@ -350,7 +347,7 @@ class Phase14TestRunner:
                     {
                         "test_name": "성능 테스트",
                         "status": "부분 성공",
-                        "message": f"평균 응답 시간: {avg_response_time:.3f}초, 최대 응답 시간: {max_response_time:.3f}초",
+                        "message": f"평균 응답 시간: {avg_response_time:.3f}초, 최대 응답 시간: {max_response_time:.3f}초",  # noqa: E501
                     }
                 )
 
@@ -395,7 +392,7 @@ class Phase14TestRunner:
                         error_handled_count += 1
                         print(f"  ✅ 에러 처리 성공: {result.error_message[:50]}...")
                     else:
-                        print(f"  ⚠️ 에러 처리 부분 성공: 예상된 에러가 발생하지 않음")
+                        print("  ⚠️ 에러 처리 부분 성공: 예상된 에러가 발생하지 않음")
 
                 except Exception as e:
                     error_handled_count += 1
@@ -440,19 +437,11 @@ class Phase14TestRunner:
 
         # 결과 통계
         total_tests = len(self.test_results)
-        successful_tests = sum(
-            1 for result in self.test_results if result["status"] == "성공"
-        )
-        partial_success_tests = sum(
-            1 for result in self.test_results if result["status"] == "부분 성공"
-        )
-        failed_tests = sum(
-            1 for result in self.test_results if result["status"] in ["실패", "오류"]
-        )
+        successful_tests = sum(1 for result in self.test_results if result["status"] == "성공")
+        partial_success_tests = sum(1 for result in self.test_results if result["status"] == "부분 성공")
+        failed_tests = sum(1 for result in self.test_results if result["status"] in ["실패", "오류"])
 
-        success_rate = (
-            (successful_tests + partial_success_tests * 0.5) / total_tests * 100
-        )
+        success_rate = (successful_tests + partial_success_tests * 0.5) / total_tests * 100
 
         print(f"📈 전체 테스트 수: {total_tests}")
         print(f"✅ 성공: {successful_tests}")
@@ -499,9 +488,7 @@ class Phase14TestRunner:
 
         # 최종 평가
         if success_rate >= 80:
-            print(
-                "\n🎉 Phase 14 테스트 성공! 커서 통합 시스템이 정상적으로 작동합니다."
-            )
+            print("\n🎉 Phase 14 테스트 성공! 커서 통합 시스템이 정상적으로 작동합니다.")
         elif success_rate >= 60:
             print("\n⚠️ Phase 14 테스트 부분 성공! 일부 기능에 개선이 필요합니다.")
         else:

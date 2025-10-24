@@ -6,9 +6,9 @@ Day39 수정된 판정 로직 및 리포트 생성
 - 오타 수정
 """
 
-from datetime import datetime
 import json
 import pathlib
+from datetime import datetime
 
 
 def create_corrected_report():

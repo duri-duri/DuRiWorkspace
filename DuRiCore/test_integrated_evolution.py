@@ -7,17 +7,15 @@ DuRi 통합 진화 시스템 테스트 (성능 최적화 통합 버전)
 """
 
 import asyncio
-from datetime import datetime
 import json
 import logging
 import time
+from datetime import datetime
 
 from integrated_evolution_system import DuRiIntegratedEvolutionSystem
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -77,12 +75,8 @@ async def test_integrated_performance_optimization():
         logger.info("✅ 진화 시스템 요약 완료")
         logger.info(f"   - 총 세션: {summary.get('total_sessions', 0)}")
         logger.info(f"   - 성공률: {summary.get('success_rate', 0):.1f}%")
-        logger.info(
-            f"   - 평균 실행시간: {summary.get('average_execution_time', 0):.3f}초"
-        )
-        logger.info(
-            f"   - 성능 개선률: {summary.get('performance_improvement', 0):.1f}%"
-        )
+        logger.info(f"   - 평균 실행시간: {summary.get('average_execution_time', 0):.3f}초")
+        logger.info(f"   - 성능 개선률: {summary.get('performance_improvement', 0):.1f}%")
 
         # 5. 캐시 통계
         cache_stats = system.get_cache_stats()
@@ -95,15 +89,9 @@ async def test_integrated_performance_optimization():
         # 6. 통합 시스템 상태
         integrated_systems = summary.get("integrated_systems", {})
         logger.info("🔗 통합 시스템 상태:")
-        logger.info(
-            f"   - 향상된 병렬 처리: {'✅' if integrated_systems.get('enhanced_parallel_processor') else '❌'}"
-        )
-        logger.info(
-            f"   - 성능 최적화: {'✅' if integrated_systems.get('performance_optimizer') else '❌'}"
-        )
-        logger.info(
-            f"   - ACT-R 병렬 처리: {'✅' if integrated_systems.get('act_r_parallel_processor') else '❌'}"
-        )
+        logger.info(f"   - 향상된 병렬 처리: {'✅' if integrated_systems.get('enhanced_parallel_processor') else '❌'}")
+        logger.info(f"   - 성능 최적화: {'✅' if integrated_systems.get('performance_optimizer') else '❌'}")
+        logger.info(f"   - ACT-R 병렬 처리: {'✅' if integrated_systems.get('act_r_parallel_processor') else '❌'}")
 
         # 7. 성능 비교 분석
         baseline_time = summary.get("baseline_execution_time", 0.215)
@@ -141,24 +129,16 @@ async def test_integrated_performance_optimization():
                 "baseline_time": baseline_time,
                 "current_time": current_time,
                 "target_time": target_time,
-                "improvement_ratio": (
-                    improvement_ratio if baseline_time > 0 and current_time > 0 else 0
-                ),
-                "target_achievement": (
-                    target_achievement if baseline_time > 0 and current_time > 0 else 0
-                ),
+                "improvement_ratio": (improvement_ratio if baseline_time > 0 and current_time > 0 else 0),
+                "target_achievement": (target_achievement if baseline_time > 0 and current_time > 0 else 0),
             },
         }
 
         # 결과를 JSON 파일로 저장
-        with open(
-            "integrated_performance_test_results.json", "w", encoding="utf-8"
-        ) as f:
+        with open("integrated_performance_test_results.json", "w", encoding="utf-8") as f:
             json.dump(test_results, f, indent=2, ensure_ascii=False, default=str)
 
-        logger.info(
-            "💾 테스트 결과가 'integrated_performance_test_results.json'에 저장되었습니다."
-        )
+        logger.info("💾 테스트 결과가 'integrated_performance_test_results.json'에 저장되었습니다.")
 
         return test_results
 

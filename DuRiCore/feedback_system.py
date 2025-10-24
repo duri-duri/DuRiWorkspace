@@ -5,14 +5,12 @@ DuRiCore Phase 5.5 - 피드백 시스템
 """
 
 import asyncio
+import logging
+import time
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-import json
-import logging
-import math
-import time
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 
@@ -101,7 +99,7 @@ class FeedbackSystem:
             # 행동 결과에서 피드백 정보 추출
             action_data = input_data.get("data", {})
             action_result = action_data.get("action_result", {})
-            performance_metrics = action_data.get("performance_metrics", {})
+            performance_metrics = action_data.get("performance_metrics", {})  # noqa: F841
 
             # 피드백 생성
             feedback_result = await self.feedback(action_result)
@@ -149,9 +147,7 @@ class FeedbackSystem:
                 "learning": learning_result.get("learning_type", "corrective"),
                 "evaluation_score": evaluation.get("evaluation_score", 0.5),
                 "learning_points": evaluation.get("learning_points", []),
-                "improvement_suggestions": evaluation.get(
-                    "improvement_suggestions", []
-                ),
+                "improvement_suggestions": evaluation.get("improvement_suggestions", []),
                 "next_actions": evaluation.get("next_actions", []),
                 "confidence": evaluation.get("confidence", 0.5),
                 "evaluation": evaluation,
@@ -210,9 +206,7 @@ class FeedbackSystem:
             logger.error(f"학습 실패: {e}")
             raise
 
-    async def identify_improvements(
-        self, feedback_result: FeedbackResult
-    ) -> ImprovementPlan:
+    async def identify_improvements(self, feedback_result: FeedbackResult) -> ImprovementPlan:
         """개선점 도출"""
         try:
             return await self.improvement_planner.create_plan(feedback_result)
@@ -225,7 +219,7 @@ class FeedbackSystem:
         try:
             effectiveness_score = action_result.get("effectiveness_score", 0.0)
             efficiency_score = action_result.get("efficiency_score", 0.0)
-            success = action_result.get("success", False)
+            success = action_result.get("success", False)  # noqa: F841
 
             # 종합 평가 점수 계산
             overall_score = (effectiveness_score * 0.6) + (efficiency_score * 0.4)
@@ -244,9 +238,7 @@ class FeedbackSystem:
             learning_points = self._extract_learning_points_real(action_result)
 
             # 개선 제안 생성
-            improvement_suggestions = self._generate_improvement_suggestions_real(
-                overall_score, action_result
-            )
+            improvement_suggestions = self._generate_improvement_suggestions_real(overall_score, action_result)
 
             # 다음 행동 제안
             next_actions = self._suggest_next_actions_real(overall_score, action_result)
@@ -281,7 +273,7 @@ class FeedbackSystem:
         try:
             effectiveness_score = action_result.get("effectiveness_score", 0.0)
             efficiency_score = action_result.get("efficiency_score", 0.0)
-            success = action_result.get("success", False)
+            success = action_result.get("success", False)  # noqa: F841
 
             # 학습 타입 결정
             if effectiveness_score > 0.8 and efficiency_score > 0.8:
@@ -330,46 +322,32 @@ class FeedbackSystem:
                 "created_at": datetime.now().isoformat(),
             }
 
-    def _real_identify_improvements(
-        self, feedback_result: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _real_identify_improvements(self, feedback_result: Dict[str, Any]) -> Dict[str, Any]:
         """실제 개선점 도출"""
         try:
             evaluation_score = feedback_result.get("evaluation_score", 0.5)
             feedback_type = feedback_result.get("feedback_type", "neutral")
 
             # 우선순위 계산
-            priority = self._calculate_improvement_priority_real(
-                evaluation_score, feedback_type
-            )
+            priority = self._calculate_improvement_priority_real(evaluation_score, feedback_type)
 
             # 개선 설명
-            description = self._generate_improvement_description_real(
-                evaluation_score, feedback_type
-            )
+            description = self._generate_improvement_description_real(evaluation_score, feedback_type)
 
             # 구현 단계
-            implementation_steps = self._generate_implementation_steps_real(
-                evaluation_score, feedback_type
-            )
+            implementation_steps = self._generate_implementation_steps_real(evaluation_score, feedback_type)
 
             # 예상 영향
-            expected_impact = self._calculate_expected_impact_real(
-                evaluation_score, feedback_type
-            )
+            expected_impact = self._calculate_expected_impact_real(evaluation_score, feedback_type)
 
             # 타임라인
             timeline = self._estimate_timeline_real(evaluation_score, feedback_type)
 
             # 필요 리소스
-            resources_needed = self._identify_resources_needed_real(
-                evaluation_score, feedback_type
-            )
+            resources_needed = self._identify_resources_needed_real(evaluation_score, feedback_type)
 
             # 성공 지표
-            success_metrics = self._define_success_metrics_real(
-                evaluation_score, feedback_type
-            )
+            success_metrics = self._define_success_metrics_real(evaluation_score, feedback_type)
 
             return {
                 "improvement_id": f"improvement_{int(time.time())}",
@@ -425,9 +403,7 @@ class FeedbackSystem:
 
         return learning_points
 
-    def _generate_improvement_suggestions_real(
-        self, overall_score: float, action_result: Dict[str, Any]
-    ) -> List[str]:
+    def _generate_improvement_suggestions_real(self, overall_score: float, action_result: Dict[str, Any]) -> List[str]:
         """실제 개선 제안 생성"""
         suggestions = []
 
@@ -442,9 +418,7 @@ class FeedbackSystem:
 
         return suggestions
 
-    def _suggest_next_actions_real(
-        self, overall_score: float, action_result: Dict[str, Any]
-    ) -> List[str]:
+    def _suggest_next_actions_real(self, overall_score: float, action_result: Dict[str, Any]) -> List[str]:
         """실제 다음 행동 제안"""
         next_actions = []
 
@@ -494,9 +468,7 @@ class FeedbackSystem:
 
         return knowledge
 
-    def _calculate_skill_improvement_real(
-        self, action_result: Dict[str, Any]
-    ) -> Dict[str, float]:
+    def _calculate_skill_improvement_real(self, action_result: Dict[str, Any]) -> Dict[str, float]:
         """실제 기술 개선 계산"""
         effectiveness_score = action_result.get("effectiveness_score", 0.0)
         efficiency_score = action_result.get("efficiency_score", 0.0)
@@ -513,9 +485,7 @@ class FeedbackSystem:
 
         return improvements
 
-    def _identify_behavior_change_real(
-        self, action_result: Dict[str, Any]
-    ) -> List[str]:
+    def _identify_behavior_change_real(self, action_result: Dict[str, Any]) -> List[str]:
         """실제 행동 변화 식별"""
         changes = []
 
@@ -558,9 +528,7 @@ class FeedbackSystem:
 
         return innovation_score
 
-    def _calculate_improvement_priority_real(
-        self, evaluation_score: float, feedback_type: str
-    ) -> float:
+    def _calculate_improvement_priority_real(self, evaluation_score: float, feedback_type: str) -> float:
         """실제 개선 우선순위 계산"""
         if feedback_type == "negative":
             return 0.9
@@ -571,9 +539,7 @@ class FeedbackSystem:
         else:  # positive
             return 0.2
 
-    def _generate_improvement_description_real(
-        self, evaluation_score: float, feedback_type: str
-    ) -> str:
+    def _generate_improvement_description_real(self, evaluation_score: float, feedback_type: str) -> str:
         """실제 개선 설명 생성 - 판단 로직 기반 동적 생성"""
         # 컨텍스트 분석
         context = getattr(self, "current_context", {})
@@ -589,9 +555,7 @@ class FeedbackSystem:
             else:
                 return "긴급한 개선이 필요한 상황"
         elif feedback_type == "neutral":
-            if len(improvement_history) > 0 and improvement_history[-1].get(
-                "success", False
-            ):
+            if len(improvement_history) > 0 and improvement_history[-1].get("success", False):
                 return "이전 개선 효과를 바탕으로 한 점진적 개선이 필요한 상황"
             else:
                 return "점진적 개선이 필요한 상황"
@@ -606,9 +570,7 @@ class FeedbackSystem:
             else:
                 return "현재 수준 유지 및 확장"
 
-    def _generate_implementation_steps_real(
-        self, evaluation_score: float, feedback_type: str
-    ) -> List[str]:
+    def _generate_implementation_steps_real(self, evaluation_score: float, feedback_type: str) -> List[str]:
         """실제 구현 단계 생성 - 판단 로직 기반 동적 생성"""
         # 컨텍스트 분석
         context = getattr(self, "current_context", {})
@@ -634,9 +596,7 @@ class FeedbackSystem:
             else:
                 return ["긴급 상황 분석", "즉시 개선 실행", "결과 모니터링"]
         elif feedback_type == "neutral":
-            if len(improvement_history) > 0 and improvement_history[-1].get(
-                "success", False
-            ):
+            if len(improvement_history) > 0 and improvement_history[-1].get("success", False):
                 return ["이전 개선 효과 분석", "상황 분석", "단계적 개선", "효과 측정"]
             else:
                 return ["상황 분석", "단계적 개선", "효과 측정"]
@@ -661,9 +621,7 @@ class FeedbackSystem:
             else:
                 return ["성공 요인 분석", "확장 계획 수립", "지속적 모니터링"]
 
-    def _calculate_expected_impact_real(
-        self, evaluation_score: float, feedback_type: str
-    ) -> Dict[str, float]:
+    def _calculate_expected_impact_real(self, evaluation_score: float, feedback_type: str) -> Dict[str, float]:
         """실제 예상 영향 계산"""
         if feedback_type == "negative":
             return {"stability": 0.8, "reliability": 0.7, "performance": 0.6}
@@ -674,9 +632,7 @@ class FeedbackSystem:
         else:  # positive
             return {"stability": 0.1, "reliability": 0.1, "performance": 0.2}
 
-    def _estimate_timeline_real(
-        self, evaluation_score: float, feedback_type: str
-    ) -> float:
+    def _estimate_timeline_real(self, evaluation_score: float, feedback_type: str) -> float:
         """실제 타임라인 추정"""
         if feedback_type == "negative":
             return 0.5  # 30분
@@ -687,9 +643,7 @@ class FeedbackSystem:
         else:  # positive
             return 8.0  # 8시간
 
-    def _identify_resources_needed_real(
-        self, evaluation_score: float, feedback_type: str
-    ) -> List[str]:
+    def _identify_resources_needed_real(self, evaluation_score: float, feedback_type: str) -> List[str]:
         """실제 필요 리소스 식별"""
         if feedback_type == "negative":
             return ["cpu", "memory", "network", "emergency_resources"]
@@ -700,9 +654,7 @@ class FeedbackSystem:
         else:  # positive
             return ["cpu"]
 
-    def _define_success_metrics_real(
-        self, evaluation_score: float, feedback_type: str
-    ) -> List[str]:
+    def _define_success_metrics_real(self, evaluation_score: float, feedback_type: str) -> List[str]:
         """실제 성공 지표 정의 - 판단 로직 기반 동적 생성"""
         # 컨텍스트 분석
         context = getattr(self, "current_context", {})
@@ -718,9 +670,7 @@ class FeedbackSystem:
             else:
                 return ["오류 감소", "안정성 향상", "성능 개선"]
         elif feedback_type == "neutral":
-            if len(improvement_history) > 0 and improvement_history[-1].get(
-                "success", False
-            ):
+            if len(improvement_history) > 0 and improvement_history[-1].get("success", False):
                 return [
                     "이전 개선 효과 유지",
                     "효과성 향상",
@@ -779,9 +729,7 @@ class FeedbackEvaluator:
             learning_points = action_result.get("learning_points", [])
 
             # 개선 제안 생성
-            improvement_suggestions = await self._generate_improvements(
-                overall_score, action_result
-            )
+            improvement_suggestions = await self._generate_improvements(overall_score, action_result)
 
             # 다음 행동 제안
             next_actions = action_result.get("next_actions", [])
@@ -800,9 +748,7 @@ class FeedbackEvaluator:
             logger.error(f"평가 실패: {e}")
             raise
 
-    async def _generate_improvements(
-        self, score: float, action_result: Dict[str, Any]
-    ) -> List[str]:
+    async def _generate_improvements(self, score: float, action_result: Dict[str, Any]) -> List[str]:
         """개선점 생성"""
         improvements = []
 
@@ -881,9 +827,7 @@ class ImprovementPlanner:
             priority = 1.0 - feedback_result.evaluation_score
 
             # 설명 생성
-            description = (
-                f"피드백 기반 개선 계획 (점수: {feedback_result.evaluation_score:.2f})"
-            )
+            description = f"피드백 기반 개선 계획 (점수: {feedback_result.evaluation_score:.2f})"
 
             # 구현 단계
             implementation_steps = [

@@ -4,12 +4,10 @@ DuRi 논리적 추론 엔진 - 논리 처리 핵심 모듈
 Phase 3 리팩토링: logical_reasoning_engine.py에서 분리
 """
 
+import logging
 from dataclasses import dataclass
 from enum import Enum
-import logging
-import re
-import statistics
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List
 
 import numpy as np
 
@@ -210,9 +208,7 @@ class LogicalProcessor:
 
         return premises
 
-    def calculate_logical_consistency(
-        self, premises: List[SemanticPremise], steps: List[LogicalStep]
-    ) -> float:
+    def calculate_logical_consistency(self, premises: List[SemanticPremise], steps: List[LogicalStep]) -> float:
         """논리적 일관성 계산"""
         if not premises or not steps:
             return 0.0
@@ -223,9 +219,7 @@ class LogicalProcessor:
 
         for i in range(len(premises)):
             for j in range(i + 1, len(premises)):
-                similarity = self.calculate_similarity(
-                    premises[i].semantic_vector, premises[j].semantic_vector
-                )
+                similarity = self.calculate_similarity(premises[i].semantic_vector, premises[j].semantic_vector)
                 premise_consistency += similarity
                 premise_count += 1
 
@@ -238,9 +232,7 @@ class LogicalProcessor:
 
         for i in range(len(steps)):
             for j in range(i + 1, len(steps)):
-                similarity = self.calculate_similarity(
-                    steps[i].semantic_vector, steps[j].semantic_vector
-                )
+                similarity = self.calculate_similarity(steps[i].semantic_vector, steps[j].semantic_vector)
                 step_consistency += similarity
                 step_count += 1
 

@@ -15,7 +15,7 @@ import time
 
 # 환경변수 설정 및 모듈 리로드
 os.environ["LOG_SAMPLE_SEED"] = "42"
-import DuRiCore.duri_logging.decorators as dec
+import DuRiCore.duri_logging.decorators as dec  # noqa: E402
 
 importlib.reload(dec)  # 오래된 버전 캐싱 차단
 

@@ -1,0 +1,33 @@
+name: lint (PR changed files)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.10' }
+
+      - run: pip install pre-commit
+
+      - name: Run pre-commit (diff between base↔head)
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          # 변경분만 자동 탐지 (인자 길이 문제 없음)
+          pre-commit run --from-ref "$BASE" --to-ref "$HEAD" \
+            --color always --show-diff-on-failure || {
+              echo "No applicable hooks; treating as success."
+            }

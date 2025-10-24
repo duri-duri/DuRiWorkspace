@@ -5,12 +5,12 @@ DuRiCore Phase 5 Day 3 - 판단 시스템
 """
 
 import asyncio
-from dataclasses import dataclass
-from datetime import datetime
-from enum import Enum
 import json
 import logging
 import math
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)

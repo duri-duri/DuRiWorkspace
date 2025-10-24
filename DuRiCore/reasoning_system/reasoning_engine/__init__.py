@@ -14,19 +14,8 @@ from .decision_maker import (
     DecisionResult,
     DecisionType,
 )
-from .inference_engine import (
-    InferenceContext,
-    InferenceEngine,
-    InferenceResult,
-    InferenceType,
-)
-from .logic_processor import (
-    LogicalChain,
-    LogicalRule,
-    LogicAnalysis,
-    LogicProcessor,
-    LogicType,
-)
+from .inference_engine import InferenceContext, InferenceEngine, InferenceResult, InferenceType
+from .logic_processor import LogicalChain, LogicalRule, LogicAnalysis, LogicProcessor, LogicType
 
 __all__ = [
     # Inference Engine

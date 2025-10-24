@@ -4,21 +4,21 @@ DuRi 전략 판단 4단계 통합 시스템
 전략 판단을 사고 흐름, 기억, 진화, 외부 피드백까지 4단계로 통합하는 시스템
 """
 
-from datetime import datetime
 import os
 import sys
-from typing import Any, Dict, Optional
+from datetime import datetime
+from typing import Any, Dict
 
 # DuRiCore 모듈 경로 추가
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from modules.evolution.self_evolution_manager import SelfEvolutionManager
-from modules.integrated_learning_system import IntegratedLearningSystem
+from modules.evolution.self_evolution_manager import SelfEvolutionManager  # noqa: E402
+from modules.integrated_learning_system import IntegratedLearningSystem  # noqa: E402
 
 # 📦 핵심 모듈 임포트 (현재 구현된 시스템에 맞게 수정)
-from modules.judgment_system.strategic_learning_engine import StrategicLearningEngine
-from modules.memory.memory_manager import MemoryManager
-from modules.thought_flow.du_ri_thought_flow import DuRiThoughtFlow
+from modules.judgment_system.strategic_learning_engine import StrategicLearningEngine  # noqa: E402
+from modules.memory.memory_manager import MemoryManager  # noqa: E402
+from modules.thought_flow.du_ri_thought_flow import DuRiThoughtFlow  # noqa: E402
 
 
 class FeedbackHub:
@@ -104,7 +104,7 @@ def integrate_strategic_judgment():
         # 진화 시스템에 판단 변화 로깅 (새로운 메서드 추가 필요)
         try:
             # 진화 시스템에 판단 변화 기록
-            evolution_summary = evolution_manager.get_evolution_summary()
+            evolution_summary = evolution_manager.get_evolution_summary()  # noqa: F841
             evolution_manager._record_evolution_steps(
                 beliefs_to_update=[],  # 새로운 신념 업데이트 없음
                 rules_to_update=[],  # 새로운 규칙 업데이트 없음
@@ -117,7 +117,7 @@ def integrate_strategic_judgment():
 
         # 4️⃣ 외부 피드백 시스템에 전달
         print("📡 4단계: 외부 피드백 시스템에 전달 중...")
-        feedback_result = feedback_hub.broadcast("judgment/strategic", latest_trace)
+        feedback_result = feedback_hub.broadcast("judgment/strategic", latest_trace)  # noqa: F841
         print("✅ 외부 피드백 전달 완료")
 
         # 5️⃣ 통합 학습 시스템에 기록
@@ -176,7 +176,7 @@ def main():
         print(f"\n❌ 통합 실패: {result.get('error')}")
         return False
     else:
-        print(f"\n✅ 통합 성공!")
+        print("\n✅ 통합 성공!")
         return True
 
 

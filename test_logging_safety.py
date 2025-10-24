@@ -62,10 +62,7 @@ def test_memory_type_comprehensive():
     try:
         # 1. 기본 타입들
         assert normalize_memory_type("learning") == MemoryType.LEARNING_EXPERIENCE
-        assert (
-            normalize_memory_type("LEARNING_EXPERIENCE")
-            == MemoryType.LEARNING_EXPERIENCE
-        )
+        assert normalize_memory_type("LEARNING_EXPERIENCE") == MemoryType.LEARNING_EXPERIENCE
         assert normalize_memory_type("Learn_Exp") == MemoryType.LEARNING_EXPERIENCE
 
         # 2. 별칭 테스트

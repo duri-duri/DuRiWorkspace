@@ -4,19 +4,19 @@ DuRiCore - FastAPI 메인 애플리케이션
 새로운 엔진들과 연동된 API 서버
 """
 
-from datetime import datetime
 import os
 import sys
+from datetime import datetime
 
-from fastapi import FastAPI, HTTPException
+import uvicorn
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-import uvicorn
 
 # DuRiCore 모듈 임포트를 위한 경로 추가
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
-from DuRiCore.DuRiCore.interface.api import router as api_router
+from DuRiCore.DuRiCore.interface.api import router as api_router  # noqa: E402
 
 # FastAPI 애플리케이션 생성
 app = FastAPI(

@@ -5,9 +5,6 @@ DuRi 통합 대화 시스템 테스트
 """
 
 import asyncio
-from datetime import datetime
-import json
-import time
 
 import aiohttp
 
@@ -32,14 +29,10 @@ async def test_unified_system():
                     bandwidth_status = data.get("bandwidth_status", {})
 
                     print(f"   📊 성장 레벨: {growth_status.get('current_level', 1)}")
+                    print(f"   🧠 인지 대역폭 레벨: {bandwidth_status.get('current_level', 1)}")
+                    print(f"   📈 일일 처리량: {bandwidth_status.get('daily_stats', {}).get('total_processed', 0)}")
                     print(
-                        f"   🧠 인지 대역폭 레벨: {bandwidth_status.get('current_level', 1)}"
-                    )
-                    print(
-                        f"   📈 일일 처리량: {bandwidth_status.get('daily_stats', {}).get('total_processed', 0)}"
-                    )
-                    print(
-                        f"   ⚠️  과부하 상태: {'예' if bandwidth_status.get('overload_status', {}).get('is_overloaded', False) else '아니오'}"
+                        f"   ⚠️  과부하 상태: {'예' if bandwidth_status.get('overload_status', {}).get('is_overloaded', False) else '아니오'}"  # noqa: E501
                     )
                 else:
                     print(f"   ❌ 상태 조회 실패: {data}")
@@ -55,27 +48,17 @@ async def test_unified_system():
                     bandwidth_status = data.get("bandwidth_status", {})
                     recommendations = data.get("recommendations", {})
 
+                    print(f"   📊 현재 레벨: {bandwidth_status.get('current_level', 1)}")
+                    print(f"   📈 일일 한계: {bandwidth_status.get('config', {}).get('max_daily_stimuli', 0)}")
                     print(
-                        f"   📊 현재 레벨: {bandwidth_status.get('current_level', 1)}"
+                        f"   🔄 동시 처리 한계: {bandwidth_status.get('config', {}).get('max_concurrent_processing', 0)}"  # noqa: E501
                     )
+                    print(f"   ⏱️  처리 간격: {bandwidth_status.get('config', {}).get('processing_cooldown', 0)}초")
+                    print("   📋 권장사항:")
+                    print(f"      - 처리 권장: {'예' if recommendations.get('should_process', False) else '아니오'}")
+                    print(f"      - 일시정지 권장: {'예' if recommendations.get('should_pause', False) else '아니오'}")
                     print(
-                        f"   📈 일일 한계: {bandwidth_status.get('config', {}).get('max_daily_stimuli', 0)}"
-                    )
-                    print(
-                        f"   🔄 동시 처리 한계: {bandwidth_status.get('config', {}).get('max_concurrent_processing', 0)}"
-                    )
-                    print(
-                        f"   ⏱️  처리 간격: {bandwidth_status.get('config', {}).get('processing_cooldown', 0)}초"
-                    )
-                    print(f"   📋 권장사항:")
-                    print(
-                        f"      - 처리 권장: {'예' if recommendations.get('should_process', False) else '아니오'}"
-                    )
-                    print(
-                        f"      - 일시정지 권장: {'예' if recommendations.get('should_pause', False) else '아니오'}"
-                    )
-                    print(
-                        f"      - 강도 감소 권장: {'예' if recommendations.get('should_reduce_intensity', False) else '아니오'}"
+                        f"      - 강도 감소 권장: {'예' if recommendations.get('should_reduce_intensity', False) else '아니오'}"  # noqa: E501
                     )
                 else:
                     print(f"   ❌ 대역폭 상태 조회 실패: {data}")
@@ -107,17 +90,13 @@ async def test_unified_system():
                     data = await response.json()
                     if data.get("status") == "success":
                         growth_result = data.get("growth_result", {})
-                        bandwidth_result = growth_result.get("bandwidth_result", {})
+                        bandwidth_result = growth_result.get("bandwidth_result", {})  # noqa: F841
 
                         if growth_result.get("status") == "bandwidth_rejected":
-                            print(
-                                f"   {i}. ❌ 거부됨: '{stimulus}' - {growth_result.get('reason', 'unknown')}"
-                            )
+                            print(f"   {i}. ❌ 거부됨: '{stimulus}' - {growth_result.get('reason', 'unknown')}")
                             rejected_count += 1
                         else:
-                            print(
-                                f"   {i}. ✅ 처리됨: '{stimulus}' - {growth_result.get('response', '')}"
-                            )
+                            print(f"   {i}. ✅ 처리됨: '{stimulus}' - {growth_result.get('response', '')}")
                             processed_count += 1
                     else:
                         print(f"   {i}. ❌ 처리 실패: {data}")
@@ -171,9 +150,7 @@ async def test_unified_system():
 
             await asyncio.sleep(0.1)  # 빠른 연속 자극
 
-        print(
-            f"   📊 과부하 테스트 결과: {overload_processed}개 처리, {overload_rejected}개 거부"
-        )
+        print(f"   📊 과부하 테스트 결과: {overload_processed}개 처리, {overload_rejected}개 거부")
 
         # 5. 최종 상태 확인
         print("\n5️⃣ 최종 상태 확인...")
@@ -184,31 +161,19 @@ async def test_unified_system():
                     growth_status = data.get("growth_status", {})
                     bandwidth_status = data.get("bandwidth_status", {})
 
-                    print(
-                        f"   📊 최종 성장 레벨: {growth_status.get('current_level', 1)}"
-                    )
-                    print(
-                        f"   🧠 최종 대역폭 레벨: {bandwidth_status.get('current_level', 1)}"
-                    )
-                    print(
-                        f"   📈 총 처리된 자극: {bandwidth_status.get('daily_stats', {}).get('total_processed', 0)}"
-                    )
-                    print(
-                        f"   ❌ 총 거부된 자극: {bandwidth_status.get('daily_stats', {}).get('total_rejected', 0)}"
-                    )
-                    print(
-                        f"   ⚠️  과부하 발생 횟수: {bandwidth_status.get('daily_stats', {}).get('overload_count', 0)}"
-                    )
+                    print(f"   📊 최종 성장 레벨: {growth_status.get('current_level', 1)}")
+                    print(f"   🧠 최종 대역폭 레벨: {bandwidth_status.get('current_level', 1)}")
+                    print(f"   📈 총 처리된 자극: {bandwidth_status.get('daily_stats', {}).get('total_processed', 0)}")
+                    print(f"   ❌ 총 거부된 자극: {bandwidth_status.get('daily_stats', {}).get('total_rejected', 0)}")
+                    print(f"   ⚠️  과부하 발생 횟수: {bandwidth_status.get('daily_stats', {}).get('overload_count', 0)}")
 
                     # 과부하 상태 확인
                     overload_status = bandwidth_status.get("overload_status", {})
                     if overload_status.get("is_overloaded", False):
-                        print(f"   🚨 현재 과부하 상태: 예")
-                        print(
-                            f"   ⏰ 복구 예정 시간: {overload_status.get('recovery_time', 'N/A')}"
-                        )
+                        print("   🚨 현재 과부하 상태: 예")
+                        print(f"   ⏰ 복구 예정 시간: {overload_status.get('recovery_time', 'N/A')}")
                     else:
-                        print(f"   ✅ 현재 과부하 상태: 아니오")
+                        print("   ✅ 현재 과부하 상태: 아니오")
                 else:
                     print(f"   ❌ 최종 상태 조회 실패: {data}")
         except Exception as e:
@@ -230,18 +195,14 @@ async def test_bandwidth_management():
         for level in levels_to_test:
             try:
                 # 레벨 업데이트
-                async with session.post(
-                    f"{base_url}/bandwidth/update-level", json={"level": level}
-                ) as response:
+                async with session.post(f"{base_url}/bandwidth/update-level", json={"level": level}) as response:
                     data = await response.json()
                     if data.get("status") == "success":
                         print(f"   📊 레벨 {level}로 업데이트 완료")
 
                         # 해당 레벨의 처리량 테스트
                         max_stimuli = 5 if level == 1 else 10
-                        test_stimuli = [
-                            f"레벨 {level} 테스트 자극 {i}" for i in range(max_stimuli)
-                        ]
+                        test_stimuli = [f"레벨 {level} 테스트 자극 {i}" for i in range(max_stimuli)]
 
                         processed = 0
                         rejected = 0
@@ -254,17 +215,12 @@ async def test_bandwidth_management():
                                 data = await response.json()
                                 if data.get("status") == "success":
                                     growth_result = data.get("growth_result", {})
-                                    if (
-                                        growth_result.get("status")
-                                        == "bandwidth_rejected"
-                                    ):
+                                    if growth_result.get("status") == "bandwidth_rejected":
                                         rejected += 1
                                     else:
                                         processed += 1
 
-                        print(
-                            f"      레벨 {level}: {processed}개 처리, {rejected}개 거부"
-                        )
+                        print(f"      레벨 {level}: {processed}개 처리, {rejected}개 거부")
                     else:
                         print(f"   ❌ 레벨 {level} 업데이트 실패: {data}")
             except Exception as e:
@@ -280,22 +236,14 @@ async def test_bandwidth_management():
                 if data.get("status") == "success":
                     recommendations = data.get("recommendations", {})
 
-                    print(f"   📋 현재 권장사항:")
+                    print("   📋 현재 권장사항:")
+                    print(f"      - 처리 권장: {'✅' if recommendations.get('should_process', False) else '❌'}")
+                    print(f"      - 일시정지 권장: {'⚠️' if recommendations.get('should_pause', False) else '✅'}")
                     print(
-                        f"      - 처리 권장: {'✅' if recommendations.get('should_process', False) else '❌'}"
+                        f"      - 강도 감소 권장: {'⚠️' if recommendations.get('should_reduce_intensity', False) else '✅'}"  # noqa: E501
                     )
-                    print(
-                        f"      - 일시정지 권장: {'⚠️' if recommendations.get('should_pause', False) else '✅'}"
-                    )
-                    print(
-                        f"      - 강도 감소 권장: {'⚠️' if recommendations.get('should_reduce_intensity', False) else '✅'}"
-                    )
-                    print(
-                        f"      - 최적 간격: {recommendations.get('optimal_stimulus_interval', 0)}초"
-                    )
-                    print(
-                        f"      - 안전 동시 처리: {recommendations.get('max_concurrent_safe', 1)}개"
-                    )
+                    print(f"      - 최적 간격: {recommendations.get('optimal_stimulus_interval', 0)}초")
+                    print(f"      - 안전 동시 처리: {recommendations.get('max_concurrent_safe', 1)}개")
                 else:
                     print(f"   ❌ 권장사항 조회 실패: {data}")
         except Exception as e:

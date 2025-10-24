@@ -12,20 +12,15 @@ DuRi Phase 6.2.1 - 인간적 우선순위 기반 판단 (15% 정확도 향상 �
 """
 
 import asyncio
+import logging
+import time
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from enum import Enum
-import json
-import logging
-import random
-import statistics
-import time
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -112,7 +107,7 @@ class JudgmentResult:
     timestamp: datetime
 
 
-from intrinsic_motivation_system import IntrinsicMotivationSystem, MotivationType
+from intrinsic_motivation_system import IntrinsicMotivationSystem  # noqa: E402
 
 
 class LIDAAttentionSystem:
@@ -176,9 +171,7 @@ class LIDAAttentionSystem:
         self.attention_tasks[task.id] = task
         self._update_priority_queue()
 
-        logger.info(
-            f"📝 주의 작업 추가: {task.name} (우선순위: {task.priority_level.value})"
-        )
+        logger.info(f"📝 주의 작업 추가: {task.name} (우선순위: {task.priority_level.value})")
         return task.id
 
     def _calculate_human_priority(self, task: AttentionTask) -> float:
@@ -188,8 +181,7 @@ class LIDAAttentionSystem:
             base_priority = (
                 float(task.urgency) * self.human_priority_weights["urgency"]
                 + float(task.importance) * self.human_priority_weights["importance"]
-                + float(task.emotional_weight)
-                * self.human_priority_weights["emotional_weight"]
+                + float(task.emotional_weight) * self.human_priority_weights["emotional_weight"]
                 + float(task.complexity) * self.human_priority_weights["complexity"]
             )
 
@@ -243,11 +235,7 @@ class LIDAAttentionSystem:
         try:
             self.priority_queue = sorted(
                 self.attention_tasks.values(),
-                key=lambda x: (
-                    float(x.attention_score)
-                    if isinstance(x.attention_score, (int, float))
-                    else 0.0
-                ),
+                key=lambda x: (float(x.attention_score) if isinstance(x.attention_score, (int, float)) else 0.0),
                 reverse=True,
             )
         except Exception as e:
@@ -273,9 +261,7 @@ class LIDAAttentionSystem:
 
         # 인지 부하 계산
         cognitive_load_increase = task.complexity * 0.1
-        self.attention_state.cognitive_load = min(
-            1.0, self.attention_state.cognitive_load + cognitive_load_increase
-        )
+        self.attention_state.cognitive_load = min(1.0, self.attention_state.cognitive_load + cognitive_load_increase)
 
         # 주의 집중 기록
         focus_record = {
@@ -316,9 +302,7 @@ class LIDAAttentionSystem:
 
         # 판단 정확도 계산 (Phase 6.2.1 개선)
         base_accuracy = self.judgment_type_accuracy.get(judgment_type, 0.75)
-        attention_bonus = (
-            0.1 if self.attention_state.attention_level.value == "focused" else 0.0
-        )
+        attention_bonus = 0.1 if self.attention_state.attention_level.value == "focused" else 0.0
         cognitive_bonus = cognitive_load_factor * 0.05
         emotional_bonus = emotional_factor * 0.03
 
@@ -327,11 +311,7 @@ class LIDAAttentionSystem:
 
         current_accuracy = min(
             1.0,
-            base_accuracy
-            + attention_bonus
-            + cognitive_bonus
-            + emotional_bonus
-            + focus_bonus,
+            base_accuracy + attention_bonus + cognitive_bonus + emotional_bonus + focus_bonus,
         )
 
         # 판단 결과 생성
@@ -353,25 +333,18 @@ class LIDAAttentionSystem:
             self.performance_metrics["correct_judgments"] += 1
 
         self.performance_metrics["accuracy_rate"] = (
-            self.performance_metrics["correct_judgments"]
-            / self.performance_metrics["total_judgments"]
+            self.performance_metrics["correct_judgments"] / self.performance_metrics["total_judgments"]
         )
 
         # 평균 판단 시간 업데이트 (타입 안전성 보장)
         try:
-            total_time = sum(
-                1.0 for j in self.judgment_history
-            )  # 각 판단을 1.0으로 계산
-            self.performance_metrics["average_judgment_time"] = total_time / len(
-                self.judgment_history
-            )
+            total_time = sum(1.0 for j in self.judgment_history)  # 각 판단을 1.0으로 계산
+            self.performance_metrics["average_judgment_time"] = total_time / len(self.judgment_history)
         except Exception as e:
             logger.warning(f"평균 판단 시간 계산 중 오류: {e}")
             self.performance_metrics["average_judgment_time"] = 0.015  # 기본값
 
-        logger.info(
-            f"🧠 인간적 판단: {judgment_type.value}, 정확도 {current_accuracy:.3f}"
-        )
+        logger.info(f"🧠 인간적 판단: {judgment_type.value}, 정확도 {current_accuracy:.3f}")
 
         return {
             "success": True,
@@ -401,9 +374,7 @@ class LIDAAttentionSystem:
         else:
             return JudgmentType.ROUTINE
 
-    def _generate_reasoning(
-        self, context: Dict[str, Any], judgment_type: JudgmentType
-    ) -> str:
+    def _generate_reasoning(self, context: Dict[str, Any], judgment_type: JudgmentType) -> str:
         """판단 근거 생성"""
         reasoning_templates = {
             JudgmentType.URGENT: "긴급성과 즉시 대응의 필요성을 고려하여",
@@ -414,9 +385,7 @@ class LIDAAttentionSystem:
         }
         return reasoning_templates.get(judgment_type, "종합적 분석을 통해")
 
-    def _generate_alternatives(
-        self, context: Dict[str, Any], judgment_type: JudgmentType
-    ) -> List[str]:
+    def _generate_alternatives(self, context: Dict[str, Any], judgment_type: JudgmentType) -> List[str]:
         """동적 대안 생성 - 컨텍스트 기반 맞춤형 접근 방법"""
         try:
             # 기본 대안 사전 정의
@@ -429,9 +398,7 @@ class LIDAAttentionSystem:
             }
 
             # 컨텍스트 분석을 통한 동적 대안 생성
-            dynamic_alternatives = self._generate_context_based_alternatives(
-                context, judgment_type
-            )
+            dynamic_alternatives = self._generate_context_based_alternatives(context, judgment_type)
 
             # 기본 대안과 동적 대안 결합
             all_alternatives = base_alternatives.get(judgment_type, [])
@@ -440,19 +407,13 @@ class LIDAAttentionSystem:
             # 중복 제거 및 우선순위 정렬
             unique_alternatives = list(dict.fromkeys(all_alternatives))
 
-            return (
-                unique_alternatives
-                if unique_alternatives
-                else ["체계적 분석 기반 접근"]
-            )
+            return unique_alternatives if unique_alternatives else ["체계적 분석 기반 접근"]
 
         except Exception as e:
             logger.error(f"동적 대안 생성 중 오류: {e}")
             return ["체계적 분석 기반 접근"]
 
-    def _generate_context_based_alternatives(
-        self, context: Dict[str, Any], judgment_type: JudgmentType
-    ) -> List[str]:
+    def _generate_context_based_alternatives(self, context: Dict[str, Any], judgment_type: JudgmentType) -> List[str]:
         """컨텍스트 기반 동적 대안 생성"""
         alternatives = []
 
@@ -531,9 +492,7 @@ class LIDAAttentionSystem:
             if "cognitive_load" in new_state:
                 cognitive_load = new_state["cognitive_load"]
                 if isinstance(cognitive_load, (int, float)):
-                    self.attention_state.cognitive_load = max(
-                        0.0, min(1.0, float(cognitive_load))
-                    )
+                    self.attention_state.cognitive_load = max(0.0, min(1.0, float(cognitive_load)))
 
             if "emotional_state" in new_state:
                 self.attention_state.emotional_state = str(new_state["emotional_state"])
@@ -550,9 +509,7 @@ class LIDAAttentionSystem:
 
             self.attention_state.last_update = datetime.now()
 
-            logger.info(
-                f"🔄 주의 상태 업데이트: {self.attention_state.attention_level.value}"
-            )
+            logger.info(f"🔄 주의 상태 업데이트: {self.attention_state.attention_level.value}")
         except Exception as e:
             logger.error(f"주의 상태 업데이트 중 오류: {e}")
             # 기본값으로 설정
@@ -582,9 +539,7 @@ class LIDAAttentionSystem:
 
     def get_performance_report(self) -> Dict[str, Any]:
         """성능 리포트 생성 (Phase 6.2.1 개선)"""
-        accuracy_improvement = (
-            self.performance_metrics["accuracy_rate"] - self.baseline_accuracy
-        ) * 100
+        accuracy_improvement = (self.performance_metrics["accuracy_rate"] - self.baseline_accuracy) * 100
         target_improvement = 15.0
 
         return {
@@ -593,20 +548,13 @@ class LIDAAttentionSystem:
             "current_accuracy": self.performance_metrics["accuracy_rate"],
             "accuracy_improvement": accuracy_improvement,
             "target_improvement": target_improvement,
-            "improvement_status": (
-                "✅ 달성"
-                if accuracy_improvement >= target_improvement
-                else "🔄 진행 중"
-            ),
+            "improvement_status": ("✅ 달성" if accuracy_improvement >= target_improvement else "🔄 진행 중"),
             "attention_state": asdict(self.attention_state),
             "total_tasks": len(self.attention_tasks),
             "focus_history_count": len(self.focus_history),
             "judgment_history_count": len(self.judgment_history),
             "judgment_types": {
-                jt.value: len(
-                    [j for j in self.judgment_history if j.judgment_type == jt]
-                )
-                for jt in JudgmentType
+                jt.value: len([j for j in self.judgment_history if j.judgment_type == jt]) for jt in JudgmentType
             },
         }
 
@@ -616,21 +564,15 @@ class LIDAAttentionSystem:
         self.priority_queue.clear()
         logger.info("🗑️  주의 작업 클리어 완료")
 
-    async def integrate_with_system(
-        self, system_context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def integrate_with_system(self, system_context: Dict[str, Any]) -> Dict[str, Any]:
         """통합 시스템과 연동"""
         # 시스템 컨텍스트에서 주의 정보 추출
         if "cognitive_load" in system_context:
-            await self.update_attention_state(
-                {"cognitive_load": system_context["cognitive_load"]}
-            )
+            await self.update_attention_state({"cognitive_load": system_context["cognitive_load"]})
 
         # 시스템 요청에 대한 판단 수행
         if "judgment_request" in system_context:
-            judgment_result = await self.make_human_like_judgment(
-                system_context["judgment_request"]
-            )
+            judgment_result = await self.make_human_like_judgment(system_context["judgment_request"])
             return {
                 "attention_system_result": judgment_result,
                 "attention_state": asdict(self.attention_state),
@@ -762,29 +704,21 @@ class LIDAAttentionSystem:
             logger.warning(f"문자열 변환 실패: {e}")
             return ""
 
-    async def process_attention_with_motivation(
-        self, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def process_attention_with_motivation(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """내적 동기를 고려한 주의 처리"""
         try:
             # 기본 주의 처리
             attention_result = await self.process_attention(context)
 
             # 내적 동기 상태 평가
-            curiosity_level = (
-                self.intrinsic_motivation.motivation_state.curiosity_metrics.overall_curiosity
-            )
-            achievement_level = (
-                self.intrinsic_motivation.motivation_state.achievement_metrics.overall_achievement
-            )
+            curiosity_level = self.intrinsic_motivation.motivation_state.curiosity_metrics.overall_curiosity
+            achievement_level = self.intrinsic_motivation.motivation_state.achievement_metrics.overall_achievement
 
             # 호기심 기반 주의 조정
             if curiosity_level > 0.7:
                 # 호기심이 높으면 새로운 패턴에 더 집중
                 attention_result["curiosity_driven"] = True
-                attention_result["exploration_focus"] = (
-                    self._generate_exploration_focus(context)
-                )
+                attention_result["exploration_focus"] = self._generate_exploration_focus(context)
 
             # 성취욕 기반 주의 조정
             if achievement_level > 0.6:
@@ -794,9 +728,7 @@ class LIDAAttentionSystem:
 
             # 자발적 학습 실행
             if curiosity_level > 0.6 or achievement_level > 0.5:
-                learning_result = (
-                    await self.intrinsic_motivation.execute_voluntary_learning()
-                )
+                learning_result = await self.intrinsic_motivation.execute_voluntary_learning()
                 attention_result["voluntary_learning"] = learning_result
 
             return attention_result
@@ -837,9 +769,7 @@ class LIDAAttentionSystem:
 
         return focus_areas if focus_areas else ["목표 달성"]
 
-    async def update_motivation_from_experience(
-        self, experience: Dict[str, Any]
-    ) -> None:
+    async def update_motivation_from_experience(self, experience: Dict[str, Any]) -> None:
         """경험을 통한 내적 동기 업데이트"""
         try:
             # 호기심 메트릭 업데이트
@@ -847,9 +777,7 @@ class LIDAAttentionSystem:
 
             # 성취욕 메트릭 업데이트 (성과 데이터가 있는 경우)
             if "performance" in experience:
-                await self.intrinsic_motivation.update_achievement_metrics(
-                    experience["performance"]
-                )
+                await self.intrinsic_motivation.update_achievement_metrics(experience["performance"])
 
             logger.info("🔄 내적 동기 메트릭 업데이트 완료")
 
@@ -937,13 +865,11 @@ async def test_lida_attention_system():
 
     # 주의 상태 업데이트 테스트
     logger.info("🔄 주의 상태 업데이트 테스트")
-    await lida_system.update_attention_state(
-        {"cognitive_load": 0.8, "emotional_state": "focused"}
-    )
+    await lida_system.update_attention_state({"cognitive_load": 0.8, "emotional_state": "focused"})
 
     # 성능 리포트
     report = lida_system.get_performance_report()
-    logger.info(f"📈 성능 리포트:")
+    logger.info("📈 성능 리포트:")
     logger.info(f"   현재 정확도: {report['current_accuracy']:.1%}")
     logger.info(f"   정확도 향상: {report['accuracy_improvement']:.1f}%")
     logger.info(f"   목표 향상: {report['target_improvement']:.1f}%")

@@ -11,15 +11,13 @@ DuRi 불일치 탐지 및 해결 시스템 - Phase 1-3 Week 3 Day 3
 """
 
 import asyncio
-from collections import defaultdict, deque
-from dataclasses import asdict, dataclass, field
-from datetime import datetime
-from enum import Enum
-import heapq
-import json
 import logging
 import re
-from typing import Any, Dict, List, Optional, Set, Tuple
+from collections import defaultdict
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional, Set
 
 import numpy as np
 
@@ -111,13 +109,9 @@ class InconsistencyDetector:
             },
         }
 
-    async def detect_inconsistencies(
-        self, graph: "DynamicReasoningGraph"
-    ) -> List[Inconsistency]:
+    async def detect_inconsistencies(self, graph: "DynamicReasoningGraph") -> List[Inconsistency]:
         """불일치 탐지"""
-        logger.info(
-            f"불일치 탐지 시작: {len(graph.nodes)} 노드, {len(graph.edges)} 엣지"
-        )
+        logger.info(f"불일치 탐지 시작: {len(graph.nodes)} 노드, {len(graph.edges)} 엣지")
 
         inconsistencies = []
 
@@ -130,9 +124,7 @@ class InconsistencyDetector:
         inconsistencies.extend(semantic_inconsistencies)
 
         # 3. 구조적 불일치 탐지
-        structural_inconsistencies = await self._detect_structural_inconsistencies(
-            graph
-        )
+        structural_inconsistencies = await self._detect_structural_inconsistencies(graph)
         inconsistencies.extend(structural_inconsistencies)
 
         # 4. 상충하는 증거 탐지
@@ -150,9 +142,7 @@ class InconsistencyDetector:
         logger.info(f"불일치 탐지 완료: {len(inconsistencies)}개 발견")
         return inconsistencies
 
-    async def _detect_logical_contradictions(
-        self, graph: "DynamicReasoningGraph"
-    ) -> List[Inconsistency]:
+    async def _detect_logical_contradictions(self, graph: "DynamicReasoningGraph") -> List[Inconsistency]:
         """논리적 모순 탐지"""
         contradictions = []
 
@@ -192,9 +182,7 @@ class InconsistencyDetector:
 
         return contradictions
 
-    async def _detect_semantic_inconsistencies(
-        self, graph: "DynamicReasoningGraph"
-    ) -> List[Inconsistency]:
+    async def _detect_semantic_inconsistencies(self, graph: "DynamicReasoningGraph") -> List[Inconsistency]:
         """의미적 불일치 탐지"""
         inconsistencies = []
 
@@ -203,19 +191,13 @@ class InconsistencyDetector:
             for node2_id, node2 in graph.nodes.items():
                 if node1_id != node2_id:
                     # 의미적 유사도가 낮지만 연결된 경우
-                    similarity = self._calculate_semantic_similarity(
-                        node1.content, node2.content
-                    )
+                    similarity = self._calculate_semantic_similarity(node1.content, node2.content)
 
                     # 연결된 노드인지 확인
                     is_connected = False
                     for edge in graph.edges.values():
-                        if (
-                            edge.source_node == node1_id
-                            and edge.target_node == node2_id
-                        ) or (
-                            edge.source_node == node2_id
-                            and edge.target_node == node1_id
+                        if (edge.source_node == node1_id and edge.target_node == node2_id) or (
+                            edge.source_node == node2_id and edge.target_node == node1_id
                         ):
                             is_connected = True
                             break
@@ -234,9 +216,7 @@ class InconsistencyDetector:
 
         return inconsistencies
 
-    async def _detect_structural_inconsistencies(
-        self, graph: "DynamicReasoningGraph"
-    ) -> List[Inconsistency]:
+    async def _detect_structural_inconsistencies(self, graph: "DynamicReasoningGraph") -> List[Inconsistency]:
         """구조적 불일치 탐지"""
         inconsistencies = []
 
@@ -254,7 +234,7 @@ class InconsistencyDetector:
 
         if isolated_nodes:
             inconsistency = Inconsistency(
-                inconsistency_id=f"structural_inconsistency_isolated_nodes",
+                inconsistency_id="structural_inconsistency_isolated_nodes",
                 inconsistency_type=InconsistencyType.STRUCTURAL_INCONSISTENCY,
                 severity=0.5,
                 description=f"고립된 노드 발견: {isolated_nodes}",
@@ -278,27 +258,19 @@ class InconsistencyDetector:
                     inconsistency_type=InconsistencyType.STRUCTURAL_INCONSISTENCY,
                     severity=0.4,
                     description=f"불균형한 노드 유형: {node_type.value} ({count}/{total_nodes})",
-                    affected_nodes=[
-                        n.node_id
-                        for n in graph.nodes.values()
-                        if n.node_type == node_type
-                    ],
+                    affected_nodes=[n.node_id for n in graph.nodes.values() if n.node_type == node_type],
                     confidence=0.6,
                 )
                 inconsistencies.append(inconsistency)
 
         return inconsistencies
 
-    async def _detect_conflicting_evidence(
-        self, graph: "DynamicReasoningGraph"
-    ) -> List[Inconsistency]:
+    async def _detect_conflicting_evidence(self, graph: "DynamicReasoningGraph") -> List[Inconsistency]:
         """상충하는 증거 탐지"""
         conflicts = []
 
         # 증거 노드들 찾기
-        evidence_nodes = [
-            n for n in graph.nodes.values() if n.node_type.value == "evidence"
-        ]
+        evidence_nodes = [n for n in graph.nodes.values() if n.node_type.value == "evidence"]
 
         # 증거 간 상충 관계 탐지
         for i, evidence1 in enumerate(evidence_nodes):
@@ -317,16 +289,12 @@ class InconsistencyDetector:
 
         return conflicts
 
-    async def _detect_circular_reasoning(
-        self, graph: "DynamicReasoningGraph"
-    ) -> List[Inconsistency]:
+    async def _detect_circular_reasoning(self, graph: "DynamicReasoningGraph") -> List[Inconsistency]:
         """순환 추론 탐지"""
         circular_reasoning = []
 
         # 실제 순환만 탐지하도록 개선
-        def has_cycle(
-            start_node: str, visited: set, rec_stack: set, path: list
-        ) -> Optional[list]:
+        def has_cycle(start_node: str, visited: set, rec_stack: set, path: list) -> Optional[list]:
             """실제 순환 탐지"""
             if start_node in rec_stack:
                 # 순환 발견
@@ -346,9 +314,7 @@ class InconsistencyDetector:
             # 인접 노드 탐색 (방향성 고려)
             for edge in graph.edges.values():
                 if edge.source_node == start_node:
-                    cycle = has_cycle(
-                        edge.target_node, visited.copy(), rec_stack.copy(), path.copy()
-                    )
+                    cycle = has_cycle(edge.target_node, visited.copy(), rec_stack.copy(), path.copy())
                     if cycle:
                         return cycle
 
@@ -375,16 +341,12 @@ class InconsistencyDetector:
 
         return circular_reasoning
 
-    async def _detect_missing_premises(
-        self, graph: "DynamicReasoningGraph"
-    ) -> List[Inconsistency]:
+    async def _detect_missing_premises(self, graph: "DynamicReasoningGraph") -> List[Inconsistency]:
         """누락된 전제 탐지"""
         missing_premises = []
 
         # 결론 노드들 찾기
-        conclusion_nodes = [
-            n for n in graph.nodes.values() if n.node_type.value == "conclusion"
-        ]
+        conclusion_nodes = [n for n in graph.nodes.values() if n.node_type.value == "conclusion"]
 
         for conclusion in conclusion_nodes:
             # 결론을 지원하는 전제들 찾기
@@ -413,9 +375,7 @@ class InconsistencyDetector:
 
         return missing_premises
 
-    def _is_logical_contradiction(
-        self, node1: "DynamicReasoningNode", node2: "DynamicReasoningNode"
-    ) -> bool:
+    def _is_logical_contradiction(self, node1: "DynamicReasoningNode", node2: "DynamicReasoningNode") -> bool:
         """논리적 모순 여부 확인"""
         # 간단한 키워드 기반 모순 탐지
         contradiction_keywords = {
@@ -453,9 +413,7 @@ class InconsistencyDetector:
 
         return intersection / union if union > 0 else 0.0
 
-    def _is_conflicting_evidence(
-        self, evidence1: "DynamicReasoningNode", evidence2: "DynamicReasoningNode"
-    ) -> bool:
+    def _is_conflicting_evidence(self, evidence1: "DynamicReasoningNode", evidence2: "DynamicReasoningNode") -> bool:
         """상충하는 증거 여부 확인"""
         # 간단한 키워드 기반 상충 탐지
         conflict_keywords = {
@@ -525,20 +483,13 @@ class InconsistencyResolver:
         logger.info(f"불일치 해결 완료: {len(resolution_results)}개 해결됨")
         return resolution_results
 
-    def _select_resolution_strategy(
-        self, inconsistency: Inconsistency
-    ) -> ResolutionStrategy:
+    def _select_resolution_strategy(self, inconsistency: Inconsistency) -> ResolutionStrategy:
         """해결 전략 선택"""
         if inconsistency.inconsistency_type == InconsistencyType.LOGICAL_CONTRADICTION:
             return ResolutionStrategy.CONTRADICTION_RESOLUTION
-        elif (
-            inconsistency.inconsistency_type == InconsistencyType.SEMANTIC_INCONSISTENCY
-        ):
+        elif inconsistency.inconsistency_type == InconsistencyType.SEMANTIC_INCONSISTENCY:
             return ResolutionStrategy.NODE_MODIFICATION
-        elif (
-            inconsistency.inconsistency_type
-            == InconsistencyType.STRUCTURAL_INCONSISTENCY
-        ):
+        elif inconsistency.inconsistency_type == InconsistencyType.STRUCTURAL_INCONSISTENCY:
             return ResolutionStrategy.PATH_RECONSTRUCTION
         elif inconsistency.inconsistency_type == InconsistencyType.CONFLICTING_EVIDENCE:
             return ResolutionStrategy.EVIDENCE_WEIGHTING
@@ -556,21 +507,13 @@ class InconsistencyResolver:
         """해결 전략 실행"""
         try:
             if strategy == ResolutionStrategy.NODE_MODIFICATION:
-                return await self._resolve_node_modification(
-                    graph, inconsistency, modified_nodes
-                )
+                return await self._resolve_node_modification(graph, inconsistency, modified_nodes)
             elif strategy == ResolutionStrategy.EDGE_ADJUSTMENT:
-                return await self._resolve_edge_adjustment(
-                    graph, inconsistency, modified_edges
-                )
+                return await self._resolve_edge_adjustment(graph, inconsistency, modified_edges)
             elif strategy == ResolutionStrategy.PATH_RECONSTRUCTION:
-                return await self._resolve_path_reconstruction(
-                    graph, inconsistency, modified_nodes
-                )
+                return await self._resolve_path_reconstruction(graph, inconsistency, modified_nodes)
             elif strategy == ResolutionStrategy.EVIDENCE_WEIGHTING:
-                return await self._resolve_evidence_weighting(
-                    graph, inconsistency, modified_nodes
-                )
+                return await self._resolve_evidence_weighting(graph, inconsistency, modified_nodes)
             elif strategy == ResolutionStrategy.CONTRADICTION_RESOLUTION:
                 return await self._resolve_contradiction_resolution(
                     graph, inconsistency, modified_nodes, modified_edges
@@ -594,7 +537,7 @@ class InconsistencyResolver:
             node = graph.nodes.get(node_id)
             if node:
                 # 노드 신뢰도 조정
-                original_confidence = node.confidence
+                original_confidence = node.confidence  # noqa: F841
                 node.confidence = max(0.1, node.confidence * 0.8)  # 신뢰도 감소
                 modified_nodes.add(node_id)  # 중복 수정 방지
                 nodes_to_modify.append(node_id)
@@ -622,7 +565,7 @@ class InconsistencyResolver:
             edge = graph.edges.get(edge_id)
             if edge:
                 # 엣지 강도 조정
-                original_strength = edge.strength
+                original_strength = edge.strength  # noqa: F841
                 edge.strength = max(0.1, edge.strength * 0.7)  # 강도 감소
                 modified_edges.add(edge_id)  # 중복 수정 방지
                 edges_to_modify.append(edge_id)
@@ -656,9 +599,7 @@ class InconsistencyResolver:
 
                 for target_id, target_node in graph.nodes.items():
                     if target_id != node_id:
-                        similarity = self._calculate_semantic_similarity(
-                            node.content, target_node.content
-                        )
+                        similarity = self._calculate_semantic_similarity(node.content, target_node.content)
                         if similarity > best_similarity:
                             best_similarity = similarity
                             best_target = target_id
@@ -701,10 +642,8 @@ class InconsistencyResolver:
             node = graph.nodes.get(node_id)
             if node and node.node_type.value == "evidence":
                 # 증거 노드의 중요도 조정
-                original_importance = node.importance_score
-                node.importance_score = max(
-                    0.1, node.importance_score * 0.6
-                )  # 중요도 감소
+                original_importance = node.importance_score  # noqa: F841
+                node.importance_score = max(0.1, node.importance_score * 0.6)  # 중요도 감소
                 modified_nodes.add(node_id)  # 중복 수정 방지
                 nodes_to_modify.append(node_id)
 
@@ -795,25 +734,19 @@ class InconsistencyValidator:
         logger.info(f"해결 결과 검증 시작: {len(resolution_results)}개 해결 결과")
 
         # 1. 해결 성공률 계산
-        resolution_success_rate = self._calculate_resolution_success_rate(
-            resolution_results
-        )
+        resolution_success_rate = self._calculate_resolution_success_rate(resolution_results)
 
         # 2. 시스템 안정성 평가
         system_stability = await self._evaluate_system_stability(graph)
 
         # 3. 품질 향상도 평가
-        quality_improvement = await self._evaluate_quality_improvement(
-            graph, inconsistencies
-        )
+        quality_improvement = await self._evaluate_quality_improvement(graph, inconsistencies)
 
         # 종합 검증 결과
         overall_validation_score = (
-            resolution_success_rate
-            * self.validation_criteria["resolution_success"]["weight"]
+            resolution_success_rate * self.validation_criteria["resolution_success"]["weight"]
             + system_stability * self.validation_criteria["system_stability"]["weight"]
-            + quality_improvement
-            * self.validation_criteria["quality_improvement"]["weight"]
+            + quality_improvement * self.validation_criteria["quality_improvement"]["weight"]
         )
 
         return {
@@ -823,24 +756,14 @@ class InconsistencyValidator:
             "quality_improvement": quality_improvement,
             "validation_details": {
                 "total_inconsistencies": len(inconsistencies),
-                "resolved_inconsistencies": len(
-                    [r for r in resolution_results if r.success]
-                ),
-                "failed_resolutions": len(
-                    [r for r in resolution_results if not r.success]
-                ),
-                "modified_nodes": len(
-                    set([n for r in resolution_results for n in r.modified_nodes])
-                ),
-                "modified_edges": len(
-                    set([e for r in resolution_results for e in r.modified_edges])
-                ),
+                "resolved_inconsistencies": len([r for r in resolution_results if r.success]),
+                "failed_resolutions": len([r for r in resolution_results if not r.success]),
+                "modified_nodes": len(set([n for r in resolution_results for n in r.modified_nodes])),
+                "modified_edges": len(set([e for r in resolution_results for e in r.modified_edges])),
             },
         }
 
-    def _calculate_resolution_success_rate(
-        self, resolution_results: List[ResolutionResult]
-    ) -> float:
+    def _calculate_resolution_success_rate(self, resolution_results: List[ResolutionResult]) -> float:
         """해결 성공률 계산"""
         if not resolution_results:
             return 0.0
@@ -852,15 +775,11 @@ class InconsistencyValidator:
         """시스템 안정성 평가"""
         # 노드 신뢰도의 평균
         node_confidences = [node.confidence for node in graph.nodes.values()]
-        avg_node_confidence = (
-            sum(node_confidences) / len(node_confidences) if node_confidences else 0.0
-        )
+        avg_node_confidence = sum(node_confidences) / len(node_confidences) if node_confidences else 0.0
 
         # 엣지 강도의 평균
         edge_strengths = [edge.strength for edge in graph.edges.values()]
-        avg_edge_strength = (
-            sum(edge_strengths) / len(edge_strengths) if edge_strengths else 0.0
-        )
+        avg_edge_strength = sum(edge_strengths) / len(edge_strengths) if edge_strengths else 0.0
 
         # 시스템 안정성 (신뢰도와 강도의 평균)
         system_stability = (avg_node_confidence + avg_edge_strength) / 2.0
@@ -872,9 +791,7 @@ class InconsistencyValidator:
         """품질 향상도 평가"""
         # 불일치 수에 따른 품질 점수 (더 관대한 기준 적용)
         total_nodes = len(graph.nodes)
-        inconsistency_ratio = (
-            len(inconsistencies) / total_nodes if total_nodes > 0 else 0.0
-        )
+        inconsistency_ratio = len(inconsistencies) / total_nodes if total_nodes > 0 else 0.0
 
         # 불일치 비율이 낮을수록 품질이 높음 (더 관대한 기준)
         quality_score = max(0.0, 1.0 - inconsistency_ratio * 2)  # 가중치 조정
@@ -882,31 +799,18 @@ class InconsistencyValidator:
         # 노드 간 연결성 고려
         total_possible_connections = total_nodes * (total_nodes - 1) / 2
         actual_connections = len(graph.edges)
-        connectivity_ratio = (
-            actual_connections / total_possible_connections
-            if total_possible_connections > 0
-            else 0.0
-        )
+        connectivity_ratio = actual_connections / total_possible_connections if total_possible_connections > 0 else 0.0
 
         # 노드 신뢰도 평균 고려
         node_confidences = [node.confidence for node in graph.nodes.values()]
-        avg_confidence = (
-            sum(node_confidences) / len(node_confidences) if node_confidences else 0.0
-        )
+        avg_confidence = sum(node_confidences) / len(node_confidences) if node_confidences else 0.0
 
         # 엣지 강도 평균 고려
         edge_strengths = [edge.strength for edge in graph.edges.values()]
-        avg_strength = (
-            sum(edge_strengths) / len(edge_strengths) if edge_strengths else 0.0
-        )
+        avg_strength = sum(edge_strengths) / len(edge_strengths) if edge_strengths else 0.0
 
         # 종합 품질 점수 (더 균형잡힌 가중치)
-        overall_quality = (
-            quality_score * 0.4
-            + connectivity_ratio * 0.2
-            + avg_confidence * 0.2
-            + avg_strength * 0.2
-        )
+        overall_quality = quality_score * 0.4 + connectivity_ratio * 0.2 + avg_confidence * 0.2 + avg_strength * 0.2
 
         return overall_quality
 
@@ -989,54 +893,26 @@ async def test_inconsistency_detector():
 
     # 테스트 노드들 생성 (의도적으로 불일치 포함)
     nodes = {
-        "node1": DynamicReasoningNode(
-            "node1", NodeType.PREMISE, "윤리적 행동은 옳다", 0.8, "test"
-        ),
-        "node2": DynamicReasoningNode(
-            "node2", NodeType.PREMISE, "윤리적 행동은 틀리다", 0.7, "test"
-        ),  # 모순
-        "node3": DynamicReasoningNode(
-            "node3", NodeType.INFERENCE, "칸트적 분석", 0.6, "test"
-        ),
-        "node4": DynamicReasoningNode(
-            "node4", NodeType.CONCLUSION, "최종 판단", 0.9, "test"
-        ),
-        "node5": DynamicReasoningNode(
-            "node5", NodeType.EVIDENCE, "증거 A: 긍정적 결과", 0.8, "test"
-        ),
-        "node6": DynamicReasoningNode(
-            "node6", NodeType.EVIDENCE, "증거 B: 부정적 결과", 0.7, "test"
-        ),  # 상충
-        "node7": DynamicReasoningNode(
-            "node7", NodeType.COUNTER_ARGUMENT, "반론", 0.5, "test"
-        ),
-        "node8": DynamicReasoningNode(
-            "node8", NodeType.ASSUMPTION, "가정", 0.6, "test"
-        ),
+        "node1": DynamicReasoningNode("node1", NodeType.PREMISE, "윤리적 행동은 옳다", 0.8, "test"),
+        "node2": DynamicReasoningNode("node2", NodeType.PREMISE, "윤리적 행동은 틀리다", 0.7, "test"),  # 모순
+        "node3": DynamicReasoningNode("node3", NodeType.INFERENCE, "칸트적 분석", 0.6, "test"),
+        "node4": DynamicReasoningNode("node4", NodeType.CONCLUSION, "최종 판단", 0.9, "test"),
+        "node5": DynamicReasoningNode("node5", NodeType.EVIDENCE, "증거 A: 긍정적 결과", 0.8, "test"),
+        "node6": DynamicReasoningNode("node6", NodeType.EVIDENCE, "증거 B: 부정적 결과", 0.7, "test"),  # 상충
+        "node7": DynamicReasoningNode("node7", NodeType.COUNTER_ARGUMENT, "반론", 0.5, "test"),
+        "node8": DynamicReasoningNode("node8", NodeType.ASSUMPTION, "가정", 0.6, "test"),
     }
 
     graph.nodes = nodes
 
     # 테스트 엣지들 생성
     edges = {
-        "edge1": DynamicReasoningEdge(
-            "edge1", "node1", "node3", EdgeType.SUPPORTS, 0.8, "지원"
-        ),
-        "edge2": DynamicReasoningEdge(
-            "edge2", "node2", "node3", EdgeType.CONTRADICTS, 0.7, "모순"
-        ),  # 모순 엣지
-        "edge3": DynamicReasoningEdge(
-            "edge3", "node3", "node4", EdgeType.INFERS, 0.9, "추론"
-        ),
-        "edge4": DynamicReasoningEdge(
-            "edge4", "node5", "node4", EdgeType.EVIDENCES, 0.8, "증거"
-        ),
-        "edge5": DynamicReasoningEdge(
-            "edge5", "node6", "node4", EdgeType.EVIDENCES, 0.7, "증거"
-        ),
-        "edge6": DynamicReasoningEdge(
-            "edge6", "node7", "node4", EdgeType.CHALLENGES, 0.6, "도전"
-        ),
+        "edge1": DynamicReasoningEdge("edge1", "node1", "node3", EdgeType.SUPPORTS, 0.8, "지원"),
+        "edge2": DynamicReasoningEdge("edge2", "node2", "node3", EdgeType.CONTRADICTS, 0.7, "모순"),  # 모순 엣지
+        "edge3": DynamicReasoningEdge("edge3", "node3", "node4", EdgeType.INFERS, 0.9, "추론"),
+        "edge4": DynamicReasoningEdge("edge4", "node5", "node4", EdgeType.EVIDENCES, 0.8, "증거"),
+        "edge5": DynamicReasoningEdge("edge5", "node6", "node4", EdgeType.EVIDENCES, 0.7, "증거"),
+        "edge6": DynamicReasoningEdge("edge6", "node7", "node4", EdgeType.CHALLENGES, 0.6, "도전"),
     }
 
     graph.edges = edges
@@ -1045,12 +921,10 @@ async def test_inconsistency_detector():
     detector = InconsistencyDetector()
     inconsistencies = await detector.detect_inconsistencies(graph)
 
-    print(f"\n🔍 불일치 탐지 결과:")
+    print("\n🔍 불일치 탐지 결과:")
     print(f"  • 발견된 불일치 수: {len(inconsistencies)}")
     for i, inconsistency in enumerate(inconsistencies):
-        print(
-            f"  • 불일치 {i+1}: {inconsistency.inconsistency_type.value} (심각도: {inconsistency.severity:.2f})"
-        )
+        print(f"  • 불일치 {i+1}: {inconsistency.inconsistency_type.value} (심각도: {inconsistency.severity:.2f})")
         print(f"    - 설명: {inconsistency.description}")
         print(f"    - 영향받는 노드: {inconsistency.affected_nodes}")
 
@@ -1058,7 +932,7 @@ async def test_inconsistency_detector():
     resolver = InconsistencyResolver()
     resolution_results = await resolver.resolve_inconsistencies(graph, inconsistencies)
 
-    print(f"\n🔧 불일치 해결 결과:")
+    print("\n🔧 불일치 해결 결과:")
     print(f"  • 해결된 불일치 수: {len([r for r in resolution_results if r.success])}")
     for i, result in enumerate(resolution_results):
         print(f"  • 해결 결과 {i+1}: {result.strategy.value} (성공: {result.success})")
@@ -1068,31 +942,19 @@ async def test_inconsistency_detector():
 
     # 3. 해결 결과 검증 테스트
     validator = InconsistencyValidator()
-    validation_results = await validator.validate_resolution_results(
-        graph, inconsistencies, resolution_results
-    )
+    validation_results = await validator.validate_resolution_results(graph, inconsistencies, resolution_results)
 
-    print(f"\n📊 해결 결과 검증:")
+    print("\n📊 해결 결과 검증:")
     print(f"  • 종합 검증 점수: {validation_results['overall_validation_score']:.2f}")
     print(f"  • 해결 성공률: {validation_results['resolution_success_rate']:.2f}")
     print(f"  • 시스템 안정성: {validation_results['system_stability']:.2f}")
     print(f"  • 품질 향상도: {validation_results['quality_improvement']:.2f}")
-    print(f"  • 검증 세부사항:")
-    print(
-        f"    - 총 불일치 수: {validation_results['validation_details']['total_inconsistencies']}"
-    )
-    print(
-        f"    - 해결된 불일치 수: {validation_results['validation_details']['resolved_inconsistencies']}"
-    )
-    print(
-        f"    - 실패한 해결 수: {validation_results['validation_details']['failed_resolutions']}"
-    )
-    print(
-        f"    - 수정된 노드 수: {validation_results['validation_details']['modified_nodes']}"
-    )
-    print(
-        f"    - 수정된 엣지 수: {validation_results['validation_details']['modified_edges']}"
-    )
+    print("  • 검증 세부사항:")
+    print(f"    - 총 불일치 수: {validation_results['validation_details']['total_inconsistencies']}")
+    print(f"    - 해결된 불일치 수: {validation_results['validation_details']['resolved_inconsistencies']}")
+    print(f"    - 실패한 해결 수: {validation_results['validation_details']['failed_resolutions']}")
+    print(f"    - 수정된 노드 수: {validation_results['validation_details']['modified_nodes']}")
+    print(f"    - 수정된 엣지 수: {validation_results['validation_details']['modified_edges']}")
 
     print(f"\n{'='*70}")
     print("=== 불일치 탐지 및 해결 시스템 테스트 완료 (Phase 1-3 Week 3 Day 3) ===")

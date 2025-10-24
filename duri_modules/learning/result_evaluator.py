@@ -3,10 +3,10 @@
 DuRi 결과 평가 시스템 (Result Evaluator)
 대화와 행동의 결과를 정밀하게 평가
 """
-from datetime import datetime
-import json
+
 import logging
 import re
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
@@ -83,9 +83,7 @@ class ResultEvaluator:
 
             # 각 기준별 평가
             for criterion, config in self.evaluation_criteria.items():
-                score, indicators = self._evaluate_criterion(
-                    duri_response, user_input, criterion, config
-                )
+                score, indicators = self._evaluate_criterion(duri_response, user_input, criterion, config)
                 evaluation["detailed_scores"][criterion] = score
 
                 if score > 0.5:
@@ -96,29 +94,21 @@ class ResultEvaluator:
             # 전체 점수 계산
             total_score = 0.0
             for criterion, config in self.evaluation_criteria.items():
-                total_score += (
-                    evaluation["detailed_scores"][criterion] * config["weight"]
-                )
+                total_score += evaluation["detailed_scores"][criterion] * config["weight"]
 
             evaluation["overall_score"] = total_score
 
             # 개선 제안 생성
-            evaluation["improvement_suggestions"] = (
-                self._generate_improvement_suggestions(evaluation)
-            )
+            evaluation["improvement_suggestions"] = self._generate_improvement_suggestions(evaluation)
 
             # 학습 인사이트 추출
-            evaluation["learning_insights"] = self._extract_learning_insights(
-                evaluation
-            )
+            evaluation["learning_insights"] = self._extract_learning_insights(evaluation)
 
             # 성공/실패 판정
             evaluation["is_success"] = total_score > 0.6
             evaluation["success_level"] = self._determine_success_level(total_score)
 
-            logger.info(
-                f"결과 평가 완료: 점수 {total_score:.2f} ({evaluation['success_level']})"
-            )
+            logger.info(f"결과 평가 완료: 점수 {total_score:.2f} ({evaluation['success_level']})")
 
             return evaluation
 
@@ -126,9 +116,7 @@ class ResultEvaluator:
             logger.error(f"결과 평가 오류: {e}")
             return self._create_fallback_evaluation(user_input, duri_response)
 
-    def _evaluate_criterion(
-        self, response: str, user_input: str, criterion: str, config: Dict
-    ) -> tuple:
+    def _evaluate_criterion(self, response: str, user_input: str, criterion: str, config: Dict) -> tuple:
         """개별 기준 평가"""
         score = 0.0
         indicators = []
@@ -170,30 +158,20 @@ class ResultEvaluator:
         response_lower = response.lower()
 
         # 질문에 대한 답변
-        if "?" in user_input or any(
-            word in user_lower for word in ["어떻게", "무엇", "왜"]
-        ):
+        if "?" in user_input or any(word in user_lower for word in ["어떻게", "무엇", "왜"]):
             return len(response) > 30 and "?" not in response
 
         # 요청에 대한 실행 가능한 답변
         if any(word in user_lower for word in ["해줘", "만들어", "구현해"]):
-            return any(
-                word in response_lower
-                for word in ["다음과 같이", "실행", "구현", "생성"]
-            )
+            return any(word in response_lower for word in ["다음과 같이", "실행", "구현", "생성"])
 
         # 평가에 대한 명확한 판단
         if any(word in user_lower for word in ["어떠니", "좋니", "성공했니"]):
-            return any(
-                word in response_lower
-                for word in ["좋습니다", "나쁩니다", "성공", "실패"]
-            )
+            return any(word in response_lower for word in ["좋습니다", "나쁩니다", "성공", "실패"])
 
         return True
 
-    def _generate_improvement_suggestions(
-        self, evaluation: Dict[str, Any]
-    ) -> List[str]:
+    def _generate_improvement_suggestions(self, evaluation: Dict[str, Any]) -> List[str]:
         """개선 제안 생성"""
         suggestions = []
 
@@ -226,15 +204,11 @@ class ResultEvaluator:
 
         # 성공 요인 분석
         if evaluation["success_indicators"]:
-            insights.append(
-                f"성공 요인: {', '.join(evaluation['success_indicators'][:3])}"
-            )
+            insights.append(f"성공 요인: {', '.join(evaluation['success_indicators'][:3])}")
 
         # 실패 요인 분석
         if evaluation["failure_indicators"]:
-            insights.append(
-                f"개선 필요: {', '.join(evaluation['failure_indicators'][:3])}"
-            )
+            insights.append(f"개선 필요: {', '.join(evaluation['failure_indicators'][:3])}")
 
         # 점수별 인사이트
         overall_score = evaluation["overall_score"]
@@ -262,9 +236,7 @@ class ResultEvaluator:
         else:
             return "부족"
 
-    def _create_fallback_evaluation(
-        self, user_input: str, duri_response: str
-    ) -> Dict[str, Any]:
+    def _create_fallback_evaluation(self, user_input: str, duri_response: str) -> Dict[str, Any]:
         """오류 시 기본 평가 생성"""
         return {
             "timestamp": datetime.now().isoformat(),
@@ -286,9 +258,7 @@ class ResultEvaluator:
             "success_level": "보통",
         }
 
-    def batch_evaluate(
-        self, conversations: List[Dict[str, str]]
-    ) -> List[Dict[str, Any]]:
+    def batch_evaluate(self, conversations: List[Dict[str, str]]) -> List[Dict[str, Any]]:
         """여러 대화의 결과를 일괄 평가"""
         evaluations = []
 
@@ -301,20 +271,14 @@ class ResultEvaluator:
 
         return evaluations
 
-    def get_evaluation_summary(
-        self, evaluations: List[Dict[str, Any]]
-    ) -> Dict[str, Any]:
+    def get_evaluation_summary(self, evaluations: List[Dict[str, Any]]) -> Dict[str, Any]:
         """평가 요약 생성"""
         if not evaluations:
             return {"error": "평가할 대화가 없습니다"}
 
         total_evaluations = len(evaluations)
-        successful_evaluations = sum(
-            1 for e in evaluations if e.get("is_success", False)
-        )
-        success_rate = (
-            successful_evaluations / total_evaluations if total_evaluations > 0 else 0
-        )
+        successful_evaluations = sum(1 for e in evaluations if e.get("is_success", False))
+        success_rate = successful_evaluations / total_evaluations if total_evaluations > 0 else 0
 
         # 평균 점수 계산
         total_score = sum(e.get("overall_score", 0) for e in evaluations)

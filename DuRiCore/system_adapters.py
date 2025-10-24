@@ -12,14 +12,13 @@ DuRi 시스템 어댑터
 - 자동 등록 지원
 """
 
-from abc import ABC, abstractmethod
 import asyncio
 import logging
 from typing import Any, Dict, Optional
 
 # 모듈 레지스트리 시스템 import
 try:
-    from module_registry import BaseModule, ModuleMeta, ModulePriority
+    from module_registry import BaseModule, ModuleMeta, ModulePriority  # noqa: F401
 
     MODULE_REGISTRY_AVAILABLE = True
 except ImportError:
@@ -66,9 +65,7 @@ class SystemAdapter(BaseModule):
         """원본 시스템의 속성에 접근"""
         if hasattr(self.original_system, name):
             return getattr(self.original_system, name)
-        raise AttributeError(
-            f"'{self.__class__.__name__}' object has no attribute '{name}'"
-        )
+        raise AttributeError(f"'{self.__class__.__name__}' object has no attribute '{name}'")
 
 
 class JudgmentSystemAdapter(SystemAdapter):
@@ -176,9 +173,7 @@ class SocialIntelligenceSystemAdapter(SystemAdapter):
     async def execute(self, context: Dict[str, Any]) -> Any:
         """사회적 지능 시스템 실행"""
         if hasattr(self.original_system, "process_social_interaction"):
-            if asyncio.iscoroutinefunction(
-                self.original_system.process_social_interaction
-            ):
+            if asyncio.iscoroutinefunction(self.original_system.process_social_interaction):
                 return await self.original_system.process_social_interaction(context)
             else:
                 return self.original_system.process_social_interaction(context)
@@ -200,9 +195,7 @@ class SystemAdapterFactory:
     }
 
     @classmethod
-    def create_adapter(
-        cls, system_name: str, original_system: Any
-    ) -> Optional[SystemAdapter]:
+    def create_adapter(cls, system_name: str, original_system: Any) -> Optional[SystemAdapter]:
         """어댑터 생성"""
         adapter_class = cls._adapters.get(system_name)
         if adapter_class:
@@ -265,9 +258,7 @@ async def test_system_adapters():
 
     # 어댑터 생성 테스트
     test_judgment = TestJudgmentSystem()
-    judgment_adapter = SystemAdapterFactory.create_adapter(
-        "judgment_system", test_judgment
-    )
+    judgment_adapter = SystemAdapterFactory.create_adapter("judgment_system", test_judgment)
 
     if judgment_adapter:
         # 초기화 테스트

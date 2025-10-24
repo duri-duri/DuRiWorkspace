@@ -5,17 +5,16 @@ DuRi 진화 결과 테스트
 """
 
 import asyncio
-from datetime import datetime
 import os
 import sys
 
 # DuRiCore 모듈 경로 추가
 sys.path.append(os.path.join(os.path.dirname(__file__), "DuRiCore"))
 
-from application_system import ApplicationContext, ApplicationDomain, ApplicationSystem
-from feedback_system import FeedbackSystem
-from judgment_system import JudgmentSystem
-from prediction_system import PredictionSystem, PredictionType
+from application_system import ApplicationDomain, ApplicationSystem  # noqa: E402
+from feedback_system import FeedbackSystem  # noqa: E402
+from judgment_system import JudgmentSystem  # noqa: E402
+from prediction_system import PredictionSystem  # noqa: E402
 
 
 async def test_application_system_evolution():
@@ -53,9 +52,7 @@ async def test_application_system_evolution():
             "name": "화남 + 목표 진행 중",
             "user_input": "화가 나요!",
             "user_context": {
-                "interaction_history": [
-                    {"emotion": "화남", "timestamp": "2025-08-05T09:00:00"}
-                ],
+                "interaction_history": [{"emotion": "화남", "timestamp": "2025-08-05T09:00:00"}],
                 "goals": ["프로젝트 완성"],
                 "system_performance": 0.7,
             },
@@ -237,7 +234,7 @@ async def test_judgment_system_evolution():
             judgment_system.current_context = test_case["context"]
 
             # 피드백 생성 오류 테스트
-            error_msg = "테스트 오류"
+            error_msg = "테스트 오류"  # noqa: F841
             result = await judgment_system._generate_feedback(0.5, 0.5, 0.5, 0.5)
             print(f"   피드백 생성 결과: {result}")
 

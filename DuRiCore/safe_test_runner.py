@@ -9,12 +9,9 @@ import logging
 import sys
 import time
 import traceback
-from typing import Any, Dict
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 # 전역 변수로 시스템 인스턴스 관리
@@ -88,7 +85,7 @@ async def test_social_intelligence_safe():
             process_time = time.time() - start_time
 
             # 결과 출력
-            print(f"\n📊 테스트 결과:")
+            print("\n📊 테스트 결과:")
             print(f"   ✅ 성공 여부: {result.success}")
             print(f"   🧠 사회적 지능 점수: {result.context_understanding:.2f}")
             print(f"   📊 공감 점수: {result.empathy_score:.2f}")
@@ -116,19 +113,13 @@ async def test_social_intelligence_safe():
                 _social_intelligence_system.get_social_intelligence_summary(),
                 timeout=30.0,
             )
-            print(f"\n📈 성능 요약:")
+            print("\n📈 성능 요약:")
+            print(f"   총 상호작용: {summary['performance_metrics']['total_interactions']}")
             print(
-                f"   총 상호작용: {summary['performance_metrics']['total_interactions']}"
+                f"   성공률: {summary['performance_metrics']['successful_interactions']/summary['performance_metrics']['total_interactions']*100:.1f}%"  # noqa: E501
             )
-            print(
-                f"   성공률: {summary['performance_metrics']['successful_interactions']/summary['performance_metrics']['total_interactions']*100:.1f}%"
-            )
-            print(
-                f"   평균 공감 점수: {summary['performance_metrics']['average_empathy_score']:.2f}"
-            )
-            print(
-                f"   평균 신뢰 점수: {summary['performance_metrics']['average_trust_score']:.2f}"
-            )
+            print(f"   평균 공감 점수: {summary['performance_metrics']['average_empathy_score']:.2f}")
+            print(f"   평균 신뢰 점수: {summary['performance_metrics']['average_trust_score']:.2f}")
         except asyncio.TimeoutError:
             print("⚠️ 성능 요약 타임아웃 (30초 초과)")
         except Exception as e:

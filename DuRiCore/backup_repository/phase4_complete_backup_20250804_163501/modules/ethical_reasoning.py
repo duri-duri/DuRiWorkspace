@@ -4,9 +4,9 @@ DuRiCore - 윤리 판단 엔진
 4개 윤리 모듈 통합: LLM 기반 윤리 분석 및 판단
 """
 
+import logging
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-import logging
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np

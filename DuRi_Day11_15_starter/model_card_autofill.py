@@ -12,10 +12,10 @@ HITL 품질 리포트 → 모델카드 자동 채움
 - 경로 안정화
 """
 import argparse
-from datetime import datetime
 import json
 import pathlib
 import sys
+from datetime import datetime
 
 
 def atomic_write(path: pathlib.Path, text: str):

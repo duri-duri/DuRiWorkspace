@@ -7,14 +7,14 @@ DuRiCore Phase 2.5: 윤리적 판단 시스템 (Ethical Judgment System)
 """
 
 import asyncio
-from collections import defaultdict
-from dataclasses import asdict, dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 import logging
 import random
 import time
-from typing import Any, Dict, List, Optional, Tuple
+from collections import defaultdict
+from dataclasses import asdict, dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
 # 로깅 설정
 logger = logging.getLogger(__name__)
@@ -150,17 +150,13 @@ class EthicalJudgmentSystem:
     """윤리적 판단 시스템"""
 
     def __init__(self):
-        self.judgment_state = EthicalJudgmentState(
-            maturity_metrics=EthicalMaturityMetrics()
-        )
+        self.judgment_state = EthicalJudgmentState(maturity_metrics=EthicalMaturityMetrics())
         self.principle_hierarchy = {}
         self.conflict_resolution_strategies = {}
         self.moral_frameworks = {}
         logger.info("🧠 윤리적 판단 시스템 초기화 완료")
 
-    async def analyze_ethical_situation(
-        self, situation_data: Dict[str, Any]
-    ) -> EthicalSituation:
+    async def analyze_ethical_situation(self, situation_data: Dict[str, Any]) -> EthicalSituation:
         """윤리적 상황 분석"""
         situation_id = f"situation_{int(time.time())}"
 
@@ -198,9 +194,7 @@ class EthicalJudgmentSystem:
         logger.info(f"🔍 윤리적 상황 분석 완료: {len(involved_principles)}개 원칙 관련")
         return situation
 
-    async def make_ethical_judgment(
-        self, situation: EthicalSituation
-    ) -> EthicalJudgment:
+    async def make_ethical_judgment(self, situation: EthicalSituation) -> EthicalJudgment:
         """윤리적 판단 수행"""
         judgment_id = f"judgment_{int(time.time())}"
 
@@ -208,9 +202,7 @@ class EthicalJudgmentSystem:
         alternatives = await self._generate_ethical_alternatives(situation)
 
         # 각 대안 평가
-        evaluated_alternatives = await self._evaluate_alternatives(
-            alternatives, situation
-        )
+        evaluated_alternatives = await self._evaluate_alternatives(alternatives, situation)
 
         # 최적 판단 선택
         best_decision = self._select_best_decision(evaluated_alternatives)
@@ -225,9 +217,7 @@ class EthicalJudgmentSystem:
         ethical_score = self._calculate_ethical_score(situation, best_decision)
 
         # 도덕적 정당화
-        moral_justification = await self._generate_moral_justification(
-            situation, best_decision
-        )
+        moral_justification = await self._generate_moral_justification(situation, best_decision)
 
         judgment = EthicalJudgment(
             judgment_id=judgment_id,
@@ -248,9 +238,7 @@ class EthicalJudgmentSystem:
         logger.info(f"⚖️ 윤리적 판단 완료: {confidence.value} 신뢰도")
         return judgment
 
-    async def resolve_ethical_conflict(
-        self, situation: EthicalSituation
-    ) -> EthicalConflict:
+    async def resolve_ethical_conflict(self, situation: EthicalSituation) -> EthicalConflict:
         """윤리적 갈등 해결"""
         conflict_id = f"conflict_{int(time.time())}"
 
@@ -264,9 +252,7 @@ class EthicalJudgmentSystem:
         resolution_approach = self._select_resolution_approach(conflicting_principles)
 
         # 타협안 생성
-        compromise_solution = await self._generate_compromise_solution(
-            situation, conflicting_principles
-        )
+        compromise_solution = await self._generate_compromise_solution(situation, conflicting_principles)
 
         conflict = EthicalConflict(
             conflict_id=conflict_id,
@@ -297,11 +283,7 @@ class EthicalJudgmentSystem:
 
         # 전체 성숙도 점수
         maturity_score = (
-            principle_understanding
-            + conflict_resolution
-            + moral_reasoning
-            + ethical_consistency
-            + moral_imagination
+            principle_understanding + conflict_resolution + moral_reasoning + ethical_consistency + moral_imagination
         ) / 5.0
 
         # 성숙도 수준 결정
@@ -326,9 +308,7 @@ class EthicalJudgmentSystem:
         )
 
         # 메트릭 업데이트
-        self.judgment_state.maturity_metrics.principle_understanding = (
-            principle_understanding
-        )
+        self.judgment_state.maturity_metrics.principle_understanding = principle_understanding
         self.judgment_state.maturity_metrics.conflict_resolution = conflict_resolution
         self.judgment_state.maturity_metrics.moral_reasoning = moral_reasoning
         self.judgment_state.maturity_metrics.ethical_consistency = ethical_consistency
@@ -380,9 +360,7 @@ class EthicalJudgmentSystem:
         }
 
     # 내부 분석 메서드들
-    def _identify_involved_principles(
-        self, situation_data: Dict[str, Any]
-    ) -> List[EthicalPrinciple]:
+    def _identify_involved_principles(self, situation_data: Dict[str, Any]) -> List[EthicalPrinciple]:
         """관련 윤리 원칙 식별"""
         principles = []
 
@@ -429,9 +407,7 @@ class EthicalJudgmentSystem:
 
         return stakeholders
 
-    def _analyze_potential_consequences(
-        self, situation_data: Dict[str, Any]
-    ) -> List[str]:
+    def _analyze_potential_consequences(self, situation_data: Dict[str, Any]) -> List[str]:
         """잠재적 결과 분석"""
         consequences = situation_data.get("consequences", [])
 
@@ -471,9 +447,7 @@ class EthicalJudgmentSystem:
     def _assess_complexity(self, situation_data: Dict[str, Any]) -> float:
         """복잡성 평가"""
         # 실제 구현에서는 더 정교한 분석 로직 사용
-        factors = len(situation_data.get("stakeholders", [])) + len(
-            situation_data.get("consequences", [])
-        )
+        factors = len(situation_data.get("stakeholders", [])) + len(situation_data.get("consequences", []))
         return min(1.0, factors / 10.0)
 
     def _assess_urgency(self, situation_data: Dict[str, Any]) -> float:
@@ -481,9 +455,7 @@ class EthicalJudgmentSystem:
         # 실제 구현에서는 더 정교한 분석 로직 사용
         return random.uniform(0.3, 0.8)
 
-    async def _generate_ethical_alternatives(
-        self, situation: EthicalSituation
-    ) -> List[Dict[str, Any]]:
+    async def _generate_ethical_alternatives(self, situation: EthicalSituation) -> List[Dict[str, Any]]:
         """윤리적 대안 생성"""
         alternatives = []
 
@@ -514,15 +486,11 @@ class EthicalJudgmentSystem:
         """대안 평가"""
         for alternative in alternatives:
             # 윤리적 점수 계산
-            ethical_score = self._calculate_alternative_ethical_score(
-                alternative, situation
-            )
+            ethical_score = self._calculate_alternative_ethical_score(alternative, situation)
             alternative["ethical_score"] = ethical_score
 
             # 실현 가능성 평가
-            feasibility_score = self._calculate_alternative_feasibility(
-                alternative, situation
-            )
+            feasibility_score = self._calculate_alternative_feasibility(alternative, situation)
             alternative["feasibility_score"] = feasibility_score
 
             # 전체 점수 계산
@@ -530,15 +498,11 @@ class EthicalJudgmentSystem:
 
         return alternatives
 
-    def _select_best_decision(
-        self, evaluated_alternatives: List[Dict[str, Any]]
-    ) -> Dict[str, Any]:
+    def _select_best_decision(self, evaluated_alternatives: List[Dict[str, Any]]) -> Dict[str, Any]:
         """최적 판단 선택"""
         return max(evaluated_alternatives, key=lambda x: x["overall_score"])
 
-    async def _generate_ethical_reasoning(
-        self, situation: EthicalSituation, decision: Dict[str, Any]
-    ) -> str:
+    async def _generate_ethical_reasoning(self, situation: EthicalSituation, decision: Dict[str, Any]) -> str:
         """윤리적 추론 생성"""
         reasoning = f"이 상황에서 {decision['decision']}을 선택한 이유는 "
 
@@ -567,27 +531,19 @@ class EthicalJudgmentSystem:
         else:
             return JudgmentConfidence.VERY_LOW
 
-    def _calculate_ethical_score(
-        self, situation: EthicalSituation, decision: Dict[str, Any]
-    ) -> float:
+    def _calculate_ethical_score(self, situation: EthicalSituation, decision: Dict[str, Any]) -> float:
         """윤리적 점수 계산"""
         # 실제 구현에서는 더 정교한 계산 로직 사용
         return decision.get("ethical_score", 0.5)
 
-    async def _generate_moral_justification(
-        self, situation: EthicalSituation, decision: Dict[str, Any]
-    ) -> str:
+    async def _generate_moral_justification(self, situation: EthicalSituation, decision: Dict[str, Any]) -> str:
         """도덕적 정당화 생성"""
-        justification = (
-            f"이 판단은 {', '.join([p.value for p in situation.involved_principles])} "
-        )
+        justification = f"이 판단은 {', '.join([p.value for p in situation.involved_principles])} "
         justification += "원칙을 고려하여 내린 윤리적으로 정당한 결정입니다."
 
         return justification
 
-    def _identify_conflicting_principles(
-        self, situation: EthicalSituation
-    ) -> List[EthicalPrinciple]:
+    def _identify_conflicting_principles(self, situation: EthicalSituation) -> List[EthicalPrinciple]:
         """갈등하는 원칙 식별"""
         if len(situation.involved_principles) < 2:
             return []
@@ -595,16 +551,12 @@ class EthicalJudgmentSystem:
         # 실제 구현에서는 더 정교한 갈등 분석 로직 사용
         return situation.involved_principles[:2]  # 예시로 처음 2개 선택
 
-    def _calculate_conflict_intensity(
-        self, conflicting_principles: List[EthicalPrinciple]
-    ) -> float:
+    def _calculate_conflict_intensity(self, conflicting_principles: List[EthicalPrinciple]) -> float:
         """갈등 강도 계산"""
         # 실제 구현에서는 더 정교한 계산 로직 사용
         return random.uniform(0.4, 0.8)
 
-    def _select_resolution_approach(
-        self, conflicting_principles: List[EthicalPrinciple]
-    ) -> str:
+    def _select_resolution_approach(self, conflicting_principles: List[EthicalPrinciple]) -> str:
         """해결 접근법 선택"""
         approaches = [
             "원칙 간 균형 모색",
@@ -654,9 +606,7 @@ class EthicalJudgmentSystem:
         # 실제 구현에서는 더 정교한 계산 로직 사용
         return random.uniform(0.5, 0.8)
 
-    def _identify_ethical_improvement_areas(
-        self, scores: Dict[str, float]
-    ) -> List[str]:
+    def _identify_ethical_improvement_areas(self, scores: Dict[str, float]) -> List[str]:
         """윤리적 개선 영역 식별"""
         areas = []
         threshold = 0.7
@@ -685,16 +635,9 @@ class EthicalJudgmentSystem:
             JudgmentConfidence.VERY_HIGH: 0.9,
         }
         average_confidence = (
-            sum(
-                confidence_values[j.confidence]
-                for j in self.judgment_state.ethical_judgments
-            )
-            / total_judgments
+            sum(confidence_values[j.confidence] for j in self.judgment_state.ethical_judgments) / total_judgments
         )
-        average_ethical_score = (
-            sum(j.ethical_score for j in self.judgment_state.ethical_judgments)
-            / total_judgments
-        )
+        average_ethical_score = sum(j.ethical_score for j in self.judgment_state.ethical_judgments) / total_judgments
 
         return {
             "total_judgments": total_judgments,
@@ -732,23 +675,17 @@ class EthicalJudgmentSystem:
 
         return recommendations
 
-    def _calculate_alternative_ethical_score(
-        self, alternative: Dict[str, Any], situation: EthicalSituation
-    ) -> float:
+    def _calculate_alternative_ethical_score(self, alternative: Dict[str, Any], situation: EthicalSituation) -> float:
         """대안의 윤리적 점수 계산"""
         # 실제 구현에서는 더 정교한 계산 로직 사용
         return alternative.get("score", 0.5)
 
-    def _calculate_alternative_feasibility(
-        self, alternative: Dict[str, Any], situation: EthicalSituation
-    ) -> float:
+    def _calculate_alternative_feasibility(self, alternative: Dict[str, Any], situation: EthicalSituation) -> float:
         """대안의 실현 가능성 계산"""
         # 실제 구현에서는 더 정교한 계산 로직 사용
         return random.uniform(0.4, 0.8)
 
-    async def _update_principle_understanding_metrics(
-        self, situation: EthicalSituation
-    ) -> None:
+    async def _update_principle_understanding_metrics(self, situation: EthicalSituation) -> None:
         """원칙 이해도 메트릭 업데이트"""
         # 실제 구현에서는 더 정교한 업데이트 로직 사용
         self.judgment_state.maturity_metrics.principle_understanding = min(
@@ -762,9 +699,7 @@ class EthicalJudgmentSystem:
             1.0, self.judgment_state.maturity_metrics.moral_reasoning + 0.01
         )
 
-    async def _update_conflict_resolution_metrics(
-        self, conflict: EthicalConflict
-    ) -> None:
+    async def _update_conflict_resolution_metrics(self, conflict: EthicalConflict) -> None:
         """갈등 해결 메트릭 업데이트"""
         # 실제 구현에서는 더 정교한 업데이트 로직 사용
         self.judgment_state.maturity_metrics.conflict_resolution = min(
@@ -807,17 +742,17 @@ async def test_ethical_judgment_system():
         situation = await judgment_system.analyze_ethical_situation(situation_data)
 
         # 윤리적 판단 수행
-        judgment = await judgment_system.make_ethical_judgment(situation)
+        judgment = await judgment_system.make_ethical_judgment(situation)  # noqa: F841
 
         # 윤리적 갈등 해결
         if situation.dilemma_type:
-            conflict = await judgment_system.resolve_ethical_conflict(situation)
+            conflict = await judgment_system.resolve_ethical_conflict(situation)  # noqa: F841
 
     # 윤리적 성숙도 평가
     maturity = await judgment_system.assess_ethical_maturity()
 
     # 보고서 생성
-    report = await judgment_system.generate_ethical_report()
+    report = await judgment_system.generate_ethical_report()  # noqa: F841
 
     # 결과 출력
     print("\n=== 윤리적 판단 시스템 테스트 결과 ===")

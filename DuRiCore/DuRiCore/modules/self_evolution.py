@@ -4,10 +4,10 @@ DuRiCore - 자기 진화 엔진
 LLM 기반 자기 분석 및 개선 능력 구현
 """
 
-from dataclasses import dataclass
-from datetime import datetime, timedelta
 import logging
-from typing import Any, Dict, List, Optional, Tuple
+from dataclasses import dataclass
+from datetime import datetime
+from typing import Any, Dict, List, Optional
 
 import numpy as np
 
@@ -42,9 +42,7 @@ class SelfEvolutionEngine:
             performance_analysis = self._analyze_self_performance()
 
             # 2. LLM 기반 고급 진화 분석
-            llm_evolution_analysis = self.llm_interface.analyze_evolution_need(
-                performance_analysis
-            )
+            llm_evolution_analysis = self.llm_interface.analyze_evolution_need(performance_analysis)  # noqa: F841
 
             # 3. 개선점 식별
             improvement_areas = self._identify_improvement_areas(performance_analysis)
@@ -56,9 +54,7 @@ class SelfEvolutionEngine:
             improvement_actions = self._execute_improvements(improvement_areas)
 
             # 6. 진화 점수 계산
-            evolution_score = self._calculate_evolution_score(
-                performance_analysis, improvement_actions
-            )
+            evolution_score = self._calculate_evolution_score(performance_analysis, improvement_actions)
 
             return EvolutionResult(
                 performance_analysis=performance_analysis,
@@ -268,9 +264,7 @@ class SelfEvolutionEngine:
             "confidence": 0.7,
         }
 
-    def _identify_improvement_areas(
-        self, overall_performance: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    def _identify_improvement_areas(self, overall_performance: Dict[str, Any]) -> List[Dict[str, Any]]:
         """개선점 식별"""
         try:
             improvement_areas = []
@@ -285,9 +279,7 @@ class SelfEvolutionEngine:
                             "current_score": score,
                             "target_score": 85,
                             "priority": "high" if score < 70 else "medium",
-                            "suggested_actions": self._get_suggested_actions(
-                                system_name, score
-                            ),
+                            "suggested_actions": self._get_suggested_actions(system_name, score),
                         }
                     )
 
@@ -315,16 +307,14 @@ class SelfEvolutionEngine:
 
         return actions_map.get(system, ["일반적인 성능 개선"])
 
-    def _suggest_evolution_directions(
-        self, improvement_areas: List[Dict[str, Any]]
-    ) -> List[Dict[str, Any]]:
+    def _suggest_evolution_directions(self, improvement_areas: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """진화 방향 제안"""
         try:
             evolution_directions = []
 
             for area in improvement_areas:
                 system = area.get("system", "")
-                current_score = area.get("current_score", 0)
+                current_score = area.get("current_score", 0)  # noqa: F841
 
                 # 진화 방향 결정
                 if system == "memory":
@@ -368,16 +358,14 @@ class SelfEvolutionEngine:
             logger.error(f"진화 방향 제안 실패: {e}")
             return []
 
-    def _execute_improvements(
-        self, improvement_areas: List[Dict[str, Any]]
-    ) -> List[Dict[str, Any]]:
+    def _execute_improvements(self, improvement_areas: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """개선 액션 실행"""
         try:
             improvement_actions = []
 
             for area in improvement_areas:
-                system = area.get("system", "")
-                current_score = area.get("current_score", 0)
+                system = area.get("system", "")  # noqa: F841
+                current_score = area.get("current_score", 0)  # noqa: F841
 
                 # 개선 액션 실행
                 improvement_result = self._execute_improvement(area)
@@ -391,9 +379,7 @@ class SelfEvolutionEngine:
             logger.error(f"개선 액션 실행 실패: {e}")
             return []
 
-    def _execute_improvement(
-        self, improvement_area: Dict[str, Any]
-    ) -> Optional[Dict[str, Any]]:
+    def _execute_improvement(self, improvement_area: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         """개별 개선 액션 실행"""
         try:
             system = improvement_area.get("system", "")
@@ -460,9 +446,7 @@ class SelfEvolutionEngine:
     ) -> float:
         """진화 점수 계산"""
         try:
-            overall_score = performance_analysis.get("overall_performance", {}).get(
-                "overall_score", 0
-            )
+            overall_score = performance_analysis.get("overall_performance", {}).get("overall_score", 0)
 
             # 개선 액션의 효과 계산
             improvement_effect = 0
@@ -496,9 +480,7 @@ class LLMInterface:
         self.model_name = "gpt-4"
         self.api_key = None
 
-    def analyze_evolution_need(
-        self, performance_analysis: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def analyze_evolution_need(self, performance_analysis: Dict[str, Any]) -> Dict[str, Any]:
         """LLM 기반 진화 필요성 분석"""
         # TODO: 실제 LLM 호출
         # 임시로 기본 분석 반환

@@ -10,17 +10,12 @@ DuRiCore Phase 2-3: 학습 엔진 (Learning Engine)
 - 학습 성과 평가
 """
 
-import asyncio
-from collections import defaultdict
+import logging
+import time
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-import json
-import logging
-import time
-from typing import Any, Dict, List, Optional, Tuple, Union
-
-import numpy as np
+from typing import Any, Dict, List, Optional
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -118,9 +113,7 @@ class LearningEngine:
 
         logger.info("학습 엔진 초기화 완료")
 
-    async def create_learning_session(
-        self, process_type: LearningProcessType, context: Dict[str, Any] = None
-    ) -> str:
+    async def create_learning_session(self, process_type: LearningProcessType, context: Dict[str, Any] = None) -> str:
         """학습 세션 생성"""
         session_id = f"session_{int(time.time())}_{process_type.value}"
 
@@ -152,9 +145,7 @@ class LearningEngine:
         logger.info(f"학습 세션 시작: {session_id}")
         return True
 
-    async def complete_learning_session(
-        self, session_id: str, results: Dict[str, Any] = None
-    ) -> bool:
+    async def complete_learning_session(self, session_id: str, results: Dict[str, Any] = None) -> bool:
         """학습 세션 완료"""
         if session_id not in self.active_sessions:
             logger.error(f"세션을 찾을 수 없음: {session_id}")
@@ -222,9 +213,7 @@ class LearningEngine:
             process.output_data = output_data
             process.performance_score = await self._calculate_process_score(process)
 
-            logger.info(
-                f"학습 프로세스 완료: {process_id} (점수: {process.performance_score:.2f})"
-            )
+            logger.info(f"학습 프로세스 완료: {process_id} (점수: {process.performance_score:.2f})")
             return output_data
 
         except Exception as e:
@@ -233,9 +222,7 @@ class LearningEngine:
             logger.error(f"학습 프로세스 실패: {process_id} - {e}")
             return {}
 
-    async def _execute_process_by_type(
-        self, process: LearningProcess
-    ) -> Dict[str, Any]:
+    async def _execute_process_by_type(self, process: LearningProcess) -> Dict[str, Any]:
         """프로세스 타입에 따른 실행"""
         if process.process_type == LearningProcessType.CONTINUOUS:
             return await self._execute_continuous_learning(process)
@@ -250,9 +237,7 @@ class LearningEngine:
         else:
             return {"error": "알 수 없는 프로세스 타입"}
 
-    async def _execute_continuous_learning(
-        self, process: LearningProcess
-    ) -> Dict[str, Any]:
+    async def _execute_continuous_learning(self, process: LearningProcess) -> Dict[str, Any]:
         """지속적 학습 실행"""
         # 지속적 학습 로직 구현
         return {
@@ -262,9 +247,7 @@ class LearningEngine:
             "efficiency_score": 0.85,
         }
 
-    async def _execute_adaptive_learning(
-        self, process: LearningProcess
-    ) -> Dict[str, Any]:
+    async def _execute_adaptive_learning(self, process: LearningProcess) -> Dict[str, Any]:
         """적응적 학습 실행"""
         # 적응적 학습 로직 구현
         return {
@@ -284,9 +267,7 @@ class LearningEngine:
             "strategy_optimizations": ["최적화 1", "최적화 2"],
         }
 
-    async def _execute_self_directed_learning(
-        self, process: LearningProcess
-    ) -> Dict[str, Any]:
+    async def _execute_self_directed_learning(self, process: LearningProcess) -> Dict[str, Any]:
         """자기 주도적 학습 실행"""
         # 자기 주도적 학습 로직 구현
         return {
@@ -296,9 +277,7 @@ class LearningEngine:
             "learning_goals": ["학습 목표 1", "학습 목표 2"],
         }
 
-    async def _execute_cognitive_meta_learning(
-        self, process: LearningProcess
-    ) -> Dict[str, Any]:
+    async def _execute_cognitive_meta_learning(self, process: LearningProcess) -> Dict[str, Any]:
         """인지 메타 학습 실행"""
         # 인지 메타 학습 로직 구현
         return {
@@ -332,14 +311,8 @@ class LearningEngine:
             session.performance_metrics["duration_seconds"] = duration_seconds
 
             # 평균 지속시간 업데이트
-            total_duration = sum(
-                s.duration.total_seconds()
-                for s in self.completed_sessions
-                if s.duration
-            )
-            self.performance_metrics["average_session_duration"] = total_duration / len(
-                self.completed_sessions
-            )
+            total_duration = sum(s.duration.total_seconds() for s in self.completed_sessions if s.duration)
+            self.performance_metrics["average_session_duration"] = total_duration / len(self.completed_sessions)
 
     async def get_session_status(self, session_id: str) -> Optional[Dict[str, Any]]:
         """세션 상태 조회"""
@@ -377,8 +350,6 @@ class LearningEngine:
         cutoff_date = datetime.now() - timedelta(days=days)
 
         # 완료된 세션에서 오래된 것들 제거
-        self.completed_sessions = [
-            s for s in self.completed_sessions if s.created_at > cutoff_date
-        ]
+        self.completed_sessions = [s for s in self.completed_sessions if s.created_at > cutoff_date]
 
         logger.info(f"오래된 세션 정리 완료 (기준: {days}일 전)")

@@ -5,13 +5,12 @@ Memory → Judgment → Action → Evolution 전체 루프 통합 시스템
 """
 
 import asyncio
+import logging
+import time
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-import json
-import logging
-import time
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -72,9 +71,7 @@ class IntegratedLearningSystem:
 
         logger.info("통합 학습 시스템 초기화 완료")
 
-    async def execute_learning_cycle(
-        self, input_data: Dict[str, Any], context: Dict[str, Any]
-    ) -> LearningCycle:
+    async def execute_learning_cycle(self, input_data: Dict[str, Any], context: Dict[str, Any]) -> LearningCycle:
         """학습 사이클 실행"""
         try:
             # 사이클 시작
@@ -293,9 +290,7 @@ class IntegratedLearningSystem:
             success = cycle.action_result.get("success", False)
 
             # 가중 평균
-            performance_score = (
-                effectiveness * 0.4 + efficiency * 0.3 + (1.0 if success else 0.0) * 0.3
-            )
+            performance_score = effectiveness * 0.4 + efficiency * 0.3 + (1.0 if success else 0.0) * 0.3
 
             return performance_score
 
@@ -303,63 +298,37 @@ class IntegratedLearningSystem:
             logger.error(f"성능 평가 실패: {e}")
             return 0.0
 
-    async def _calculate_performance_metrics(
-        self, cycle: LearningCycle
-    ) -> Dict[str, float]:
+    async def _calculate_performance_metrics(self, cycle: LearningCycle) -> Dict[str, float]:
         """성능 메트릭 계산"""
         try:
             metrics = {}
 
             # 메모리 성능
             if cycle.memory_result:
-                metrics["memory_access_time"] = cycle.memory_result.get(
-                    "access_time", 0.0
-                )
-                metrics["memory_relevance"] = cycle.memory_result.get(
-                    "relevance_score", 0.0
-                )
+                metrics["memory_access_time"] = cycle.memory_result.get("access_time", 0.0)
+                metrics["memory_relevance"] = cycle.memory_result.get("relevance_score", 0.0)
 
             # 판단 성능
             if cycle.judgment_result:
-                metrics["judgment_time"] = cycle.judgment_result.get(
-                    "analysis_time", 0.0
-                )
-                metrics["judgment_confidence"] = cycle.judgment_result.get(
-                    "confidence", 0.0
-                )
-                metrics["judgment_ethical_score"] = cycle.judgment_result.get(
-                    "ethical_score", 0.0
-                )
+                metrics["judgment_time"] = cycle.judgment_result.get("analysis_time", 0.0)
+                metrics["judgment_confidence"] = cycle.judgment_result.get("confidence", 0.0)
+                metrics["judgment_ethical_score"] = cycle.judgment_result.get("ethical_score", 0.0)
 
             # 행동 성능
             if cycle.action_result:
-                metrics["action_execution_time"] = cycle.action_result.get(
-                    "execution_time", 0.0
-                )
-                metrics["action_effectiveness"] = cycle.action_result.get(
-                    "effectiveness_score", 0.0
-                )
-                metrics["action_efficiency"] = cycle.action_result.get(
-                    "efficiency_score", 0.0
-                )
-                metrics["action_success"] = (
-                    1.0 if cycle.action_result.get("success", False) else 0.0
-                )
+                metrics["action_execution_time"] = cycle.action_result.get("execution_time", 0.0)
+                metrics["action_effectiveness"] = cycle.action_result.get("effectiveness_score", 0.0)
+                metrics["action_efficiency"] = cycle.action_result.get("efficiency_score", 0.0)
+                metrics["action_success"] = 1.0 if cycle.action_result.get("success", False) else 0.0
 
             # 진화 성능
             if cycle.evolution_result:
-                metrics["evolution_improvement"] = cycle.evolution_result.get(
-                    "improvement_score", 0.0
-                )
-                metrics["evolution_stability"] = cycle.evolution_result.get(
-                    "stability_score", 0.0
-                )
+                metrics["evolution_improvement"] = cycle.evolution_result.get("improvement_score", 0.0)
+                metrics["evolution_stability"] = cycle.evolution_result.get("stability_score", 0.0)
 
             # 전체 성능
             if cycle.completed_at and cycle.created_at:
-                metrics["total_cycle_time"] = (
-                    cycle.completed_at - cycle.created_at
-                ).total_seconds()
+                metrics["total_cycle_time"] = (cycle.completed_at - cycle.created_at).total_seconds()
 
             return metrics
 
@@ -375,11 +344,7 @@ class IntegratedLearningSystem:
 
             # 기본 통계
             total_cycles = len(self.completed_cycles)
-            successful_cycles = sum(
-                1
-                for c in self.completed_cycles
-                if c.status == LearningCycleStatus.COMPLETED
-            )
+            successful_cycles = sum(1 for c in self.completed_cycles if c.status == LearningCycleStatus.COMPLETED)
             success_rate = successful_cycles / total_cycles if total_cycles > 0 else 0.0
 
             # 평균 성능 메트릭
@@ -387,25 +352,13 @@ class IntegratedLearningSystem:
             if self.completed_cycles:
                 metric_keys = self.completed_cycles[0].performance_metrics.keys()
                 for key in metric_keys:
-                    values = [
-                        c.performance_metrics.get(key, 0.0)
-                        for c in self.completed_cycles
-                    ]
+                    values = [c.performance_metrics.get(key, 0.0) for c in self.completed_cycles]
                     avg_metrics[key] = sum(values) / len(values)
 
             # 성능 트렌드 분석
-            recent_cycles = (
-                self.completed_cycles[-10:]
-                if len(self.completed_cycles) >= 10
-                else self.completed_cycles
-            )
+            recent_cycles = self.completed_cycles[-10:] if len(self.completed_cycles) >= 10 else self.completed_cycles
             recent_success_rate = (
-                sum(
-                    1
-                    for c in recent_cycles
-                    if c.status == LearningCycleStatus.COMPLETED
-                )
-                / len(recent_cycles)
+                sum(1 for c in recent_cycles if c.status == LearningCycleStatus.COMPLETED) / len(recent_cycles)
                 if recent_cycles
                 else 0.0
             )
@@ -418,9 +371,7 @@ class IntegratedLearningSystem:
                 "performance_trend": (
                     "improving"
                     if recent_success_rate > success_rate
-                    else (
-                        "stable" if recent_success_rate == success_rate else "declining"
-                    )
+                    else ("stable" if recent_success_rate == success_rate else "declining")
                 ),
             }
 
@@ -450,9 +401,7 @@ class IntegratedLearningSystem:
                 )
 
             # 응답 시간 기반 권장사항
-            avg_cycle_time = performance.get("average_metrics", {}).get(
-                "total_cycle_time", 0.0
-            )
+            avg_cycle_time = performance.get("average_metrics", {}).get("total_cycle_time", 0.0)
             if avg_cycle_time > 1.0:
                 recommendations.append(
                     {
@@ -466,9 +415,7 @@ class IntegratedLearningSystem:
                 )
 
             # 효과성 기반 권장사항
-            avg_effectiveness = performance.get("average_metrics", {}).get(
-                "action_effectiveness", 0.0
-            )
+            avg_effectiveness = performance.get("average_metrics", {}).get("action_effectiveness", 0.0)
             if avg_effectiveness < 0.8:
                 recommendations.append(
                     {
@@ -530,37 +477,21 @@ async def test_integrated_learning_system():
         print(f"입력: {scenario['input_data']}")
 
         # 학습 사이클 실행
-        cycle = await learning_system.execute_learning_cycle(
-            scenario["input_data"], scenario["context"]
-        )
+        cycle = await learning_system.execute_learning_cycle(scenario["input_data"], scenario["context"])
 
-        print(f"사이클 결과:")
+        print("사이클 결과:")
         print(f"- 사이클 ID: {cycle.cycle_id}")
         print(f"- 상태: {cycle.status.value}")
         print(f"- 성공 여부: {cycle.status == LearningCycleStatus.COMPLETED}")
-        print(
-            f"- 총 소요시간: {cycle.performance_metrics.get('total_cycle_time', 0.0):.3f}초"
-        )
-        print(
-            f"- 메모리 접근 시간: {cycle.performance_metrics.get('memory_access_time', 0.0):.3f}초"
-        )
-        print(
-            f"- 판단 시간: {cycle.performance_metrics.get('judgment_time', 0.0):.3f}초"
-        )
-        print(
-            f"- 행동 실행 시간: {cycle.performance_metrics.get('action_execution_time', 0.0):.3f}초"
-        )
-        print(
-            f"- 행동 효과성: {cycle.performance_metrics.get('action_effectiveness', 0.0):.3f}"
-        )
-        print(
-            f"- 행동 효율성: {cycle.performance_metrics.get('action_efficiency', 0.0):.3f}"
-        )
+        print(f"- 총 소요시간: {cycle.performance_metrics.get('total_cycle_time', 0.0):.3f}초")
+        print(f"- 메모리 접근 시간: {cycle.performance_metrics.get('memory_access_time', 0.0):.3f}초")
+        print(f"- 판단 시간: {cycle.performance_metrics.get('judgment_time', 0.0):.3f}초")
+        print(f"- 행동 실행 시간: {cycle.performance_metrics.get('action_execution_time', 0.0):.3f}초")
+        print(f"- 행동 효과성: {cycle.performance_metrics.get('action_effectiveness', 0.0):.3f}")
+        print(f"- 행동 효율성: {cycle.performance_metrics.get('action_efficiency', 0.0):.3f}")
 
         if cycle.evolution_result:
-            print(
-                f"- 진화 개선 점수: {cycle.evolution_result.get('improvement_score', 0.0):.3f}"
-            )
+            print(f"- 진화 개선 점수: {cycle.evolution_result.get('improvement_score', 0.0):.3f}")
 
     # 시스템 성능 분석
     print("\n시스템 성능 분석:")
@@ -576,9 +507,7 @@ async def test_integrated_learning_system():
     for rec in recommendations:
         print(f"- {rec['type']}: {rec['description']}")
         print(f"  우선순위: {rec['priority']}")
-        print(
-            f"  현재값: {rec['current_value']:.3f} -> 목표값: {rec['target_value']:.3f}"
-        )
+        print(f"  현재값: {rec['current_value']:.3f} -> 목표값: {rec['target_value']:.3f}")
 
     print("\n=== 테스트 완료 ===")
 

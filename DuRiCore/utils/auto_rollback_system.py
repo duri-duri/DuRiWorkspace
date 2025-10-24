@@ -11,15 +11,14 @@ AutoRollbackSystem - 자동 롤백 시스템
 @final_execution: 인간처럼 실패하고도 다시 일어날 수 있는 존재
 """
 
-from datetime import datetime
 import glob
 import json
 import logging
 import os
-import shutil
 import subprocess
 import tarfile
-from typing import Any, Dict, List, Optional, Tuple
+from datetime import datetime
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -161,12 +160,8 @@ class AutoRollbackSystem:
                                 "name": file,
                                 "path": file_path,
                                 "size": stat.st_size,
-                                "created": datetime.fromtimestamp(
-                                    stat.st_ctime
-                                ).isoformat(),
-                                "modified": datetime.fromtimestamp(
-                                    stat.st_mtime
-                                ).isoformat(),
+                                "created": datetime.fromtimestamp(stat.st_ctime).isoformat(),
+                                "modified": datetime.fromtimestamp(stat.st_mtime).isoformat(),
                             }
                         )
 
@@ -238,19 +233,13 @@ class AutoRollbackSystem:
             memory_activity = assessment.evaluate_memory_activity()
             emotional_response = assessment.evaluate_emotional_response()
 
-            logger.info(f"자기 재구성 평가 결과:")
+            logger.info("자기 재구성 평가 결과:")
             logger.info(f"  - 창의성: {creativity_score}")
             logger.info(f"  - 판단 다양성: {judgment_diversity}")
             logger.info(f"  - 기억 활성도: {memory_activity}")
             logger.info(f"  - 감정 반응: {emotional_response}")
 
-            if (
-                creativity_score < 0.7
-                or judgment_diversity < 0.7
-                or memory_activity < 0.7
-                or emotional_response < 0.7
-            ):
-
+            if creativity_score < 0.7 or judgment_diversity < 0.7 or memory_activity < 0.7 or emotional_response < 0.7:
                 logger.error("자기 재구성 평가 실패 - 자동 롤백 실행")
                 self._emergency_rollback()
                 return False
@@ -344,18 +333,12 @@ class AutoRollbackSystem:
                 logger.info("롤백 스크립트 실행 완료")
 
                 # 3. 존재형 AI 회복 시도
-                if (
-                    self.existence_ai
-                    and self.existence_ai.recovery_capability.can_recover()
-                ):
+                if self.existence_ai and self.existence_ai.recovery_capability.can_recover():
                     recovery_result = self.existence_ai.recovery_capability.recover()
                     logger.info(f"존재형 AI 회복 완료: {recovery_result}")
 
                 # 4. 최종 실행 준비 완료 확인
-                if (
-                    self.final_execution_verifier
-                    and self.final_execution_verifier.verify_readiness()
-                ):
+                if self.final_execution_verifier and self.final_execution_verifier.verify_readiness():
                     logger.info("최종 실행 준비 완료 확인됨")
 
                 # 5. 롤백 히스토리에 기록
@@ -400,9 +383,7 @@ class AutoRollbackSystem:
             os.chmod(script_path, 0o755)
 
             # 스크립트 실행
-            result = subprocess.run(
-                [f"./{script_path}"], capture_output=True, text=True, cwd=os.getcwd()
-            )
+            result = subprocess.run([f"./{script_path}"], capture_output=True, text=True, cwd=os.getcwd())
 
             # 임시 스크립트 파일 삭제
             if os.path.exists(script_path):
@@ -456,12 +437,10 @@ tar -xzf "$BACKUP_FILE"
 echo "롤백 완료"
 echo "복원된 백업: $BACKUP_FILE"
 echo "현재 상태 백업: $CURRENT_BACKUP"
-"""
+"""  # noqa: E501
         return script_content
 
-    def _record_rollback_history(
-        self, rollback_type: str, backup_file: str, success: bool
-    ) -> None:
+    def _record_rollback_history(self, rollback_type: str, backup_file: str, success: bool) -> None:
         """롤백 히스토리에 기록"""
         try:
             rollback_record = {
@@ -498,18 +477,14 @@ echo "현재 상태 백업: $CURRENT_BACKUP"
             if not backup_name:
                 backup_name = f"DuRi_backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
 
-            backup_file = os.path.join(
-                self.backup_manager["backup_dir"], f"{backup_name}.tar.gz"
-            )
+            backup_file = os.path.join(self.backup_manager["backup_dir"], f"{backup_name}.tar.gz")
 
             # 백업 생성
             with tarfile.open(backup_file, "w:gz") as tar:
                 # 수동으로 파일 추가 (exclude 대신)
                 for root, dirs, files in os.walk("."):
                     # 백업 디렉토리와 tar.gz 파일 제외
-                    dirs[:] = [
-                        d for d in dirs if d != "backups" and not d.endswith(".tar.gz")
-                    ]
+                    dirs[:] = [d for d in dirs if d != "backups" and not d.endswith(".tar.gz")]
 
                     for file in files:
                         if not file.endswith(".tar.gz"):
@@ -520,9 +495,7 @@ echo "현재 상태 백업: $CURRENT_BACKUP"
             logger.info(f"백업 생성 완료: {backup_file}")
 
             # 백업 파일 목록 업데이트
-            self.backup_manager["backup_files"] = self._scan_backup_files(
-                self.backup_manager["backup_dir"]
-            )
+            self.backup_manager["backup_files"] = self._scan_backup_files(self.backup_manager["backup_dir"])
 
             return backup_file
 

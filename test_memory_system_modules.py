@@ -7,11 +7,8 @@ DuRiCore Phase 2-5: 메모리 시스템 모듈 테스트
 """
 
 import asyncio
-from datetime import datetime, timedelta
 import logging
-import os
 import sys
-from typing import Any, Dict
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -25,11 +22,7 @@ def test_memory_allocator():
     try:
         # 메모리 할당기 import 테스트
         from DuRiCore.memory.memory_manager import (
-            MemoryAllocation,
             MemoryAllocator,
-            MemoryBlock,
-            MemoryStatus,
-            MemoryType,
         )
 
         # MemoryAllocator 인스턴스 생성 테스트
@@ -50,13 +43,7 @@ def test_memory_synchronizer():
 
     try:
         # 메모리 동기화기 import 테스트
-        from DuRiCore.memory.memory_sync import (
-            MemoryConflict,
-            MemorySynchronizer,
-            SyncOperation,
-            SyncStatus,
-            SyncType,
-        )
+        from DuRiCore.memory.memory_sync import MemorySynchronizer
 
         # MemorySynchronizer 인스턴스 생성 테스트
         memory_synchronizer = MemorySynchronizer()
@@ -78,10 +65,6 @@ def test_memory_optimizer():
         # 메모리 최적화기 import 테스트
         from DuRiCore.memory.memory_optimization import (
             MemoryOptimizer,
-            MemoryUsageMetrics,
-            OptimizationStatus,
-            OptimizationTask,
-            OptimizationType,
         )
 
         # MemoryOptimizer 인스턴스 생성 테스트
@@ -102,25 +85,18 @@ async def test_async_functionality():
 
     try:
         from DuRiCore.memory.memory_manager import MemoryAllocator, MemoryType
-        from DuRiCore.memory.memory_optimization import (
-            MemoryOptimizer,
-            OptimizationType,
-        )
-        from DuRiCore.memory.memory_sync import MemorySynchronizer, SyncStatus, SyncType
+        from DuRiCore.memory.memory_optimization import MemoryOptimizer, OptimizationType
+        from DuRiCore.memory.memory_sync import MemorySynchronizer, SyncType
 
         # 1. 메모리 할당 테스트
         memory_allocator = MemoryAllocator()
 
         # 메모리 할당
-        allocation_id = await memory_allocator.allocate_memory(
-            "테스트 메모리 내용", MemoryType.EXPERIENCE, size=1024
-        )
+        allocation_id = await memory_allocator.allocate_memory("테스트 메모리 내용", MemoryType.EXPERIENCE, size=1024)
         logger.info(f"✅ 메모리 할당: {allocation_id}")
 
         # 메모리 블록 조회
-        memory_block = await memory_allocator.get_memory_block(
-            allocation_id.replace("alloc_", "block_")
-        )
+        memory_block = await memory_allocator.get_memory_block(allocation_id.replace("alloc_", "block_"))
         if memory_block:
             logger.info(f"✅ 메모리 블록 조회: {memory_block.block_id}")
 
@@ -132,9 +108,7 @@ async def test_async_functionality():
         memory_synchronizer = MemorySynchronizer()
 
         # 동기화 작업 시작
-        sync_id = await memory_synchronizer.start_sync_operation(
-            SyncType.FULL, "source_system", "target_system"
-        )
+        sync_id = await memory_synchronizer.start_sync_operation(SyncType.FULL, "source_system", "target_system")
         logger.info(f"✅ 동기화 작업 시작: {sync_id}")
 
         # 동기화 상태 조회
@@ -150,15 +124,11 @@ async def test_async_functionality():
         memory_optimizer = MemoryOptimizer()
 
         # 최적화 작업 시작
-        optimization_id = await memory_optimizer.start_optimization(
-            OptimizationType.CLEANUP
-        )
+        optimization_id = await memory_optimizer.start_optimization(OptimizationType.CLEANUP)
         logger.info(f"✅ 최적화 작업 시작: {optimization_id}")
 
         # 최적화 상태 조회
-        optimization_status = await memory_optimizer.get_optimization_status(
-            optimization_id
-        )
+        optimization_status = await memory_optimizer.get_optimization_status(optimization_id)
         if optimization_status:
             logger.info(f"✅ 최적화 상태 조회: {optimization_status.status.value}")
 
@@ -184,14 +154,6 @@ def test_package_import():
 
     try:
         # 전체 패키지 import 테스트
-        from DuRiCore.memory import (
-            MemoryAllocator,
-            MemoryOptimizer,
-            MemorySynchronizer,
-            MemoryType,
-            OptimizationType,
-            SyncType,
-        )
 
         logger.info("✅ 패키지 전체 import 성공")
         return True

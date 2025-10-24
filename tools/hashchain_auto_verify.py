@@ -2,10 +2,10 @@
 #!/usr/bin/env python3
 # 해시체인 자동검증 훅: 5분마다 연속성 검증
 
-from datetime import datetime
 import json
 import os
 import time
+from datetime import datetime
 
 import psycopg2
 from psycopg2.extras import RealDictCursor
@@ -21,9 +21,7 @@ def verify_hashchain_integrity():
         db_port = os.getenv("POSTGRES_PORT", "5433")
         db_name = os.getenv("POSTGRES_DB", "postgres")
 
-        conn = psycopg2.connect(
-            f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
-        )
+        conn = psycopg2.connect(f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}")
 
         with conn.cursor(cursor_factory=RealDictCursor) as cur:
             # 해시체인 연속성 검증
@@ -46,9 +44,7 @@ def verify_hashchain_integrity():
             if violations:
                 print(f"❌ 해시체인 위반 발견: {len(violations)}건")
                 for v in violations:
-                    print(
-                        f"  ID {v['id']}: prev_hash={v['prev_hash'][:8]}... != prev_chain={v['prev_chain'][:8]}..."
-                    )
+                    print(f"  ID {v['id']}: prev_hash={v['prev_hash'][:8]}... != prev_chain={v['prev_chain'][:8]}...")
 
                 # bundle_verify_fail_total 증가
                 cur.execute(
@@ -65,8 +61,7 @@ def verify_hashchain_integrity():
                                 "timestamp": datetime.now().isoformat(),
                             }
                         ),
-                        "hashchain_violation_"
-                        + datetime.now().strftime("%Y%m%d_%H%M%S"),
+                        "hashchain_violation_" + datetime.now().strftime("%Y%m%d_%H%M%S"),
                     ),
                 )
 

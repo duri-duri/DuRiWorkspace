@@ -8,16 +8,14 @@
 
 import asyncio
 import logging
-from pathlib import Path
 import sys
+from pathlib import Path
 
 # 현재 디렉토리를 sys.path에 추가
 sys.path.append(str(Path(__file__).parent))
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -26,12 +24,7 @@ async def test_auto_registration():
     logger.info("🧪 자동 등록 테스트 시작")
 
     try:
-        from module_registry import (
-            BaseModule,
-            ModulePriority,
-            ModuleRegistry,
-            register_module,
-        )
+        from module_registry import BaseModule, ModulePriority, ModuleRegistry, register_module
 
         # 레지스트리 인스턴스 가져오기
         registry = ModuleRegistry.get_instance()
@@ -39,9 +32,7 @@ async def test_auto_registration():
         # 테스트 1: 데코레이터 방식 자동 등록
         logger.info("📝 테스트 1: 데코레이터 방식 자동 등록")
 
-        @register_module(
-            name="auto_test_module", dependencies=[], priority=ModulePriority.NORMAL
-        )
+        @register_module(name="auto_test_module", dependencies=[], priority=ModulePriority.NORMAL)
         class AutoTestModule(BaseModule):
             async def initialize(self):
                 self._initialized = True
@@ -134,12 +125,7 @@ async def test_import_order_issue():
         # 모듈을 다시 로드
         importlib.reload(module_registry)
 
-        from module_registry import (
-            BaseModule,
-            ModulePriority,
-            ModuleRegistry,
-            register_module,
-        )
+        from module_registry import BaseModule, ModuleRegistry, register_module
 
         # 레지스트리 인스턴스 가져오기
         registry = ModuleRegistry.get_instance()
@@ -172,12 +158,7 @@ async def test_metaclass_conflict():
     logger.info("🧪 메타클래스 충돌 테스트 시작")
 
     try:
-        from module_registry import (
-            BaseModule,
-            ModulePriority,
-            ModuleRegistry,
-            register_module,
-        )
+        from module_registry import BaseModule, ModuleRegistry, register_module
 
         # ABC 상속 확인
         if hasattr(BaseModule, "__abstractmethods__"):

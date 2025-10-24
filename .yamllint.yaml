@@ -1,0 +1,10 @@
+extends: default
+ignore:
+  - .github/workflows-archive/**
+  - DuRi_Day11_15_starter/**
+  - "**/backup_*/**"
+rules:
+  document-start: disable
+  line-length: disable
+  colons: {max-spaces-after: 1}
+  commas: {min-spaces-after: 1}

@@ -5,15 +5,15 @@ Memory → Judgment → Action → Evolution 전체 루프 추적 및 메타데�
 """
 
 import asyncio
-from dataclasses import asdict, dataclass
-from datetime import datetime
-from enum import Enum
 import hashlib
 import json
 import logging
 import time
-from typing import Any, Dict, List, Optional, Tuple
 import uuid
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -210,9 +210,7 @@ class BehaviorTracer:
             logger.error(f"추적 업데이트 실패: {e}")
             raise
 
-    async def create_memory_trace(
-        self, trace_id: str, memory_data: Dict[str, Any]
-    ) -> MemoryTrace:
+    async def create_memory_trace(self, trace_id: str, memory_data: Dict[str, Any]) -> MemoryTrace:
         """기억 추적 생성"""
         try:
             metadata = self.trace_store[trace_id]
@@ -237,9 +235,7 @@ class BehaviorTracer:
             logger.error(f"기억 추적 생성 실패: {e}")
             raise
 
-    async def create_judgment_trace(
-        self, trace_id: str, judgment_data: Dict[str, Any]
-    ) -> JudgmentTrace:
+    async def create_judgment_trace(self, trace_id: str, judgment_data: Dict[str, Any]) -> JudgmentTrace:
         """판단 추적 생성"""
         try:
             metadata = self.trace_store[trace_id]
@@ -265,9 +261,7 @@ class BehaviorTracer:
             logger.error(f"판단 추적 생성 실패: {e}")
             raise
 
-    async def create_action_trace(
-        self, trace_id: str, action_data: Dict[str, Any]
-    ) -> ActionTrace:
+    async def create_action_trace(self, trace_id: str, action_data: Dict[str, Any]) -> ActionTrace:
         """행동 추적 생성"""
         try:
             metadata = self.trace_store[trace_id]
@@ -294,18 +288,14 @@ class BehaviorTracer:
             logger.error(f"행동 추적 생성 실패: {e}")
             raise
 
-    async def create_evolution_trace(
-        self, trace_id: str, evolution_data: Dict[str, Any]
-    ) -> EvolutionTrace:
+    async def create_evolution_trace(self, trace_id: str, evolution_data: Dict[str, Any]) -> EvolutionTrace:
         """진화 추적 생성"""
         try:
             metadata = self.trace_store[trace_id]
 
             evolution_trace = EvolutionTrace(
                 evolution_id=evolution_data.get("evolution_id", str(uuid.uuid4())),
-                evolution_type=evolution_data.get(
-                    "evolution_type", "pattern_improvement"
-                ),
+                evolution_type=evolution_data.get("evolution_type", "pattern_improvement"),
                 improvement_score=evolution_data.get("improvement_score", 0.0),
                 changes_applied=evolution_data.get("changes_applied", []),
                 performance_impact=evolution_data.get("performance_impact", {}),
@@ -359,12 +349,8 @@ class BehaviorTracer:
             }
 
             if evolution_trace:
-                performance_metrics["evolution_improvement"] = (
-                    evolution_trace.improvement_score
-                )
-                performance_metrics["evolution_stability"] = (
-                    evolution_trace.stability_score
-                )
+                performance_metrics["evolution_improvement"] = evolution_trace.improvement_score
+                performance_metrics["evolution_stability"] = evolution_trace.stability_score
 
             # 전체 성공 여부 판단
             overall_success = (
@@ -421,20 +407,15 @@ class BehaviorTracer:
             if self.performance_history:
                 metric_keys = self.performance_history[0]["metrics"].keys()
                 for key in metric_keys:
-                    values = [
-                        p["metrics"].get(key, 0.0) for p in self.performance_history
-                    ]
+                    values = [p["metrics"].get(key, 0.0) for p in self.performance_history]
                     avg_metrics[key] = sum(values) / len(values)
 
             # 성능 트렌드 분석
             recent_performance = (
-                self.performance_history[-10:]
-                if len(self.performance_history) >= 10
-                else self.performance_history
+                self.performance_history[-10:] if len(self.performance_history) >= 10 else self.performance_history
             )
             recent_success_rate = (
-                sum(1 for p in recent_performance if p["success"])
-                / len(recent_performance)
+                sum(1 for p in recent_performance if p["success"]) / len(recent_performance)
                 if recent_performance
                 else 0.0
             )
@@ -447,9 +428,7 @@ class BehaviorTracer:
                 "performance_trend": (
                     "improving"
                     if recent_success_rate > success_rate
-                    else (
-                        "stable" if recent_success_rate == success_rate else "declining"
-                    )
+                    else ("stable" if recent_success_rate == success_rate else "declining")
                 ),
             }
 
@@ -499,9 +478,7 @@ class BehaviorTracer:
                 )
 
             # 응답 시간 기반 제안
-            avg_cycle_time = patterns.get("average_metrics", {}).get(
-                "total_cycle_time", 0.0
-            )
+            avg_cycle_time = patterns.get("average_metrics", {}).get("total_cycle_time", 0.0)
             if avg_cycle_time > 1.0:
                 suggestions.append(
                     {
@@ -515,9 +492,7 @@ class BehaviorTracer:
                 )
 
             # 효과성 기반 제안
-            avg_effectiveness = patterns.get("average_metrics", {}).get(
-                "action_effectiveness", 0.0
-            )
+            avg_effectiveness = patterns.get("average_metrics", {}).get("action_effectiveness", 0.0)
             if avg_effectiveness < 0.8:
                 suggestions.append(
                     {
@@ -606,9 +581,7 @@ async def test_behavior_tracer():
         "available_resources": ["cpu", "memory"],
     }
 
-    judgment_trace_id = await tracer.start_trace(
-        TraceType.JUDGMENT_PROCESS, judgment_input, memory_trace_id
-    )
+    judgment_trace_id = await tracer.start_trace(TraceType.JUDGMENT_PROCESS, judgment_input, memory_trace_id)
     await asyncio.sleep(0.2)  # 시뮬레이션
 
     judgment_output = {
@@ -623,9 +596,7 @@ async def test_behavior_tracer():
     }
 
     await tracer.update_trace(judgment_trace_id, TraceStatus.COMPLETED, judgment_output)
-    judgment_trace = await tracer.create_judgment_trace(
-        judgment_trace_id, judgment_output
-    )
+    judgment_trace = await tracer.create_judgment_trace(judgment_trace_id, judgment_output)
 
     print(f"판단 추적 완료: {judgment_trace.judgment_id}")
 
@@ -637,9 +608,7 @@ async def test_behavior_tracer():
         "constraints": {"time_limit": 60},
     }
 
-    action_trace_id = await tracer.start_trace(
-        TraceType.ACTION_EXECUTION, action_input, judgment_trace_id
-    )
+    action_trace_id = await tracer.start_trace(TraceType.ACTION_EXECUTION, action_input, judgment_trace_id)
     await asyncio.sleep(0.3)  # 시뮬레이션
 
     action_output = {
@@ -662,9 +631,7 @@ async def test_behavior_tracer():
     # 4. 전체 사이클 추적 테스트
     print("\n4. 전체 사이클 추적 테스트")
     cycle_id = f"cycle_{int(time.time())}"
-    full_cycle_trace = await tracer.create_full_cycle_trace(
-        cycle_id, memory_trace, judgment_trace, action_trace
-    )
+    full_cycle_trace = await tracer.create_full_cycle_trace(cycle_id, memory_trace, judgment_trace, action_trace)
 
     print(f"전체 사이클 추적 완료: {full_cycle_trace.cycle_id}")
     print(f"- 전체 성공: {full_cycle_trace.overall_success}")
@@ -674,7 +641,7 @@ async def test_behavior_tracer():
     # 5. 성능 패턴 분석 테스트
     print("\n5. 성능 패턴 분석 테스트")
     patterns = await tracer.analyze_performance_patterns()
-    print(f"성능 패턴 분석 결과:")
+    print("성능 패턴 분석 결과:")
     print(f"- 총 사이클: {patterns.get('total_cycles', 0)}")
     print(f"- 성공률: {patterns.get('success_rate', 0.0):.3f}")
     print(f"- 최근 성공률: {patterns.get('recent_success_rate', 0.0):.3f}")
@@ -683,13 +650,11 @@ async def test_behavior_tracer():
     # 6. 진화 제안 테스트
     print("\n6. 진화 제안 테스트")
     suggestions = await tracer.get_evolution_suggestions()
-    print(f"진화 제안:")
+    print("진화 제안:")
     for suggestion in suggestions:
         print(f"- {suggestion['type']}: {suggestion['description']}")
         print(f"  우선순위: {suggestion['priority']}")
-        print(
-            f"  현재값: {suggestion['current_value']:.3f} -> 목표값: {suggestion['target_value']:.3f}"
-        )
+        print(f"  현재값: {suggestion['current_value']:.3f} -> 목표값: {suggestion['target_value']:.3f}")
 
     print("\n=== 테스트 완료 ===")
 

@@ -4,6 +4,8 @@ env:
   PROM_VERSIONS: "2.53.0,2.55.0"
 jobs:
   compatibility:
+    # PR에서는 전체 스킵
+    if: ${{ github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:

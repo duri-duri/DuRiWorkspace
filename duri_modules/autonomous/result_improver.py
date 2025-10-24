@@ -1,8 +1,5 @@
-from dataclasses import dataclass
-from datetime import datetime
-import json
 import logging
-import os
+from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
@@ -36,23 +33,17 @@ class ResultImprover:
 
         logger.info("🔧 DuRi 결과 개선 시스템 초기화 완료")
 
-    def analyze_improvement_suggestions(
-        self, evaluation_result: Dict[str, Any]
-    ) -> List[ImprovementAction]:
+    def analyze_improvement_suggestions(self, evaluation_result: Dict[str, Any]) -> List[ImprovementAction]:
         """평가 결과에서 개선 제안을 분석하여 실행 가능한 액션으로 변환"""
         try:
             actions = []
 
             # ChatGPT 평가에서 개선 제안 추출
-            chatgpt_eval = evaluation_result.get("evaluation", {}).get(
-                "chatgpt_evaluation", {}
-            )
+            chatgpt_eval = evaluation_result.get("evaluation", {}).get("chatgpt_evaluation", {})
             suggestions = chatgpt_eval.get("suggestions", [])
 
             # 자기성찰에서 개선 제안 추출
-            self_reflection = evaluation_result.get("evaluation", {}).get(
-                "self_reflection", {}
-            )
+            self_reflection = evaluation_result.get("evaluation", {}).get("self_reflection", {})
             improvement_proposal = self_reflection.get("improvement_proposal", {})
 
             # ChatGPT 제안을 액션으로 변환
@@ -62,20 +53,14 @@ class ResultImprover:
                     actions.append(action)
 
             # 자기성찰 제안을 액션으로 변환
-            specific_improvements = improvement_proposal.get(
-                "specific_improvements", []
-            )
+            specific_improvements = improvement_proposal.get("specific_improvements", [])
             for improvement in specific_improvements:
-                action = self._convert_suggestion_to_action(
-                    improvement, "self_reflection"
-                )
+                action = self._convert_suggestion_to_action(improvement, "self_reflection")
                 if action:
                     actions.append(action)
 
             # 우선순위 정렬
-            actions.sort(
-                key=lambda x: self._get_priority_score(x.priority), reverse=True
-            )
+            actions.sort(key=lambda x: self._get_priority_score(x.priority), reverse=True)
 
             logger.info(f"📋 개선 액션 생성 완료: {len(actions)}개")
             return actions
@@ -84,9 +69,7 @@ class ResultImprover:
             logger.error(f"❌ 개선 제안 분석 오류: {e}")
             return []
 
-    def _convert_suggestion_to_action(
-        self, suggestion: str, source: str
-    ) -> Optional[ImprovementAction]:
+    def _convert_suggestion_to_action(self, suggestion: str, source: str) -> Optional[ImprovementAction]:
         """개선 제안을 실행 가능한 액션으로 변환"""
         try:
             # 제안 유형 분류
@@ -148,14 +131,10 @@ class ResultImprover:
         priority_map = {"high": 3, "medium": 2, "low": 1}
         return priority_map.get(priority, 1)
 
-    def execute_improvement_action(
-        self, action: ImprovementAction, context: Dict[str, Any]
-    ) -> bool:
+    def execute_improvement_action(self, action: ImprovementAction, context: Dict[str, Any]) -> bool:
         """개선 액션 실행"""
         try:
-            logger.info(
-                f"🔧 개선 액션 실행: {action.action_type} - {action.description}"
-            )
+            logger.info(f"🔧 개선 액션 실행: {action.action_type} - {action.description}")
 
             if action.action_type == "code_change":
                 return self._execute_code_change(action, context)
@@ -171,18 +150,14 @@ class ResultImprover:
             logger.error(f"❌ 개선 액션 실행 오류: {e}")
             return False
 
-    def _execute_code_change(
-        self, action: ImprovementAction, context: Dict[str, Any]
-    ) -> bool:
+    def _execute_code_change(self, action: ImprovementAction, context: Dict[str, Any]) -> bool:
         """코드 변경 실행"""
         try:
             # 코드 예제 생성
             example_code = self._generate_code_example(action.description, context)
 
             # 개선된 응답 생성
-            improved_response = self._improve_response_with_code(
-                context.get("original_response", ""), example_code
-            )
+            improved_response = self._improve_response_with_code(context.get("original_response", ""), example_code)
 
             # 결과 저장
             improvement = CodeImprovement(
@@ -202,15 +177,11 @@ class ResultImprover:
             logger.error(f"❌ 코드 변경 오류: {e}")
             return False
 
-    def _execute_structure_change(
-        self, action: ImprovementAction, context: Dict[str, Any]
-    ) -> bool:
+    def _execute_structure_change(self, action: ImprovementAction, context: Dict[str, Any]) -> bool:
         """구조 변경 실행"""
         try:
             # 구조화된 응답 생성
-            structured_response = self._structure_response(
-                context.get("original_response", "")
-            )
+            structured_response = self._structure_response(context.get("original_response", ""))
 
             improvement = CodeImprovement(
                 file_path="structured_response.txt",
@@ -229,15 +200,11 @@ class ResultImprover:
             logger.error(f"❌ 구조 변경 오류: {e}")
             return False
 
-    def _execute_content_addition(
-        self, action: ImprovementAction, context: Dict[str, Any]
-    ) -> bool:
+    def _execute_content_addition(self, action: ImprovementAction, context: Dict[str, Any]) -> bool:
         """내용 추가 실행"""
         try:
             # 개선된 내용 생성
-            enhanced_response = self._enhance_response(
-                context.get("original_response", ""), action.description
-            )
+            enhanced_response = self._enhance_response(context.get("original_response", ""), action.description)
 
             improvement = CodeImprovement(
                 file_path="enhanced_response.txt",
@@ -280,11 +247,9 @@ if __name__ == "__main__":
 """
         return code_template
 
-    def _improve_response_with_code(
-        self, original_response: str, code_example: str
-    ) -> str:
+    def _improve_response_with_code(self, original_response: str, code_example: str) -> str:
         """코드 예제를 포함한 개선된 응답 생성"""
-        improved = f"{original_response}\n\n## 코드 예제\n```python\n{code_example}\n```\n\n이 예제를 참고하여 실제 프로젝트에 적용해보세요."
+        improved = f"{original_response}\n\n## 코드 예제\n```python\n{code_example}\n```\n\n이 예제를 참고하여 실제 프로젝트에 적용해보세요."  # noqa: E501
         return improved
 
     def _structure_response(self, original_response: str) -> str:
@@ -308,14 +273,13 @@ if __name__ == "__main__":
 
     def _enhance_response(self, original_response: str, improvement: str) -> str:
         """응답 내용 개선"""
-        enhanced = f"{original_response}\n\n## 개선 사항\n{improvement}\n\n## 추가 설명\n이 개선사항을 통해 더 나은 결과를 얻을 수 있습니다."
+        enhanced = f"{original_response}\n\n## 개선 사항\n{improvement}\n\n## 추가 설명\n이 개선사항을 통해 더 나은 결과를 얻을 수 있습니다."  # noqa: E501
         return enhanced
 
     def get_improvement_summary(self) -> Dict[str, Any]:
         """개선 결과 요약"""
         return {
-            "total_improvements": len(self.successful_improvements)
-            + len(self.failed_improvements),
+            "total_improvements": len(self.successful_improvements) + len(self.failed_improvements),
             "successful_improvements": len(self.successful_improvements),
             "failed_improvements": len(self.failed_improvements),
             "success_rate": len(self.successful_improvements)

@@ -3,12 +3,13 @@
 Day 37: A/B 테스트 결과 리포트 생성 도구
 JSONL → Markdown 변환
 """
+
 import argparse
 import json
 import logging
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -86,7 +87,7 @@ def generate_markdown_report(results: List[Dict[str, Any]]) -> str:
 
 ## 🎯 **유의성 검정**
 
-"""
+"""  # noqa: E501
 
     # p-value 정보 추가
     if "p_value" in result:

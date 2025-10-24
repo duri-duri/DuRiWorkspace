@@ -4,11 +4,11 @@ DuRiCore - 자기 성찰 시스템
 스스로 판단을 평가하고 개선하는 시스템
 """
 
+import logging
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 
@@ -146,40 +146,28 @@ class SelfCritiqueSystem:
             critique_level = self._determine_critique_level(judgment_data, emotion_data)
 
             # 2. 판단 품질 평가
-            judgment_quality = self._evaluate_judgment_quality(
-                judgment_data, emotion_data
-            )
+            judgment_quality = self._evaluate_judgment_quality(judgment_data, emotion_data)
 
             # 3. 편향 감지
             bias_analysis = self._detect_bias(judgment_data, emotion_data, context_data)
 
             # 4. 개선점 식별
-            improvement_areas = self._identify_improvement_areas(
-                judgment_data, judgment_quality, bias_analysis
-            )
+            improvement_areas = self._identify_improvement_areas(judgment_data, judgment_quality, bias_analysis)
 
             # 5. 자기 피드백 생성
-            self_feedback = self._generate_self_feedback(
-                judgment_quality, bias_analysis, improvement_areas
-            )
+            self_feedback = self._generate_self_feedback(judgment_quality, bias_analysis, improvement_areas)
 
             # 6. 신뢰도 계산
-            confidence = self._calculate_critique_confidence(
-                judgment_quality, bias_analysis
-            )
+            confidence = self._calculate_critique_confidence(judgment_quality, bias_analysis)
 
             # 7. 추론 과정 분석
             reasoning_process = self._analyze_reasoning_process(judgment_data)
 
             # 8. 대안적 관점 생성
-            alternative_perspectives = self._generate_alternative_perspectives(
-                judgment_data, bias_analysis
-            )
+            alternative_perspectives = self._generate_alternative_perspectives(judgment_data, bias_analysis)
 
             # 9. 학습 포인트 추출
-            learning_points = self._extract_learning_points(
-                judgment_data, bias_analysis, improvement_areas
-            )
+            learning_points = self._extract_learning_points(judgment_data, bias_analysis, improvement_areas)
 
             # 성찰 결과 생성
             critique_result = SelfCritique(
@@ -205,9 +193,7 @@ class SelfCritiqueSystem:
             logger.error(f"자기 성찰 오류: {e}")
             return self._create_default_critique()
 
-    def _determine_critique_level(
-        self, judgment_data: Dict[str, Any], emotion_data: Dict[str, Any]
-    ) -> CritiqueLevel:
+    def _determine_critique_level(self, judgment_data: Dict[str, Any], emotion_data: Dict[str, Any]) -> CritiqueLevel:
         """성찰 수준 결정"""
         # 판단 복잡도 평가
         complexity_score = self._assess_complexity(judgment_data)
@@ -232,9 +218,7 @@ class SelfCritiqueSystem:
         else:
             return CritiqueLevel.NONE
 
-    def _evaluate_judgment_quality(
-        self, judgment_data: Dict[str, Any], emotion_data: Dict[str, Any]
-    ) -> float:
+    def _evaluate_judgment_quality(self, judgment_data: Dict[str, Any], emotion_data: Dict[str, Any]) -> float:
         """판단 품질 평가"""
         quality_score = 0.5  # 기본 점수
 
@@ -383,9 +367,7 @@ class SelfCritiqueSystem:
 
         return " ".join(feedback_parts)
 
-    def _calculate_critique_confidence(
-        self, quality: float, bias_analysis: Dict[str, Any]
-    ) -> float:
+    def _calculate_critique_confidence(self, quality: float, bias_analysis: Dict[str, Any]) -> float:
         """성찰 신뢰도 계산"""
         confidence = 0.5  # 기본 신뢰도
 
@@ -487,9 +469,7 @@ class SelfCritiqueSystem:
         # 편향에서 학습
         if bias_analysis["bias_detected"]:
             bias_type = bias_analysis["bias_type"]
-            learning_points.append(
-                f"{bias_type.value} 편향을 인식하고 극복하는 방법 학습"
-            )
+            learning_points.append(f"{bias_type.value} 편향을 인식하고 극복하는 방법 학습")
 
         # 개선점에서 학습
         for area in improvement_areas:
@@ -547,9 +527,7 @@ class SelfCritiqueSystem:
 
         return min(1.0, consistency_score)
 
-    def _store_critique_history(
-        self, critique_result: SelfCritique, judgment_data: Dict[str, Any]
-    ):
+    def _store_critique_history(self, critique_result: SelfCritique, judgment_data: Dict[str, Any]):
         """성찰 히스토리 저장"""
         history_entry = {
             "timestamp": datetime.now().isoformat(),
@@ -592,13 +570,8 @@ class SelfCritiqueSystem:
             return {"total_critiques": 0}
 
         total_critiques = len(self.critique_history)
-        avg_quality = (
-            sum(h["judgment_quality"] for h in self.critique_history) / total_critiques
-        )
-        bias_detection_rate = (
-            sum(1 for h in self.critique_history if h["bias_detected"])
-            / total_critiques
-        )
+        avg_quality = sum(h["judgment_quality"] for h in self.critique_history) / total_critiques
+        bias_detection_rate = sum(1 for h in self.critique_history if h["bias_detected"]) / total_critiques
 
         return {
             "total_critiques": total_critiques,
@@ -616,7 +589,5 @@ class SelfCritiqueSystem:
                 improvement_counts[area] = improvement_counts.get(area, 0) + 1
 
         # 빈도순 정렬
-        sorted_improvements = sorted(
-            improvement_counts.items(), key=lambda x: x[1], reverse=True
-        )
+        sorted_improvements = sorted(improvement_counts.items(), key=lambda x: x[1], reverse=True)
         return [area for area, count in sorted_improvements[:5]]

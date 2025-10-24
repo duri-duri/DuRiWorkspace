@@ -6,14 +6,12 @@ DuRi 학습 시스템 모니터링 대시보드
 """
 
 import asyncio
-from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
 import json
 import logging
 import os
 import sys
-import threading
-import time
+from dataclasses import asdict, dataclass
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 # 프로젝트 루트를 Python 경로에 추가
@@ -149,11 +147,7 @@ class LearningMonitoringDashboard:
             from DuRiCore.unified_learning_system import UnifiedLearningSystem
 
             learning_system = UnifiedLearningSystem()
-            active_sessions = [
-                s
-                for s in learning_system.learning_sessions
-                if s.status.value == "in_progress"
-            ]
+            active_sessions = [s for s in learning_system.learning_sessions if s.status.value == "in_progress"]
 
             is_active = len(active_sessions) > 0
             session_id = active_sessions[0].id if active_sessions else None
@@ -198,16 +192,8 @@ class LearningMonitoringDashboard:
             autonomous_core = DuRiAutonomousCore()
 
             is_active = autonomous_learner.is_running and autonomous_core.is_active
-            session_id = (
-                autonomous_learner.current_session.session_id
-                if autonomous_learner.current_session
-                else None
-            )
-            start_time = (
-                autonomous_learner.current_session.start_time
-                if autonomous_learner.current_session
-                else None
-            )
+            session_id = autonomous_learner.current_session.session_id if autonomous_learner.current_session else None
+            start_time = autonomous_learner.current_session.start_time if autonomous_learner.current_session else None
 
             runtime = None
             if start_time:
@@ -242,24 +228,14 @@ class LearningMonitoringDashboard:
     async def _get_learning_loop_status(self) -> SystemStatus:
         """학습 루프 매니저 상태"""
         try:
-            from duri_brain.learning.learning_loop_manager import (
-                get_learning_loop_manager,
-            )
+            from duri_brain.learning.learning_loop_manager import get_learning_loop_manager
 
             learning_loop_manager = get_learning_loop_manager()
             current_status = learning_loop_manager.get_current_status()
 
             is_active = learning_loop_manager.is_running
-            session_id = (
-                learning_loop_manager.current_cycle.cycle_id
-                if learning_loop_manager.current_cycle
-                else None
-            )
-            start_time = (
-                learning_loop_manager.current_cycle.start_time
-                if learning_loop_manager.current_cycle
-                else None
-            )
+            session_id = learning_loop_manager.current_cycle.cycle_id if learning_loop_manager.current_cycle else None
+            start_time = learning_loop_manager.current_cycle.start_time if learning_loop_manager.current_cycle else None
 
             runtime = None
             if start_time:
@@ -276,9 +252,7 @@ class LearningMonitoringDashboard:
                     "learning_cycle_count": learning_loop_manager.learning_cycle_count,
                     "total_cycles": len(learning_loop_manager.learning_cycles),
                     "current_stage": current_status.get("current_stage"),
-                    "performance_metrics": current_status.get(
-                        "performance_metrics", {}
-                    ),
+                    "performance_metrics": current_status.get("performance_metrics", {}),
                 },
             )
         except Exception as e:
@@ -303,16 +277,8 @@ class LearningMonitoringDashboard:
             realtime_learner = RealtimeLearner(autonomous_learner)
 
             is_active = realtime_learner.is_active
-            session_id = (
-                realtime_learner.current_session.session_id
-                if realtime_learner.current_session
-                else None
-            )
-            start_time = (
-                realtime_learner.current_session.start_time
-                if realtime_learner.current_session
-                else None
-            )
+            session_id = realtime_learner.current_session.session_id if realtime_learner.current_session else None
+            start_time = realtime_learner.current_session.start_time if realtime_learner.current_session else None
 
             runtime = None
             if start_time:
@@ -329,9 +295,7 @@ class LearningMonitoringDashboard:
                     "learning_interval": realtime_learner.learning_interval,
                     "total_learning_sessions": len(realtime_learner.learning_history),
                     "last_learning_time": (
-                        realtime_learner.last_learning_time.isoformat()
-                        if realtime_learner.last_learning_time
-                        else None
+                        realtime_learner.last_learning_time.isoformat() if realtime_learner.last_learning_time else None
                     ),
                 },
             )
@@ -393,9 +357,7 @@ class LearningMonitoringDashboard:
                 runtime_text = f" (실행: {status.runtime})" if status.runtime else ""
                 session_text = f" [{status.session_id}]" if status.session_id else ""
 
-                print(
-                    f"  {status_icon} {system_name}: {status_text}{runtime_text}{session_text}"
-                )
+                print(f"  {status_icon} {system_name}: {status_text}{runtime_text}{session_text}")
             else:
                 print(f"  ⚪ {system_name}: 상태 확인 불가")
 
@@ -418,16 +380,8 @@ class LearningMonitoringDashboard:
         total_cycles = sum(m.learning_cycles for m in recent_metrics)
         total_problems = sum(m.problems_detected for m in recent_metrics)
         total_decisions = sum(m.decisions_made for m in recent_metrics)
-        avg_confidence = (
-            sum(m.confidence_score for m in recent_metrics) / len(recent_metrics)
-            if recent_metrics
-            else 0
-        )
-        avg_progress = (
-            sum(m.progress_score for m in recent_metrics) / len(recent_metrics)
-            if recent_metrics
-            else 0
-        )
+        avg_confidence = sum(m.confidence_score for m in recent_metrics) / len(recent_metrics) if recent_metrics else 0
+        avg_progress = sum(m.progress_score for m in recent_metrics) / len(recent_metrics) if recent_metrics else 0
 
         print(f"  🔄 총 학습 사이클: {total_cycles}")
         print(f"  ⚠️ 감지된 문제: {total_problems}")
@@ -466,17 +420,11 @@ class LearningMonitoringDashboard:
 
         report_data = {
             "report_time": datetime.now().isoformat(),
-            "system_statuses": {
-                name: asdict(status) for name, status in self.system_statuses.items()
-            },
-            "metrics_history": [
-                asdict(metric) for metric in self.metrics_history[-100:]
-            ],  # 최근 100개
+            "system_statuses": {name: asdict(status) for name, status in self.system_statuses.items()},
+            "metrics_history": [asdict(metric) for metric in self.metrics_history[-100:]],  # 최근 100개
             "summary": {
                 "total_metrics_collected": len(self.metrics_history),
-                "active_systems": sum(
-                    1 for status in self.system_statuses.values() if status.is_active
-                ),
+                "active_systems": sum(1 for status in self.system_statuses.values() if status.is_active),
                 "total_systems": len(self.system_statuses),
             },
         }

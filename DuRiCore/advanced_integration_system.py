@@ -4,22 +4,20 @@ DuRi 고급 통합 시스템
 자가 반성, 성장 루프, 판단 시각화를 통합하는 시스템
 """
 
-from datetime import datetime
-import json
 import os
 import sys
-from typing import Any, Dict, List, Optional
+from datetime import datetime
+from typing import Any, Dict
 
 # DuRiCore 모듈 경로 추가
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from modules.evolution.self_evolution_manager import SelfEvolutionManager
-from modules.integrated_learning_system import IntegratedLearningSystem
-from modules.judgment_system.judgment_trace_logger import JudgmentTraceLogger
-from modules.thought_flow.du_ri_thought_flow import DuRiThoughtFlow
+from modules.evolution.self_evolution_manager import SelfEvolutionManager  # noqa: E402
+from modules.judgment_system.judgment_trace_logger import JudgmentTraceLogger  # noqa: E402
+from modules.thought_flow.du_ri_thought_flow import DuRiThoughtFlow  # noqa: E402
 
 # 📦 핵심 모듈 임포트 (현재 구현된 시스템에 맞게 수정)
-from modules.thought_flow.self_reflection_loop import SelfReflectionLoop
+from modules.thought_flow.self_reflection_loop import SelfReflectionLoop  # noqa: E402
 
 
 class SelfReflection:
@@ -64,13 +62,9 @@ class SelfReflection:
                 "status": "synchronized",
             }
 
-            instance.thought_flow.register_stream(
-                "self_reflection_sync", reflection_summary
-            )
+            instance.thought_flow.register_stream("self_reflection_sync", reflection_summary)
 
-            print(
-                f"✅ 자가 반성 동기화 완료: {reflection_result.get('new_insights', 0)}개 통찰 생성"
-            )
+            print(f"✅ 자가 반성 동기화 완료: {reflection_result.get('new_insights', 0)}개 통찰 생성")
 
             return reflection_summary
 
@@ -111,9 +105,7 @@ class GrowthLoop:
 
         try:
             # 자기개선 시퀀스 실행
-            evolution_result = (
-                instance.evolution_manager.execute_self_improvement_sequence()
-            )
+            evolution_result = instance.evolution_manager.execute_self_improvement_sequence()
 
             # 사고 흐름에 성장 결과 기록
             growth_summary = {
@@ -125,9 +117,7 @@ class GrowthLoop:
 
             instance.thought_flow.register_stream("growth_loop_trigger", growth_summary)
 
-            print(
-                f"✅ 성장 루프 트리거 완료: {evolution_result.get('evolution_steps', 0)}개 진화 단계"
-            )
+            print(f"✅ 성장 루프 트리거 완료: {evolution_result.get('evolution_steps', 0)}개 진화 단계")
 
             return growth_summary
 
@@ -192,9 +182,7 @@ class JudgmentTrace:
             }
 
             # 사고 흐름에 시각화 결과 기록
-            instance.thought_flow.register_stream(
-                "judgment_visualization", visualization_data
-            )
+            instance.thought_flow.register_stream("judgment_visualization", visualization_data)
 
             print(f"✅ 판단 시각화 완료: {len(recent_traces)}개 최근 기록 분석")
 
@@ -217,9 +205,7 @@ def execute_advanced_integration():
         print("\n" + "=" * 50)
         print("① 자가 반성 동기화 실행")
         print("=" * 50)
-        reflection_result = SelfReflection.self_reflection_sync(
-            trigger="strategic_judgment"
-        )
+        reflection_result = SelfReflection.self_reflection_sync(trigger="strategic_judgment")
 
         # ② 성장 루프 트리거
         print("\n" + "=" * 50)
@@ -273,7 +259,7 @@ def main():
         print(f"\n❌ 통합 실패: {result.get('error')}")
         return False
     else:
-        print(f"\n✅ 고급 통합 성공!")
+        print("\n✅ 고급 통합 성공!")
         return True
 
 

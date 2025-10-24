@@ -3,10 +3,10 @@ Common emotion handling utilities for DuRi system.
 This module provides core functionality for emotion vector handling, logging, and communication.
 """
 
-from datetime import datetime
 import json
 import os
-from typing import Dict, List, Optional, Tuple
+from datetime import datetime
+from typing import Dict
 
 import requests
 import yaml
@@ -27,8 +27,7 @@ class EmotionLogger:
             "timestamp": datetime.now().isoformat(),
             "old_emotions": old_vector.get_dominant_emotions(),
             "new_emotions": new_vector.get_dominant_emotions(),
-            "importance_delta": new_vector.compute_importance()
-            - old_vector.compute_importance(),
+            "importance_delta": new_vector.compute_importance() - old_vector.compute_importance(),
         }
 
         with open(self.log_path, "a") as f:
@@ -49,7 +48,7 @@ class EmotionTransmitter:
         try:
             with open(self.policy_path, "r") as f:
                 return yaml.safe_load(f).get("importance_threshold", default)
-        except:
+        except:  # noqa: E722
             return default
 
     def send_emotion(self, vector: EmotionVector) -> bool:
@@ -96,18 +95,14 @@ class EmotionDeltaHandler:
         self.base_path = base_path
         self.date = datetime.now().strftime("%Y-%m-%d")
 
-    def compute_delta(
-        self, old_vector: EmotionVector, new_vector: EmotionVector
-    ) -> Dict[str, float]:
+    def compute_delta(self, old_vector: EmotionVector, new_vector: EmotionVector) -> Dict[str, float]:
         """Compute delta between two emotion vectors"""
         delta = {}
         for dim in EmotionVector.DIMENSIONS:
             delta[dim] = new_vector.values[dim] - old_vector.values[dim]
         return delta
 
-    def update_from_delta(
-        self, current_vector: EmotionVector, delta: Dict[str, float]
-    ) -> EmotionVector:
+    def update_from_delta(self, current_vector: EmotionVector, delta: Dict[str, float]) -> EmotionVector:
         """Apply delta to current emotion vector"""
         new_values = current_vector.values.copy()
         for dim, change in delta.items():

@@ -14,7 +14,7 @@ from pydantic import BaseModel
 # DuRiCore 모듈 임포트를 위한 경로 추가
 sys.path.append(os.path.join(os.path.dirname(__file__), "../../.."))
 
-from DuRiCore.DuRiCore.modules.ethical_reasoning import EthicalReasoningEngine
+from DuRiCore.DuRiCore.modules.ethical_reasoning import EthicalReasoningEngine  # noqa: E402
 
 router = APIRouter()
 
@@ -48,9 +48,7 @@ async def analyze_ethical_dilemma(request: EthicalRequest):
         ethical_engine = EthicalReasoningEngine()
 
         # 윤리 분석 실행
-        result = ethical_engine.analyze_ethical_dilemma(
-            situation=request.situation, context=request.context or {}
-        )
+        result = ethical_engine.analyze_ethical_dilemma(situation=request.situation, context=request.context or {})
 
         return EthicalResponse(
             ethical_dilemma=result.ethical_dilemma,
@@ -65,9 +63,7 @@ async def analyze_ethical_dilemma(request: EthicalRequest):
         )
 
     except Exception as e:
-        raise HTTPException(
-            status_code=500, detail=f"윤리 분석 중 오류가 발생했습니다: {str(e)}"
-        )
+        raise HTTPException(status_code=500, detail=f"윤리 분석 중 오류가 발생했습니다: {str(e)}")  # noqa: B904
 
 
 @router.get("/stats")
@@ -84,9 +80,7 @@ async def get_ethical_stats():
         }
 
     except Exception as e:
-        raise HTTPException(
-            status_code=500, detail=f"통계 조회 중 오류가 발생했습니다: {str(e)}"
-        )
+        raise HTTPException(status_code=500, detail=f"통계 조회 중 오류가 발생했습니다: {str(e)}")  # noqa: B904
 
 
 @router.post("/batch-analyze")
@@ -97,9 +91,7 @@ async def batch_analyze_ethical_dilemmas(requests: List[EthicalRequest]):
         results = []
 
         for request in requests:
-            result = ethical_engine.analyze_ethical_dilemma(
-                situation=request.situation, context=request.context or {}
-            )
+            result = ethical_engine.analyze_ethical_dilemma(situation=request.situation, context=request.context or {})
 
             results.append(
                 {
@@ -115,18 +107,12 @@ async def batch_analyze_ethical_dilemmas(requests: List[EthicalRequest]):
             "success": True,
             "results": results,
             "total_analyzed": len(results),
-            "average_score": (
-                sum(r["ethical_score"] for r in results) / len(results)
-                if results
-                else 0
-            ),
+            "average_score": (sum(r["ethical_score"] for r in results) / len(results) if results else 0),
             "message": f"{len(results)}개의 윤리적 상황에 대한 분석이 완료되었습니다.",
         }
 
     except Exception as e:
-        raise HTTPException(
-            status_code=500, detail=f"배치 분석 중 오류가 발생했습니다: {str(e)}"
-        )
+        raise HTTPException(status_code=500, detail=f"배치 분석 중 오류가 발생했습니다: {str(e)}")  # noqa: B904
 
 
 @router.get("/principles")
@@ -149,9 +135,7 @@ async def get_ethical_principles():
         }
 
     except Exception as e:
-        raise HTTPException(
-            status_code=500, detail=f"윤리 원칙 조회 중 오류가 발생했습니다: {str(e)}"
-        )
+        raise HTTPException(status_code=500, detail=f"윤리 원칙 조회 중 오류가 발생했습니다: {str(e)}")  # noqa: B904
 
 
 @router.get("/frameworks")
@@ -172,7 +156,7 @@ async def get_ethical_frameworks():
         }
 
     except Exception as e:
-        raise HTTPException(
+        raise HTTPException(  # noqa: B904
             status_code=500,
             detail=f"윤리적 프레임워크 조회 중 오류가 발생했습니다: {str(e)}",
         )

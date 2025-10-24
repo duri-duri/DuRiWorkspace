@@ -3,8 +3,7 @@
 DuRi 새로운 학습 시스템 테스트
 의미 추출 + 결과 평가 시스템
 """
-from datetime import datetime
-import json
+
 import time
 
 import requests
@@ -18,15 +17,15 @@ def test_meaning_extraction():
     test_conversations = [
         {
             "user_input": "어떻게 해야지만 자율적인 커서와의 학습이 가능해지는 거야?",
-            "duri_response": "자율적 학습을 위해서는 Cursor Extension 활성화, 실시간 학습 시스템 구현, 그리고 완전한 학습 루프가 필요합니다.",
+            "duri_response": "자율적 학습을 위해서는 Cursor Extension 활성화, 실시간 학습 시스템 구현, 그리고 완전한 학습 루프가 필요합니다.",  # noqa: E501
         },
         {
             "user_input": "DuRi가 실제로 학습하고 있는지 확인해줘",
-            "duri_response": "현재 DuRi는 자동 학습 시스템이 실행 중이며, 대화를 저장하고 ChatGPT 평가를 수행하고 있습니다.",
+            "duri_response": "현재 DuRi는 자동 학습 시스템이 실행 중이며, 대화를 저장하고 ChatGPT 평가를 수행하고 있습니다.",  # noqa: E501
         },
         {
             "user_input": "자율학습 가능 상태로 개선 시작하자",
-            "duri_response": "네! 지금부터 DuRi를 실제로 배우는 인간형 인공지능으로 발전시키기 위해 기술 격차를 메우는 전면적인 개선 작업에 착수하겠습니다.",
+            "duri_response": "네! 지금부터 DuRi를 실제로 배우는 인간형 인공지능으로 발전시키기 위해 기술 격차를 메우는 전면적인 개선 작업에 착수하겠습니다.",  # noqa: E501
         },
     ]
 
@@ -36,9 +35,7 @@ def test_meaning_extraction():
         print(f"   DuRi: {conversation['duri_response']}")
 
         try:
-            response = requests.post(
-                f"{base_url}/learning/extract-meaning", json=conversation
-            )
+            response = requests.post(f"{base_url}/learning/extract-meaning", json=conversation)
             result = response.json()
 
             if result.get("status") == "success":
@@ -73,7 +70,7 @@ def test_result_evaluation():
         },
         {
             "user_input": "복잡한 시스템을 어떻게 설계하나요?",
-            "duri_response": "복잡한 시스템 설계는 단계별 접근이 필요합니다. 먼저 요구사항을 분석하고, 아키텍처를 설계한 후, 모듈별로 구현하는 것이 효과적입니다.",
+            "duri_response": "복잡한 시스템 설계는 단계별 접근이 필요합니다. 먼저 요구사항을 분석하고, 아키텍처를 설계한 후, 모듈별로 구현하는 것이 효과적입니다.",  # noqa: E501
         },
     ]
 
@@ -83,9 +80,7 @@ def test_result_evaluation():
         print(f"   DuRi: {conversation['duri_response']}")
 
         try:
-            response = requests.post(
-                f"{base_url}/learning/evaluate-result", json=conversation
-            )
+            response = requests.post(f"{base_url}/learning/evaluate-result", json=conversation)
             result = response.json()
 
             if result.get("status") == "success":
@@ -95,7 +90,7 @@ def test_result_evaluation():
                 print(f"   ✅ 성공 여부: {evaluation.get('is_success', False)}")
 
                 detailed_scores = evaluation.get("detailed_scores", {})
-                print(f"   📊 세부 점수:")
+                print("   📊 세부 점수:")
                 for criterion, score in detailed_scores.items():
                     print(f"      - {criterion}: {score:.2f}")
 
@@ -118,24 +113,22 @@ def test_complete_learning_analysis():
 
     test_conversation = {
         "user_input": "DuRi가 실제로 학습하고 있는지 확인해줘",
-        "duri_response": "현재 DuRi는 자동 학습 시스템이 실행 중이며, 대화를 저장하고 ChatGPT 평가를 수행하고 있습니다. 실시간 학습 시스템도 구축되어 있어 대화가 발생하는 즉시 학습이 이루어집니다.",
+        "duri_response": "현재 DuRi는 자동 학습 시스템이 실행 중이며, 대화를 저장하고 ChatGPT 평가를 수행하고 있습니다. 실시간 학습 시스템도 구축되어 있어 대화가 발생하는 즉시 학습이 이루어집니다.",  # noqa: E501
     }
 
-    print(f"📝 테스트 대화:")
+    print("📝 테스트 대화:")
     print(f"   사용자: {test_conversation['user_input']}")
     print(f"   DuRi: {test_conversation['duri_response']}")
 
     try:
-        response = requests.post(
-            f"{base_url}/learning/complete-analysis", json=test_conversation
-        )
+        response = requests.post(f"{base_url}/learning/complete-analysis", json=test_conversation)
         result = response.json()
 
         if result.get("status") == "success":
             analysis = result.get("complete_analysis", {})
             learning_insights = analysis.get("learning_insights", {})
 
-            print(f"\n✅ 완전한 학습 분석 결과:")
+            print("\n✅ 완전한 학습 분석 결과:")
             print(f"   📊 전체 점수: {learning_insights.get('overall_score', 0):.2f}")
             print(f"   📊 성공 수준: {learning_insights.get('success_level', 'N/A')}")
             print(f"   💡 핵심 교훈: {learning_insights.get('key_lesson', 'N/A')}")
@@ -207,20 +200,18 @@ def test_integration_with_existing_systems():
     print("3️⃣ 통합 학습 분석")
     test_conversation = {
         "user_input": "DuRi의 새로운 학습 시스템이 잘 작동하나요?",
-        "duri_response": "네! 새로운 학습 시스템이 성공적으로 구현되었습니다. 의미 추출과 결과 평가가 모두 작동하고 있으며, 실시간 학습과 자동 학습 시스템과도 잘 통합되어 있습니다.",
+        "duri_response": "네! 새로운 학습 시스템이 성공적으로 구현되었습니다. 의미 추출과 결과 평가가 모두 작동하고 있으며, 실시간 학습과 자동 학습 시스템과도 잘 통합되어 있습니다.",  # noqa: E501
     }
 
     try:
-        response = requests.post(
-            f"{base_url}/learning/complete-analysis", json=test_conversation
-        )
+        response = requests.post(f"{base_url}/learning/complete-analysis", json=test_conversation)
         result = response.json()
 
         if result.get("status") == "success":
             analysis = result.get("complete_analysis", {})
             learning_insights = analysis.get("learning_insights", {})
 
-            print(f"   ✅ 통합 분석 성공")
+            print("   ✅ 통합 분석 성공")
             print(f"   📊 점수: {learning_insights.get('overall_score', 0):.2f}")
             print(f"   📊 수준: {learning_insights.get('success_level', 'N/A')}")
         else:

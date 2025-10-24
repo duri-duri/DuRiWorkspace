@@ -5,11 +5,9 @@ DuRiCore Phase 7 - 실제 응용 시스템 테스트
 """
 
 import asyncio
-from datetime import datetime
-import json
 import time
 
-from application_system import ApplicationDomain, ApplicationSystem, ProblemType
+from application_system import ApplicationDomain, ApplicationSystem
 
 
 async def test_application_system():
@@ -66,9 +64,7 @@ async def test_general_conversation(app_system: ApplicationSystem):
 
     for i, user_input in enumerate(test_inputs, 1):
         try:
-            result = await app_system.process_application(
-                user_input, ApplicationDomain.GENERAL_CONVERSATION
-            )
+            result = await app_system.process_application(user_input, ApplicationDomain.GENERAL_CONVERSATION)
 
             print(f"   {i}. 입력: '{user_input}'")
             print(f"      응답: {result.solution}")
@@ -92,9 +88,7 @@ async def test_problem_solving(app_system: ApplicationSystem):
 
     for i, user_input in enumerate(test_inputs, 1):
         try:
-            result = await app_system.process_application(
-                user_input, ApplicationDomain.PROBLEM_SOLVING
-            )
+            result = await app_system.process_application(user_input, ApplicationDomain.PROBLEM_SOLVING)
 
             print(f"   {i}. 입력: '{user_input}'")
             print(f"      해결책: {result.solution}")
@@ -118,17 +112,13 @@ async def test_creative_writing(app_system: ApplicationSystem):
 
     for i, user_input in enumerate(test_inputs, 1):
         try:
-            result = await app_system.process_application(
-                user_input, ApplicationDomain.CREATIVE_WRITING
-            )
+            result = await app_system.process_application(user_input, ApplicationDomain.CREATIVE_WRITING)
 
             print(f"   {i}. 입력: '{user_input}'")
             print(f"      창작물: {result.solution}")
             print(f"      신뢰도: {result.confidence_score:.2f}")
             print(f"      실행시간: {result.execution_time:.2f}초")
-            print(
-                f"      창의성 점수: {result.performance_metrics.get('creativity', 0):.2f}"
-            )
+            print(f"      창의성 점수: {result.performance_metrics.get('creativity', 0):.2f}")
 
         except Exception as e:
             print(f"   {i}. ❌ 오류: {e}")
@@ -146,17 +136,13 @@ async def test_technical_analysis(app_system: ApplicationSystem):
 
     for i, user_input in enumerate(test_inputs, 1):
         try:
-            result = await app_system.process_application(
-                user_input, ApplicationDomain.TECHNICAL_ANALYSIS
-            )
+            result = await app_system.process_application(user_input, ApplicationDomain.TECHNICAL_ANALYSIS)
 
             print(f"   {i}. 입력: '{user_input}'")
             print(f"      분석: {result.solution}")
             print(f"      신뢰도: {result.confidence_score:.2f}")
             print(f"      실행시간: {result.execution_time:.2f}초")
-            print(
-                f"      기술 정확도: {result.performance_metrics.get('technical_accuracy', 0):.2f}"
-            )
+            print(f"      기술 정확도: {result.performance_metrics.get('technical_accuracy', 0):.2f}")
 
         except Exception as e:
             print(f"   {i}. ❌ 오류: {e}")
@@ -205,9 +191,7 @@ async def test_domain_detection(app_system: ApplicationSystem):
             print(f"   {i}. ❌ 오류: {e}")
 
     accuracy = correct_detections / total_tests * 100
-    print(
-        f"\n   📊 도메인 감지 정확도: {accuracy:.1f}% ({correct_detections}/{total_tests})"
-    )
+    print(f"\n   📊 도메인 감지 정확도: {accuracy:.1f}% ({correct_detections}/{total_tests})")
 
 
 async def test_integration(app_system: ApplicationSystem):
@@ -219,17 +203,11 @@ async def test_integration(app_system: ApplicationSystem):
 
         print(f"      응용 시스템 상태: {status['application_system']['status']}")
         print(f"      모듈 수: {status['application_system']['modules_count']}")
-        print(
-            f"      성능 기록 수: {status['application_system']['performance_history_count']}"
-        )
+        print(f"      성능 기록 수: {status['application_system']['performance_history_count']}")
 
         # 통합 시스템 상태 확인
         integrated_status = status["integrated_systems"]
-        active_systems = sum(
-            1
-            for system in integrated_status.values()
-            if system.get("status") == "active"
-        )
+        active_systems = sum(1 for system in integrated_status.values() if system.get("status") == "active")
         total_systems = len(integrated_status)
 
         print(f"      활성 통합 시스템: {active_systems}/{total_systems}")
@@ -239,9 +217,7 @@ async def test_integration(app_system: ApplicationSystem):
         if domain_stats:
             print("      도메인별 사용 통계:")
             for domain, stats in domain_stats.items():
-                print(
-                    f"         {domain}: {stats['count']}회, 평균 신뢰도 {stats['avg_confidence']:.2f}"
-                )
+                print(f"         {domain}: {stats['count']}회, 평균 신뢰도 {stats['avg_confidence']:.2f}")
 
     except Exception as e:
         print(f"   ❌ 통합 시스템 상태 확인 오류: {e}")
@@ -271,7 +247,7 @@ async def test_performance_monitoring(app_system: ApplicationSystem):
             total_execution_time += result.execution_time
 
             print(
-                f"      {i}. {result.domain.value}: 신뢰도 {result.confidence_score:.2f}, 시간 {result.execution_time:.2f}초"
+                f"      {i}. {result.domain.value}: 신뢰도 {result.confidence_score:.2f}, 시간 {result.execution_time:.2f}초"  # noqa: E501
             )
 
         except Exception as e:
@@ -281,7 +257,7 @@ async def test_performance_monitoring(app_system: ApplicationSystem):
     avg_confidence = total_confidence / len(test_inputs)
     avg_execution_time = total_execution_time / len(test_inputs)
 
-    print(f"\n   📈 성능 요약:")
+    print("\n   📈 성능 요약:")
     print(f"      총 처리 시간: {total_time:.2f}초")
     print(f"      평균 신뢰도: {avg_confidence:.2f}")
     print(f"      평균 실행 시간: {avg_execution_time:.2f}초")
@@ -341,11 +317,9 @@ async def test_comprehensive_scenarios():
             expected_domains = scenario["expected_domains"]
 
             if detected_domain in expected_domains:
-                print(f"   ✅ 도메인 감지 정확")
+                print("   ✅ 도메인 감지 정확")
             else:
-                print(
-                    f"   ⚠️  도메인 감지 차이 (예상: {[d.value for d in expected_domains]})"
-                )
+                print(f"   ⚠️  도메인 감지 차이 (예상: {[d.value for d in expected_domains]})")
 
         except Exception as e:
             print(f"   ❌ 시나리오 처리 오류: {e}")

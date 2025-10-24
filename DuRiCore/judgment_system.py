@@ -5,13 +5,11 @@ DuRiCore Phase 5 Day 3 - 판단 시스템
 """
 
 import asyncio
+import logging
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-import json
-import logging
-import math
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 
@@ -103,16 +101,12 @@ class JudgmentSystem:
             context = memory_data.get("context", {})
 
             # 상황 분석
-            situation_analysis = await self.analyze_situation(
-                {"content": content}, context
-            )
+            situation_analysis = await self.analyze_situation({"content": content}, context)
 
             # 의사결정
             available_actions = ["proceed", "wait", "reconsider", "escalate"]
             constraints = {"time_limit": 10.0, "resource_limit": 0.8}
-            decision_result = await self.make_decision(
-                situation_analysis, available_actions, constraints
-            )
+            decision_result = await self.make_decision(situation_analysis, available_actions, constraints)
 
             return {
                 "status": "success",
@@ -149,9 +143,7 @@ class JudgmentSystem:
                 from memory.judgment_strategy_applier import JudgmentStrategyApplier
 
                 strategy_applier = JudgmentStrategyApplier()
-                decision_result = strategy_applier.apply_strategy(
-                    context, decision_result
-                )
+                decision_result = strategy_applier.apply_strategy(context, decision_result)
                 logger.info("✅ 판단 전략 적용 완료")
             except Exception as e:
                 logger.warning(f"판단 전략 적용 실패: {e}")
@@ -165,10 +157,7 @@ class JudgmentSystem:
                 import sys
 
                 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-                from memory.judgment_trace_store import (
-                    get_reasoning_trace,
-                    record_judgment_trace,
-                )
+                from memory.judgment_trace_store import get_reasoning_trace, record_judgment_trace
 
                 reason = get_reasoning_trace(context)
                 record_judgment_trace(context, decision_result, reason)
@@ -264,13 +253,13 @@ class JudgmentSystem:
 
             return {
                 "success": True,
-                "situation_analysis": situation_analysis,
-                "decision_result": decision_result,
+                "situation_analysis": situation_analysis,  # noqa: F821
+                "decision_result": decision_result,  # noqa: F821
                 "data": {
-                    "content": content,
+                    "content": content,  # noqa: F821
                     "context": context,
-                    "decision": decision_result.decision,
-                    "confidence": decision_result.confidence,
+                    "decision": decision_result.decision,  # noqa: F821
+                    "confidence": decision_result.confidence,  # noqa: F821
                 },
             }
 
@@ -278,9 +267,7 @@ class JudgmentSystem:
             logger.error(f"판단 시스템 입력 처리 실패: {e}")
             return {"success": False, "error": str(e), "data": {}}
 
-    async def analyze_situation(
-        self, input_data: Dict[str, Any], context: Dict[str, Any]
-    ) -> SituationAnalysis:
+    async def analyze_situation(self, input_data: Dict[str, Any], context: Dict[str, Any]) -> SituationAnalysis:
         """상황 분석"""
         try:
             start_time = datetime.now()
@@ -292,9 +279,7 @@ class JudgmentSystem:
             context_elements = await self._extract_context_elements(context)
 
             # 3. 상황 패턴 인식
-            situation_pattern = await self._recognize_situation_pattern(
-                input_data, context
-            )
+            situation_pattern = await self._recognize_situation_pattern(input_data, context)
 
             # 4. 핵심 요소 식별
             key_factors = await self._identify_key_factors(input_data, context)
@@ -307,9 +292,7 @@ class JudgmentSystem:
             complexity_score = await self._calculate_complexity(input_data, context)
 
             # 7. 신뢰도 계산
-            confidence = await self._calculate_analysis_confidence(
-                data_analysis, context_elements, situation_pattern
-            )
+            confidence = await self._calculate_analysis_confidence(data_analysis, context_elements, situation_pattern)
 
             analysis_time = (datetime.now() - start_time).total_seconds()
 
@@ -348,36 +331,24 @@ class JudgmentSystem:
             start_time = datetime.now()
 
             # 1. 규칙 기반 의사결정
-            rule_decision = await self._rule_based_decision(
-                situation_analysis, available_actions, constraints
-            )
+            rule_decision = await self._rule_based_decision(situation_analysis, available_actions, constraints)
 
             # 2. 머신러닝 기반 의사결정
-            ml_decision = await self._ml_based_decision(
-                situation_analysis, available_actions, constraints
-            )
+            ml_decision = await self._ml_based_decision(situation_analysis, available_actions, constraints)
 
             # 3. 윤리적 판단
-            ethical_review = await self._ethical_review(
-                rule_decision, ml_decision, situation_analysis
-            )
+            ethical_review = await self._ethical_review(rule_decision, ml_decision, situation_analysis)
 
             # 4. 최종 의사결정 (하이브리드)
-            final_decision = await self._hybrid_decision(
-                rule_decision, ml_decision, ethical_review
-            )
+            final_decision = await self._hybrid_decision(rule_decision, ml_decision, ethical_review)
 
             # 5. 대안 생성
-            alternatives = await self._generate_alternatives(
-                situation_analysis, available_actions
-            )
+            alternatives = await self._generate_alternatives(situation_analysis, available_actions)
 
             # 6. 위험 평가
-            risk_assessment = await self._assess_decision_risk(
-                final_decision, situation_analysis
-            )
+            risk_assessment = await self._assess_decision_risk(final_decision, situation_analysis)
 
-            decision_time = (datetime.now() - start_time).total_seconds()
+            decision_time = (datetime.now() - start_time).total_seconds()  # noqa: F841
 
             return DecisionResult(
                 decision=final_decision["action"],
@@ -415,27 +386,19 @@ class JudgmentSystem:
             accuracy_score = await self._evaluate_accuracy(decision_result, outcome)
 
             # 2. 일관성 평가
-            consistency_score = await self._evaluate_consistency(
-                decision_result, situation_analysis
-            )
+            consistency_score = await self._evaluate_consistency(decision_result, situation_analysis)
 
             # 3. 윤리성 평가
-            ethical_score = await self._evaluate_ethical_quality(
-                decision_result, outcome
-            )
+            ethical_score = await self._evaluate_ethical_quality(decision_result, outcome)
 
             # 4. 효율성 평가
             efficiency_score = await self._evaluate_efficiency(decision_result, outcome)
 
             # 5. 종합 점수 계산
-            overall_score = (
-                accuracy_score + consistency_score + ethical_score + efficiency_score
-            ) / 4
+            overall_score = (accuracy_score + consistency_score + ethical_score + efficiency_score) / 4
 
             # 6. 피드백 생성
-            feedback = await self._generate_feedback(
-                accuracy_score, consistency_score, ethical_score, efficiency_score
-            )
+            feedback = await self._generate_feedback(accuracy_score, consistency_score, ethical_score, efficiency_score)
 
             # 7. 개선 제안
             improvement_suggestions = await self._generate_improvement_suggestions(
@@ -471,9 +434,7 @@ class JudgmentSystem:
             analysis = {
                 "data_type": type(input_data).__name__,
                 "data_size": len(str(input_data)),
-                "key_fields": (
-                    list(input_data.keys()) if isinstance(input_data, dict) else []
-                ),
+                "key_fields": (list(input_data.keys()) if isinstance(input_data, dict) else []),
                 "complexity": self._calculate_data_complexity(input_data),
                 "quality_score": self._assess_data_quality(input_data),
             }
@@ -500,9 +461,7 @@ class JudgmentSystem:
             logger.error(f"컨텍스트 요소 추출 오류: {e}")
             return []
 
-    async def _recognize_situation_pattern(
-        self, input_data: Dict[str, Any], context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _recognize_situation_pattern(self, input_data: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
         """상황 패턴 인식"""
         try:
             patterns = {
@@ -529,9 +488,7 @@ class JudgmentSystem:
             logger.error(f"상황 패턴 인식 오류: {e}")
             return {"type": "unknown", "patterns": [], "confidence": 0.0}
 
-    async def _identify_key_factors(
-        self, input_data: Dict[str, Any], context: Dict[str, Any]
-    ) -> List[str]:
+    async def _identify_key_factors(self, input_data: Dict[str, Any], context: Dict[str, Any]) -> List[str]:
         """핵심 요소 식별"""
         try:
             factors = []
@@ -552,9 +509,7 @@ class JudgmentSystem:
             logger.error(f"핵심 요소 식별 오류: {e}")
             return []
 
-    async def _assess_risk_level(
-        self, input_data: Dict[str, Any], context: Dict[str, Any]
-    ) -> float:
+    async def _assess_risk_level(self, input_data: Dict[str, Any], context: Dict[str, Any]) -> float:
         """위험도 평가"""
         try:
             risk_score = 0.0
@@ -571,9 +526,7 @@ class JudgmentSystem:
             logger.error(f"위험도 평가 오류: {e}")
             return 0.5
 
-    async def _assess_urgency_level(
-        self, input_data: Dict[str, Any], context: Dict[str, Any]
-    ) -> float:
+    async def _assess_urgency_level(self, input_data: Dict[str, Any], context: Dict[str, Any]) -> float:
         """긴급도 평가"""
         try:
             urgency_score = 0.0
@@ -590,9 +543,7 @@ class JudgmentSystem:
             logger.error(f"긴급도 평가 오류: {e}")
             return 0.5
 
-    async def _calculate_complexity(
-        self, input_data: Dict[str, Any], context: Dict[str, Any]
-    ) -> float:
+    async def _calculate_complexity(self, input_data: Dict[str, Any], context: Dict[str, Any]) -> float:
         """복잡도 계산"""
         try:
             complexity = 0.0
@@ -799,9 +750,7 @@ class JudgmentSystem:
             if situation_analysis.complexity_score > 0.7:
                 alternatives.append("detailed_analysis_action")
 
-            alternatives.extend(
-                ["wait_and_observe", "consult_expert", "gather_more_info"]
-            )
+            alternatives.extend(["wait_and_observe", "consult_expert", "gather_more_info"])
 
             return alternatives[:5]
         except Exception as e:
@@ -816,13 +765,9 @@ class JudgmentSystem:
             risk_assessment = {}
             risk_assessment["base_risk"] = situation_analysis.risk_level
             risk_assessment["confidence_risk"] = 1.0 - decision["confidence"]
-            risk_assessment["complexity_risk"] = (
-                situation_analysis.complexity_score * 0.5
-            )
+            risk_assessment["complexity_risk"] = situation_analysis.complexity_score * 0.5
             risk_assessment["total_risk"] = (
-                risk_assessment["base_risk"]
-                + risk_assessment["confidence_risk"]
-                + risk_assessment["complexity_risk"]
+                risk_assessment["base_risk"] + risk_assessment["confidence_risk"] + risk_assessment["complexity_risk"]
             ) / 3
 
             return risk_assessment
@@ -830,9 +775,7 @@ class JudgmentSystem:
             logger.error(f"의사결정 위험 평가 오류: {e}")
             return {"error": 1.0}
 
-    async def _evaluate_accuracy(
-        self, decision_result: DecisionResult, outcome: Dict[str, Any]
-    ) -> float:
+    async def _evaluate_accuracy(self, decision_result: DecisionResult, outcome: Dict[str, Any]) -> float:
         """정확도 평가"""
         try:
             accuracy = 0.5
@@ -850,16 +793,10 @@ class JudgmentSystem:
         try:
             consistency = 0.5
 
-            if (
-                situation_analysis.risk_level > 0.7
-                and "risk" in decision_result.decision.lower()
-            ):
+            if situation_analysis.risk_level > 0.7 and "risk" in decision_result.decision.lower():
                 consistency += 0.2
 
-            if (
-                situation_analysis.urgency_level > 0.7
-                and "urgent" in decision_result.decision.lower()
-            ):
+            if situation_analysis.urgency_level > 0.7 and "urgent" in decision_result.decision.lower():
                 consistency += 0.2
 
             consistency += decision_result.confidence * 0.1
@@ -869,9 +806,7 @@ class JudgmentSystem:
             logger.error(f"일관성 평가 오류: {e}")
             return 0.5
 
-    async def _evaluate_ethical_quality(
-        self, decision_result: DecisionResult, outcome: Dict[str, Any]
-    ) -> float:
+    async def _evaluate_ethical_quality(self, decision_result: DecisionResult, outcome: Dict[str, Any]) -> float:
         """윤리적 품질 평가"""
         try:
             return decision_result.ethical_score
@@ -879,9 +814,7 @@ class JudgmentSystem:
             logger.error(f"윤리적 품질 평가 오류: {e}")
             return 0.5
 
-    async def _evaluate_efficiency(
-        self, decision_result: DecisionResult, outcome: Dict[str, Any]
-    ) -> float:
+    async def _evaluate_efficiency(self, decision_result: DecisionResult, outcome: Dict[str, Any]) -> float:
         """효율성 평가"""
         try:
             efficiency = 0.5
@@ -930,17 +863,11 @@ class JudgmentSystem:
             recent_errors = context.get("recent_errors", 0)
 
             if recent_errors > 3:
-                return [
-                    f"연속적인 오류로 인한 피드백 생성 실패: {e}. 시스템 상태를 점검해주세요."
-                ]
+                return [f"연속적인 오류로 인한 피드백 생성 실패: {e}. 시스템 상태를 점검해주세요."]
             elif system_performance < 0.3:
-                return [
-                    f"시스템 성능 저하로 인한 피드백 생성 실패: {e}. 잠시 후 다시 시도해주세요."
-                ]
+                return [f"시스템 성능 저하로 인한 피드백 생성 실패: {e}. 잠시 후 다시 시도해주세요."]
             else:
-                return [
-                    f"피드백 생성 중 오류 발생: {e}. 다른 방법으로 시도해보겠습니다."
-                ]
+                return [f"피드백 생성 중 오류 발생: {e}. 다른 방법으로 시도해보겠습니다."]
 
     async def _generate_improvement_suggestions(
         self,
@@ -981,17 +908,11 @@ class JudgmentSystem:
             recent_errors = context.get("recent_errors", 0)
 
             if recent_errors > 3:
-                return [
-                    f"연속적인 오류로 인한 개선 제안 생성 실패: {e}. 시스템 상태를 점검해주세요."
-                ]
+                return [f"연속적인 오류로 인한 개선 제안 생성 실패: {e}. 시스템 상태를 점검해주세요."]
             elif system_performance < 0.3:
-                return [
-                    f"시스템 성능 저하로 인한 개선 제안 생성 실패: {e}. 잠시 후 다시 시도해주세요."
-                ]
+                return [f"시스템 성능 저하로 인한 개선 제안 생성 실패: {e}. 잠시 후 다시 시도해주세요."]
             else:
-                return [
-                    f"개선 제안 생성 중 오류 발생: {e}. 다른 방법으로 시도해보겠습니다."
-                ]
+                return [f"개선 제안 생성 중 오류 발생: {e}. 다른 방법으로 시도해보겠습니다."]
 
     def _calculate_data_complexity(self, data: Any) -> float:
         """데이터 복잡도 계산"""
@@ -1127,9 +1048,7 @@ class JudgmentSystem:
 
         return patterns
 
-    def _real_analyze_situation(
-        self, input_data: Dict[str, Any], memory_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _real_analyze_situation(self, input_data: Dict[str, Any], memory_data: Dict[str, Any]) -> Dict[str, Any]:
         """실제 상황 분석 로직"""
         try:
             # 입력 데이터에서 키워드 추출
@@ -1173,40 +1092,30 @@ class JudgmentSystem:
                 "analysis_method": "fallback",
             }
 
-    def _classify_situation_type(
-        self, keywords: List[str], context: Dict[str, Any]
-    ) -> str:
+    def _classify_situation_type(self, keywords: List[str], context: Dict[str, Any]) -> str:
         """상황 타입 분류"""
         if any(word in ["error", "problem", "issue", "fail"] for word in keywords):
             return "problem"
-        elif any(
-            word in ["learn", "study", "understand", "explain"] for word in keywords
-        ):
+        elif any(word in ["learn", "study", "understand", "explain"] for word in keywords):
             return "learning"
         elif any(word in ["urgent", "important", "critical"] for word in keywords):
             return "urgent"
         else:
             return "routine"
 
-    def _assess_risk_level_real(
-        self, keywords: List[str], context: Dict[str, Any]
-    ) -> float:
+    def _assess_risk_level_real(self, keywords: List[str], context: Dict[str, Any]) -> float:
         """실제 위험도 평가"""
         risk_keywords = ["error", "problem", "fail", "critical", "emergency"]
         risk_count = sum(1 for word in keywords if word in risk_keywords)
         return min(1.0, risk_count * 0.3)
 
-    def _assess_urgency_level_real(
-        self, keywords: List[str], context: Dict[str, Any]
-    ) -> float:
+    def _assess_urgency_level_real(self, keywords: List[str], context: Dict[str, Any]) -> float:
         """실제 긴급도 평가"""
         urgency_keywords = ["urgent", "important", "critical", "emergency", "immediate"]
         urgency_count = sum(1 for word in keywords if word in urgency_keywords)
         return min(1.0, urgency_count * 0.4)
 
-    def _calculate_complexity_score_real(
-        self, content: str, context: Dict[str, Any]
-    ) -> float:
+    def _calculate_complexity_score_real(self, content: str, context: Dict[str, Any]) -> float:
         """실제 복잡도 계산"""
         if not content:
             return 0.5
@@ -1221,15 +1130,13 @@ class JudgmentSystem:
         avg_words_per_sentence = word_count / sentence_count
         return min(1.0, avg_words_per_sentence / 20.0)
 
-    def _real_make_decision(
-        self, situation_analysis: Dict[str, Any], context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _real_make_decision(self, situation_analysis: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
         """실제 의사결정 로직"""
         try:
             situation_type = situation_analysis.get("situation_type", "unknown")
             risk_level = situation_analysis.get("risk_level", 0.5)
             urgency_level = situation_analysis.get("urgency_level", 0.5)
-            complexity_score = situation_analysis.get("complexity_score", 0.5)
+            complexity_score = situation_analysis.get("complexity_score", 0.5)  # noqa: F841
 
             # 상황별 의사결정 로직
             if situation_type == "learning":
@@ -1269,9 +1176,7 @@ class JudgmentSystem:
             }
 
             # 윤리적 점수
-            ethical_score = self._calculate_ethical_score_real(
-                decision, situation_analysis
-            )
+            ethical_score = self._calculate_ethical_score_real(decision, situation_analysis)
 
             return {
                 "decision": decision,
@@ -1297,9 +1202,7 @@ class JudgmentSystem:
                 "ethical_score": 0.5,
             }
 
-    def _generate_alternatives_real(
-        self, situation_type: str, risk_level: float
-    ) -> List[str]:
+    def _generate_alternatives_real(self, situation_type: str, risk_level: float) -> List[str]:
         """실제 대안 생성"""
         alternatives = []
 
@@ -1314,9 +1217,7 @@ class JudgmentSystem:
 
         return alternatives
 
-    def _calculate_ethical_score_real(
-        self, decision: str, situation_analysis: Dict[str, Any]
-    ) -> float:
+    def _calculate_ethical_score_real(self, decision: str, situation_analysis: Dict[str, Any]) -> float:
         """실제 윤리적 점수 계산"""
         # 기본 윤리 점수
         base_score = 0.7
@@ -1370,9 +1271,7 @@ async def test_judgment_system():
 
     # 1. 상황 분석 테스트
     print("\n1. 상황 분석 테스트")
-    situation_analysis = await judgment_system.analyze_situation(
-        test_input, test_context
-    )
+    situation_analysis = await judgment_system.analyze_situation(test_input, test_context)
     print(f"상황 타입: {situation_analysis.situation_type}")
     print(f"위험도: {situation_analysis.risk_level:.3f}")
     print(f"긴급도: {situation_analysis.urgency_level:.3f}")
@@ -1382,9 +1281,7 @@ async def test_judgment_system():
 
     # 2. 의사결정 테스트
     print("\n2. 의사결정 테스트")
-    decision_result = await judgment_system.make_decision(
-        situation_analysis, available_actions, constraints
-    )
+    decision_result = await judgment_system.make_decision(situation_analysis, available_actions, constraints)
     print(f"결정: {decision_result.decision}")
     print(f"추론: {decision_result.reasoning}")
     print(f"신뢰도: {decision_result.confidence:.3f}")
@@ -1400,9 +1297,7 @@ async def test_judgment_system():
         "stakeholder_satisfaction": 0.8,
     }
 
-    quality = await judgment_system.evaluate_judgment_quality(
-        situation_analysis, decision_result, outcome
-    )
+    quality = await judgment_system.evaluate_judgment_quality(situation_analysis, decision_result, outcome)
     print(f"정확도: {quality.accuracy_score:.3f}")
     print(f"일관성: {quality.consistency_score:.3f}")
     print(f"윤리성: {quality.ethical_score:.3f}")

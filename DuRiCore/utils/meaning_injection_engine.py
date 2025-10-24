@@ -14,7 +14,7 @@ MeaningInjectionEngine - 의미 주입 자동화 시스템
 import logging
 import os
 import re
-from typing import Any, Dict, List, Optional
+from typing import Dict
 
 logger = logging.getLogger(__name__)
 
@@ -95,7 +95,7 @@ def {function_name}(self, {parameters}):
         structural_changes=self._get_structural_changes()
     )
 
-    return result""",
+    return result""",  # noqa: E501
             "regression_test_stub": """def test_{module_name}_regression():
     # 실행 가능성 보장: 실제 데이터 기반 회귀 테스트
     regression_framework = RegressionTestFramework()
@@ -363,29 +363,19 @@ class {class_name}:
             meaning_injected = module_content
 
             # 1. 정체성 선언 추가
-            meaning_injected = self._add_identity_declaration(
-                meaning_injected, module_name
-            )
+            meaning_injected = self._add_identity_declaration(meaning_injected, module_name)
 
             # 2. 판단 흐름 Trace 구조 추가
-            meaning_injected = self._add_judgment_trace_structure(
-                meaning_injected, module_name
-            )
+            meaning_injected = self._add_judgment_trace_structure(meaning_injected, module_name)
 
             # 3. 회귀 테스트 스텁 추가
-            meaning_injected = self._add_regression_test_stub(
-                meaning_injected, module_name
-            )
+            meaning_injected = self._add_regression_test_stub(meaning_injected, module_name)
 
             # 4. 존재형 AI 구조 추가
-            meaning_injected = self._add_existence_ai_structure(
-                meaning_injected, module_name
-            )
+            meaning_injected = self._add_existence_ai_structure(meaning_injected, module_name)
 
             # 5. 최종 실행 준비 완료 구조 추가
-            meaning_injected = self._add_final_execution_structure(
-                meaning_injected, module_name
-            )
+            meaning_injected = self._add_final_execution_structure(meaning_injected, module_name)
 
             logger.info(f"의미 주입 완료: {module_name}")
             return meaning_injected
@@ -403,9 +393,7 @@ class {class_name}:
             must_not = self._extract_must_not(content)
             integration = self._extract_integration(content)
 
-            identity_declaration = self.meaning_templates[
-                "identity_declaration"
-            ].format(
+            identity_declaration = self.meaning_templates["identity_declaration"].format(
                 module_name=module_name,
                 purpose=purpose,
                 must_provide=must_provide,
@@ -418,17 +406,9 @@ class {class_name}:
             insert_index = 0
 
             for i, line in enumerate(lines):
-                if (
-                    line.strip().startswith("#")
-                    or line.strip().startswith("import")
-                    or line.strip().startswith("from")
-                ):
+                if line.strip().startswith("#") or line.strip().startswith("import") or line.strip().startswith("from"):
                     insert_index = i + 1
-                elif (
-                    line.strip()
-                    and not line.strip().startswith('"""')
-                    and not line.strip().startswith("'''")
-                ):
+                elif line.strip() and not line.strip().startswith('"""') and not line.strip().startswith("'''"):
                     break
 
             lines.insert(insert_index, identity_declaration)
@@ -484,18 +464,14 @@ class {class_name}:
                         # 클래스에 존재형 AI 구조 추가
                         existing_init = self._extract_existing_init(content, class_name)
 
-                        existence_ai_structure = self.meaning_templates[
-                            "existence_ai_structure"
-                        ].format(class_name=class_name, existing_init=existing_init)
+                        existence_ai_structure = self.meaning_templates["existence_ai_structure"].format(
+                            class_name=class_name, existing_init=existing_init
+                        )
 
                         # 클래스 내용 교체
-                        content = self._replace_class_content(
-                            content, class_name, existence_ai_structure
-                        )
+                        content = self._replace_class_content(content, class_name, existence_ai_structure)
                     except Exception as e:
-                        logger.warning(
-                            f"클래스 {class_name}에 존재형 AI 구조 추가 실패: {str(e)}"
-                        )
+                        logger.warning(f"클래스 {class_name}에 존재형 AI 구조 추가 실패: {str(e)}")
                         continue
         except Exception as e:
             logger.error(f"존재형 AI 구조 추가 실패: {str(e)}")
@@ -513,14 +489,12 @@ class {class_name}:
                 # 클래스에 최종 실행 준비 완료 구조 추가
                 existing_init = self._extract_existing_init(content, class_name)
 
-                final_execution_structure = self.meaning_templates[
-                    "final_execution_structure"
-                ].format(class_name=class_name, existing_init=existing_init)
+                final_execution_structure = self.meaning_templates["final_execution_structure"].format(
+                    class_name=class_name, existing_init=existing_init
+                )
 
                 # 클래스 내용 교체
-                content = self._replace_class_content(
-                    content, class_name, final_execution_structure
-                )
+                content = self._replace_class_content(content, class_name, final_execution_structure)
 
         return content
 
@@ -542,7 +516,7 @@ class {class_name}:
                     purpose += " + 최종 실행 준비 완료"
                 return purpose
 
-        return f"{module_name} 모듈 - 판단 이유 기록 필수 + 기존 특성 보존 + 실행 가능성 보장 + 존재형 AI + 최종 실행 준비 완료"
+        return f"{module_name} 모듈 - 판단 이유 기록 필수 + 기존 특성 보존 + 실행 가능성 보장 + 존재형 AI + 최종 실행 준비 완료"  # noqa: E501
 
     def _extract_must_provide(self, content: str) -> str:
         """반드시 제공해야 할 것들 추출"""
@@ -651,9 +625,7 @@ class {class_name}:
 
         return "pass"
 
-    def _replace_class_content(
-        self, content: str, class_name: str, new_structure: str
-    ) -> str:
+    def _replace_class_content(self, content: str, class_name: str, new_structure: str) -> str:
         """클래스 내용 교체"""
         class_pattern = rf"class {class_name}:.*?(?=\nclass|\n\n|\Z)"
         replacement = f"class {class_name}:\n{new_structure}"
@@ -661,15 +633,11 @@ class {class_name}:
         content = re.sub(class_pattern, replacement, content, flags=re.DOTALL)
         return content
 
-    def save_meaning_injected_module(
-        self, module_content: str, module_name: str, output_dir: str = "."
-    ) -> str:
+    def save_meaning_injected_module(self, module_content: str, module_name: str, output_dir: str = ".") -> str:
         """의미가 주입된 모듈 저장"""
         try:
             os.makedirs(output_dir, exist_ok=True)
-            meaning_injected_file_path = os.path.join(
-                output_dir, f"{module_name}_meaning_injected.py"
-            )
+            meaning_injected_file_path = os.path.join(output_dir, f"{module_name}_meaning_injected.py")
 
             with open(meaning_injected_file_path, "w", encoding="utf-8") as f:
                 f.write(module_content)

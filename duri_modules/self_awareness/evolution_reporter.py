@@ -3,11 +3,12 @@
 DuRi 진화 보고서 생성 시스템
 자가 진화 분석 결과를 보고서 형태로 생성하는 시스템
 """
-from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
+
 import json
 import logging
-from typing import Any, Dict, List, Optional
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 
@@ -48,9 +49,7 @@ class EvolutionReporter:
         try:
             with open(self.report_data_file, "r", encoding="utf-8") as f:
                 data = json.load(f)
-                self.report_history = [
-                    EvolutionReport(**report) for report in data.get("history", [])
-                ]
+                self.report_history = [EvolutionReport(**report) for report in data.get("history", [])]
         except FileNotFoundError:
             logger.info("보고서 데이터 파일이 없습니다. 새로 시작합니다.")
         except Exception as e:
@@ -68,9 +67,7 @@ class EvolutionReporter:
         except Exception as e:
             logger.error(f"보고서 데이터 저장 오류: {e}")
 
-    def generate_evolution_report(
-        self, analysis_data: Dict[str, Any], report_type: str = "summary"
-    ) -> Dict[str, Any]:
+    def generate_evolution_report(self, analysis_data: Dict[str, Any], report_type: str = "summary") -> Dict[str, Any]:
         """진화 보고서 생성"""
         try:
             # 보고서 ID 생성
@@ -88,9 +85,7 @@ class EvolutionReporter:
                 report_id=report_id,
                 conclusion=report_content["conclusion"],
                 quantitative_changes=report_content["quantitative_changes"],
-                qualitative_characteristics=report_content[
-                    "qualitative_characteristics"
-                ],
+                qualitative_characteristics=report_content["qualitative_characteristics"],
                 evolution_evidence=report_content["evolution_evidence"],
                 next_evolution_plan=report_content["next_evolution_plan"],
                 confidence_level=report_content["confidence_level"],
@@ -127,9 +122,7 @@ class EvolutionReporter:
             quantitative_changes = self._format_quantitative_changes(analysis_data)
 
             # 질적 특성 정리
-            qualitative_characteristics = self._format_qualitative_characteristics(
-                analysis_data
-            )
+            qualitative_characteristics = self._format_qualitative_characteristics(analysis_data)
 
             # 진화 증거 추출
             evolution_evidence = self._format_evolution_evidence(analysis_data)
@@ -152,9 +145,7 @@ class EvolutionReporter:
             logger.error(f"요약 보고서 생성 오류: {e}")
             return self._generate_error_report()
 
-    def _generate_detailed_report(
-        self, analysis_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _generate_detailed_report(self, analysis_data: Dict[str, Any]) -> Dict[str, Any]:
         """상세 보고서 생성"""
         try:
             # 요약 보고서 기반으로 상세 정보 추가
@@ -162,18 +153,10 @@ class EvolutionReporter:
 
             # 상세 분석 정보 추가
             detailed_analysis = {
-                "quantitative_analysis": self._generate_detailed_quantitative_analysis(
-                    analysis_data
-                ),
-                "qualitative_analysis": self._generate_detailed_qualitative_analysis(
-                    analysis_data
-                ),
-                "temporal_analysis": self._generate_detailed_temporal_analysis(
-                    analysis_data
-                ),
-                "comparative_analysis": self._generate_comparative_analysis(
-                    analysis_data
-                ),
+                "quantitative_analysis": self._generate_detailed_quantitative_analysis(analysis_data),
+                "qualitative_analysis": self._generate_detailed_qualitative_analysis(analysis_data),
+                "temporal_analysis": self._generate_detailed_temporal_analysis(analysis_data),
+                "comparative_analysis": self._generate_comparative_analysis(analysis_data),
             }
 
             summary_report["detailed_analysis"] = detailed_analysis
@@ -183,9 +166,7 @@ class EvolutionReporter:
             logger.error(f"상세 보고서 생성 오류: {e}")
             return self._generate_error_report()
 
-    def _generate_prediction_report(
-        self, analysis_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _generate_prediction_report(self, analysis_data: Dict[str, Any]) -> Dict[str, Any]:
         """예측 보고서 생성"""
         try:
             # 기본 요약 보고서
@@ -193,18 +174,10 @@ class EvolutionReporter:
 
             # 예측 정보 추가
             prediction_info = {
-                "short_term_prediction": self._generate_short_term_prediction(
-                    analysis_data
-                ),
-                "medium_term_prediction": self._generate_medium_term_prediction(
-                    analysis_data
-                ),
-                "long_term_prediction": self._generate_long_term_prediction(
-                    analysis_data
-                ),
-                "prediction_confidence": self._calculate_prediction_confidence(
-                    analysis_data
-                ),
+                "short_term_prediction": self._generate_short_term_prediction(analysis_data),
+                "medium_term_prediction": self._generate_medium_term_prediction(analysis_data),
+                "long_term_prediction": self._generate_long_term_prediction(analysis_data),
+                "prediction_confidence": self._calculate_prediction_confidence(analysis_data),
             }
 
             summary_report["prediction_info"] = prediction_info
@@ -232,23 +205,15 @@ class EvolutionReporter:
             logger.error(f"결론 생성 오류: {e}")
             return "진화 상태를 분석하는 중입니다."
 
-    def _format_quantitative_changes(
-        self, analysis_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _format_quantitative_changes(self, analysis_data: Dict[str, Any]) -> Dict[str, Any]:
         """양적 변화 정리"""
         try:
             quantitative = analysis_data.get("quantitative_evolution", {})
 
             changes = {
-                "evaluation_accuracy": self._format_score_change(
-                    quantitative.get("latest_performance", 0.0)
-                ),
-                "response_speed": self._format_speed_change(
-                    quantitative.get("latest_learning", 0.0)
-                ),
-                "learning_efficiency": self._format_efficiency_change(
-                    quantitative.get("latest_autonomy", 0.0)
-                ),
+                "evaluation_accuracy": self._format_score_change(quantitative.get("latest_performance", 0.0)),
+                "response_speed": self._format_speed_change(quantitative.get("latest_learning", 0.0)),
+                "learning_efficiency": self._format_efficiency_change(quantitative.get("latest_autonomy", 0.0)),
             }
 
             return changes
@@ -256,9 +221,7 @@ class EvolutionReporter:
             logger.error(f"양적 변화 정리 오류: {e}")
             return {"error": "양적 변화 분석 중 오류가 발생했습니다"}
 
-    def _format_qualitative_characteristics(
-        self, analysis_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _format_qualitative_characteristics(self, analysis_data: Dict[str, Any]) -> Dict[str, Any]:
         """질적 특성 정리"""
         try:
             qualitative = analysis_data.get("qualitative_evolution", {})
@@ -370,7 +333,7 @@ class EvolutionReporter:
                 return f"{score:.3f} (보통)"
             else:
                 return f"{score:.3f} (개선 필요)"
-        except Exception as e:
+        except Exception:
             return "분석 중"
 
     def _format_speed_change(self, speed: float) -> str:
@@ -384,7 +347,7 @@ class EvolutionReporter:
                 return "보통"
             else:
                 return "느림"
-        except Exception as e:
+        except Exception:
             return "분석 중"
 
     def _format_efficiency_change(self, efficiency: float) -> str:
@@ -398,12 +361,10 @@ class EvolutionReporter:
                 return "보통"
             else:
                 return "개선 필요"
-        except Exception as e:
+        except Exception:
             return "분석 중"
 
-    def _generate_detailed_quantitative_analysis(
-        self, analysis_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _generate_detailed_quantitative_analysis(self, analysis_data: Dict[str, Any]) -> Dict[str, Any]:
         """상세 양적 분석"""
         try:
             quantitative = analysis_data.get("quantitative_evolution", {})
@@ -422,9 +383,7 @@ class EvolutionReporter:
             logger.error(f"상세 양적 분석 오류: {e}")
             return {"error": "상세 양적 분석 중 오류가 발생했습니다"}
 
-    def _generate_detailed_qualitative_analysis(
-        self, analysis_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _generate_detailed_qualitative_analysis(self, analysis_data: Dict[str, Any]) -> Dict[str, Any]:
         """상세 질적 분석"""
         try:
             qualitative = analysis_data.get("qualitative_evolution", {})
@@ -432,9 +391,7 @@ class EvolutionReporter:
             return {
                 "autonomy_level": qualitative.get("autonomy_level", 0.0),
                 "learning_efficiency": qualitative.get("learning_efficiency", 0.0),
-                "problem_solving_capability": qualitative.get(
-                    "problem_solving_capability", 0.0
-                ),
+                "problem_solving_capability": qualitative.get("problem_solving_capability", 0.0),
                 "evolution_capability": qualitative.get("evolution_capability", 0.0),
                 "characteristics": qualitative.get("qualitative_characteristics", {}),
             }
@@ -442,9 +399,7 @@ class EvolutionReporter:
             logger.error(f"상세 질적 분석 오류: {e}")
             return {"error": "상세 질적 분석 중 오류가 발생했습니다"}
 
-    def _generate_detailed_temporal_analysis(
-        self, analysis_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _generate_detailed_temporal_analysis(self, analysis_data: Dict[str, Any]) -> Dict[str, Any]:
         """상세 시간적 분석"""
         try:
             temporal = analysis_data.get("temporal_evolution", {})
@@ -459,9 +414,7 @@ class EvolutionReporter:
             logger.error(f"상세 시간적 분석 오류: {e}")
             return {"error": "상세 시간적 분석 중 오류가 발생했습니다"}
 
-    def _generate_comparative_analysis(
-        self, analysis_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _generate_comparative_analysis(self, analysis_data: Dict[str, Any]) -> Dict[str, Any]:
         """비교 분석"""
         try:
             # 이전 분석과의 비교
@@ -476,11 +429,7 @@ class EvolutionReporter:
                     "previous_score": previous_score,
                     "current_score": current_score,
                     "improvement": improvement,
-                    "improvement_rate": (
-                        (improvement / previous_score * 100)
-                        if previous_score > 0
-                        else 0
-                    ),
+                    "improvement_rate": ((improvement / previous_score * 100) if previous_score > 0 else 0),
                 }
             else:
                 return {"status": "no_previous_data"}
@@ -488,15 +437,11 @@ class EvolutionReporter:
             logger.error(f"비교 분석 오류: {e}")
             return {"error": "비교 분석 중 오류가 발생했습니다"}
 
-    def _generate_short_term_prediction(
-        self, analysis_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _generate_short_term_prediction(self, analysis_data: Dict[str, Any]) -> Dict[str, Any]:
         """단기 예측"""
         try:
             current_score = analysis_data.get("overall_evolution_score", 0.0)
-            evolution_speed = analysis_data.get("temporal_evolution", {}).get(
-                "evolution_speed", 0.0
-            )
+            evolution_speed = analysis_data.get("temporal_evolution", {}).get("evolution_speed", 0.0)
 
             # 단기 예측 (1-2주)
             short_term_prediction = current_score + (evolution_speed * 0.1)
@@ -510,15 +455,11 @@ class EvolutionReporter:
             logger.error(f"단기 예측 오류: {e}")
             return {"error": "단기 예측 중 오류가 발생했습니다"}
 
-    def _generate_medium_term_prediction(
-        self, analysis_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _generate_medium_term_prediction(self, analysis_data: Dict[str, Any]) -> Dict[str, Any]:
         """중기 예측"""
         try:
             current_score = analysis_data.get("overall_evolution_score", 0.0)
-            evolution_speed = analysis_data.get("temporal_evolution", {}).get(
-                "evolution_speed", 0.0
-            )
+            evolution_speed = analysis_data.get("temporal_evolution", {}).get("evolution_speed", 0.0)
 
             # 중기 예측 (1-2개월)
             medium_term_prediction = current_score + (evolution_speed * 0.3)
@@ -532,15 +473,11 @@ class EvolutionReporter:
             logger.error(f"중기 예측 오류: {e}")
             return {"error": "중기 예측 중 오류가 발생했습니다"}
 
-    def _generate_long_term_prediction(
-        self, analysis_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _generate_long_term_prediction(self, analysis_data: Dict[str, Any]) -> Dict[str, Any]:
         """장기 예측"""
         try:
             current_score = analysis_data.get("overall_evolution_score", 0.0)
-            evolution_speed = analysis_data.get("temporal_evolution", {}).get(
-                "evolution_speed", 0.0
-            )
+            evolution_speed = analysis_data.get("temporal_evolution", {}).get("evolution_speed", 0.0)
 
             # 장기 예측 (3-6개월)
             long_term_prediction = current_score + (evolution_speed * 0.5)
@@ -559,9 +496,7 @@ class EvolutionReporter:
         try:
             # 데이터 품질과 분석 신뢰도 기반
             evolution_confidence = analysis_data.get("evolution_confidence", 0.0)
-            data_quality = analysis_data.get("quantitative_evolution", {}).get(
-                "confidence", 0.0
-            )
+            data_quality = analysis_data.get("quantitative_evolution", {}).get("confidence", 0.0)
 
             prediction_confidence = (evolution_confidence + data_quality) / 2
             return max(0.0, min(1.0, prediction_confidence))

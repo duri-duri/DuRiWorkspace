@@ -9,14 +9,14 @@ Author: DuRi Phase 11 Integration Team
 """
 
 import asyncio
-from dataclasses import dataclass, field
-from datetime import datetime
 import json
 import logging
-from pathlib import Path
 import sys
 import time
-from typing import Any, Dict, List, Optional
+from dataclasses import dataclass, field
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List
 
 # 프로젝트 루트를 Python 경로에 추가
 project_root = Path(__file__).parent.parent.parent.parent
@@ -24,12 +24,8 @@ sys.path.insert(0, str(project_root))
 
 # 기존 시스템들 import
 try:
-    from DuRiCore.duri_orchestrator import (
-        DuRiOrchestrator,
-        ExecutionContext,
-        SystemStatus,
-    )
-    from DuRiCore.inner_thinking_system import InnerThinkingResult, InnerThinkingSystem
+    from DuRiCore.duri_orchestrator import DuRiOrchestrator, ExecutionContext, SystemStatus
+    from DuRiCore.inner_thinking_system import InnerThinkingSystem
     from DuRiCore.integrated_system_manager import IntegratedSystemManager
     from DuRiCore.unified_learning_system import UnifiedLearningSystem
 except Exception as e:
@@ -81,9 +77,7 @@ except Exception:
     logging.warning("Insight Engine을 찾을 수 없습니다. 기본 모드로 실행됩니다.")
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -174,19 +168,13 @@ class EnhancedDuRiOrchestrator(DuRiOrchestrator):
                 judgment_result = await self._execute_enhanced_judgment_phase()
 
                 # 2. 향상된 Action Phase
-                action_result = await self._execute_enhanced_action_phase(
-                    judgment_result
-                )
+                action_result = await self._execute_enhanced_action_phase(judgment_result)
 
                 # 3. 향상된 Feedback Phase
-                feedback_result = await self._execute_enhanced_feedback_phase(
-                    action_result
-                )
+                feedback_result = await self._execute_enhanced_feedback_phase(action_result)
 
                 # 4. 내부 사고 및 성찰
-                reflection_result = await self._execute_inner_reflection(
-                    feedback_result
-                )
+                reflection_result = await self._execute_inner_reflection(feedback_result)
 
                 # 5. 외부 학습 트리거
                 learning_result = await self._execute_external_learning(feedback_result)
@@ -299,9 +287,7 @@ class EnhancedDuRiOrchestrator(DuRiOrchestrator):
 
         try:
             # 대화 턴에 대한 자기성찰
-            reflection_topic = (
-                f"대화 턴 {self.conversation_turn} 분석: {feedback_result}"
-            )
+            reflection_topic = f"대화 턴 {self.conversation_turn} 분석: {feedback_result}"
             reflection_result = await self.inner_thinking.think_deeply(reflection_topic)
 
             # 결과 처리
@@ -338,9 +324,7 @@ class EnhancedDuRiOrchestrator(DuRiOrchestrator):
             }
 
             # 학습 내용 생성 (실제로는 외부 소스에서 가져옴)
-            learning_content = (
-                f"턴 {self.conversation_turn} 학습 내용: {feedback_result}"
-            )
+            learning_content = f"턴 {self.conversation_turn} 학습 내용: {feedback_result}"
 
             # 통합 학습 시스템 실행
             learning_result = await self.unified_learning.process_learning(
@@ -436,9 +420,7 @@ class EnhancedDuRiOrchestrator(DuRiOrchestrator):
             # Phase 11 특화 성능 모니터링
             current_metrics = {
                 "turn": self.conversation_turn,
-                "active_systems": len(
-                    [s for s in self.system_status.values() if s.status == "active"]
-                ),
+                "active_systems": len([s for s in self.system_status.values() if s.status == "active"]),
                 "insight_available": self.insight_engine is not None,
                 "timestamp": datetime.now().isoformat(),
             }
@@ -448,9 +430,7 @@ class EnhancedDuRiOrchestrator(DuRiOrchestrator):
         except Exception as e:
             logger.error(f"❌ 성능 모니터링 오류: {e}")
 
-    async def _record_phase11_metrics(
-        self, execution_time: float, insight_result: Dict[str, Any]
-    ):
+    async def _record_phase11_metrics(self, execution_time: float, insight_result: Dict[str, Any]):
         """Phase 11 메트릭 기록"""
         try:
             # 각 단계별 점수 계산
@@ -473,9 +453,7 @@ class EnhancedDuRiOrchestrator(DuRiOrchestrator):
 
             self.phase11_metrics.append(metrics)
 
-            logger.info(
-                f"📊 Phase 11 메트릭 기록: 품질 {overall_quality:.2f}, 실행시간 {execution_time:.2f}초"
-            )
+            logger.info(f"📊 Phase 11 메트릭 기록: 품질 {overall_quality:.2f}, 실행시간 {execution_time:.2f}초")
 
         except Exception as e:
             logger.error(f"❌ Phase 11 메트릭 기록 오류: {e}")
@@ -490,19 +468,11 @@ class EnhancedDuRiOrchestrator(DuRiOrchestrator):
             phase11_report = {
                 "phase11_metrics": {
                     "total_turns": len(self.phase11_metrics),
-                    "average_quality": sum(
-                        m.overall_quality for m in self.phase11_metrics
-                    )
+                    "average_quality": sum(m.overall_quality for m in self.phase11_metrics)
                     / max(len(self.phase11_metrics), 1),
-                    "average_execution_time": sum(
-                        m.execution_time for m in self.phase11_metrics
-                    )
+                    "average_execution_time": sum(m.execution_time for m in self.phase11_metrics)
                     / max(len(self.phase11_metrics), 1),
-                    "latest_metrics": (
-                        self.phase11_metrics[-1].__dict__
-                        if self.phase11_metrics
-                        else None
-                    ),
+                    "latest_metrics": (self.phase11_metrics[-1].__dict__ if self.phase11_metrics else None),
                 },
                 "enhanced_systems": {
                     "inner_thinking": "active",
@@ -512,9 +482,7 @@ class EnhancedDuRiOrchestrator(DuRiOrchestrator):
                 },
                 "integration_status": {
                     "duri_core": "integrated",
-                    "insight_engine": (
-                        "integrated" if self.insight_engine else "not_available"
-                    ),
+                    "insight_engine": ("integrated" if self.insight_engine else "not_available"),
                     "inner_thinking": "integrated",
                     "unified_learning": "integrated",
                 },

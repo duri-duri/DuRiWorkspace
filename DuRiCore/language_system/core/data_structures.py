@@ -6,20 +6,11 @@ DuRi 언어 시스템 - 공통 데이터 구조
 언어 시스템에서 사용하는 공통 데이터 구조들을 정의합니다.
 """
 
-import asyncio
-from collections import Counter, defaultdict
+import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-import hashlib
-import json
-import logging
-import re
-import time
-from typing import Any, Dict, List, Optional, Tuple, Union
-import unicodedata
-
-import numpy as np
+from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 

@@ -70,9 +70,7 @@ def coherence_score(text_tokens: List[str]) -> float:
         "these",
         "those",
     }
-    anchor_ratio = len([t for t in text_tokens if t in anchors]) / max(
-        1, len(text_tokens)
-    )
+    anchor_ratio = len([t for t in text_tokens if t in anchors]) / max(1, len(text_tokens))
     # Bigram churn: too random progression lowers score
     bg = list(ngrams(text_tokens, 2))
     churn = 0.0
@@ -103,9 +101,7 @@ def brevity_prior(text_tokens: List[str], mu: int = 120, sigma: int = 60) -> flo
 DEFAULT_WEIGHTS = {"novelty": 0.45, "coherence": 0.40, "brevity": 0.15}
 
 
-def score_candidate(
-    prompt: str, text: str, weights: Optional[Dict[str, float]] = None
-) -> Dict[str, float]:
+def score_candidate(prompt: str, text: str, weights: Optional[Dict[str, float]] = None) -> Dict[str, float]:
     """Return per-metric scores and composite S in [0,1]."""
     if not isinstance(text, str) or not text.strip():
         return {"novelty": 0.0, "coherence": 0.0, "brevity": 0.0, "S": 0.0}

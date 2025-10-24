@@ -7,14 +7,13 @@ DuRiCore Phase 3.2: 인지적 메타 학습 시스템 (Cognitive Meta-Learning S
 """
 
 import asyncio
-from collections import defaultdict
-from dataclasses import asdict, dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 import logging
 import random
 import time
-from typing import Any, Dict, List, Optional, Tuple
+from dataclasses import asdict, dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
 # 로깅 설정
 logger = logging.getLogger(__name__)
@@ -132,17 +131,13 @@ class CognitiveMetaLearningSystem:
     """인지적 메타 학습 시스템"""
 
     def __init__(self):
-        self.meta_learning_state = CognitiveMetaLearningState(
-            meta_learning_metrics=CognitiveMetaLearningMetrics()
-        )
+        self.meta_learning_state = CognitiveMetaLearningState(meta_learning_metrics=CognitiveMetaLearningMetrics())
         self.pattern_database = {}
         self.strategy_repository = {}
         self.efficiency_models = {}
         logger.info("🧠 인지적 메타 학습 시스템 초기화 완료")
 
-    async def observe_learning_patterns(
-        self, learning_data: Dict[str, Any]
-    ) -> List[LearningPattern]:
+    async def observe_learning_patterns(self, learning_data: Dict[str, Any]) -> List[LearningPattern]:
         """학습 패턴 관찰"""
         patterns = []
 
@@ -157,17 +152,13 @@ class CognitiveMetaLearningSystem:
 
         for pattern_type in pattern_types:
             if pattern_type in learning_data:
-                pattern = await self._extract_learning_pattern(
-                    learning_data, pattern_type
-                )
+                pattern = await self._extract_learning_pattern(learning_data, pattern_type)
                 if pattern:
                     patterns.append(pattern)
 
         # 패턴 효과성 분석
         for pattern in patterns:
-            pattern.effectiveness_score = await self._analyze_pattern_effectiveness(
-                pattern
-            )
+            pattern.effectiveness_score = await self._analyze_pattern_effectiveness(pattern)
             pattern.success_rate = await self._calculate_pattern_success_rate(pattern)
 
         self.meta_learning_state.learning_patterns.extend(patterns)
@@ -176,9 +167,7 @@ class CognitiveMetaLearningSystem:
         logger.info(f"🔍 학습 패턴 관찰 완료: {len(patterns)}개 패턴 발견")
         return patterns
 
-    async def develop_learning_strategies(
-        self, patterns: List[LearningPattern]
-    ) -> List[LearningStrategy]:
+    async def develop_learning_strategies(self, patterns: List[LearningPattern]) -> List[LearningStrategy]:
         """학습 전략 개발"""
         strategies = []
 
@@ -205,9 +194,7 @@ class CognitiveMetaLearningSystem:
 
         # 전략 효율성 평가
         for strategy in strategies:
-            strategy.efficiency_score = await self._evaluate_strategy_efficiency(
-                strategy
-            )
+            strategy.efficiency_score = await self._evaluate_strategy_efficiency(strategy)
 
         self.meta_learning_state.learning_strategies.extend(strategies)
         await self._update_strategy_optimization_metrics(strategies)
@@ -215,9 +202,7 @@ class CognitiveMetaLearningSystem:
         logger.info(f"💡 학습 전략 개발 완료: {len(strategies)}개 전략 생성")
         return strategies
 
-    async def optimize_learning_efficiency(
-        self, strategies: List[LearningStrategy]
-    ) -> Dict[str, Any]:
+    async def optimize_learning_efficiency(self, strategies: List[LearningStrategy]) -> Dict[str, Any]:
         """학습 효율성 최적화"""
         optimization_results = {}
 
@@ -238,9 +223,7 @@ class CognitiveMetaLearningSystem:
         logger.info("⚡ 학습 효율성 최적화 완료")
         return optimization_results
 
-    async def execute_adaptive_learning(
-        self, context: Dict[str, Any]
-    ) -> MetaLearningProcess:
+    async def execute_adaptive_learning(self, context: Dict[str, Any]) -> MetaLearningProcess:
         """적응적 학습 실행"""
         process_id = f"process_{int(time.time())}"
         start_time = time.time()
@@ -298,11 +281,7 @@ class CognitiveMetaLearningSystem:
 
         # 전체 메타 학습 능력 점수
         meta_learning_score = (
-            pattern_recognition
-            + strategy_optimization
-            + efficiency_improvement
-            + adaptive_learning
-            + transfer_learning
+            pattern_recognition + strategy_optimization + efficiency_improvement + adaptive_learning + transfer_learning
         ) / 5.0
 
         # 능력 수준 결정
@@ -329,21 +308,11 @@ class CognitiveMetaLearningSystem:
         )
 
         # 메트릭 업데이트
-        self.meta_learning_state.meta_learning_metrics.pattern_recognition_skill = (
-            pattern_recognition
-        )
-        self.meta_learning_state.meta_learning_metrics.strategy_optimization_skill = (
-            strategy_optimization
-        )
-        self.meta_learning_state.meta_learning_metrics.efficiency_improvement_skill = (
-            efficiency_improvement
-        )
-        self.meta_learning_state.meta_learning_metrics.adaptive_learning_skill = (
-            adaptive_learning
-        )
-        self.meta_learning_state.meta_learning_metrics.transfer_learning_skill = (
-            transfer_learning
-        )
+        self.meta_learning_state.meta_learning_metrics.pattern_recognition_skill = pattern_recognition
+        self.meta_learning_state.meta_learning_metrics.strategy_optimization_skill = strategy_optimization
+        self.meta_learning_state.meta_learning_metrics.efficiency_improvement_skill = efficiency_improvement
+        self.meta_learning_state.meta_learning_metrics.adaptive_learning_skill = adaptive_learning
+        self.meta_learning_state.meta_learning_metrics.transfer_learning_skill = transfer_learning
 
         return {
             "capability_level": capability_level,
@@ -383,14 +352,10 @@ class CognitiveMetaLearningSystem:
     def get_meta_learning_state(self) -> Dict[str, Any]:
         """메타 학습 상태 반환"""
         return {
-            "meta_learning_metrics": asdict(
-                self.meta_learning_state.meta_learning_metrics
-            ),
+            "meta_learning_metrics": asdict(self.meta_learning_state.meta_learning_metrics),
             "learning_patterns": len(self.meta_learning_state.learning_patterns),
             "learning_strategies": len(self.meta_learning_state.learning_strategies),
-            "meta_learning_processes": len(
-                self.meta_learning_state.meta_learning_processes
-            ),
+            "meta_learning_processes": len(self.meta_learning_state.meta_learning_processes),
             "last_update": self.meta_learning_state.last_update.isoformat(),
         }
 
@@ -423,18 +388,14 @@ class CognitiveMetaLearningSystem:
         frequency_modifier = min(1.0, pattern.frequency / 10.0)
         context_modifier = len(pattern.context_conditions) / 5.0
 
-        return min(
-            1.0, base_effectiveness * (1 + frequency_modifier + context_modifier)
-        )
+        return min(1.0, base_effectiveness * (1 + frequency_modifier + context_modifier))
 
     async def _calculate_pattern_success_rate(self, pattern: LearningPattern) -> float:
         """패턴 성공률 계산"""
         # 실제 구현에서는 더 정교한 계산 로직 사용
         return random.uniform(0.4, 0.9)
 
-    async def _develop_strategy_from_pattern(
-        self, pattern: LearningPattern
-    ) -> Optional[LearningStrategy]:
+    async def _develop_strategy_from_pattern(self, pattern: LearningPattern) -> Optional[LearningStrategy]:
         """패턴에서 전략 개발"""
         strategy_id = f"strategy_{int(time.time())}"
 
@@ -490,9 +451,7 @@ class CognitiveMetaLearningSystem:
             base_efficiency * (1 + applicability_modifier + implementation_modifier),
         )
 
-    async def _optimize_strategy_efficiency(
-        self, strategy: LearningStrategy
-    ) -> Dict[str, Any]:
+    async def _optimize_strategy_efficiency(self, strategy: LearningStrategy) -> Dict[str, Any]:
         """전략 효율성 최적화"""
         # 실제 구현에서는 더 정교한 최적화 로직 사용
         original_efficiency = strategy.efficiency_score
@@ -504,16 +463,10 @@ class CognitiveMetaLearningSystem:
             "improvement": optimized_efficiency - original_efficiency,
         }
 
-    async def _optimize_overall_efficiency(
-        self, strategies: List[LearningStrategy]
-    ) -> Dict[str, Any]:
+    async def _optimize_overall_efficiency(self, strategies: List[LearningStrategy]) -> Dict[str, Any]:
         """전체 효율성 최적화"""
         # 실제 구현에서는 더 정교한 최적화 로직 사용
-        avg_efficiency = (
-            sum(s.efficiency_score for s in strategies) / len(strategies)
-            if strategies
-            else 0.0
-        )
+        avg_efficiency = sum(s.efficiency_score for s in strategies) / len(strategies) if strategies else 0.0
         optimized_avg = min(1.0, avg_efficiency * random.uniform(1.05, 1.2))
 
         return {
@@ -522,9 +475,7 @@ class CognitiveMetaLearningSystem:
             "overall_improvement": optimized_avg - avg_efficiency,
         }
 
-    async def _execute_meta_learning_stage(
-        self, stage: MetaLearningStage, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _execute_meta_learning_stage(self, stage: MetaLearningStage, context: Dict[str, Any]) -> Dict[str, Any]:
         """메타 학습 단계 실행"""
         stage_results = {}
 
@@ -540,16 +491,12 @@ class CognitiveMetaLearningSystem:
 
         elif stage == MetaLearningStage.SYNTHESIS:
             # 전략 합성
-            strategies = await self.develop_learning_strategies(
-                self.meta_learning_state.learning_patterns
-            )
+            strategies = await self.develop_learning_strategies(self.meta_learning_state.learning_patterns)
             stage_results["strategies"] = strategies
 
         elif stage == MetaLearningStage.OPTIMIZATION:
             # 효율성 최적화
-            optimization = await self.optimize_learning_efficiency(
-                self.meta_learning_state.learning_strategies
-            )
+            optimization = await self.optimize_learning_efficiency(self.meta_learning_state.learning_strategies)
             stage_results["improvements"] = optimization
 
         elif stage == MetaLearningStage.IMPLEMENTATION:
@@ -565,15 +512,9 @@ class CognitiveMetaLearningSystem:
         return {
             "total_patterns": len(self.meta_learning_state.learning_patterns),
             "effective_patterns": len(
-                [
-                    p
-                    for p in self.meta_learning_state.learning_patterns
-                    if p.effectiveness_score > 0.7
-                ]
+                [p for p in self.meta_learning_state.learning_patterns if p.effectiveness_score > 0.7]
             ),
-            "pattern_diversity": len(
-                set(p.pattern_type for p in self.meta_learning_state.learning_patterns)
-            ),
+            "pattern_diversity": len(set(p.pattern_type for p in self.meta_learning_state.learning_patterns)),
         }
 
     async def _implement_learning_strategies(self) -> Dict[str, Any]:
@@ -585,9 +526,7 @@ class CognitiveMetaLearningSystem:
             "efficiency_gain": random.uniform(0.1, 0.3),
         }
 
-    async def _calculate_process_success_metrics(
-        self, process: MetaLearningProcess
-    ) -> Dict[str, float]:
+    async def _calculate_process_success_metrics(self, process: MetaLearningProcess) -> Dict[str, float]:
         """과정 성공 지표 계산"""
         return {
             "pattern_discovery_rate": len(process.observed_patterns) / 10.0,
@@ -621,9 +560,7 @@ class CognitiveMetaLearningSystem:
         # 실제 구현에서는 더 정교한 계산 로직 사용
         return random.uniform(0.5, 0.8)
 
-    def _identify_meta_learning_improvement_areas(
-        self, scores: Dict[str, float]
-    ) -> List[str]:
+    def _identify_meta_learning_improvement_areas(self, scores: Dict[str, float]) -> List[str]:
         """메타 학습 개선 영역 식별"""
         areas = []
         threshold = 0.7
@@ -645,26 +582,16 @@ class CognitiveMetaLearningSystem:
 
         total_patterns = len(self.meta_learning_state.learning_patterns)
         avg_effectiveness = (
-            sum(
-                p.effectiveness_score
-                for p in self.meta_learning_state.learning_patterns
-            )
-            / total_patterns
+            sum(p.effectiveness_score for p in self.meta_learning_state.learning_patterns) / total_patterns
         )
-        pattern_diversity = len(
-            set(p.pattern_type for p in self.meta_learning_state.learning_patterns)
-        )
+        pattern_diversity = len(set(p.pattern_type for p in self.meta_learning_state.learning_patterns))
 
         return {
             "total_patterns": total_patterns,
             "average_effectiveness": avg_effectiveness,
             "pattern_diversity": pattern_diversity,
             "effective_patterns": len(
-                [
-                    p
-                    for p in self.meta_learning_state.learning_patterns
-                    if p.effectiveness_score > 0.7
-                ]
+                [p for p in self.meta_learning_state.learning_patterns if p.effectiveness_score > 0.7]
             ),
         }
 
@@ -673,9 +600,7 @@ class CognitiveMetaLearningSystem:
         recommendations = []
 
         # 메타 학습 능력 수준에 따른 권장사항
-        meta_learning_level = (
-            self.meta_learning_state.meta_learning_metrics.overall_meta_learning_skill
-        )
+        meta_learning_level = self.meta_learning_state.meta_learning_metrics.overall_meta_learning_skill
 
         if meta_learning_level < 0.4:
             recommendations.append("기본적인 학습 패턴 관찰 훈련")
@@ -692,55 +617,41 @@ class CognitiveMetaLearningSystem:
 
         return recommendations
 
-    async def _update_efficiency_models(
-        self, optimization_results: Dict[str, Any]
-    ) -> None:
+    async def _update_efficiency_models(self, optimization_results: Dict[str, Any]) -> None:
         """효율성 모델 업데이트"""
         # 실제 구현에서는 더 정교한 업데이트 로직 사용
         pass
 
-    async def _update_pattern_recognition_metrics(
-        self, patterns: List[LearningPattern]
-    ) -> None:
+    async def _update_pattern_recognition_metrics(self, patterns: List[LearningPattern]) -> None:
         """패턴 인식 메트릭 업데이트"""
         # 실제 구현에서는 더 정교한 업데이트 로직 사용
         self.meta_learning_state.meta_learning_metrics.pattern_recognition_skill = min(
             1.0,
-            self.meta_learning_state.meta_learning_metrics.pattern_recognition_skill
-            + 0.01,
+            self.meta_learning_state.meta_learning_metrics.pattern_recognition_skill + 0.01,
         )
 
-    async def _update_strategy_optimization_metrics(
-        self, strategies: List[LearningStrategy]
-    ) -> None:
+    async def _update_strategy_optimization_metrics(self, strategies: List[LearningStrategy]) -> None:
         """전략 최적화 메트릭 업데이트"""
         # 실제 구현에서는 더 정교한 업데이트 로직 사용
         self.meta_learning_state.meta_learning_metrics.strategy_optimization_skill = min(
             1.0,
-            self.meta_learning_state.meta_learning_metrics.strategy_optimization_skill
-            + 0.01,
+            self.meta_learning_state.meta_learning_metrics.strategy_optimization_skill + 0.01,
         )
 
-    async def _update_efficiency_improvement_metrics(
-        self, optimization_results: Dict[str, Any]
-    ) -> None:
+    async def _update_efficiency_improvement_metrics(self, optimization_results: Dict[str, Any]) -> None:
         """효율성 개선 메트릭 업데이트"""
         # 실제 구현에서는 더 정교한 업데이트 로직 사용
         self.meta_learning_state.meta_learning_metrics.efficiency_improvement_skill = min(
             1.0,
-            self.meta_learning_state.meta_learning_metrics.efficiency_improvement_skill
-            + 0.01,
+            self.meta_learning_state.meta_learning_metrics.efficiency_improvement_skill + 0.01,
         )
 
-    async def _update_adaptive_learning_metrics(
-        self, process: MetaLearningProcess
-    ) -> None:
+    async def _update_adaptive_learning_metrics(self, process: MetaLearningProcess) -> None:
         """적응적 학습 메트릭 업데이트"""
         # 실제 구현에서는 더 정교한 업데이트 로직 사용
         self.meta_learning_state.meta_learning_metrics.adaptive_learning_skill = min(
             1.0,
-            self.meta_learning_state.meta_learning_metrics.adaptive_learning_skill
-            + 0.01,
+            self.meta_learning_state.meta_learning_metrics.adaptive_learning_skill + 0.01,
         )
 
 
@@ -794,7 +705,7 @@ async def test_cognitive_meta_learning_system():
 
     # 학습 패턴 관찰
     for learning_data in test_learning_data:
-        patterns = await meta_learning_system.observe_learning_patterns(learning_data)
+        patterns = await meta_learning_system.observe_learning_patterns(learning_data)  # noqa: F841
 
     # 학습 전략 개발
     strategies = await meta_learning_system.develop_learning_strategies(
@@ -802,32 +713,24 @@ async def test_cognitive_meta_learning_system():
     )
 
     # 학습 효율성 최적화
-    optimization = await meta_learning_system.optimize_learning_efficiency(strategies)
+    optimization = await meta_learning_system.optimize_learning_efficiency(strategies)  # noqa: F841
 
     # 적응적 학습 실행
     context = {"learning_type": "skill_development", "complexity": "high"}
-    process = await meta_learning_system.execute_adaptive_learning(context)
+    process = await meta_learning_system.execute_adaptive_learning(context)  # noqa: F841
 
     # 메타 학습 능력 평가
     capability = await meta_learning_system.assess_meta_learning_capability()
 
     # 보고서 생성
-    report = await meta_learning_system.generate_meta_learning_report()
+    report = await meta_learning_system.generate_meta_learning_report()  # noqa: F841
 
     # 결과 출력
     print("\n=== 인지적 메타 학습 시스템 테스트 결과 ===")
-    print(
-        f"메타 학습 능력: {capability['score']:.3f} ({capability['capability_level']})"
-    )
-    print(
-        f"학습 패턴: {len(meta_learning_system.meta_learning_state.learning_patterns)}개"
-    )
-    print(
-        f"학습 전략: {len(meta_learning_system.meta_learning_state.learning_strategies)}개"
-    )
-    print(
-        f"메타 학습 과정: {len(meta_learning_system.meta_learning_state.meta_learning_processes)}개"
-    )
+    print(f"메타 학습 능력: {capability['score']:.3f} ({capability['capability_level']})")
+    print(f"학습 패턴: {len(meta_learning_system.meta_learning_state.learning_patterns)}개")
+    print(f"학습 전략: {len(meta_learning_system.meta_learning_state.learning_strategies)}개")
+    print(f"메타 학습 과정: {len(meta_learning_system.meta_learning_state.meta_learning_processes)}개")
 
     print("✅ 인지적 메타 학습 시스템 테스트 완료!")
 

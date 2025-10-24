@@ -4,6 +4,8 @@ WORKDIR /app
 
 # Evolution 서비스 파일 복사
 COPY duri_evolution/ /app/duri_evolution/
+# 공통 모듈 복사
+COPY duri_common/ /app/duri_common/
 
 # Evolution 서비스 의존성 설치
 COPY duri_evolution/requirements.txt ./requirements.txt

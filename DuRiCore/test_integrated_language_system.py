@@ -7,23 +7,20 @@ DuRi Phase 1-3 Week 3 Day 12 - 통합 언어 이해 및 생성 시스템 테스�
 """
 
 import asyncio
-from datetime import datetime
 import json
 import logging
 import time
-from typing import Any, Dict, List
+from datetime import datetime
+from typing import Any, Dict
 
 # 시스템 import
 from integrated_language_understanding_generation_system import (
     IntegratedLanguageUnderstandingGenerationSystem,
     LanguageGenerationType,
-    LanguageUnderstandingType,
 )
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -64,12 +61,8 @@ class IntegratedLanguageSystemTester:
         comprehensive_results = {
             "test_summary": {
                 "total_tests": len(self.test_results),
-                "successful_tests": len(
-                    [r for r in self.test_results if r.get("success", False)]
-                ),
-                "failed_tests": len(
-                    [r for r in self.test_results if not r.get("success", False)]
-                ),
+                "successful_tests": len([r for r in self.test_results if r.get("success", False)]),
+                "failed_tests": len([r for r in self.test_results if not r.get("success", False)]),
                 "total_time": total_time,
                 "timestamp": datetime.now().isoformat(),
             },
@@ -138,9 +131,7 @@ class IntegratedLanguageSystemTester:
 
             except Exception as e:
                 logger.error(f"❌ {test_case['name']} 실패: {e}")
-                results.append(
-                    {"name": test_case["name"], "success": False, "error": str(e)}
-                )
+                results.append({"name": test_case["name"], "success": False, "error": str(e)})
                 self.test_results.append(results[-1])
 
         return {
@@ -177,31 +168,18 @@ class IntegratedLanguageSystemTester:
         results = []
         for test_case in test_cases:
             try:
-                result = await self.system.process_language(
-                    text=test_case["text"], context=test_case["context"]
-                )
+                result = await self.system.process_language(text=test_case["text"], context=test_case["context"])
 
                 # 예상 결과와 실제 결과 비교
                 understanding_result = result.understanding_result
 
                 success = True
                 if "expected_emotion" in test_case:
-                    success = (
-                        success
-                        and test_case["expected_emotion"]
-                        in understanding_result.emotional_tone
-                    )
+                    success = success and test_case["expected_emotion"] in understanding_result.emotional_tone
                 if "expected_intent" in test_case:
-                    success = (
-                        success
-                        and test_case["expected_intent"] in understanding_result.intent
-                    )
+                    success = success and test_case["expected_intent"] in understanding_result.intent
                 if "expected_context" in test_case:
-                    success = (
-                        success
-                        and test_case["expected_context"]
-                        in understanding_result.context_meaning
-                    )
+                    success = success and test_case["expected_context"] in understanding_result.context_meaning
 
                 test_result = {
                     "name": test_case["name"],
@@ -219,9 +197,7 @@ class IntegratedLanguageSystemTester:
 
             except Exception as e:
                 logger.error(f"❌ {test_case['name']} 실패: {e}")
-                results.append(
-                    {"name": test_case["name"], "success": False, "error": str(e)}
-                )
+                results.append({"name": test_case["name"], "success": False, "error": str(e)})
                 self.test_results.append(results[-1])
 
         return {
@@ -291,15 +267,11 @@ class IntegratedLanguageSystemTester:
                 self.test_results.append(test_result)
 
                 logger.info(f"✅ {test_case['name']}: {'성공' if success else '실패'}")
-                logger.info(
-                    f"   생성된 텍스트: {generation_result.generated_text[:50]}..."
-                )
+                logger.info(f"   생성된 텍스트: {generation_result.generated_text[:50]}...")
 
             except Exception as e:
                 logger.error(f"❌ {test_case['name']} 실패: {e}")
-                results.append(
-                    {"name": test_case["name"], "success": False, "error": str(e)}
-                )
+                results.append({"name": test_case["name"], "success": False, "error": str(e)})
                 self.test_results.append(results[-1])
 
         return {
@@ -336,27 +308,20 @@ class IntegratedLanguageSystemTester:
         results = []
         for test_case in test_cases:
             try:
-                result = await self.system.process_language(
-                    text=test_case["text"], context=test_case["context"]
-                )
+                result = await self.system.process_language(text=test_case["text"], context=test_case["context"])
 
-                multilingual_analysis = (
-                    result.understanding_result.multilingual_analysis
-                )
+                multilingual_analysis = result.understanding_result.multilingual_analysis
 
                 success = (
                     multilingual_analysis.get("multilingual_support", False)
-                    and multilingual_analysis.get("detected_language")
-                    == test_case["expected_language"]
+                    and multilingual_analysis.get("detected_language") == test_case["expected_language"]
                 )
 
                 test_result = {
                     "name": test_case["name"],
                     "success": success,
                     "detected_language": multilingual_analysis.get("detected_language"),
-                    "multilingual_support": multilingual_analysis.get(
-                        "multilingual_support"
-                    ),
+                    "multilingual_support": multilingual_analysis.get("multilingual_support"),
                 }
 
                 results.append(test_result)
@@ -366,9 +331,7 @@ class IntegratedLanguageSystemTester:
 
             except Exception as e:
                 logger.error(f"❌ {test_case['name']} 실패: {e}")
-                results.append(
-                    {"name": test_case["name"], "success": False, "error": str(e)}
-                )
+                results.append({"name": test_case["name"], "success": False, "error": str(e)})
                 self.test_results.append(results[-1])
 
         return {
@@ -389,7 +352,7 @@ class IntegratedLanguageSystemTester:
             },
             {
                 "name": "복잡한 텍스트 처리 성능 테스트",
-                "text": "오늘은 정말 특별한 날이에요. 새로운 기술을 배우고, 가족과 함께 즐거운 시간을 보냈어요. 정말 행복하고 감사한 하루였습니다.",
+                "text": "오늘은 정말 특별한 날이에요. 새로운 기술을 배우고, 가족과 함께 즐거운 시간을 보냈어요. 정말 행복하고 감사한 하루였습니다.",  # noqa: E501
                 "context": {"topic": "일상", "emotion": "기쁨"},
             },
         ]
@@ -399,9 +362,7 @@ class IntegratedLanguageSystemTester:
             try:
                 start_time = time.time()
 
-                result = await self.system.process_language(
-                    text=test_case["text"], context=test_case["context"]
-                )
+                result = await self.system.process_language(text=test_case["text"], context=test_case["context"])
 
                 processing_time = time.time() - start_time
 
@@ -420,15 +381,11 @@ class IntegratedLanguageSystemTester:
                 results.append(test_result)
                 self.test_results.append(test_result)
 
-                logger.info(
-                    f"✅ {test_case['name']}: {'성공' if success else '실패'} ({processing_time:.2f}초)"
-                )
+                logger.info(f"✅ {test_case['name']}: {'성공' if success else '실패'} ({processing_time:.2f}초)")
 
             except Exception as e:
                 logger.error(f"❌ {test_case['name']} 실패: {e}")
-                results.append(
-                    {"name": test_case["name"], "success": False, "error": str(e)}
-                )
+                results.append({"name": test_case["name"], "success": False, "error": str(e)})
                 self.test_results.append(results[-1])
 
         return {
@@ -481,14 +438,12 @@ class IntegratedLanguageSystemTester:
                 self.test_results.append(test_result)
 
                 logger.info(
-                    f"✅ {test_case['name']}: {'성공' if success else '실패'} (통합점수: {result.integration_score:.2f})"
+                    f"✅ {test_case['name']}: {'성공' if success else '실패'} (통합점수: {result.integration_score:.2f})"  # noqa: E501
                 )
 
             except Exception as e:
                 logger.error(f"❌ {test_case['name']} 실패: {e}")
-                results.append(
-                    {"name": test_case["name"], "success": False, "error": str(e)}
-                )
+                results.append({"name": test_case["name"], "success": False, "error": str(e)})
                 self.test_results.append(results[-1])
 
         return {
@@ -513,17 +468,13 @@ class IntegratedLanguageSystemTester:
         # 카테고리별 결과
         logger.info("\n📋 카테고리별 결과:")
         for category, category_results in results["test_categories"].items():
-            success_rate = (
-                category_results["successful_tests"] / category_results["total_tests"]
-            ) * 100
+            success_rate = (category_results["successful_tests"] / category_results["total_tests"]) * 100
             logger.info(
-                f"  {category}: {category_results['successful_tests']}/{category_results['total_tests']} ({success_rate:.1f}%)"
+                f"  {category}: {category_results['successful_tests']}/{category_results['total_tests']} ({success_rate:.1f}%)"  # noqa: E501
             )
 
         # 전체 성공률
-        overall_success_rate = (
-            summary["successful_tests"] / summary["total_tests"]
-        ) * 100
+        overall_success_rate = (summary["successful_tests"] / summary["total_tests"]) * 100
         logger.info(f"\n🎉 전체 성공률: {overall_success_rate:.1f}%")
 
         if overall_success_rate >= 80:

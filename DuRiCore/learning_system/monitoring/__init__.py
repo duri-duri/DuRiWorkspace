@@ -18,11 +18,11 @@ from .learning_monitor import (
 from .learning_monitoring import (
     LearningIssue,
     LearningIssueType,
-    LearningMonitoringSystem as AdvancedLearningMonitoringSystem,
     LearningPrediction,
     MonitoringLevel,
     OptimizationRecommendation,
 )
+from .learning_monitoring import LearningMonitoringSystem as AdvancedLearningMonitoringSystem
 
 __all__ = [
     "LearningMonitoringSystem",

@@ -4,9 +4,7 @@ import ast
 import operator as op
 from typing import Any, Dict
 
-from DuRiCore.reasoning_engine.core.logical_reasoning_engine import (
-    LogicalReasoningEngine,
-)
+from DuRiCore.reasoning_engine.core.logical_reasoning_engine import LogicalReasoningEngine
 
 # 안전 수식 평가용(사칙연산만)
 _ALLOWED = {

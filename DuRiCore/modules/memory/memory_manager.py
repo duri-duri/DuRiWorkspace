@@ -4,10 +4,10 @@ DuRi 메모리 관리 시스템
 장기 기억과 단기 기억을 관리하는 시스템
 """
 
-from datetime import datetime
 import json
 import os
-from typing import Any, Dict, List, Optional
+from datetime import datetime
+from typing import Any, Dict, Optional
 
 
 class MemoryManager:

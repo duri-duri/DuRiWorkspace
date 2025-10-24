@@ -11,18 +11,16 @@ DuRiCore Phase 2-5: 메모리 동기화 모듈
 """
 
 import asyncio
-from collections import defaultdict, deque
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-import hashlib
 import json
 import logging
 import sqlite3
 import threading
 import time
-from typing import Any, Dict, List, Optional, Tuple, Union
 import uuid
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -157,15 +155,9 @@ class MemorySynchronizer:
                 )
 
                 # 인덱스 생성
-                cursor.execute(
-                    "CREATE INDEX IF NOT EXISTS idx_sync_status ON sync_operations(status)"
-                )
-                cursor.execute(
-                    "CREATE INDEX IF NOT EXISTS idx_sync_type ON sync_operations(sync_type)"
-                )
-                cursor.execute(
-                    "CREATE INDEX IF NOT EXISTS idx_conflict_resolved ON memory_conflicts(resolved)"
-                )
+                cursor.execute("CREATE INDEX IF NOT EXISTS idx_sync_status ON sync_operations(status)")
+                cursor.execute("CREATE INDEX IF NOT EXISTS idx_sync_type ON sync_operations(sync_type)")
+                cursor.execute("CREATE INDEX IF NOT EXISTS idx_conflict_resolved ON memory_conflicts(resolved)")
 
                 conn.commit()
                 logger.info("동기화 데이터베이스 초기화 완료")
@@ -229,9 +221,7 @@ class MemorySynchronizer:
 
             # 동기화 완료 처리
             sync_operation.completed_at = datetime.now()
-            sync_operation.status = (
-                SyncStatus.COMPLETED if success else SyncStatus.FAILED
-            )
+            sync_operation.status = SyncStatus.COMPLETED if success else SyncStatus.FAILED
 
             # 성능 메트릭 업데이트
             self.performance_metrics["total_sync_operations"] += 1
@@ -242,14 +232,11 @@ class MemorySynchronizer:
 
             sync_time = time.time() - start_time
             self.performance_metrics["average_sync_time"] = (
-                self.performance_metrics["average_sync_time"]
-                * (self.performance_metrics["total_sync_operations"] - 1)
+                self.performance_metrics["average_sync_time"] * (self.performance_metrics["total_sync_operations"] - 1)
                 + sync_time
             ) / self.performance_metrics["total_sync_operations"]
 
-            logger.info(
-                f"동기화 완료: {sync_operation.sync_id} ({'성공' if success else '실패'})"
-            )
+            logger.info(f"동기화 완료: {sync_operation.sync_id} ({'성공' if success else '실패'})")
             return success
 
         except Exception as e:
@@ -262,9 +249,7 @@ class MemorySynchronizer:
         """전체 동기화 수행"""
         try:
             # 소스에서 모든 메모리 데이터 가져오기
-            source_memories = await self._get_memories_from_source(
-                sync_operation.source_id
-            )
+            source_memories = await self._get_memories_from_source(sync_operation.source_id)
 
             # 타겟에 동기화
             synced_count = 0
@@ -272,9 +257,7 @@ class MemorySynchronizer:
 
             for memory_data in source_memories:
                 try:
-                    success = await self._sync_memory_to_target(
-                        sync_operation.target_id, memory_data
-                    )
+                    success = await self._sync_memory_to_target(sync_operation.target_id, memory_data)
                     if success:
                         synced_count += 1
                     else:
@@ -296,14 +279,10 @@ class MemorySynchronizer:
         """증분 동기화 수행"""
         try:
             # 마지막 동기화 이후 변경된 데이터만 가져오기
-            last_sync_time = await self._get_last_sync_time(
-                sync_operation.source_id, sync_operation.target_id
-            )
+            last_sync_time = await self._get_last_sync_time(sync_operation.source_id, sync_operation.target_id)
 
             # 변경된 메모리 데이터 가져오기
-            changed_memories = await self._get_changed_memories(
-                sync_operation.source_id, last_sync_time
-            )
+            changed_memories = await self._get_changed_memories(sync_operation.source_id, last_sync_time)
 
             # 타겟에 동기화
             synced_count = 0
@@ -311,9 +290,7 @@ class MemorySynchronizer:
 
             for memory_data in changed_memories:
                 try:
-                    success = await self._sync_memory_to_target(
-                        sync_operation.target_id, memory_data
-                    )
+                    success = await self._sync_memory_to_target(sync_operation.target_id, memory_data)
                     if success:
                         synced_count += 1
                     else:
@@ -338,9 +315,7 @@ class MemorySynchronizer:
             selection_criteria = sync_operation.metadata.get("selection_criteria", {})
 
             # 조건에 맞는 메모리 데이터 가져오기
-            selected_memories = await self._get_selected_memories(
-                sync_operation.source_id, selection_criteria
-            )
+            selected_memories = await self._get_selected_memories(sync_operation.source_id, selection_criteria)
 
             # 타겟에 동기화
             synced_count = 0
@@ -348,9 +323,7 @@ class MemorySynchronizer:
 
             for memory_data in selected_memories:
                 try:
-                    success = await self._sync_memory_to_target(
-                        sync_operation.target_id, memory_data
-                    )
+                    success = await self._sync_memory_to_target(sync_operation.target_id, memory_data)
                     if success:
                         synced_count += 1
                     else:
@@ -375,9 +348,7 @@ class MemorySynchronizer:
             backup_path = f"backup_{int(time.time())}_{uuid.uuid4().hex[:8]}.json"
 
             # 소스에서 모든 메모리 데이터 가져오기
-            source_memories = await self._get_memories_from_source(
-                sync_operation.source_id
-            )
+            source_memories = await self._get_memories_from_source(sync_operation.source_id)
 
             # 백업 파일에 저장
             backup_data = {
@@ -419,9 +390,7 @@ class MemorySynchronizer:
 
             for memory_data in backup_data.get("memories", []):
                 try:
-                    success = await self._sync_memory_to_target(
-                        sync_operation.target_id, memory_data
-                    )
+                    success = await self._sync_memory_to_target(sync_operation.target_id, memory_data)
                     if success:
                         restored_count += 1
                     else:
@@ -472,9 +441,7 @@ class MemorySynchronizer:
             logger.error(f"메모리 충돌 감지 실패: {e}")
             return None
 
-    async def resolve_conflict(
-        self, conflict_id: str, resolution_strategy: str
-    ) -> bool:
+    async def resolve_conflict(self, conflict_id: str, resolution_strategy: str) -> bool:
         """메모리 충돌 해결"""
         try:
             if conflict_id not in self.memory_conflicts:
@@ -492,26 +459,20 @@ class MemorySynchronizer:
                 resolved_version = conflict.target_version
             elif resolution_strategy == "merge":
                 # 병합
-                resolved_version = await self._merge_versions(
-                    conflict.source_version, conflict.target_version
-                )
+                resolved_version = await self._merge_versions(conflict.source_version, conflict.target_version)
             else:
                 logger.error(f"알 수 없는 해결 전략: {resolution_strategy}")
                 return False
 
             # 해결된 버전 적용
-            success = await self._apply_resolved_version(
-                conflict.memory_id, resolved_version
-            )
+            success = await self._apply_resolved_version(conflict.memory_id, resolved_version)
 
             if success:
                 conflict.resolved = True
                 conflict.resolution_strategy = resolution_strategy
                 self.performance_metrics["conflicts_resolved"] += 1
 
-                logger.info(
-                    f"메모리 충돌 해결 완료: {conflict_id} ({resolution_strategy})"
-                )
+                logger.info(f"메모리 충돌 해결 완료: {conflict_id} ({resolution_strategy})")
                 return True
             else:
                 logger.error(f"메모리 충돌 해결 실패: {conflict_id}")
@@ -526,9 +487,7 @@ class MemorySynchronizer:
         # 실제 구현에서는 소스 시스템에서 데이터를 가져와야 함
         return []
 
-    async def _sync_memory_to_target(
-        self, target_id: str, memory_data: Dict[str, Any]
-    ) -> bool:
+    async def _sync_memory_to_target(self, target_id: str, memory_data: Dict[str, Any]) -> bool:
         """타겟에 메모리 동기화"""
         # 실제 구현에서는 타겟 시스템에 데이터를 저장해야 함
         return True
@@ -538,35 +497,25 @@ class MemorySynchronizer:
         # 실제 구현에서는 데이터베이스에서 마지막 동기화 시간을 조회해야 함
         return datetime.now() - timedelta(hours=1)
 
-    async def _get_changed_memories(
-        self, source_id: str, since_time: datetime
-    ) -> List[Dict[str, Any]]:
+    async def _get_changed_memories(self, source_id: str, since_time: datetime) -> List[Dict[str, Any]]:
         """변경된 메모리 데이터 가져오기"""
         # 실제 구현에서는 소스 시스템에서 변경된 데이터를 가져와야 함
         return []
 
-    async def _get_selected_memories(
-        self, source_id: str, criteria: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    async def _get_selected_memories(self, source_id: str, criteria: Dict[str, Any]) -> List[Dict[str, Any]]:
         """선택된 메모리 데이터 가져오기"""
         # 실제 구현에서는 소스 시스템에서 조건에 맞는 데이터를 가져와야 함
         return []
 
-    async def _merge_versions(
-        self, source_version: Dict[str, Any], target_version: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _merge_versions(self, source_version: Dict[str, Any], target_version: Dict[str, Any]) -> Dict[str, Any]:
         """버전 병합"""
         # 실제 구현에서는 두 버전을 병합하는 로직이 필요함
         merged_version = source_version.copy()
         merged_version.update(target_version)
-        merged_version["version"] = (
-            max(source_version.get("version", 0), target_version.get("version", 0)) + 1
-        )
+        merged_version["version"] = max(source_version.get("version", 0), target_version.get("version", 0)) + 1
         return merged_version
 
-    async def _apply_resolved_version(
-        self, memory_id: str, resolved_version: Dict[str, Any]
-    ) -> bool:
+    async def _apply_resolved_version(self, memory_id: str, resolved_version: Dict[str, Any]) -> bool:
         """해결된 버전 적용"""
         # 실제 구현에서는 해결된 버전을 메모리 시스템에 적용해야 함
         return True
@@ -586,37 +535,19 @@ class MemorySynchronizer:
             stats = {
                 "total_operations": len(self.sync_operations),
                 "pending_operations": len(
-                    [
-                        op
-                        for op in self.sync_operations.values()
-                        if op.status == SyncStatus.PENDING
-                    ]
+                    [op for op in self.sync_operations.values() if op.status == SyncStatus.PENDING]
                 ),
                 "in_progress_operations": len(
-                    [
-                        op
-                        for op in self.sync_operations.values()
-                        if op.status == SyncStatus.IN_PROGRESS
-                    ]
+                    [op for op in self.sync_operations.values() if op.status == SyncStatus.IN_PROGRESS]
                 ),
                 "completed_operations": len(
-                    [
-                        op
-                        for op in self.sync_operations.values()
-                        if op.status == SyncStatus.COMPLETED
-                    ]
+                    [op for op in self.sync_operations.values() if op.status == SyncStatus.COMPLETED]
                 ),
                 "failed_operations": len(
-                    [
-                        op
-                        for op in self.sync_operations.values()
-                        if op.status == SyncStatus.FAILED
-                    ]
+                    [op for op in self.sync_operations.values() if op.status == SyncStatus.FAILED]
                 ),
                 "total_conflicts": len(self.memory_conflicts),
-                "resolved_conflicts": len(
-                    [c for c in self.memory_conflicts.values() if c.resolved]
-                ),
+                "resolved_conflicts": len([c for c in self.memory_conflicts.values() if c.resolved]),
                 "performance_metrics": self.performance_metrics.copy(),
             }
 

@@ -7,11 +7,11 @@
 
 import hashlib
 import os
-from pathlib import Path
 import random
 import sys
 import time
-from typing import Dict, List, Tuple
+from pathlib import Path
+from typing import Dict
 
 
 class DualVerification:
@@ -35,9 +35,7 @@ class DualVerification:
                         file_hash = hashlib.sha256(f.read()).hexdigest()
                         checksums[str(file_path)] = file_hash
                 except Exception as e:
-                    self.verification_results["sha256"]["errors"].append(
-                        f"Failed to hash {file_path}: {e}"
-                    )
+                    self.verification_results["sha256"]["errors"].append(f"Failed to hash {file_path}: {e}")
                     self.verification_results["sha256"]["failed"] += 1
 
         self.verification_results["sha256"]["success"] = len(checksums)
@@ -46,7 +44,7 @@ class DualVerification:
 
     def verify_checksums(self, checksums: Dict[str, str]) -> bool:
         """생성된 체크섬 검증"""
-        print(f"🔍 SHA256 체크섬 검증 중...")
+        print("🔍 SHA256 체크섬 검증 중...")
 
         all_valid = True
         for file_path, expected_hash in checksums.items():
@@ -55,25 +53,21 @@ class DualVerification:
                     actual_hash = hashlib.sha256(f.read()).hexdigest()
 
                 if actual_hash != expected_hash:
-                    self.verification_results["sha256"]["errors"].append(
-                        f"Hash mismatch for {file_path}"
-                    )
+                    self.verification_results["sha256"]["errors"].append(f"Hash mismatch for {file_path}")
                     self.verification_results["sha256"]["failed"] += 1
                     all_valid = False
                 else:
                     self.verification_results["sha256"]["success"] += 1
 
             except Exception as e:
-                self.verification_results["sha256"]["errors"].append(
-                    f"Failed to verify {file_path}: {e}"
-                )
+                self.verification_results["sha256"]["errors"].append(f"Failed to verify {file_path}: {e}")
                 self.verification_results["sha256"]["failed"] += 1
                 all_valid = False
 
         if all_valid:
-            print(f"✅ SHA256 체크섬 검증 통과!")
+            print("✅ SHA256 체크섬 검증 통과!")
         else:
-            print(f"❌ SHA256 체크섬 검증 실패!")
+            print("❌ SHA256 체크섬 검증 실패!")
 
         return all_valid
 
@@ -111,61 +105,57 @@ class DualVerification:
 
             except Exception as e:
                 print(f"  ❌ {file_path.name}: {e}")
-                self.verification_results["sample_open"]["errors"].append(
-                    f"Failed to verify {file_path}: {e}"
-                )
+                self.verification_results["sample_open"]["errors"].append(f"Failed to verify {file_path}: {e}")
                 self.verification_results["sample_open"]["failed"] += 1
                 all_valid = False
 
         if all_valid:
-            print(f"✅ 샘플 파일 열기 검증 통과!")
+            print("✅ 샘플 파일 열기 검증 통과!")
         else:
-            print(f"❌ 샘플 파일 열기 검증 실패!")
+            print("❌ 샘플 파일 열기 검증 실패!")
 
         return all_valid
 
     def run_dual_verification(self) -> bool:
         """검증 2중 루프 실행"""
-        print(f"🚀 검증 2중 루프 시작...")
+        print("🚀 검증 2중 루프 시작...")
         start_time = time.time()
 
         # 1차 검증: SHA256 체크섬
-        print(f"\n📋 1차 검증: SHA256 체크섬")
+        print("\n📋 1차 검증: SHA256 체크섬")
         checksums = self.generate_checksums()
         sha256_valid = self.verify_checksums(checksums)
 
         # 2차 검증: 샘플 파일 열기
-        print(f"\n📋 2차 검증: 샘플 파일 열기")
+        print("\n📋 2차 검증: 샘플 파일 열기")
         sample_valid = self.sample_file_verification()
 
         # 결과 요약
         elapsed_time = time.time() - start_time
-        print(f"\n📊 검증 2중 루프 결과 요약:")
+        print("\n📊 검증 2중 루프 결과 요약:")
         print(f"  - 소요 시간: {elapsed_time:.2f}초")
         print(f"  - SHA256 검증: {'✅ 통과' if sha256_valid else '❌ 실패'}")
         print(f"  - 샘플 파일 검증: {'✅ 통과' if sample_valid else '❌ 실패'}")
-        print(
-            f"  - 전체 결과: {'✅ 통과' if (sha256_valid and sample_valid) else '❌ 실패'}"
-        )
+        print(f"  - 전체 결과: {'✅ 통과' if (sha256_valid and sample_valid) else '❌ 실패'}")
 
         # 상세 결과
-        print(f"\n📋 상세 결과:")
-        print(f"  SHA256:")
+        print("\n📋 상세 결과:")
+        print("  SHA256:")
         print(f"    - 성공: {self.verification_results['sha256']['success']}개")
         print(f"    - 실패: {self.verification_results['sha256']['failed']}개")
 
-        print(f"  샘플 파일 열기:")
+        print("  샘플 파일 열기:")
         print(f"    - 성공: {self.verification_results['sample_open']['success']}개")
         print(f"    - 실패: {self.verification_results['sample_open']['failed']}개")
 
         # 오류가 있으면 출력
         if self.verification_results["sha256"]["errors"]:
-            print(f"\n❌ SHA256 오류:")
+            print("\n❌ SHA256 오류:")
             for error in self.verification_results["sha256"]["errors"]:
                 print(f"    - {error}")
 
         if self.verification_results["sample_open"]["errors"]:
-            print(f"\n❌ 샘플 파일 열기 오류:")
+            print("\n❌ 샘플 파일 열기 오류:")
             for error in self.verification_results["sample_open"]["errors"]:
                 print(f"    - {error}")
 

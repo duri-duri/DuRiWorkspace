@@ -1,0 +1,15 @@
+[Unit]
+Description=DuRiWorkspace Auto-Start
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/home/duri/DuRiWorkspace
+ExecStart=/usr/bin/docker compose -p duriworkspace up -d
+ExecStop=/usr/bin/docker compose -p duriworkspace down
+TimeoutStartSec=0
+
+[Install]
+WantedBy=multi-user.target

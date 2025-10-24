@@ -1,12 +1,6 @@
 SHELL := /usr/bin/env bash
 .SHELLFLAGS := -euo pipefail -c
 SUDO ?= sudo -n
-SHELL := /usr/bin/env bash
-.SHELLFLAGS := -eu -o pipefail -c
-
-# 리포지토리 루트 고정
-REPO_ROOT := $(shell git rev-parse --show-toplevel 2>/dev/null || pwd | sed 's:/*$$::')
-export REPO_ROOT
 
 # CI 도구 고정 (노이즈 제로)
 ci-bootstrap-tools:
@@ -259,3 +253,12 @@ alert-labels-guard:
 
 runbook-url-guard-dummy:
 	@echo "Runbook URL guard passed"
+
+# 모니터링 편의 타겟
+alertmanager-reload:
+	@chmod 600 ops/observability/slack_webhook_url
+	@curl -s -X POST http://localhost:9093/-/reload && echo "Alertmanager reloaded"
+.PHONY: alertmanager-reload
+
+
+-include ops/observability/monitoring.mk

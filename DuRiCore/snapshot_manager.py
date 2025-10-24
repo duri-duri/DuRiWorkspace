@@ -9,15 +9,12 @@ DuRi 리팩토링 Phase 1 - 스냅샷 관리 시스템
 - 자동 정리 기능
 """
 
-from dataclasses import asdict, dataclass, field
-from datetime import datetime, timedelta
 import hashlib
 import json
 import logging
-import os
+from dataclasses import asdict, dataclass, field
+from datetime import datetime
 from pathlib import Path
-import shutil
-import time
 from typing import Any, Dict, List, Optional
 
 # 로깅 설정
@@ -69,9 +66,7 @@ class SnapshotManager:
                     for snapshot_data in data.get("snapshots", []):
                         snapshot_info = SnapshotInfo(
                             name=snapshot_data["name"],
-                            timestamp=datetime.fromisoformat(
-                                snapshot_data["timestamp"]
-                            ),
+                            timestamp=datetime.fromisoformat(snapshot_data["timestamp"]),
                             size=snapshot_data["size"],
                             description=snapshot_data.get("description", ""),
                             tags=snapshot_data.get("tags", []),
@@ -130,9 +125,7 @@ class SnapshotManager:
             # 파일로 저장
             snapshot_file = self.snapshot_dir / f"{name}.json"
             snapshot_data_dict = asdict(snapshot_data)
-            snapshot_data_dict["snapshot_info"][
-                "timestamp"
-            ] = snapshot_data.snapshot_info.timestamp.isoformat()
+            snapshot_data_dict["snapshot_info"]["timestamp"] = snapshot_data.snapshot_info.timestamp.isoformat()
             snapshot_data_dict["created_at"] = snapshot_data.created_at.isoformat()
 
             with open(snapshot_file, "w", encoding="utf-8") as f:
@@ -140,16 +133,12 @@ class SnapshotManager:
 
             # 스냅샷 정보 업데이트
             snapshot_data.snapshot_info.size = snapshot_file.stat().st_size
-            snapshot_data.snapshot_info.checksum = self._calculate_checksum(
-                snapshot_file
-            )
+            snapshot_data.snapshot_info.checksum = self._calculate_checksum(snapshot_file)
 
             self.snapshots[name] = snapshot_data.snapshot_info
             self._save_snapshots()
 
-            logger.info(
-                f"스냅샷 저장 완료: {name} ({snapshot_data.snapshot_info.size} bytes)"
-            )
+            logger.info(f"스냅샷 저장 완료: {name} ({snapshot_data.snapshot_info.size} bytes)")
             return True
 
         except Exception as e:
@@ -207,9 +196,7 @@ class SnapshotManager:
         """오래된 스냅샷 정리"""
         try:
             # 시간순으로 정렬
-            sorted_snapshots = sorted(
-                self.snapshots.values(), key=lambda x: x.timestamp, reverse=True
-            )
+            sorted_snapshots = sorted(self.snapshots.values(), key=lambda x: x.timestamp, reverse=True)
 
             # 삭제할 스냅샷 찾기
             snapshots_to_delete = sorted_snapshots[keep_count:]
@@ -239,9 +226,7 @@ class SnapshotManager:
         """스냅샷 정보 반환"""
         return self.snapshots.get(name)
 
-    def search_snapshots(
-        self, tags: List[str] = None, description: str = ""
-    ) -> List[SnapshotInfo]:
+    def search_snapshots(self, tags: List[str] = None, description: str = "") -> List[SnapshotInfo]:
         """스냅샷 검색"""
         results = []
 
@@ -266,16 +251,8 @@ class SnapshotManager:
             "snapshot_dir": str(self.snapshot_dir),
             "total_snapshots": len(self.snapshots),
             "total_size": sum(s.size for s in self.snapshots.values()),
-            "oldest_snapshot": (
-                min(s.timestamp for s in self.snapshots.values())
-                if self.snapshots
-                else None
-            ),
-            "newest_snapshot": (
-                max(s.timestamp for s in self.snapshots.values())
-                if self.snapshots
-                else None
-            ),
+            "oldest_snapshot": (min(s.timestamp for s in self.snapshots.values()) if self.snapshots else None),
+            "newest_snapshot": (max(s.timestamp for s in self.snapshots.values()) if self.snapshots else None),
         }
 
 

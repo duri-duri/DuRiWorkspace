@@ -10,7 +10,7 @@ import json
 import os
 import random
 import sys
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 # 도메인 정규화 매핑 (하위 호환성 유지)
 DOMAIN_ALIASES = {
@@ -93,17 +93,13 @@ def append_log_entry(log_file: str, entry: Dict[str, Any]) -> None:
         f.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
 
-def generate_session_logs(
-    domain: str, num_sessions: int = 10, canary_percentage: float = 0.1
-) -> None:
+def generate_session_logs(domain: str, num_sessions: int = 10, canary_percentage: float = 0.1) -> None:
     """세션별 로그 생성 (기존 로깅 패턴 활용)"""
 
     # 도메인 정규화
     normalized_domain = DOMAIN_ALIASES.get(domain.lower(), domain.lower())
     if normalized_domain not in DOMAIN_DIRS:
-        raise ValueError(
-            f"Unknown domain: {domain}. Supported: {list(DOMAIN_ALIASES.keys())}"
-        )
+        raise ValueError(f"Unknown domain: {domain}. Supported: {list(DOMAIN_ALIASES.keys())}")
 
     log_file = f"{DOMAIN_DIRS[normalized_domain]}/logs.jsonl"
 
@@ -115,9 +111,7 @@ def generate_session_logs(
         # 세션 시작
         append_log_entry(
             log_file,
-            generate_pilot_log_entry(
-                domain, user_id, session_id, "session_start", is_canary
-            ),
+            generate_pilot_log_entry(domain, user_id, session_id, "session_start", is_canary),
         )
 
         # 작업 완료 (3-7개)
@@ -125,26 +119,20 @@ def generate_session_logs(
         for task in range(num_tasks):
             append_log_entry(
                 log_file,
-                generate_pilot_log_entry(
-                    domain, user_id, session_id, "task_complete", is_canary
-                ),
+                generate_pilot_log_entry(domain, user_id, session_id, "task_complete", is_canary),
             )
 
         # 에러 (10% 확률)
         if random.random() < 0.1:
             append_log_entry(
                 log_file,
-                generate_pilot_log_entry(
-                    domain, user_id, session_id, "error", is_canary
-                ),
+                generate_pilot_log_entry(domain, user_id, session_id, "error", is_canary),
             )
 
         # 세션 종료
         append_log_entry(
             log_file,
-            generate_pilot_log_entry(
-                domain, user_id, session_id, "session_end", is_canary
-            ),
+            generate_pilot_log_entry(domain, user_id, session_id, "session_end", is_canary),
         )
 
 
@@ -165,12 +153,8 @@ def main():
         required=True,
         help="PoU domain (supports aliases)",
     )
-    parser.add_argument(
-        "--sessions", type=int, default=10, help="Number of sessions to generate"
-    )
-    parser.add_argument(
-        "--canary", type=float, default=0.1, help="Canary percentage (0.0 to 1.0)"
-    )
+    parser.add_argument("--sessions", type=int, default=10, help="Number of sessions to generate")
+    parser.add_argument("--canary", type=float, default=0.1, help="Canary percentage (0.0 to 1.0)")
 
     args = parser.parse_args()
 
@@ -181,9 +165,7 @@ def main():
         print(f"   Supported domains: {list(DOMAIN_ALIASES.keys())}")
         sys.exit(1)
 
-    print(
-        f"Generating {args.sessions} sessions for {args.domain} domain (normalized: {normalized_domain})..."
-    )
+    print(f"Generating {args.sessions} sessions for {args.domain} domain (normalized: {normalized_domain})...")
     print(f"Canary percentage: {args.canary * 100:.1f}%")
 
     generate_session_logs(normalized_domain, args.sessions, args.canary)

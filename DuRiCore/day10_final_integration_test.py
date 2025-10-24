@@ -7,16 +7,13 @@ DuRi Phase 1-3 Week 3 Day 10: 최종 통합 테스트
 """
 
 import asyncio
-from datetime import datetime
 import json
 import logging
-import time
+from datetime import datetime
 from typing import Any, Dict, List
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -87,15 +84,11 @@ class Day10FinalIntegrationTest:
 
             # 성능 모니터링 테스트
             performance_data = {"monitoring_type": "comprehensive"}
-            performance_report = await system.monitor_integration_performance(
-                performance_data
-            )
+            performance_report = await system.monitor_integration_performance(performance_data)
 
             # 호환성 검증 테스트
             compatibility_data = {"validation_type": "full"}
-            validation_report = await system.validate_system_compatibility(
-                compatibility_data
-            )
+            validation_report = await system.validate_system_compatibility(compatibility_data)
 
             await system.stop()
 
@@ -140,9 +133,7 @@ class Day10FinalIntegrationTest:
                 "duration": 60,
                 "concurrent_users": 100,
             }
-            performance_report = await platform.perform_comprehensive_tests(
-                performance_test_data
-            )
+            performance_report = await platform.perform_comprehensive_tests(performance_test_data)
 
             # 안정성 테스트
             stability_data = {
@@ -198,9 +189,7 @@ class Day10FinalIntegrationTest:
                 "system_name": "test_system",
                 "validation_type": "comprehensive",
             }
-            system_validation = await engine.validate_system(
-                "test_system", validation_data
-            )
+            system_validation = await engine.validate_system("test_system", validation_data)
 
             # 품질 보고서 생성 테스트
             quality_data = {
@@ -217,9 +206,7 @@ class Day10FinalIntegrationTest:
                     "overall_score": system_validation.overall_score,
                     "quality_level": system_validation.quality_level.value,
                     "validation_time": system_validation.validation_time,
-                    "validation_results_count": len(
-                        system_validation.validation_results
-                    ),
+                    "validation_results_count": len(system_validation.validation_results),
                 },
                 "quality_report": {
                     "overall_quality": quality_report.overall_quality.value,
@@ -244,9 +231,7 @@ class Day10FinalIntegrationTest:
             stability_score = 0.0
 
             # 각 시스템의 결과를 종합하여 점수 계산
-            if self.test_results.get("final_integration_system", {}).get(
-                "success", False
-            ):
+            if self.test_results.get("final_integration_system", {}).get("success", False):
                 integration_score = 1.0
                 compatibility_score = (
                     self.test_results["final_integration_system"]
@@ -259,9 +244,7 @@ class Day10FinalIntegrationTest:
                     .get("overall_performance", 0.0)
                 )
 
-            if self.test_results.get("comprehensive_testing_platform", {}).get(
-                "success", False
-            ):
+            if self.test_results.get("comprehensive_testing_platform", {}).get("success", False):
                 stability_score = (
                     self.test_results["comprehensive_testing_platform"]
                     .get("stability_report", {})
@@ -269,12 +252,7 @@ class Day10FinalIntegrationTest:
                 )
 
             # 전체 점수 계산
-            overall_score = (
-                integration_score
-                + compatibility_score
-                + performance_score
-                + stability_score
-            ) / 4.0
+            overall_score = (integration_score + compatibility_score + performance_score + stability_score) / 4.0
 
             return {
                 "success": True,
@@ -297,16 +275,12 @@ class Day10FinalIntegrationTest:
         duration = (self.end_time - self.start_time).total_seconds()
 
         # 성공률 계산
-        successful_tests = sum(
-            1 for result in self.test_results.values() if result.get("success", False)
-        )
+        successful_tests = sum(1 for result in self.test_results.values() if result.get("success", False))
         total_tests = len(self.test_results)
         success_rate = (successful_tests / total_tests) * 100 if total_tests > 0 else 0
 
         # 전체 점수 계산
-        overall_score = self.test_results.get("overall_integration", {}).get(
-            "overall_score", 0.0
-        )
+        overall_score = self.test_results.get("overall_integration", {}).get("overall_score", 0.0)
 
         report = {
             "test_info": {
@@ -333,18 +307,14 @@ class Day10FinalIntegrationTest:
         """권장사항 생성"""
         recommendations = []
 
-        overall_score = self.test_results.get("overall_integration", {}).get(
-            "overall_score", 0.0
-        )
+        overall_score = self.test_results.get("overall_integration", {}).get("overall_score", 0.0)
 
         if overall_score >= 0.95:
             recommendations.append("✅ 시스템이 배포 준비 완료 상태입니다.")
             recommendations.append("✅ Phase 1-3 Week 3 Day 10 목표 달성 완료")
             recommendations.append("✅ 모든 시스템이 성공적으로 통합되었습니다.")
         elif overall_score >= 0.90:
-            recommendations.append(
-                "⚠️ 시스템이 거의 완료되었으나 일부 개선이 필요합니다."
-            )
+            recommendations.append("⚠️ 시스템이 거의 완료되었으나 일부 개선이 필요합니다.")
             recommendations.append("⚠️ 성능 최적화를 권장합니다.")
         else:
             recommendations.append("❌ 시스템 통합에 문제가 있습니다.")
@@ -363,7 +333,7 @@ async def main():
     print("🎯 Day 10 최종 통합 테스트 결과")
     print("=" * 80)
 
-    print(f"\n📊 테스트 정보:")
+    print("\n📊 테스트 정보:")
     print(f"  - 테스트명: {report['test_info']['test_name']}")
     print(f"  - 시작시간: {report['test_info']['start_time']}")
     print(f"  - 종료시간: {report['test_info']['end_time']}")
@@ -372,14 +342,12 @@ async def main():
     print(f"  - 성공 테스트: {report['test_info']['successful_tests']}개")
     print(f"  - 성공률: {report['test_info']['success_rate']:.1f}%")
 
-    print(f"\n🎯 전체 평가:")
+    print("\n🎯 전체 평가:")
     print(f"  - 전체 점수: {report['overall_assessment']['overall_score']:.3f}")
-    print(
-        f"  - 배포 준비: {'✅ 준비됨' if report['overall_assessment']['deployment_ready'] else '❌ 준비 안됨'}"
-    )
+    print(f"  - 배포 준비: {'✅ 준비됨' if report['overall_assessment']['deployment_ready'] else '❌ 준비 안됨'}")
     print(f"  - Phase 완료: {report['overall_assessment']['phase_completion']}")
 
-    print(f"\n📋 권장사항:")
+    print("\n📋 권장사항:")
     for recommendation in report["overall_assessment"]["recommendations"]:
         print(f"  - {recommendation}")
 
@@ -387,7 +355,7 @@ async def main():
     with open("day10_final_test_results.json", "w", encoding="utf-8") as f:
         json.dump(report, f, ensure_ascii=False, indent=2, default=str)
 
-    print(f"\n💾 테스트 결과가 'day10_final_test_results.json' 파일에 저장되었습니다.")
+    print("\n💾 테스트 결과가 'day10_final_test_results.json' 파일에 저장되었습니다.")
 
     return report
 

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-from datetime import datetime
 import json
 import os
+from datetime import datetime
 
 import requests
 import yaml
@@ -22,7 +22,7 @@ def load_importance_threshold(default=0.3):
     try:
         with open(POLICY_PATH, "r") as f:
             return yaml.safe_load(f).get("importance_threshold", default)
-    except:
+    except:  # noqa: E722
         return default
 
 

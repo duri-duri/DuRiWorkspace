@@ -5,16 +5,15 @@ DuRiCore 테스트 스크립트
 """
 
 import asyncio
-from datetime import datetime
 import os
 import sys
 
 # DuRiCore 모듈 임포트를 위한 경로 추가
 sys.path.append(os.path.join(os.path.dirname(__file__), "DuRiCore"))
 
-from DuRiCore.DuRiCore.core.main_loop import InputData, MainLoop
-from DuRiCore.DuRiCore.modules.emotion_engine import EmotionEngine
-from DuRiCore.DuRiCore.modules.self_evolution import SelfEvolutionEngine
+from DuRiCore.DuRiCore.core.main_loop import InputData, MainLoop  # noqa: E402
+from DuRiCore.DuRiCore.modules.emotion_engine import EmotionEngine  # noqa: E402
+from DuRiCore.DuRiCore.modules.self_evolution import SelfEvolutionEngine  # noqa: E402
 
 
 async def test_emotion_engine():
@@ -80,9 +79,7 @@ async def test_self_evolution_engine():
     if evolution_result.improvement_areas:
         print("\n개선 영역:")
         for area in evolution_result.improvement_areas:
-            print(
-                f"  - {area['system']}: {area['current_score']:.1f}점 → {area['target_score']}점"
-            )
+            print(f"  - {area['system']}: {area['current_score']:.1f}점 → {area['target_score']}점")
 
     # 진화 방향 출력
     if evolution_result.evolution_directions:
@@ -130,14 +127,14 @@ async def test_main_loop():
 
     # 시스템 상태 출력
     status = main_loop.get_system_status()
-    print(f"\n시스템 상태:")
+    print("\n시스템 상태:")
     print(f"  - 총 사이클: {status['performance_stats']['total_cycles']}")
     print(f"  - 메모리 수: {status['memory_count']}")
     print(f"  - 현재 감정: {status['current_state']['emotional_state']}")
 
     # 메모리 요약 출력
     memory_summary = main_loop.get_memory_summary(limit=3)
-    print(f"\n최근 메모리:")
+    print("\n최근 메모리:")
     for memory in memory_summary:
         print(f"  - {memory['input']} → {memory['emotion']} → {memory['decision']}")
 
@@ -168,7 +165,7 @@ async def test_integration():
     # 메인 루프 실행
     result = await main_loop.process_input(complex_input)
 
-    print(f"\n결과 분석:")
+    print("\n결과 분석:")
     print(
         f"  - 감정: {result['emotional_analysis'].primary_emotion} (강도: {result['emotional_analysis'].intensity:.2f})"
     )
@@ -180,7 +177,7 @@ async def test_integration():
     print(f"  - 개선 제안: {len(result['reflection'].improvement_suggestions)}개")
 
     # 성능 통계
-    print(f"\n성능 통계:")
+    print("\n성능 통계:")
     stats = result["performance_stats"]
     print(f"  - 총 사이클: {stats['total_cycles']}")
     print(f"  - 평균 사이클 시간: {stats.get('average_cycle_time', 0):.3f}초")

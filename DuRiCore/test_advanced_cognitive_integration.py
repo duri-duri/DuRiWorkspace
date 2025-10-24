@@ -5,25 +5,18 @@ DuRiCore Phase 6.3 - 고급 인지 시스템 통합 테스트
 """
 
 import asyncio
-from datetime import datetime
 import json
 import logging
 import time
-from typing import Any, Dict, List
+from datetime import datetime
+from typing import Any, Dict
 
 # 테스트 대상 시스템들
-from advanced_cognitive_system import (
-    AbstractionType,
-    AdvancedCognitiveSystem,
-    CognitiveLevel,
-    MetacognitiveType,
-)
+from advanced_cognitive_system import AdvancedCognitiveSystem
 from integrated_system_manager import IntegratedSystemManager
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -102,7 +95,7 @@ class AdvancedCognitiveIntegrationTest:
         }
 
         # 결과 출력
-        print(f"\n=== 고급 인지 시스템 통합 테스트 결과 ===")
+        print("\n=== 고급 인지 시스템 통합 테스트 결과 ===")
         print(f"총 테스트 수: {total_tests}")
         print(f"성공한 테스트: {successful_tests}")
         print(f"실패한 테스트: {total_tests - successful_tests}")
@@ -110,21 +103,15 @@ class AdvancedCognitiveIntegrationTest:
         print(f"총 소요 시간: {total_duration:.3f}초")
 
         if failed_tests := [r for r in self.test_results if not r["success"]]:
-            print(f"\n실패한 테스트들:")
+            print("\n실패한 테스트들:")
             for result in failed_tests:
-                print(
-                    f"  - {result['test_name']}: {result.get('error', '알 수 없는 오류')}"
-                )
+                print(f"  - {result['test_name']}: {result.get('error', '알 수 없는 오류')}")
 
         # 결과를 파일로 저장
-        with open(
-            "advanced_cognitive_integration_test_results.json", "w", encoding="utf-8"
-        ) as f:
+        with open("advanced_cognitive_integration_test_results.json", "w", encoding="utf-8") as f:
             json.dump(summary, f, ensure_ascii=False, indent=2)
 
-        logger.info(
-            "테스트 결과가 advanced_cognitive_integration_test_results.json에 저장되었습니다."
-        )
+        logger.info("테스트 결과가 advanced_cognitive_integration_test_results.json에 저장되었습니다.")
         return summary
 
     async def test_advanced_cognitive_basic_functionality(self) -> bool:
@@ -139,17 +126,13 @@ class AdvancedCognitiveIntegrationTest:
             }
 
             # 고급 인지 처리
-            result = await self.advanced_cognitive_system.process_advanced_cognition(
-                test_context
-            )
+            result = await self.advanced_cognitive_system.process_advanced_cognition(test_context)
 
             # 기본 결과 확인
             if not result.success:
                 return False
 
-            if not hasattr(result, "cognitive_insights") or not hasattr(
-                result, "overall_cognitive_score"
-            ):
+            if not hasattr(result, "cognitive_insights") or not hasattr(result, "overall_cognitive_score"):
                 return False
 
             return True
@@ -169,9 +152,7 @@ class AdvancedCognitiveIntegrationTest:
             }
 
             # 추상화 생성
-            abstractions = await self.advanced_cognitive_system.generate_abstractions(
-                test_context
-            )
+            abstractions = await self.advanced_cognitive_system.generate_abstractions(test_context)
 
             # 추상화 결과 확인
             if not isinstance(abstractions, list):
@@ -179,9 +160,7 @@ class AdvancedCognitiveIntegrationTest:
 
             # 추상화의 기본 속성 확인
             for abstraction in abstractions:
-                if not hasattr(abstraction, "concept_id") or not hasattr(
-                    abstraction, "abstraction_type"
-                ):
+                if not hasattr(abstraction, "concept_id") or not hasattr(abstraction, "abstraction_type"):
                     return False
 
             return True
@@ -202,9 +181,7 @@ class AdvancedCognitiveIntegrationTest:
             }
 
             # 메타인지 분석
-            metacognitive_processes = (
-                await self.advanced_cognitive_system.analyze_metacognition(test_context)
-            )
+            metacognitive_processes = await self.advanced_cognitive_system.analyze_metacognition(test_context)
 
             # 메타인지 결과 확인
             if not isinstance(metacognitive_processes, list):
@@ -212,9 +189,7 @@ class AdvancedCognitiveIntegrationTest:
 
             # 메타인지 과정의 기본 속성 확인
             for process in metacognitive_processes:
-                if not hasattr(process, "process_id") or not hasattr(
-                    process, "metacognitive_type"
-                ):
+                if not hasattr(process, "process_id") or not hasattr(process, "metacognitive_type"):
                     return False
 
             return True
@@ -234,11 +209,7 @@ class AdvancedCognitiveIntegrationTest:
             }
 
             # 인지 시스템 통합
-            integration_result = (
-                await self.advanced_cognitive_system.integrate_cognitive_systems(
-                    test_context
-                )
-            )
+            integration_result = await self.advanced_cognitive_system.integrate_cognitive_systems(test_context)
 
             # 통합 결과 확인
             if not isinstance(integration_result, dict):
@@ -271,11 +242,7 @@ class AdvancedCognitiveIntegrationTest:
             }
 
             # 인지 성능 최적화
-            optimization_result = (
-                await self.advanced_cognitive_system.optimize_cognitive_performance(
-                    test_context
-                )
-            )
+            optimization_result = await self.advanced_cognitive_system.optimize_cognitive_performance(test_context)
 
             # 최적화 결과 확인
             if not isinstance(optimization_result, dict):
@@ -310,9 +277,7 @@ class AdvancedCognitiveIntegrationTest:
             }
 
             # 고급 인지 처리
-            result = await self.advanced_cognitive_system.process_advanced_cognition(
-                test_context
-            )
+            result = await self.advanced_cognitive_system.process_advanced_cognition(test_context)
 
             # 결과 검증
             if not result.success:
@@ -398,7 +363,7 @@ async def main():
     results = await test_runner.run_all_tests()
 
     # 결과 출력
-    print(f"\n=== 최종 테스트 결과 ===")
+    print("\n=== 최종 테스트 결과 ===")
     print(f"성공률: {results['success_rate']:.1f}%")
     print(f"총 소요 시간: {results['total_duration']:.3f}초")
 

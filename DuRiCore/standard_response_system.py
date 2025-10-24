@@ -3,11 +3,11 @@
 중복된 오류 처리 로직을 통합하고 판단 로고 시스템을 제공합니다.
 """
 
-from datetime import datetime
-from enum import Enum
 import json
 import logging
-from typing import Any, Dict, Optional, Union
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -203,9 +203,7 @@ class ErrorHandler:
         )
 
     @staticmethod
-    def handle_not_found(
-        item_type: str, item_id: str = None, context: str = "unknown"
-    ) -> Dict[str, Any]:
+    def handle_not_found(item_type: str, item_id: str = None, context: str = "unknown") -> Dict[str, Any]:
         """찾을 수 없음 오류"""
         message = f"{item_type}을(를) 찾을 수 없습니다."
         if item_id:
@@ -239,9 +237,7 @@ class ErrorHandler:
         )
 
     @staticmethod
-    def handle_validation_error(
-        field: str, expected: str, actual: str, context: str = "unknown"
-    ) -> Dict[str, Any]:
+    def handle_validation_error(field: str, expected: str, actual: str, context: str = "unknown") -> Dict[str, Any]:
         """검증 오류"""
         return StandardResponse.error(
             error_type="validation_error",
@@ -303,25 +299,17 @@ class StringToLogoConverter:
                 actionable_items=["상황 분석", "단계적 개선", "효과 측정"],
             )
         else:
-            return StandardResponse.feedback(
-                feedback_type="general", message=original_message, priority="low"
-            )
+            return StandardResponse.feedback(feedback_type="general", message=original_message, priority="low")
 
     @staticmethod
     def system_status_to_logo(status_message: str) -> Dict[str, Any]:
         """시스템 상태 메시지를 판단 로고로 변환"""
         if "성공" in status_message:
-            return StandardResponse.system_status(
-                status="success", performance_metrics={"success_rate": 1.0}
-            )
+            return StandardResponse.system_status(status="success", performance_metrics={"success_rate": 1.0})
         elif "오류" in status_message:
-            return StandardResponse.system_status(
-                status="error", performance_metrics={"error_rate": 1.0}
-            )
+            return StandardResponse.system_status(status="error", performance_metrics={"error_rate": 1.0})
         else:
-            return StandardResponse.system_status(
-                status="unknown", performance_metrics={"status": 0.5}
-            )
+            return StandardResponse.system_status(status="unknown", performance_metrics={"status": 0.5})
 
 
 # 사용 예시

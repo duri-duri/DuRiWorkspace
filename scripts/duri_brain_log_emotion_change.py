@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-from datetime import datetime
 import json
 import os
+from datetime import datetime
 
 BASE_DIR = "/home/duri/emotion_data"
 CUR_PATH = os.path.join(BASE_DIR, "cur.json")
@@ -29,7 +29,7 @@ def append_log(entry):
         with open(LOG_PATH, "r") as f:
             try:
                 logs = json.load(f)
-            except:
+            except:  # noqa: E722
                 logs = []
     logs.append(entry)
     with open(LOG_PATH, "w") as f:

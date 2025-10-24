@@ -53,11 +53,7 @@ class InnerThoughtAdapter:
 
     def reflect(self, ctx: TurnContext, last_assistant: Message) -> Message:
         reply = last_assistant.content
-        verdict = (
-            "OK"
-            if ("계획안" in reply or "포인트 3가지" in reply or "제안" in reply)
-            else "NEEDS_DETAIL"
-        )
+        verdict = "OK" if ("계획안" in reply or "포인트 3가지" in reply or "제안" in reply) else "NEEDS_DETAIL"
         hints = []
         if verdict != "OK":
             hints.append("다음 행동 3개 명시")
@@ -77,7 +73,6 @@ class Telemetry:
     """Insight Engine 연동용 계측 포인트 (기존 시스템 활용)"""
 
     def __init__(self):
-        from datetime import datetime
         import os
 
         # 기존 judgment_trace_store.py 패턴 활용
@@ -113,15 +108,12 @@ class Telemetry:
 
     def snapshot(self, ctx: TurnContext) -> None:
         """컨텍스트 스냅샷 저장"""
-        from datetime import datetime
         import json
+        from datetime import datetime
 
         snapshot = {
             "conv_id": ctx.conv_id,
-            "messages": [
-                {"role": m.role, "content": m.content, "meta": m.meta}
-                for m in ctx.messages
-            ],
+            "messages": [{"role": m.role, "content": m.content, "meta": m.meta} for m in ctx.messages],
             "memory": ctx.memory,
             "timestamp": datetime.now().isoformat(),
         }

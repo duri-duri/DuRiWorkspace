@@ -1,12 +1,8 @@
 # Facade to internal package path
-from DuRiCore.reasoning_engine.core.reasoning_engine import (  # noqa: F401
-    ReasoningEngine,
-)
+from DuRiCore.reasoning_engine.core.reasoning_engine import ReasoningEngine  # noqa: F401
 
 try:
-    from DuRiCore.reasoning_engine.core.decision_maker import (  # noqa: F401
-        DecisionMaker,
-    )
+    from DuRiCore.reasoning_engine.core.decision_maker import DecisionMaker  # noqa: F401
 except Exception:
     pass
 

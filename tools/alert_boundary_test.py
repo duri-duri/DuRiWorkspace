@@ -2,10 +2,6 @@
 #!/usr/bin/env python3
 # 알람 룰 바운드 테스트: 5개 알람 강제 트리거 확인
 
-from datetime import datetime
-import json
-import time
-
 
 def test_alert_boundaries():
     """5개 알람에 대해 강제 트리거 테스트"""
@@ -53,11 +49,11 @@ def test_alert_boundaries():
         # 실제 환경에서는 Prometheus API 호출
         # 여기서는 시뮬레이션
         if alert["test_value"] > 0:
-            print(f"  ✅ 알람 트리거됨")
+            print("  ✅ 알람 트리거됨")
         else:
-            print(f"  ❌ 알람 트리거 안됨")
+            print("  ❌ 알람 트리거 안됨")
 
-    print(f"\n=== 바운드 테스트 완료 ===")
+    print("\n=== 바운드 테스트 완료 ===")
     print("• 실제 환경에서 Prometheus API로 확인 권장")
     print("• 페이지/슬랙 알람 채널 연결 확인 필요")
 

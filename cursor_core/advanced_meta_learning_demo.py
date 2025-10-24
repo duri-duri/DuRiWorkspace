@@ -5,16 +5,9 @@ ChatGPT가 제안한 핵심 병목 제거 시스템의 실제 작동을 보여�
 """
 
 import random
-import time
-from typing import Any, Dict
 
 # 고급 메타-학습 시스템 임포트
-from advanced_meta_learning import (
-    AdvancedMetaLearningSystem,
-    LearningTargetType,
-    StrategyType,
-    advanced_meta_learning,
-)
+from advanced_meta_learning import LearningTargetType, StrategyType, advanced_meta_learning
 
 
 def demonstrate_chatgpt_solutions():
@@ -66,7 +59,7 @@ def demonstrate_chatgpt_solutions():
             break
 
         print(
-            f"   사이클 {i+1}: {result['strategy']} 전략, 성공: {result['success']}, 개선률: {result['improvement']:.3f}, 진행도: {result['progress']:.2%}"
+            f"   사이클 {i+1}: {result['strategy']} 전략, 성공: {result['success']}, 개선률: {result['improvement']:.3f}, 진행도: {result['progress']:.2%}"  # noqa: E501
         )
 
     print()
@@ -117,9 +110,7 @@ def demonstrate_chatgpt_solutions():
     print("🎯 목표 상태:")
     for target_name, target_info in status["targets"].items():
         achieved = "✅" if target_info["achieved"] else "⏳"
-        print(
-            f"   {achieved} {target_name}: {target_info['current']:.2f} → {target_info['target']:.2f}"
-        )
+        print(f"   {achieved} {target_name}: {target_info['current']:.2f} → {target_info['target']:.2f}")
     print()
 
     print("📈 전략 추천:")
@@ -180,12 +171,12 @@ def show_chatgpt_analysis():
     print()
     print("📌 한 문장 요약:")
     print(
-        "DuRi는 '학습 시스템은 작동하고 있지만, 학습의 방향성과 해석력, 전략 선택의 효율성은 아직 인간처럼 정제되어 있지 않다.'"
+        "DuRi는 '학습 시스템은 작동하고 있지만, 학습의 방향성과 해석력, 전략 선택의 효율성은 아직 인간처럼 정제되어 있지 않다.'"  # noqa: E501
     )
     print()
     print("✅ 가장 큰 병목은?")
     print(
-        "'DuRi가 자기 실패를 단순 '점수'로만 기록하지 말고, 그 실패의 '패턴'과 '원인'을 스스로 분류하고 전략을 조정하는 것'이 핵심입니다."
+        "'DuRi가 자기 실패를 단순 '점수'로만 기록하지 말고, 그 실패의 '패턴'과 '원인'을 스스로 분류하고 전략을 조정하는 것'이 핵심입니다."  # noqa: E501
     )
     print()
 
