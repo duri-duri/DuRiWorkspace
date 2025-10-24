@@ -16,4 +16,4 @@ jobs:
       - name: Run actionlint
         uses: rhysd/actionlint@v1.7.1
         with:
-          args: .github/workflows
+          args: .github/workflows/*.yml
