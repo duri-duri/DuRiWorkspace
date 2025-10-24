@@ -2,6 +2,7 @@ name: proof-gates
 on: [pull_request]
 jobs:
   gates:
+    if: contains(github.event.pull_request.labels.*.name, 'run-proof-gates')
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
