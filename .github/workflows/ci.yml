@@ -9,18 +9,34 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      SUBMODULES_TOKEN: ${{ secrets.SUBMODULES_TOKEN }}
     steps:
-      - name: Verify PAT presence
-        run: |
-          test -n "${{ secrets.SUBMODULES_TOKEN }}" || { echo "SUBMODULES_TOKEN is empty"; exit 1; }
-
-      - name: Checkout (with PAT & submodules)
+      - name: Checkout (no submodules)
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: false
-          token: ${{ secrets.SUBMODULES_TOKEN }}
-          submodules: true  # Non-recursive: only init top-level legacy submodules
+          submodules: false  # ✅ checkout이 submodule/post-cleanup 건드리지 않게
+
+      - name: Verify PAT presence
+        run: test -n "${SUBMODULES_TOKEN}" || { echo "SUBMODULES_TOKEN is empty"; exit 1; }
+
+      - name: PAT auth for org (HTTPS)
+        run: |
+          git config --global url."https://x-access-token:${SUBMODULES_TOKEN}@github.com/duri-duri/".insteadOf "https://github.com/duri-duri/"
+
+      - name: Init only top-level legacy submodules (non-recursive)
+        run: |
+          set -euxo pipefail
+          git submodule sync -- 'duri_*_legacy'
+          # non-recursive + depth 1 로 가볍게
+          git -c submodule.recurse=false submodule update --init --depth 1 -- 'duri_*_legacy'
+
+          # (방어적) duri_core_legacy 안의 고아 gitlink가 있어도 후속 단계에 영향 없게 캐시만 제거
+          if git -C duri_core_legacy ls-files --stage | grep -q " 160000 .* all-node-scripts$"; then
+            git -C duri_core_legacy rm -f --cached all-node-scripts || true
+          fi
 
       - name: Detect relevant changes
         id: detect
