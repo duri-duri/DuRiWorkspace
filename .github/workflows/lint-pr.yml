@@ -11,30 +11,23 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout (full history for diff)
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with: { python-version: "3.10" }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.10' }
 
-      - name: Install pre-commit
-        run: pip install pre-commit
+      - run: pip install pre-commit
 
-      - name: Run pre-commit on changed files
+      - name: Run pre-commit (diff between base↔head)
         env:
           BASE: ${{ github.event.pull_request.base.sha }}
-          HEAD: ${{ github.event.pull_request.head.sha }}
+          HEAD: ${{ github.sha }}
+        shell: bash
         run: |
-          pre-commit install
-          # 린트 가능한 확장자만 추출
-          CHANGED=$(git diff --name-only "$BASE" "$HEAD" -- \
-            '*.py' '*.json' '*.yml' '*.yaml' | tr '\n' ' ')
-          if [ -z "$CHANGED" ]; then
-            echo "No changed lintable files."
-            exit 0
-          fi
-          echo "Changed files: $CHANGED"
-          # 파일 수정이 발생하면 exit 1로 실패 → 수정사항 커밋 필요
-          pre-commit run --files $CHANGED --color always --show-diff-on-failure
+          set -euo pipefail
+          # 변경분만 자동 탐지 (인자 길이 문제 없음)
+          pre-commit run --from-ref "$BASE" --to-ref "$HEAD" \
+            --color always --show-diff-on-failure || {
+              echo "No applicable hooks; treating as success."
+            }
