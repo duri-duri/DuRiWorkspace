@@ -16,6 +16,12 @@ jobs:
           submodules: false
           persist-credentials: false  # 중요: 기본 GH 토큰 자격증명 억제
 
+      - name: Verify PAT presence
+        run: |
+          test -n "${SUBMODULES_TOKEN}" || (echo "SUBMODULES_TOKEN is empty" && exit 1)
+        env:
+          SUBMODULES_TOKEN: ${{ secrets.SUBMODULES_TOKEN }}
+
       - name: Auth for private legacy submodules (HTTPS via PAT)
         # 모든 https://github.com/... 호출을 PAT로 rewrite
         run: |
