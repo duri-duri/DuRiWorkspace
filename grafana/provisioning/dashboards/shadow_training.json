@@ -1,0 +1,58 @@
+{
+  "dashboard": {
+    "title": "Shadow Training Ground",
+    "tags": ["shadow", "training", "evolution"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Shadow Loop Status",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 0, "y": 0},
+        "targets": [
+          {
+            "expr": "probe_success{instance=~\"http://duri-core:8080/loop/status.*\"}",
+            "legendFormat": "Loop Status"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "thresholds"},
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 1, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 2,
+        "title": "Shadow Response Time (P95)",
+        "type": "graph",
+        "gridPos": {"h": 4, "w": 6, "x": 6, "y": 0},
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, probe_http_duration_seconds_bucket{instance=~\"http://duri-core:8080/loop/status.*\"})",
+            "legendFormat": "P95 Response Time"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Weakpoints Top-K",
+        "type": "text",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 4},
+        "options": {
+          "content": "Latest weakpoint report will be displayed here",
+          "mode": "markdown"
+        }
+      }
+    ],
+    "refresh": "30s",
+    "schemaVersion": 27,
+    "version": 1
+  }
+}

@@ -43,6 +43,13 @@ temp/
 .vscode/
 *.iml
 
+# === Shadow Training Ground (Local Only) ===
+# Shadow paths are symlinks to ~/DuRiShadow/* (not tracked in repo)
+/duri_core
+/duri_brain
+/duri_evolution
+/duri_control
+
 # === Data (generated) ===
 *.db
 *.sqlite*

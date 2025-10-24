@@ -47,6 +47,7 @@ scrape_configs:
           - http://duri-control:8083/health
           - http://localhost:9090/-/ready
           - http://localhost:3000/api/health
+          - http://duri-core:8080/loop/status/shadow-test  # Shadow 루프 상태 엔드포인트
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target

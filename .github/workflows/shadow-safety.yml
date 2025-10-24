@@ -1,0 +1,52 @@
+name: shadow-safety
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect shadow-sensitive changes and require approval label
+        env:
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+          BASE_REF: ${{ github.base_ref }}
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          set -euo pipefail
+
+          # 바뀐 파일 나열 (base..head)
+          git fetch origin "${BASE_REF}:${BASE_REF}" --depth=1
+          CHANGED=$(git diff --name-only "origin/${BASE_REF}...HEAD" || true)
+          echo "Changed files:"
+          echo "${CHANGED:-<none>}"
+
+          # Shadow 관련 민감 경로들
+          SENSITIVE=$(echo "$CHANGED" | grep -E \
+            '(^scripts/shadow_|/shadow_|^scripts/.+shadow|docker/docker-compose\.shadow\.override\.yml|^grafana/provisioning/dashboards/shadow_|^SHADOW_.*\.md)' \
+            || true)
+
+          if [[ -z "${SENSITIVE}" ]]; then
+            echo "No shadow-sensitive changes detected. ✅"
+            exit 0
+          fi
+
+          echo "Shadow-sensitive changes detected:"
+          echo "$SENSITIVE"
+
+          # PR 라벨 검사 (이벤트 페이로드에서 읽기)
+          REQ_LABEL="shadow-change-ok"
+          if ! jq -r '.pull_request.labels[].name' < "$GITHUB_EVENT_PATH" | grep -qx "${REQ_LABEL}"; then
+            echo "::error::Missing required label '${REQ_LABEL}' for shadow-related changes."
+            echo "Add label '${REQ_LABEL}' to proceed."
+            exit 1
+          fi
+
+          echo "Required label '${REQ_LABEL}' present. ✅"
