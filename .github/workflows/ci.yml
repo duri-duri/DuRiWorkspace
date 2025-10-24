@@ -13,20 +13,22 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          submodules: false   # 기본은 끔
+          submodules: false
+          persist-credentials: true
+
+      - name: Auth for legacy submodules (HTTPS)
+        run: |
+          git config --global http.https://github.com/.extraheader \
+            "AUTHORIZATION: basic $(printf "x-access-token:%s" "$GITHUB_TOKEN" | base64 -w0)"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Init legacy submodules only
         run: |
-          # CI에서 항상 HTTPS로 덮어쓰기
           git submodule set-url duri_core_legacy      https://github.com/duri-duri/duri_core.git
           git submodule set-url duri_brain_legacy     https://github.com/duri-duri/duri_brain.git
           git submodule set-url duri_evolution_legacy https://github.com/duri-duri/duri_evolution.git
           git submodule set-url duri_control_legacy   https://github.com/duri-duri/duri_control.git
-
-          # GITHUB_TOKEN으로 인증
-          git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
-
-          # 레거시만 init
           git submodule update --init --recursive --checkout duri_*_legacy
 
       - name: Detect relevant changes
