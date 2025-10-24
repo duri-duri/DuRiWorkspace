@@ -7,10 +7,10 @@
 
 [submodule "duri_brain"]
         path = duri_brain
-        url = https://github.com/duri-duri/duri_brain.git
+        url = git@github.com:duri-duri/duri_brain.git
 [submodule "duri_evolution"]
         path = duri_evolution
-        url = https://github.com/duri-duri/duri_evolution.git
+        url = git@github.com:duri-duri/duri_evolution.git
 [submodule "duri_core"]
         path = duri_core
-        url = https://github.com/duri-duri/duri_core.git
+        url = git@github.com:duri-duri/duri_core.git
