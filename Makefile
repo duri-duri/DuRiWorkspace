@@ -74,7 +74,7 @@ shellcheck:
 	@./scripts/shellcheck_hook.sh || true
 
 # 운영 편의 타깃 (systemd)
-.PHONY: start-shadow stop-shadow status-shadow install-systemd
+.PHONY: start-shadow stop-shadow status-shadow install-systemd shadow-start shadow-stop shadow-status shadow-run-once
 start-shadow:
 	@$(SUDO) systemctl enable --now duri-rag-eval duri-pr-gate duri-rag-eval-tuned
 
@@ -87,6 +87,57 @@ stop-shadow-user:
 
 status-shadow:
 	@$(SUDO) systemctl --no-pager --full status duri-rag-eval duri-pr-gate duri-rag-eval-tuned | sed -n '1,40p'
+
+# Shadow 훈련장 제어 (4개 명령어)
+shadow-start:
+	@echo "🚀 Shadow 훈련장 시작..."
+	@mkdir -p var/logs var/run var/reports
+	@nohup bash scripts/shadow_duri_integration_final.sh > var/logs/shadow_startup.log 2>&1 &
+	@sleep 2
+	@if [ -f var/run/shadow.pid ]; then \
+		echo "✅ Shadow 훈련장 시작됨 (PID: $$(cat var/run/shadow.pid))"; \
+	else \
+		echo "⚠️ Shadow 훈련장 시작 실패"; \
+	fi
+
+shadow-stop:
+	@echo "🛑 Shadow 훈련장 중지..."
+	@if [ -f var/run/shadow.pid ]; then \
+		PID=$$(cat var/run/shadow.pid); \
+		if ps -p $$PID > /dev/null 2>&1; then \
+			kill $$PID && echo "✅ Shadow 훈련장 중지됨 (PID: $$PID)"; \
+		else \
+			echo "⚠️ Shadow 훈련장이 실행 중이 아닙니다"; \
+		fi; \
+		rm -f var/run/shadow.pid var/run/shadow.lock; \
+	else \
+		echo "⚠️ PID 파일 없음 - 수동 종료 필요"; \
+	fi
+
+shadow-status:
+	@echo "📊 Shadow 훈련장 상태:"
+	@if [ -f var/run/shadow.pid ]; then \
+		PID=$$(cat var/run/shadow.pid); \
+		if ps -p $$PID > /dev/null 2>&1; then \
+			echo "✅ 실행 중 (PID: $$PID)"; \
+			echo "실행 시간: $$(ps -p $$PID -o etime=)"; \
+			echo "마지막 로그 (최근 5줄):"; \
+			tail -5 var/logs/shadow.log 2>/dev/null || echo "로그 없음"; \
+		else \
+			echo "❌ 실행 중이 아님 (PID 파일 존재하지만 프로세스 없음)"; \
+		fi; \
+	else \
+		echo "❌ 실행 중이 아님 (PID 파일 없음)"; \
+	fi
+	@echo ""
+	@echo "📁 리포트 파일:"
+	@ls -lht var/reports/*.md 2>/dev/null | head -5 || echo "리포트 없음"
+
+shadow-run-once:
+	@echo "🔄 Shadow 훈련장 1회 실행..."
+	@mkdir -p var/logs var/reports
+	@bash -c 'source scripts/lib/submodule_sync.sh && sync_all_submodules'
+	@bash scripts/shadow_duri_integration_final.sh || echo "⚠️ 1회 실행 완료 (오류 포함)"
 
 cleanup-docker:
 	@echo "🧹 도커 네트워크 잔류 방지"

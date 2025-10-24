@@ -5,8 +5,8 @@
 set -euo pipefail
 
 REPO_NAME="${1:-duri_core}"   # duri_core | duri_brain | duri_evolution | duri_control
-SRC_DIR="${REPO_NAME}_ssh"
-DST_DIR="${REPO_NAME}_legacy"
+SRC_DIR="$HOME/DuRiShadow/$REPO_NAME"  # Shadow SSH 경로
+DST_DIR="${REPO_NAME}_legacy"           # Legacy HTTPS 경로
 MAIN_BRANCH="main"
 
 REQUIRE_TESTS=${REQUIRE_TESTS:-1}
@@ -14,11 +14,16 @@ REQUIRE_LINT=${REQUIRE_LINT:-0}
 DRY_RUN=${DRY_RUN:-0}
 
 timestamp="$(date +%Y%m%d-%H%M%S)"
-tag="shadow-${timestamp}"
-pr_branch="pr/${tag}-${REPO_NAME}"
+tag="shadow-${timestamp}-${REPO_NAME}"
+pr_branch="pr/${tag}"
 
-[[ -d "$SRC_DIR/.git" ]] || { echo "missing $SRC_DIR"; exit 1; }
-[[ -d "$DST_DIR/.git" ]] || { echo "missing $DST_DIR"; exit 1; }
+[[ -d "$SRC_DIR/.git" ]] || { echo "❌ missing $SRC_DIR"; exit 1; }
+[[ -d "$DST_DIR/.git" ]] || { echo "❌ missing $DST_DIR"; exit 1; }
+
+echo "🚀 Promotion: $SRC_DIR → $DST_DIR"
+echo "   Tag: $tag"
+echo "   Branch: $pr_branch"
+echo "   Dry Run: $DRY_RUN"
 
 # (선택) shadow 브랜치명 정책 가드
 git -C "$SRC_DIR" rev-parse --abbrev-ref HEAD >/dev/null

@@ -1,0 +1,31 @@
+# Shadow 개발 모드 override 파일
+# 사용법: docker compose -f docker-compose.yml -f docker/docker-compose.shadow.override.yml up -d --build
+
+services:
+  duri-core:
+    volumes:
+      - /home/duri/DuRiShadow/duri_core:/app/duri_core:rw
+      - /home/duri/DuRiShadow/duri_common:/app/duri_common:rw
+    environment:
+      - SHADOW_MODE=1
+
+  duri-brain:
+    volumes:
+      - /home/duri/DuRiShadow/duri_brain:/app/duri_brain:rw
+      - /home/duri/DuRiShadow/duri_common:/app/duri_common:rw
+    environment:
+      - SHADOW_MODE=1
+
+  duri-evolution:
+    volumes:
+      - /home/duri/DuRiShadow/duri_evolution:/app/duri_evolution:rw
+      - /home/duri/DuRiShadow/duri_common:/app/duri_common:rw
+    environment:
+      - SHADOW_MODE=1
+
+  duri-control:
+    volumes:
+      - /home/duri/DuRiShadow/duri_control:/app/duri_control:rw
+      - /home/duri/DuRiShadow/duri_common:/app/duri_common:rw
+    environment:
+      - SHADOW_MODE=1
