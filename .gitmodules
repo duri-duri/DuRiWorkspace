@@ -1,3 +1,6 @@
+[submodule "duri_all_scripts"]
+  path = duri_all_scripts
+  url  = git@github.com:duri-duri/duri_all_scripts.git
 [submodule "duri_core_legacy"]
   path = duri_core_legacy
   url  = https://github.com/duri-duri/duri_core.git
