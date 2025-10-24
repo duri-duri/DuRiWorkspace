@@ -48,6 +48,8 @@ jobs:
           git submodule set-url duri_control_legacy   https://github.com/duri-duri/duri_control.git
           git submodule sync --recursive
           git submodule update --init --recursive --checkout duri_*_legacy
+        env:
+          SUBMODULES_TOKEN: ${{ secrets.SUBMODULES_TOKEN }}
 
       - name: Detect relevant changes
         id: detect
