@@ -1,6 +1,3 @@
-[submodule "duri_all_scripts"]
-  path = duri_all_scripts
-  url  = git@github.com:duri-duri/duri_all_scripts.git
 [submodule "duri_core_legacy"]
   path = duri_core_legacy
 	url = https://github.com/duri-duri/duri_core.git
@@ -13,16 +10,3 @@
 [submodule "duri_control_legacy"]
   path = duri_control_legacy
 	url = https://github.com/duri-duri/duri_control.git
-
-[submodule "duri_core_ssh"]
-	path = duri_core_ssh
-	url = git@github.com:duri-duri/duri_core.git
-[submodule "duri_brain_ssh"]
-	path = duri_brain_ssh
-	url = git@github.com:duri-duri/duri_brain.git
-[submodule "duri_evolution_ssh"]
-	path = duri_evolution_ssh
-	url = git@github.com:duri-duri/duri_evolution.git
-[submodule "duri_control_ssh"]
-	path = duri_control_ssh
-	url = git@github.com:duri-duri/duri_control.git
