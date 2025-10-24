@@ -23,9 +23,9 @@ jobs:
           SUBMODULES_TOKEN: ${{ secrets.SUBMODULES_TOKEN }}
 
       - name: Auth for private legacy submodules (HTTPS via PAT)
-        # 모든 https://github.com/... 호출을 PAT로 rewrite
+        # 조직 경로만 PAT로 rewrite (더 안전)
         run: |
-          git config --global url."https://x-access-token:${SUBMODULES_TOKEN}@github.com/".insteadOf "https://github.com/"
+          git config --global url."https://x-access-token:${SUBMODULES_TOKEN}@github.com/duri-duri/".insteadOf "https://github.com/duri-duri/"
         env:
           SUBMODULES_TOKEN: ${{ secrets.SUBMODULES_TOKEN }}
 
