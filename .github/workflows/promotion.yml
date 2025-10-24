@@ -1,0 +1,30 @@
+name: Promote Shadow to Legacy
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 18 * * *"  # 매일 18:00 UTC (다음날 03:00 KST)
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0, submodules: false }
+
+      - name: Init submodules (read-only)
+        run: |
+          git submodule update --init --checkout duri_*_legacy duri_*_ssh
+
+      - name: Dry-run (review first)
+        run: |
+          REQUIRE_TESTS=1 DRY_RUN=1 bash scripts/promote_shadow_to_legacy.sh duri_core
+
+      - name: Execute (manual only)
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        run: |
+          REQUIRE_TESTS=1 DRY_RUN=0 bash scripts/promote_shadow_to_legacy.sh duri_core
