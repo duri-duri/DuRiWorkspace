@@ -23,6 +23,9 @@ jobs:
           git submodule set-url duri_evolution_legacy https://github.com/duri-duri/duri_evolution.git
           git submodule set-url duri_control_legacy   https://github.com/duri-duri/duri_control.git
 
+          # GITHUB_TOKEN으로 인증
+          git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
+
           # 레거시만 init
           git submodule update --init --recursive --checkout duri_*_legacy
 
