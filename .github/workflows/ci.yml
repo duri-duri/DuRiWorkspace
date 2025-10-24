@@ -3,15 +3,22 @@ name: DuRi Core CI Pipeline
 on:
   push:
     branches: [ main, develop ]
+    paths:
+      - "DuRiCore/**"
+      - "src/**"
+      - "tests/**"
+      - "docker/**"
+      - "scripts/**"
+      - "requirements*.txt"
   pull_request:
     branches: [ main ]
     paths:
-      - 'DuRiCore/**'
-      - 'tests/**'
-      - 'docker/**'
-      - 'scripts/**'
-      - 'src/**'
-      - 'requirements*.txt'
+      - "DuRiCore/**"
+      - "src/**"
+      - "tests/**"
+      - "docker/**"
+      - "scripts/**"
+      - "requirements*.txt"
 
 jobs:
   test:
