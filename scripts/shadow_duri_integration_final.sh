@@ -6,6 +6,22 @@ cd /home/duri/DuRiWorkspace
 # Shadow 훈련장 시작 - 안전장치 및 초기화
 # ==========================================
 
+# ==== SAFEGUARD: never run from CI or non-interactive unless explicitly allowed ====
+if [[ -n "${CI:-}" || -n "${GITHUB_ACTIONS:-}" ]]; then
+  echo "[SAFEGUARD] CI 환경에서 shadow 스크립트 실행 차단"
+  exit 0
+fi
+if [[ ! -t 0 && "${ALLOW_SHADOW_NONINTERACTIVE:-0}" != "1" ]]; then
+  echo "[SAFEGUARD] 비대화형 실행 차단 (ALLOW_SHADOW_NONINTERACTIVE=1 로 해제 가능)"
+  exit 0
+fi
+# 선택: 승인 플래그가 없는 경우 차단
+APPROVAL_FLAG=".shadow/ALLOW_RUN"
+if [[ ! -f "$APPROVAL_FLAG" ]]; then
+  echo "[SAFEGUARD] 승인 플래그($APPROVAL_FLAG) 없음 → 실행 차단"
+  exit 0
+fi
+
 # 서비스 엔드포인트 상수 정의 (config/common_app.json 기준)
 DURI_CORE_URL="http://localhost:8080"
 DURI_BRAIN_URL="http://localhost:8081"
@@ -21,6 +37,20 @@ HEALTH_ENDPOINT="/health"
 mkdir -p var/run
 LOCK_FILE=var/run/shadow.lock
 PID_FILE=var/run/shadow.pid
+
+# ===== SAFEGUARD: never run from CI or non-interactive unless explicitly allowed =====
+if [[ -n "${CI:-}" || -n "${GITHUB_ACTIONS:-}" ]]; then
+  echo "[SAFEGUARD] CI 환경에서 shadow 스크립트 실행 차단"; exit 0
+fi
+if [[ ! -t 0 && "${ALLOW_SHADOW_NONINTERACTIVE:-0}" != "1" ]]; then
+  echo "[SAFEGUARD] 비대화형 실행 차단 (ALLOW_SHADOW_NONINTERACTIVE=1 로 해제 가능)"; exit 0
+fi
+APPROVAL_FLAG=".shadow/ALLOW_RUN"
+if [[ ! -f "$APPROVAL_FLAG" ]]; then
+  echo "[SAFEGUARD] 승인 플래그($APPROVAL_FLAG) 없음 → 실행 차단"; exit 0
+fi
+# ===== /SAFEGUARD ================================================================
+
 
 exec 9>"$LOCK_FILE"
 if ! flock -n 9; then

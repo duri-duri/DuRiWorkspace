@@ -1,5 +1,8 @@
 # Shadow 개발 모드 override 파일
-# 사용법: docker compose -f docker-compose.yml -f docker/docker-compose.shadow.override.yml up -d --build
+# 사용법: docker compose -f docker-compose.yml -f docker/docker-compose.shadow.override.yml --profile shadow up -d --build
+
+name: duriworkspace_shadow
+profiles: [shadow]
 
 services:
   duri-core:

@@ -29,3 +29,13 @@ repos:
         entry: bash -c 'git diff --cached .gitmodules 2>/dev/null | grep -E "^\+(url|path).*=.*duri_(core|brain|evolution|control)[^_]" && echo "❌ Do not add shadow submodules to .gitmodules (use *_legacy only)" && exit 1 || exit 0'
         language: system
         pass_filenames: false
+      - id: deny-shadow-symlink-change
+        name: Deny modifying top-level shadow symlinks
+        entry: bash -c 'git diff --name-status --cached | grep -E "^(A|M|R).*(^|/)(duri_core|duri_brain|duri_evolution|duri_control)$" && { echo "❌ Do not modify shadow symlinks directly."; exit 1; } || true'
+        language: system
+        pass_filenames: false
+      - id: deny-prod-compose-change
+        name: Deny editing prod compose without approval
+        entry: bash -c '[ -z "$(git diff --name-only --cached | grep -E "^docker-compose\.yml$")" ] || { echo "⚠️ Editing docker-compose.yml requires careful review."; exit 0; }'
+        language: system
+        pass_filenames: false
