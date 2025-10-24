@@ -29,6 +29,17 @@ jobs:
         env:
           SUBMODULES_TOKEN: ${{ secrets.SUBMODULES_TOKEN }}
 
+      - name: Verify PAT can read org repos
+        run: |
+          set -e
+          git ls-remote https://github.com/duri-duri/duri_core.git >/dev/null
+          git ls-remote https://github.com/duri-duri/duri_brain.git >/dev/null
+          git ls-remote https://github.com/duri-duri/duri_evolution.git >/dev/null
+          git ls-remote https://github.com/duri-duri/duri_control.git >/dev/null
+          echo "✅ PAT can read all org repos"
+        env:
+          SUBMODULES_TOKEN: ${{ secrets.SUBMODULES_TOKEN }}
+
       - name: Init legacy submodules only
         run: |
           git submodule set-url duri_core_legacy      https://github.com/duri-duri/duri_core.git
