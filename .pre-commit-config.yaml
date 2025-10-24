@@ -15,3 +15,12 @@ repos:
       - id: check-toml
       - id: end-of-file-fixer
       - id: trailing-whitespace
+
+  # Shadow 경로 커밋 금지
+  - repo: local
+    hooks:
+      - id: deny-shadow-paths
+        name: Deny shadow tracked paths
+        entry: bash -c 'git diff --cached --name-only | grep -E "^duri_(core|brain|evolution|control)(/|$)" && echo "❌ Do not commit shadow paths (duri_core, duri_brain, duri_evolution, duri_control)" && exit 1 || exit 0'
+        language: system
+        pass_filenames: false
