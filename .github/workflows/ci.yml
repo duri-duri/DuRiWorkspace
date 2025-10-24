@@ -9,6 +9,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      SUBMODULES_TOKEN: ${{ secrets.SUBMODULES_TOKEN }}   # 전 스텝에 주입
     steps:
       - uses: actions/checkout@v4
         with:
@@ -19,15 +21,11 @@ jobs:
       - name: Verify PAT presence
         run: |
           test -n "${SUBMODULES_TOKEN}" || (echo "SUBMODULES_TOKEN is empty" && exit 1)
-        env:
-          SUBMODULES_TOKEN: ${{ secrets.SUBMODULES_TOKEN }}
 
       - name: Auth for private legacy submodules (HTTPS via PAT)
         # 조직 경로만 PAT로 rewrite (더 안전)
         run: |
           git config --global url."https://x-access-token:${SUBMODULES_TOKEN}@github.com/duri-duri/".insteadOf "https://github.com/duri-duri/"
-        env:
-          SUBMODULES_TOKEN: ${{ secrets.SUBMODULES_TOKEN }}
 
       - name: Verify PAT can read org repos
         run: |
@@ -37,8 +35,6 @@ jobs:
           git ls-remote https://github.com/duri-duri/duri_evolution.git >/dev/null
           git ls-remote https://github.com/duri-duri/duri_control.git >/dev/null
           echo "✅ PAT can read all org repos"
-        env:
-          SUBMODULES_TOKEN: ${{ secrets.SUBMODULES_TOKEN }}
 
       - name: Init legacy submodules only
         run: |
@@ -48,8 +44,6 @@ jobs:
           git submodule set-url duri_control_legacy   https://github.com/duri-duri/duri_control.git
           git submodule sync --recursive
           git submodule update --init --recursive --checkout duri_*_legacy
-        env:
-          SUBMODULES_TOKEN: ${{ secrets.SUBMODULES_TOKEN }}
 
       - name: Detect relevant changes
         id: detect
