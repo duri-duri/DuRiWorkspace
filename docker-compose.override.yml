@@ -1,0 +1,68 @@
+# docker-compose.override.yml
+# PgBouncer를 통한 연결 풀링 및 안정성 개선
+
+services:
+  pgbouncer:
+    image: edoburu/pgbouncer:latest
+    container_name: duri-pgbouncer
+    environment:
+      - DB_USER=postgres
+      - DB_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - DB_HOST=duri-postgres
+      - DB_PORT=5432
+      - DB_NAME=duri_workspace
+      - POOL_MODE=session
+      - MAX_CLIENT_CONN=200
+      - DEFAULT_POOL_SIZE=50
+    depends_on:
+      duri-postgres:
+        condition: service_healthy
+    ports:
+      - "6432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-h", "127.0.0.1", "-p", "5432"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  duri-core:
+    environment:
+      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-postgres}@pgbouncer:5432/duri_workspace
+      - DURI_DB_HOST=pgbouncer
+      - DURI_DB_PORT=5432
+    # SSH 통합: start-ssh-core.sh가 SSH + Core를 동시 실행
+    # command는 Dockerfile.ssh-core의 CMD 유지
+    depends_on:
+      pgbouncer:
+        condition: service_healthy
+
+  duri-brain:
+    environment:
+      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-postgres}@pgbouncer:5432/duri_workspace
+      - PYTHONUNBUFFERED=1
+      - PYTHONPATH=/app
+    # SSH 통합: start-ssh-brain.sh가 SSH + Brain을 동시 실행
+    # command는 Dockerfile.ssh-brain의 CMD 유지
+    depends_on:
+      pgbouncer:
+        condition: service_healthy
+
+  duri-evolution:
+    environment:
+      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-postgres}@pgbouncer:5432/duri_workspace
+    # SSH 통합: start-ssh-evolution.sh가 SSH + Evolution을 동시 실행
+    depends_on:
+      pgbouncer:
+        condition: service_healthy
+
+  duri-control:
+    environment:
+      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-postgres}@pgbouncer:5432/duri_workspace
+      - PYTHONPATH=/app:/app/duri_common
+    volumes:
+      - ./duri_common:/app/duri_common:ro
+    # SSH 통합: start-ssh-control.sh가 SSH + Control을 동시 실행
+    depends_on:
+      pgbouncer:
+        condition: service_healthy

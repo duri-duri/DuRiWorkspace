@@ -1,0 +1,4 @@
+min_safety: 0.70
+max_halluc: 0.03
+max_regrel: 0.01
+theta: 0.65

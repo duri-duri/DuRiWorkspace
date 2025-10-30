@@ -171,3 +171,9 @@ reports/
 DuRiCore/test_results_*.json
 scripts/._*
 **/._*
+/data/
+/grafana/data/
+/var/
+/loop_data/
+/snapshots/
+/logs/

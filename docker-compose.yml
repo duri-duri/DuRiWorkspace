@@ -31,22 +31,25 @@ services:
       timeout: 5s
       retries: 5
 
-  # DuRi Core 서비스
+  # DuRi Core 서비스 (SSH 통합)
   duri-core:
     build:
       context: .
-      dockerfile: docker/Dockerfile.core
+      dockerfile: docker/Dockerfile.ssh-core
     container_name: duri-core
     environment:
       - DURI_MODE=core
       - PYTHONPATH=/app:/app/duri_common
-      - DATABASE_URL=sqlite:////tmp/duri_core.db
+      - DATABASE_URL=postgresql://postgres:postgres@duri-postgres:5432/duri_workspace
       - REDIS_URL=redis://duri-redis:6379
       # 포트/어댑터 설정
       - REFLEXION_BACKEND=http
       - BRAIN_BASE_URL=http://duri-brain:8081
+      - ROOT_PASSWORD=duri123
     ports:
       - "8080:8080"
+      - "2220:22"  # SSH 포트
+    command: ["/start-ssh-node.sh", "python", "duri_core/run.py"]
     depends_on:
       duri-postgres:
         condition: service_healthy
@@ -72,19 +75,23 @@ services:
         max-size: "10m"
         max-file: "5"
 
-  # DuRi Brain 서비스
+  # DuRi Brain 서비스 (SSH 통합)
   duri-brain:
     build:
       context: .
-      dockerfile: docker/Dockerfile.brain
+      dockerfile: docker/Dockerfile.ssh-brain
     container_name: duri-brain
     environment:
       - DURI_MODE=brain
       - PYTHONPATH=/app:/app/duri_common
       - DATABASE_URL=postgresql://postgres:postgres@duri-postgres:5432/duri_workspace
       - REDIS_URL=redis://duri-redis:6379
+      - ROOT_PASSWORD=duri123
+      - PORT=8081
     ports:
       - "8081:8081"
+      - "2221:22"  # SSH 포트
+    command: ["/start-ssh-node.sh", "python", "run.py"]
     depends_on:
       duri-postgres:
         condition: service_healthy
@@ -97,19 +104,22 @@ services:
       timeout: 3s
       retries: 3
 
-  # DuRi Evolution 서비스
+  # DuRi Evolution 서비스 (SSH 통합)
   duri-evolution:
     build:
       context: .
-      dockerfile: docker/Dockerfile.evolution
+      dockerfile: docker/Dockerfile.ssh-evolution
     container_name: duri-evolution
     environment:
       - DURI_MODE=evolution
       - PYTHONPATH=/app:/app/duri_common
       - DATABASE_URL=postgresql://postgres:postgres@duri-postgres:5432/duri_workspace
       - REDIS_URL=redis://duri-redis:6379
+      - ROOT_PASSWORD=duri123
     ports:
       - "8082:8082"
+      - "2222:22"  # SSH 포트
+    command: ["/start-ssh-node.sh", "python", "duri_evolution/run.py"]
     depends_on:
       duri-postgres:
         condition: service_healthy
@@ -122,19 +132,22 @@ services:
       timeout: 3s
       retries: 3
 
-  # DuRi Control 서비스
+  # DuRi Control 서비스 (SSH 통합)
   duri-control:
     build:
       context: .
-      dockerfile: docker/Dockerfile.control
+      dockerfile: docker/Dockerfile.ssh-control
     container_name: duri-control
     environment:
       - DURI_MODE=control
       - PYTHONPATH=/app:/app/duri_common
       - DATABASE_URL=postgresql://postgres:postgres@duri-postgres:5432/duri_workspace
       - REDIS_URL=redis://duri-redis:6379
+      - ROOT_PASSWORD=duri123
     ports:
       - "8083:8083"
+      - "2223:22"  # SSH 포트
+    command: ["/start-ssh-node.sh", "python", "duri_control/run.py"]
     depends_on:
       duri-postgres:
         condition: service_healthy
