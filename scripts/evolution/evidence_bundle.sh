@@ -17,3 +17,6 @@ tail -n 50 var/events/evolution.jsonl > "$ev_dir/evolution.EV-${ts}.jsonl"
 [ -f var/metrics/ab_eval.prom ] && cp var/metrics/ab_eval.prom "$ev_dir/ab_eval.prom" || true
 ( cd "$ev_dir" && find . -maxdepth 1 -type f -printf "%P\n" | sort | xargs -r sha256sum > SHA256SUMS )
 echo "[OK] bundle: $ev_dir"
+
+# Update latest pointer
+ln -sfn "$(realpath --relative-to=var/evolution "$ev_dir")" var/evolution/LATEST || true

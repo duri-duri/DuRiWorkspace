@@ -25,28 +25,22 @@ def heartbeat(ts):
 
 
 def _read_ab_p_from_prom(path="var/metrics/ab_eval.prom"):
-    """Read p-value from a Prometheus textfile if present.
-    Returns float or None when unavailable/invalid.
-    """
+    """Read p-value from Prom textfile; tolerate labels/timestamps; pick first numeric <=1e3."""
     try:
         with open(path, "r") as f:
             for line in f:
-                line = line.strip()
                 if not line or line.startswith("#"):
                     continue
                 if line.startswith("duri_ab_p_value"):
-                    try:
-                        # format can be: duri_ab_p_value 0.12 1690000000000
-                        parts = line.split()
-                        # value is typically the second token; handle labeled form
-                        if len(parts) >= 2:
-                            # strip optional {..}
-                            if parts[0].startswith("duri_ab_p_value{"):
-                                # labeled, value should be at index 1
-                                return float(parts[1])
-                            return float(parts[1])
-                    except Exception:
-                        return None
+                    # remove labels braces to split tokens uniformly
+                    tokens = line.replace("{", " ").replace("}", " ").split()
+                    for tk in tokens:
+                        try:
+                            v = float(tk)
+                            if 0.0 <= v <= 1e3:
+                                return v
+                        except Exception:
+                            continue
     except FileNotFoundError:
         return None
     except Exception:
