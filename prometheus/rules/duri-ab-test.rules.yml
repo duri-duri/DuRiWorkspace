@@ -1,0 +1,17 @@
+groups:
+- name: duri-ab-test.rules
+  rules:
+  - alert: ABTestPValueSignificant
+    expr: duri_ab_p_value < 0.05
+    for: 10m
+    labels: {severity: info}
+    annotations:
+      summary: "AB test indicates significance (p < 0.05)"
+      description: "p-value is {{ $value }} for at least 10m"
+  - alert: ABTestPValueEdgeCase
+    expr: duri_ab_p_value == 0 or duri_ab_p_value == 1
+    for: 5m
+    labels: {severity: warning}
+    annotations:
+      summary: "AB p-value at boundary (0 or 1)"
+      description: "Check pipeline (nan/overflow/underflow)."
