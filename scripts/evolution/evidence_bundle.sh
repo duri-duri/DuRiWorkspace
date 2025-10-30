@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
-ts="$(date -u +%Y%m%d-%H%M%S)"; ev_dir="var/evolution/EV-${ts}"; mkdir -p "$ev_dir"
+ts="$(date -u +%Y%m%d-%H%M%S)"
+# add 2-digit random suffix to avoid ID collisions within the same second
+rnd=$(awk 'BEGIN{srand(); printf "%02d", int(rand()*100)}')
+ev_dir="var/evolution/EV-${ts}-${rnd}"
+mkdir -p "$ev_dir"
 [ -f var/ANCHOR/SHA256SUMS ] && cp -a var/ANCHOR/SHA256SUMS "$ev_dir/ANCHOR.SHA256SUMS" || true
 [ -f var/STATE.SHA256SUMS.snapshot ] && cp -a var/STATE.SHA256SUMS.snapshot "$ev_dir/STATE.SHA256SUMS.snapshot" || true
 mkdir -p var/events; [ -f var/events/evolution.jsonl ] || touch var/events/evolution.jsonl
