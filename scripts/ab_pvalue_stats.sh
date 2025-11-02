@@ -4,6 +4,29 @@ set -euo pipefail
 
 # 집계창 파라미터 파싱 (A) p-value 분산 '진짜' 보장
 WINDOW="${1:-24 hours}"
+TEXTFILE_OUT=""
+
+# 옵션 파싱
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --window)
+            WINDOW="$2"
+            shift 2
+            ;;
+        --textfile)
+            TEXTFILE_OUT="$2"
+            shift 2
+            ;;
+        *)
+            # 위치 인자로 처리 (하위 호환)
+            if [[ -z "$WINDOW" || "$WINDOW" == "24 hours" ]]; then
+                WINDOW="$1"
+            fi
+            shift
+            ;;
+    esac
+done
+
 echo "[INFO] 집계창: $WINDOW"
 
 # C) AB 통계 "유효 샘플만" 집계: n≥1만 포함, 라벨 없는 라인 제외
@@ -67,22 +90,38 @@ VALID_VALS=("${VALS_CLEAN[@]}")
 
 python3 -c '
 import sys, math
-vals=[]
-for arg in sys.argv[1:]:
-    try:
-        v=float(arg)
-        if math.isfinite(v) and v>=0:
-            vals.append(v)
-    except (ValueError, OverflowError):
+TEXTFILE_OUT = None
+vals = []
+
+# argv에서 --textfile 옵션 찾기
+i = 0
+while i < len(sys.argv):
+    if sys.argv[i] == "--textfile" and i + 1 < len(sys.argv):
+        TEXTFILE_OUT = sys.argv[i + 1]
+        i += 2
         continue
-n=len(vals)
-if n==0:
+    elif sys.argv[i].startswith("--"):
+        i += 1
+        continue
+    else:
+        try:
+            v = float(sys.argv[i])
+            if math.isfinite(v) and v >= 0:
+                vals.append(v)
+        except (ValueError, OverflowError):
+            pass
+    i += 1
+
+n = len(vals)
+if n == 0:
     print("샘플 수: 0")
     sys.exit(0)
-avg=sum(vals)/n
+
+avg = sum(vals) / n
 mn, mx = min(vals), max(vals)
-var=sum((x-avg)**2 for x in vals)/n
-sd=math.sqrt(var) if var>0 else 0.0
+var = sum((x - avg) ** 2 for x in vals) / n
+sd = math.sqrt(var) if var > 0 else 0.0
+
 print(f"샘플 수: {n}")
 print(f"평균 p-value: {avg:.9f}")
 print(f"최소: {mn:.9f}")
@@ -97,7 +136,18 @@ if sd == 0.0:
     with open("var/metrics/ab_eval.prom", "a") as f:
         f.write("ab_eval_warn_sigma_zero 1\n")
     print("[WARN] 표준편차 0 (분산 붕괴)")
-    exit(0)
+    sys.exit(0)
 
-print("✅ 통계적으로 유의미 (p < 0.05)" if avg<0.05 else "⚠️ 통계적으로 유의미하지 않음 (p >= 0.05)")
-' "${VALID_VALS[@]}"
+print("✅ 통계적으로 유의미 (p < 0.05)" if avg < 0.05 else "⚠️ 통계적으로 유의미하지 않음 (p >= 0.05)")
+
+# --textfile 옵션이 있으면 Prometheus 형식으로 출력
+if TEXTFILE_OUT:
+    import os
+    os.makedirs(os.path.dirname(TEXTFILE_OUT) if os.path.dirname(TEXTFILE_OUT) else ".", exist_ok=True)
+    with open(TEXTFILE_OUT, "w") as f:
+        f.write("# HELP p_value p-value from AB test\n")
+        f.write("# TYPE p_value gauge\n")
+        for v in vals[:500]:  # 최대 500개
+            f.write(f"p_value {v}\n")
+    print(f"[OK] Prometheus 메트릭 기록: {TEXTFILE_OUT}")
+' --textfile "$TEXTFILE_OUT" "${VALID_VALS[@]}"

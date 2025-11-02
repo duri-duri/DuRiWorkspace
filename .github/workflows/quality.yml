@@ -30,6 +30,9 @@ jobs:
       - name: AB Round/Seed Policy
         run: bash tests/test_ab_round_seed.sh
       
+      - name: p-sigma Export Test
+        run: bash tests/test_p_sigma_export.sh
+      
       - name: AB Quality Gate
         run: |
           bash scripts/gate_check.sh ab-quality-gate || exit 1

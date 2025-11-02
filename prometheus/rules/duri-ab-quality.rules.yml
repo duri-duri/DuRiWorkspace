@@ -41,4 +41,51 @@ groups:
     annotations:
       summary: "Effective EV below target (<2 in 2h)"
       description: "Only {{ $value }} effective EV(s) with n>=1 samples in last 2h (SYN excluded). Check sample collection."
+  
+  # Δ2: NaN/0 샘플 경보 (2h 창)
+  - alert: ABPSigmaNoSamples2H
+    expr: |
+      (
+        duri_p_samples{window="2h"} == 0
+      ) or
+      (
+        duri_p_sigma{window="2h"} != duri_p_sigma{window="2h"}
+      )
+    for: 30m
+    labels:
+      severity: warning
+      cause: no-samples-or-nan
+      subsystem: ab-p-sigma
+    annotations:
+      summary: "p-sigma 2h window: no samples or NaN for > 30m"
+      description: "Window 2h: samples={{ $value }} or sigma=NaN. Check p_sigma_export.py execution and p_values_2h.prom generation."
+  
+  # Δ2: NaN/0 샘플 경보 (24h 창)
+  - alert: ABPSigmaNoSamples24H
+    expr: |
+      (
+        duri_p_samples{window="24h"} == 0
+      ) or
+      (
+        duri_p_sigma{window="24h"} != duri_p_sigma{window="24h"}
+      )
+    for: 30m
+    labels:
+      severity: warning
+      cause: no-samples-or-nan
+      subsystem: ab-p-sigma
+    annotations:
+      summary: "p-sigma 24h window: no samples or NaN for > 30m"
+      description: "Window 24h: samples={{ $value }} or sigma=NaN. Check p_sigma_export.py execution and p_values_24h.prom generation."
+  
+  # KS-Uniform 품질검정 알람
+  - alert: ABPValuesUniformityLost
+    expr: duri_p_uniform_ks_p{window="24h"} < 0.05
+    for: 2h
+    labels:
+      severity: warning
+      subsystem: ab-p-quality
+    annotations:
+      summary: "p-value 분포가 Uniform에서 이탈(24h)"
+      description: "KS-test p-value = {{ $value }} < 0.05. p-value 분포가 균등분포에서 이탈. 실험 자체 변동 부족 가능성."
 
