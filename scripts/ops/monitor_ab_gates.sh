@@ -181,13 +181,23 @@ write_state() {
     local yellow_count="$2"
     local red_count="$3"
     local judgment="$4"
+    
+    # jq 에러 처리 강화
+    if ! command -v jq >/dev/null 2>&1; then
+        echo "[WARN] jq 없음, 상태 파일 기록 스킵" >&2
+        return 0
+    fi
+    
     jq -n \
         --arg gc "$green_count" \
         --arg yc "$yellow_count" \
         --arg rc "$red_count" \
         --arg j "$judgment" \
         '{green_count: ($gc | tonumber), yellow_count: ($yc | tonumber), red_count: ($rc | tonumber), last_judgment: $j, timestamp: now}' \
-        > "$STATE_FILE"
+        > "$STATE_FILE" 2>/dev/null || {
+        echo "[WARN] 상태 파일 기록 실패, 계속 진행" >&2
+        return 0
+    }
 }
 
 # 5) 메인 루프
