@@ -327,21 +327,34 @@ eval-window-off:
 	sed -i 's/DURI_FORCE_MIN_SAMPLES=5/DURI_FORCE_MIN_SAMPLES=1/g' $$f; \
 	docker compose up -d --force-recreate duri-core duri-brain duri-evolution
 
-# A. promtool 검증 명령 안정화 (단일 셸·단일 도커·명시적 종료)
-.PHONY: promtool-check
+# Prometheus 도구 변수
+PROM_IMG ?= prom/prometheus:v2.54.1
+PROM_DIR ?= $(PWD)/prometheus
+PROM_LOG ?= .reports/obs/promtool_last.log
+
+# A. promtool 검증 명령 안정화 (단일 셸·단일 도커·명시적 종료 + 파일별 판정)
+.PHONY: promtool-check promtool-find-failing
 promtool-check:
+	@mkdir -p $$(dirname "$(PROM_LOG)")
+	@echo "[promtool] full run -> $(PROM_LOG)"
 	@docker run --rm --entrypoint /bin/sh \
 	  -v "$(PROM_DIR):/etc/prometheus:ro" $(PROM_IMG) -lc '\
 	    set -eu; \
 	    promtool check config /etc/prometheus/prometheus.yml.minimal; ec1=$$?; \
-	    set +e; promtool check rules /etc/prometheus/rules/*.yml 2>&1; ec2=$$?; set -e; \
-	    echo "exit=cfg($$ec1), rules($$ec2)"; \
-	    if [ $$ec1 -eq 0 ] && [ $$ec2 -eq 0 ]; then \
-	      echo "[OK] promtool-check passed"; exit 0; \
-	    else \
-	      echo "[FAIL] promtool-check failed"; exit 1; \
-	    fi \
-	  '
+	    : > /tmp/prom_all.log; \
+	    fail=0; \
+	    for f in /etc/prometheus/rules/*.yml; do \
+	      echo "=== CHECK $$f ===" >>/tmp/prom_all.log; \
+	      promtool check rules "$$f" >>/tmp/prom_all.log 2>&1 || { echo "FAIL -> $$f"; fail=1; }; \
+	    done; \
+	    echo "EXIT-CFG=$$ec1 EXIT-RULES=$$fail"; \
+	    exit $$([ $$ec1 -eq 0 ] && echo $$fail || echo 1)' \
+	| tee "$(PROM_LOG)"; \
+	test $$? -eq 0 && echo "[OK] promtool-check passed" || { echo "[FAIL] promtool-check failed (see $(PROM_LOG))"; exit 1; }
+
+promtool-find-failing:
+	@docker run --rm --entrypoint /bin/sh -v "$(PROM_DIR):/etc/prometheus:ro" $(PROM_IMG) -lc '\
+	  set -eu; fail=0; for f in /etc/prometheus/rules/*.yml; do promtool check rules "$$f" >/dev/null 2>&1 || { echo "FAIL -> $$f"; fail=1; }; done; exit $$fail'
 
 .PHONY: promtool-check-full
 promtool-check-full:
