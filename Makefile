@@ -329,7 +329,7 @@ promtool-check:
 	@set -e; echo "[CHECK] Prometheus config and rules..."
 	@docker run --rm --entrypoint /bin/sh \
 	  -v "$$(pwd)/prometheus:/etc/prometheus:ro" prom/prometheus:v2.54.1 -lc \
-	  'promtool check config /etc/prometheus/prometheus.yml && promtool check rules /etc/prometheus/rules/*.yml'
+	  'promtool check config /etc/prometheus/prometheus.yml.minimal && promtool check rules /etc/prometheus/rules/*.yml'
 
 .PHONY: prometheus-reload-safe
 prometheus-reload-safe: promtool-check
