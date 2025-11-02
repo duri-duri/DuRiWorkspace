@@ -346,13 +346,27 @@ main() {
     # 공백응답 가드: 메트릭이 모두 0이고 Prometheus 응답이 없으면 관용 처리
     local judgment=""
     if [ "$ks_p_2h" = "0" ] && [ "$ks_p_24h" = "0" ] && [ "$unique_2h" = "0" ] && [ "$unique_24h" = "0" ]; then
-        # n 최근값이 존재(>=1)면 YELLOW, 아니면 RED
+        # n 최근값이 존재(>=1)면 타임아웃 카운터로 판정, 아니면 RED
         local n_2h_num=$(printf '%.0f' "${n_2h:-0}" 2>/dev/null || echo "0")
         local n_24h_num=$(printf '%.0f' "${n_24h:-0}" 2>/dev/null || echo "0")
         
         if [ "$n_2h_num" -ge 1 ] 2>/dev/null || [ "$n_24h_num" -ge 1 ] 2>/dev/null; then
-            judgment="YELLOW"
-            echo "[NOTE] prometheus timeout 응답, n>=1 → YELLOW (관용 처리)"
+            # timeout 카운터 파일
+            local TOF="$STATE_DIR/prom_timeout.count"
+            local cnt=0
+            if [ -f "$TOF" ]; then
+                cnt=$(cat "$TOF" 2>/dev/null || echo "0")
+            fi
+            cnt=$((cnt + 1))
+            echo "$cnt" > "$TOF" 2>/dev/null || true
+            
+            if [ "$cnt" -ge 3 ]; then
+                judgment="RED"
+                echo "[NOTE] prometheus timeout x3 → RED"
+            else
+                judgment="YELLOW"
+                echo "[NOTE] prometheus timeout 응답 (${cnt}/3), n>=1 → YELLOW (관용 처리)"
+            fi
         else
             judgment="RED"
             echo "[WARN] prometheus 응답 없음 또는 메트릭 부재 → 이번 라운드 RED로 표기하고 계속 진행"
@@ -417,6 +431,8 @@ main() {
             green_count=$((green_count + 1))
             yellow_count=0
             red_count=0
+            # 성공 라운드엔 timeout 카운터 리셋
+            : > "$STATE_DIR/prom_timeout.count" 2>/dev/null || true
             ;;
         YELLOW)
             yellow_count=$((yellow_count + 1))
