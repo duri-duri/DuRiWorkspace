@@ -29,6 +29,10 @@ WEEK ?= 7
 export GA_ENFORCE ?= 1
 export CROSS_TYPE_ENFORCE ?= 1
 
+# Prometheus 도구 변수
+PROM_IMG ?= prom/prometheus:v2.54.1
+PROM_DIR ?= $(PWD)/prometheus
+
 # 의존성 정의
 SCRIPTS = scripts/rag_eval.sh scripts/rag_gate.sh
 TESTS = tests/eval_smoke.sh
@@ -323,31 +327,30 @@ eval-window-off:
 	sed -i 's/DURI_FORCE_MIN_SAMPLES=5/DURI_FORCE_MIN_SAMPLES=1/g' $$f; \
 	docker compose up -d --force-recreate duri-core duri-brain duri-evolution
 
-# A. promtool 검증 명령 안정화 (단일 소스만)
+# A. promtool 검증 명령 안정화 (단일 셸·단일 도커·명시적 종료)
 .PHONY: promtool-check
 promtool-check:
-	@set -u; \
-	echo "[1/2] config check..."; \
-	docker run --rm --entrypoint /bin/sh \
-	  -v "$$(pwd)/prometheus:/etc/prometheus:ro" prom/prometheus:v2.54.1 -lc \
-	  'promtool check config /etc/prometheus/prometheus.yml.minimal'; \
-	ec1=$$?; echo "exit=$$ec1"; \
-	echo "[2/2] rules check..."; \
-	docker run --rm --entrypoint /bin/sh \
-	  -v "$$(pwd)/prometheus:/etc/prometheus:ro" prom/prometheus:v2.54.1 -lc \
-	  'promtool check rules /etc/prometheus/rules/*.yml'; \
-	ec2=$$?; echo "exit=$$ec2"; \
-	test $$ec1 -eq 0 -a $$ec2 -eq 0 && echo "[OK] promtool-check passed" || { echo "[FAIL] promtool-check failed"; exit 1; }
+	@docker run --rm --entrypoint /bin/sh \
+	  -v "$(PROM_DIR):/etc/prometheus:ro" $(PROM_IMG) -lc '\
+	    set -eu; \
+	    promtool check config /etc/prometheus/prometheus.yml.minimal; ec1=$$?; \
+	    # rules 글롭은 셸에서 확장되도록 따옴표 사용 금지
+	    set +e; promtool check rules /etc/prometheus/rules/*.yml; ec2=$$?; set -e; \
+	    echo "exit=cfg($$ec1), rules($$ec2)"; \
+	    [ $$ec1 -eq 0 ] && [ $$ec2 -eq 0 ] && echo "[OK] promtool-check passed" || { echo "[FAIL] promtool-check failed"; exit 1; } \
+	  '
 
-# A.1. Template function guard (forbidden functions check)
 .PHONY: promtool-check-full
-promtool-check-full: promtool-check
-	@echo "[GUARD] Checking for forbidden template functions..."; \
-	if grep -r -nE 'humanize[A-Za-z]+' prometheus/rules/ 2>/dev/null; then \
-	  echo "[FAIL] Forbidden template function detected"; \
-	  exit 1; \
-	fi; \
-	echo "[OK] No forbidden template functions found"
+promtool-check-full:
+	@$(MAKE) --no-print-directory promtool-check
+	@# 금지 템플릿 가드
+	@docker run --rm --entrypoint /bin/sh \
+	  -v "$(PROM_DIR):/etc/prometheus:ro" $(PROM_IMG) -lc '\
+	    forbid="humanizePercentage|humanizeDuration|humanizeTimestamp"; \
+	    if grep -REn "$$forbid" /etc/prometheus/rules/*.yml >/dev/null 2>&1; then \
+	      echo "[FAIL] Forbidden template function detected"; exit 1; \
+	    fi; echo "[OK] No forbidden template functions found" \
+	  '
 
 # B. Safe reload (validation + reload)
 .PHONY: prometheus-reload-safe
