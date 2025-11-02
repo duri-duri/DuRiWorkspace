@@ -29,9 +29,10 @@ WEEK ?= 7
 export GA_ENFORCE ?= 1
 export CROSS_TYPE_ENFORCE ?= 1
 
-# Prometheus 도구 변수
+# Prometheus 도구 변수 (통합 정의)
 PROM_IMG ?= prom/prometheus:v2.54.1
 PROM_DIR ?= $(PWD)/prometheus
+PROM_LOG ?= .reports/obs/promtool_last.log
 
 # 의존성 정의
 SCRIPTS = scripts/rag_eval.sh scripts/rag_gate.sh
