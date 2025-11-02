@@ -95,12 +95,14 @@ groups:
       (duri_p_samples{window="2h"} < 12) or
       (duri_p_samples{window="24h"} < 12) or
       (duri_p_unique_ratio{window="2h"} < 0.2) or
-      (duri_p_unique_ratio{window="24h"} < 0.2)
+      (duri_p_unique_ratio{window="24h"} < 0.2) or
+      (duri_p_uniform_ks_p{window="2h"} < 0.01) or
+      (duri_p_uniform_ks_p{window="24h"} < 0.01)
     for: 60m
     labels: { severity: warning }
     annotations:
       summary: "AB p-values 변이 부족"
-      description: "samples(2h/24h) 또는 unique_ratio<0.2"
+      description: "samples(2h/24h) < 12 OR unique_ratio < 0.2 OR KS_p < 0.01"
   
   # KS-Uniform 이상(편향 의심) 게이트
   - alert: ABPValuesKSDrift

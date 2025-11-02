@@ -15,11 +15,24 @@ def load_vals(path):
                     try:
                         val = float(line.split()[1])
                         # 중복 방지: 정밀도 10자리로 반올림하여 중복 체크
+                        # 어댑티브: n<10일 때는 중복 제거 비활성
                         val_rounded = round(val, 10)
                         if val_rounded not in seen:
                             seen.add(val_rounded)
                             vals.append(val)
                     except: pass
+    # 어댑티브 중복 제거: n<10이면 중복 제거 비활성
+    if len(vals) < 10:
+        # 중복 제거하지 않고 원본 반환
+        vals_original = []
+        if os.path.exists(path):
+            with open(path) as f:
+                for line in f:
+                    if line.startswith("p_value "):
+                        try:
+                            vals_original.append(float(line.split()[1]))
+                        except: pass
+        return vals_original if vals_original else vals
     return vals
 
 two  = load_vals(os.path.join(tdir, "p_values_2h.prom"))
