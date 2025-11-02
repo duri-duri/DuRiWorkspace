@@ -1,8 +1,17 @@
 groups:
-- name: quality-burn-alerts
-  interval: 1m
-  rules:
-  - alert: QualityBurnRateHigh
+  - name: quality-burn-alerts
+    interval: 1m
+    rules:
+      - alert: NodeTextfileScrapeError
+        expr: node_textfile_scrape_error > 0
+        for: 3m
+        labels:
+          severity: page
+        annotations:
+          summary: "node_exporter textfile scrape error"
+          description: "textfile 디렉토리 권한/손상 확인 필요. 경로: reports/textfile"
+      
+      - alert: QualityBurnRateHigh
     expr: duri_ndcg_errbudget / 7d < -0.1
     for: 5m
     labels:

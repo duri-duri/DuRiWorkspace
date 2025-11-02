@@ -25,7 +25,7 @@ groups:
     labels: {severity: warning}
     annotations:
       summary: "Shadow SSH failure rate > 5%"
-      description: "SSH failure rate is {{ $value | humanizePercentage }} for at least 10m. Auto-fallback to HTTP."
+      description: "SSH failure rate is {{ $value }} for at least 10m. Auto-fallback to HTTP."
   - alert: ShadowTransportDrift
     expr: |
       (
@@ -40,14 +40,14 @@ groups:
     labels: {severity: info}
     annotations:
       summary: "Shadow transport mode share changed > 20%"
-      description: "Transport mode share drift detected. Current SSH share: {{ $value | humanizePercentage }}"
+      description: "Transport mode share drift detected. Current SSH share: {{ $value }}"
   - alert: NoNewEV
     expr: time() - duri_last_ev_unixtime > 7200
     for: 5m
     labels: {severity: warning}
     annotations:
       summary: "No new EV bundle for > 2 hours"
-      description: "Last EV bundle created {{ $value | humanizeDuration }} ago. Check Shadow→Evidence pipeline."
+      description: "Last EV bundle created {{ $value }}s ago. Check Shadow→Evidence pipeline."
   - alert: ABTestPValueNaN
     expr: duri_ab_p_value != duri_ab_p_value
     for: 1m
@@ -104,7 +104,7 @@ groups:
     labels: {severity: info}
     annotations:
       summary: "Shadow epoch duration > 15 minutes"
-      description: "Last epoch build timestamp {{ $value | humanizeDuration }} ago. Target: 10-15min. Check SHADOW_EPOCH_DURATION log."
+      description: "Last epoch build timestamp {{ $value }}s ago. Target: 10-15min. Check SHADOW_EPOCH_DURATION log."
   # (B) Prometheus 룰: 운영 레벨 알람 - 라벨 없는 p라인 탐지 (하드닝: 명확화)
   - alert: ABUnlabeledPValueDetected
     expr: scalar(count_over_time(ab_unlabeled_detected[2h])) > bool 0
