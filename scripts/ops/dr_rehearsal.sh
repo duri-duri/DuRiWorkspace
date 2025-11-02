@@ -142,11 +142,13 @@ cat >> "$DR_REPORT" <<EOF
 {"timestamp":"$(date -Iseconds)","backup":"$(basename "$RANDOM_SAMPLE")","restore_time_seconds":$RESTORE_TIME,"missing_files":$missing,"promtool":"$promtool_result","resume":"$resume_result","sli":{"prometheus_ready":"$sli_prometheus_ready","rules_loaded":"$sli_rules_loaded","heartbeat":"$sli_heartbeat","ev_sample":"$sli_ev_sample"},"success":$SUCCESS}
 EOF
 
-# 9) Export metrics to textfile
+# 9) Export metrics to textfile (histogram format for p95 calculation)
 tmp_metrics=$(mktemp "${METRICS_DIR}/.duri_dr_metrics.prom.XXXXXX")
 {
   echo "# HELP duri_dr_restore_time_seconds DR restore rehearsal time in seconds"
   echo "# TYPE duri_dr_restore_time_seconds histogram"
+  echo "duri_dr_restore_time_seconds_bucket{le=\"2\"} $(if [ $RESTORE_TIME -le 2 ]; then echo 1; else echo 0; fi)"
+  echo "duri_dr_restore_time_seconds_bucket{le=\"5\"} $(if [ $RESTORE_TIME -le 5 ]; then echo 1; else echo 0; fi)"
   echo "duri_dr_restore_time_seconds_bucket{le=\"10\"} $(if [ $RESTORE_TIME -le 10 ]; then echo 1; else echo 0; fi)"
   echo "duri_dr_restore_time_seconds_bucket{le=\"30\"} $(if [ $RESTORE_TIME -le 30 ]; then echo 1; else echo 0; fi)"
   echo "duri_dr_restore_time_seconds_bucket{le=\"60\"} $(if [ $RESTORE_TIME -le 60 ]; then echo 1; else echo 0; fi)"
@@ -162,10 +164,6 @@ tmp_metrics=$(mktemp "${METRICS_DIR}/.duri_dr_metrics.prom.XXXXXX")
   echo "# HELP duri_dr_failure_total Total failed DR rehearsals"
   echo "# TYPE duri_dr_failure_total counter"
   echo "duri_dr_failure_total $((1 - SUCCESS))"
-  echo ""
-  echo "# HELP duri_dr_rto_seconds DR recovery time objective (RTO) in seconds"
-  echo "# TYPE duri_dr_rto_seconds gauge"
-  echo "duri_dr_rto_seconds $RESTORE_TIME"
 } > "$tmp_metrics"
 chmod 644 "$tmp_metrics"
 mv -f "$tmp_metrics" "${METRICS_DIR}/duri_dr_metrics.prom"

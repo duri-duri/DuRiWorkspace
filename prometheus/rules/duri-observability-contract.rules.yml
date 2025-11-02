@@ -138,26 +138,33 @@ groups:
       # Recording rule: DR success ratio (7d)
       - record: duri_dr_success_ratio_7d
         expr: |
-          (
-            sum(increase(duri_dr_success_total[7d]))
-          ) / (
-            sum(increase(duri_dr_success_total[7d])) + sum(increase(duri_dr_failure_total[7d]))
-          )
+          sum(rate(duri_dr_success_total[7d])) / 
+          (sum(rate(duri_dr_success_total[7d])) + sum(rate(duri_dr_failure_total[7d])))
       
       # Recording rule: DR RTO p95 (7d)
       - record: duri_dr_rto_seconds_p95_7d
         expr: |
           histogram_quantile(0.95, sum by (le) (rate(duri_dr_restore_time_seconds_bucket[7d])))
       
-      # Recording rule: Alert rate (alerts per hour)
-      - record: duri_alert_rate_per_hour
+      # Alert: DR success rate low
+      - alert: DRSuccessRateLow
         expr: |
-          sum(rate(alert_firing_total[1h]))
+          duri_dr_success_ratio_7d < 0.999
+        for: 1h
+        labels: { severity: critical, team: "ops", component: "dr" }
+        annotations:
+          summary: "DR success rate below threshold"
+          description: "DR success rate: {{ $value }} (target: ≥0.999). Block merges until fixed."
       
-      # Recording rule: MTTR (mean time to recovery)
-      - record: duri_mttr_seconds
+      # Alert: DR RTO high (p95 > 10 minutes)
+      - alert: DRRTOHigh
         expr: |
-          avg_over_time(duri_mttr_seconds[24h])
+          duri_dr_rto_seconds_p95_7d > 600
+        for: 24h
+        labels: { severity: warning, team: "ops", component: "dr" }
+        annotations:
+          summary: "DR RTO p95 above threshold"
+          description: "DR RTO p95: {{ $value }}s (target: ≤600s). Review restore procedures."
 
   - name: prometheus-self-health
     interval: 30s

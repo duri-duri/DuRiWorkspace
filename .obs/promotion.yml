@@ -17,15 +17,78 @@ required_checks:
   # Canary checks (if applicable)
   - canary-quorum-pass
 
+# DuRi Promotion Gate Configuration
+# Purpose: Define minimum criteria for automatic promotion and merge
+
+required_checks:
+  # CI/CD checks
+  - obs-lint
+  - promtool-check
+  - sandbox-smoke-60s
+  
+  # Observability checks
+  - heartbeat-v2-stable
+  - prometheus-ready
+  
+  # DR checks
+  - dr-rehearsal-24h-pass
+  
+  # Canary checks (if applicable)
+  - canary-quorum-pass
+  
+  # Error budget checks
+  - error-budget-burn-ok
+
 canary:
   # Minimum sample size for canary decision
-  min_samples: 100
+  min_samples: 300          # 카나리 구간 최소 이벤트
   # Maximum wait time (seconds)
-  max_wait_seconds: 1800  # 30 minutes
+  max_wait_seconds: 1800    # 최대 대기 30분
   # Health check query
   health_query: 'duri_canary_health == 1'
   # Pass threshold (number of successful checks)
   quorum_threshold: 0.95
+  # KS p-value threshold for distribution equality
+  ks_p_threshold: 0.05      # 분포 동등성 KS p-value 하한
+  # Unique ratio minimum
+  unique_ratio_min: 0.92    # 데이터 다양성 하한
+  # Require both conditions simultaneously
+  dual_pass_required: true  # 두 조건 동시 만족
+
+rollback:
+  # Tag format for rollback
+  tag_format: "rollback-${{date:%Y%m%d-%H%M}}"
+  # Auto trigger conditions
+  auto_trigger_on:
+    - canary_rollback_rate > 0.05
+    - alert_burn_short > 14
+    - dr_success_ratio_7d < 0.995
+  
+  # Rollback action
+  action: "git tag + deploy rollback"
+
+automerge:
+  # Enable automatic merge after checks pass
+  enabled: true
+  # Minimum checks required
+  min_checks: 5
+  # Label required for auto-merge
+  labels:
+    - "auto"
+    - "canary-ready"
+    - "dr-safe"
+  
+  # Merge queue settings
+  merge_queue:
+    enabled: true
+    max_wait_minutes: 60
+
+emergency:
+  # Emergency bypass (admin only, one-time use)
+  # NOTE: Use GitHub labels + CODEOWNERS approval instead of FREEZE_BYPASS
+  bypass_label: "emergency-approved"
+  required_approvers: 1
+  max_uses_per_month: 3
 
 rollback:
   # Tag format for rollback
