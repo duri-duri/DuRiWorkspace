@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# DR (Disaster Recovery) Rehearsal Job
+# DR (Disaster Recovery) Rehearsal Job v2
 # Purpose: Automatically restore random backup samples and validate
+# Enhanced: RTO measurement, SLI smoke checks, Prometheus export
 # Usage: Daily cron job (e.g., 02:00 daily)
 
 set -euo pipefail
@@ -11,7 +12,8 @@ cd "$ROOT"
 ARCHIVE_DIR="${ARCHIVE_DIR:-/mnt/hdd/ARCHIVE/INCR}"
 RESTORE_DIR="${RESTORE_DIR:-/tmp/duri-restore-$$}"
 DR_REPORT="${DR_REPORT:-.reports/dr/dr_report_$(date +%Y%m%d_%H%M%S).jsonl}"
-mkdir -p "$(dirname "$DR_REPORT")" "$RESTORE_DIR"
+METRICS_DIR="${METRICS_DIR:-.reports/textfile}"
+mkdir -p "$(dirname "$DR_REPORT")" "$RESTORE_DIR" "$METRICS_DIR"
 
 TS_START=$(date +%s)
 
@@ -78,22 +80,69 @@ if [ -f "scripts/ops/resume_obs_green_lock.sh" ]; then
   fi
 fi
 
+# 6) SLI Smoke Checks (if Prometheus available)
+sli_prometheus_ready="skip"
+sli_rules_loaded="skip"
+sli_heartbeat="skip"
+sli_ev_sample="skip"
+
+if command -v curl >/dev/null 2>&1 && curl -sf --max-time 3 http://localhost:9090/-/ready >/dev/null 2>&1; then
+  log "Running SLI smoke checks..."
+  
+  # Prometheus readiness
+  if curl -sf --max-time 3 http://localhost:9090/-/ready >/dev/null 2>&1; then
+    sli_prometheus_ready="pass"
+  else
+    sli_prometheus_ready="fail"
+  fi
+  
+  # Rules loaded
+  rules_count=$(curl -sf --max-time 3 'http://localhost:9090/api/v1/rules' | \
+    jq -r '.data.groups | length' 2>/dev/null || echo "0")
+  if [ "$rules_count" -gt 0 ]; then
+    sli_rules_loaded="pass"
+  else
+    sli_rules_loaded="fail"
+  fi
+  
+  # Heartbeat v2
+  heartbeat_seq=$(curl -sf --max-time 3 --get 'http://localhost:9090/api/v1/query' \
+    --data-urlencode 'query=duri_textfile_heartbeat_seq' 2>/dev/null | \
+    jq -r '.data.result[0].value[1] // "0"' || echo "0")
+  if [ "$heartbeat_seq" != "0" ] && [ -n "$heartbeat_seq" ]; then
+    sli_heartbeat="pass"
+  else
+    sli_heartbeat="fail"
+  fi
+  
+  # EV/h sample (if available)
+  ev_rate=$(curl -sf --max-time 3 --get 'http://localhost:9090/api/v1/query' \
+    --data-urlencode 'query=rate(duri_ev_created_total[1h])' 2>/dev/null | \
+    jq -r '.data.result[0].value[1] // "0"' || echo "0")
+  if [ "$ev_rate" != "0" ] && [ -n "$ev_rate" ]; then
+    sli_ev_sample="pass"
+  else
+    sli_ev_sample="skip"
+  fi
+fi
+
 TS_END=$(date +%s)
 RESTORE_TIME=$((TS_END - TS_START))
 
-# 6) Write report
+# 7) Determine success
 SUCCESS=0
 if [ "$missing" -eq 0 ] && [ "$promtool_result" != "fail" ] && [ "$resume_result" != "fail" ]; then
-  SUCCESS=1
+  if [ "$sli_prometheus_ready" != "fail" ] && [ "$sli_rules_loaded" != "fail" ] && [ "$sli_heartbeat" != "fail" ]; then
+    SUCCESS=1
+  fi
 fi
 
+# 8) Write report
 cat >> "$DR_REPORT" <<EOF
-{"timestamp":"$(date -Iseconds)","backup":"$(basename "$RANDOM_SAMPLE")","restore_time_seconds":$RESTORE_TIME,"missing_files":$missing,"promtool":"$promtool_result","resume":"$resume_result","success":$SUCCESS}
+{"timestamp":"$(date -Iseconds)","backup":"$(basename "$RANDOM_SAMPLE")","restore_time_seconds":$RESTORE_TIME,"missing_files":$missing,"promtool":"$promtool_result","resume":"$resume_result","sli":{"prometheus_ready":"$sli_prometheus_ready","rules_loaded":"$sli_rules_loaded","heartbeat":"$sli_heartbeat","ev_sample":"$sli_ev_sample"},"success":$SUCCESS}
 EOF
 
-# 7) Export metrics to textfile
-METRICS_DIR="${METRICS_DIR:-.reports/textfile}"
-mkdir -p "$METRICS_DIR"
+# 9) Export metrics to textfile
 tmp_metrics=$(mktemp "${METRICS_DIR}/.duri_dr_metrics.prom.XXXXXX")
 {
   echo "# HELP duri_dr_restore_time_seconds DR restore rehearsal time in seconds"
@@ -113,16 +162,21 @@ tmp_metrics=$(mktemp "${METRICS_DIR}/.duri_dr_metrics.prom.XXXXXX")
   echo "# HELP duri_dr_failure_total Total failed DR rehearsals"
   echo "# TYPE duri_dr_failure_total counter"
   echo "duri_dr_failure_total $((1 - SUCCESS))"
+  echo ""
+  echo "# HELP duri_dr_rto_seconds DR recovery time objective (RTO) in seconds"
+  echo "# TYPE duri_dr_rto_seconds gauge"
+  echo "duri_dr_rto_seconds $RESTORE_TIME"
 } > "$tmp_metrics"
 chmod 644 "$tmp_metrics"
 mv -f "$tmp_metrics" "${METRICS_DIR}/duri_dr_metrics.prom"
 
-# 8) Cleanup
+# 10) Cleanup
 log "Cleaning up restore directory..."
 rm -rf "$RESTORE_DIR"
 
 log "[REPORT] Written to $DR_REPORT"
 log "[RESULT] success=$SUCCESS, restore_time=${RESTORE_TIME}s, missing=$missing"
+log "[SLI] prometheus=$sli_prometheus_ready, rules=$sli_rules_loaded, heartbeat=$sli_heartbeat"
 
 exit $((1 - SUCCESS))
 

@@ -143,6 +143,21 @@ groups:
           ) / (
             sum(increase(duri_dr_success_total[7d])) + sum(increase(duri_dr_failure_total[7d]))
           )
+      
+      # Recording rule: DR RTO p95 (7d)
+      - record: duri_dr_rto_seconds_p95_7d
+        expr: |
+          histogram_quantile(0.95, sum by (le) (rate(duri_dr_restore_time_seconds_bucket[7d])))
+      
+      # Recording rule: Alert rate (alerts per hour)
+      - record: duri_alert_rate_per_hour
+        expr: |
+          sum(rate(alert_firing_total[1h]))
+      
+      # Recording rule: MTTR (mean time to recovery)
+      - record: duri_mttr_seconds
+        expr: |
+          avg_over_time(duri_mttr_seconds[24h])
 
   - name: prometheus-self-health
     interval: 30s
