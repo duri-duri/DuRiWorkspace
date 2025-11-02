@@ -1,64 +1,85 @@
 #!/usr/bin/env python3
-# (v) KS-Uniform 품질검정
-import os, glob, re, math
+import os, glob, re, math, tempfile, shutil
 
-try:
-    from scipy import stats
-    has_scipy = True
-except ImportError:
-    has_scipy = False
+from statistics import NormalDist
 
-def vals(pattern):
-    out = []
-    for f in glob.glob(pattern):
-        try:
-            for line in open(f):
-                m = re.match(r'^p_value\s+([0-9.]+)', line)
-                if m:
-                    out.append(float(m.group(1)))
-        except:
-            pass
-    return out
+TEXTFILE_DIR = os.environ.get("TEXTFILE_DIR", ".reports/synth")
+OUT = os.path.join(TEXTFILE_DIR, "p_uniform_ks.prom")
+WINDOWS = ("2h","24h")
+ROUND_DP = int(os.environ.get("P_DEDUP_ROUND_DP", "8"))  # unique(8dp) 기본
 
-def safe(v, lo=1e-12, hi=1-1e-12):
-    return min(hi, max(lo, v))
+def read_p_values(path_glob):
+    xs=[]
+    for f in glob.glob(path_glob):
+        with open(f) as fd:
+            for line in fd:
+                m=re.match(r'^p_value\s+([0-9.]+)', line)
+                if m: xs.append(float(m.group(1)))
+    return xs
 
-root = os.getcwd()
-tdir = os.environ.get("TEXTFILE_DIR", os.path.join(root, ".reports/synth"))
-out = os.path.join(tdir, "p_uniform_ks.prom")
+def ks_statistic_uniform(xs):
+    # 두 방향 supremum
+    n=len(xs)
+    if n==0: return float('nan')
+    ys=sorted(xs)
+    d_plus=max((i+1)/n - y for i,y in enumerate(ys))
+    d_minus=max(y - i/n for i,y in enumerate(ys))
+    return max(d_plus,d_minus)
 
-os.makedirs(tdir, exist_ok=True)
+def clamp(p): return max(1e-12, min(1-1e-12, p))
 
-tmp_out = f"{out}.{os.getpid()}"
+def ks_pvalue_asymptotic(d, n):
+    # Kolmogorov 분포 근사 (Smirnov), n>0, d>=0
+    if n==0 or not math.isfinite(d): return float('nan')
+    en = math.sqrt(n)
+    x = (en + 0.12 + 0.11/en) * d
+    # 빠른 합 근사
+    s = 0.0
+    for k in range(1, 101):
+        term = (-1)**(k-1) * math.exp(-2*(k*k)*(x*x))
+        s += term
+        if abs(term) < 1e-12: break
+    return max(0.0, min(1.0, 2*s))
 
-with open(tmp_out, "w") as w:
-    w.write("# HELP duri_p_uniform_ks_stat KS statistic for uniform distribution\n")
-    w.write("# TYPE duri_p_uniform_ks_stat gauge\n")
-    w.write("# HELP duri_p_uniform_ks_p KS test p-value\n")
-    w.write("# TYPE duri_p_uniform_ks_p gauge\n")
-    
-    for w_name in ("2h", "24h"):
-        xs = vals(f"{tdir}/p_values_{w_name}.prom")
-        if xs and len(xs) > 2:
-            xs_safe = [safe(p) for p in xs]
-            if has_scipy:
-                d, p_ks = stats.kstest(xs_safe, 'uniform')
-            else:
-                # 간단한 KS 통계 계산 (scipy 없이)
-                xs_sorted = sorted(xs_safe)
-                n = len(xs_sorted)
-                d = 0.0
-                for i, x in enumerate(xs_sorted):
-                    d = max(d, abs((i+1)/n - x), abs(i/n - x))
-                # p-value는 근사치 생략 (NaN으로 표시)
-                p_ks = float('nan')
-            w.write(f'duri_p_uniform_ks_stat{{window="{w_name}"}} {d}\n')
-            w.write(f'duri_p_uniform_ks_p{{window="{w_name}"}} {p_ks}\n')
+def unique_ratio(xs, dp=8):
+    if not xs: return float('nan')
+    tot=len(xs)
+    uniq=len({round(v, dp) for v in xs})
+    return uniq/tot
+
+def atomic_write(path, text):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with tempfile.NamedTemporaryFile("w", delete=False, dir=os.path.dirname(path)) as tmp:
+        tmp.write(text)
+        tmp.flush(); os.fsync(tmp.fileno())
+    shutil.move(tmp.name, path)
+
+def main():
+    lines=[]
+    for w in WINDOWS:
+        xs = [clamp(v) for v in read_p_values(os.path.join(TEXTFILE_DIR, f"p_values_{w}.prom"))]
+        n = len(xs)
+        if n>0:
+            d = ks_statistic_uniform(xs)
+            p = ks_pvalue_asymptotic(d, n)
+            ur = unique_ratio(xs, ROUND_DP)
         else:
-            w.write(f'duri_p_uniform_ks_stat{{window="{w_name}"}} NaN\n')
-            w.write(f'duri_p_uniform_ks_p{{window="{w_name}"}} NaN\n')
+            d = float('nan'); p = float('nan'); ur = float('nan')
 
-os.rename(tmp_out, out)
+        lines += [
+            "# HELP duri_p_uniform_ks KS statistic vs U(0,1)",
+            "# TYPE duri_p_uniform_ks gauge",
+            f'duri_p_uniform_ks{{window="{w}"}} {d}',
+            "# HELP duri_p_uniform_ks_p Asymptotic p-value of KS",
+            "# TYPE duri_p_uniform_ks_p gauge",
+            f'duri_p_uniform_ks_p{{window="{w}"}} {p}',
+            "# HELP duri_p_unique_ratio unique(8dp)/total ratio",
+            "# TYPE duri_p_unique_ratio gauge",
+            f'duri_p_unique_ratio{{window="{w}"}} {ur}',
+            ""
+        ]
+    atomic_write(OUT, "\n".join(lines))
+    print(f"[OK] KS/unique exported -> {OUT}")
 
-print(f"[OK] KS-Uniform test exported -> {out}")
-
+if __name__=="__main__":
+    main()

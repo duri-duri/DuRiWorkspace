@@ -79,7 +79,7 @@ groups:
       description: "Window 24h: samples={{ $value }} or sigma=NaN. Check p_sigma_export.py execution and p_values_24h.prom generation."
   
   # KS-Uniform 품질검정 알람
-  - alert: ABPValuesUniformityLost
+  - alert: ABPValuesKSUniformityLost
     expr: duri_p_uniform_ks_p{window="24h"} < 0.05
     for: 2h
     labels:
@@ -88,4 +88,28 @@ groups:
     annotations:
       summary: "p-value 분포가 Uniform에서 이탈(24h)"
       description: "KS-test p-value = {{ $value }} < 0.05. p-value 분포가 균등분포에서 이탈. 실험 자체 변동 부족 가능성."
+  
+  # 변이 존재(샘플·중복) 게이트
+  - alert: ABPValuesUniformityLost
+    expr: |
+      (duri_p_samples{window="2h"} < 12) or
+      (duri_p_samples{window="24h"} < 12) or
+      (duri_p_unique_ratio{window="2h"} < 0.2) or
+      (duri_p_unique_ratio{window="24h"} < 0.2)
+    for: 60m
+    labels: { severity: warning }
+    annotations:
+      summary: "AB p-values 변이 부족"
+      description: "samples(2h/24h) 또는 unique_ratio<0.2"
+  
+  # KS-Uniform 이상(편향 의심) 게이트
+  - alert: ABPValuesKSDrift
+    expr: |
+      (duri_p_uniform_ks_p{window="2h"} < 0.2) or
+      (duri_p_uniform_ks_p{window="24h"} < 0.2)
+    for: 60m
+    labels: { severity: warning }
+    annotations:
+      summary: "AB p-values KS drift"
+      description: "KS p<0.2 (U(0,1) 위반 가능)"
 

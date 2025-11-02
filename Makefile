@@ -376,3 +376,8 @@ producer-schema-check:
 	bash tests/test_producer_schema.sh
 
 -include ops/observability/monitoring.mk
+test-p-sigma:
+	@bash tests/test_p_sigma_export.sh
+
+quality: test-p-sigma
+	@echo "[OK] quality gate: p-sigma"
