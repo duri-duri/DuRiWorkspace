@@ -234,7 +234,16 @@ collect_metrics() {
     ks_p_2h=$(echo "$ks_p_2h" | grep -E "^[0-9.e+-]+$" || echo "0")
     ks_p_24h=$(echo "$ks_p_24h" | grep -E "^[0-9.e+-]+$" || echo "0")
     
-    echo "$ks_p_2h $ks_p_24h $unique_2h $unique_24h $sigma_2h $sigma_24h $n_2h $n_24h"
+    # n 기준 그레이스: n < MIN_N이면 RED 금지, YELLOW로 완충
+    local n_2h_num=$(printf '%.0f' "${n_2h:-0}" 2>/dev/null || echo "0")
+    local n_24h_num=$(printf '%.0f' "${n_24h:-0}" 2>/dev/null || echo "0")
+    local judgment_note=""
+    
+    if [ "$n_2h_num" -lt "$MIN_N" ] 2>/dev/null || [ "$n_24h_num" -lt "$MIN_N" ] 2>/dev/null; then
+        judgment_note="(n<${MIN_N}, 초기구간 그레이스)"
+    fi
+    
+    echo "$ks_p_2h $ks_p_24h $unique_2h $unique_24h $sigma_2h $sigma_24h $n_2h $n_24h $judgment_note"
 }
 
 # 4) 상태 파일 관리
