@@ -216,10 +216,10 @@ groups:
     interval: 30s
     rules:
       # Recording rule: consecutive green runs (successful reload bundles)
-      # Increments on each successful reload_safe.sh + promtool-check-full + /reload + textfile pass
+      # Count successful reloads in the last hour
       - record: duri_obs_green_run_counter
         expr: |
-          increase(duri_prom_reload_success{job="node"} == 1[1h:30s])
+          increase((duri_prom_reload_success{job="node"} == 1)[1h:30s])
           OR on() vector(0)
       
       # Recording rule: Beta-Binomial estimate for operational stability
@@ -227,7 +227,7 @@ groups:
       - record: duri_obs_green_estimate
         expr: |
           (
-            sum(increase(duri_prom_reload_success{job="node"} == 1[24h:30s]))
+            sum(increase((duri_prom_reload_success{job="node"} == 1)[24h:30s]))
             /
             (sum(increase(duri_prom_reload_success{job="node"}[24h:30s])) + 2)
           )
