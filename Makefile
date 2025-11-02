@@ -323,10 +323,10 @@ eval-window-off:
 	sed -i 's/DURI_FORCE_MIN_SAMPLES=5/DURI_FORCE_MIN_SAMPLES=1/g' $$f; \
 	docker compose up -d --force-recreate duri-core duri-brain duri-evolution
 
-# A. promtool 검증 명령 안정화 (필수 파일만)
+# A. promtool 검증 명령 안정화 (단일 소스만)
 .PHONY: promtool-check
 promtool-check:
-	@set -e; echo "[CHECK] Prometheus config and rules..."
+	@echo "[CHECK] Prometheus minimal config and rules..."
 	@docker run --rm --entrypoint /bin/sh \
 	  -v "$$(pwd)/prometheus:/etc/prometheus:ro" prom/prometheus:v2.54.1 -lc \
 	  'promtool check config /etc/prometheus/prometheus.yml.minimal && promtool check rules /etc/prometheus/rules/*.yml'
