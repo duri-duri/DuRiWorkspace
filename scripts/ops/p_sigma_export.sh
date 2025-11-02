@@ -13,15 +13,21 @@ mkdir -p "$TEXTFILE_DIR"
 # --- 2) p 값 수집 ---
 vals=""
 for f in "$P2H" "$P24H"; do
-  [[ -f "$f" ]] && vals+=$(awk '/^p_value/ {printf "%s ", $2}' "$f")
+  if [[ -f "$f" ]]; then
+    vals+=$(awk '/^p_value/ {printf "%s ", $2}' "$f")
+  fi
 done
+
+# 디버깅: vals가 비어있으면 로그
+if [[ -z "${vals// /}" ]]; then
+  echo "[WARN] No p-values found in $P2H or $P24H" >&2
+fi
 
 # --- 3) sigma 계산 ---
 sigma="NaN"; n="0"
 if [[ -n "${vals// /}" ]]; then
-  # 파이프 없이 안전 계산
-  read -r sigma n <<EOF
-$(python3 - <<'PY'
+  # heredoc 대신 echo로 파이프
+  sigma_n=$(echo "$vals" | python3 - <<'PY'
 import math, sys
 data = [float(x) for x in sys.stdin.read().strip().split()]
 if not data:
@@ -32,8 +38,9 @@ else:
     var = sum((x-m)**2 for x in data)/max(n-1,1)
     print(f"{math.sqrt(var):.10f} {n}")
 PY
-<<<"${vals}")
-EOF
+)
+  sigma=$(echo "$sigma_n" | awk '{print $1}')
+  n=$(echo "$sigma_n" | awk '{print $2}')
 fi
 
 # --- 4) 파일에 '반드시' 씀(단일 리다이렉션 블록) ---
