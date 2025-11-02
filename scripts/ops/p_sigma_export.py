@@ -146,13 +146,12 @@ with open(tmp_out, "w") as w:
     w.write(f'duri_p_sigma{{window="2h"}} {s2h}\n')
     w.write(f'duri_p_sigma{{window="24h"}} {s24}\n')
     
-    # 샘플수: 라벨有/無 모두 노출 (하위호환+쿼리 정합)
+    # 샘플수: 라벨有만 노출 (무라벨 제거, 단일 진실원)
     w.write("# HELP duri_p_sigma_samples number of p-values aggregated\n# TYPE duri_p_sigma_samples gauge\n")
-    w.write(f'duri_p_sigma_samples {n2h}\n')  # backward-compat (no label, 2h 값 사용)
-    w.write(f'duri_p_sigma_samples{{window="2h"}} {n2h}\n')  # labeled
-    w.write(f'duri_p_sigma_samples{{window="24h"}} {n24}\n')  # labeled
+    w.write(f'duri_p_sigma_samples{{window="2h"}} {n2h}\n')  # labeled only
+    w.write(f'duri_p_sigma_samples{{window="24h"}} {n24}\n')  # labeled only
     
-    # 표준 이름으로도 노출 (duri_p_samples)
+    # 표준 이름으로도 노출 (duri_p_samples, 라벨有만)
     w.write("# HELP duri_p_samples number of p-values aggregated (standard name)\n# TYPE duri_p_samples gauge\n")
     w.write(f'duri_p_samples{{window="2h"}} {n2h}\n')
     w.write(f'duri_p_samples{{window="24h"}} {n24}\n')
