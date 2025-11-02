@@ -12,6 +12,20 @@ cd "$ROOT"
 
 mkdir -p "$TEXTFILE_DIR"
 
+# Rate limiting: minimum gap between reloads (30s)
+MIN_GAP="${MIN_GAP:-30}"
+STAMP="/tmp/duri_last_reload.ts"
+now=$(date +%s)
+
+if [ -f "$STAMP" ]; then
+  last=$(cat "$STAMP" 2>/dev/null || echo "0")
+  gap=$((now - last))
+  if [ "$gap" -lt "$MIN_GAP" ]; then
+    echo "[SKIP] reload throttled (last reload ${gap}s ago, min gap ${MIN_GAP}s)"
+    exit 0
+  fi
+fi
+
 # 1) promtool validation
 echo "[1/2] promtool validation..."
 if docker run --rm --entrypoint /bin/sh \
@@ -32,29 +46,43 @@ if grep -r -nE 'humanize[A-Za-z]+' prometheus/rules/ 2>/dev/null; then
   exit 1
 fi
 
-# 3) Reload
+# 3) Reload with exponential backoff (max 5 retries)
 echo "[RELOAD] POST /-/reload"
-if curl -sf -XPOST "$PROM_URL/-/reload" >/dev/null 2>&1; then
-  TS="$(date +%s)"
-  TMP="$(mktemp "${TEXTFILE_DIR}/.duri_prometheus_reload.prom.XXXXXX")"
-  {
-    printf 'duri_prom_reload_success %d\n' 1
-    printf 'duri_prom_reload_timestamp %d\n' "$TS"
-  } > "$TMP"
-  chmod 644 "$TMP"
-  mv -f "$TMP" "${TEXTFILE_DIR}/duri_prometheus_reload.prom"
-  echo "[OK] reload successful"
+MAX_RETRY="${MAX_RETRY:-5}"
+BASE_SLEEP="${BASE_SLEEP:-2}"
+retry=0
+success=0
+
+while [ $retry -lt $MAX_RETRY ]; do
+  if curl -sf -XPOST "$PROM_URL/-/reload" >/dev/null 2>&1; then
+    success=1
+    break
+  fi
+  retry=$((retry + 1))
+  if [ $retry -lt $MAX_RETRY ]; then
+    sleep=$((BASE_SLEEP * (1 << (retry - 1))))
+    echo "[RETRY] reload attempt $retry/$MAX_RETRY (backoff ${sleep}s)..."
+    sleep $sleep
+  fi
+done
+
+TS="$(date +%s)"
+echo "$TS" > "$STAMP" 2>/dev/null || true
+
+TMP="$(mktemp "${TEXTFILE_DIR}/.duri_prometheus_reload.prom.XXXXXX")"
+{
+  printf 'duri_prom_reload_success %d\n' $success
+  printf 'duri_prom_reload_timestamp %d\n' "$TS"
+  printf 'duri_prom_reload_retries %d\n' $retry
+} > "$TMP"
+chmod 644 "$TMP"
+mv -f "$TMP" "${TEXTFILE_DIR}/duri_prometheus_reload.prom"
+
+if [ $success -eq 1 ]; then
+  echo "[OK] reload successful (attempts: $retry)"
   exit 0
 else
-  echo "[FAIL] reload failed"
-  TS="$(date +%s)"
-  TMP="$(mktemp "${TEXTFILE_DIR}/.duri_prometheus_reload.prom.XXXXXX")"
-  {
-    printf 'duri_prom_reload_success %d\n' 0
-    printf 'duri_prom_reload_timestamp %d\n' "$TS"
-  } > "$TMP"
-  chmod 644 "$TMP"
-  mv -f "$TMP" "${TEXTFILE_DIR}/duri_prometheus_reload.prom"
+  echo "[FAIL] reload failed after $MAX_RETRY attempts"
   exit 1
 fi
 

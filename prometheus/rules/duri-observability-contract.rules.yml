@@ -173,6 +173,16 @@ groups:
         labels: { severity: warning, team: "obs", service: "prometheus" }
         annotations:
           summary: "textfile inputs stale (>5m)"
+      
+      # Alert: Textfile heartbeat stall
+      - alert: TextfileHeartbeatStall
+        expr: |
+          increase(node_textfile_mtime_seconds{file=~".*heartbeat.*"}[10m]) == 0
+        for: 10m
+        labels: { severity: warning, team: "obs", service: "prometheus" }
+        annotations:
+          summary: "Textfile collector heartbeat stalled"
+          description: "Heartbeat metric has not updated for 10 minutes. Collector may be frozen."
 
   - name: observability-quality-ma
     interval: 1m
@@ -201,4 +211,26 @@ groups:
       - record: duri_p_sigma_std5
         expr: |
           stddev_over_time(duri_p_sigma{job="node"}[5m])
+
+  - name: duri-obs-green-counter
+    interval: 30s
+    rules:
+      # Recording rule: consecutive green runs (successful reload bundles)
+      # Increments on each successful reload_safe.sh + promtool-check-full + /reload + textfile pass
+      - record: duri_obs_green_run_counter
+        expr: |
+          increase(duri_prom_reload_success{job="node"} == 1)[1h:30s]
+          OR on() vector(0)
+      
+      # Recording rule: Beta-Binomial estimate for operational stability
+      # E[p] = (s+1)/(s+f+2), where s=successes, f=failures
+      - record: duri_obs_green_estimate
+        expr: |
+          (
+            sum(increase(duri_prom_reload_success{job="node"} == 1)[24h:30s]))
+            /
+            (sum(increase(duri_prom_reload_success{job="node"}[24h:30s])) + 2)
+          )
+          OR on() vector(0)
+
 
