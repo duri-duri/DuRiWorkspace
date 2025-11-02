@@ -69,7 +69,11 @@ groups:
       # Alert: No samples (샘플 부족 경고)
       - alert: DuriNoSamples2h
         expr: |
-          (max_over_time(duri_p_samples{window="2h"}[2m]) or max_over_time(duri_p_sigma_samples{window="2h"}[2m])) < 200
+          (
+            max_over_time(duri_p_samples{window="2h"}[2m])
+            or max_over_time(duri_p_sigma_samples{window="2h"}[2m])
+            or max_over_time(label_replace(duri_p_sigma_samples,"window","2h","","")[2m])
+          ) < 200
         for: 1m
         labels:
           severity: warning
@@ -79,7 +83,11 @@ groups:
       
       - alert: DuriNoSamples24h
         expr: |
-          (max_over_time(duri_p_samples{window="24h"}[2m]) or max_over_time(duri_p_sigma_samples{window="24h"}[2m])) < 200
+          (
+            max_over_time(duri_p_samples{window="24h"}[2m])
+            or max_over_time(duri_p_sigma_samples{window="24h"}[2m])
+            or max_over_time(label_replace(duri_p_sigma_samples,"window","24h","","")[2m])
+          ) < 200
         for: 1m
         labels:
           severity: warning

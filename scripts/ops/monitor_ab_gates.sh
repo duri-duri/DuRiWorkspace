@@ -121,26 +121,50 @@ fallback_from_textfile() {
     local lbl="${2:-}"
     local textfile_dir="${TEXTFILE_DIR:-.reports/synth}"
     
-    # Search for metric in textfile directory
-    if [ -n "$lbl" ]; then
-        # Match label pattern
-        awk -v n="$name" -v L="$lbl" '
-            $1 ~ "^" n {
-                if (index($0, L) > 0) {
+    # 샘플수 메트릭: 라벨有/無 모두 지원
+    if [[ "$name" == *"samples"* ]] || [[ "$name" == *"SAMPLES"* ]]; then
+        # 먼저 라벨 있는 버전 찾기
+        if [ -n "$lbl" ]; then
+            v=$(awk -v n="$name" -v L="$lbl" '
+                $1 ~ "^" n "{" {
+                    if (index($0, L) > 0) {
+                        print $NF
+                        exit
+                    }
+                }
+            ' "$textfile_dir"/*.prom 2>/dev/null | head -1 || echo "")
+        fi
+        # 라벨 없는 버전도 찾기 (하위호환)
+        if [ -z "$v" ]; then
+            v=$(awk -v n="$name" '
+                $1 ~ "^" n "[[:space:]]" {
                     print $NF
                     exit
                 }
-            }
-        ' "$textfile_dir"/*.prom 2>/dev/null | head -1 || echo ""
+            ' "$textfile_dir"/*.prom 2>/dev/null | head -1 || echo "")
+        fi
     else
-        # No label requirement, take first match
-        awk -v n="$name" '
-            $1 ~ "^" n {
-                print $NF
-                exit
-            }
-        ' "$textfile_dir"/*.prom 2>/dev/null | head -1 || echo ""
+        # 다른 메트릭: 기존 로직
+        if [ -n "$lbl" ]; then
+            v=$(awk -v n="$name" -v L="$lbl" '
+                $1 ~ "^" n "{" {
+                    if (index($0, L) > 0) {
+                        print $NF
+                        exit
+                    }
+                }
+            ' "$textfile_dir"/*.prom 2>/dev/null | head -1 || echo "")
+        else
+            v=$(awk -v n="$name" '
+                $1 ~ "^" n "{" || $1 ~ "^" n "[[:space:]]" {
+                    print $NF
+                    exit
+                }
+            ' "$textfile_dir"/*.prom 2>/dev/null | head -1 || echo "")
+        fi
     fi
+    
+    echo "${v:-}"
 }
 
 # Prometheus 쿼리 또는 텍스트파일 폴백 (Observability Contract v1: 빈 벡터 방어 + 초기 grace)
@@ -214,9 +238,9 @@ collect_metrics() {
     local sigma_24h=$(query_prom_or_fallback "duri_p_sigma{window=\"24h\"}" 'window="24h"')
     
     # 표본 수 (샘플수: 새/구 이름 모두 지원, OR 쿼리)
-    # max_over_time로 2분 윈도우 평활화
-    local samples_query_2h='max_over_time(duri_p_samples{window="2h"}[2m]) or max_over_time(duri_p_sigma_samples{window="2h"}[2m]) or 0'
-    local samples_query_24h='max_over_time(duri_p_samples{window="24h"}[2m]) or max_over_time(duri_p_sigma_samples{window="24h"}[2m]) or 0'
+    # max_over_time로 2분 윈도우 평활화 + 라벨有/無 코얼레싱
+    local samples_query_2h='max_over_time(duri_p_samples{window="2h"}[2m]) or max_over_time(duri_p_sigma_samples{window="2h"}[2m]) or max_over_time(label_replace(duri_p_sigma_samples,"window","2h","","")[2m])'
+    local samples_query_24h='max_over_time(duri_p_samples{window="24h"}[2m]) or max_over_time(duri_p_sigma_samples{window="24h"}[2m]) or max_over_time(label_replace(duri_p_sigma_samples,"window","24h","","")[2m])'
     local n_2h=$(query_prom_or_fallback "$samples_query_2h" 'window="2h"')
     local n_24h=$(query_prom_or_fallback "$samples_query_24h" 'window="24h"')
     

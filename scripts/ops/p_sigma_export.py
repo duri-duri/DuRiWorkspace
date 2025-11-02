@@ -145,9 +145,18 @@ with open(tmp_out, "w") as w:
     w.write("# HELP duri_p_sigma p-value stddev\n# TYPE duri_p_sigma gauge\n")
     w.write(f'duri_p_sigma{{window="2h"}} {s2h}\n')
     w.write(f'duri_p_sigma{{window="24h"}} {s24}\n')
-    w.write("# HELP duri_p_samples number of p-values aggregated\n# TYPE duri_p_samples gauge\n")
+    
+    # 샘플수: 라벨有/無 모두 노출 (하위호환+쿼리 정합)
+    w.write("# HELP duri_p_sigma_samples number of p-values aggregated\n# TYPE duri_p_sigma_samples gauge\n")
+    w.write(f'duri_p_sigma_samples {n2h}\n')  # backward-compat (no label, 2h 값 사용)
+    w.write(f'duri_p_sigma_samples{{window="2h"}} {n2h}\n')  # labeled
+    w.write(f'duri_p_sigma_samples{{window="24h"}} {n24}\n')  # labeled
+    
+    # 표준 이름으로도 노출 (duri_p_samples)
+    w.write("# HELP duri_p_samples number of p-values aggregated (standard name)\n# TYPE duri_p_samples gauge\n")
     w.write(f'duri_p_samples{{window="2h"}} {n2h}\n')
     w.write(f'duri_p_samples{{window="24h"}} {n24}\n')
+    
     w.write("# HELP duri_p_sigma_log10 p-value stddev in log10 scale\n# TYPE duri_p_sigma_log10 gauge\n")
     w.write(f'duri_p_sigma_log10{{window="2h"}} {log10_sd_2h}\n')
     w.write(f'duri_p_sigma_log10{{window="24h"}} {log10_sd_24h}\n')
