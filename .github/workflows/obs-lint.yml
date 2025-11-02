@@ -20,4 +20,47 @@ jobs:
                 promtool check rules "$f"
               done
             '
+      
+      - name: sandbox smoke test (60s)
+        run: |
+          set -eu
+          echo "[SANDBOX] Starting Prometheus sandbox..."
+          docker run -d --name prom-sandbox \
+            -v "$PWD/prometheus:/etc/prometheus:ro" \
+            -p 9091:9090 \
+            prom/prometheus:v2.54.1 \
+            --config.file=/etc/prometheus/prometheus.yml.minimal \
+            --storage.tsdb.path=/tmp/prometheus \
+            --web.listen-address=0.0.0.0:9090
+          
+          # Wait for readiness
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:9091/-/ready >/dev/null 2>&1; then
+              echo "[OK] Prometheus sandbox ready"
+              break
+            fi
+            sleep 2
+          done
+          
+          # Smoke checks
+          echo "[SMOKE] Checking rules loaded..."
+          rules_loaded=$(curl -s http://localhost:9091/api/v1/rules | jq -r '.data.groups | length')
+          if [ "$rules_loaded" -eq 0 ]; then
+            echo "[FAIL] No rules loaded"
+            docker logs prom-sandbox 2>&1 | tail -20
+            docker rm -f prom-sandbox
+            exit 1
+          fi
+          
+          echo "[SMOKE] Checking representative query..."
+          query_result=$(curl -s --get 'http://localhost:9091/api/v1/query' \
+            --data-urlencode 'query=up' | jq -r '.status')
+          if [ "$query_result" != "success" ]; then
+            echo "[FAIL] Query failed: $query_result"
+            docker rm -f prom-sandbox
+            exit 1
+          fi
+          
+          echo "[OK] Sandbox smoke test passed (rules=$rules_loaded)"
+          docker rm -f prom-sandbox
 

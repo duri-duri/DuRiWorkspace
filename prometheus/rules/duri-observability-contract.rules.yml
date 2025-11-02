@@ -177,12 +177,14 @@ groups:
       # Alert: Textfile heartbeat stall
       - alert: TextfileHeartbeatStall
         expr: |
-          increase(node_textfile_mtime_seconds{file=~".*heartbeat.*"}[10m]) == 0
+          increase(duri_textfile_heartbeat_seq[10m]) == 0
+          OR
+          max_over_time(duri_textfile_last_success_exit[10m]) != 0
         for: 10m
         labels: { severity: warning, team: "obs", service: "prometheus" }
         annotations:
           summary: "Textfile collector heartbeat stalled"
-          description: "Heartbeat metric has not updated for 10 minutes. Collector may be frozen."
+          description: "Heartbeat seq not increasing OR last_success_exit != 0 for 10 minutes. Collector may be frozen."
 
   - name: observability-quality-ma
     interval: 1m
