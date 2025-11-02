@@ -67,22 +67,59 @@ judge_gate() {
     fi
 }
 
-# 2) Prometheus 쿼리 함수 (정확한 쿼리 형식)
+# Prometheus 쿼리 함수 (이중 질의 + 재시도 + 폴백)
 query_prom() {
-    local query="$1"
-    local window="$2"
-    docker exec "$PROM_CONTAINER" sh -lc "wget -qO- 'localhost:9090/api/v1/query?query=$query'" 2>/dev/null | \
-        jq -r ".data.result[]? | select(.metric.window==\"$window\") | .value[1]" 2>/dev/null || echo "0"
+    local q="$1"
+    local i=1
+    local resp=""
+    
+    # 호스트에서 재시도
+    while [ $i -le "$RETRY" ]; do
+        resp="$(curl -s --max-time 2 "$PROM_URL/api/v1/query?query=$q" 2>/dev/null || true)"
+        if echo "$resp" | jq -e '.status=="success"' >/dev/null 2>&1; then
+            echo "$resp"
+            return 0
+        fi
+        i=$((i+1))
+        sleep 0.5
+    done
+    
+    # 호스트 실패 → 컨테이너 폴백
+    if docker ps --format '{{.Names}}' | grep -qx "$PROM_CONTAINER" 2>/dev/null; then
+        i=1
+        while [ $i -le "$RETRY" ]; do
+            resp="$(docker exec "$PROM_CONTAINER" sh -lc "wget -qO- 'http://localhost:9090/api/v1/query?query=$q'" 2>/dev/null || true)"
+            if echo "$resp" | jq -e '.status=="success"' >/dev/null 2>&1; then
+                echo "$resp"
+                return 0
+            fi
+            i=$((i+1))
+            sleep 0.5
+        done
+    fi
+    
+    echo ""  # 완전 실패
+    return 1
+}
+
+# 값 추출 함수 (안전한 기본값)
+val_or_zero() {
+    local q="$1"
+    local r="$(query_prom "$q")"
+    if [ -z "$r" ]; then
+        echo "0"
+        return
+    fi
+    echo "$r" | jq -r '.data.result[]? | select(.metric.window=="'"$2"'") | .value[1] // 0' 2>/dev/null || echo "0"
 }
 
 # Prometheus 쿼리 헬퍼 (전체 결과, 공백응답 가드 포함)
 query_prom_all() {
     local query="$1"
-    local resp=$(docker exec "$PROM_CONTAINER" sh -lc "wget -qO- 'localhost:9090/api/v1/query?query=$query'" 2>/dev/null || echo "")
+    local resp="$(query_prom "$query")"
     
-    # 공백응답 가드
-    if [ -z "$resp" ] || ! echo "$resp" | jq -e .status >/dev/null 2>&1; then
-        echo "[WARN] prometheus 응답 없음 또는 JSON 파싱 실패: query=$query" >&2
+    if [ -z "$resp" ]; then
+        echo "[WARN] prometheus 응답 없음: query=$query" >&2
         echo "0"
         return 1
     fi
@@ -213,10 +250,12 @@ main() {
     echo "  베이지안: P(p≥0.8|data)=${bayes_prob}"
     echo "  SPRT: $sprt_result (LR=${sprt_ll})"
     
-    # 진행표 CSV 기록 (라운드별 Bayes/SPRT 상태 누적)
+    # 진행표 CSV 기록 (라운드별 Bayes/SPRT 상태 누적) - 보장 쓰기
     local progress_csv="${PROGRESS_CSV:-.reports/synth/progress.csv}"
     mkdir -p "$(dirname "$progress_csv")"
-    echo "$(date +%F' '%T),$judgment,$ks_p_2h,$ks_p_24h,$unique_2h,$unique_24h,$sigma_2h,$sigma_24h,$n_2h,$n_24h,$sprt_ll,$bayes_prob" >> "$progress_csv"
+    judgment="${judgment:-RED}"  # 초기화 보장
+    echo "$(date +%F' '%T),$judgment,$ks_p_2h,$ks_p_24h,$unique_2h,$unique_24h,$sigma_2h,$sigma_24h,$n_2h,$n_24h,$sprt_ll,$bayes_prob" >> "$progress_csv" || true
+    sync
     
     # 의사결정 (Sequential Rule + 통계적 판정)
     echo "[DECISION]"
