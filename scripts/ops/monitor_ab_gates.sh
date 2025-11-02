@@ -185,6 +185,14 @@ main() {
     
     write_state "$green_count" "$yellow_count" "$red_count" "$judgment"
     
+    # 베이지안/SPRT 통계적 판정
+    local bayes_prob=$(python3 scripts/ops/bayes_progress.py "$judgment" 2>/dev/null | grep -oE 'P\(p≥0\.8\|data\)=[0-9.]+' | grep -oE '[0-9.]+' | head -1 || echo "0")
+    local sprt_result=$(python3 scripts/ops/wald_sprt.py "$judgment" 2>/dev/null | grep -oE '→ [A-Z]+' | tail -1 || echo "CONTINUE")
+    
+    echo "[STATISTICS]"
+    echo "  베이지안: P(p≥0.8|data)=${bayes_prob}"
+    echo "  SPRT: $sprt_result"
+    
     # 의사결정 (Sequential Rule + 통계적 판정)
     echo "[DECISION]"
     
