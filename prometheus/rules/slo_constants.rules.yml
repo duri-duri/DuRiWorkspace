@@ -10,18 +10,6 @@ groups:
       - record: slo_recall3_target
         expr: 0.98
       
-groups:
-  - name: slo-constants
-    interval: 30s
-    rules:
-      # Existing SLO targets
-      - record: slo_ndcg_target
-        expr: 0.90
-      - record: slo_mrr_target
-        expr: 0.88
-      - record: slo_recall3_target
-        expr: 0.98
-      
       # Lyapunov control function coefficients (recommended initial values)
       - record: alpha_const
         expr: 2.0
