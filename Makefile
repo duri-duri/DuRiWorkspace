@@ -334,9 +334,13 @@ promtool-check:
 	  -v "$(PROM_DIR):/etc/prometheus:ro" $(PROM_IMG) -lc '\
 	    set -eu; \
 	    promtool check config /etc/prometheus/prometheus.yml.minimal; ec1=$$?; \
-	    set +e; promtool check rules /etc/prometheus/rules/*.yml; ec2=$$?; set -e; \
+	    set +e; promtool check rules /etc/prometheus/rules/*.yml 2>&1; ec2=$$?; set -e; \
 	    echo "exit=cfg($$ec1), rules($$ec2)"; \
-	    [ $$ec1 -eq 0 ] && [ $$ec2 -eq 0 ] && echo "[OK] promtool-check passed" || { echo "[FAIL] promtool-check failed"; exit 1; } \
+	    if [ $$ec1 -eq 0 ] && [ $$ec2 -eq 0 ]; then \
+	      echo "[OK] promtool-check passed"; exit 0; \
+	    else \
+	      echo "[FAIL] promtool-check failed"; exit 1; \
+	    fi \
 	  '
 
 .PHONY: promtool-check-full
@@ -349,11 +353,6 @@ promtool-check-full:
 	      echo "[FAIL] Forbidden template function detected"; exit 1; \
 	    fi; echo "[OK] No forbidden template functions found" \
 	  '
-
-.PHONY: promtool-check-full
-promtool-check-full:
-	@$(MAKE) --no-print-directory promtool-check
-	@# 금지 템플릿 가드
 	@docker run --rm --entrypoint /bin/sh \
 	  -v "$(PROM_DIR):/etc/prometheus:ro" $(PROM_IMG) -lc '\
 	    forbid="humanizePercentage|humanizeDuration|humanizeTimestamp"; \
