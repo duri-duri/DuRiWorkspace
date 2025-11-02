@@ -94,6 +94,17 @@ groups:
         annotations:
           summary: "DuRi: 샘플 부족 (24h)"
           description: "최근 2분 내 24h 창 샘플수 < 200. 초기 램프업 또는 파이프라인 문제."
+      
+      # Alert: Missing metrics (강력 안전망)
+      - alert: DuriMetricsMissing
+        expr: |
+          absent_over_time(duri_p_uniform_ks_p[2m]) or absent_over_time(duri_p_sigma[2m])
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "DuRi: 핵심 메트릭 부재"
+          description: "duri_p_uniform_ks_p 또는 duri_p_sigma가 2분 이상 관측되지 않음. 파이프라인 중단 가능."
 
   - name: observability-quality-ma
     interval: 1m

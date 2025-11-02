@@ -237,12 +237,34 @@ collect_metrics() {
     local sigma_2h=$(query_prom_or_fallback "duri_p_sigma{window=\"2h\"}" 'window="2h"')
     local sigma_24h=$(query_prom_or_fallback "duri_p_sigma{window=\"24h\"}" 'window="24h"')
     
-    # 표본 수 (샘플수: 새/구 이름 모두 지원, OR 쿼리)
-    # max_over_time로 2분 윈도우 평활화 + 라벨有/無 코얼레싱
-    local samples_query_2h='max_over_time(duri_p_samples{window="2h"}[2m]) or max_over_time(duri_p_sigma_samples{window="2h"}[2m]) or max_over_time(label_replace(duri_p_sigma_samples,"window","2h","","")[2m])'
-    local samples_query_24h='max_over_time(duri_p_samples{window="24h"}[2m]) or max_over_time(duri_p_sigma_samples{window="24h"}[2m]) or max_over_time(label_replace(duri_p_sigma_samples,"window","24h","","")[2m])'
-    local n_2h=$(query_prom_or_fallback "$samples_query_2h" 'window="2h"')
-    local n_24h=$(query_prom_or_fallback "$samples_query_24h" 'window="24h"')
+    # 표본 수 (샘플수: 새/구 이름 모두 지원, 개별 쿼리 후 max 선택)
+    # Prometheus OR 쿼리가 안정적이지 않을 수 있으므로 개별 쿼리 후 max
+    local n_samples_2h_new=$(query_prom_or_fallback "duri_p_samples{window=\"2h\"}" 'window="2h"')
+    local n_samples_2h_old=$(query_prom_or_fallback "duri_p_sigma_samples{window=\"2h\"}" 'window="2h"')
+    local n_samples_24h_new=$(query_prom_or_fallback "duri_p_samples{window=\"24h\"}" 'window="24h"')
+    local n_samples_24h_old=$(query_prom_or_fallback "duri_p_sigma_samples{window=\"24h\"}" 'window="24h"')
+    
+    # 개별 쿼리 결과 중 최대값 선택 (둘 다 0이면 폴백 시도)
+    local n_2h="0"
+    local n_24h="0"
+    
+    # 숫자 비교를 위해 awk 사용
+    n_2h=$(echo -e "${n_samples_2h_new:-0}\n${n_samples_2h_old:-0}" | awk 'BEGIN{max=0} {if($1+0>max) max=$1+0} END{print max}')
+    n_24h=$(echo -e "${n_samples_24h_new:-0}\n${n_samples_24h_old:-0}" | awk 'BEGIN{max=0} {if($1+0>max) max=$1+0} END{print max}')
+    
+    # 둘 다 0이면 textfile에서 직접 찾기 (라벨有/無 모두)
+    if [ "$(printf '%.0f' "${n_2h:-0}" 2>/dev/null || echo "0")" -eq 0 ]; then
+        local fallback_2h=$(fallback_from_textfile "duri_p_sigma_samples" "window=\"2h\"")
+        [ -z "$fallback_2h" ] && fallback_2h=$(fallback_from_textfile "duri_p_samples" "window=\"2h\"")
+        [ -z "$fallback_2h" ] && fallback_2h=$(fallback_from_textfile "duri_p_sigma_samples" "")
+        [ -n "$fallback_2h" ] && n_2h="$fallback_2h"
+    fi
+    if [ "$(printf '%.0f' "${n_24h:-0}" 2>/dev/null || echo "0")" -eq 0 ]; then
+        local fallback_24h=$(fallback_from_textfile "duri_p_sigma_samples" "window=\"24h\"")
+        [ -z "$fallback_24h" ] && fallback_24h=$(fallback_from_textfile "duri_p_samples" "window=\"24h\"")
+        [ -z "$fallback_24h" ] && fallback_24h=$(fallback_from_textfile "duri_p_sigma_samples" "")
+        [ -n "$fallback_24h" ] && n_24h="$fallback_24h"
+    fi
     
     # NaN/empty/null 처리
     ks_p_2h=${ks_p_2h:-0}
