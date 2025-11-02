@@ -20,28 +20,6 @@ groups:
         expr: |
           (duri_error_budget offset 1h - duri_error_budget) / 3600
       
-# Error Budget Rules for DuRi
-# Purpose: Monitor error budget burn rate and alert when budget is at risk
-
-groups:
-  - name: error-budget
-    interval: 1m
-    rules:
-      # Recording rule: Monthly error budget
-      - record: duri_error_budget
-        expr: |
-          1 - duri_green_uptime_ratio
-      
-      # Recording rule: Error budget burn rate (short-term, 5min window)
-      - record: duri_error_budget_burn_short
-        expr: |
-          (duri_error_budget offset 5m - duri_error_budget) / 300
-      
-      # Recording rule: Error budget burn rate (long-term, 1h window)
-      - record: duri_error_budget_burn_long
-        expr: |
-          (duri_error_budget offset 1h - duri_error_budget) / 3600
-      
       # Recording rule: Error budget burn 7d (for convenience)
       - record: duri_error_budget_burn_7d
         expr: |
@@ -86,5 +64,3 @@ groups:
         annotations:
           summary: "Monthly error budget exhausted"
           description: "Error budget has reached 2% threshold. Stop all non-critical changes immediately."
-
-
