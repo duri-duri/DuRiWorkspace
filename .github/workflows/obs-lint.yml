@@ -1,0 +1,23 @@
+name: obs-lint
+
+on: [push, pull_request]
+
+jobs:
+  promtool:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: promtool check (cfg+rules, per-file)
+        run: |
+          set -eu
+          docker run --rm --entrypoint /bin/sh \
+            -v "$PWD/prometheus:/etc/prometheus:ro" \
+            prom/prometheus:v2.54.1 -lc '
+              promtool check config /etc/prometheus/prometheus.yml.minimal
+              for f in /etc/prometheus/rules/*.yml; do
+                echo "== $f"
+                promtool check rules "$f"
+              done
+            '
+

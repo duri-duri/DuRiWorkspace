@@ -333,8 +333,12 @@ PROM_DIR ?= $(PWD)/prometheus
 PROM_LOG ?= .reports/obs/promtool_last.log
 
 # A. promtool 검증 명령 안정화 (단일 셸·단일 도커·명시적 종료 + 파일별 판정)
-.PHONY: promtool-check promtool-find-failing
-promtool-check:
+.PHONY: promtool-check promtool-find-failing promtool-ensure-rules
+promtool-ensure-rules:
+	@[ -n "$$(ls -1 $(PROM_DIR)/rules/*.yml 2>/dev/null)" ] || { echo "[FAIL] no rules/*.yml files found"; exit 1; }
+	@echo "[OK] rules files present"
+
+promtool-check: promtool-ensure-rules
 	@mkdir -p $$(dirname "$(PROM_LOG)")
 	@echo "[promtool] full run -> $(PROM_LOG)"
 	@docker run --rm --entrypoint /bin/sh \
