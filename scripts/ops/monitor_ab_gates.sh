@@ -259,12 +259,19 @@ main() {
     echo "  베이지안: P(p≥0.8|data)=${bayes_prob}"
     echo "  SPRT: $sprt_result (LR=${sprt_ll})"
     
-    # 진행표 CSV 기록 (라운드별 Bayes/SPRT 상태 누적) - 보장 쓰기
+    # 진행표 CSV 기록 (라운드별 Bayes/SPRT 상태 누적) - 보장 쓰기 (에러와 무관하게)
     local progress_csv="${PROGRESS_CSV:-.reports/synth/progress.csv}"
     mkdir -p "$(dirname "$progress_csv")"
     judgment="${judgment:-RED}"  # 초기화 보장
-    echo "$(date +%F' '%T),$judgment,$ks_p_2h,$ks_p_24h,$unique_2h,$unique_24h,$sigma_2h,$sigma_24h,$n_2h,$n_24h,$sprt_ll,$bayes_prob" >> "$progress_csv" || true
-    sync
+    
+    # CSV 기록 (에러 발생 시에도 반드시 기록)
+    {
+        echo "$(date +%F' '%T),$judgment,$ks_p_2h,$ks_p_24h,$unique_2h,$unique_24h,$sigma_2h,$sigma_24h,$n_2h,$n_24h,$sprt_ll,$bayes_prob"
+    } >> "$progress_csv" 2>/dev/null || {
+        # CSV 기록 실패 시에도 계속 진행
+        echo "[WARN] CSV 기록 실패, 계속 진행" >&2
+    }
+    sync 2>/dev/null || true
     
     # 의사결정 (Sequential Rule + 통계적 판정)
     echo "[DECISION]"
