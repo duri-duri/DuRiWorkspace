@@ -162,6 +162,7 @@ main() {
     read -r ks_p_2h ks_p_24h unique_2h unique_24h sigma_2h sigma_24h n_2h n_24h <<< "$metrics"
     
     # 공백응답 가드: 메트릭이 모두 0이고 Prometheus 응답이 없으면 RED로 기록
+    local judgment=""
     if [ "$ks_p_2h" = "0" ] && [ "$ks_p_24h" = "0" ] && [ "$unique_2h" = "0" ] && [ "$unique_24h" = "0" ]; then
         echo "[WARN] prometheus 응답 없음 또는 메트릭 부재 → 이번 라운드 RED로 표기하고 계속 진행"
         judgment="RED"
@@ -174,7 +175,7 @@ main() {
     echo "  n (2h/24h): $n_2h / $n_24h"
     
     # 판정 (RED가 아닌 경우에만 정상 판정 수행)
-    if [ "$judgment" != "RED" ]; then
+    if [ -z "$judgment" ]; then
         judgment=$(judge_gate "$ks_p_2h" "$ks_p_24h" "$unique_2h" "$unique_24h" "$sigma_2h" "$sigma_24h" "$n_2h" "$n_24h")
     fi
     echo "[JUDGMENT] $judgment"
