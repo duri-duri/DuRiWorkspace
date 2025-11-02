@@ -238,32 +238,20 @@ collect_metrics() {
     local sigma_2h=$(query_prom_or_fallback "duri_p_sigma{window=\"2h\"}" 'window="2h"')
     local sigma_24h=$(query_prom_or_fallback "duri_p_sigma{window=\"24h\"}" 'window="24h"')
     
-    # 표본 수 (샘플수: 새/구 이름 모두 지원, 개별 쿼리 후 max 선택)
-    # Prometheus OR 쿼리가 안정적이지 않을 수 있으므로 개별 쿼리 후 max
-    local n_samples_2h_new=$(query_prom_or_fallback "duri_p_samples{window=\"2h\"}" 'window="2h"')
-    local n_samples_2h_old=$(query_prom_or_fallback "duri_p_sigma_samples{window=\"2h\"}" 'window="2h"')
-    local n_samples_24h_new=$(query_prom_or_fallback "duri_p_samples{window=\"24h\"}" 'window="24h"')
-    local n_samples_24h_old=$(query_prom_or_fallback "duri_p_sigma_samples{window=\"24h\"}" 'window="24h"')
+    # 표본 수 (샘플수: 단일 진실원 duri_p_n 사용)
+    # Recording rule로 코얼레싱 처리되어 단순 쿼리만 필요
+    local n_2h=$(query_prom_or_fallback "duri_p_n{window=\"2h\"}" 'window="2h"')
+    local n_24h=$(query_prom_or_fallback "duri_p_n{window=\"24h\"}" 'window="24h"')
     
-    # 개별 쿼리 결과 중 최대값 선택 (둘 다 0이면 폴백 시도)
-    local n_2h="0"
-    local n_24h="0"
-    
-    # 숫자 비교를 위해 awk 사용
-    n_2h=$(echo -e "${n_samples_2h_new:-0}\n${n_samples_2h_old:-0}" | awk 'BEGIN{max=0} {if($1+0>max) max=$1+0} END{print max}')
-    n_24h=$(echo -e "${n_samples_24h_new:-0}\n${n_samples_24h_old:-0}" | awk 'BEGIN{max=0} {if($1+0>max) max=$1+0} END{print max}')
-    
-    # 둘 다 0이면 textfile에서 직접 찾기 (라벨有/無 모두)
+    # 폴백: recording rule이 없으면 직접 쿼리 (하위호환)
     if [ "$(printf '%.0f' "${n_2h:-0}" 2>/dev/null || echo "0")" -eq 0 ]; then
-        local fallback_2h=$(fallback_from_textfile "duri_p_sigma_samples" "window=\"2h\"")
-        [ -z "$fallback_2h" ] && fallback_2h=$(fallback_from_textfile "duri_p_samples" "window=\"2h\"")
-        [ -z "$fallback_2h" ] && fallback_2h=$(fallback_from_textfile "duri_p_sigma_samples" "")
+        local fallback_2h=$(fallback_from_textfile "duri_p_samples" "window=\"2h\"")
+        [ -z "$fallback_2h" ] && fallback_2h=$(fallback_from_textfile "duri_p_sigma_samples" "window=\"2h\"")
         [ -n "$fallback_2h" ] && n_2h="$fallback_2h"
     fi
     if [ "$(printf '%.0f' "${n_24h:-0}" 2>/dev/null || echo "0")" -eq 0 ]; then
-        local fallback_24h=$(fallback_from_textfile "duri_p_sigma_samples" "window=\"24h\"")
-        [ -z "$fallback_24h" ] && fallback_24h=$(fallback_from_textfile "duri_p_samples" "window=\"24h\"")
-        [ -z "$fallback_24h" ] && fallback_24h=$(fallback_from_textfile "duri_p_sigma_samples" "")
+        local fallback_24h=$(fallback_from_textfile "duri_p_samples" "window=\"24h\"")
+        [ -z "$fallback_24h" ] && fallback_24h=$(fallback_from_textfile "duri_p_sigma_samples" "window=\"24h\"")
         [ -n "$fallback_24h" ] && n_24h="$fallback_24h"
     fi
     

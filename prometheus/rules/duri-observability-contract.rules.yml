@@ -106,6 +106,26 @@ groups:
           summary: "DuRi: 핵심 메트릭 부재"
           description: "duri_p_uniform_ks_p 또는 duri_p_sigma가 2분 이상 관측되지 않음. 파이프라인 중단 가능."
 
+  - name: duri-derived
+    interval: 30s
+    rules:
+      # Recording rule: 샘플수 단일 진실원 (SOT)
+      - record: duri_p_n
+        labels:
+          window: "2h"
+        expr: |
+          max_over_time(duri_p_samples{window="2h"}[2m])
+          OR on() max_over_time(duri_p_sigma_samples{window="2h"}[2m])
+          OR on() max_over_time(label_replace(duri_p_sigma_samples,"window","2h","","")[2m])
+      
+      - record: duri_p_n
+        labels:
+          window: "24h"
+        expr: |
+          max_over_time(duri_p_samples{window="24h"}[2m])
+          OR on() max_over_time(duri_p_sigma_samples{window="24h"}[2m])
+          OR on() max_over_time(label_replace(duri_p_sigma_samples,"window","24h","","")[2m])
+
   - name: observability-quality-ma
     interval: 1m
     rules:
