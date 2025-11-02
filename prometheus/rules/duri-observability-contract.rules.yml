@@ -129,6 +129,20 @@ groups:
       
       - record: duri_pipeline_green
         expr: (duri_p_n{window="2h"} >= 200) OR (duri_p_n{window="24h"} >= 200)
+      
+      # Recording rule: GREEN uptime ratio (24h)
+      - record: duri_green_uptime_ratio
+        expr: |
+          sum_over_time((duri_pipeline_green == 1)[24h:30s]) / 86400
+      
+      # Recording rule: DR success ratio (7d)
+      - record: duri_dr_success_ratio_7d
+        expr: |
+          (
+            sum(increase(duri_dr_success_total[7d]))
+          ) / (
+            sum(increase(duri_dr_success_total[7d])) + sum(increase(duri_dr_failure_total[7d]))
+          )
 
   - name: prometheus-self-health
     interval: 30s
