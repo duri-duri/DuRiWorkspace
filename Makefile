@@ -327,11 +327,6 @@ eval-window-off:
 	sed -i 's/DURI_FORCE_MIN_SAMPLES=5/DURI_FORCE_MIN_SAMPLES=1/g' $$f; \
 	docker compose up -d --force-recreate duri-core duri-brain duri-evolution
 
-# Prometheus 도구 변수
-PROM_IMG ?= prom/prometheus:v2.54.1
-PROM_DIR ?= $(PWD)/prometheus
-PROM_LOG ?= .reports/obs/promtool_last.log
-
 # A. promtool 검증 명령 안정화 (단일 셸·단일 도커·명시적 종료 + 파일별 판정)
 .PHONY: promtool-check promtool-find-failing promtool-ensure-rules
 promtool-ensure-rules:
