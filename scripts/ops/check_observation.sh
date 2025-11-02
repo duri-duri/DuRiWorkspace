@@ -44,9 +44,11 @@ fi
 # 2. Check node-exporter /metrics endpoint for duri_* metrics
 echo ""
 echo "[2/6] Checking node-exporter metrics endpoint..."
+duri_count=0
 if curl -sf --max-time 5 "$NODE_EXPORTER_URL/metrics" >/dev/null 2>&1; then
-    duri_count=$(curl -sf --max-time 5 "$NODE_EXPORTER_URL/metrics" 2>/dev/null | grep -c "^duri_" || echo "0")
-    if [ "$duri_count" -ge 3 ]; then
+    duri_count=$(curl -sf --max-time 5 "$NODE_EXPORTER_URL/metrics" 2>/dev/null | grep -c "^duri_" 2>/dev/null || echo "0")
+    duri_count=${duri_count:-0}
+    if [ "$duri_count" -ge 3 ] 2>/dev/null; then
         echo "  ✓ Found $duri_count duri_* metrics in node-exporter"
     else
         echo "  ✗ Only $duri_count duri_* metrics found (expected >= 3)"
@@ -66,7 +68,8 @@ while [ $wait_count -lt $MAX_WAIT ]; do
     labels_resp=$(curl -sf --max-time 5 "$PROM_URL/api/v1/labels?match[]=__name__=~\"duri_.*\"" 2>/dev/null || echo "")
     if echo "$labels_resp" | jq -e '.data.result' >/dev/null 2>&1; then
         duri_labels_count=$(echo "$labels_resp" | jq -r '.data.result | length' 2>/dev/null || echo "0")
-        if [ "$duri_labels_count" -ge 3 ]; then
+        duri_labels_count=${duri_labels_count:-0}
+        if [ "$duri_labels_count" -ge 3 ] 2>/dev/null; then
             echo "  ✓ Found $duri_labels_count duri_* metric names in Prometheus"
             break
         fi
@@ -75,7 +78,8 @@ while [ $wait_count -lt $MAX_WAIT ]; do
     wait_count=$((wait_count + 2))
 done
 
-if [ "$duri_labels_count" -lt 3 ]; then
+duri_labels_count=${duri_labels_count:-0}
+if [ "$duri_labels_count" -lt 3 ] 2>/dev/null; then
     echo "  ✗ Only $duri_labels_count duri_* metric names found (expected >= 3)"
     errors=$((errors + 1))
 fi

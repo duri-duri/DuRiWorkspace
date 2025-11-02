@@ -23,10 +23,24 @@ lint_file() {
         errors=$((errors + 1))
     fi
     
-    # 2. No commas in metric values
-    if grep -q ',' "$f" 2>/dev/null; then
+    # 2. No commas in metric values (but allow commas in labels)
+    # Check if comma appears outside of label braces {}
+    if awk '
+        {
+            # Skip comments
+            if (/^[[:space:]]*#/) next
+            # Extract value part (after last space)
+            match($0, /[[:space:]]+([0-9.eE+-]+)$/, arr)
+            if (arr[1] == "") next
+            # Check if comma appears in value part
+            if (arr[1] ~ /,/) {
+                print "COMMA_IN_VALUE"
+                exit 1
+            }
+        }
+    ' "$f" 2>/dev/null | grep -q "COMMA_IN_VALUE"; then
         echo "[ERROR] COMMA_FAIL: $f" >> "$LINT_ERR_LOG"
-        echo "COMMA_FAIL: $f (comma found in metric)" >&2
+        echo "COMMA_FAIL: $f (comma found in metric value)" >&2
         errors=$((errors + 1))
     fi
     
