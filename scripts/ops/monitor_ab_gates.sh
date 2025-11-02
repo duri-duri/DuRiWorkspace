@@ -75,11 +75,19 @@ query_prom() {
         jq -r ".data.result[]? | select(.metric.window==\"$window\") | .value[1]" 2>/dev/null || echo "0"
 }
 
-# Prometheus 쿼리 헬퍼 (전체 결과)
+# Prometheus 쿼리 헬퍼 (전체 결과, 공백응답 가드 포함)
 query_prom_all() {
     local query="$1"
-    docker exec "$PROM_CONTAINER" sh -lc "wget -qO- 'localhost:9090/api/v1/query?query=$query'" 2>/dev/null | \
-        jq -r '.data.result[]?.value[1]' 2>/dev/null || echo "0"
+    local resp=$(docker exec "$PROM_CONTAINER" sh -lc "wget -qO- 'localhost:9090/api/v1/query?query=$query'" 2>/dev/null || echo "")
+    
+    # 공백응답 가드
+    if [ -z "$resp" ] || ! echo "$resp" | jq -e .status >/dev/null 2>&1; then
+        echo "[WARN] prometheus 응답 없음 또는 JSON 파싱 실패: query=$query"
+        echo "0"
+        return 1
+    fi
+    
+    echo "$resp" | jq -r '.data.result[]?.value[1]' 2>/dev/null || echo "0"
 }
 
 # 3) 메트릭 수집 (정확한 쿼리 형식)
@@ -153,14 +161,22 @@ main() {
     local metrics=$(collect_metrics)
     read -r ks_p_2h ks_p_24h unique_2h unique_24h sigma_2h sigma_24h n_2h n_24h <<< "$metrics"
     
+    # 공백응답 가드: 메트릭이 모두 0이고 Prometheus 응답이 없으면 RED로 기록
+    if [ "$ks_p_2h" = "0" ] && [ "$ks_p_24h" = "0" ] && [ "$unique_2h" = "0" ] && [ "$unique_24h" = "0" ]; then
+        echo "[WARN] prometheus 응답 없음 또는 메트릭 부재 → 이번 라운드 RED로 표기하고 계속 진행"
+        judgment="RED"
+    fi
+    
     echo "[METRICS]"
     echo "  KS_p (2h/24h): $ks_p_2h / $ks_p_24h"
     echo "  unique_ratio (2h/24h): $unique_2h / $unique_24h"
     echo "  sigma (2h/24h): $sigma_2h / $sigma_24h"
     echo "  n (2h/24h): $n_2h / $n_24h"
     
-    # 판정
-    local judgment=$(judge_gate "$ks_p_2h" "$ks_p_24h" "$unique_2h" "$unique_24h" "$sigma_2h" "$sigma_24h" "$n_2h" "$n_24h")
+    # 판정 (RED가 아닌 경우에만 정상 판정 수행)
+    if [ "$judgment" != "RED" ]; then
+        judgment=$(judge_gate "$ks_p_2h" "$ks_p_24h" "$unique_2h" "$unique_24h" "$sigma_2h" "$sigma_24h" "$n_2h" "$n_24h")
+    fi
     echo "[JUDGMENT] $judgment"
     
     # 상태 읽기
@@ -186,12 +202,20 @@ main() {
     write_state "$green_count" "$yellow_count" "$red_count" "$judgment"
     
     # 베이지안/SPRT 통계적 판정
-    local bayes_prob=$(python3 scripts/ops/bayes_progress.py "$judgment" 2>/dev/null | grep -oE 'P\(p≥0\.8\|data\)=[0-9.]+' | grep -oE '[0-9.]+' | head -1 || echo "0")
-    local sprt_result=$(python3 scripts/ops/wald_sprt.py "$judgment" 2>/dev/null | grep -oE '→ [A-Z]+' | tail -1 || echo "CONTINUE")
+    local bayes_output=$(python3 scripts/ops/bayes_progress.py "$judgment" 2>/dev/null || echo "")
+    local bayes_prob=$(echo "$bayes_output" | grep -oE 'P\(p≥0\.8\|data\)=[0-9.]+' | grep -oE '[0-9.]+' | head -1 || echo "0")
+    local sprt_output=$(python3 scripts/ops/wald_sprt.py "$judgment" 2>/dev/null || echo "")
+    local sprt_result=$(echo "$sprt_output" | grep -oE '→ [A-Z]+' | tail -1 || echo "CONTINUE")
+    local sprt_ll=$(echo "$sprt_output" | grep -oE 'LR=[0-9.e+-]+' | grep -oE '[0-9.e+-]+' | head -1 || echo "0")
     
     echo "[STATISTICS]"
     echo "  베이지안: P(p≥0.8|data)=${bayes_prob}"
-    echo "  SPRT: $sprt_result"
+    echo "  SPRT: $sprt_result (LR=${sprt_ll})"
+    
+    # 진행표 CSV 기록 (라운드별 Bayes/SPRT 상태 누적)
+    local progress_csv="${PROGRESS_CSV:-.reports/synth/progress.csv}"
+    mkdir -p "$(dirname "$progress_csv")"
+    echo "$(date +%F' '%T),$judgment,$ks_p_2h,$ks_p_24h,$unique_2h,$unique_24h,$sigma_2h,$sigma_24h,$n_2h,$n_24h,$sprt_ll,$bayes_prob" >> "$progress_csv"
     
     # 의사결정 (Sequential Rule + 통계적 판정)
     echo "[DECISION]"
