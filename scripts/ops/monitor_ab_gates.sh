@@ -5,8 +5,17 @@ set -euo pipefail
 ROOT="$(git -C "$(dirname "$0")/../.." rev-parse --show-toplevel 2>/dev/null || realpath "$(dirname "$0")/../..")"
 cd "$ROOT"
 
+PROM_URL="${PROM_URL:-http://localhost:9090}"
 PROM_CONTAINER="${PROM_CONTAINER:-prometheus}"
+RETRY="${RETRY:-3}"
+LOCK="${LOCK:-$ROOT/var/locks/monitor_ab_gates.lock}"
 STATE_FILE="${STATE_FILE:-.reports/synth/ab_gate_state.json}"
+
+mkdir -p "$(dirname "$LOCK")"
+
+# flock: 중복 방지
+exec 200>"$LOCK"
+flock -n 200 || { echo "[SKIP] 다른 인스턴스 실행 중"; exit 0; }
 
 # 1) 판정 함수
 judge_gate() {
