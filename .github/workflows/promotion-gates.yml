@@ -1,0 +1,86 @@
+name: promotion-gates
+
+on:
+  pull_request:
+    branches: [ "main", "release/*" ]
+  push:
+    branches: [ "main", "release/*" ]
+
+jobs:
+  dr-rehearsal-24h-pass:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: assert DR histogram & p95 query
+        run: |
+          set -eu
+          # Check histogram format exists
+          if ! grep -q 'duri_dr_rto_seconds_bucket' prometheus/rules/duri-observability-contract.rules.yml; then
+            echo "[FAIL] DR histogram format not found in rules"
+            exit 1
+          fi
+          
+          # Check p95 recording rule exists
+          if ! grep -q 'duri_dr_rto_seconds_p95_7d' prometheus/rules/duri-observability-contract.rules.yml; then
+            echo "[FAIL] DR p95 recording rule not found"
+            exit 1
+          fi
+          
+          echo "[OK] DR histogram and p95 rules verified"
+
+  canary-quorum-pass:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: check quorum constants exist
+        run: |
+          set -eu
+          if ! grep -q 'min_samples:' .obs/promotion.yml; then
+            echo "[FAIL] min_samples not found in promotion.yml"
+            exit 1
+          fi
+          
+          if ! grep -q 'ks_p_threshold:' .obs/promotion.yml; then
+            echo "[FAIL] ks_p_threshold not found in promotion.yml"
+            exit 1
+          fi
+          
+          if ! grep -q 'unique_ratio_min:' .obs/promotion.yml; then
+            echo "[FAIL] unique_ratio_min not found in promotion.yml"
+            exit 1
+          fi
+          
+          if ! grep -q 'dual_pass_required:' .obs/promotion.yml; then
+            echo "[FAIL] dual_pass_required not found in promotion.yml"
+            exit 1
+          fi
+          
+          echo "[OK] Canary quorum constants verified"
+
+  error-budget-burn-ok:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: verify error budget rules
+        run: |
+          set -eu
+          if ! grep -q 'duri_error_budget_burn_short' prometheus/rules/error_budget.rules.yml; then
+            echo "[FAIL] error_budget_burn_short rule not found"
+            exit 1
+          fi
+          
+          if ! grep -q 'duri_error_budget_burn_long' prometheus/rules/error_budget.rules.yml; then
+            echo "[FAIL] error_budget_burn_long rule not found"
+            exit 1
+          fi
+          
+          if ! grep -q 'duri_error_budget_burn_ok' prometheus/rules/error_budget.rules.yml; then
+            echo "[FAIL] error_budget_burn_ok rule not found"
+            exit 1
+          fi
+          
+          echo "[OK] Error budget rules verified"
+

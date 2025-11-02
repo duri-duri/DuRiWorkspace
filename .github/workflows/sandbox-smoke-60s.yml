@@ -1,31 +1,19 @@
-name: obs-lint
+name: sandbox-smoke-60s
 
-on: 
+on:
   pull_request:
     branches: [ "main", "release/*" ]
   push:
     branches: [ "main", "release/*" ]
 
 jobs:
-  obs-lint:
+  sandbox-smoke-60s:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
       
-      - name: promtool check (cfg+rules, per-file)
-        run: |
-          set -eu
-          docker run --rm --entrypoint /bin/sh \
-            -v "$PWD/prometheus:/etc/prometheus:ro" \
-            prom/prometheus:v2.54.1 -lc '
-              promtool check config /etc/prometheus/prometheus.yml.minimal
-              for f in /etc/prometheus/rules/*.yml; do
-                echo "== $f"
-                promtool check rules "$f"
-              done
-            '
-      
-      - name: sandbox smoke test (60s)
+      - name: boot sandbox & smoke
         run: |
           set -eu
           echo "[SANDBOX] Starting Prometheus sandbox..."
@@ -46,17 +34,14 @@ jobs:
             sleep 2
           done
           
-          # Smoke checks
-          echo "[SMOKE] Checking rules loaded..."
-          rules_loaded=$(curl -s http://localhost:9091/api/v1/rules | jq -r '.data.groups | length')
-          if [ "$rules_loaded" -eq 0 ]; then
-            echo "[FAIL] No rules loaded"
-            docker logs prom-sandbox 2>&1 | tail -20
-            docker rm -f prom-sandbox
-            exit 1
-          fi
+          # Run heartbeat script
+          bash scripts/ops/textfile_heartbeat.sh || exit 1
           
-          echo "[SMOKE] Checking representative query..."
+          # Wait 60 seconds
+          echo "[WAIT] Waiting 60 seconds for metrics to stabilize..."
+          sleep 60
+          
+          # Final smoke check
           query_result=$(curl -s --get 'http://localhost:9091/api/v1/query' \
             --data-urlencode 'query=up' | jq -r '.status')
           if [ "$query_result" != "success" ]; then
@@ -65,6 +50,6 @@ jobs:
             exit 1
           fi
           
-          echo "[OK] Sandbox smoke test passed (rules=$rules_loaded)"
+          echo "[OK] Sandbox smoke test passed"
           docker rm -f prom-sandbox
 

@@ -1,11 +1,13 @@
-# Global owners
-* @duri-duri
+# CODEOWNERS
+# Purpose: Define code ownership for protected branches
+# Required for GitHub Protected Branch "Require review from Code Owners"
 
-# Prometheus rules
-prometheus/rules/ @duri-duri
+*                    @duri-duri @oper-team
 
-# Grafana dashboards
-grafana/ @duri-duri
+prometheus/**        @oper-team
+scripts/ops/**       @oper-team
+scripts/evolution/** @evo-team
+.github/**          @ops-ci
+.obs/**             @oper-team
 
-# CI workflows
-.github/workflows/ @duri-duri
+docs/ops/**         @oper-team
