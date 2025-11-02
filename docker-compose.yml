@@ -4,7 +4,7 @@ services:
     image: postgres:14
     container_name: duri-postgres
     environment:
-      POSTGRES_DB: duri_workspace
+      POSTGRES_DB: duri_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     volumes:
@@ -40,7 +40,7 @@ services:
     environment:
       - DURI_MODE=core
       - PYTHONPATH=/app:/app/duri_common
-      - DATABASE_URL=postgresql://postgres:postgres@duri-postgres:5432/duri_workspace
+      - DATABASE_URL=postgresql://postgres:postgres@duri-postgres:5432/duri_db
       - REDIS_URL=redis://duri-redis:6379
       # 포트/어댑터 설정
       - REFLEXION_BACKEND=http
@@ -84,7 +84,7 @@ services:
     environment:
       - DURI_MODE=brain
       - PYTHONPATH=/app:/app/duri_common
-      - DATABASE_URL=postgresql://postgres:postgres@duri-postgres:5432/duri_workspace
+      - DATABASE_URL=postgresql://postgres:postgres@duri-postgres:5432/duri_db
       - REDIS_URL=redis://duri-redis:6379
       - ROOT_PASSWORD=duri123
       - PORT=8081
@@ -113,7 +113,7 @@ services:
     environment:
       - DURI_MODE=evolution
       - PYTHONPATH=/app:/app/duri_common
-      - DATABASE_URL=postgresql://postgres:postgres@duri-postgres:5432/duri_workspace
+      - DATABASE_URL=postgresql://postgres:postgres@duri-postgres:5432/duri_db
       - REDIS_URL=redis://duri-redis:6379
       - ROOT_PASSWORD=duri123
     ports:
@@ -141,7 +141,7 @@ services:
     environment:
       - DURI_MODE=control
       - PYTHONPATH=/app:/app/duri_common
-      - DATABASE_URL=postgresql://postgres:postgres@duri-postgres:5432/duri_workspace
+      - DATABASE_URL=postgresql://postgres:postgres@duri-postgres:5432/duri_db
       - REDIS_URL=redis://duri-redis:6379
       - ROOT_PASSWORD=duri123
     ports:

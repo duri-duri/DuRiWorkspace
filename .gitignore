@@ -177,3 +177,4 @@ scripts/._*
 /loop_data/
 /snapshots/
 /logs/
+!duri_core

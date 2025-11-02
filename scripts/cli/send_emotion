@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+set -euo pipefail
+PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/bin"
+emotion="${1:-neutral}"
+payload="${2:-}"
+: "${DURI_CORE_URL:=http://localhost:8080}"
+: "${EMOTION_CURL_TIMEOUT:=2}"   # 서버가 즉시 202 내보내므로 다시 낮춤
+
+# payload 정규화
+[ -z "${payload}" ] && payload="{\"emotion\":\"${emotion}\"}"
+
+auth_hdr=()
+if [ -n "${DURI_AUTH_TOKEN:-}" ]; then
+  auth_hdr+=( -H "Authorization: Bearer ${DURI_AUTH_TOKEN}" )
+elif [ -f "${HOME}/.config/duri/token" ]; then
+  token="$(tr -d '\r\n' < "${HOME}/.config/duri/token")"
+  [ -n "$token" ] && auth_hdr+=( -H "Authorization: Bearer ${token}" )
+fi
+
+CACHE="${HOME}/.cache/duri_emotion_endpoint"
+mkdir -p "$(dirname "$CACHE")"
+
+discover_ep() {
+  ep="$(curl -sS --max-time 0.6 "${DURI_CORE_URL}/" 2>/dev/null \
+      | python3 - <<'PY' 2>/dev/null || true
+import sys,json
+try:
+  doc=json.load(sys.stdin); ep=doc.get("endpoints",{}).get("emotion")
+  print(ep if isinstance(ep,str) else "/emotion")
+except: print("/emotion")
+PY
+  )"
+  echo "${ep:-/emotion}"
+}
+
+endpoint=""
+[ -f "$CACHE" ] && endpoint="$(tr -d '\r\n' < "$CACHE")"
+[ -z "$endpoint" ] && endpoint="$(discover_ep)"
+
+post_once() {
+  http_code="$(curl -sS -o /tmp/_duri_emotion.out \
+    -w "%{http_code}" --max-time "${EMOTION_CURL_TIMEOUT}" \
+    -X POST "${DURI_CORE_URL}${1}" -H 'Content-Type: application/json' \
+    "${auth_hdr[@]}" -d "${payload}" 2>/dev/null || echo "000")"
+  # 200/201/202 모두 성공 처리 (백그라운드 설계에서는 202 정상)
+  if [[ "$http_code" =~ ^20(0|1|2)$ ]]; then
+    echo "$1" > "$CACHE"
+    [ -x scripts/cli/ev_touch.sh ] && scripts/cli/ev_touch.sh >/dev/null 2>&1 || true
+    echo "[OK] emotion -> ${1} (code=${http_code})"
+    return 0
+  fi
+  return 1
+}
+
+if post_once "$endpoint"; then exit 0; fi
+rm -f "$CACHE" 2>/dev/null || true
+if post_once "/emotion"; then exit 0; fi
+
+echo "[FAIL] emotion send failed (endpoint=${endpoint}, timeout=${EMOTION_CURL_TIMEOUT}s, code=${http_code:-N/A})" >&2
+exit 1

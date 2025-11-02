@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/bin"
+endpoint="${1:?endpoint path like /api/emotion}"
+json="${2:-{}}"
+: "${DURI_CORE_URL:=http://localhost:8080}"
+curl -fsS -X POST "${DURI_CORE_URL}${endpoint}" \
+  -H 'Content-Type: application/json' \
+  -d "${json}"

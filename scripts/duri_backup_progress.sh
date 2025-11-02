@@ -51,11 +51,11 @@ show_file_progress() {
 
 # PRECHECK START
 precheck_usb_or_fallback() {
-  USB_MNT="/mnt/usb"
+  USB_MNT="/mnt/g"
   DESKTOP_ROOT="/mnt/c/Users/admin/Desktop/두리백업"
   mkdir -p "$DESKTOP_ROOT" 2>/dev/null || true
 
-  # 1) /mnt/usb가 fstab 자동 마운트로 살아있으면 OK
+  # 1) /mnt/g가 fstab 자동 마운트로 살아있으면 OK
   if mount | grep -q " on ${USB_MNT} "; then
     log "[PRECHECK] USB mounted at ${USB_MNT}"
     echo "$USB_MNT"
@@ -63,8 +63,8 @@ precheck_usb_or_fallback() {
   fi
 
   # 2) fstab 등록되어 있으면 재마운트 시도
-  if grep -qE '^[A-Z]:[[:space:]]+/mnt/usb[[:space:]]+drvfs' /etc/fstab 2>/dev/null; then
-    if sudo mount /mnt/usb 2>/dev/null; then
+  if grep -qE '^[A-Z]:[[:space:]]+/mnt/g[[:space:]]+drvfs' /etc/fstab 2>/dev/null; then
+    if sudo mount /mnt/g 2>/dev/null; then
       log "[PRECHECK] USB mounted via fstab"
       echo "$USB_MNT"
       return 0
@@ -82,8 +82,8 @@ BACKUP_ROOT="$(precheck_usb_or_fallback)"
 echo "[PRECHECK] Backup root determined: ${BACKUP_ROOT}"
 
 # USB와 데스크톱 경로 설정
-if [[ "$BACKUP_ROOT" == "/mnt/usb" ]]; then
-  USB="/mnt/usb"
+if [[ "$BACKUP_ROOT" == "/mnt/g" ]]; then
+  USB="/mnt/g"
   DESKTOP_ROOT="/mnt/c/Users/admin/Desktop/두리백업"
   DEST_DESKTOP_DIR="${DESKTOP_ROOT}/$(date +%Y)/$(date +%m)/$(date +%d)"
   mkdir -p "$DEST_DESKTOP_DIR" 2>/dev/null || true

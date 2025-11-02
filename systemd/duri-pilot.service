@@ -1,0 +1,15 @@
+[Unit]
+Description=DuRi Pilot (One-shot EV generation)
+After=network.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/duri/DuRiWorkspace
+EnvironmentFile=/home/duri/DuRiWorkspace/config/duri.env
+ExecStart=/usr/bin/bash scripts/pilot_24h.sh --one-shot
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
+

@@ -1,0 +1,67 @@
+# DuRi Gates: 선언적 게이트 정의
+# scripts/gate_check.sh가 이 파일을 읽어 doctor.sh 출력과 합쳐 pass/fail 판정
+
+targets:
+  ev_velocity_per_hour:
+    warn: 2.5
+    pass: 4.0
+    unit: "EV/h"
+    description: "EV 생성 속도 (시간당)"
+    
+  ab_pvalue:
+    p_threshold: 0.05
+    require_variance: true
+    min_samples: 10
+    description: "AB 테스트 p-value (통계적 유의미성 + 분산 요구)"
+    
+  shadow_epoch_seconds:
+    p50: 360
+    p95: 720
+    unit: "seconds"
+    description: "Shadow Epoch 소요시간 (p50 ≤ 6분, p95 ≤ 12분)"
+    
+  db_consistency:
+    expected_db: "duri_db"
+    description: "DB 일관성 (단일 DB 이름 사용)"
+    
+  metrics_endpoint:
+    expected_port: 9109
+    description: "메트릭 엔드포인트 가용성"
+    
+  pilot_process:
+    required: true
+    description: "파일럿/워커 프로세스 실행 상태"
+    
+  last_ev_age:
+    warn_seconds: 3600
+    fail_seconds: 7200
+    description: "최근 EV 생성 시간 (1시간 경과 시 경고, 2시간 경과 시 실패)"
+
+# (5) Promotion Gate에 질 지표 결합 (하나라도 실패→머지 금지)
+gates:
+  ab-quality-gate:
+    name: "ab-quality-gate"
+    window: "2h"
+    checks:
+      - metric: "ab_eval_unique_p_2h"
+        op: ">="
+        value: 2
+      - metric: "ab_eval_sigma_2h"
+        op: ">"
+        value: 0
+      - metric: "ev_velocity_per_hour"
+        op: ">="
+        value: 2.5
+      # H2: 효과적 EV ≥ 2 추가
+      - metric: "ab_effective_ev_2h"
+        op: ">="
+        value: 2
+    action_on_fail: "fail_pr"
+
+actions_on_fail:
+  - print_fix_instructions
+  - suggest_cursor_task
+
+actions_on_warn:
+  - print_fix_instructions
+

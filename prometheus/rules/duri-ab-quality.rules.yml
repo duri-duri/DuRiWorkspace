@@ -1,0 +1,44 @@
+groups:
+- name: ab-quality
+  interval: 30s
+  rules:
+  # (2) 분산·고유값을 지표로 상시 노출 (Prometheus 레코딩룰)
+  - record: ab_eval_unique_p_2h
+    expr: count(sum by (ev) (duri_ab_p_value) > bool -1)  # 라벨p 존재 ev 개수
+  
+  - record: ab_eval_sigma_2h
+    expr: stddev_over_time(duri_ab_p_value[2h])
+  
+  # H1: 효과적 EV 메트릭 (2h 창에서 n≥1 EV 개수)
+  - record: ab_effective_ev_2h
+    expr: sum_over_time(duri_ab_effective_ev[2h])
+  
+  # 하드닝 #5: 효과적 EV 정의를 규칙으로 명문화 (SYN 제외)
+  - record: ab:effective_ev_2h
+    expr: count_over_time(duri_ab_p_value{ev!~".*-SYN.*"}[2h])
+  
+  # 3h 진단 보조 지표
+  - record: ab_eval_unique_p_3h
+    expr: count(sum by (ev) (duri_ab_p_value) > bool -1)
+  
+  - record: ab_eval_sigma_3h
+    expr: stddev_over_time(duri_ab_p_value[3h])
+  
+  # (2) 알람: AB 분산 붕괴 (하드닝: SYN 제외 강제)
+  - alert: ABVarianceCollapsed
+    expr: stddev_over_time(duri_ab_p_value{ev!~".*-SYN.*"}[2h]) == 0
+    for: 10m
+    labels: {severity: warning}
+    annotations:
+      summary: "AB 분산 붕괴 (SYN 제외)"
+      description: "sigma == 0 (최근 2h, SYN 제외). Check Γ2 (EV별 입력/시드 분기)."
+  
+  # H2: 효과적 EV 부족 알람 (하드닝 #5: 명확화)
+  - alert: ABEffectiveEVLow
+    expr: ab:effective_ev_2h < 2
+    for: 10m
+    labels: {severity: warning}
+    annotations:
+      summary: "Effective EV below target (<2 in 2h)"
+      description: "Only {{ $value }} effective EV(s) with n>=1 samples in last 2h (SYN excluded). Check sample collection."
+

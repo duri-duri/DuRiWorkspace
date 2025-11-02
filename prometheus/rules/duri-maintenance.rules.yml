@@ -1,0 +1,21 @@
+groups:
+- name: syn-cleanup-health
+  interval: 30s
+  rules:
+  # 하드닝: SYN 청소 헬스 메트릭
+  - record: duri:syn_cleanup_hours_since_last
+    expr: (time() - duri_syn_cleanup_last_unixtime) / 3600
+  
+  # 추가 룰: 청소 헬스 신선도 (명확화)
+  - record: maint:syn_cleanup_age_hours
+    expr: (time() - duri_syn_cleanup_last_unixtime) / 3600
+  
+  # B. 청소 크론 드리프트 감시 룰 명확화
+  - alert: SynCleanupStale
+    expr: maint:syn_cleanup_age_hours > 1.5
+    for: 30m
+    labels: {severity: warning}
+    annotations:
+      summary: "SYN cleanup stale (>90m)"
+      description: "마지막 실행 이후 {{ $value }}h 경과 (목표: <1.5h)"
+

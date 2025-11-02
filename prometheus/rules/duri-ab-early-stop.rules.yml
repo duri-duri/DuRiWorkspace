@@ -1,0 +1,31 @@
+# 2.4) 조기중단(SPRT/그룹순차) — 최소 기준
+# n≥5 창에서 유의미 차이가 연속 k번 관측되면(예: 3회), 하위 arm을 즉시 중단/감산
+
+groups:
+- name: ab-early-stop
+  interval: 30s
+  rules:
+  # 간단 룰(운영 친화):
+  # ab:success_rate_5m{arm} 차이의 95% CI가 0을 k회 연속 하회 → 하위 arm 트래픽 절반
+  # 2회 반복 시 arm drop
+  
+  # Success rate 차이 계산
+  - record: ab:success_rate_diff_5m
+    expr: |
+      ab:success_rate_5m{arm="A"} - ab:success_rate_5m{arm="B"}
+  
+  # 조기중단 신호: 차이가 음수로 연속 관측 (간단 버전)
+  - record: ab:early_stop_signal_a_inferior
+    expr: |
+      count_over_time(
+        (ab:success_rate_diff_5m < -0.02)[5m:]
+      ) >= 3
+  
+  - alert: ABEarlyStopCandidate
+    expr: ab:early_stop_signal_a_inferior
+    for: 5m
+    labels: {severity: warning}
+    annotations:
+      summary: "Early stop candidate detected (A inferior)"
+      description: "A가 B보다 성공률이 2%p 이상 낮은 상태가 3회 연속. 하위 arm 트래픽 감산 검토."
+

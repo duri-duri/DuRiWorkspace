@@ -1,0 +1,13 @@
+[Unit]
+Description=DuRi Pilot Timer (8-12min cadence)
+Requires=duri-pilot.service
+
+[Timer]
+OnBootSec=30s
+OnUnitActiveSec=8min
+RandomizedDelaySec=240s
+AccuracySec=1s
+
+[Install]
+WantedBy=timers.target
+

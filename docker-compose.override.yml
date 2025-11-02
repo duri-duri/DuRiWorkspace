@@ -2,6 +2,32 @@ services:
   duri-core:
     environment:
       - EMOTION_ASYNC=1
+      # 하드닝: AB 라운딩/시드 정책 영구 반영
+      - DURI_AB_ROUND=1e-6
+      - DURI_AB_SEED_MODE=ev_ts
+      - DURI_FORCE_MIN_SAMPLES=5
+      # A. 환경변수 영구 반영 누락 수정
+      - TEXTFILE_DIR=/.reports/synth
     volumes:
       # 로컬 서브모듈 코드를 컨테이너의 /app/duri_core에 강제 반영
       - ./duri_core:/app/duri_core:ro
+      # A. 환경변수 영구 반영 누락 수정
+      - ./.reports/synth:/.reports/synth:rw
+
+  duri-brain:
+    environment:
+      # 하드닝: AB 라운딩/시드 정책 영구 반영
+      - DURI_AB_ROUND=1e-6
+      - DURI_AB_SEED_MODE=ev_ts
+
+  duri-evolution:
+    environment:
+      # 하드닝: AB 라운딩/시드 정책 영구 반영
+      - DURI_AB_ROUND=1e-6
+      - DURI_AB_SEED_MODE=ev_ts
+
+  duri-control:
+    environment:
+      # 하드닝: AB 라운딩/시드 정책 영구 반영
+      - DURI_AB_ROUND=1e-6
+      - DURI_AB_SEED_MODE=ev_ts

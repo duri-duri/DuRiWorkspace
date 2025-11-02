@@ -1,0 +1,39 @@
+groups:
+- name: ab-ev-rate
+  interval: 30s
+  rules:
+  # A. EV/h 정의 분리 (60m/6h) + 알람
+  - record: ab:ev_per_hour_60m
+    expr: rate(duri_ev_count_total[60m]) * 3600
+  
+  - record: ab:ev_per_hour_6h
+    expr: rate(duri_ev_count_total[6h]) * 3600
+  
+  - alert: ABEvRateLow60m
+    expr: ab:ev_per_hour_60m < 4
+    for: 10m
+    labels: {severity: warning}
+    annotations:
+      summary: "EV generation rate low (60m window)"
+      description: "EV/h < 4 in last 60 minutes. Check pilot cycle."
+  
+  - alert: ABEvRateLow6h
+    expr: ab:ev_per_hour_6h < 2.5
+    for: 30m
+    labels: {severity: warning}
+    annotations:
+      summary: "EV generation rate low (6h window)"
+      description: "EV/h < 2.5 in last 6 hours. Check long-term cadence."
+  
+  # 장기 EV/h 버스트 착시 완화
+  - record: ab:ev_velocity_6h_ma
+    expr: avg_over_time(duri_ev_velocity[6h])
+  
+  - alert: ABVelocityDrift
+    expr: ab:ev_velocity_6h_ma < 2
+    for: 2h
+    labels: {severity: warning}
+    annotations:
+      summary: "EV/h drift low"
+      description: "6시간 이동평균이 2/h 미만."
+

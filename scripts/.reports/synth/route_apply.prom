@@ -1,0 +1,3 @@
+# HELP ab_route_apply_success Route apply success (1=success,0=fail)
+# TYPE ab_route_apply_success gauge
+ab_route_apply_success 0

@@ -15,18 +15,18 @@ log(){ echo "[$(TS)] $*"; }
 # 기본 모드
 MODE="${1:-export}"                    # export|import
 
-# 자동탐지 + 오버라이드 가능(환경변수)
+# 자동탐지 + 오버라이드 가능(환경변수) - G: Ventoy 우선
 USB_ROOT="${USB_ROOT:-}"
-for CAND in "/mnt/usb/DuRiSync" "/mnt/g/DuRiSync"; do
+for CAND in "/mnt/g/DuRiSync" "/mnt/usb/DuRiSync"; do
   [[ -z "$USB_ROOT" && -d "$CAND" ]] && USB_ROOT="$CAND"
 done
-USB_ROOT="${USB_ROOT:-/mnt/usb/DuRiSync}"
+USB_ROOT="${USB_ROOT:-/mnt/g/DuRiSync}"
 
 HOSP_ROOT="${HOSP_ROOT:-/mnt/e/DuRiSafe_HOSP}"
 HOME_ROOT="${HOME_ROOT:-/mnt/f/DuRiSafe_HOME}"
 
-# 핸드오프 마커는 두리 백업 미러 루트에 둔다(캐스케이드 워커와 공유)
-HANDOFF_ROOT="${HANDOFF_ROOT:-/mnt/usb/두리백업}"
+# 핸드오프 마커는 두리 백업 미러 루트에 둔다(캐스케이드 워커와 공유) - G: Ventoy
+HANDOFF_ROOT="${HANDOFF_ROOT:-/mnt/g/두리백업}"
 
 DAYS="${DAYS:-7}"                      # 최근 N일
 VERIFY_SAMPLE="${VERIFY_SAMPLE:-10}"   # 샘플 검증 파일 수

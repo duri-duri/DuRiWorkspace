@@ -311,5 +311,41 @@ alertmanager-reload:
 	@curl -s -X POST http://localhost:9093/-/reload && echo "Alertmanager reloaded"
 .PHONY: alertmanager-reload
 
+# 평가 윈도우에서만 n 하한 상향(게이트 n=1은 유지)
+.PHONY: eval-window-on eval-window-off
+eval-window-on:
+	@f=docker-compose.override.yml; \
+	sed -i 's/DURI_FORCE_MIN_SAMPLES=1/DURI_FORCE_MIN_SAMPLES=5/g' $$f; \
+	docker compose up -d --force-recreate duri-core duri-brain duri-evolution
+
+eval-window-off:
+	@f=docker-compose.override.yml; \
+	sed -i 's/DURI_FORCE_MIN_SAMPLES=5/DURI_FORCE_MIN_SAMPLES=1/g' $$f; \
+	docker compose up -d --force-recreate duri-core duri-brain duri-evolution
+
+# A. promtool 검증 명령 안정화 (필수 파일만)
+.PHONY: promtool-check
+promtool-check:
+	@docker run --rm -v "$$(pwd)/prometheus/rules":/rules \
+	  --entrypoint /bin/promtool prom/prometheus:latest \
+	  check rules \
+	  /rules/duri-ev.rules.yml \
+	  /rules/duri-ab-detect.rules.yml \
+	  /rules/duri-target.rules.yml \
+	  /rules/duri-maintenance.rules.yml \
+	  /rules/duri-ab-early-stop.rules.yml \
+	  /rules/duri-ab-quality.rules.yml
+
+# A. 환경변수 영구 반영 검증
+.PHONY: env-harden
+env-harden:
+	@echo "[INFO] 환경변수 영구 반영 확인..."
+	@docker compose up -d duri-core && sleep 3
+	@docker compose exec duri-core env 2>/dev/null | grep -E 'DURI_FORCE_MIN_SAMPLES|TEXTFILE_DIR' || echo "[WARN] 환경변수 확인 실패"
+
+# 프로듀서 스키마 계약 테스트 (P-FIX#2)
+.PHONY: producer-schema-check
+producer-schema-check:
+	bash tests/test_producer_schema.sh
 
 -include ops/observability/monitoring.mk
