@@ -139,7 +139,7 @@ groups:
         labels: { severity: critical, team: "obs", service: "prometheus" }
         annotations:
           summary: "Prometheus config reload failed"
-          description: "last_reload={{ humanizeTimestamp(prometheus_config_last_reload_success_timestamp_seconds*1000) }}"
+          description: "last_reload_timestamp={{ $value }}"
       
       - alert: RuleEvalFailures
         expr: sum by (rule_group) (increase(prometheus_rule_group_eval_failures_total[5m])) > 0
