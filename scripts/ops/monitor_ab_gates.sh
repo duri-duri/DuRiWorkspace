@@ -120,6 +120,7 @@ fallback_from_textfile() {
     local name="$1"
     local lbl="${2:-}"
     local textfile_dir="${TEXTFILE_DIR:-.reports/synth}"
+    local v=""  # 초기화 필수
     
     # 샘플수 메트릭: 라벨有/無 모두 지원
     if [[ "$name" == *"samples"* ]] || [[ "$name" == *"SAMPLES"* ]]; then
