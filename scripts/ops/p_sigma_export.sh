@@ -26,19 +26,8 @@ fi
 # --- 3) sigma 계산 ---
 sigma="NaN"; n="0"
 if [[ -n "${vals// /}" ]]; then
-  # 파이프로 직접 전달
-  sigma_n=$(printf '%s' "$vals" | python3 - <<'PY'
-import math, sys
-data = [float(x) for x in sys.stdin.read().strip().split()]
-if not data:
-    print("NaN 0")
-else:
-    n = len(data)
-    m = sum(data)/n
-    var = sum((x-m)**2 for x in data)/max(n-1,1)
-    print(f"{math.sqrt(var):.10f} {n}")
-PY
-)
+  # 파이프로 직접 전달 (heredoc 분리)
+  sigma_n=$(printf '%s\n' "$vals" | python3 -c 'import math, sys; data = [float(x) for x in sys.stdin.read().strip().split()]; print(f"{math.sqrt(sum((x-sum(data)/len(data))**2 for x in data)/max(len(data)-1,1)):.10f} {len(data)}" if data else "NaN 0")')
   sigma=$(echo "$sigma_n" | awk '{print $1}')
   n=$(echo "$sigma_n" | awk '{print $2}')
 fi
