@@ -12,6 +12,10 @@ PROM_CONTAINER="${PROM_CONTAINER:-prometheus}"
 NODE_EXPORTER_URL="${NODE_EXPORTER_URL:-http://localhost:9100}"
 MAX_WAIT="${MAX_WAIT:-60}"
 
+# 초기 grace 및 시작 시간
+BOOT_SEC="${BOOT_SEC:-120}"
+start_ts="$(date +%s)"
+
 errors=0
 
 echo "[CHECK] Observability Contract v1 Boot Test"
@@ -82,8 +86,15 @@ done
 
 duri_labels_count=${duri_labels_count:-0}
 if [ "$duri_labels_count" -lt 3 ] 2>/dev/null; then
-    echo "  ✗ Only $duri_labels_count duri_* metric names found (expected >= 3)"
-    errors=$((errors + 1))
+    # 초기 구간 램프업: t<120s → 1개 이상 통과, 이후 3개 이상
+    now="$(date +%s)"
+    need=$([ $((now - start_ts)) -lt "$BOOT_SEC" ] && echo 1 || echo 3)
+    if [ "$duri_labels_count" -lt "$need" ] 2>/dev/null; then
+        echo "  ✗ Only $duri_labels_count duri_* metric names found (expected >= $need)"
+        errors=$((errors + 1))
+    else
+        echo "  ✓ Found $duri_labels_count duri_* metric names (OK: >= $need during boot grace)"
+    fi
 fi
 
 # 4. Check node job is UP

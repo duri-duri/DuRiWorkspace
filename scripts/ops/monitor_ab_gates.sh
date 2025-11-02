@@ -11,6 +11,10 @@ RETRY="${RETRY:-2}"                  # unbound variable 방지
 PROM_QUERY_TIMEOUT="${PROM_QUERY_TIMEOUT:-2500}"  # ms
 STATE_FILE="${STATE_FILE:-.reports/synth/ab_gate_state.json}"
 
+# 초기 grace(초) — 첫 스크랩 대기
+GRACE_SEC="${GRACE_SEC:-120}"
+start_ts="$(date +%s)"
+
 mkdir -p "$(dirname "$LOCK")"
 
 # flock: 중복 방지
@@ -136,11 +140,12 @@ fallback_from_textfile() {
     fi
 }
 
-# Prometheus 쿼리 또는 텍스트파일 폴백 (Observability Contract v1: 빈 벡터 방어)
+# Prometheus 쿼리 또는 텍스트파일 폴백 (Observability Contract v1: 빈 벡터 방어 + 초기 grace)
 query_prom_or_fallback() {
     local metric="$1"
     local lbl="${2:-}"
     local v=""
+    local fallback=""
     
     # Try Prometheus first (host → container fallback)
     local resp="$(query_prom "$metric" "host")"
@@ -155,7 +160,17 @@ query_prom_or_fallback() {
     
     # Fallback to textfile if Prometheus query failed or returned empty
     if [ -z "$v" ] || [ "$v" = "0" ] || [ "$v" = "" ]; then
-        v=$(fallback_from_textfile "$metric" "$lbl")
+        fallback=$(fallback_from_textfile "$metric" "$lbl")
+    fi
+    
+    # 초기 GRACE: Prom 응답이 비어있으면 GRACE_SEC 동안은 fallback값이 있으면 그걸 우선, 없으면 빈값 반환
+    if [ -z "$v" ] || [ "$v" = "0" ] || [ "$v" = "" ]; then
+        now="$(date +%s)"
+        if [ $((now - start_ts)) -lt "$GRACE_SEC" ]; then
+            [ -n "$fallback" ] && v="$fallback" || v=""
+        else
+            v="$fallback"
+        fi
     fi
     
     # Final fallback: 0
