@@ -20,6 +20,7 @@ emit() {
   printf 'duri_prom_reload_success %d\n' "$ok" > "$tmp"
   printf 'duri_prom_reload_timestamp %.0f\n' "$(date +%s)" >> "$tmp"
   mkdir -p "$TEXTFILE_DIR"
+  chmod 644 "$tmp"  # node_exporter가 읽을 수 있도록 권한 설정
   mv -f "$tmp" "$out"
   
   # 즉시 노출 확인(있으면 1줄 출력, 없으면 빈출력)
