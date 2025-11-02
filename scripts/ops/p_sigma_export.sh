@@ -13,7 +13,7 @@ mkdir -p "$TEXTFILE_DIR"
 # --- 2) p 값 수집 ---
 vals=""
 for f in "$P2H" "$P24H"; do
-  [[ -f "$f" ]] && vals+=$(awk '/^p_value[[:space:]]+/ {printf "%s ", $2}' "$f")
+  [[ -f "$f" ]] && vals+=$(awk '/^p_value/ {printf "%s ", $2}' "$f")
 done
 
 # --- 3) sigma 계산 ---
