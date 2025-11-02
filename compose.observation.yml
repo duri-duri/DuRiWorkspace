@@ -5,12 +5,15 @@ services:
     restart: unless-stopped
     ports: ["9090:9090"]
     volumes:
+      # 핵심: 디렉터리 전체가 아니라 "단일 파일 바인드"로 강제
       - ./prometheus/prometheus.yml.minimal:/etc/prometheus/prometheus.yml:ro
       - ./prometheus/rules:/etc/prometheus/rules:ro
+      - ./prometheus/targets:/etc/prometheus/targets:ro
     command:
       - --config.file=/etc/prometheus/prometheus.yml
       - --web.enable-lifecycle
       - --storage.tsdb.retention.time=15d
+
   node_exporter:
     image: quay.io/prometheus/node-exporter:v1.8.1
     container_name: node-exporter
