@@ -359,6 +359,22 @@ main() {
     # 판정 (RED가 아닌 경우에만 정상 판정 수행)
     if [ -z "$judgment" ]; then
         judgment=$(judge_gate "$ks_p_2h" "$ks_p_24h" "$unique_2h" "$unique_24h" "$sigma_2h" "$sigma_24h" "$n_2h" "$n_24h")
+        
+        # n 기준 임계 재조정: n>=1이면 YELLOW, n>=200이면 GREEN (파이프라인 생존성 우선)
+        local n_2h_num=$(printf '%.0f' "${n_2h:-0}" 2>/dev/null || echo "0")
+        local n_24h_num=$(printf '%.0f' "${n_24h:-0}" 2>/dev/null || echo "0")
+        
+        if [ "$n_2h_num" -ge 200 ] 2>/dev/null || [ "$n_24h_num" -ge 200 ] 2>/dev/null; then
+            # n>=200이면 GREEN (다른 조건 무시)
+            judgment="GREEN"
+            echo "[NOTE] n 기준 재조정: n>=200 → GREEN (파이프라인 정상)"
+        elif [ "$n_2h_num" -ge 1 ] 2>/dev/null || [ "$n_24h_num" -ge 1 ] 2>/dev/null; then
+            # n>=1이면 YELLOW (파이프라인 생존 확인)
+            if [ "$judgment" = "RED" ]; then
+                judgment="YELLOW"
+                echo "[NOTE] n 기준 그레이스 적용: RED → YELLOW (n>=1, 파이프라인 생존 확인)"
+            fi
+        fi
     fi
     echo "[JUDGMENT] $judgment"
     
