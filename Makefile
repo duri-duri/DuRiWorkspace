@@ -326,14 +326,18 @@ eval-window-off:
 # A. promtool 검증 명령 안정화 (단일 소스만)
 .PHONY: promtool-check
 promtool-check:
-	@if docker run --rm --entrypoint /bin/sh \
-	  -v "$$(pwd)/prometheus:/etc/prometheus:ro" prom/prometheus:v2.54.1 -lc \
-	  'promtool check config /etc/prometheus/prometheus.yml.minimal && promtool check rules /etc/prometheus/rules/*.yml'; then \
-	  echo "[OK] promtool-check passed"; \
-	else \
-	  echo "[FAIL] promtool-check failed"; \
-	  exit 1; \
-	fi
+	@set -u; \
+	echo "[1/2] config check..."; \
+	docker run --rm --entrypoint promtool \
+	  -v "$$(pwd)/prometheus:/etc/prometheus:ro" prom/prometheus:v2.54.1 \
+	  check config /etc/prometheus/prometheus.yml.minimal; \
+	ec1=$$?; echo "exit=$$ec1"; \
+	echo "[2/2] rules check..."; \
+	docker run --rm --entrypoint promtool \
+	  -v "$$(pwd)/prometheus:/etc/prometheus:ro" prom/prometheus:v2.54.1 \
+	  check rules /etc/prometheus/rules/*.yml; \
+	ec2=$$?; echo "exit=$$ec2"; \
+	test $$ec1 -eq 0 -a $$ec2 -eq 0 && echo "[OK] promtool-check passed" || { echo "[FAIL] promtool-check failed"; exit 1; }
 
 .PHONY: prometheus-reload-safe
 prometheus-reload-safe: promtool-check
