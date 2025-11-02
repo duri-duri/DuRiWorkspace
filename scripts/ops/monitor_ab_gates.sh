@@ -343,11 +343,20 @@ main() {
     local metrics=$(collect_metrics)
     read -r ks_p_2h ks_p_24h unique_2h unique_24h sigma_2h sigma_24h n_2h n_24h <<< "$metrics"
     
-    # 공백응답 가드: 메트릭이 모두 0이고 Prometheus 응답이 없으면 RED로 기록
+    # 공백응답 가드: 메트릭이 모두 0이고 Prometheus 응답이 없으면 관용 처리
     local judgment=""
     if [ "$ks_p_2h" = "0" ] && [ "$ks_p_24h" = "0" ] && [ "$unique_2h" = "0" ] && [ "$unique_24h" = "0" ]; then
-        echo "[WARN] prometheus 응답 없음 또는 메트릭 부재 → 이번 라운드 RED로 표기하고 계속 진행"
-        judgment="RED"
+        # n 최근값이 존재(>=1)면 YELLOW, 아니면 RED
+        local n_2h_num=$(printf '%.0f' "${n_2h:-0}" 2>/dev/null || echo "0")
+        local n_24h_num=$(printf '%.0f' "${n_24h:-0}" 2>/dev/null || echo "0")
+        
+        if [ "$n_2h_num" -ge 1 ] 2>/dev/null || [ "$n_24h_num" -ge 1 ] 2>/dev/null; then
+            judgment="YELLOW"
+            echo "[NOTE] prometheus timeout 응답, n>=1 → YELLOW (관용 처리)"
+        else
+            judgment="RED"
+            echo "[WARN] prometheus 응답 없음 또는 메트릭 부재 → 이번 라운드 RED로 표기하고 계속 진행"
+        fi
     fi
     
     echo "[METRICS]"

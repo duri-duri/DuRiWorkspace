@@ -18,7 +18,7 @@ services:
       - --storage.tsdb.retention.time=15d
 
   node_exporter:
-    image: quay.io/prometheus/node-exporter:v1.8.1
+    image: prom/node-exporter:v1.8.2
     container_name: node-exporter
     restart: unless-stopped
     ports: ["9100:9100"]
@@ -31,5 +31,4 @@ services:
       - --path.rootfs=/rootfs
       - --path.procfs=/host/proc
       - --path.sysfs=/host/sys
-      - --collector.textfile
       - --collector.textfile.directory=/textfile
