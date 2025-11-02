@@ -9,7 +9,7 @@ PROM_CONTAINER="${PROM_CONTAINER:-prometheus}"
 LOCK="${LOCK:-$ROOT/var/locks/monitor_gates.lock}"
 RETRY="${RETRY:-2}"                  # unbound variable 방지
 PROM_QUERY_TIMEOUT="${PROM_QUERY_TIMEOUT:-2500}"  # ms
-STATE_DIR="${STATE_DIR:-.reports/synth/state}"
+STATE_DIR="${STATE_DIR:-reports/textfile/state}"
 STATE_FILE="${STATE_FILE:-$STATE_DIR/ab_gate_state.json}"
 mkdir -p "$STATE_DIR" 2>/dev/null || echo "[WARN] cannot mkdir $STATE_DIR" >&2
 
