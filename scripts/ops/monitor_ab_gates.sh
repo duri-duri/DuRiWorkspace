@@ -9,7 +9,9 @@ PROM_CONTAINER="${PROM_CONTAINER:-prometheus}"
 LOCK="${LOCK:-$ROOT/var/locks/monitor_gates.lock}"
 RETRY="${RETRY:-2}"                  # unbound variable 방지
 PROM_QUERY_TIMEOUT="${PROM_QUERY_TIMEOUT:-2500}"  # ms
-STATE_FILE="${STATE_FILE:-.reports/synth/ab_gate_state.json}"
+STATE_DIR="${STATE_DIR:-.reports/obs}"
+STATE_FILE="${STATE_FILE:-$STATE_DIR/ab_gate_state.json}"
+mkdir -p "$STATE_DIR" 2>/dev/null || echo "[WARN] cannot mkdir $STATE_DIR" >&2
 
 # 초기 grace(초) — 첫 스크랩 대기
 GRACE_SEC="${GRACE_SEC:-120}"
@@ -269,13 +271,18 @@ collect_metrics() {
     ks_p_2h=$(echo "$ks_p_2h" | grep -E "^[0-9.e+-]+$" || echo "0")
     ks_p_24h=$(echo "$ks_p_24h" | grep -E "^[0-9.e+-]+$" || echo "0")
     
-    # n 기준 그레이스: n < MIN_N이면 RED 금지, YELLOW로 완충
+    # n 기준 그레이스: 임계 재조정 (파이프라인 생존성 우선)
     local n_2h_num=$(printf '%.0f' "${n_2h:-0}" 2>/dev/null || echo "0")
     local n_24h_num=$(printf '%.0f' "${n_24h:-0}" 2>/dev/null || echo "0")
     local judgment_note=""
     
-    if [ "$n_2h_num" -lt "$MIN_N" ] 2>/dev/null || [ "$n_24h_num" -lt "$MIN_N" ] 2>/dev/null; then
-        judgment_note="(n<${MIN_N}, 초기구간 그레이스)"
+    # n>=1이면 YELLOW, n>=200이면 GREEN (파이프라인 생존성 우선)
+    if [ "$n_2h_num" -ge 200 ] 2>/dev/null || [ "$n_24h_num" -ge 200 ] 2>/dev/null; then
+        judgment_note="(n>=200, GREEN)"
+    elif [ "$n_2h_num" -ge 1 ] 2>/dev/null || [ "$n_24h_num" -ge 1 ] 2>/dev/null; then
+        judgment_note="(n>=1, YELLOW grace: 파이프라인 생존 확인)"
+    else
+        judgment_note="(n=0, RED: 파이프라인 중단 가능)"
     fi
     
     echo "$ks_p_2h $ks_p_24h $unique_2h $unique_24h $sigma_2h $sigma_24h $n_2h $n_24h $judgment_note"
@@ -291,7 +298,12 @@ read_state() {
 }
 
 write_state() {
-    mkdir -p "$(dirname "$STATE_FILE")"
+    # 디렉토리 보장 (재발 방지)
+    mkdir -p "$(dirname "$STATE_FILE")" 2>/dev/null || {
+        echo "[WARN] cannot mkdir $(dirname "$STATE_FILE")" >&2
+        return 0
+    }
+    
     local green_count="$1"
     local yellow_count="$2"
     local red_count="$3"
@@ -303,14 +315,22 @@ write_state() {
         return 0
     fi
     
+    # 원자적 쓰기 (tmp 파일 사용)
+    local tmpf=$(mktemp "$(dirname "$STATE_FILE")/.tmp.XXXXXX" 2>/dev/null || echo "")
+    if [ -z "$tmpf" ]; then
+        echo "[WARN] cannot create temp file for $STATE_FILE" >&2
+        return 0
+    fi
+    
     jq -n \
         --arg gc "$green_count" \
         --arg yc "$yellow_count" \
         --arg rc "$red_count" \
         --arg j "$judgment" \
         '{green_count: ($gc | tonumber), yellow_count: ($yc | tonumber), red_count: ($rc | tonumber), last_judgment: $j, timestamp: now}' \
-        > "$STATE_FILE" 2>/dev/null || {
-        echo "[WARN] 상태 파일 기록 실패, 계속 진행" >&2
+        > "$tmpf" 2>/dev/null && mv "$tmpf" "$STATE_FILE" 2>/dev/null || {
+        rm -f "$tmpf" 2>/dev/null
+        echo "[WARN] 상태 파일 기록 실패 ($STATE_FILE), 계속 진행" >&2
         return 0
     }
 }

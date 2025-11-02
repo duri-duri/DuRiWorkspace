@@ -126,6 +126,29 @@ groups:
           OR on() max_over_time(duri_p_sigma_samples{window="24h"}[2m])
           OR on() label_replace(max_over_time(duri_p_sigma_samples[2m]),"window","24h","","")
 
+  - name: prometheus-self-health
+    interval: 30s
+    rules:
+      # Alert: Prometheus config reload failed
+      - alert: PromConfigReloadFailed
+        expr: prometheus_config_last_reload_successful == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Prometheus config reload failed"
+          description: "Check rules/config; last reload failed at {{ humanizeTimestamp(prometheus_config_last_reload_success_timestamp_seconds*1000) }}"
+      
+      # Alert: Rule evaluation failures
+      - alert: RuleEvalFailures
+        expr: sum by (rule_group) (increase(prometheus_rule_group_eval_failures_total[5m])) > 0
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Rule evaluation failures detected"
+          description: "Rule group {{ $labels.rule_group }} has evaluation failures in last 5m."
+
   - name: observability-quality-ma
     interval: 1m
     rules:

@@ -325,7 +325,12 @@ eval-window-off:
 
 # A. promtool 검증 명령 안정화 (필수 파일만)
 .PHONY: promtool-check
+# promtool 검증 (표준화, 재발 방지)
 promtool-check:
+	@echo "[CHECK] Prometheus config and rules..."
+	@docker run --rm --entrypoint /bin/sh \
+	  -v "$$(pwd)/prometheus:/etc/prometheus:ro" prom/prometheus:v2.54.1 -lc \
+	  'promtool check config /etc/prometheus/prometheus.yml && promtool check rules /etc/prometheus/rules/*.yml'
 	@docker run --rm -v "$$(pwd)/prometheus/rules":/rules \
 	  --entrypoint /bin/promtool prom/prometheus:latest \
 	  check rules \
