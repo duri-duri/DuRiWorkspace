@@ -190,12 +190,16 @@ main() {
     if [ "$judgment" = "GREEN" ] && [ "$green_count" -ge 4 ]; then
         echo "  → 완전 관찰 모드 전환 (Green 4회 연속)"
         echo "  → 개입 중단"
+        echo "  → 조건: 지난 2h 윈도우에서 Green ≥80% (연속 4회 이상)"
+        echo "  → 알람 확인: ABPValuesUniformityLost, ABPSigmaNoSamples*, KS_p<0.01 결합 없음"
     elif [ "$judgment" = "YELLOW" ] && [ "$yellow_count" -ge 3 ]; then
         echo "  → 경미 개입 A 실행 필요 (Yellow ≥3회)"
         echo "  → 실행: bash scripts/ops/intervene_minor_a.sh"
+        echo "  → 기대효과: P(KS_p≥0.05) ~ +0.08, unique_ratio ~ +0.05"
     elif [ "$judgment" = "RED" ]; then
         echo "  → 즉시 트리아지 실행 (Red 1회)"
         echo "  → 실행: bash scripts/ops/triage_red.sh"
+        echo "  → 10분 컷: Exporter 산출물 → 규칙 검증 → 타깃 확인 → 워크스페이스 테스트"
     else
         echo "  → 계속 관찰 (현재: $judgment, 연속: $green_count/$yellow_count/$red_count)"
     fi
