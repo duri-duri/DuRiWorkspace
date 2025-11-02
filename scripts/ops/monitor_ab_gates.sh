@@ -108,6 +108,58 @@ safe_value() {
     [ -n "$payload" ] && echo "$payload" | jq -r '.data.result[0].value[1] // "0"' 2>/dev/null || echo "0"
 }
 
+# 텍스트파일 폴백 함수 (Observability Contract v1)
+fallback_from_textfile() {
+    local name="$1"
+    local lbl="${2:-}"
+    local textfile_dir="${TEXTFILE_DIR:-.reports/synth}"
+    
+    # Search for metric in textfile directory
+    if [ -n "$lbl" ]; then
+        # Match label pattern
+        awk -v n="$name" -v L="$lbl" '
+            $1 ~ "^" n {
+                if (index($0, L) > 0) {
+                    print $NF
+                    exit
+                }
+            }
+        ' "$textfile_dir"/*.prom 2>/dev/null | head -1 || echo ""
+    else
+        # No label requirement, take first match
+        awk -v n="$name" '
+            $1 ~ "^" n {
+                print $NF
+                exit
+            }
+        ' "$textfile_dir"/*.prom 2>/dev/null | head -1 || echo ""
+    fi
+}
+
+# Prometheus 쿼리 또는 텍스트파일 폴백
+query_prom_or_fallback() {
+    local metric="$1"
+    local lbl="${2:-}"
+    local v=""
+    
+    # Try Prometheus first
+    local resp="$(query_prom "$metric" "host")"
+    if [ -z "$resp" ] || ! echo "$resp" | jq -e '.data.result[0].value' >/dev/null 2>&1; then
+        resp="$(query_prom "$metric" "container")"
+    fi
+    
+    if [ -n "$resp" ] && echo "$resp" | jq -e '.data.result[0].value' >/dev/null 2>&1; then
+        v=$(echo "$resp" | jq -r '.data.result[0].value[1] // "0"' 2>/dev/null || echo "0")
+    fi
+    
+    # Fallback to textfile if Prometheus query failed
+    if [ -z "$v" ] || [ "$v" = "0" ] || [ "$v" = "" ]; then
+        v=$(fallback_from_textfile "$metric" "$lbl")
+    fi
+    
+    echo "${v:-0}"
+}
+
 # Prometheus 쿼리 헬퍼 (전체 결과, 공백응답 가드 포함)
 query_prom_all() {
     local query="$1"

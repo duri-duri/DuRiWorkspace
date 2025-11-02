@@ -1,0 +1,97 @@
+# Observability Contract v1: Prometheus rules for textfile health and alerts
+
+groups:
+  - name: observability-contract
+    interval: 30s
+    rules:
+      # Recording rule: textfile staleness
+      - record: duri_textfile_staleness_seconds
+        expr: |
+          time() - node_textfile_mtime_seconds{job="node"}
+      
+      # Recording rule: duri_* metric count
+      - record: duri_textfile_metric_count
+        expr: |
+          count({__name__=~"duri_.*", job="node"})
+      
+      # Alert: Textfile scrape error
+      - alert: TextfileScrapeError
+        expr: node_textfile_scrape_error{job="node"} > 0
+        for: 1m
+        labels:
+          severity: page
+        annotations:
+          summary: "node_exporter textfile scrape error"
+          description: "Textfile scrape error detected: {{ $value }}"
+      
+      # Alert: Textfile staleness
+      - alert: TextfileStaleness
+        expr: duri_textfile_staleness_seconds > 180
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Textfile metrics stale"
+          description: "Textfile metrics have not been updated for {{ $value }} seconds"
+      
+      # Alert: Missing KS metrics
+      - alert: DuriKsMissing
+        expr: |
+          absent(duri_p_uniform_ks_p{job="node"}) or absent(duri_p_unique_ratio{job="node"})
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "KS/unique metrics not scraped"
+          description: "Critical metrics duri_p_uniform_ks_p or duri_p_unique_ratio are missing"
+      
+      # Alert: Missing sigma metrics
+      - alert: DuriSigmaMissing
+        expr: |
+          absent(duri_p_sigma{job="node"}) or absent(duri_p_samples{job="node"})
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Sigma/samples metrics not scraped"
+          description: "Critical metrics duri_p_sigma or duri_p_samples are missing"
+      
+      # Alert: Low metric count
+      - alert: DuriMetricCountLow
+        expr: duri_textfile_metric_count < 3
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Low duri_* metric count"
+          description: "Only {{ $value }} duri_* metrics found (expected >= 3)"
+
+groups:
+  - name: observability-quality-ma
+    interval: 1m
+    rules:
+      # Moving averages for quality metrics (5-minute windows)
+      - record: duri_p_uniform_ks_p_ma5
+        expr: |
+          avg_over_time(duri_p_uniform_ks_p{job="node"}[5m])
+      
+      - record: duri_p_uniform_ks_p_std5
+        expr: |
+          stddev_over_time(duri_p_uniform_ks_p{job="node"}[5m])
+      
+      - record: duri_p_unique_ratio_ma5
+        expr: |
+          avg_over_time(duri_p_unique_ratio{job="node"}[5m])
+      
+      - record: duri_p_unique_ratio_std5
+        expr: |
+          stddev_over_time(duri_p_unique_ratio{job="node"}[5m])
+      
+      - record: duri_p_sigma_ma5
+        expr: |
+          avg_over_time(duri_p_sigma{job="node"}[5m])
+      
+      - record: duri_p_sigma_std5
+        expr: |
+          stddev_over_time(duri_p_sigma{job="node"}[5m])
+
