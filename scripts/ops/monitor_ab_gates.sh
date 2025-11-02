@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
-# 가드 달린 관찰 모드: Green/Yellow/Red 판정 및 자동 의사결정
+# --- hard guards ---
 set -euo pipefail
 
 ROOT="$(git -C "$(dirname "$0")/../.." rev-parse --show-toplevel 2>/dev/null || realpath "$(dirname "$0")/../..")"
@@ -7,8 +6,9 @@ cd "$ROOT"
 
 PROM_URL="${PROM_URL:-http://localhost:9090}"
 PROM_CONTAINER="${PROM_CONTAINER:-prometheus}"
-RETRY="${RETRY:-3}"
-LOCK="${LOCK:-$ROOT/var/locks/monitor_ab_gates.lock}"
+LOCK="${LOCK:-$ROOT/var/locks/monitor_gates.lock}"
+RETRY="${RETRY:-2}"                  # unbound variable 방지
+PROM_QUERY_TIMEOUT="${PROM_QUERY_TIMEOUT:-2500}"  # ms
 STATE_FILE="${STATE_FILE:-.reports/synth/ab_gate_state.json}"
 
 mkdir -p "$(dirname "$LOCK")"
@@ -79,47 +79,33 @@ judge_gate() {
 # Prometheus 쿼리 함수 (이중 질의 + 재시도 + 폴백)
 query_prom() {
     local q="$1"
-    local i=1
+    local kind="${2:-host}"
+    local try=0
     local resp=""
     
-    # 호스트에서 재시도
-    while [ $i -le "$RETRY" ]; do
-        resp="$(curl -s --max-time 2 "$PROM_URL/api/v1/query?query=$q" 2>/dev/null || true)"
-        if echo "$resp" | jq -e '.status=="success"' >/dev/null 2>&1; then
+    while [ $try -le $RETRY ]; do
+        if [ "$kind" = "host" ]; then
+            resp="$(curl -sf --max-time 3 "$PROM_URL/api/v1/query?query=$q" 2>/dev/null || true)"
+        else
+            resp="$(docker exec "$PROM_CONTAINER" sh -lc "wget -qO- 'http://localhost:9090/api/v1/query?query=$q'" 2>/dev/null || true)"
+        fi
+        
+        if [ -n "$resp" ] && echo "$resp" | jq -e '.data.result[0].value' >/dev/null 2>&1; then
             echo "$resp"
             return 0
         fi
-        i=$((i+1))
-        sleep 0.5
+        try=$((try+1))
+        sleep 0.8
     done
     
-    # 호스트 실패 → 컨테이너 폴백
-    if docker ps --format '{{.Names}}' | grep -qx "$PROM_CONTAINER" 2>/dev/null; then
-        i=1
-        while [ $i -le "$RETRY" ]; do
-            resp="$(docker exec "$PROM_CONTAINER" sh -lc "wget -qO- 'http://localhost:9090/api/v1/query?query=$q'" 2>/dev/null || true)"
-            if echo "$resp" | jq -e '.status=="success"' >/dev/null 2>&1; then
-                echo "$resp"
-                return 0
-            fi
-            i=$((i+1))
-            sleep 0.5
-        done
-    fi
-    
-    echo ""  # 완전 실패
+    echo ""  # 공백응답 반환 (호출측이 RED로 처리)
     return 1
 }
 
-# 값 추출 함수 (안전한 기본값)
-val_or_zero() {
-    local q="$1"
-    local r="$(query_prom "$q")"
-    if [ -z "$r" ]; then
-        echo "0"
-        return
-    fi
-    echo "$r" | jq -r '.data.result[]? | select(.metric.window=="'"$2"'") | .value[1] // 0' 2>/dev/null || echo "0"
+# 안전한 값 추출 함수 (jq 실패/공백이면 0)
+safe_value() {
+    local payload="$1"
+    [ -n "$payload" ] && echo "$payload" | jq -r '.data.result[0].value[1] // "0"' 2>/dev/null || echo "0"
 }
 
 # Prometheus 쿼리 헬퍼 (전체 결과, 공백응답 가드 포함)
