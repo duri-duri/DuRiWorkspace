@@ -32,7 +32,7 @@ services:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /:/rootfs:ro
-      - ./reports/textfile:/textfile:ro   # 고정 마운트 (textfile 수집 경로)
+      - ../.reports/textfile:/textfile:ro   # DuRiWorkspace/.reports/textfile 마운트
     command:
       - --path.rootfs=/rootfs
       - --path.procfs=/host/proc

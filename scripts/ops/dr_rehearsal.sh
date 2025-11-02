@@ -12,6 +12,7 @@ cd "$ROOT"
 
 # Test mode: success|fail|--smoke (for generating test metrics)
 TEST_MODE="${1:-}"
+EXPORT_HIST="${2:-}"
 if [ "$TEST_MODE" = "success" ] || [ "$TEST_MODE" = "fail" ]; then
   METRICS_DIR="${METRICS_DIR:-.reports/textfile}"
   mkdir -p "$METRICS_DIR"

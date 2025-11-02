@@ -41,7 +41,7 @@ if command -v gh >/dev/null 2>&1; then
   done
   
   # Check for required checks
-  REQUIRED_CHECK_LIST=("obs-lint" "sandbox-smoke-60s" "dr-rehearsal-24h-pass" "canary-quorum-pass" "error-budget-burn-ok")
+  REQUIRED_CHECK_LIST=("obs-lint" "sandbox-smoke-60s" "promql-unit" "dr-rehearsal-24h-pass" "canary-quorum-pass" "error-budget-burn-ok")
   MISSING_CHECKS=()
   for check in "${REQUIRED_CHECK_LIST[@]}"; do
     if ! echo "$REQUIRED_CHECKS" | grep -q "^${check}$"; then
