@@ -82,7 +82,7 @@ query_prom_all() {
     
     # 공백응답 가드
     if [ -z "$resp" ] || ! echo "$resp" | jq -e .status >/dev/null 2>&1; then
-        echo "[WARN] prometheus 응답 없음 또는 JSON 파싱 실패: query=$query"
+        echo "[WARN] prometheus 응답 없음 또는 JSON 파싱 실패: query=$query" >&2
         echo "0"
         return 1
     fi
