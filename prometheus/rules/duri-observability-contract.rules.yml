@@ -65,6 +65,27 @@ groups:
         annotations:
           summary: "Low duri_* metric count"
           description: "Only {{ $value }} duri_* metrics found (expected >= 3)"
+      
+      # Alert: No samples (샘플 부족 경고)
+      - alert: DuriNoSamples2h
+        expr: |
+          (max_over_time(duri_p_samples{window="2h"}[2m]) or max_over_time(duri_p_sigma_samples{window="2h"}[2m])) < 200
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "DuRi: 샘플 부족 (2h)"
+          description: "최근 2분 내 2h 창 샘플수 < 200. 초기 램프업 또는 파이프라인 문제."
+      
+      - alert: DuriNoSamples24h
+        expr: |
+          (max_over_time(duri_p_samples{window="24h"}[2m]) or max_over_time(duri_p_sigma_samples{window="24h"}[2m])) < 200
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "DuRi: 샘플 부족 (24h)"
+          description: "최근 2분 내 24h 창 샘플수 < 200. 초기 램프업 또는 파이프라인 문제."
 
   - name: observability-quality-ma
     interval: 1m

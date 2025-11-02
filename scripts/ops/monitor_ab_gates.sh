@@ -15,6 +15,9 @@ STATE_FILE="${STATE_FILE:-.reports/synth/ab_gate_state.json}"
 GRACE_SEC="${GRACE_SEC:-120}"
 start_ts="$(date +%s)"
 
+# 최소 샘플 수 (n 기준 그레이스)
+MIN_N="${MIN_N:-200}"
+
 mkdir -p "$(dirname "$LOCK")"
 
 # flock: 중복 방지
@@ -196,23 +199,26 @@ query_prom_all() {
     echo "$resp" | jq -r '.data.result[]?.value[1]' 2>/dev/null || echo "0"
 }
 
-# 3) 메트릭 수집 (폴백 우선순위: Prom → textfile → 0)
+# 3) 메트릭 수집 (폴백 우선순위: Prom → textfile → 0, 샘플수는 OR 쿼리)
 collect_metrics() {
     # KS·unique (폴백 사용)
-    local ks_p_2h=$(query_prom_or_fallback "duri_p_uniform_ks_p" 'window="2h"')
-    local ks_p_24h=$(query_prom_or_fallback "duri_p_uniform_ks_p" 'window="24h"')
+    local ks_p_2h=$(query_prom_or_fallback "duri_p_uniform_ks_p{window=\"2h\"}" 'window="2h"')
+    local ks_p_24h=$(query_prom_or_fallback "duri_p_uniform_ks_p{window=\"24h\"}" 'window="24h"')
     
     # unique ratio (폴백 사용)
-    local unique_2h=$(query_prom_or_fallback "duri_p_unique_ratio" 'window="2h"')
-    local unique_24h=$(query_prom_or_fallback "duri_p_unique_ratio" 'window="24h"')
+    local unique_2h=$(query_prom_or_fallback "duri_p_unique_ratio{window=\"2h\"}" 'window="2h"')
+    local unique_24h=$(query_prom_or_fallback "duri_p_unique_ratio{window=\"24h\"}" 'window="24h"')
     
     # σ (폴백 사용)
-    local sigma_2h=$(query_prom_or_fallback "duri_p_sigma" 'window="2h"')
-    local sigma_24h=$(query_prom_or_fallback "duri_p_sigma" 'window="24h"')
+    local sigma_2h=$(query_prom_or_fallback "duri_p_sigma{window=\"2h\"}" 'window="2h"')
+    local sigma_24h=$(query_prom_or_fallback "duri_p_sigma{window=\"24h\"}" 'window="24h"')
     
-    # 표본 수 (폴백 사용)
-    local n_2h=$(query_prom_or_fallback "duri_p_samples" 'window="2h"')
-    local n_24h=$(query_prom_or_fallback "duri_p_samples" 'window="24h"')
+    # 표본 수 (샘플수: 새/구 이름 모두 지원, OR 쿼리)
+    # max_over_time로 2분 윈도우 평활화
+    local samples_query_2h='max_over_time(duri_p_samples{window="2h"}[2m]) or max_over_time(duri_p_sigma_samples{window="2h"}[2m]) or 0'
+    local samples_query_24h='max_over_time(duri_p_samples{window="24h"}[2m]) or max_over_time(duri_p_sigma_samples{window="24h"}[2m]) or 0'
+    local n_2h=$(query_prom_or_fallback "$samples_query_2h" 'window="2h"')
+    local n_24h=$(query_prom_or_fallback "$samples_query_24h" 'window="24h"')
     
     # NaN/empty/null 처리
     ks_p_2h=${ks_p_2h:-0}
