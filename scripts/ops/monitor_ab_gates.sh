@@ -185,17 +185,32 @@ main() {
     
     write_state "$green_count" "$yellow_count" "$red_count" "$judgment"
     
-    # 의사결정 (Sequential Rule)
+    # 의사결정 (Sequential Rule + 통계적 판정)
     echo "[DECISION]"
-    if [ "$judgment" = "GREEN" ] && [ "$green_count" -ge 4 ]; then
-        echo "  → 완전 관찰 모드 전환 (Green 4회 연속)"
+    
+    # 정지 규칙: 둘 다 충족 시 기다림 전환
+    local can_wait=0
+    if [ "$green_count" -ge 4 ]; then
+        # 알람 확인 (간단 버전: Prometheus 쿼리)
+        local alert_count=$(docker exec "$PROM_CONTAINER" sh -lc "wget -qO- 'localhost:9090/api/v1/alerts'?silenced=false&active=true" 2>/dev/null | \
+            jq -r '.data.alerts[]? | select(.labels.alertname | test("ABPValuesUniformityLost|ABPSigmaNoSamples|ABPValuesKS")) | .labels.alertname' 2>/dev/null | wc -l || echo "0")
+        if [ "$alert_count" -eq 0 ]; then
+            can_wait=1
+        fi
+    fi
+    
+    if [ "$can_wait" -eq 1 ] && (( $(echo "$bayes_prob >= 0.8" | bc -l 2>/dev/null || echo "0") )); then
+        echo "  → 완전 관찰 모드 전환 (정지 규칙 충족)"
         echo "  → 개입 중단"
-        echo "  → 조건: 지난 2h 윈도우에서 Green ≥80% (연속 4회 이상)"
-        echo "  → 알람 확인: ABPValuesUniformityLost, ABPSigmaNoSamples*, KS_p<0.01 결합 없음"
+        echo "  → 조건: Green 4회 연속 + 알람 무 + P(p≥0.8|data)≥0.8"
+        echo "  → 증거 수집을 '수동 개입 없이' 지속"
+    elif [ "$judgment" = "GREEN" ] && [ "$green_count" -ge 4 ]; then
+        echo "  → Green 4회 연속 (베이지안/SPRT 확인 중)"
+        echo "  → 계속 관찰"
     elif [ "$judgment" = "YELLOW" ] && [ "$yellow_count" -ge 3 ]; then
         echo "  → 경미 개입 A 실행 필요 (Yellow ≥3회)"
         echo "  → 실행: bash scripts/ops/intervene_minor_a.sh"
-        echo "  → 기대효과: P(KS_p≥0.05) ~ +0.08, unique_ratio ~ +0.05"
+        echo "  → 기대효과: ΔKS_p≈+0.05~0.08, Δunique_ratio≈+0.03~0.05"
     elif [ "$judgment" = "RED" ]; then
         echo "  → 즉시 트리아지 실행 (Red 1회)"
         echo "  → 실행: bash scripts/ops/triage_red.sh"
