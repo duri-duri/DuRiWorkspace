@@ -26,8 +26,8 @@ fi
 # --- 3) sigma 계산 ---
 sigma="NaN"; n="0"
 if [[ -n "${vals// /}" ]]; then
-  # heredoc 대신 echo로 파이프
-  sigma_n=$(echo "$vals" | python3 - <<'PY'
+  # 파이프로 직접 전달
+  sigma_n=$(printf '%s' "$vals" | python3 - <<'PY'
 import math, sys
 data = [float(x) for x in sys.stdin.read().strip().split()]
 if not data:
