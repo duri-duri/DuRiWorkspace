@@ -72,7 +72,7 @@ groups:
           (
             max_over_time(duri_p_samples{window="2h"}[2m])
             or max_over_time(duri_p_sigma_samples{window="2h"}[2m])
-            or max_over_time(label_replace(duri_p_sigma_samples,"window","2h","","")[2m])
+            or label_replace(max_over_time(duri_p_sigma_samples[2m]),"window","2h","","")
           ) < 200
         for: 1m
         labels:
@@ -86,7 +86,7 @@ groups:
           (
             max_over_time(duri_p_samples{window="24h"}[2m])
             or max_over_time(duri_p_sigma_samples{window="24h"}[2m])
-            or max_over_time(label_replace(duri_p_sigma_samples,"window","24h","","")[2m])
+            or label_replace(max_over_time(duri_p_sigma_samples[2m]),"window","24h","","")
           ) < 200
         for: 1m
         labels:
@@ -116,7 +116,7 @@ groups:
         expr: |
           max_over_time(duri_p_samples{window="2h"}[2m])
           OR on() max_over_time(duri_p_sigma_samples{window="2h"}[2m])
-          OR on() max_over_time(label_replace(duri_p_sigma_samples,"window","2h","","")[2m])
+          OR on() label_replace(max_over_time(duri_p_sigma_samples[2m]),"window","2h","","")
       
       - record: duri_p_n
         labels:
@@ -124,7 +124,7 @@ groups:
         expr: |
           max_over_time(duri_p_samples{window="24h"}[2m])
           OR on() max_over_time(duri_p_sigma_samples{window="24h"}[2m])
-          OR on() max_over_time(label_replace(duri_p_sigma_samples,"window","24h","","")[2m])
+          OR on() label_replace(max_over_time(duri_p_sigma_samples[2m]),"window","24h","","")
 
   - name: observability-quality-ma
     interval: 1m
