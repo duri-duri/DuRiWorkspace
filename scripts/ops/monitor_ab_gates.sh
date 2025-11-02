@@ -67,25 +67,44 @@ judge_gate() {
     fi
 }
 
-# 2) Prometheus 쿼리 함수
+# 2) Prometheus 쿼리 함수 (정확한 쿼리 형식)
 query_prom() {
     local query="$1"
+    local window="$2"
     docker exec "$PROM_CONTAINER" sh -lc "wget -qO- 'localhost:9090/api/v1/query?query=$query'" 2>/dev/null | \
-        jq -r '.data.result[]? | select(.metric.window=="'"$2"'") | .value[1]' 2>/dev/null || echo "0"
+        jq -r ".data.result[]? | select(.metric.window==\"$window\") | .value[1]" 2>/dev/null || echo "0"
 }
 
-# 3) 메트릭 수집
+# Prometheus 쿼리 헬퍼 (전체 결과)
+query_prom_all() {
+    local query="$1"
+    docker exec "$PROM_CONTAINER" sh -lc "wget -qO- 'localhost:9090/api/v1/query?query=$query'" 2>/dev/null | \
+        jq -r '.data.result[]?.value[1]' 2>/dev/null || echo "0"
+}
+
+# 3) 메트릭 수집 (정확한 쿼리 형식)
 collect_metrics() {
-    local ks_p_2h=$(query_prom "duri_p_uniform_ks_p" "2h")
-    local ks_p_24h=$(query_prom "duri_p_uniform_ks_p" "24h")
-    local unique_2h=$(query_prom "duri_p_unique_ratio" "2h")
-    local unique_24h=$(query_prom "duri_p_unique_ratio" "24h")
-    local sigma_2h=$(query_prom "duri_p_sigma" "2h")
-    local sigma_24h=$(query_prom "duri_p_sigma" "24h")
-    local n_2h=$(query_prom "duri_p_samples" "2h")
-    local n_24h=$(query_prom "duri_p_samples" "24h")
+    # KS·unique
+    local ks_p_results=$(query_prom_all "duri_p_uniform_ks_p")
+    local ks_p_2h=$(echo "$ks_p_results" | head -1)
+    local ks_p_24h=$(echo "$ks_p_results" | tail -1)
     
-    # NaN/empty 처리
+    # unique ratio
+    local unique_results=$(query_prom_all "duri_p_unique_ratio")
+    local unique_2h=$(echo "$unique_results" | head -1)
+    local unique_24h=$(echo "$unique_results" | tail -1)
+    
+    # σ
+    local sigma_results=$(query_prom_all "duri_p_sigma")
+    local sigma_2h=$(echo "$sigma_results" | head -1)
+    local sigma_24h=$(echo "$sigma_results" | tail -1)
+    
+    # 표본 수
+    local n_results=$(query_prom_all "duri_p_samples")
+    local n_2h=$(echo "$n_results" | head -1)
+    local n_24h=$(echo "$n_results" | tail -1)
+    
+    # NaN/empty/null 처리
     ks_p_2h=${ks_p_2h:-0}
     ks_p_24h=${ks_p_24h:-0}
     unique_2h=${unique_2h:-0}
@@ -94,6 +113,10 @@ collect_metrics() {
     sigma_24h=${sigma_24h:-0}
     n_2h=${n_2h:-0}
     n_24h=${n_24h:-0}
+    
+    # 숫자 변환 (NaN 문자열 처리)
+    ks_p_2h=$(echo "$ks_p_2h" | grep -E "^[0-9.e+-]+$" || echo "0")
+    ks_p_24h=$(echo "$ks_p_24h" | grep -E "^[0-9.e+-]+$" || echo "0")
     
     echo "$ks_p_2h $ks_p_24h $unique_2h $unique_24h $sigma_2h $sigma_24h $n_2h $n_24h"
 }

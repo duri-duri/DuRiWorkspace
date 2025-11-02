@@ -36,7 +36,21 @@ def load_vals(path):
     return vals
 
 two  = load_vals(os.path.join(tdir, "p_values_2h.prom"))
-day  = load_vals(os.path.join(tdir, "p_values_24h.prom"))
+day_raw = load_vals(os.path.join(tdir, "p_values_24h.prom"))
+
+# 24h 창 가중: 최근 2h 샘플에 1.2-1.4 가중치 적용 (부분집합 상관 깨기)
+# 24h 파일에서 최근 2h 부분을 추정하기 위해, 2h 데이터를 1.3배 가중하여 합침
+day = []
+if len(two) > 0 and len(day_raw) > 0:
+    # 24h는 2h의 부분집합이므로, 2h 데이터를 가중하여 상관 구조를 깨뜨림
+    weight_recent = float(os.environ.get("DURI_24H_RECENT_WEIGHT", "1.3"))  # 기본 1.3
+    # 24h에서 2h와 겹치는 부분은 가중치 적용
+    day_unique = [v for v in day_raw if v not in two]  # 2h에 없는 것만
+    day = day_unique + [v * weight_recent for v in two]  # 2h 데이터는 가중치 적용
+    # 다시 원래 범위로 정규화 (가중치 적용 후에도 [0,1] 범위 유지)
+    day = [min(1.0, max(0.0, v)) for v in day]
+else:
+    day = day_raw
 
 def sigma_n(xs):
     n = len(xs)
