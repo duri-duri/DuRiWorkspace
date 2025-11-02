@@ -19,29 +19,26 @@ scrape_configs:
       - targets: ['localhost:9090']
 
   # DuRi AI 서비스들
+  # 스크레이프 간격 정합: 전역 15s 사용 (개별 오버라이드 제거)
   - job_name: 'duri-core'
     static_configs:
       - targets: ['duri-core:8080']
     metrics_path: '/metrics'
-    scrape_interval: 10s
 
   - job_name: 'duri-brain'
     static_configs:
       - targets: ['duri-brain:8081']
     metrics_path: '/metrics'
-    scrape_interval: 10s
 
   - job_name: 'duri-evolution'
     static_configs:
       - targets: ['duri-evolution:8082']
     metrics_path: '/metrics'
-    scrape_interval: 10s
 
   - job_name: 'duri-control'
     static_configs:
       - targets: ['duri-control:8083']
     metrics_path: '/metrics'
-    scrape_interval: 10s
 
   # 인프라 서비스들
   - job_name: 'postgres'
