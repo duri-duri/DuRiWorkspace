@@ -288,11 +288,13 @@ main() {
     
     # 정지 규칙: 둘 다 충족 시 기다림 전환
     local can_wait=0
-    if [ "$green_count" -ge 4 ]; then
+    green_count=${green_count:-0}
+    if [ "$green_count" -ge 4 ] 2>/dev/null; then
         # 알람 확인 (간단 버전: Prometheus 쿼리)
         local alert_count=$(docker exec "$PROM_CONTAINER" sh -lc "wget -qO- 'localhost:9090/api/v1/alerts'?silenced=false&active=true" 2>/dev/null | \
             jq -r '.data.alerts[]? | select(.labels.alertname | test("ABPValuesUniformityLost|ABPSigmaNoSamples|ABPValuesKS")) | .labels.alertname' 2>/dev/null | wc -l || echo "0")
-        if [ "$alert_count" -eq 0 ]; then
+        alert_count=${alert_count:-0}
+        if [ "$alert_count" -eq 0 ] 2>/dev/null; then
             can_wait=1
         fi
     fi
