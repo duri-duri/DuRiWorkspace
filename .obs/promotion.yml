@@ -16,25 +16,6 @@ required_checks:
   
   # Canary checks (if applicable)
   - canary-quorum-pass
-
-# DuRi Promotion Gate Configuration
-# Purpose: Define minimum criteria for automatic promotion and merge
-
-required_checks:
-  # CI/CD checks
-  - obs-lint
-  - promtool-check
-  - sandbox-smoke-60s
-  
-  # Observability checks
-  - heartbeat-v2-stable
-  - prometheus-ready
-  
-  # DR checks
-  - dr-rehearsal-24h-pass
-  
-  # Canary checks (if applicable)
-  - canary-quorum-pass
   
   # Error budget checks
   - error-budget-burn-ok
@@ -89,38 +70,3 @@ emergency:
   bypass_label: "emergency-approved"
   required_approvers: 1
   max_uses_per_month: 3
-
-rollback:
-  # Tag format for rollback
-  tag_format: "rollback-${{date:%Y%m%d-%H%M}}"
-  # Auto trigger conditions
-  auto_trigger_on:
-    - canary_rollback_rate > 0.05
-    - alert_burn_short > 14
-    - dr_success_ratio_7d < 0.995
-  
-  # Rollback action
-  action: "git tag + deploy rollback"
-
-automerge:
-  # Enable automatic merge after checks pass
-  enabled: true
-  # Minimum checks required
-  min_checks: 5
-  # Label required for auto-merge
-  labels:
-    - "auto"
-    - "canary-ready"
-    - "dr-safe"
-  
-  # Merge queue settings
-  merge_queue:
-    enabled: true
-    max_wait_minutes: 60
-
-emergency:
-  # Emergency bypass (admin only, one-time use)
-  bypass_label: "emergency-bypass"
-  required_approvers: 1
-  max_uses_per_month: 3
-
