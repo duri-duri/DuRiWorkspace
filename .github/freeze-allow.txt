@@ -63,4 +63,5 @@ scripts/usb_*.sh
 scripts/verify_*.sh
 shadow/*
 tests/test_*.sh
+tests/test_*.py
 start-ssh-node.sh
