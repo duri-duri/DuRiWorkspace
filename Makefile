@@ -343,6 +343,33 @@ env-harden:
 	@docker compose up -d duri-core && sleep 3
 	@docker compose exec duri-core env 2>/dev/null | grep -E 'DURI_FORCE_MIN_SAMPLES|TEXTFILE_DIR' || echo "[WARN] 환경변수 확인 실패"
 
+# 크론 안정화 (중복 제거, flock 버전만 남김)
+.PHONY: cron-harden
+cron-harden:
+	@echo "[INFO] 크론 정리 (중복 제거: flock 버전만 남김)..."
+	@crontab -l 2>/dev/null | sed '/ts_router.py/d;/export_target_metrics.sh/d;/apply_routes.sh/d' | crontab - || true
+	@{ \
+		echo 'SHELL=/bin/bash'; \
+		echo 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'; \
+		echo '*/5 * * * *  cd /home/duri/DuRiWorkspace && flock -n var/locks/ts_router.lock -c "TEXTFILE_DIR=.reports/synth python3 scripts/ab/ts_router.py >> var/logs/ts_router.log 2>&1"'; \
+		echo '*/1 * * * *  cd /home/duri/DuRiWorkspace && flock -n var/locks/target_exporter.lock -c "TEXTFILE_DIR=.reports/synth bash scripts/export_target_metrics.sh >> var/logs/target_exporter.log 2>&1"'; \
+		echo '2-59/5 * * * * cd /home/duri/DuRiWorkspace && flock -n var/locks/route_apply.lock  -c "TEXTFILE_DIR=.reports/synth bash scripts/ab/apply_routes.sh >> var/logs/route_apply.log 2>&1"'; \
+	} | crontab -
+	@echo "[OK] 크론 안정화 완료"
+	@crontab -l
+
+# p-분산 메트릭 배선 (옵션1: 쉘 수집)
+.PHONY: p-sigma-wire
+p-sigma-wire:
+	@echo "[INFO] p-분산 메트릭 배선..."
+	@mkdir -p var/locks
+	@chmod +x scripts/ops/p_sigma_export.sh
+	@(crontab -l 2>/dev/null | grep -v "p_sigma_export.sh" || true; \
+		echo '*/1 * * * * cd /home/duri/DuRiWorkspace && flock -n var/locks/p_sigma.lock -c "TEXTFILE_DIR=.reports/synth bash scripts/ops/p_sigma_export.sh >> var/logs/p_sigma.log 2>&1"') | crontab -
+	@echo "[OK] p-sigma 크론 등록 완료"
+	@TEXTFILE_DIR=.reports/synth bash scripts/ops/p_sigma_export.sh || true
+	@echo "[OK] p-sigma 메트릭 배선 완료"
+
 # 프로듀서 스키마 계약 테스트 (P-FIX#2)
 .PHONY: producer-schema-check
 producer-schema-check:

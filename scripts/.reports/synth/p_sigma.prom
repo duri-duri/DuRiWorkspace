@@ -1,0 +1,3 @@
+# HELP duri_p_sigma p-value stddev (fallback=NaN)
+# TYPE duri_p_sigma gauge
+duri_p_sigma NaN

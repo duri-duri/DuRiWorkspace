@@ -4,3 +4,14 @@ scripts/catch_up_today.sh
 prometheus/rules/duri-ab-test.rules.yml
 shadow/metrics_exporter_enhanced.py
 scripts/lib/**
+
+prometheus/rules/*
+prometheus/dashboards/*
+scripts/ab/*
+scripts/ops/*
+scripts/*.sh
+systemd/*
+docs/ops/*
+docker-compose.override.yml
+gates.yml
+EVOLUTION_EVIDENCE_PLAN.md
