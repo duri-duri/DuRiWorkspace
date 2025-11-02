@@ -141,10 +141,15 @@ groups:
           sum(rate(duri_dr_success_total[7d])) / 
           (sum(rate(duri_dr_success_total[7d])) + sum(rate(duri_dr_failure_total[7d])))
       
-      # Recording rule: DR RTO p95 (7d)
+      # Recording rule: DR RTO p95 (7d) - converted to minutes
       - record: duri_dr_rto_seconds_p95_7d
         expr: |
           histogram_quantile(0.95, sum by (le) (rate(duri_dr_restore_time_seconds_bucket[7d])))
+      
+      # Recording rule: DR RTO p95 in minutes (for convenience)
+      - record: duri_dr_rehearsal_p95_minutes
+        expr: |
+          duri_dr_rto_seconds_p95_7d / 60
       
       # Alert: DR success rate low
       - alert: DRSuccessRateLow

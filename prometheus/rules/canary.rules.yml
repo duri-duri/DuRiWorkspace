@@ -20,9 +20,20 @@ groups:
         expr: |
           (duri_canary_samples > 300) * (duri_canary_quorum_pass == 1)
       
-      # Recording rule: Canary rollback rate (weekly)
+      # Recording rule: Canary failure ratio (weekly)
+      - record: duri_canary_failure_ratio
+        expr: |
+          sum(increase(duri_canary_rollback_total[7d])) / 
+          (sum(increase(duri_canary_rollback_total[7d])) + sum(increase(duri_canary_promote_total[7d])) + 1)
+      
+      # Recording rule: Canary unique ratio (for decision)
+      - record: duri_canary_unique_ratio
+        expr: |
+          duri_p_unique_ratio{window="2h"}
+      
+      # Recording rule: Canary rollback rate (for alerts)
       - record: duri_canary_rollback_rate
         expr: |
           sum(increase(duri_canary_rollback_total[7d])) / 
-          (sum(increase(duri_canary_rollback_total[7d])) + sum(increase(duri_canary_promote_total[7d])))
+          (sum(increase(duri_canary_rollback_total[7d])) + sum(increase(duri_canary_promote_total[7d])) + 1)
 
