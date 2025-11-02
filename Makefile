@@ -339,15 +339,31 @@ promtool-check:
 	ec2=$$?; echo "exit=$$ec2"; \
 	test $$ec1 -eq 0 -a $$ec2 -eq 0 && echo "[OK] promtool-check passed" || { echo "[FAIL] promtool-check failed"; exit 1; }
 
+# A.1. Template function guard (forbidden functions check)
+.PHONY: promtool-check-full
+promtool-check-full: promtool-check
+	@echo "[GUARD] Checking for forbidden template functions..."; \
+	if grep -r -nE 'humanize[A-Za-z]+' prometheus/rules/ 2>/dev/null; then \
+	  echo "[FAIL] Forbidden template function detected"; \
+	  exit 1; \
+	fi; \
+	echo "[OK] No forbidden template functions found"
+
+# B. Safe reload (validation + reload)
 .PHONY: prometheus-reload-safe
-prometheus-reload-safe: promtool-check
-	@echo "[RELOAD] POST /-/reload"
-	@curl -sf --max-time 3 -X POST http://localhost:9090/-/reload >/dev/null || { echo "[FAIL] reload failed"; exit 1; }
-	@echo "[OK] reload"
-	  /rules/duri-target.rules.yml \
-	  /rules/duri-maintenance.rules.yml \
-	  /rules/duri-ab-early-stop.rules.yml \
-	  /rules/duri-ab-quality.rules.yml
+prometheus-reload-safe: promtool-check-full
+	@bash scripts/ops/reload_safe.sh
+
+# C. Deployment workflow (push → validate → reload)
+.PHONY: deploy-observation
+deploy-observation:
+	@echo "[DEPLOY] Observation stack deployment..."
+	@echo "[1/3] Validation..."
+	@make promtool-check-full || { echo "[FAIL] Validation failed, aborting"; exit 1; }
+	@echo "[2/3] Safe reload..."
+	@bash scripts/ops/reload_safe.sh || { echo "[FAIL] Reload failed"; exit 1; }
+	@echo "[3/3] Deployment complete"
+	@echo "[NOTE] To push changes: git push origin HEAD"
 
 # A. 환경변수 영구 반영 검증
 .PHONY: env-harden

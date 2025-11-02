@@ -141,6 +141,18 @@ groups:
           summary: "Prometheus config reload failed"
           description: "last_reload_timestamp={{ $value }}"
       
+      - alert: PromRuleLoadFailed
+        expr: |
+          count(
+            (prometheus_rule_group_last_duration_seconds == 0) 
+            and on() (prometheus_rule_group_rules{rule_group=~".+"} > 0)
+          ) > 0
+        for: 2m
+        labels: { severity: page, team: "obs", service: "prometheus" }
+        annotations:
+          summary: "Prometheus rule load failed"
+          description: "최근 룰 적용이 반영되지 않음. promtool/템플릿 확인 필요."
+      
       - alert: RuleEvalFailures
         expr: sum by (rule_group) (increase(prometheus_rule_group_eval_failures_total[5m])) > 0
         for: 5m
