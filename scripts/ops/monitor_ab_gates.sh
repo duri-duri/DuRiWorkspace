@@ -9,7 +9,7 @@ PROM_CONTAINER="${PROM_CONTAINER:-prometheus}"
 LOCK="${LOCK:-$ROOT/var/locks/monitor_gates.lock}"
 RETRY="${RETRY:-2}"                  # unbound variable 방지
 PROM_QUERY_TIMEOUT="${PROM_QUERY_TIMEOUT:-2500}"  # ms
-STATE_DIR="${STATE_DIR:-.reports/obs}"
+STATE_DIR="${STATE_DIR:-.reports/synth/state}"
 STATE_FILE="${STATE_FILE:-$STATE_DIR/ab_gate_state.json}"
 mkdir -p "$STATE_DIR" 2>/dev/null || echo "[WARN] cannot mkdir $STATE_DIR" >&2
 
@@ -356,23 +356,43 @@ main() {
     echo "  sigma (2h/24h): $sigma_2h / $sigma_24h"
     echo "  n (2h/24h): $n_2h / $n_24h"
     
-    # 판정 (RED가 아닌 경우에만 정상 판정 수행)
+    # 판정: 원-비트 지표 우선 사용
     if [ -z "$judgment" ]; then
-        judgment=$(judge_gate "$ks_p_2h" "$ks_p_24h" "$unique_2h" "$unique_24h" "$sigma_2h" "$sigma_24h" "$n_2h" "$n_24h")
+        # 먼저 원-비트 지표 확인 (파이프라인 생존/정상)
+        local q_green='duri_pipeline_green'
+        local green_val=$(curl -sf --max-time 3 --get "$PROM_URL/api/v1/query" \
+            --data-urlencode "query=$q_green" 2>/dev/null | jq -r '.data.result[0].value[1] // "0"' 2>/dev/null || echo "0")
         
-        # n 기준 임계 재조정: n>=1이면 YELLOW, n>=200이면 GREEN (파이프라인 생존성 우선)
-        local n_2h_num=$(printf '%.0f' "${n_2h:-0}" 2>/dev/null || echo "0")
-        local n_24h_num=$(printf '%.0f' "${n_24h:-0}" 2>/dev/null || echo "0")
-        
-        if [ "$n_2h_num" -ge 200 ] 2>/dev/null || [ "$n_24h_num" -ge 200 ] 2>/dev/null; then
-            # n>=200이면 GREEN (다른 조건 무시)
+        if [ "$green_val" = "1" ] 2>/dev/null; then
             judgment="GREEN"
-            echo "[NOTE] n 기준 재조정: n>=200 → GREEN (파이프라인 정상)"
-        elif [ "$n_2h_num" -ge 1 ] 2>/dev/null || [ "$n_24h_num" -ge 1 ] 2>/dev/null; then
-            # n>=1이면 YELLOW (파이프라인 생존 확인)
-            if [ "$judgment" = "RED" ]; then
+            echo "[NOTE] 원-비트 지표: duri_pipeline_green=1 → GREEN"
+        else
+            # duri_pipeline_alive 확인
+            local alive_val=$(curl -sf --max-time 3 --get "$PROM_URL/api/v1/query" \
+                --data-urlencode 'query=duri_pipeline_alive' 2>/dev/null | jq -r '.data.result[0].value[1] // "0"' 2>/dev/null || echo "0")
+            
+            if [ "$alive_val" = "1" ] 2>/dev/null; then
                 judgment="YELLOW"
-                echo "[NOTE] n 기준 그레이스 적용: RED → YELLOW (n>=1, 파이프라인 생존 확인)"
+                echo "[NOTE] 원-비트 지표: duri_pipeline_alive=1 → YELLOW"
+            else
+                # 원-비트 지표 없으면 기존 judge_gate 사용
+                judgment=$(judge_gate "$ks_p_2h" "$ks_p_24h" "$unique_2h" "$unique_24h" "$sigma_2h" "$sigma_24h" "$n_2h" "$n_24h")
+                
+                # n 기준 임계 재조정: n>=1이면 YELLOW, n>=200이면 GREEN (파이프라인 생존성 우선)
+                local n_2h_num=$(printf '%.0f' "${n_2h:-0}" 2>/dev/null || echo "0")
+                local n_24h_num=$(printf '%.0f' "${n_24h:-0}" 2>/dev/null || echo "0")
+                
+                if [ "$n_2h_num" -ge 200 ] 2>/dev/null || [ "$n_24h_num" -ge 200 ] 2>/dev/null; then
+                    # n>=200이면 GREEN (다른 조건 무시)
+                    judgment="GREEN"
+                    echo "[NOTE] n 기준 재조정: n>=200 → GREEN (파이프라인 정상)"
+                elif [ "$n_2h_num" -ge 1 ] 2>/dev/null || [ "$n_24h_num" -ge 1 ] 2>/dev/null; then
+                    # n>=1이면 YELLOW (파이프라인 생존 확인)
+                    if [ "$judgment" = "RED" ]; then
+                        judgment="YELLOW"
+                        echo "[NOTE] n 기준 그레이스 적용: RED → YELLOW (n>=1, 파이프라인 생존 확인)"
+                    fi
+                fi
             fi
         fi
     fi

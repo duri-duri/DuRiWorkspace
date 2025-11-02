@@ -109,45 +109,58 @@ groups:
   - name: duri-derived
     interval: 30s
     rules:
-      # Recording rule: 샘플수 단일 진실원 (SOT)
+      # n (2h) — "실데이터" 우선 (프로브 라벨 배제)
       - record: duri_p_n
-        labels:
-          window: "2h"
+        labels: { window: "2h" }
         expr: |
-          max_over_time(duri_p_samples{window="2h"}[2m])
-          OR on() max_over_time(duri_p_sigma_samples{window="2h"}[2m])
-          OR on() label_replace(max_over_time(duri_p_sigma_samples[2m]),"window","2h","","")
+          max_over_time(duri_p_samples{window="2h", __probe__!="true"}[2m])
+          OR on() max_over_time(duri_p_sigma_samples{window="2h", __probe__!="true"}[2m])
       
+      # n (24h)
       - record: duri_p_n
-        labels:
-          window: "24h"
+        labels: { window: "24h" }
         expr: |
-          max_over_time(duri_p_samples{window="24h"}[2m])
-          OR on() max_over_time(duri_p_sigma_samples{window="24h"}[2m])
-          OR on() label_replace(max_over_time(duri_p_sigma_samples[2m]),"window","24h","","")
+          max_over_time(duri_p_samples{window="24h", __probe__!="true"}[2m])
+          OR on() max_over_time(duri_p_sigma_samples{window="24h", __probe__!="true"}[2m])
+      
+      # 파이프라인 생존/정상 원-비트 지표
+      - record: duri_pipeline_alive
+        expr: (duri_p_n{window="2h"} > 0) OR (duri_p_n{window="24h"} > 0)
+      
+      - record: duri_pipeline_green
+        expr: (duri_p_n{window="2h"} >= 200) OR (duri_p_n{window="24h"} >= 200)
 
   - name: prometheus-self-health
     interval: 30s
     rules:
-      # Alert: Prometheus config reload failed
       - alert: PromConfigReloadFailed
         expr: prometheus_config_last_reload_successful == 0
         for: 2m
-        labels:
-          severity: critical
+        labels: { severity: critical, team: "obs", service: "prometheus" }
         annotations:
           summary: "Prometheus config reload failed"
-          description: "Check rules/config; last reload failed at {{ humanizeTimestamp(prometheus_config_last_reload_success_timestamp_seconds*1000) }}"
+          description: "last_reload={{ humanizeTimestamp(prometheus_config_last_reload_success_timestamp_seconds*1000) }}"
       
-      # Alert: Rule evaluation failures
       - alert: RuleEvalFailures
         expr: sum by (rule_group) (increase(prometheus_rule_group_eval_failures_total[5m])) > 0
         for: 5m
-        labels:
-          severity: warning
+        labels: { severity: warning, team: "obs", service: "prometheus" }
         annotations:
-          summary: "Rule evaluation failures detected"
-          description: "Rule group {{ $labels.rule_group }} has evaluation failures in last 5m."
+          summary: "Rule group evaluation failures (>0 in 5m)"
+      
+      - alert: TextfileScrapeError
+        expr: node_textfile_scrape_error > 0
+        for: 2m
+        labels: { severity: warning, team: "obs", service: "prometheus" }
+        annotations:
+          summary: "node_exporter textfile scrape error"
+      
+      - alert: TextfileStale
+        expr: time() - max(node_textfile_mtime_seconds) > 300
+        for: 5m
+        labels: { severity: warning, team: "obs", service: "prometheus" }
+        annotations:
+          summary: "textfile inputs stale (>5m)"
 
   - name: observability-quality-ma
     interval: 1m
