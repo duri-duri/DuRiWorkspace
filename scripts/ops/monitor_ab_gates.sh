@@ -111,9 +111,14 @@ safe_value() {
 # Prometheus 쿼리 헬퍼 (전체 결과, 공백응답 가드 포함)
 query_prom_all() {
     local query="$1"
-    local resp="$(query_prom "$query")"
+    local resp="$(query_prom "$query" "host")"
     
-    if [ -z "$resp" ]; then
+    # 호스트 실패 → 컨테이너 폴백
+    if [ -z "$resp" ] || ! echo "$resp" | jq -e '.data.result[0].value' >/dev/null 2>&1; then
+        resp="$(query_prom "$query" "container")"
+    fi
+    
+    if [ -z "$resp" ] || ! echo "$resp" | jq -e '.data.result[0].value' >/dev/null 2>&1; then
         echo "[WARN] prometheus 응답 없음: query=$query" >&2
         echo "0"
         return 1
@@ -234,12 +239,21 @@ main() {
     
     write_state "$green_count" "$yellow_count" "$red_count" "$judgment"
     
-    # 베이지안/SPRT 통계적 판정
-    local bayes_output=$(python3 scripts/ops/bayes_progress.py "$judgment" 2>/dev/null || echo "")
-    local bayes_prob=$(echo "$bayes_output" | grep -oE 'P\(p≥0\.8\|data\)=[0-9.]+' | grep -oE '[0-9.]+' | head -1 || echo "0")
-    local sprt_output=$(python3 scripts/ops/wald_sprt.py "$judgment" 2>/dev/null || echo "")
-    local sprt_result=$(echo "$sprt_output" | grep -oE '→ [A-Z]+' | tail -1 || echo "CONTINUE")
-    local sprt_ll=$(echo "$sprt_output" | grep -oE 'LR=[0-9.e+-]+' | grep -oE '[0-9.e+-]+' | head -1 || echo "0")
+    # 베이지안/SPRT 통계적 판정 (에러 처리 강화)
+    local bayes_output=""
+    local bayes_prob="0"
+    local sprt_output=""
+    local sprt_result="CONTINUE"
+    local sprt_ll="0"
+    
+    if command -v python3 >/dev/null 2>&1; then
+        bayes_output=$(python3 scripts/ops/bayes_progress.py "$judgment" 2>/dev/null || echo "")
+        bayes_prob=$(echo "$bayes_output" | grep -oE 'P\(p≥0\.8\|data\)=[0-9.]+' | grep -oE '[0-9.]+' | head -1 || echo "0")
+        
+        sprt_output=$(python3 scripts/ops/wald_sprt.py "$judgment" 2>/dev/null || echo "")
+        sprt_result=$(echo "$sprt_output" | grep -oE '→ [A-Z]+' | tail -1 || echo "CONTINUE")
+        sprt_ll=$(echo "$sprt_output" | grep -oE 'LR=[0-9.e+-]+' | grep -oE '[0-9.e+-]+' | head -1 || echo "0")
+    fi
     
     echo "[STATISTICS]"
     echo "  베이지안: P(p≥0.8|data)=${bayes_prob}"
