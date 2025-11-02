@@ -136,27 +136,29 @@ fallback_from_textfile() {
     fi
 }
 
-# Prometheus 쿼리 또는 텍스트파일 폴백
+# Prometheus 쿼리 또는 텍스트파일 폴백 (Observability Contract v1: 빈 벡터 방어)
 query_prom_or_fallback() {
     local metric="$1"
     local lbl="${2:-}"
     local v=""
     
-    # Try Prometheus first
+    # Try Prometheus first (host → container fallback)
     local resp="$(query_prom "$metric" "host")"
     if [ -z "$resp" ] || ! echo "$resp" | jq -e '.data.result[0].value' >/dev/null 2>&1; then
         resp="$(query_prom "$metric" "container")"
     fi
     
+    # Extract value if valid response
     if [ -n "$resp" ] && echo "$resp" | jq -e '.data.result[0].value' >/dev/null 2>&1; then
-        v=$(echo "$resp" | jq -r '.data.result[0].value[1] // "0"' 2>/dev/null || echo "0")
+        v=$(echo "$resp" | jq -r '.data.result[0].value[1] // empty' 2>/dev/null || echo "")
     fi
     
-    # Fallback to textfile if Prometheus query failed
+    # Fallback to textfile if Prometheus query failed or returned empty
     if [ -z "$v" ] || [ "$v" = "0" ] || [ "$v" = "" ]; then
         v=$(fallback_from_textfile "$metric" "$lbl")
     fi
     
+    # Final fallback: 0
     echo "${v:-0}"
 }
 
@@ -179,27 +181,23 @@ query_prom_all() {
     echo "$resp" | jq -r '.data.result[]?.value[1]' 2>/dev/null || echo "0"
 }
 
-# 3) 메트릭 수집 (정확한 쿼리 형식)
+# 3) 메트릭 수집 (폴백 우선순위: Prom → textfile → 0)
 collect_metrics() {
-    # KS·unique
-    local ks_p_results=$(query_prom_all "duri_p_uniform_ks_p")
-    local ks_p_2h=$(echo "$ks_p_results" | head -1)
-    local ks_p_24h=$(echo "$ks_p_results" | tail -1)
+    # KS·unique (폴백 사용)
+    local ks_p_2h=$(query_prom_or_fallback "duri_p_uniform_ks_p" 'window="2h"')
+    local ks_p_24h=$(query_prom_or_fallback "duri_p_uniform_ks_p" 'window="24h"')
     
-    # unique ratio
-    local unique_results=$(query_prom_all "duri_p_unique_ratio")
-    local unique_2h=$(echo "$unique_results" | head -1)
-    local unique_24h=$(echo "$unique_results" | tail -1)
+    # unique ratio (폴백 사용)
+    local unique_2h=$(query_prom_or_fallback "duri_p_unique_ratio" 'window="2h"')
+    local unique_24h=$(query_prom_or_fallback "duri_p_unique_ratio" 'window="24h"')
     
-    # σ
-    local sigma_results=$(query_prom_all "duri_p_sigma")
-    local sigma_2h=$(echo "$sigma_results" | head -1)
-    local sigma_24h=$(echo "$sigma_results" | tail -1)
+    # σ (폴백 사용)
+    local sigma_2h=$(query_prom_or_fallback "duri_p_sigma" 'window="2h"')
+    local sigma_24h=$(query_prom_or_fallback "duri_p_sigma" 'window="24h"')
     
-    # 표본 수
-    local n_results=$(query_prom_all "duri_p_samples")
-    local n_2h=$(echo "$n_results" | head -1)
-    local n_24h=$(echo "$n_results" | tail -1)
+    # 표본 수 (폴백 사용)
+    local n_2h=$(query_prom_or_fallback "duri_p_samples" 'window="2h"')
+    local n_24h=$(query_prom_or_fallback "duri_p_samples" 'window="24h"')
     
     # NaN/empty/null 처리
     ks_p_2h=${ks_p_2h:-0}

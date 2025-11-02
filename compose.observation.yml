@@ -5,9 +5,8 @@ services:
     restart: unless-stopped
     ports: ["9090:9090"]
     volumes:
-      - ./prometheus:/etc/prometheus:ro
+      - ./prometheus/prometheus.yml.minimal:/etc/prometheus/prometheus.yml:ro
       - ./prometheus/rules:/etc/prometheus/rules:ro
-      - ./prometheus/targets:/etc/prometheus/targets:ro
     command:
       - --config.file=/etc/prometheus/prometheus.yml
       - --web.enable-lifecycle

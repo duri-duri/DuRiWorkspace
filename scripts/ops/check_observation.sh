@@ -65,12 +65,14 @@ echo "[3/6] Checking Prometheus labels..."
 wait_count=0
 duri_labels_count=0
 while [ $wait_count -lt $MAX_WAIT ]; do
-    labels_resp=$(curl -sf --max-time 5 "$PROM_URL/api/v1/labels?match[]=__name__=~\"duri_.*\"" 2>/dev/null || echo "")
-    if echo "$labels_resp" | jq -e '.data.result' >/dev/null 2>&1; then
-        duri_labels_count=$(echo "$labels_resp" | jq -r '.data.result | length' 2>/dev/null || echo "0")
-        duri_labels_count=${duri_labels_count:-0}
-        if [ "$duri_labels_count" -ge 3 ] 2>/dev/null; then
-            echo "  ✓ Found $duri_labels_count duri_* metric names in Prometheus"
+    # Use __name__/values endpoint (more reliable)
+    names_resp=$(curl -sf --max-time 5 "$PROM_URL/api/v1/labels/__name__/values" 2>/dev/null || echo "")
+    if echo "$names_resp" | jq -e '.data' >/dev/null 2>&1; then
+        names_count=$(echo "$names_resp" | jq -r '.data[]?' 2>/dev/null | grep -c '^duri_' 2>/dev/null || echo "0")
+        names_count=${names_count:-0}
+        if [ "$names_count" -ge 3 ] 2>/dev/null; then
+            echo "  ✓ Found $names_count duri_* metric names in Prometheus"
+            duri_labels_count=$names_count
             break
         fi
     fi
