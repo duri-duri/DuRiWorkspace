@@ -66,7 +66,6 @@ groups:
           summary: "Low duri_* metric count"
           description: "Only {{ $value }} duri_* metrics found (expected >= 3)"
 
-groups:
   - name: observability-quality-ma
     interval: 1m
     rules:
