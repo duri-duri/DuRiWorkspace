@@ -199,7 +199,8 @@ main() {
         fi
     fi
     
-    if [ "$can_wait" -eq 1 ] && (( $(echo "$bayes_prob >= 0.8" | bc -l 2>/dev/null || echo "0") )); then
+    bayes_prob_num=$(echo "$bayes_prob" | grep -oE '[0-9.]+' | head -1 || echo "0")
+    if [ "$can_wait" -eq 1 ] && (( $(echo "$bayes_prob_num >= 0.8" | bc -l 2>/dev/null || echo "0") )); then
         echo "  → 완전 관찰 모드 전환 (정지 규칙 충족)"
         echo "  → 개입 중단"
         echo "  → 조건: Green 4회 연속 + 알람 무 + P(p≥0.8|data)≥0.8"
