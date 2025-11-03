@@ -15,25 +15,25 @@ tests:
   - expr: duri_heartbeat_changes_6m
     eval_time: 6m
     exp_samples:
-    - labels: '{ }'
+    - labels: '{ metric_realm="prod" }'
       value: 3
   
   - expr: duri_heartbeat_fresh_120s
     eval_time: 6m
     exp_samples:
-    - labels: '{ }'
+    - labels: '{ metric_realm="prod" }'
       value: 1
   
   - expr: duri_heartbeat_ok
     eval_time: 6m
     exp_samples:
-    - labels: '{ }'
+    - labels: '{ metric_realm="prod" }'
       value: 1
   
   - expr: duri_heartbeat_stall
     eval_time: 6m
     exp_samples:
-    - labels: '{ }'
+    - labels: '{ metric_realm="prod" }'
       value: 0
 
 # Test case 2: Stalled heartbeat (no changes, stale timestamp)
@@ -48,24 +48,24 @@ tests:
   - expr: duri_heartbeat_changes_6m
     eval_time: 10m
     exp_samples:
-    - labels: '{ }'
+    - labels: '{ metric_realm="prod" }'
       value: 0
   
   - expr: duri_heartbeat_fresh_120s
     eval_time: 10m
     exp_samples:
-    - labels: '{ }'
+    - labels: '{ metric_realm="prod" }'
       value: 0
   
   - expr: duri_heartbeat_ok
     eval_time: 10m
     exp_samples:
-    - labels: '{ }'
+    - labels: '{ metric_realm="prod" }'
       value: 0
   
   - expr: duri_heartbeat_stall
     eval_time: 10m
     exp_samples:
-    - labels: '{ }'
+    - labels: '{ metric_realm="prod" }'
       value: 1
 
