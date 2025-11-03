@@ -10,11 +10,19 @@ set -euo pipefail
 ROOT="$(git -C "$(dirname "$0")/../.." rev-parse --show-toplevel 2>/dev/null || realpath "$(dirname "$0")/../..")"
 cd "$ROOT"
 
+# Source config (TEXTFILE_DIR)
+if [ -f "$ROOT/config/duri.env" ]; then
+  source "$ROOT/config/duri.env"
+fi
+
+# Default to workspace textfile directory
+: "${TEXTFILE_DIR:=${HOME}/DuRiWorkspace/.reports/textfile}"
+
 # Test mode: success|fail|--smoke (for generating test metrics)
 TEST_MODE="${1:-}"
 EXPORT_HIST="${2:-}"
 if [ "$TEST_MODE" = "success" ] || [ "$TEST_MODE" = "fail" ]; then
-  METRICS_DIR="${METRICS_DIR:-.reports/textfile}"
+  METRICS_DIR="${TEXTFILE_DIR}"
   mkdir -p "$METRICS_DIR"
   OUT="${METRICS_DIR}/duri_dr_metrics.prom"
   
@@ -80,7 +88,7 @@ fi
 
 # Smoke mode: quick validation without full restore
 if [ "$TEST_MODE" = "--smoke" ]; then
-  METRICS_DIR="${METRICS_DIR:-.reports/textfile}"
+  METRICS_DIR="${TEXTFILE_DIR}"
   mkdir -p "$METRICS_DIR"
   OUT="${METRICS_DIR}/duri_dr_metrics.prom"
   
@@ -117,7 +125,7 @@ fi
 ARCHIVE_DIR="${ARCHIVE_DIR:-/mnt/hdd/ARCHIVE/INCR}"
 RESTORE_DIR="${RESTORE_DIR:-/tmp/duri-restore-$$}"
 DR_REPORT="${DR_REPORT:-.reports/dr/dr_report_$(date +%Y%m%d_%H%M%S).jsonl}"
-METRICS_DIR="${METRICS_DIR:-.reports/textfile}"
+METRICS_DIR="${TEXTFILE_DIR}"
 mkdir -p "$(dirname "$DR_REPORT")" "$RESTORE_DIR" "$METRICS_DIR"
 
 TS_START=$(date +%s)

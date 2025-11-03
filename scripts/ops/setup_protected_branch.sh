@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Protected Branch 강제 적용 스크립트 (JSON 방식)
+# Protected Branch 강제 적용 스크립트 (정확한 JSON 페이로드)
 # Purpose: GitHub API로 Protected Branch 설정 강제 적용
 # Usage: bash scripts/ops/setup_protected_branch.sh
 
@@ -22,9 +22,9 @@ if ! command -v gh >/dev/null 2>&1; then
   exit 1
 fi
 
-# JSON 파일 생성
+# JSON 페이로드 생성 (정확한 스키마)
 TMP_JSON=$(mktemp)
-cat > "$TMP_JSON" <<EOF
+cat > "$TMP_JSON" <<'JSON'
 {
   "required_status_checks": {
     "strict": true,
@@ -40,33 +40,30 @@ cat > "$TMP_JSON" <<EOF
   "enforce_admins": true,
   "required_pull_request_reviews": {
     "require_code_owner_reviews": true,
-    "required_approving_review_count": 1
+    "required_approving_review_count": 1,
+    "dismiss_stale_reviews": true
   },
   "restrictions": null,
+  "required_linear_history": true,
   "allow_force_pushes": false,
-  "allow_deletions": false,
-  "required_linear_history": true
+  "allow_deletions": false
 }
-EOF
+JSON
 
 # Protected Branch 설정 강제 적용
 log "Applying Protected Branch settings..."
 if gh api \
-  -X PUT "repos/$OWNER/$REPO/branches/$BR/protection" \
+  -X PUT \
   -H "Accept: application/vnd.github+json" \
-  --input "$TMP_JSON" >/dev/null 2>&1; then
+  "repos/$OWNER/$REPO/branches/$BR/protection" \
+  --input "$TMP_JSON" 2>&1; then
   log "[OK] Protected Branch settings applied"
   rm -f "$TMP_JSON"
 else
-  log "[WARN] Protected Branch API call failed. Using manual method."
+  log "[WARN] Protected Branch API call failed. Check permissions or use manual method."
   log ""
-  log "Please run manually:"
-  log "  gh api -X PUT 'repos/$OWNER/$REPO/branches/$BR/protection' \\"
-  log "    -H 'Accept: application/vnd.github+json' \\"
-  log "    --input <(cat <<'JSON'"
-  cat "$TMP_JSON"
-  log "JSON"
-  log ")"
+  log "Manual setup: GitHub Settings → Branches → Add rule → main"
+  log "Required checks: obs-lint, sandbox-smoke-60s, promql-unit, dr-rehearsal-24h-pass, canary-quorum-pass, error-budget-burn-ok"
   rm -f "$TMP_JSON"
   exit 1
 fi
@@ -76,7 +73,7 @@ log ""
 log "=== Verification ==="
 VERIFICATION=$(gh api "repos/$OWNER/$REPO/branches/$BR/protection" 2>/dev/null || echo "{}")
 
-echo "$VERIFICATION" | jq '{enforce_admins, required_status_checks: .required_status_checks.contexts}' 2>/dev/null || echo "$VERIFICATION"
+echo "$VERIFICATION" | jq '{enforce_admins, required_status_checks: .required_status_checks.contexts, required_pull_request_reviews}' 2>/dev/null || echo "$VERIFICATION"
 
 CONTEXTS=$(echo "$VERIFICATION" | jq -r '.required_status_checks.contexts[]? // empty' 2>/dev/null || echo "")
 REQUIRED_LIST=("obs-lint" "sandbox-smoke-60s" "promql-unit" "dr-rehearsal-24h-pass" "canary-quorum-pass" "error-budget-burn-ok")

@@ -5,7 +5,16 @@
 
 set -euo pipefail
 
-TEXTFILE_DIR="${TEXTFILE_DIR:-./reports/textfile}"
+ROOT="$(git -C "$(dirname "$0")/../.." rev-parse --show-toplevel 2>/dev/null || realpath "$(dirname "$0")/../..")"
+cd "$ROOT"
+
+# Source config (TEXTFILE_DIR)
+if [ -f "$ROOT/config/duri.env" ]; then
+  source "$ROOT/config/duri.env"
+fi
+
+# Default to workspace textfile directory
+: "${TEXTFILE_DIR:=${HOME}/DuRiWorkspace/.reports/textfile}"
 mkdir -p "$TEXTFILE_DIR"
 
 tmp=$(mktemp "${TEXTFILE_DIR}/.duri_textfile_heartbeat.prom.XXXXXX")

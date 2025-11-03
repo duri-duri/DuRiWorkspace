@@ -23,19 +23,19 @@ services:
       - --web.enable-lifecycle
       - --storage.tsdb.retention.time=15d
 
-  node_exporter:
+  node-exporter:
     image: prom/node-exporter:v1.8.2
     container_name: node-exporter
     restart: unless-stopped
-    ports: ["9100:9100"]
-    volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/rootfs:ro
-      - ../.reports/textfile:/textfile:ro   # DuRiWorkspace/.reports/textfile 마운트
+    network_mode: host
+    pid: host
     command:
-      - --path.rootfs=/rootfs
+      - --path.rootfs=/host
       - --path.procfs=/host/proc
       - --path.sysfs=/host/sys
+      - --collector.systemd
       - --collector.textfile
       - --collector.textfile.directory=/textfile
+    volumes:
+      - /:/host:ro,rslave
+      - ./.reports/textfile:/textfile:ro   # Absolute path resolved at runtime

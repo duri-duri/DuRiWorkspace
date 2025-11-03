@@ -1,0 +1,50 @@
+# Dry-Run Smoke Rules for DuRi
+# Purpose: Provide smoke test metrics for L4 dry-run when production sources are unavailable
+# Note: These rules should be replaced with production sources before production deployment
+
+groups:
+  - name: dryrun-smoke
+    interval: 30s
+    rules:
+      # Recording rule: GREEN uptime ratio (smoke mode)
+      # Uses node-exporter up status as proxy
+      - record: duri_green_uptime_ratio
+        labels: { mode: "smoke" }
+        expr: |
+          avg_over_time(up{job="node-exporter"}[1m])
+      
+      # Recording rule: DR RTO p95 in minutes (smoke mode)
+      # Converts histogram to p95 minutes
+      - record: duri_dr_rehearsal_p95_minutes
+        labels: { mode: "smoke" }
+        expr: |
+          histogram_quantile(
+            0.95,
+            sum by (le)(rate(duri_dr_restore_time_seconds_bucket[5m]))
+          ) / 60
+      
+      # Recording rule: Canary failure ratio (smoke mode)
+      # Defaults to 0 for dry-run
+      - record: duri_canary_failure_ratio
+        labels: { mode: "smoke" }
+        expr: |
+          clamp_max(
+            sum(increase(duri_canary_rollback_total[7d])) /
+            (sum(increase(duri_canary_rollback_total[7d])) + sum(increase(duri_canary_promote_total[7d])) + 1),
+            1
+          )
+      
+      # Recording rule: Canary unique ratio (smoke mode)
+      # Uses production metric if available, otherwise defaults to 0.95
+      - record: duri_canary_unique_ratio
+        labels: { mode: "smoke" }
+        expr: |
+          duri_p_unique_ratio{window="2h"} or 0.95
+      
+      # Recording rule: Lyapunov V (smoke mode)
+      # Defaults to 0 for dry-run
+      - record: duri_lyapunov_v
+        labels: { mode: "smoke" }
+        expr: |
+          duri_lyapunov_v or 0
+
