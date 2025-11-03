@@ -22,7 +22,7 @@ groups:
   - record: duri_heartbeat_fresh_120s
     labels:
       metric_realm: "prod"
-    expr: (duri_heartbeat_age_seconds{metric_realm="prod"} < 120)
+    expr: ((duri_heartbeat_age_seconds{metric_realm="prod"} < 120) * 1)
           OR on(metric_realm,job,instance) duri_heartbeat_zero_like{metric_realm="prod"}
   
   # Recording rule: Heartbeat changes (number of changes in 6m window)
@@ -36,12 +36,12 @@ groups:
   
   # Recording rule: Heartbeat OK (1 = healthy, 0 = stalled)
   # OK if: fresh == 1 AND changes > 0
-  # Comparison operators naturally return 0/1 (bool casting unnecessary)
+  # Explicit boolean conversion: (fresh == 1) * (changes > 0)
   - record: duri_heartbeat_ok
     labels:
       metric_realm: "prod"
-    expr: (duri_heartbeat_fresh_120s{metric_realm="prod"} == 1)
-          * ((duri_heartbeat_changes_6m{metric_realm="prod"} > 0))
+    expr: ((duri_heartbeat_fresh_120s{metric_realm="prod"} == 1)
+          * ((duri_heartbeat_changes_6m{metric_realm="prod"} > 0) * 1))
           OR on(metric_realm,job,instance) duri_heartbeat_zero_like{metric_realm="prod"}
   
   # Recording rule: Heartbeat stall detection (1 = stale >= 120s, 0 = fresh)
@@ -49,5 +49,5 @@ groups:
   - record: duri_heartbeat_stall
     labels:
       metric_realm: "prod"
-    expr: (duri_heartbeat_age_seconds{metric_realm="prod"} >= 120)
+    expr: ((duri_heartbeat_age_seconds{metric_realm="prod"} >= 120) * 1)
           OR on(metric_realm,job,instance) duri_heartbeat_zero_like{metric_realm="prod"}
