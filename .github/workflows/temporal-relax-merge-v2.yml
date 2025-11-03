@@ -2,13 +2,15 @@ name: temporal-relax-merge-v2 (label→relax→merge→restore+audit+ruleset-gua
 
 on:
   pull_request_target:
-    types: [labeled]
+    types: [labeled, opened, synchronize, reopened]
+    branches: [ main ]
 
   workflow_dispatch:
     inputs:
       pr:
-        description: "PR number"
+        description: "Target PR number"
         required: true
+        type: string
       strategy:
         description: "merge strategy (squash|merge|rebase)"
         required: false
@@ -38,9 +40,15 @@ env:
 jobs:
   merge:
     if: >
-      (github.event_name == 'pull_request_target' &&
-       contains(github.event.pull_request.labels.*.name, env.LABEL_KEY_1)) ||
       (github.event_name == 'workflow_dispatch')
+      || (
+        github.event_name == 'pull_request_target'
+        && github.base_ref == 'main'
+        && (
+          contains(join(github.event.pull_request.labels.*.name, ','), 'merge:temporal-relax')
+          || contains(join(github.event.pull_request.labels.*.name, ','), 'safe-change')
+        )
+      )
     runs-on: ubuntu-latest
     steps:
       - name: Toolchain
@@ -81,6 +89,24 @@ jobs:
           else
             echo "num=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
           fi
+
+      - name: Re-check labels live (avoid race condition)
+        id: labels
+        run: |
+          PR=${{ steps.pr.outputs.num }}
+          # Live re-check to avoid race condition when labels are added separately
+          names=$(gh api repos/${{ github.repository }}/issues/$PR/labels -q '.[].name' || echo "")
+          echo "Current labels: $names"
+          if ! echo "$names" | grep -qx "merge:temporal-relax"; then
+            echo "::notice::Label 'merge:temporal-relax' not found, exiting neutrally"
+            exit 78
+          fi
+          if ! echo "$names" | grep -qx "safe-change"; then
+            echo "::notice::Label 'safe-change' not found, exiting neutrally"
+            exit 78
+          fi
+          echo "Both labels found, proceeding"
+        env: { GH_TOKEN: ${{ env.ADMIN_TOKEN }} }
 
       # ---- 쿨다운: 최근 코멘트 타임스탬프 확인 → 중복 실행 차단 ----
       - name: Cooldown check
