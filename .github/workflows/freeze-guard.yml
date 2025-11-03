@@ -13,8 +13,8 @@ concurrency:
 
 jobs:
   enforce-freeze:
+    if: ${{ github.base_ref == 'main' && !contains(join(fromJson(toJson(github.event.pull_request.labels || fromJSON('[]'))).*.name, ','), 'freeze:override') && !contains(join(fromJson(toJson(github.event.pull_request.labels || fromJSON('[]'))).*.name, ','), 'override-freeze') }}
     runs-on: ubuntu-latest
-    if: ${{ github.base_ref == 'main' }} # main 병합 대상만 검사
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
