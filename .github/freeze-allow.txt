@@ -115,3 +115,5 @@ docs/ops/**
 .github/freeze-allow.txt
 .gitignore
 prometheus.yml
+.github/workflows/temporal-relax-merge-v2.yml
+.github/workflows/protection-guard.yml
