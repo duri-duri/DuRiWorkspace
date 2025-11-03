@@ -11,38 +11,34 @@ groups:
     expr: changes(duri_textfile_heartbeat_seq{metric_realm="prod"}[6m])
   
   # Recording rule: Heartbeat freshness (recent sample within 120s)
-  # Direct timestamp check: time() - duri_textfile_heartbeat_ts < 120
-  # Convert boolean to 0/1 with clamp_max
+  # Direct timestamp check: time() - duri_textfile_heartbeat_ts <= 120
+  # Convert boolean to 0/1 with clamp_max and explicit scalar multiplication
   - record: duri_heartbeat_fresh_120s
     expr: |
       clamp_max(
-        ((time() - duri_textfile_heartbeat_ts{metric_realm="prod"}) < 120) * 1,
+        ((time() - duri_textfile_heartbeat_ts{metric_realm="prod"}) <= 120) * 1,
         1
       )
   
   # Recording rule: Heartbeat OK (1 = healthy, 0 = stalled)
-  # OK if: changes > 0 OR recent sample is fresh (< 120s)
-  # Convert boolean to 0/1 and clamp to ensure single value
+  # OK if: changes > 0 AND fresh_120s > 0 (both conditions must be met)
+  # Explicit scalar multiplication for bool→num conversion
   # This is the normalized 0/1 gauge for decision-making
   - record: duri_heartbeat_ok
     expr: |
       clamp_max(
         (
-          (duri_heartbeat_changes_6m > 0) * 1
-          OR on() (duri_heartbeat_fresh_120s == 1)
+          (duri_heartbeat_changes_6m > 0) * (duri_heartbeat_fresh_120s > 0)
         ) * 1,
         1
       )
   
   # Recording rule: Heartbeat stall detection (for alerts)
-  # Stall if: no changes AND sample is stale (> 120s)
+  # Stall if: ok == 0 (inverse of OK)
   # Convert boolean to 0/1 and clamp
   - record: duri_heartbeat_stall
     expr: |
       clamp_max(
-        (
-          (duri_heartbeat_changes_6m == 0) * 1
-          AND on() ((duri_heartbeat_fresh_120s == 0) * 1)
-        ) * 1,
+        ((duri_heartbeat_ok == 0) * 1),
         1
       )

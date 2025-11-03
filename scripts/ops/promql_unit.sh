@@ -22,13 +22,21 @@ log "Test directory: $TEST_DIR"
 # Enable nullglob to handle empty globs gracefully
 shopt -s nullglob
 
-# Collect test files (both .yml and .yaml)
+# Collect test files (both .yml and .yaml) - deduplicate using sort -u
 TEST_FILES=()
+shopt -s nullglob
 for pattern in "${TEST_DIR}"/*_test.yml "${TEST_DIR}"/*_test.yaml "${TEST_DIR}"/*.yml "${TEST_DIR}"/*.yaml; do
   if [ -f "$pattern" ]; then
     TEST_FILES+=("$pattern")
   fi
 done
+shopt -u nullglob
+
+# Deduplicate: sort -u to remove duplicates
+if [ ${#TEST_FILES[@]} -gt 0 ]; then
+  # Use sort -u to remove duplicates (handles same file multiple times)
+  TEST_FILES=($(printf '%s\n' "${TEST_FILES[@]}" | sort -u))
+fi
 
 if [ ${#TEST_FILES[@]} -eq 0 ]; then
   log "[SKIP] No PromQL test files found in $TEST_DIR"

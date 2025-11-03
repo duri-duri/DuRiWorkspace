@@ -28,6 +28,29 @@ log() {
 
 log "=== Prometheus Safe Reload (Hardened - Cross-Check) ==="
 
+# Step 0: Textfile directory verification
+log "Step 0: Verifying textfile directory..."
+TEXTFILE_DIR="${TEXTFILE_DIR:-$ROOT/reports/textfile}"
+if [ ! -d "$TEXTFILE_DIR" ]; then
+  log "[FAIL] Textfile directory missing: $TEXTFILE_DIR"
+  exit 1
+fi
+if [ ! -w "$TEXTFILE_DIR" ]; then
+  log "[FAIL] Textfile directory not writable: $TEXTFILE_DIR"
+  exit 1
+fi
+log "[OK] Textfile directory verified: $TEXTFILE_DIR"
+
+# Check node-exporter target health
+log "Step 0.5: Verifying node-exporter target health..."
+NODE_EXPORTER_UP=$(curl -sf --max-time 3 "${PROM_URL}/api/v1/targets" 2>/dev/null | \
+  jq -r '[.data.activeTargets[]? | select(.labels.job=="node-exporter" and .health=="up")] | length' || echo "0")
+if [ "$NODE_EXPORTER_UP" -eq 0 ]; then
+  log "[WARN] No healthy node-exporter targets found (may be normal if not configured)"
+else
+  log "[OK] Node-exporter target healthy (up: $NODE_EXPORTER_UP)"
+fi
+
 # Step 1: Container-internal promtool check
 log "Step 1: Container-internal promtool check..."
 CONTAINER_OK=0

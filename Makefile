@@ -355,10 +355,22 @@ promtool-check: promtool-ensure-rules
 # PromQL Unit Tests
 .PHONY: promql-unit promql-test-heartbeat
 promql-unit:
-	@bash scripts/ops/promql_unit.sh
+	@REALM="${REALM:-prod}" bash scripts/ops/promql_unit.sh
 
 promql-test-heartbeat: promql-unit
 	@echo "[OK] Heartbeat rules test included in promql-unit"
+
+# Check for forbidden patterns in heartbeat rules
+.PHONY: heartbeat-rules-lint
+heartbeat-rules-lint:
+	@echo "[lint] Checking heartbeat rules for forbidden patterns..."
+	@FORBIDDEN="(sign|abs)\\(.*heartbeat|increase\\(.*duri_textfile_heartbeat"; \
+	HEARTBEAT_RULES="prometheus/rules/heartbeat*.yml"; \
+	if grep -rE "$$FORBIDDEN" $$HEARTBEAT_RULES 2>/dev/null; then \
+	  echo "[FAIL] Forbidden pattern detected in heartbeat rules: $$FORBIDDEN"; \
+	  exit 1; \
+	fi; \
+	echo "[OK] No forbidden patterns found in heartbeat rules"
 
 promtool-find-failing:
 	@docker run --rm --entrypoint /bin/sh -v "$(PROM_DIR):/etc/prometheus:ro" $(PROM_IMG) -lc '\

@@ -1,0 +1,32 @@
+groups:
+- name: heartbeat.alerts
+  interval: 15s
+  rules:
+  # Alert: Heartbeat metric absent for 10 minutes
+  # Detects complete absence of heartbeat sequence metric
+  - alert: HeartbeatAbsent
+    expr: |
+      absent_over_time(duri_textfile_heartbeat_seq{metric_realm="prod"}[10m]) == 1
+    for: 5m
+    labels:
+      severity: critical
+      team: "ops"
+      component: "heartbeat"
+    annotations:
+      summary: "Heartbeat metric absent for 10+ minutes"
+      description: "duri_textfile_heartbeat_seq{metric_realm=\"prod\"} has been absent for 10+ minutes. Check textfile writer and node-exporter scrape."
+  
+  # Alert: Heartbeat stalled (no changes AND stale)
+  # Detects heartbeat stall condition
+  - alert: HeartbeatStalled
+    expr: |
+      duri_heartbeat_stall == 1
+    for: 3m
+    labels:
+      severity: warning
+      team: "ops"
+      component: "heartbeat"
+    annotations:
+      summary: "Heartbeat stalled (no changes and stale)"
+      description: "Heartbeat has not changed in 6m window and timestamp is stale (>120s). Check cron job and textfile writer."
+
