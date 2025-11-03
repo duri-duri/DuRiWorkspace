@@ -139,25 +139,16 @@ groups:
             1
           )
       
-      # Recording rule: Heartbeat changes (number of changes in 10m window)
-      # changes() works with gauge metrics and counts value changes
-      - record: duri_heartbeat_changes_10m
-        expr: |
-          changes(duri_textfile_heartbeat_seq[10m])
-      
-      # Recording rule: Heartbeat OK (1 = healthy, 0 = stalled)
-      # Use changes() > 0 to detect if heartbeat is updating
-      # For initial ramp-up (< 5min), allow if metric exists
+      # Recording rule: Heartbeat OK (delegated to heartbeat.rules.yml)
+      # Use heartbeat.rules.yml for detailed heartbeat detection
       - record: duri_heartbeat_ok
         expr: |
-          (duri_heartbeat_changes_10m > 0)
-          OR on() (time() - min_over_time(timestamp(duri_textfile_heartbeat_seq)[10m:]) < 300)
+          duri_heartbeat_ok
       
-      # Recording rule: Heartbeat stall detection (for alerts)
-      # Alert metric: 1 = stalled, 0 = OK (inverse of heartbeat_ok)
+      # Recording rule: Heartbeat stall (delegated to heartbeat.rules.yml)
       - record: duri_heartbeat_stall
         expr: |
-          1 - duri_heartbeat_ok
+          duri_heartbeat_stall
       
       # Recording rule: DR RTO p95 (7d) - converted to minutes
       - record: duri_dr_rto_seconds_p95_7d

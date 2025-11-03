@@ -1,0 +1,28 @@
+groups:
+- name: heartbeat
+  interval: 15s
+  rules:
+  # Recording rule: Heartbeat changes (number of changes in 5m window)
+  # changes() works with gauge metrics and counts value changes
+  - record: duri_heartbeat_changes_5m
+    expr: changes(duri_textfile_heartbeat_seq[5m])
+  
+  # Recording rule: Heartbeat freshness (recent sample within 90s)
+  # Prometheus 2.44+ supports timestamp() function
+  - record: duri_heartbeat_fresh_90s
+    expr: (time() - max_over_time(timestamp(duri_textfile_heartbeat_seq)[5m:])) < 90
+  
+  # Recording rule: Heartbeat OK (1 = healthy, 0 = stalled)
+  # OK if: changes > 0 OR recent sample is fresh (< 90s)
+  - record: duri_heartbeat_ok
+    expr: |
+      (duri_heartbeat_changes_5m > 0)
+      OR on() (duri_heartbeat_fresh_90s == 1)
+  
+  # Recording rule: Heartbeat stall detection (for alerts)
+  # Stall if: no changes AND sample is stale (> 90s)
+  - record: duri_heartbeat_stall
+    expr: |
+      (duri_heartbeat_changes_5m == 0)
+      AND on() (duri_heartbeat_fresh_90s == 0)
+

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Textfile heartbeat generator v2
 # Writes a timestamp metric + monotonic seq + writer pid + last_success_exit
-# Usage: Called by cron every 5 minutes
+# Usage: Called by cron every 5 minutes (or 1 minute for high-frequency)
+# Single source of truth: /home/duri/DuRiWorkspace/reports/textfile
 
 set -euo pipefail
 
@@ -13,33 +14,24 @@ if [ -f "$ROOT/config/duri.env" ]; then
   source "$ROOT/config/duri.env"
 fi
 
-# Default to workspace textfile directory
-: "${TEXTFILE_DIR:=${HOME}/DuRiWorkspace/.reports/textfile}"
+# Single source of truth: Always use reports/textfile
+TEXTFILE_DIR="${TEXTFILE_DIR:-$ROOT/reports/textfile}"
+METRIC="$TEXTFILE_DIR/duri_textfile_heartbeat.prom"
+TMP="$METRIC.$$"
+
 mkdir -p "$TEXTFILE_DIR"
 
-tmp=$(mktemp "${TEXTFILE_DIR}/.duri_textfile_heartbeat.prom.XXXXXX")
+# Current seq reading (from existing file if available)
+SEQ=0
+if [ -f "$METRIC" ]; then
+  SEQ=$(awk '/^duri_textfile_heartbeat_seq /{print $2}' "$METRIC" 2>/dev/null || echo 0)
+fi
+NEW=$((SEQ + 1))
+
 ts=$(date +%s)
 pid=$$
-seq_file="${TEXTFILE_DIR}/.heartbeat_seq"
-heartbeat_file="${TEXTFILE_DIR}/duri_textfile_heartbeat.prom"
 
-# Monotonic sequence (increment on each successful write)
-seq=0
-if [ -f "$heartbeat_file" ]; then
-  # Extract current seq from existing file
-  old_seq=$(grep -E '^duri_textfile_heartbeat_seq ' "$heartbeat_file" | awk '{print $2}' 2>/dev/null || echo "0")
-  seq=$(( ${old_seq:-0} + 1 ))
-elif [ -f "$seq_file" ]; then
-  # Fallback to seq file
-  seq=$(cat "$seq_file" 2>/dev/null || echo "0")
-  seq=$((seq + 1))
-else
-  seq=1
-fi
-
-# Last success exit (0 = success, 1 = failure)
-last_success_exit=0
-
+# Atomic write: tmp → mv
 {
   echo "# HELP duri_textfile_heartbeat Textfile collector heartbeat timestamp"
   echo "# TYPE duri_textfile_heartbeat gauge"
@@ -47,7 +39,7 @@ last_success_exit=0
   echo ""
   echo "# HELP duri_textfile_heartbeat_seq Monotonic sequence counter"
   echo "# TYPE duri_textfile_heartbeat_seq gauge"
-  echo "duri_textfile_heartbeat_seq $seq"
+  echo "duri_textfile_heartbeat_seq $NEW"
   echo ""
   echo "# HELP duri_textfile_writer_pid Writer process PID"
   echo "# TYPE duri_textfile_writer_pid gauge"
@@ -55,14 +47,11 @@ last_success_exit=0
   echo ""
   echo "# HELP duri_textfile_last_success_exit Last success exit code (0=success, 1=failure)"
   echo "# TYPE duri_textfile_last_success_exit gauge"
-  echo "duri_textfile_last_success_exit $last_success_exit"
-} > "$tmp"
+  echo "duri_textfile_last_success_exit 0"
+} > "$TMP"
 
-chmod 644 "$tmp"
-mv -f "$tmp" "${TEXTFILE_DIR}/duri_textfile_heartbeat.prom"
-echo "$seq" > "$seq_file"
+chmod 644 "$TMP"
+mv -f "$TMP" "$METRIC"
 
 # Exit with success
 exit 0
-
-

@@ -34,33 +34,25 @@ groups:
             1
           )
       
-      # 2) Heartbeat changes (number of changes in 10m window)
-      - record: duri_heartbeat_changes_10m
-        expr: |
-          changes(duri_textfile_heartbeat_seq[10m])
-      
-      # 3) Heartbeat OK (1 = healthy, 0 = stalled)
-      # Use changes() > 0 to detect if heartbeat is updating
+      # 2) Heartbeat OK (delegated to heartbeat.rules.yml)
       - record: duri_heartbeat_ok
         expr: |
-          (duri_heartbeat_changes_10m > 0)
-          OR on() (time() - min_over_time(timestamp(duri_textfile_heartbeat_seq)[10m:]) < 300)
+          duri_heartbeat_ok
       
       - record: duri_heartbeat_ok
         labels: { mode: "smoke" }
         expr: |
-          (duri_heartbeat_changes_10m > 0)
-          OR on() (time() - min_over_time(timestamp(duri_textfile_heartbeat_seq)[10m:]) < 300)
+          duri_heartbeat_ok
       
-      # 4) Heartbeat stall (for alerts only, 1 = stalled)
+      # 3) Heartbeat stall (delegated to heartbeat.rules.yml)
       - record: duri_heartbeat_stall
         expr: |
-          1 - duri_heartbeat_ok
+          duri_heartbeat_stall
       
       - record: duri_heartbeat_stall
         labels: { mode: "smoke" }
         expr: |
-          1 - duri_heartbeat_ok
+          duri_heartbeat_stall
       
       # 3) DR RTO p95 in minutes (production-ready with fallbacks)
       - record: duri_dr_rehearsal_p95_minutes
