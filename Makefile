@@ -353,7 +353,7 @@ promtool-check: promtool-ensure-rules
 	test $$? -eq 0 && echo "[OK] promtool-check passed" || { echo "[FAIL] promtool-check failed (see $(PROM_LOG))"; exit 1; }
 
 # L4 24-Hour Monitoring
-.PHONY: l4-monitor-24h l4-stats
+.PHONY: l4-monitor-24h l4-stats prometheus-snapshot
 l4-monitor-24h:
 	@echo "[INFO] Starting L4 24-hour stability monitor..."
 	@echo "[INFO] Run in background: nohup bash scripts/ops/l4_24h_monitor.sh > /dev/null 2>&1 &"
@@ -361,6 +361,9 @@ l4-monitor-24h:
 
 l4-stats:
 	@bash scripts/ops/l4_24h_stats.sh
+
+prometheus-snapshot:
+	@bash scripts/ops/prometheus_snapshot.sh
 
 # PromQL Unit Tests
 .PHONY: promql-unit promql-test-heartbeat

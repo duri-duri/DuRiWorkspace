@@ -21,6 +21,7 @@ services:
     command:
       - --config.file=/etc/prometheus/prometheus.yml
       - --web.enable-lifecycle
+      - --web.enable-admin-api
       - --storage.tsdb.retention.time=15d
 
   node-exporter:

@@ -13,12 +13,13 @@ groups:
   # Recording rule: Heartbeat freshness (recent sample within 120s)
   # Direct timestamp check: time() - duri_textfile_heartbeat_ts <= 120
   # Convert boolean to 0/1 with clamp_max and explicit scalar multiplication
+  # Missing values coalesced to 0 (operational safety)
   - record: duri_heartbeat_fresh_120s
     expr: |
       clamp_max(
         ((time() - duri_textfile_heartbeat_ts{metric_realm="prod"}) <= 120) * 1,
         1
-      )
+      ) or on() vector(0)
   
   # Recording rule: Heartbeat OK (1 = healthy, 0 = stalled)
   # OK if: changes > 0 AND fresh_120s > 0 (both conditions must be met)
