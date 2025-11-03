@@ -28,58 +28,54 @@ duri_textfile_heartbeat_seq{metric_realm="prod"} ${SEQ}
 # TYPE duri_textfile_heartbeat_ts gauge
 duri_textfile_heartbeat_ts{metric_realm="prod"} ${TS}
 EOF
+  log "Pushed heartbeat seq=$SEQ, ts=$TS"
   sleep 2
 done
 
-log "Safe reload + wait eval"
-curl -sf -X POST "${PROM_URL}/-/reload" >/dev/null || true
-sleep 8
+log "Wait for rule evaluation"
+sleep 10
 
 log "Verify heartbeat metrics"
 ok=$(curl -sf --get "${PROM_URL}/api/v1/query" \
   --data-urlencode 'query=duri_heartbeat_ok{metric_realm="prod"}' | \
-  jq -r '.data.result[]?.value[1] // "N/A"')
+  jq -r '.data.result[]?.value[1] // "0"')
+
+chg=$(curl -sf --get "${PROM_URL}/api/v1/query" \
+  --data-urlencode 'query=duri_heartbeat_changes_6m{metric_realm="prod"}' | \
+  jq -r '.data.result[]?.value[1] // "0"')
 
 fresh=$(curl -sf --get "${PROM_URL}/api/v1/query" \
   --data-urlencode 'query=duri_heartbeat_fresh_120s{metric_realm="prod"}' | \
-  jq -r '.data.result[]?.value[1] // "N/A"')
+  jq -r '.data.result[]?.value[1] // "0"')
 
-changes=$(curl -sf --get "${PROM_URL}/api/v1/query" \
-  --data-urlencode 'query=duri_heartbeat_changes_6m{metric_realm="prod"}' | \
-  jq -r '.data.result[]?.value[1] // "N/A"')
-
-log "duri_heartbeat_ok=$ok, fresh_120s=$fresh, changes_6m=$changes"
+log "ok=$ok chg=$chg fresh=$fresh"
 
 # Validation
-if [ "$ok" != "1" ] && [ "$ok" != "N/A" ]; then
+if [ "$ok" != "1" ]; then
   log "FAIL: heartbeat_ok not 1 (got: $ok)"
   exit 1
 fi
 
-# Check if fresh is a valid boolean (should be 0 or 1)
-if [ "$fresh" = "N/A" ]; then
-  log "FAIL: freshness N/A"
+# fresh should be 0 or 1 (boolean)
+if [ "$fresh" = "N/A" ] || [ -z "$fresh" ]; then
+  log "FAIL: freshness N/A or empty"
   exit 1
 fi
 
-# For boolean check: fresh should be 0 or 1 (or a small positive number if computed as difference)
-if ! echo "$fresh" | grep -qE '^[01](\.[0-9]+)?$'; then
+# Check if fresh is valid (0 or 1, or reasonable timestamp difference < 120)
+if ! echo "$fresh" | grep -qE '^[01]$'; then
   # If it's a timestamp difference, check if it's reasonable (< 120)
-  if (( $(echo "$fresh" | awk '{if ($1 > 120 || $1 < 0) exit 1; exit 0}') )); then
-    log "WARN: freshness not boolean but reasonable (got: $fresh)"
-  else
+  if ! awk -v v="$fresh" 'BEGIN{exit (v >= 0 && v < 120) ? 0 : 1}'; then
     log "FAIL: freshness invalid (got: $fresh)"
     exit 1
   fi
 fi
 
 # Check changes_6m >= 1 (should have at least 1 increase from 2 pushes)
-if [ "$changes" != "N/A" ]; then
-  if (( $(echo "$changes < 1" | bc -l 2>/dev/null || echo "0") )); then
-    log "WARN: changes_6m < 1 (got: $changes), may need more time"
-  fi
+if ! awk -v v="$chg" 'BEGIN{exit (v > 0) ? 0 : 1}'; then
+  log "FAIL: changes_6m <= 0 (got: $chg)"
+  exit 1
 fi
 
 log "OK: All heartbeat metrics verified"
 exit 0
-

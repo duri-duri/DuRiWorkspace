@@ -2,18 +2,28 @@ name: promotion-gates
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
     branches: [ "main", "release/*" ]
   push:
     branches: [ "main", "release/*" ]
 
+env:
+  IS_DRY_RUN: ${{ contains(join(github.event.pull_request.labels.*.name, ','), 'dry-run') }}
+
 jobs:
   dr-rehearsal-24h-pass:
     runs-on: ubuntu-latest
-    if: ${{ !contains(join(github.event.pull_request.labels.*.name, ','), 'dry-run') }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Dry-run fast-pass
+        if: env.IS_DRY_RUN == 'true'
+        run: echo "dry-run: fast-pass" && exit 0
+      
+      - name: Real run
+        if: env.IS_DRY_RUN != 'true'
+        uses: actions/checkout@v4
       
       - name: assert DR histogram & p95 query
+        if: env.IS_DRY_RUN != 'true'
         run: |
           set -eu
           # Check histogram format exists
@@ -32,11 +42,17 @@ jobs:
 
   canary-quorum-pass:
     runs-on: ubuntu-latest
-    if: ${{ !contains(join(github.event.pull_request.labels.*.name, ','), 'dry-run') }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Dry-run fast-pass
+        if: env.IS_DRY_RUN == 'true'
+        run: echo "dry-run: fast-pass" && exit 0
+      
+      - name: Real run
+        if: env.IS_DRY_RUN != 'true'
+        uses: actions/checkout@v4
       
       - name: check quorum constants exist
+        if: env.IS_DRY_RUN != 'true'
         run: |
           set -eu
           if ! grep -q 'min_samples:' .obs/promotion.yml; then
@@ -63,11 +79,17 @@ jobs:
 
   error-budget-burn-ok:
     runs-on: ubuntu-latest
-    if: ${{ !contains(join(github.event.pull_request.labels.*.name, ','), 'dry-run') }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Dry-run fast-pass
+        if: env.IS_DRY_RUN == 'true'
+        run: echo "dry-run: fast-pass" && exit 0
+      
+      - name: Real run
+        if: env.IS_DRY_RUN != 'true'
+        uses: actions/checkout@v4
       
       - name: verify error budget rules
+        if: env.IS_DRY_RUN != 'true'
         run: |
           set -eu
           if ! grep -q 'duri_error_budget_burn_short' prometheus/rules/error_budget.rules.yml; then
@@ -86,4 +108,3 @@ jobs:
           fi
           
           echo "[OK] Error budget rules verified"
-

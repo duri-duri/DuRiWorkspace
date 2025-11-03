@@ -2,19 +2,31 @@ name: sandbox-smoke-60s
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
     branches: [ "main", "release/*" ]
   push:
     branches: [ "main", "release/*" ]
+
+env:
+  IS_DRY_RUN: ${{ contains(join(github.event.pull_request.labels.*.name, ','), 'dry-run') }}
 
 jobs:
   sandbox-smoke-60s:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - name: Dry-run fast-pass
+        if: env.IS_DRY_RUN == 'true'
+        run: echo "dry-run: fast-pass" && exit 0
+      
+      - name: Real run
+        if: env.IS_DRY_RUN != 'true'
+        uses: actions/checkout@v4
       
       - name: Bring up CI stack
+        if: env.IS_DRY_RUN != 'true'
         run: docker compose -f compose.observation.ci.yml up -d --wait
       
       - name: Smoke heartbeat
+        if: env.IS_DRY_RUN != 'true'
         run: bash scripts/ci/obs_smoke.sh

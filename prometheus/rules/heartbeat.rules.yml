@@ -2,35 +2,42 @@ groups:
 - name: heartbeat
   interval: 30s
   rules:
-  # Recording rule: Heartbeat changes (number of changes in 6m window)
-  # Window: 6m = HB(60s) + 2*SI(30s) + ε for safety margin
-  # increase() works with gauge metrics and counts value changes
-  # Filter by metric_realm="prod" to avoid legacy series
-  # Missing values coalesced to 0 (operational safety)
-  - record: duri_heartbeat_changes_6m
+  # Recording rule: Heartbeat age (seconds since last update)
+  # Used as intermediate value for freshness checks
+  - record: duri_heartbeat_age_seconds
     labels:
       metric_realm: "prod"
-    expr: increase(duri_textfile_heartbeat_seq{metric_realm="prod"}[6m]) or on() vector(0)
+    expr: time() - duri_textfile_heartbeat_ts{metric_realm="prod"}
   
-  # Recording rule: Heartbeat freshness (recent sample within 120s)
-  # Boolean 0/1: (time() - ts < 120) → 1, else 0
-  # Missing values coalesced to 0 (operational safety)
-  - record: duri_heartbeat_fresh_120s
-    labels:
-      metric_realm: "prod"
-    expr: ((time() - duri_textfile_heartbeat_ts{metric_realm="prod"}) < 120) or on() vector(0)
-  
-  # Recording rule: Heartbeat OK (1 = healthy, 0 = stalled)
-  # OK if: fresh_120s == 1 AND changes_6m > 0 (both conditions must be met)
-  # Boolean 0/1 conversion
+  # Recording rule: Heartbeat OK (1 = healthy within 120s, 0 = stale)
+  # Label-preserving 0 fallback: 0 * duri_textfile_heartbeat_ts preserves labels
   - record: duri_heartbeat_ok
     labels:
       metric_realm: "prod"
-    expr: ((duri_heartbeat_fresh_120s{metric_realm="prod"} == 1) and (duri_heartbeat_changes_6m{metric_realm="prod"} > 0)) or on() vector(0)
+    expr: (duri_heartbeat_age_seconds{metric_realm="prod"} < 120)
+          OR on(metric_realm,job,instance) 0 * duri_textfile_heartbeat_ts{metric_realm="prod"}
   
-  # Recording rule: Heartbeat stall detection (for alerts)
-  # Stall if: ts >= 120s old (inverse of fresh)
+  # Recording rule: Heartbeat stall detection (1 = stale >= 120s, 0 = fresh)
+  # Label-preserving 0 fallback
   - record: duri_heartbeat_stall
     labels:
       metric_realm: "prod"
-    expr: ((time() - duri_textfile_heartbeat_ts{metric_realm="prod"}) >= 120) or on() vector(0)
+    expr: (duri_heartbeat_age_seconds{metric_realm="prod"} >= 120)
+          OR on(metric_realm,job,instance) 0 * duri_textfile_heartbeat_ts{metric_realm="prod"}
+  
+  # Recording rule: Heartbeat changes (number of changes in 6m window)
+  # increase() works with gauge metrics
+  # Label-preserving 0 fallback
+  - record: duri_heartbeat_changes_6m
+    labels:
+      metric_realm: "prod"
+    expr: increase(duri_textfile_heartbeat_seq{metric_realm="prod"}[6m])
+          OR on(metric_realm,job,instance) 0 * duri_textfile_heartbeat_ts{metric_realm="prod"}
+  
+  # Recording rule: Heartbeat fresh_120s (backward compatibility)
+  # Same as duri_heartbeat_ok for consistency
+  - record: duri_heartbeat_fresh_120s
+    labels:
+      metric_realm: "prod"
+    expr: (duri_heartbeat_age_seconds{metric_realm="prod"} < 120)
+          OR on(metric_realm,job,instance) 0 * duri_textfile_heartbeat_ts{metric_realm="prod"}

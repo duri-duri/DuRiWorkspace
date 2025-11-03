@@ -1,24 +1,24 @@
 services:
-  prometheus:
+  prometheus-ci:
     image: prom/prometheus:v2.54.1
     container_name: prometheus-ci
     user: "65534:65534"
     command:
-      - --web.enable-admin-api
       - --config.file=/etc/prometheus/prometheus.yml.ci
       - --storage.tsdb.path=/prometheus
+      - --web.enable-admin-api
     ports: ["9090:9090"]
+    volumes:
+      - ./prometheus:/etc/prometheus:ro
+      - ./prometheus-data-ci:/prometheus
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:9090/-/ready"]
       interval: 5s
       timeout: 3s
-      retries: 20
-    volumes:
-      - ./prometheus:/etc/prometheus:ro
-      - ./prometheus/rules:/etc/prometheus/rules:ro
-      - ./prometheus-data-ci:/prometheus
+      retries: 40
+    restart: unless-stopped
 
-  pushgateway:
+  pushgateway-ci:
     image: prom/pushgateway:v1.7.0
     container_name: pushgateway-ci
     ports: ["9091:9091"]
@@ -26,5 +26,5 @@ services:
       test: ["CMD", "wget", "-qO-", "http://localhost:9091/metrics"]
       interval: 5s
       timeout: 3s
-      retries: 20
-
+      retries: 40
+    restart: unless-stopped
