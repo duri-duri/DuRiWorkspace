@@ -6,66 +6,69 @@ evaluation_interval: 1m
 tests:
 - interval: 1m
   input_series:
+  # Sequence: 0→1→2 (3 changes over 6 minutes)
   - series: 'duri_textfile_heartbeat_seq{metric_realm="prod"}'
-    values: '0 1 2 2 3 3'   # 6m 동안 3회 변화 (0→1, 1→2, 2→3)
+    values: '0+0x2 1 1+0x2 2 2+0x2 3'  # 0m=0, 2m=1, 4m=1, 6m=2, 8m=2, 10m=3
+  # Timestamp: Fresh (within 120s)
   - series: 'duri_textfile_heartbeat_ts{metric_realm="prod"}'
-    values: '0x60 0x120 0x180 0x240 0x300 0x360'  # 초 단위 (의미상 최근)
+    values: '0+0x6 180 360 540 720'  # 0m=0s, 3m=180s, 6m=360s, 9m=540s, 12m=720s (all fresh)
   
   promql_expr_test:
   - expr: duri_heartbeat_changes_6m
     eval_time: 6m
     exp_samples:
     - labels: '{ metric_realm="prod" }'
-      value: 3
+      value: 2  # 0→1, 1→2 (2 changes in 6m window)
   
   - expr: duri_heartbeat_fresh_120s
     eval_time: 6m
     exp_samples:
     - labels: '{ metric_realm="prod" }'
-      value: 1
+      value: 1  # timestamp is fresh (< 120s)
   
   - expr: duri_heartbeat_ok
     eval_time: 6m
     exp_samples:
     - labels: '{ metric_realm="prod" }'
-      value: 1
+      value: 1  # changes > 0 AND fresh > 0
   
   - expr: duri_heartbeat_stall
     eval_time: 6m
     exp_samples:
     - labels: '{ metric_realm="prod" }'
-      value: 0
+      value: 0  # ok == 1, so stall == 0
 
 # Test case 2: Stalled heartbeat (no changes, stale timestamp)
 - interval: 1m
   input_series:
+  # Sequence: No changes (stuck at 5)
   - series: 'duri_textfile_heartbeat_seq{metric_realm="prod"}'
-    values: '5+0x10'  # 10분 동안 변화 없음
+    values: '5+0x10'  # 10 minutes stuck at 5
+  # Timestamp: Stale (> 120s)
   - series: 'duri_textfile_heartbeat_ts{metric_realm="prod"}'
-    values: '0x600'   # 10분 전 타임스탬프 (stale)
+    values: '0x600'   # 10 minutes ago (600s, stale)
   
   promql_expr_test:
   - expr: duri_heartbeat_changes_6m
     eval_time: 10m
     exp_samples:
     - labels: '{ metric_realm="prod" }'
-      value: 0
+      value: 0  # No changes
   
   - expr: duri_heartbeat_fresh_120s
     eval_time: 10m
     exp_samples:
     - labels: '{ metric_realm="prod" }'
-      value: 0
+      value: 0  # Timestamp is stale (> 120s)
   
   - expr: duri_heartbeat_ok
     eval_time: 10m
     exp_samples:
     - labels: '{ metric_realm="prod" }'
-      value: 0
+      value: 0  # changes == 0 OR fresh == 0
   
   - expr: duri_heartbeat_stall
     eval_time: 10m
     exp_samples:
     - labels: '{ metric_realm="prod" }'
-      value: 1
-
+      value: 1  # ok == 0, so stall == 1
