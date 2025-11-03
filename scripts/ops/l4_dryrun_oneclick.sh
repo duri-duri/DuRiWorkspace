@@ -32,16 +32,16 @@ if ! make heartbeat-rules-lint >/dev/null 2>&1; then
 fi
 log "[OK] heartbeat-rules-lint passed"
 
-# Step 3: promql-unit
-log "Step 3: promql-unit REALM=prod..."
-if ! make promql-unit REALM=prod >/dev/null 2>&1; then
-  log "[WARN] promql-unit failed (may be acceptable if test fixtures need adjustment)"
-  log "[INFO] Continuing despite unit test failure - operational metrics are OK"
-  log "[INFO] Unit test failure does not block L4 dry-run (operational environment is healthy)"
-  # Don't exit, continue with warning
-else
-  log "[OK] promql-unit passed"
+# Step 3: promql-unit (필수 통과 - 운영 전 테스트 결정론 확보)
+log "Step 3: promql-unit REALM=prod (필수 통과)..."
+if ! make promql-unit REALM=prod 2>&1; then
+  log "[FAIL] promql-unit failed"
+  log "[INFO] PromQL unit tests must pass before L4 dry-run"
+  log "[INFO] Check test fixtures: tests/promql/heartbeat_test.yml"
+  log "[INFO] Fix: Ensure input_series are properly injected and labels match"
+  exit 1
 fi
+log "[OK] promql-unit passed"
 
 # Step 4: reload_safe.sh
 log "Step 4: reload_safe.sh..."

@@ -25,8 +25,14 @@ if ! curl -sf "${PROM_URL}/api/v1/status/config" >/dev/null 2>&1; then
   exit 1
 fi
 
-# Step 2: Create snapshot
-log "Step 2: Creating TSDB snapshot..."
+# Step 2: Get actual TSDB storage path
+log "Step 2: Detecting TSDB storage path..."
+STORAGE_DIR=$(curl -sf "${PROM_URL}/api/v1/status/flags" 2>/dev/null | \
+  jq -r '.data["storage.tsdb.path"] // "/prometheus"' || echo "/prometheus")
+log "[OK] TSDB storage path: $STORAGE_DIR"
+
+# Step 3: Create snapshot
+log "Step 3: Creating TSDB snapshot..."
 SNAP_JSON=$(curl -sfS -XPOST "${PROM_URL}/api/v1/admin/tsdb/snapshot?skip_head=false" 2>&1)
 
 if [ $? -ne 0 ]; then
@@ -37,8 +43,8 @@ fi
 
 SNAP_ID=$(printf '%s' "$SNAP_JSON" | jq -r '.data.name // empty' 2>/dev/null || echo "")
 
-# Step 3: Validate snapshot ID (3-level check)
-log "Step 3: Validating snapshot ID..."
+# Step 4: Validate snapshot ID (3-level check)
+log "Step 4: Validating snapshot ID..."
 if [ -z "$SNAP_ID" ] || [ "$SNAP_ID" = "null" ] || [ "$SNAP_ID" = "NULL" ]; then
   log "[FAIL] TSDB snapshot name is null/empty"
   log "[INFO] Response: $SNAP_JSON"
@@ -48,23 +54,32 @@ fi
 
 log "[OK] Snapshot ID: $SNAP_ID"
 
-# Step 4: Verify snapshot directory exists in container
-log "Step 4: Verifying snapshot directory in container..."
-if ! docker exec "$PROM_CONTAINER" test -d "/prometheus/snapshots/$SNAP_ID" 2>/dev/null; then
-  log "[FAIL] Snapshot directory missing in container: snapshots/$SNAP_ID"
+# Step 5: Poll for snapshot directory creation (max 60s, async creation guard)
+log "Step 5: Waiting for snapshot directory creation (async guard)..."
+SNAP_DIR="${STORAGE_DIR}/snapshots/${SNAP_ID}"
+SNAP_READY=0
+for i in {1..60}; do
+  if docker exec "$PROM_CONTAINER" test -d "$SNAP_DIR" 2>/dev/null; then
+    log "[OK] Snapshot directory ready after ${i}s"
+    SNAP_READY=1
+    break
+  fi
+  sleep 1
+done
+
+if [ "$SNAP_READY" != "1" ]; then
+  log "[FAIL] Snapshot directory not found after 60s: $SNAP_DIR"
   log "[INFO] Available snapshots:"
-  docker exec "$PROM_CONTAINER" ls -la /prometheus/snapshots/ 2>/dev/null || true
+  docker exec "$PROM_CONTAINER" ls -la "${STORAGE_DIR}/snapshots/" 2>/dev/null || true
   exit 3
 fi
 
-log "[OK] Snapshot directory exists in container"
-
-# Step 5: Export snapshot
-log "Step 5: Exporting snapshot..."
+# Step 6: Export snapshot
+log "Step 6: Exporting snapshot..."
 mkdir -p "$BACKUP_DIR"
 SNAP_FILE="${BACKUP_DIR}/prom_tsdb_${SNAP_ID}_$(date +%Y%m%d-%H%M).tar.gz"
 
-if docker exec "$PROM_CONTAINER" tar -C /prometheus -czf - "snapshots/$SNAP_ID" > "$SNAP_FILE" 2>&1; then
+if docker exec "$PROM_CONTAINER" tar -C "$STORAGE_DIR" -czf - "snapshots/$SNAP_ID" > "$SNAP_FILE" 2>&1; then
   log "[OK] Snapshot exported: $SNAP_FILE"
 else
   log "[FAIL] Snapshot export failed"

@@ -18,10 +18,13 @@ services:
       - ./prometheus/prometheus.yml.minimal:/etc/prometheus/prometheus.yml:ro
       - ./prometheus/rules:/etc/prometheus/rules:ro
       - ./prometheus/targets:/etc/prometheus/targets:ro
+      # TSDB 데이터 볼륨 고정 (스냅샷 경로 일관성)
+      - ./prometheus-data:/prometheus
     command:
       - --config.file=/etc/prometheus/prometheus.yml
       - --web.enable-lifecycle
       - --web.enable-admin-api
+      - --storage.tsdb.path=/prometheus
       - --storage.tsdb.retention.time=15d
 
   node-exporter:
