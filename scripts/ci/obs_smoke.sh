@@ -32,8 +32,11 @@ ts=$(date +%s)
 seq1=1
 seq2=2
 
-cat <<EOF | curl -sS --data-binary @- "${PG}/metrics/job/${JOB}/instance/${INSTANCE}/"
+# Push first heartbeat (with TYPE declarations)
+cat <<EOF | curl -sS --data-binary @- "${PG}/metrics/job/${JOB}/instance/${INSTANCE}"
+# TYPE duri_textfile_heartbeat_seq gauge
 duri_textfile_heartbeat_seq{metric_realm="${REALM}"} ${seq1}
+# TYPE duri_textfile_heartbeat_ts gauge
 duri_textfile_heartbeat_ts{metric_realm="${REALM}"} ${ts}
 EOF
 
@@ -41,8 +44,11 @@ sleep 2
 
 ts2=$((ts+2))
 
-cat <<EOF | curl -sS --data-binary @- "${PG}/metrics/job/${JOB}/instance/${INSTANCE}/"
+# Push second heartbeat
+cat <<EOF | curl -sS --data-binary @- "${PG}/metrics/job/${JOB}/instance/${INSTANCE}"
+# TYPE duri_textfile_heartbeat_seq gauge
 duri_textfile_heartbeat_seq{metric_realm="${REALM}"} ${seq2}
+# TYPE duri_textfile_heartbeat_ts gauge
 duri_textfile_heartbeat_ts{metric_realm="${REALM}"} ${ts2}
 EOF
 
