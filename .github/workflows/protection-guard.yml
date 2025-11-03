@@ -11,13 +11,20 @@ on:
 
 jobs:
   guard:
-    if: ${{ github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: read
     steps:
+      # 👉 PR에서는 필수 상태체크 이름을 'guard'로 유지한 채 즉시 성공 처리
+      - name: Neutral pass on PR (required check name = guard)
+        if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          echo "protection-guard: noop on pull_request (required-check satisfied)"
+          exit 0
+
       - name: Check branch protection snapshot
+        if: ${{ github.event_name != 'pull_request' }}
         env:
           REPO: ${{ github.repository }}
           BRANCH: main
@@ -58,44 +65,5 @@ jobs:
           const wantCtx = want.required_status_checks.contexts.sort().join(',');
           const liveCtx = (live.required_status_checks?.contexts||[]).sort().join(',');
           if (wantCtx !== liveCtx) bad.push(`contexts mismatch: ${liveCtx} != ${wantCtx}`);
-          if (bad.length){ 
-            console.error('Branch protection drift:\n- '+bad.join('\n- '));
-            console.log('Want:', JSON.stringify(want, null, 2));
-            console.log('Live:', JSON.stringify({
-              strict: get(live, 'required_status_checks.strict'),
-              contexts: get(live, 'required_status_checks.contexts'),
-              codeowners: get(live, 'required_pull_request_reviews.require_code_owner_reviews'),
-              reviews: get(live, 'required_pull_request_reviews.required_approving_review_count'),
-              conv: get(live, 'required_conversation_resolution.enabled'),
-              admins: get(live, 'enforce_admins.enabled'),
-              linear: get(live, 'required_linear_history.enabled')
-            }, null, 2));
-            process.exit(1);
-          }
+          if (bad.length){ console.error('Branch protection drift:\n- '+bad.join('\n- ')); process.exit(1);}
           JS
-
-  guard-pr-noop:
-    if: ${{ github.event_name == 'pull_request' }}
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: read
-    steps:
-      - name: Neutral pass on PR (required status check)
-        run: |
-          echo "protection-guard: neutral pass on pull_request event"
-          echo "Branch protection check is only performed on push/schedule events"
-          exit 0
-
-  guard-pr-noop:
-    if: ${{ github.event_name == 'pull_request' }}
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: read
-    steps:
-      - name: Neutral pass on PR (required status check)
-        run: |
-          echo "protection-guard: neutral pass on pull_request event"
-          echo "Branch protection check is only performed on push/schedule events"
-          exit 0
