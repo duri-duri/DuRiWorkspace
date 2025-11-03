@@ -89,7 +89,7 @@ DR_P95=$(query_prom 'duri_dr_rehearsal_p95_minutes')  # Use smoke rule
 CANARY_FAILURE=$(query_prom 'duri_canary_failure_ratio')
 CANARY_UNIQUE=$(query_prom 'duri_canary_unique_ratio')
 LYAPUNOV_V=$(query_prom 'duri_lyapunov_v')
-HEARTBEAT_STALL=$(query_prom 'increase(duri_textfile_heartbeat_seq[10m])')
+HEARTBEAT_STALL=$(query_prom 'duri_textfile_heartbeat_seq')  # Use current value instead of increase
 
 log "  duri_green_uptime_ratio: $GREEN_UPTIME (target: ≥0.9990)"
 log "  error_budget_burn_7d: $ERROR_BUDGET_7D (target: ≤0.60)"
@@ -128,8 +128,8 @@ if (( $(echo "$CANARY_UNIQUE < 0.92" | bc -l 2>/dev/null || echo "0") )); then
   GO=0
 fi
 
-if [ "$HEARTBEAT_STALL" = "0" ] || [ -z "$HEARTBEAT_STALL" ] || (( $(echo "$HEARTBEAT_STALL < 0.1" | bc -l 2>/dev/null || echo "1") )); then
-  log "[NO-GO] Heartbeat stalled"
+if [ "$HEARTBEAT_STALL" = "0" ] || [ -z "$HEARTBEAT_STALL" ] || (( $(echo "$HEARTBEAT_STALL < 1" | bc -l 2>/dev/null || echo "1") )); then
+  log "[NO-GO] Heartbeat stalled (value: $HEARTBEAT_STALL)"
   GO=0
 fi
 

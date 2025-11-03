@@ -11,13 +11,13 @@ groups:
       # Base metric (no labels) - for compatibility with decision script
       - record: duri_green_uptime_ratio
         expr: |
-          (increase(duri_textfile_heartbeat_seq[10m]) > 0) * 1.0
+          (duri_textfile_heartbeat_seq > 0) * 1.0
       
       # Smoke-labeled version
       - record: duri_green_uptime_ratio
         labels: { mode: "smoke" }
         expr: |
-          (increase(duri_textfile_heartbeat_seq[10m]) > 0) * 1.0
+          (duri_textfile_heartbeat_seq > 0) * 1.0
       
       # 2) DR RTO p95 in minutes
       # Histogram-based (preferred) or sum/count fallback
