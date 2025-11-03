@@ -16,24 +16,6 @@ log() {
 
 log "=== Prometheus Safe Reload ==="
 
-# Step 1: promtool-check-config
-log "Step 1: Checking Prometheus config..."
-if ! make promtool-check-config >/dev/null 2>&1; then
-  log "[FAIL] promtool-check-config failed"
-  log "Fix configuration errors before reloading"
-  exit 1
-fi
-log "[OK] Config check passed"
-
-# Step 2: promtool-check-rules
-log "Step 2: Checking Prometheus rules..."
-if ! make promtool-check-rules >/dev/null 2>&1; then
-  log "[FAIL] promtool-check-rules failed"
-  log "Fix rule errors before reloading"
-  exit 1
-fi
-log "[OK] Rules check passed"
-
 # Step 1: promtool-check (config + rules)
 log "Step 1: Checking Prometheus config and rules..."
 if ! make promtool-check >/dev/null 2>&1; then
@@ -42,6 +24,9 @@ if ! make promtool-check >/dev/null 2>&1; then
   exit 1
 fi
 log "[OK] Config and rules check passed"
+
+# Step 2: Reload Prometheus
+log "Step 2: Reloading Prometheus..."
 if curl -sf -X POST "$PROM_URL/-/reload" >/dev/null 2>&1; then
   log "[OK] Prometheus reloaded successfully"
   sleep 2
