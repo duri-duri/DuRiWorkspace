@@ -34,13 +34,19 @@ if ! make promtool-check-rules >/dev/null 2>&1; then
 fi
 log "[OK] Rules check passed"
 
-# Step 3: Reload Prometheus
-log "Step 3: Reloading Prometheus..."
+# Step 1: promtool-check (config + rules)
+log "Step 1: Checking Prometheus config and rules..."
+if ! make promtool-check >/dev/null 2>&1; then
+  log "[FAIL] promtool-check failed"
+  log "Fix configuration/rule errors before reloading"
+  exit 1
+fi
+log "[OK] Config and rules check passed"
 if curl -sf -X POST "$PROM_URL/-/reload" >/dev/null 2>&1; then
   log "[OK] Prometheus reloaded successfully"
   sleep 2
   
-  # Step 4: Verify reload success
+  # Step 3: Verify reload success
   RELOAD_SUCCESS=$(curl -sf --max-time 3 "$PROM_URL/api/v1/status/config" 2>/dev/null | \
     jq -r '.data.yaml' | grep -c "prometheus" || echo "0")
   

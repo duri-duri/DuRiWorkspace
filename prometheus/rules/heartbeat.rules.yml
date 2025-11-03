@@ -2,37 +2,45 @@ groups:
 - name: heartbeat
   interval: 15s
   rules:
-  # Recording rule: Heartbeat changes (number of changes in 5m window)
+  # Recording rule: Heartbeat changes (number of changes in 6m window)
+  # Window: 6m = HB(60s) + 2*SI(30s) + ε for safety margin
   # changes() works with gauge metrics and counts value changes
-  - record: duri_heartbeat_changes_5m
-    expr: changes(duri_textfile_heartbeat_seq[5m])
+  # Filter by metric_realm="prod" to avoid legacy series
+  - record: duri_heartbeat_changes_6m
+    expr: changes(duri_textfile_heartbeat_seq{metric_realm="prod"}[6m])
   
-  # Recording rule: Heartbeat freshness (recent sample within 90s)
+  # Recording rule: Heartbeat freshness (recent sample within 75s)
   # Prometheus 2.44+ supports timestamp() function
-  # Convert boolean to 0/1
+  # Convert boolean to 0/1 with clamp_max
   - record: duri_heartbeat_fresh_90s
     expr: |
-      ((time() - max_over_time(timestamp(duri_textfile_heartbeat_seq)[5m:])) < 90) * 1
+      clamp_max(
+        ((time() - max_over_time(timestamp(duri_textfile_heartbeat_seq{metric_realm="prod"})[90s:])) < 75) * 1,
+        1
+      )
   
   # Recording rule: Heartbeat OK (1 = healthy, 0 = stalled)
-  # OK if: changes > 0 OR recent sample is fresh (< 90s)
+  # OK if: changes > 0 OR recent sample is fresh (< 75s)
   # Convert boolean to 0/1 and clamp to ensure single value
   - record: duri_heartbeat_ok
     expr: |
       clamp_max(
-        ((duri_heartbeat_changes_5m > 0) * 1)
-        OR on() (duri_heartbeat_fresh_90s == 1),
+        (
+          (duri_heartbeat_changes_6m > 0) * 1
+          OR on() (duri_heartbeat_fresh_90s == 1)
+        ) * 1,
         1
       )
   
   # Recording rule: Heartbeat stall detection (for alerts)
-  # Stall if: no changes AND sample is stale (> 90s)
+  # Stall if: no changes AND sample is stale (> 75s)
   # Convert boolean to 0/1 and clamp
   - record: duri_heartbeat_stall
     expr: |
       clamp_max(
-        ((duri_heartbeat_changes_5m == 0) * 1)
-        AND on() ((duri_heartbeat_fresh_90s == 0) * 1),
+        (
+          (duri_heartbeat_changes_6m == 0) * 1
+          AND on() ((duri_heartbeat_fresh_90s == 0) * 1)
+        ) * 1,
         1
       )
-
