@@ -33,7 +33,7 @@ EOF
 done
 
 log "Wait for rule evaluation"
-sleep 10
+sleep 15
 
 log "Verify heartbeat metrics"
 ok=$(curl -sf --get "${PROM_URL}/api/v1/query" \
