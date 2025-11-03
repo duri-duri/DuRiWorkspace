@@ -44,3 +44,12 @@ services:
     volumes:
       - /:/host:ro,rslave
       - ./.reports/textfile:/textfile:ro   # Absolute path resolved at runtime
+
+  pushgateway:
+    image: prom/pushgateway:v1.7.0
+    container_name: pushgateway
+    restart: unless-stopped
+    ports: ["9091:9091"]
+    command:
+      - --web.listen-address=:9091
+      - --web.telemetry-path=/metrics

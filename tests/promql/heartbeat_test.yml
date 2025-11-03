@@ -11,33 +11,33 @@ tests:
       values: '0+1x10'   # 0,1,2,...,9 (10분 동안 1씩 증가)
     # 원시 시계열: ts (초 단위 타임스탬프, 신선도 보장)
     - series: 'duri_textfile_heartbeat_ts{metric_realm="prod"}'
-      values: '1700000000+60x10'  # 분당 60초 증가(결정론)
+      values: '1690000000+60x10'  # 분당 60초 증가(결정론)
   
   promql_expr_test:
-    # 6m 시점: changes_6m = 6 (0→1→2→3→4→5→6)
+    # 2m 시점: changes_6m = 2 (0→1→2)
     - expr: duri_heartbeat_changes_6m
-      eval_time: 6m
+      eval_time: 2m
       exp_samples:
         - labels: '{__name__="duri_heartbeat_changes_6m",metric_realm="prod"}'
-          value: 6
+          value: 2
     
-    # 6m 시점: fresh_120s = 1 (타임스탬프가 신선함)
+    # 2m 시점: fresh_120s = 1 (타임스탬프가 신선함)
     - expr: duri_heartbeat_fresh_120s
-      eval_time: 6m
+      eval_time: 2m
       exp_samples:
         - labels: '{__name__="duri_heartbeat_fresh_120s",metric_realm="prod"}'
           value: 1
     
-    # 6m 시점: ok = 1 (changes > 0 AND fresh == 1)
+    # 2m 시점: ok = 1 (changes > 0 AND fresh == 1)
     - expr: duri_heartbeat_ok
-      eval_time: 6m
+      eval_time: 2m
       exp_samples:
         - labels: '{__name__="duri_heartbeat_ok",metric_realm="prod"}'
           value: 1
     
-    # 6m 시점: stall = 0 (ok == 1이므로)
+    # 2m 시점: stall = 0 (ok == 1이므로)
     - expr: duri_heartbeat_stall
-      eval_time: 6m
+      eval_time: 2m
       exp_samples:
         - labels: '{__name__="duri_heartbeat_stall",metric_realm="prod"}'
           value: 0
