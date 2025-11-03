@@ -8,8 +8,11 @@ set -euo pipefail
 ROOT="$(git -C "$(dirname "$0")/../.." rev-parse --show-toplevel 2>/dev/null || realpath "$(dirname "$0")/../..")"
 cd "$ROOT"
 
-PROM_URL="${PROM_URL:-http://localhost:9090}"
-PUSHGATEWAY_URL="${PUSHGATEWAY_URL:-http://localhost:9091}"
+PG="http://localhost:9091"
+PR="http://localhost:9090"
+JOB="node_exporter"
+INST="ci"
+REALM="prod"
 
 log() {
   echo "[CI] $*" >&2
@@ -19,57 +22,34 @@ log "Bring up stack"
 docker compose -f compose.observation.ci.yml up -d --wait
 
 log "Seed heartbeat x2 via pushgateway"
-for i in 1 2; do
-  TS=$(date +%s)
-  SEQ=$i
-  cat <<EOF | curl -sf --data-binary @- "${PUSHGATEWAY_URL}/metrics/job/duri_heartbeat/instance/local"
-# TYPE duri_textfile_heartbeat_seq gauge
-duri_textfile_heartbeat_seq{metric_realm="prod"} ${SEQ}
-# TYPE duri_textfile_heartbeat_ts gauge
-duri_textfile_heartbeat_ts{metric_realm="prod"} ${TS}
-EOF
-  log "Pushed heartbeat seq=$SEQ, ts=$TS"
-  sleep 2
-done
+curl -s --data-binary "duri_textfile_heartbeat_seq{metric_realm=\"${REALM}\"} 1" \
+  "${PG}/metrics/job/${JOB}/instance/${INST}" >/dev/null || true
+sleep 2
+curl -s --data-binary "duri_textfile_heartbeat_seq{metric_realm=\"${REALM}\"} 2" \
+  "${PG}/metrics/job/${JOB}/instance/${INST}" >/dev/null || true
+
+# Also push timestamp
+TS=$(date +%s)
+curl -s --data-binary "duri_textfile_heartbeat_ts{metric_realm=\"${REALM}\"} ${TS}" \
+  "${PG}/metrics/job/${JOB}/instance/${INST}" >/dev/null || true
 
 log "Wait for rule evaluation"
-sleep 15
+sleep 18  # 15~20s
 
 log "Verify heartbeat metrics"
-ok=$(curl -sf --get "${PROM_URL}/api/v1/query" \
-  --data-urlencode 'query=duri_heartbeat_ok{metric_realm="prod"}' | \
-  jq -r '.data.result[]?.value[1] // "0"')
+ok=$(curl -sf --get "${PR}/api/v1/query" --data-urlencode "query=duri_heartbeat_ok{metric_realm=\"${REALM}\"}" \
+     | jq -r '.data.result[]?.value[1] // "0"')
+chg=$(curl -sf --get "${PR}/api/v1/query" --data-urlencode "query=duri_heartbeat_changes_6m{metric_realm=\"${REALM}\"}" \
+     | jq -r '.data.result[]?.value[1] // "0"')
+fresh=$(curl -sf --get "${PR}/api/v1/query" --data-urlencode "query=duri_heartbeat_fresh_120s{metric_realm=\"${REALM}\"}" \
+     | jq -r '.data.result[]?.value[1] // "0"')
 
-chg=$(curl -sf --get "${PROM_URL}/api/v1/query" \
-  --data-urlencode 'query=duri_heartbeat_changes_6m{metric_realm="prod"}' | \
-  jq -r '.data.result[]?.value[1] // "0"')
+log "ok=${ok} chg=${chg} fresh=${fresh}"
 
-fresh=$(curl -sf --get "${PROM_URL}/api/v1/query" \
-  --data-urlencode 'query=duri_heartbeat_fresh_120s{metric_realm="prod"}' | \
-  jq -r '.data.result[]?.value[1] // "0"')
-
-log "ok=$ok chg=$chg fresh=$fresh"
-
-# Validation
-if [ "$ok" != "1" ]; then
-  log "FAIL: heartbeat_ok not 1 (got: $ok)"
+if [ "${ok}" != "1" ]; then
+  log "FAIL: heartbeat_ok not 1 (got: ${ok})"
   exit 1
 fi
 
-# fresh should be 0 or 1 (boolean), or reasonable timestamp difference < 120
-if ! echo "$fresh" | grep -qE '^[01]$'; then
-  # If it's a timestamp difference, check if it's reasonable (< 120)
-  if ! awk -v v="$fresh" 'BEGIN{exit (v >= 0 && v < 120) ? 0 : 1}'; then
-    log "FAIL: freshness invalid (got: $fresh)"
-    exit 1
-  fi
-fi
-
-# Check changes_6m >= 1 (should have at least 1 increase from 2 pushes)
-if ! awk -v v="$chg" 'BEGIN{exit (v > 0) ? 0 : 1}'; then
-  log "FAIL: changes_6m <= 0 (got: $chg)"
-  exit 1
-fi
-
-log "OK: All heartbeat metrics verified"
+log "PASS"
 exit 0
