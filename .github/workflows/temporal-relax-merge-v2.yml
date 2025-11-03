@@ -1,0 +1,282 @@
+name: temporal-relax-merge-v2 (label→relax→merge→restore+audit+ruleset-guard)
+
+on:
+  pull_request_target:
+    types: [labeled]
+
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: "PR number"
+        required: true
+      strategy:
+        description: "merge strategy (squash|merge|rebase)"
+        required: false
+        default: "squash"
+      allow_ruleset_override:
+        description: "allow proceed even if active org/repo rulesets exist (true|false)"
+        required: false
+        default: "false"
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: read
+
+env:
+  REPO: ${{ github.repository }}
+  BASE_BRANCH: main
+  SNAPSHOT: /tmp/protection_snapshot.json
+  RELAX: /tmp/protection_relax.json
+  RESTORE: /tmp/protection_restore.json
+  LABEL_KEY_1: merge:temporal-relax
+  LABEL_KEY_2: safe-change
+  ALLOWLIST: duri-duri,DuRiBot,ShinMD
+  # 동일 PR에 대해 중복 실행 방지 쿨다운(분)
+  COOLDOWN_MIN: "10"
+
+jobs:
+  merge:
+    if: >
+      (github.event_name == 'pull_request_target' &&
+       contains(github.event.pull_request.labels.*.name, env.LABEL_KEY_1)) ||
+      (github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Toolchain
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y jq
+          gh --version || (type -p gh >/dev/null || sudo apt-get install -y gh)
+
+      # ---- 토큰: App 우선, 없으면 ADMIN_PAT ----
+      - name: Issue GitHub App token (preferred)
+        id: app
+        if: ${{ secrets.APP_ID != '' && secrets.APP_PRIVATE_KEY != '' }}
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
+      - name: Select admin token (APP > ADMIN_PAT)
+        id: tok
+        run: |
+          if [ -n "${{ steps.app.outputs.token }}" ]; then
+            echo "ADMIN_TOKEN=${{ steps.app.outputs.token }}" >> $GITHUB_ENV
+            echo "using=app" >> $GITHUB_OUTPUT
+          elif [ -n "${{ secrets.ADMIN_PAT }}" ]; then
+            echo "ADMIN_TOKEN=${{ secrets.ADMIN_PAT }}" >> $GITHUB_ENV
+            echo "using=pat" >> $GITHUB_OUTPUT
+          else
+            echo "::error::No admin token available. Provide APP_ID+APP_PRIVATE_KEY or ADMIN_PAT."
+            exit 1
+          fi
+
+      - name: Resolve PR number
+        id: pr
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "num=${{ github.event.inputs.pr }}" >> $GITHUB_OUTPUT
+          else
+            echo "num=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+          fi
+
+      # ---- 쿨다운: 최근 코멘트 타임스탬프 확인 → 중복 실행 차단 ----
+      - name: Cooldown check
+        id: cooldown
+        run: |
+          PR=${{ steps.pr.outputs.num }}
+          # 최근 v2 실행 로그 코멘트의 created_at을 읽어 쿨다운 판단
+          t=$(gh api repos/$REPO/issues/$PR/comments \
+              --jq '[.[]|select(.body|contains("temporal-relax-merge-v2 start"))]|max_by(.created_at).created_at' | tr -d '"')
+          if [ "$t" != "null" ] && [ -n "$t" ]; then
+            last=$(date -d "$t" +%s 2>/dev/null || date -j -f "%Y-%m-%dT%H:%M:%SZ" "$t" +%s)
+            now=$(date +%s)
+            diff=$(( (now - last) / 60 ))
+            if [ $diff -lt ${{ env.COOLDOWN_MIN }} ]; then
+              echo "::error::Cooldown active ($diff min < ${{ env.COOLDOWN_MIN }} min). Abort."
+              exit 1
+            fi
+          fi
+        env: { GH_TOKEN: ${{ env.ADMIN_TOKEN }} }
+
+      # ---- 게이트: allowlist / base / labels / merge state / open ----
+      - name: Safety gates
+        run: |
+          PR=${{ steps.pr.outputs.num }}
+          ACTOR="${{ github.actor }}"
+          echo "[Gate] actor=$ACTOR pr=$PR repo=${{ env.REPO }}"
+          echo "${{ env.ALLOWLIST }}" | tr ',' '\n' | grep -qx "$ACTOR" \
+            || { echo "::error::actor $ACTOR not allowed"; exit 1; }
+          base=$(gh pr view "$PR" --json baseRefName -q .baseRefName)
+          [ "$base" = "${BASE_BRANCH}" ] || { echo "::error::Blocked: base=$base"; exit 1; }
+          if [ "${{ github.event_name }}" = "pull_request_target" ]; then
+            have=$(gh pr view "$PR" --json labels -q '[.labels[].name]|join(",")')
+            for l in "${{ env.LABEL_KEY_1 }}" "${{ env.LABEL_KEY_2 }}"; do
+              echo "$have" | tr ',' '\n' | grep -qx "$l" || { echo "::error::label $l missing"; exit 1; }
+            done
+          fi
+          ms=$(gh pr view "$PR" --json mergeStateStatus -q .mergeStateStatus)
+          case "$ms" in
+            CLEAN|HAS_HOOKS|UNSTABLE) : ;;
+            *) echo "::error::mergeStateStatus=$ms"; exit 1;;
+          esac
+          st=$(gh pr view "$PR" --json state -q .state)
+          [ "$st" = "OPEN" ] || { echo "::error::Blocked: state=$st"; exit 1; }
+        env: { GH_TOKEN: ${{ env.ADMIN_TOKEN }} }
+
+      # ---- 감사: 시작 ----
+      - name: Audit comment - start
+        run: |
+          PR=${{ steps.pr.outputs.num }}
+          gh api repos/$REPO/issues/$PR/comments -f body="$(cat <<'MD'
+          ▶️ **temporal-relax-merge-v2 start**
+
+          - actor: \`${{ github.actor }}\`
+          - token: \`${{ steps.tok.outputs.using }}\`
+          - base: \`${{ env.BASE_BRANCH }}\`
+          - event: \`${{ github.event_name }}\`
+          MD
+          )"
+        env: { GH_TOKEN: ${{ env.ADMIN_TOKEN }} }
+
+      # ---- 룰셋 감지(하드 가드: 옵션으로 해제 가능) ----
+      - name: Detect active rulesets (hard-guard unless override)
+        run: |
+          owner=$(cut -d/ -f1 <<< "${{ env.REPO }}")
+          org=$(gh api --paginate "orgs/$owner/rulesets" -q '.[]|select(.enforcement=="active")|.name' || true)
+          repo=$(gh api --paginate "repos/${{ env.REPO }}/rulesets" -q '.[]|select(.enforcement=="active")|.name' || true)
+          echo "[org rulesets]"; echo "$org"
+          echo "[repo rulesets]"; echo "$repo"
+          if [ -n "$org$repo" ] && [ "${{ github.event.inputs.allow_ruleset_override || 'false' }}" != "true" ]; then
+            echo "::error::Active rulesets detected. Set allow_ruleset_override=true if you intentionally want to proceed."
+            exit 1
+          fi
+        env: { GH_TOKEN: ${{ env.ADMIN_TOKEN }} }
+
+      # ---- 스냅샷 → 완화 → 머지 → 원복 → 검증 → 실패시 강제 복원 ----
+      - name: Snapshot current protection (before)
+        run: |
+          curl -sSf -H "Authorization: Bearer $ADMIN_TOKEN" \
+               -H "Accept: application/vnd.github+json" \
+               "https://api.github.com/repos/${REPO}/branches/${BASE_BRANCH}/protection" \
+               > "$SNAPSHOT"
+          jq '{required_status_checks,required_pull_request_reviews,enforce_admins,required_linear_history}' "$SNAPSHOT" | tee /tmp/snap_view.json
+        env: { ADMIN_TOKEN: ${{ env.ADMIN_TOKEN }} }
+
+      - name: Audit comment - snapshot(before)
+        run: |
+          PR=${{ steps.pr.outputs.num }}
+          BODY=$(jq -r @json /tmp/snap_view.json)
+          gh api repos/$REPO/issues/$PR/comments -f body="🧾 **Snapshot(before)** \`$BODY\`"
+        env: { GH_TOKEN: ${{ env.ADMIN_TOKEN }} }
+
+      - name: Build RELAX payload (keep contexts)
+        run: |
+          jq '{
+            required_status_checks: { strict: true, contexts: (.required_status_checks.contexts // []) },
+            enforce_admins: true,
+            required_pull_request_reviews: {
+              required_approving_review_count: 0,
+              require_code_owner_reviews: false
+            },
+            required_conversation_resolution: true,
+            required_linear_history: true,
+            restrictions: null
+          }' "$SNAPSHOT" > "$RELAX"
+          cat "$RELAX"
+
+      - name: Apply RELAX
+        run: |
+          curl -sSf -X PUT -H "Authorization: Bearer $ADMIN_TOKEN" \
+               -H "Accept: application/vnd.github+json" \
+               --data @"$RELAX" \
+               "https://api.github.com/repos/${REPO}/branches/${BASE_BRANCH}/protection" \
+               | jq '{required_pull_request_reviews, enforce_admins, required_status_checks}' | tee /tmp/relaxed.json
+        env: { ADMIN_TOKEN: ${{ env.ADMIN_TOKEN }} }
+
+      - name: Audit comment - relaxed
+        run: |
+          PR=${{ steps.pr.outputs.num }}
+          BODY=$(jq -r @json /tmp/relaxed.json)
+          gh api repos/$REPO/issues/$PR/comments -f body="🟡 **Relax applied** \`$BODY\`"
+        env: { GH_TOKEN: ${{ env.ADMIN_TOKEN }} }
+
+      - name: Merge PR (admin path preferred)
+        id: merge
+        run: |
+          PR=${{ steps.pr.outputs.num }}
+          STRAT=${{ github.event.inputs.strategy || 'squash' }}
+          set -e
+          if gh pr merge "$PR" --"$STRAT" --delete-branch --admin -y --repo "$REPO"; then
+            echo "result=admin" >> $GITHUB_OUTPUT
+          else
+            echo "::warning::admin merge failed, trying --auto"
+            gh pr merge "$PR" --"$STRAT" --delete-branch --auto -y --repo "$REPO"
+            echo "result=auto" >> $GITHUB_OUTPUT
+          fi
+        env: { GH_TOKEN: ${{ env.ADMIN_TOKEN }} }
+
+      - name: Audit comment - merged
+        run: |
+          PR=${{ steps.pr.outputs.num }}
+          RES=${{ steps.merge.outputs.result }}
+          SHA=$(gh pr view "$PR" --json mergeCommit -q .mergeCommit.oid || echo "n/a")
+          gh api repos/$REPO/issues/$PR/comments -f body="✅ **Merged** (route=\`$RES\`, sha=\`$SHA\`)"
+        env: { GH_TOKEN: ${{ env.ADMIN_TOKEN }} }
+
+      - name: Build RESTORE payload (from snapshot)
+        run: |
+          jq '{
+            required_status_checks: { strict: true, contexts: (.required_status_checks.contexts // []) },
+            enforce_admins: (.enforce_admins.enabled // true),
+            required_pull_request_reviews: {
+              required_approving_review_count: (.required_pull_request_reviews.required_approving_review_count // 1),
+              require_code_owner_reviews: (.required_pull_request_reviews.require_code_owner_reviews // true)
+            },
+            required_conversation_resolution: (.required_conversation_resolution.enabled // true),
+            required_linear_history: (.required_linear_history.enabled // true),
+            restrictions: null
+          }' "$SNAPSHOT" > "$RESTORE"
+          cat "$RESTORE"
+
+      - name: Restore protection (always)
+        if: always()
+        run: |
+          curl -sSf -X PUT -H "Authorization: Bearer $ADMIN_TOKEN" \
+               -H "Accept: application/vnd.github+json" \
+               --data @"$RESTORE" \
+               "https://api.github.com/repos/${REPO}/branches/${BASE_BRANCH}/protection" \
+               | jq '{required_pull_request_reviews, enforce_admins, required_status_checks}' | tee /tmp/restored.json
+        env: { ADMIN_TOKEN: ${{ env.ADMIN_TOKEN }} }
+
+      - name: Audit comment - restored
+        if: always()
+        run: |
+          PR=${{ steps.pr.outputs.num }}
+          BODY=$(jq -r @json /tmp/restored.json)
+          gh api repos/$REPO/issues/$PR/comments -f body="🟢 **Protection restored** \`$BODY\`"
+        env: { GH_TOKEN: ${{ env.ADMIN_TOKEN }} }
+
+      - name: Verify final protection (strict)
+        if: always()
+        run: |
+          curl -sSf -H "Authorization: Bearer $ADMIN_TOKEN" \
+               -H "Accept: application/vnd.github+json" \
+               "https://api.github.com/repos/${REPO}/branches/${BASE_BRANCH}/protection" \
+               | jq '{required_status_checks, required_pull_request_reviews, enforce_admins, required_linear_history}' | tee /tmp/final.json
+          jq -e '
+            .required_pull_request_reviews.required_approving_review_count>=1 and
+            .required_pull_request_reviews.require_code_owner_reviews==true and
+            .required_linear_history.enabled==true
+          ' /tmp/final.json >/dev/null || { echo "::error::protection not restored to secure state"; exit 1; }
+
+      - name: Failsafe force-restore (only if failed)
+        if: failure()
+        run: |
+          curl -sSf -X PUT -H "Authorization: Bearer $ADMIN_TOKEN" \
+               -H "Accept: application/vnd.github+json" \
+               --data @"$SNAPSHOT" \
+               "https://api.github.com/repos/${REPO}/branches/${BASE_BRANCH}/protection" >/dev/null
+

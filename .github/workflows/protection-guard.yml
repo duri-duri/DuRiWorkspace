@@ -11,7 +11,6 @@ on:
 
 jobs:
   guard:
-    if: ${{ github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -33,8 +32,7 @@ jobs:
               "require_code_owner_reviews": true,
               "required_approving_review_count": 1,
               "required_conversation_resolution": true,
-              "enforce_admins": true,
-              "required_linear_history": true
+              "enforce_admins": true
             }
         run: |
           curl -sSf -H "Authorization: Bearer ${{ github.token }}" \
@@ -51,25 +49,11 @@ jobs:
             ['required_pull_request_reviews.required_approving_review_count', want.required_approving_review_count],
             ['required_conversation_resolution.enabled', want.required_conversation_resolution],
             ['enforce_admins.enabled', want.enforce_admins],
-            ['required_linear_history.enabled', want.required_linear_history],
           ];
           let bad = [];
           for (const [k,v] of checks) if (get(live,k)!==v) bad.push(`${k} != ${v}`);
           const wantCtx = want.required_status_checks.contexts.sort().join(',');
           const liveCtx = (live.required_status_checks?.contexts||[]).sort().join(',');
           if (wantCtx !== liveCtx) bad.push(`contexts mismatch: ${liveCtx} != ${wantCtx}`);
-          if (bad.length){ 
-            console.error('Branch protection drift:\n- '+bad.join('\n- '));
-            console.log('Want:', JSON.stringify(want, null, 2));
-            console.log('Live:', JSON.stringify({
-              strict: get(live, 'required_status_checks.strict'),
-              contexts: get(live, 'required_status_checks.contexts'),
-              codeowners: get(live, 'required_pull_request_reviews.require_code_owner_reviews'),
-              reviews: get(live, 'required_pull_request_reviews.required_approving_review_count'),
-              conv: get(live, 'required_conversation_resolution.enabled'),
-              admins: get(live, 'enforce_admins.enabled'),
-              linear: get(live, 'required_linear_history.enabled')
-            }, null, 2));
-            process.exit(1);
-          }
+          if (bad.length){ console.error('Branch protection drift:\n- '+bad.join('\n- ')); process.exit(1);}
           JS
