@@ -135,7 +135,17 @@ if (( $(echo "$CANARY_UNIQUE < 0.92" | bc -l 2>/dev/null || echo "0") )); then
 fi
 
 # Heartbeat OK check (1 = healthy, 0 = stalled)
-if [ "$HEARTBEAT_OK" != "1" ] || [ -z "$HEARTBEAT_OK" ]; then
+# Allow N/A during initial ramp-up (heartbeat_ok requires 10m window)
+if [ "$HEARTBEAT_OK" = "N/A" ] || [ -z "$HEARTBEAT_OK" ]; then
+  # Fallback: Check if heartbeat_seq is increasing
+  HEARTBEAT_SEQ_INCREASE=$(query_prom 'increase(duri_textfile_heartbeat_seq[5m])')
+  if (( $(echo "$HEARTBEAT_SEQ_INCREASE > 0" | bc -l 2>/dev/null || echo "0") )); then
+    log "[OK] Heartbeat OK (fallback: seq increasing, heartbeat_ok not yet evaluated)"
+  else
+    log "[NO-GO] Heartbeat not OK (heartbeat_ok: N/A, seq increase: $HEARTBEAT_SEQ_INCREASE)"
+    GO=0
+  fi
+elif [ "$HEARTBEAT_OK" != "1" ]; then
   log "[NO-GO] Heartbeat not OK (heartbeat_ok: $HEARTBEAT_OK, expected: 1)"
   GO=0
 fi
@@ -176,7 +186,7 @@ else
   (( $(echo "$DR_P95 > 12" | bc -l 2>/dev/null || echo "0") )) && log "  - DR p95 > 12 minutes"
   (( $(echo "$CANARY_FAILURE > 0.08" | bc -l 2>/dev/null || echo "0") )) && log "  - Canary failure > 0.08"
   (( $(echo "$CANARY_UNIQUE < 0.92" | bc -l 2>/dev/null || echo "0") )) && log "  - Canary unique < 0.92"
-  [ "$HEARTBEAT_STALL" = "0" ] && log "  - Heartbeat stalled"
+  [ "$HEARTBEAT_OK" != "1" ] && [ "$HEARTBEAT_OK" != "N/A" ] && log "  - Heartbeat not OK"
   log ""
   log "Fix blocking conditions and rerun this script"
   exit 1
