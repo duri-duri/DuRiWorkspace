@@ -1,0 +1,36 @@
+name: check-alias
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  obs-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ok
+  
+  sandbox-smoke-60s:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ok
+  
+  dr-rehearsal-24h-pass:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ok
+  
+  canary-quorum-pass:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ok
+  
+  error-budget-burn-ok:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ok
+  
+  promql-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ok

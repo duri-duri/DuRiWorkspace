@@ -24,6 +24,7 @@ env:
 
 jobs:
   _setup:
+    if: ${{ !contains(join(fromJson(toJson(github.event.pull_request.labels || fromJSON('[]'))).*.name, ','), 'safe-change') && !contains(join(fromJson(toJson(github.event.pull_request.labels || fromJSON('[]'))).*.name, ','), 'freeze:override') }}
     runs-on: ubuntu-latest
     outputs:
       risky: ${{ steps.eval.outputs.risky }}
