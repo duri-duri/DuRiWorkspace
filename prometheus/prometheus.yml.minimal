@@ -9,11 +9,15 @@ rule_files:
   - /etc/prometheus/rules/*.yml
 
 scrape_configs:
-  - job_name: node-exporter
+  - job_name: 'node-exporter'
+    scrape_interval: 15s
+    honor_labels: true
     file_sd_configs:
-      - files: ["/etc/prometheus/targets/node_exporter.yml"]
+      - files: ['/etc/prometheus/targets/node_exporter.yml']
         refresh_interval: 30s
     # Fallback to static config if file_sd fails
     static_configs:
-      - targets: ["node-exporter:9100", "localhost:9100"]
+      - targets: ['node-exporter:9100']
+        labels:
+          job: 'node-exporter'
 

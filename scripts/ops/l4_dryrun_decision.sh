@@ -93,7 +93,8 @@ DR_P95=$(query_prom 'duri_dr_rehearsal_p95_minutes')  # Use smoke rule
 CANARY_FAILURE=$(query_prom 'duri_canary_failure_ratio')
 CANARY_UNIQUE=$(query_prom 'duri_canary_unique_ratio')
 LYAPUNOV_V=$(query_prom 'duri_lyapunov_v')
-HEARTBEAT_STALL=$(query_prom 'duri_textfile_heartbeat_seq')  # Use current value instead of increase
+HEARTBEAT_OK=$(query_prom 'duri_heartbeat_ok')  # Use heartbeat_ok (1 = healthy, 0 = stalled)
+HEARTBEAT_STALL=$(query_prom 'duri_heartbeat_stall')  # For reference only (alerts)
 
 log "  duri_green_uptime_ratio: $GREEN_UPTIME (target: ≥0.9990)"
 log "  error_budget_burn_7d: $ERROR_BUDGET_7D (target: ≤0.60)"
@@ -102,7 +103,8 @@ log "  dr_rehearsal_p95_minutes: $DR_P95 (target: ≤12)"
 log "  canary_failure_ratio: $CANARY_FAILURE (target: ≤0.08)"
 log "  canary_unique_ratio: $CANARY_UNIQUE (target: ≥0.92)"
 log "  lyapunov_V: $LYAPUNOV_V"
-log "  heartbeat_stall: $HEARTBEAT_STALL (target: >0)"
+log "  heartbeat_ok: $HEARTBEAT_OK (target: ==1)"
+log "  heartbeat_stall: $HEARTBEAT_STALL (for reference, 1=stalled)"
 
 # Go/No-Go 판정
 GO=1
