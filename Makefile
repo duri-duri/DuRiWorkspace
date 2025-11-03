@@ -354,23 +354,11 @@ promtool-check: promtool-ensure-rules
 
 # PromQL Unit Tests
 .PHONY: promql-unit promql-test-heartbeat
-promql-unit: promql-test-heartbeat
-	@echo "[OK] All PromQL unit tests passed"
+promql-unit:
+	@bash scripts/ops/promql_unit.sh
 
-promql-test-heartbeat:
-	@echo "[promql] Testing heartbeat rules..."
-	@mkdir -p tests/promql
-	@docker run --rm --entrypoint /bin/sh \
-	  -v "$(PROM_DIR):/etc/prometheus:ro" \
-	  -v "$(ROOT)/tests/promql:/tests/promql:ro" \
-	  $(PROM_IMG) -lc '\
-	    if [ -f /tests/promql/heartbeat_test.yml ]; then \
-	      promtool test rules /tests/promql/heartbeat_test.yml || exit 1; \
-	    else \
-	      echo "[SKIP] heartbeat_test.yml not found"; \
-	    fi' \
-	|| { echo "[FAIL] heartbeat rules test failed"; exit 1; }
-	@echo "[OK] Heartbeat rules test passed"
+promql-test-heartbeat: promql-unit
+	@echo "[OK] Heartbeat rules test included in promql-unit"
 
 promtool-find-failing:
 	@docker run --rm --entrypoint /bin/sh -v "$(PROM_DIR):/etc/prometheus:ro" $(PROM_IMG) -lc '\

@@ -178,3 +178,6 @@ scripts/._*
 /snapshots/
 /logs/
 !duri_core
+
+# Allow ops documentation tracking
+!docs/ops/*.md
