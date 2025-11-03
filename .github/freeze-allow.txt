@@ -98,3 +98,20 @@ tests/promql/**
 .shadow/**
 compose.observation*.yml
 prometheus.yml
+
+# === PR70 minimal allow ===
+.github/workflows/**
+compose.observation*.yml
+prometheus/**
+prometheus/**/*
+scripts/ci/**
+scripts/ops/**
+tests/promql/**
+docs/ops/**
+.obs/**
+.shadow/**
+.cursorrules
+.github/CODEOWNERS
+.github/freeze-allow.txt
+.gitignore
+prometheus.yml
