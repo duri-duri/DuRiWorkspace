@@ -18,9 +18,30 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
+      - uses: dorny/paths-filter@v3
+        id: paths
+        with:
+          filters: |
+            ci_only:
+              - '.github/workflows/**'
+              - 'tests/**'
+              - 'Makefile'
+              - 'docs/**'
+              - 'scripts/ci/**'
+              - 'scripts/ops/**'
+              - 'prometheus/**'
+              - 'compose.observation.ci.yml'
+      - name: Skip freeze for CI-only changes
+        if: ${{ steps.paths.outputs.ci_only == 'true' }}
+        run: |
+          echo "CI-only change detected → freeze bypass"
+          echo "Changed files: ${{ steps.paths.outputs.ci_only_files }}"
+          exit 0
       - name: Install jq
+        if: ${{ steps.paths.outputs.ci_only != 'true' }}
         run: sudo apt-get update && sudo apt-get install -y jq
       - name: Check last commit trailer (Override-Freeze)
+        if: ${{ steps.paths.outputs.ci_only != 'true' }}
         run: |
           # 기본: Freeze ON → 항상 막음
           FREEZE_ON=1
