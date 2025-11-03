@@ -2,7 +2,7 @@
 # Purpose: Define code ownership for protected branches
 # Required for GitHub Protected Branch "Require review from Code Owners"
 
-*                    @duri-duri @oper-team
+*                    @duri-duri @DuRiBot @oper-team
 
 prometheus/**        @oper-team
 scripts/ops/**       @oper-team
