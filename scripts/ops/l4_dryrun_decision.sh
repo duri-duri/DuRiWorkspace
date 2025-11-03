@@ -135,14 +135,14 @@ if (( $(echo "$CANARY_UNIQUE < 0.92" | bc -l 2>/dev/null || echo "0") )); then
 fi
 
 # Heartbeat OK check (1 = healthy, 0 = stalled)
-# Use abs(sign(increase())) based metric for reliable 0/1 gauge
+# Use changes() based metric for reliable detection
 if [ "$HEARTBEAT_OK" != "1" ]; then
-  # Fallback: Check if heartbeat_seq is increasing in shorter window
-  HEARTBEAT_SEQ_INCREASE=$(query_prom 'abs(sign(increase(duri_textfile_heartbeat_seq[5m])))')
-  if (( $(echo "$HEARTBEAT_SEQ_INCREASE == 1" | bc -l 2>/dev/null || echo "0") )); then
-    log "[OK] Heartbeat OK (fallback: seq increasing in 5m window, heartbeat_ok=$HEARTBEAT_OK)"
+  # Fallback: Check if heartbeat_seq changed in shorter window
+  HEARTBEAT_CHANGES=$(query_prom 'changes(duri_textfile_heartbeat_seq[5m])')
+  if (( $(echo "$HEARTBEAT_CHANGES > 0" | bc -l 2>/dev/null || echo "0") )); then
+    log "[OK] Heartbeat OK (fallback: seq changed in 5m window, heartbeat_ok=$HEARTBEAT_OK, changes=$HEARTBEAT_CHANGES)"
   else
-    log "[NO-GO] Heartbeat not OK (heartbeat_ok: $HEARTBEAT_OK, seq increase: $HEARTBEAT_SEQ_INCREASE)"
+    log "[NO-GO] Heartbeat not OK (heartbeat_ok: $HEARTBEAT_OK, changes: $HEARTBEAT_CHANGES)"
     GO=0
   fi
 fi

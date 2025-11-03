@@ -139,12 +139,19 @@ groups:
             1
           )
       
+      # Recording rule: Heartbeat changes (number of changes in 10m window)
+      # changes() works with gauge metrics and counts value changes
+      - record: duri_heartbeat_changes_10m
+        expr: |
+          changes(duri_textfile_heartbeat_seq[10m])
+      
       # Recording rule: Heartbeat OK (1 = healthy, 0 = stalled)
-      # Use abs(sign(increase())) to convert bool-vector to 0/1 gauge reliably
-      # This avoids empty vector issues with comparison operators
+      # Use changes() > 0 to detect if heartbeat is updating
+      # For initial ramp-up (< 5min), allow if metric exists
       - record: duri_heartbeat_ok
         expr: |
-          clamp_max(1, abs(sign(increase(duri_textfile_heartbeat_seq[5m]))))
+          (duri_heartbeat_changes_10m > 0)
+          OR on() (time() - min_over_time(timestamp(duri_textfile_heartbeat_seq)[10m:]) < 300)
       
       # Recording rule: Heartbeat stall detection (for alerts)
       # Alert metric: 1 = stalled, 0 = OK (inverse of heartbeat_ok)

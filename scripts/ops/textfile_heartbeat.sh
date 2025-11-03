@@ -21,13 +21,21 @@ tmp=$(mktemp "${TEXTFILE_DIR}/.duri_textfile_heartbeat.prom.XXXXXX")
 ts=$(date +%s)
 pid=$$
 seq_file="${TEXTFILE_DIR}/.heartbeat_seq"
+heartbeat_file="${TEXTFILE_DIR}/duri_textfile_heartbeat.prom"
 
 # Monotonic sequence (increment on each successful write)
 seq=0
-if [ -f "$seq_file" ]; then
+if [ -f "$heartbeat_file" ]; then
+  # Extract current seq from existing file
+  old_seq=$(grep -E '^duri_textfile_heartbeat_seq ' "$heartbeat_file" | awk '{print $2}' 2>/dev/null || echo "0")
+  seq=$(( ${old_seq:-0} + 1 ))
+elif [ -f "$seq_file" ]; then
+  # Fallback to seq file
   seq=$(cat "$seq_file" 2>/dev/null || echo "0")
+  seq=$((seq + 1))
+else
+  seq=1
 fi
-seq=$((seq + 1))
 
 # Last success exit (0 = success, 1 = failure)
 last_success_exit=0
@@ -38,7 +46,7 @@ last_success_exit=0
   echo "duri_textfile_heartbeat $ts"
   echo ""
   echo "# HELP duri_textfile_heartbeat_seq Monotonic sequence counter"
-  echo "# TYPE duri_textfile_heartbeat_seq counter"
+  echo "# TYPE duri_textfile_heartbeat_seq gauge"
   echo "duri_textfile_heartbeat_seq $seq"
   echo ""
   echo "# HELP duri_textfile_writer_pid Writer process PID"

@@ -34,18 +34,25 @@ groups:
             1
           )
       
-      # 2) Heartbeat OK (1 = healthy, 0 = stalled)
-      # Use abs(sign(increase())) to reliably convert to 0/1 gauge
+      # 2) Heartbeat changes (number of changes in 10m window)
+      - record: duri_heartbeat_changes_10m
+        expr: |
+          changes(duri_textfile_heartbeat_seq[10m])
+      
+      # 3) Heartbeat OK (1 = healthy, 0 = stalled)
+      # Use changes() > 0 to detect if heartbeat is updating
       - record: duri_heartbeat_ok
         expr: |
-          clamp_max(1, abs(sign(increase(duri_textfile_heartbeat_seq[5m]))))
+          (duri_heartbeat_changes_10m > 0)
+          OR on() (time() - min_over_time(timestamp(duri_textfile_heartbeat_seq)[10m:]) < 300)
       
       - record: duri_heartbeat_ok
         labels: { mode: "smoke" }
         expr: |
-          clamp_max(1, abs(sign(increase(duri_textfile_heartbeat_seq[5m]))))
+          (duri_heartbeat_changes_10m > 0)
+          OR on() (time() - min_over_time(timestamp(duri_textfile_heartbeat_seq)[10m:]) < 300)
       
-      # 3) Heartbeat stall (for alerts only, 1 = stalled)
+      # 4) Heartbeat stall (for alerts only, 1 = stalled)
       - record: duri_heartbeat_stall
         expr: |
           1 - duri_heartbeat_ok
