@@ -8,23 +8,28 @@ groups:
   # Filter by metric_realm="prod" to avoid legacy series
   # This is the raw count of changes (for debugging/monitoring)
   - record: duri_heartbeat_changes_6m
-    expr: clamp_max(changes(duri_textfile_heartbeat_seq{metric_realm="prod"}[6m]), 1e9)
+    labels:
+      metric_realm: "prod"
+    expr: clamp_max(changes(duri_textfile_heartbeat_seq{metric_realm="prod"}[6m]), 1e9) or on() vector(0)
   
   # Recording rule: Heartbeat freshness (recent sample within 120s)
-  # timestamp()에 range 불가 → 절대시간 비교로 결정화
+  # Direct timestamp check: time() - duri_textfile_heartbeat_ts <= 120
   # Missing values coalesced to 0 (operational safety)
-  # Fallback to 0 for initial gaps (reload resilience)
   - record: duri_heartbeat_fresh_120s
+    labels:
+      metric_realm: "prod"
     expr: ((time() - duri_textfile_heartbeat_ts{metric_realm="prod"}) <= 120) or on() vector(0)
   
   # Recording rule: Heartbeat OK (1 = healthy, 0 = stalled)
   # OK if: changes > 0 AND fresh_120s == 1 (both conditions must be met)
-  # 'and'는 스칼라/벡터 모두 OK, 0/1 벡터를 사용
   - record: duri_heartbeat_ok
-    expr: (duri_heartbeat_changes_6m > 0) and (duri_heartbeat_fresh_120s == 1)
+    labels:
+      metric_realm: "prod"
+    expr: ((duri_heartbeat_changes_6m > 0) and (duri_heartbeat_fresh_120s == 1)) or on() vector(0)
   
   # Recording rule: Heartbeat stall detection (for alerts)
   # Stall if: ok == 0 (inverse of OK)
-  # Convert boolean to 0/1 and clamp
   - record: duri_heartbeat_stall
+    labels:
+      metric_realm: "prod"
     expr: (1 - duri_heartbeat_ok) or on() vector(0)

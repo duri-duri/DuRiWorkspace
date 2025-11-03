@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
-# Textfile heartbeat generator v2
-# Writes a timestamp metric + monotonic seq + writer pid + last_success_exit
-# Usage: Called by cron every 5 minutes (or 1 minute for high-frequency)
-# Single source of truth: /home/duri/DuRiWorkspace/reports/textfile
-# Lock-protected to prevent concurrent writes
+# Textfile Heartbeat Generator (Pushgateway + Textfile Dual Mode)
+# Purpose: Generate heartbeat metrics and push to Pushgateway + write to textfile
+# Usage: bash scripts/ops/textfile_heartbeat.sh
 
 set -euo pipefail
 
@@ -17,13 +15,11 @@ fi
 
 # Single source of truth: Always use reports/textfile
 TEXTFILE_DIR="${TEXTFILE_DIR:-$ROOT/reports/textfile}"
-METRIC="$TEXTFILE_DIR/duri_textfile_heartbeat.prom"
-SEQ_FILE="${TEXTFILE_DIR}/duri_textfile_heartbeat_seq.prom"
-TS_FILE="${TEXTFILE_DIR}/duri_textfile_heartbeat_ts.prom"
+PUSHGATEWAY_URL="${PUSHGATEWAY_URL:-http://localhost:9091}"
+SEQ_FILE="${TEXTFILE_DIR}/.hb_seq"
 LOCK="${TEXTFILE_DIR}/.hb.lock"
-TMP="$METRIC.$$"
 
-mkdir -p "$TEXTFILE_DIR"
+mkdir -p "${TEXTFILE_DIR}"
 
 # Lock-protected write (flock prevents concurrent execution)
 exec 9>"${LOCK}"
@@ -33,54 +29,36 @@ if ! flock -n 9; then
 fi
 
 # Current seq reading (from existing file if available)
-SEQ=0
-if [ -f "$SEQ_FILE" ]; then
-  SEQ=$(awk '/^duri_textfile_heartbeat_seq{metric_realm="prod"} /{print $2}' "$SEQ_FILE" 2>/dev/null || \
-        awk '/^duri_textfile_heartbeat_seq /{print $2}' "$SEQ_FILE" 2>/dev/null || echo 0)
-fi
-NEW=$((SEQ + 1))
+SEQ=$(cat "${SEQ_FILE}" 2>/dev/null || echo 0)
+SEQ=$((SEQ + 1))
+echo "$SEQ" > "${SEQ_FILE}"
 
 ts=$(date +%s)
-pid=$$
 
-# Atomic write: tmp → mv
-# Write sequence counter separately for freshness guard
-{
-  echo "# HELP duri_textfile_heartbeat_seq Monotonic sequence counter"
-  echo "# TYPE duri_textfile_heartbeat_seq gauge"
-  echo "duri_textfile_heartbeat_seq{metric_realm=\"prod\"} $NEW"
-} > "${SEQ_FILE}.$$"
-mv -f "${SEQ_FILE}.$$" "$SEQ_FILE"
+# Push to Pushgateway
+# Format: job=duri_heartbeat, instance=local
+# Metric labels: metric_realm="prod"
+cat <<EOF | curl -sf --data-binary @- "${PUSHGATEWAY_URL}/metrics/job/duri_heartbeat/instance/local" >/dev/null 2>&1 || true
+# TYPE duri_textfile_heartbeat_seq gauge
+duri_textfile_heartbeat_seq{metric_realm="prod"} ${SEQ}
+# TYPE duri_textfile_heartbeat_ts gauge
+duri_textfile_heartbeat_ts{metric_realm="prod"} ${ts}
+EOF
 
-# Write timestamp separately for freshness guard
-{
-  echo "# HELP duri_textfile_heartbeat_ts Timestamp of last heartbeat write"
-  echo "# TYPE duri_textfile_heartbeat_ts gauge"
-  echo "duri_textfile_heartbeat_ts{metric_realm=\"prod\"} $ts"
-} > "${TS_FILE}.$$"
-mv -f "${TS_FILE}.$$" "$TS_FILE"
+# Also write to textfile for backward compatibility (if node-exporter is available)
+SEQ_FILE_TXT="${TEXTFILE_DIR}/duri_textfile_heartbeat_seq.prom"
+TS_FILE_TXT="${TEXTFILE_DIR}/duri_textfile_heartbeat_ts.prom"
 
-# Write full heartbeat file (backward compatibility)
-{
-  echo "# HELP duri_textfile_heartbeat Textfile collector heartbeat timestamp"
-  echo "# TYPE duri_textfile_heartbeat gauge"
-  echo "duri_textfile_heartbeat{metric_realm=\"prod\"} $ts"
-  echo ""
-  echo "# HELP duri_textfile_heartbeat_seq Monotonic sequence counter"
-  echo "# TYPE duri_textfile_heartbeat_seq gauge"
-  echo "duri_textfile_heartbeat_seq{metric_realm=\"prod\"} $NEW"
-  echo ""
-  echo "# HELP duri_textfile_writer_pid Writer process PID"
-  echo "# TYPE duri_textfile_writer_pid gauge"
-  echo "duri_textfile_writer_pid{metric_realm=\"prod\"} $pid"
-  echo ""
-  echo "# HELP duri_textfile_last_success_exit Last success exit code (0=success, 1=failure)"
-  echo "# TYPE duri_textfile_last_success_exit gauge"
-  echo "duri_textfile_last_success_exit{metric_realm=\"prod\"} 0"
-} > "$TMP"
+cat > "${SEQ_FILE_TXT}.$$" <<EOF
+duri_textfile_heartbeat_seq{metric_realm="prod"} ${SEQ}
+EOF
 
-chmod 644 "$TMP" "$SEQ_FILE" "$TS_FILE"
-mv -f "$TMP" "$METRIC"
+cat > "${TS_FILE_TXT}.$$" <<EOF
+duri_textfile_heartbeat_ts{metric_realm="prod"} ${ts}
+EOF
+
+mv -f "${SEQ_FILE_TXT}.$$" "${SEQ_FILE_TXT}"
+mv -f "${TS_FILE_TXT}.$$" "${TS_FILE_TXT}"
 
 # Release lock
 exec 9>&-
