@@ -130,17 +130,26 @@ groups:
       - record: duri_pipeline_green
         expr: (duri_p_n{window="2h"} >= 200) OR (duri_p_n{window="24h"} >= 200)
       
-      # Recording rule: GREEN uptime ratio (24h)
-      # Production metric: Average of heartbeat increases over 24h window
+      # Recording rule: GREEN uptime ratio (24h) - normalized to [0,1]
+      # Production metric: Average of heartbeat increases over 24h window, normalized to ratio
       - record: duri_green_uptime_ratio
         expr: |
-          avg_over_time((increase(duri_textfile_heartbeat_seq[1m]) > 0)[24h:1m])
+          clamp_max(
+            avg_over_time((increase(duri_textfile_heartbeat_seq[1m]) > 0)[24h:1m]),
+            1
+          )
       
-      # Recording rule: Heartbeat stall detection
-      # Alert if heartbeat does not increase in 5 minutes
+      # Recording rule: Heartbeat OK (1 = healthy, 0 = stalled)
+      # Intuitive metric: 1 means heartbeat is increasing normally
+      - record: duri_heartbeat_ok
+        expr: |
+          (increase(duri_textfile_heartbeat_seq[10m]) > 0) * 1
+      
+      # Recording rule: Heartbeat stall detection (for alerts)
+      # Alert metric: 1 = stalled, 0 = OK (inverse of heartbeat_ok)
       - record: duri_heartbeat_stall
         expr: |
-          (increase(duri_textfile_heartbeat_seq[5m]) == 0)
+          (increase(duri_textfile_heartbeat_seq[5m]) == 0) * 1
       
       # Recording rule: DR RTO p95 (7d) - converted to minutes
       - record: duri_dr_rto_seconds_p95_7d

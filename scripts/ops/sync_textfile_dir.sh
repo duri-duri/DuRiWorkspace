@@ -47,12 +47,25 @@ fi
 : "${TEXTFILE_DIR:=${HOME}/DuRiWorkspace/.reports/textfile}"
 log "[INFO] Using TEXTFILE_DIR: $TEXTFILE_DIR"
 
-# 2) Ensure directory exists
-mkdir -p "$TEXTFILE_DIR" || {
-  log "[WARN] Cannot create $TEXTFILE_DIR, trying with sudo..."
-  sudo mkdir -p "$TEXTFILE_DIR"
-  sudo chown -R "$USER:$USER" "$TEXTFILE_DIR"
-}
+# 2) Ensure directory exists (use container mount path, no sudo)
+log "=== Ensuring directory exists ==="
+
+# Use container mount path if available
+if [ -n "${DOCKER_MOUNT:-}" ]; then
+  TEXTFILE_DIR="$DOCKER_MOUNT"
+  log "[OK] Using container mount path: $TEXTFILE_DIR"
+fi
+
+# Try to create directory without sudo first
+if ! mkdir -p "$TEXTFILE_DIR" 2>/dev/null; then
+  log "[WARN] Cannot create $TEXTFILE_DIR without sudo"
+  log "[INFO] Please ensure container mount path is accessible or run with appropriate permissions"
+  log "[INFO] Container mount should be: ./.reports/textfile:/textfile:ro"
+  exit 1
+fi
+
+# Ensure permissions (user should own the directory)
+chmod 755 "$TEXTFILE_DIR" 2>/dev/null || true
 
 # 3) Sync existing metrics from .reports/textfile
 SOURCE_DIR="$ROOT/.reports/textfile"

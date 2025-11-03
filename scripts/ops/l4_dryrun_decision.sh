@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # L4 Dry-Run Go/No-Go Decision Script
 # Purpose: Verify all 4 axes are connected and determine if L4 dry-run can proceed
+# Metric Schema Version: 2 (heartbeat_ok, normalized uptime_ratio)
 # Usage: bash scripts/ops/l4_dryrun_decision.sh
 
 set -euo pipefail
@@ -10,6 +11,7 @@ cd "$ROOT"
 
 PROM_URL="${PROM_URL:-http://localhost:9090}"
 REPO="${REPO:-duri-duri/DuRiWorkspace}"
+METRIC_SCHEMA_REV="2"
 
 log() {
   echo "[$(date +%Y-%m-%d\ %H:%M:%S)] $*" >&2
@@ -21,6 +23,8 @@ query_prom() {
     --data-urlencode "query=$query" 2>/dev/null | \
     jq -r '.data.result[0].value[1] // "0"' || echo "0"
 }
+
+log "=== L4 Dry-Run Go/No-Go Decision (Schema v${METRIC_SCHEMA_REV}) ==="
 
 # 1) Protected Branch 검증
 log "=== 1) Protected Branch 검증 ==="
@@ -128,8 +132,9 @@ if (( $(echo "$CANARY_UNIQUE < 0.92" | bc -l 2>/dev/null || echo "0") )); then
   GO=0
 fi
 
-if [ "$HEARTBEAT_STALL" = "0" ] || [ -z "$HEARTBEAT_STALL" ] || (( $(echo "$HEARTBEAT_STALL < 1" | bc -l 2>/dev/null || echo "1") )); then
-  log "[NO-GO] Heartbeat stalled (value: $HEARTBEAT_STALL)"
+# Heartbeat OK check (1 = healthy, 0 = stalled)
+if [ "$HEARTBEAT_OK" != "1" ] || [ -z "$HEARTBEAT_OK" ]; then
+  log "[NO-GO] Heartbeat not OK (heartbeat_ok: $HEARTBEAT_OK, expected: 1)"
   GO=0
 fi
 

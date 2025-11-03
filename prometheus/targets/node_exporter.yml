@@ -1,2 +1,2 @@
 - labels: { job: "node-exporter" }
-  targets: ["localhost:9100"]
+  targets: ["node-exporter:9100"]

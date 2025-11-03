@@ -8,35 +8,51 @@ groups:
     interval: 5s
     rules:
       # 1) GREEN uptime ratio (production-ready with fallback)
-      # Production: Average of heartbeat increases over 24h window
-      # Fallback: Current heartbeat value (>0 means alive)
+      # Production: Average of heartbeat increases over 24h window, normalized to [0,1]
+      # Fallback: Current heartbeat value (>0 means alive), normalized to [0,1]
       - record: duri_green_uptime_ratio
         expr: |
-          (
-            avg_over_time((increase(duri_textfile_heartbeat_seq[1m]) > 0)[24h:1m])
-          ) or (
-            (duri_textfile_heartbeat_seq > 0) * 1.0
+          clamp_max(
+            (
+              avg_over_time((increase(duri_textfile_heartbeat_seq[1m]) > 0)[24h:1m])
+            ) or (
+              (duri_textfile_heartbeat_seq > 0) * 1.0
+            ),
+            1
           )
       
       # Smoke-labeled version
       - record: duri_green_uptime_ratio
         labels: { mode: "smoke" }
         expr: |
-          (
-            avg_over_time((increase(duri_textfile_heartbeat_seq[1m]) > 0)[24h:1m])
-          ) or (
-            (duri_textfile_heartbeat_seq > 0) * 1.0
+          clamp_max(
+            (
+              avg_over_time((increase(duri_textfile_heartbeat_seq[1m]) > 0)[24h:1m])
+            ) or (
+              (duri_textfile_heartbeat_seq > 0) * 1.0
+            ),
+            1
           )
       
-      # 2) Heartbeat stall detection (production-ready)
+      # 2) Heartbeat OK (1 = healthy, 0 = stalled)
+      - record: duri_heartbeat_ok
+        expr: |
+          (increase(duri_textfile_heartbeat_seq[10m]) > 0) * 1
+      
+      - record: duri_heartbeat_ok
+        labels: { mode: "smoke" }
+        expr: |
+          (increase(duri_textfile_heartbeat_seq[10m]) > 0) * 1
+      
+      # 3) Heartbeat stall (for alerts only, 1 = stalled)
       - record: duri_heartbeat_stall
         expr: |
-          (increase(duri_textfile_heartbeat_seq[5m]) == 0)
+          (increase(duri_textfile_heartbeat_seq[5m]) == 0) * 1
       
       - record: duri_heartbeat_stall
         labels: { mode: "smoke" }
         expr: |
-          (increase(duri_textfile_heartbeat_seq[5m]) == 0)
+          (increase(duri_textfile_heartbeat_seq[5m]) == 0) * 1
       
       # 3) DR RTO p95 in minutes (production-ready with fallbacks)
       - record: duri_dr_rehearsal_p95_minutes
