@@ -1,34 +1,50 @@
-# Dry-Run Smoke Rules for DuRi (확정판)
+# Dry-Run Smoke Rules for DuRi (Production-Ready Transition)
 # Purpose: Provide smoke test metrics for L4 dry-run when production sources are unavailable
-# Strategy: Base metrics (no labels) + smoke-labeled metrics for dual compatibility
+# Strategy: Production metrics first, fallback to smoke constants
 # Note: These rules should be replaced with production sources before production deployment
 
 groups:
   - name: dryrun-smoke
     interval: 5s
     rules:
-      # 1) GREEN uptime ratio (heartbeat-based)
-      # Base metric (no labels) - for compatibility with decision script
+      # 1) GREEN uptime ratio (production-ready with fallback)
+      # Production: Average of heartbeat increases over 24h window
+      # Fallback: Current heartbeat value (>0 means alive)
       - record: duri_green_uptime_ratio
         expr: |
-          (duri_textfile_heartbeat_seq > 0) * 1.0
+          (
+            avg_over_time((increase(duri_textfile_heartbeat_seq[1m]) > 0)[24h:1m])
+          ) or (
+            (duri_textfile_heartbeat_seq > 0) * 1.0
+          )
       
       # Smoke-labeled version
       - record: duri_green_uptime_ratio
         labels: { mode: "smoke" }
         expr: |
-          (duri_textfile_heartbeat_seq > 0) * 1.0
+          (
+            avg_over_time((increase(duri_textfile_heartbeat_seq[1m]) > 0)[24h:1m])
+          ) or (
+            (duri_textfile_heartbeat_seq > 0) * 1.0
+          )
       
-      # 2) DR RTO p95 in minutes
-      # Histogram-based (preferred) or sum/count fallback
+      # 2) Heartbeat stall detection (production-ready)
+      - record: duri_heartbeat_stall
+        expr: |
+          (increase(duri_textfile_heartbeat_seq[5m]) == 0)
+      
+      - record: duri_heartbeat_stall
+        labels: { mode: "smoke" }
+        expr: |
+          (increase(duri_textfile_heartbeat_seq[5m]) == 0)
+      
+      # 3) DR RTO p95 in minutes (production-ready with fallbacks)
       - record: duri_dr_rehearsal_p95_minutes
         expr: |
           (
-            histogram_quantile(0.95, sum by (le) (rate(duri_dr_restore_time_seconds_bucket[5m]))) / 60
+            histogram_quantile(0.95, sum by (le) (rate(duri_dr_restore_time_seconds_bucket[1h]))) / 60
           ) or (
             duri_dr_restore_time_seconds_sum / duri_dr_restore_time_seconds_count / 60
-          ) or (
-            duri_dr_rehearsal_p95_minutes
           ) or vector(4)
       
       # Smoke-labeled version
@@ -36,14 +52,12 @@ groups:
         labels: { mode: "smoke" }
         expr: |
           (
-            histogram_quantile(0.95, sum by (le) (rate(duri_dr_restore_time_seconds_bucket[5m]))) / 60
+            histogram_quantile(0.95, sum by (le) (rate(duri_dr_restore_time_seconds_bucket[1h]))) / 60
           ) or (
             duri_dr_restore_time_seconds_sum / duri_dr_restore_time_seconds_count / 60
-          ) or (
-            duri_dr_rehearsal_p95_minutes
           ) or vector(4)
       
-      # 3) Canary metrics (smoke constants)
+      # 4) Canary metrics (smoke constants)
       - record: duri_canary_unique_ratio
         expr: vector(0.95)
       
@@ -58,7 +72,7 @@ groups:
         labels: { mode: "smoke" }
         expr: vector(0.01)
       
-      # 4) Error budget burn (smoke constants)
+      # 5) Error budget burn (smoke constants)
       - record: duri_error_budget_burn_7d
         expr: vector(0.10)
       
@@ -73,18 +87,10 @@ groups:
         labels: { mode: "smoke" }
         expr: vector(0.10)
       
-      # 5) Lyapunov V (smoke constant)
+      # 6) Lyapunov V (smoke constant)
       - record: duri_lyapunov_v
         expr: vector(0.1)
       
       - record: duri_lyapunov_v
         labels: { mode: "smoke" }
         expr: vector(0.1)
-      
-      # 6) Heartbeat stall (for decision script)
-      - record: heartbeat_stall
-        expr: increase(duri_textfile_heartbeat_seq[10m])
-      
-      - record: heartbeat_stall
-        labels: { mode: "smoke" }
-        expr: increase(duri_textfile_heartbeat_seq[10m])
