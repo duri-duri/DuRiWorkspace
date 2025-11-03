@@ -1,0 +1,5 @@
+- labels: { job: "node-exporter", metric_realm: "prod" }
+  targets: ["node-exporter:9100"]
+# Backup target for SPOF mitigation (optional, requires separate node-exporter-backup service)
+# - labels: { job: "node-exporter-backup", metric_realm: "prod" }
+#   targets: ["127.0.0.1:9101"]

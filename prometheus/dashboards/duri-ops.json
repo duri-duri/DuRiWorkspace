@@ -1,0 +1,44 @@
+{
+  "dashboard": {
+    "title": "DuRi Operations Dashboard",
+    "panels": [
+      {
+        "title": "EV/h (5m rate)",
+        "targets": [
+          {
+            "expr": "rate(ev_velocity_per_hour[5m])",
+            "legendFormat": "EV/h"
+          }
+        ]
+      },
+      {
+        "title": "ab_eval_unique_p_2h",
+        "targets": [
+          {
+            "expr": "ab_eval_unique_p_2h",
+            "legendFormat": "Unique p-values (2h)"
+          }
+        ]
+      },
+      {
+        "title": "ab_eval_sigma_2h",
+        "targets": [
+          {
+            "expr": "ab_eval_sigma_2h",
+            "legendFormat": "σ (2h)"
+          }
+        ]
+      },
+      {
+        "title": "ab_unlabeled_removed_total (24h/7d)",
+        "targets": [
+          {
+            "expr": "sum(ab_unlabeled_removed_total)",
+            "legendFormat": "Removed (total)"
+          }
+        ]
+      }
+    ]
+  }
+}
+

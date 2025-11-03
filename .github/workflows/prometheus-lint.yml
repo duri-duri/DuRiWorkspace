@@ -1,0 +1,13 @@
+name: prometheus-lint
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: promtool check
+        run: make promtool-check
+

@@ -1,0 +1,66 @@
+# Error Budget Rules for DuRi
+# Purpose: Monitor error budget burn rate and alert when budget is at risk
+
+groups:
+  - name: error-budget
+    interval: 1m
+    rules:
+      # Recording rule: Monthly error budget
+      - record: duri_error_budget
+        expr: |
+          1 - duri_green_uptime_ratio
+      
+      # Recording rule: Error budget burn rate (short-term, 5min window)
+      - record: duri_error_budget_burn_short
+        expr: |
+          (duri_error_budget offset 5m - duri_error_budget) / 300
+      
+      # Recording rule: Error budget burn rate (long-term, 1h window)
+      - record: duri_error_budget_burn_long
+        expr: |
+          (duri_error_budget offset 1h - duri_error_budget) / 3600
+      
+      # Recording rule: Error budget burn 7d (for convenience)
+      - record: duri_error_budget_burn_7d
+        expr: |
+          duri_error_budget_burn_long * 7
+      
+      # Recording rule: Error budget burn 30d (for convenience)
+      - record: duri_error_budget_burn_30d
+        expr: |
+          duri_error_budget_burn_long * 30
+      
+      # Recording rule: Error budget burn OK (both short and long within threshold)
+      - record: duri_error_budget_burn_ok
+        expr: |
+          (duri_error_budget_burn_short < 14) AND (duri_error_budget_burn_long < 6)
+      
+      # Alert: Short-term burn rate high (> 14x)
+      - alert: ErrorBudgetBurnShort
+        expr: |
+          duri_error_budget_burn_short > 14
+        for: 1h
+        labels: { severity: warning, team: "ops", component: "error-budget" }
+        annotations:
+          summary: "Error budget burn rate high (short-term)"
+          description: "Burn rate: {{ $value }}x (target: <14x). Consider throttling merges and reducing experiment intensity."
+      
+      # Alert: Long-term burn rate high (> 6x)
+      - alert: ErrorBudgetBurnLong
+        expr: |
+          duri_error_budget_burn_long > 6
+        for: 6h
+        labels: { severity: warning, team: "ops", component: "error-budget" }
+        annotations:
+          summary: "Error budget burn rate high (long-term)"
+          description: "Burn rate: {{ $value }}x (target: <6x). Review SLIs and adjust targets if needed."
+      
+      # Alert: Error budget exhausted
+      - alert: ErrorBudgetExhausted
+        expr: |
+          duri_error_budget >= 0.02
+        for: 5m
+        labels: { severity: critical, team: "ops", component: "error-budget" }
+        annotations:
+          summary: "Monthly error budget exhausted"
+          description: "Error budget has reached 2% threshold. Stop all non-critical changes immediately."

@@ -1,0 +1,36 @@
+services:
+  prometheus-ci:
+    image: prom/prometheus:v2.54.1
+    container_name: prometheus-ci
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml.ci
+      - --storage.tsdb.path=/prometheus
+      - --web.enable-admin-api
+      - --log.level=info
+    ports: ["9090:9090"]
+    volumes:
+      - ./prometheus:/etc/prometheus:ro
+      - ./prometheus/rules:/etc/prometheus/rules:ro
+    tmpfs:
+      - /prometheus:size=128m,mode=1777
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:9090/-/ready"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    restart: unless-stopped
+
+  pushgateway-ci:
+    image: prom/pushgateway:v1.7.0
+    container_name: pushgateway-ci
+    command:
+      - --web.listen-address=:9091
+      - --persistence.file=
+      - --persistence.interval=0s
+    ports: ["9091:9091"]
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:9091/-/ready"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    restart: unless-stopped

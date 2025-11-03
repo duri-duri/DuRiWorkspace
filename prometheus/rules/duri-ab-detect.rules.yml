@@ -1,0 +1,40 @@
+groups:
+- name: ab-detect
+  interval: 30s
+  rules:
+  # E. ABNoDetectableEffect 단순화
+  # "목표함수 개선 無"만 본다(파생지표 최소화)
+  # 주의: duri_ab_effect_detected_total, duri_ab_trials_total를 실제로 증가시키는 한 줄 집계만 연결
+  - record: ab:detect_ratio_24h
+    expr: |
+      increase(duri_ab_effect_detected_total[24h]) / increase(duri_ab_trials_total[24h])
+  
+  - alert: ABNoDetectableEffect
+    expr: ab:detect_ratio_24h < 0.05
+    for: 12h
+    labels: {severity: warning}
+    annotations:
+      summary: "No detectable improvement by AB in 24h"
+      description: "유의 개선 감지 비율이 낮음: {{ $value }}. 평가창 n≥5 및 목표함수 승격 검토 필요."
+  
+  # Δ4: 라우팅 정합 경보의 지속성 조건 (12 슬롯 연속)
+  - alert: ABTSRoutingConsistencyLost
+    expr: max_over_time(ab_ts_consume_delta[60m]) > 0.02
+    for: 60m
+    labels:
+      severity: warning
+      subsystem: ab-ts-routing
+    annotations:
+      summary: "TS routing consistency lost for > 60m (12 slots)"
+      description: "max(|real-cfg|) = {{ $value }} > 0.02 over last 60m. Check ts_consume_check.sh and Redis route application."
+  
+  - alert: ABTSRoutingConsistencyRestored
+    expr: max_over_time(ab_ts_consume_delta[60m]) <= 0.02
+    for: 5m
+    labels:
+      severity: info
+      subsystem: ab-ts-routing
+    annotations:
+      summary: "TS routing consistency restored"
+      description: "max(|real-cfg|) = {{ $value }} <= 0.02 for 5m. Routing is consistent."
+

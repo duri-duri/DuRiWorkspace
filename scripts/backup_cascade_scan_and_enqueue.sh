@@ -6,8 +6,8 @@ set -Eeuo pipefail
 
 source .ops.env 2>/dev/null || true
 
-USB_ROOT="${USB_ROOT:-/mnt/usb/DuRiSync}"
-HANDOFF_ROOT="${HANDOFF_ROOT:-/mnt/usb/두리백업}"
+USB_ROOT="${USB_ROOT:-/mnt/g/DuRiSync}"
+HANDOFF_ROOT="${HANDOFF_ROOT:-/mnt/g/두리백업}"
 LOG_FILE="/var/log/duri2-backup/cascade_scan_$(date +%Y%m%d_%H%M%S).log"
 
 TS() { date '+%F %T'; }

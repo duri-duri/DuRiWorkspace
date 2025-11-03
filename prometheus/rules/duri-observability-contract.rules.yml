@@ -1,0 +1,305 @@
+# Observability Contract v1: Prometheus rules for textfile health and alerts
+
+groups:
+  - name: observability-contract
+    interval: 30s
+    rules:
+      # Recording rule: textfile staleness
+      - record: duri_textfile_staleness_seconds
+        expr: |
+          time() - node_textfile_mtime_seconds{job="node"}
+      
+      # Recording rule: duri_* metric count
+      - record: duri_textfile_metric_count
+        expr: |
+          count({__name__=~"duri_.*", job="node"})
+      
+      # Alert: Textfile scrape error
+      - alert: TextfileScrapeError
+        expr: node_textfile_scrape_error{job="node"} > 0
+        for: 1m
+        labels:
+          severity: page
+        annotations:
+          summary: "node_exporter textfile scrape error"
+          description: "Textfile scrape error detected: {{ $value }}"
+      
+      # Alert: Textfile staleness
+      - alert: TextfileStaleness
+        expr: duri_textfile_staleness_seconds > 180
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Textfile metrics stale"
+          description: "Textfile metrics have not been updated for {{ $value }} seconds"
+      
+      # Alert: Missing KS metrics
+      - alert: DuriKsMissing
+        expr: |
+          absent(duri_p_uniform_ks_p{job="node"}) or absent(duri_p_unique_ratio{job="node"})
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "KS/unique metrics not scraped"
+          description: "Critical metrics duri_p_uniform_ks_p or duri_p_unique_ratio are missing"
+      
+      # Alert: Missing sigma metrics
+      - alert: DuriSigmaMissing
+        expr: |
+          absent(duri_p_sigma{job="node"}) or absent(duri_p_samples{job="node"})
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Sigma/samples metrics not scraped"
+          description: "Critical metrics duri_p_sigma or duri_p_samples are missing"
+      
+      # Alert: Low metric count
+      - alert: DuriMetricCountLow
+        expr: duri_textfile_metric_count < 3
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Low duri_* metric count"
+          description: "Only {{ $value }} duri_* metrics found (expected >= 3)"
+      
+      # Alert: No samples (샘플 부족 경고)
+      - alert: DuriNoSamples2h
+        expr: |
+          (
+            max_over_time(duri_p_samples{window="2h"}[2m])
+            or max_over_time(duri_p_sigma_samples{window="2h"}[2m])
+            or label_replace(max_over_time(duri_p_sigma_samples[2m]),"window","2h","","")
+          ) < 200
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "DuRi: 샘플 부족 (2h)"
+          description: "최근 2분 내 2h 창 샘플수 < 200. 초기 램프업 또는 파이프라인 문제."
+      
+      - alert: DuriNoSamples24h
+        expr: |
+          (
+            max_over_time(duri_p_samples{window="24h"}[2m])
+            or max_over_time(duri_p_sigma_samples{window="24h"}[2m])
+            or label_replace(max_over_time(duri_p_sigma_samples[2m]),"window","24h","","")
+          ) < 200
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "DuRi: 샘플 부족 (24h)"
+          description: "최근 2분 내 24h 창 샘플수 < 200. 초기 램프업 또는 파이프라인 문제."
+      
+      # Alert: Missing metrics (강력 안전망)
+      - alert: DuriMetricsMissing
+        expr: |
+          absent_over_time(duri_p_uniform_ks_p[2m]) or absent_over_time(duri_p_sigma[2m])
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "DuRi: 핵심 메트릭 부재"
+          description: "duri_p_uniform_ks_p 또는 duri_p_sigma가 2분 이상 관측되지 않음. 파이프라인 중단 가능."
+
+  - name: duri-derived
+    interval: 30s
+    rules:
+      # n (2h) — "실데이터" 우선 (프로브 라벨 배제)
+      - record: duri_p_n
+        labels: { window: "2h" }
+        expr: |
+          max_over_time(duri_p_samples{window="2h", __probe__!="true"}[2m])
+          OR on() max_over_time(duri_p_sigma_samples{window="2h", __probe__!="true"}[2m])
+      
+      # n (24h)
+      - record: duri_p_n
+        labels: { window: "24h" }
+        expr: |
+          max_over_time(duri_p_samples{window="24h", __probe__!="true"}[2m])
+          OR on() max_over_time(duri_p_sigma_samples{window="24h", __probe__!="true"}[2m])
+      
+      # 파이프라인 생존/정상 원-비트 지표
+      - record: duri_pipeline_alive
+        expr: (duri_p_n{window="2h"} > 0) OR (duri_p_n{window="24h"} > 0)
+      
+      - record: duri_pipeline_green
+        expr: (duri_p_n{window="2h"} >= 200) OR (duri_p_n{window="24h"} >= 200)
+      
+      # Recording rule: GREEN uptime ratio (24h) - normalized to [0,1]
+      # Production metric: Average of heartbeat increases over 24h window, normalized to ratio
+      # Use metric_realm="prod" filter for consistency
+      - record: duri_green_uptime_ratio
+        expr: |
+          clamp_max(
+            avg_over_time((increase(duri_textfile_heartbeat_seq{metric_realm="prod"}[1m]) > 0)[24h:1m]),
+            1
+          )
+      
+      # Recording rule: Heartbeat OK (delegated to heartbeat.rules.yml)
+      # Use heartbeat.rules.yml for detailed heartbeat detection
+      - record: duri_heartbeat_ok
+        expr: |
+          duri_heartbeat_ok
+      
+      # Recording rule: Heartbeat stall (delegated to heartbeat.rules.yml)
+      - record: duri_heartbeat_stall
+        expr: |
+          duri_heartbeat_stall
+      
+      # Recording rule: DR RTO p95 (7d) - converted to minutes
+      - record: duri_dr_rto_seconds_p95_7d
+        expr: |
+          histogram_quantile(0.95, sum by (le) (rate(duri_dr_restore_time_seconds_bucket[7d])))
+      
+      # Recording rule: DR RTO p95 in minutes (for convenience)
+      - record: duri_dr_rehearsal_p95_minutes
+        expr: |
+          histogram_quantile(0.95, sum by (le) (rate(duri_dr_restore_time_seconds_bucket[1h]))) / 60
+      
+      # Recording rule: DR success ratio (7d)
+      - record: duri_dr_success_ratio_7d
+        expr: |
+          sum(rate(duri_dr_success_total[7d])) / 
+          (sum(rate(duri_dr_success_total[7d])) + sum(rate(duri_dr_failure_total[7d])))
+      
+      # Recording rule: DR RTO p95 (7d) - converted to minutes
+      - record: duri_dr_rto_seconds_p95_7d
+        expr: |
+          histogram_quantile(0.95, sum by (le) (rate(duri_dr_restore_time_seconds_bucket[7d])))
+      
+      # Recording rule: DR RTO p95 in minutes (for convenience)
+      - record: duri_dr_rehearsal_p95_minutes
+        expr: |
+          duri_dr_rto_seconds_p95_7d / 60
+      
+      # Alert: DR success rate low
+      - alert: DRSuccessRateLow
+        expr: |
+          duri_dr_success_ratio_7d < 0.999
+        for: 1h
+        labels: { severity: critical, team: "ops", component: "dr" }
+        annotations:
+          summary: "DR success rate below threshold"
+          description: "DR success rate: {{ $value }} (target: ≥0.999). Block merges until fixed."
+      
+      # Alert: DR RTO high (p95 > 10 minutes)
+      - alert: DRRTOHigh
+        expr: |
+          duri_dr_rto_seconds_p95_7d > 600
+        for: 24h
+        labels: { severity: warning, team: "ops", component: "dr" }
+        annotations:
+          summary: "DR RTO p95 above threshold"
+          description: "DR RTO p95: {{ $value }}s (target: ≤600s). Review restore procedures."
+
+  - name: prometheus-self-health
+    interval: 30s
+    rules:
+      - alert: PromConfigReloadFailed
+        expr: prometheus_config_last_reload_successful == 0
+        for: 2m
+        labels: { severity: critical, team: "obs", service: "prometheus" }
+        annotations:
+          summary: "Prometheus config reload failed"
+          description: "last_reload_timestamp={{ $value }}"
+      
+      - alert: PromRuleLoadFailed
+        expr: |
+          count(
+            (prometheus_rule_group_last_duration_seconds == 0) 
+            and on() (prometheus_rule_group_rules{rule_group=~".+"} > 0)
+          ) > 0
+        for: 2m
+        labels: { severity: page, team: "obs", service: "prometheus" }
+        annotations:
+          summary: "Prometheus rule load failed"
+          description: "최근 룰 적용이 반영되지 않음. promtool/템플릿 확인 필요."
+      
+      - alert: RuleEvalFailures
+        expr: sum by (rule_group) (increase(prometheus_rule_group_eval_failures_total[5m])) > 0
+        for: 5m
+        labels: { severity: warning, team: "obs", service: "prometheus" }
+        annotations:
+          summary: "Rule group evaluation failures (>0 in 5m)"
+      
+      - alert: TextfileScrapeError
+        expr: node_textfile_scrape_error > 0
+        for: 2m
+        labels: { severity: warning, team: "obs", service: "prometheus" }
+        annotations:
+          summary: "node_exporter textfile scrape error"
+      
+      - alert: TextfileStale
+        expr: time() - max(node_textfile_mtime_seconds) > 300
+        for: 5m
+        labels: { severity: warning, team: "obs", service: "prometheus" }
+        annotations:
+          summary: "textfile inputs stale (>5m)"
+      
+      # Alert: Textfile heartbeat stall
+      - alert: TextfileHeartbeatStall
+        expr: |
+          increase(duri_textfile_heartbeat_seq[10m]) == 0
+          OR
+          max_over_time(duri_textfile_last_success_exit[10m]) != 0
+        for: 10m
+        labels: { severity: warning, team: "obs", service: "prometheus" }
+        annotations:
+          summary: "Textfile collector heartbeat stalled"
+          description: "Heartbeat seq not increasing OR last_success_exit != 0 for 10 minutes. Collector may be frozen."
+
+  - name: observability-quality-ma
+    interval: 1m
+    rules:
+      # Moving averages for quality metrics (5-minute windows)
+      - record: duri_p_uniform_ks_p_ma5
+        expr: |
+          avg_over_time(duri_p_uniform_ks_p{job="node"}[5m])
+      
+      - record: duri_p_uniform_ks_p_std5
+        expr: |
+          stddev_over_time(duri_p_uniform_ks_p{job="node"}[5m])
+      
+      - record: duri_p_unique_ratio_ma5
+        expr: |
+          avg_over_time(duri_p_unique_ratio{job="node"}[5m])
+      
+      - record: duri_p_unique_ratio_std5
+        expr: |
+          stddev_over_time(duri_p_unique_ratio{job="node"}[5m])
+      
+      - record: duri_p_sigma_ma5
+        expr: |
+          avg_over_time(duri_p_sigma{job="node"}[5m])
+      
+      - record: duri_p_sigma_std5
+        expr: |
+          stddev_over_time(duri_p_sigma{job="node"}[5m])
+
+  - name: duri-obs-green-counter
+    interval: 30s
+    rules:
+      # Recording rule: consecutive green runs (successful reload bundles)
+      # Count successful reloads in the last hour
+      - record: duri_obs_green_run_counter
+        expr: |
+          increase((duri_prom_reload_success{job="node"} == 1)[1h:30s])
+          OR on() vector(0)
+      
+      # Recording rule: Beta-Binomial estimate for operational stability
+      # E[p] = (s+1)/(s+f+2), where s=successes, f=failures
+      - record: duri_obs_green_estimate
+        expr: |
+          (
+            sum(increase((duri_prom_reload_success{job="node"} == 1)[24h:30s]))
+            /
+            (sum(increase(duri_prom_reload_success{job="node"}[24h:30s])) + 2)
+          )
+          OR on() vector(0)
+
+

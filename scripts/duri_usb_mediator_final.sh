@@ -7,7 +7,7 @@ set -Eeuo pipefail
 export LC_ALL=C
 
 [ -f /etc/duri/backup.env ] && . /etc/duri/backup.env 2>/dev/null || true
-USB_ROOT="${USB_ROOT:-/mnt/usb/두리백업}"
+USB_ROOT="${USB_ROOT:-/mnt/g/두리백업}"
 E_ROOT="${E_ROOT:-/mnt/e/DuRiSafe_HOSP/DAILY}"
 F_ROOT="${F_ROOT:-/mnt/f/DuRiSafe_HOME/DAILY}"
 RETAIN_COUNT="${RETAIN_COUNT:-3}"

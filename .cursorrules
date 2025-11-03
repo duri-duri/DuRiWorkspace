@@ -1,0 +1,44 @@
+# DuRi Cursor Rules: 자동 진단 및 수리 제안을 위한 지침
+
+## 진단 우선순위
+- Always run `scripts/doctor.sh` first and summarize findings before proposing changes.
+- Use `scripts/gate_check.sh` to verify gates.yml thresholds before merging.
+
+## AB p-value 상수화 방지
+- If AB p-value has zero variance, inspect `scripts/evolution/make_ab_eval_prom_min.py` for:
+  - Cache/seed/input slicing issues
+  - EV별 JSONL 입력 경로 확인
+  - RNG seed(ev_id) 강제 적용 확인
+- Always verify `--input` argument passes EV-specific JSONL file.
+
+## EV cadence 최적화
+- If EV/h < 2.5, check:
+  - `scripts/pilot_24h.sh` cadence settings (MIN/MAX_GAP_SEC)
+  - `scripts/start_shadow_2worker.sh` is active
+  - Shadow epoch duration (p50 ≤ 6min, p95 ≤ 12min)
+- Propose systemd timer if missing for reliable cadence.
+
+## 코드 변경 원칙
+- Propose minimal diffs; avoid adding new scripts unless needed.
+- Respect `gates.yml` thresholds.
+- Cache invalidation: Remove cached files before recompute (`rm -f $EV/ab_eval.*`).
+- Single source of truth: Use `config/duri.env` for all configuration.
+
+## 상태 머신
+- `pilot_24h.sh` should output `STATE=(IDLE→HARVEST→EVAL→BUNDLE→PUSH)` at start.
+- Missing state transitions indicate FAIL.
+
+## 테스트 필수
+- Run `pytest -q tests/` before proposing changes.
+- Ensure `test_ab_variance.py` and `test_ev_cadence.py` pass.
+
+## 병목 분석
+- If Shadow epoch p95 > 12min, surface bottleneck phase and propose:
+  - Parallel map (2-worker)
+  - Timeout enforcement
+  - Async bundle processing
+
+## 태스크 참조
+- See `cursor-tasks.md` for specific task templates.
+- Follow task patterns for common issues (EV cadence, AB constant, epoch delay).
+

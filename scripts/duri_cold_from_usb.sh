@@ -4,7 +4,7 @@ set -Eeuo pipefail
 shopt -s nullglob
 
 MODE="${1:-hosp}"                              # hosp|home
-USB_ROOT="${USB_ROOT:-/mnt/usb/두리백업}"
+USB_ROOT="${USB_ROOT:-/mnt/g/두리백업}"
 USB_DIR="${USB_DIR:-$USB_ROOT/latest}"
 HOSP_DIR="${HOSP_DIR:-/mnt/e/DuRiSafe_HOSP/latest}"
 HOME_DIR="${HOME_DIR:-/mnt/f/DuRiSafe_HOME/latest}"

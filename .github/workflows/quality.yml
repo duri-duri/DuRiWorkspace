@@ -1,0 +1,39 @@
+name: Quality Gate
+on:
+  pull_request:
+    paths:
+      - 'scripts/evolution/**'
+      - 'scripts/ab_pvalue_stats.sh'
+      - 'prometheus/rules/**'
+      - 'config/duri.env'
+      - 'gates.yml'
+
+jobs:
+  ab-label-integrity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      # (6) CI에 라벨 정합 단위 테스트 추가
+      # 하드닝 #3: Makefile/CI 게이트를 "실제"로 묶기
+      - name: Producer Schema Contract
+        run: make producer-schema-check
+
+      - name: AB Label Integrity
+        run: bash tests/test_ab_label_integrity.sh
+      
+      # 하드닝 #4: SYN 오염 영구 차단 테스트
+      - name: SYN Pollution Check
+        run: bash tests/test_no_syn_pollution.sh
+      
+      # 하드닝 #6: 라운딩/시드 정책 고정 테스트
+      - name: AB Round/Seed Policy
+        run: bash tests/test_ab_round_seed.sh
+      
+      - name: p-sigma Export Test
+        run: bash tests/test_p_sigma_export.sh
+      
+      - name: AB Quality Gate
+        run: |
+          bash scripts/gate_check.sh ab-quality-gate || exit 1
+

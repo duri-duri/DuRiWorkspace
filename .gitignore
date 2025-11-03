@@ -171,3 +171,14 @@ reports/
 DuRiCore/test_results_*.json
 scripts/._*
 **/._*
+/data/
+/grafana/data/
+/var/
+/loop_data/
+/snapshots/
+/logs/
+!duri_core
+
+# Allow ops documentation tracking
+!docs/ops/*.md
+prometheus-data/

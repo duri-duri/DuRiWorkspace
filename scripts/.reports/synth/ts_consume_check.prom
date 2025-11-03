@@ -1,0 +1,12 @@
+# HELP ab_ts_consume_cfg route config fraction
+# TYPE ab_ts_consume_cfg gauge
+ab_ts_consume_cfg{arm="A"} NaN
+ab_ts_consume_cfg{arm="B"} NaN
+# HELP ab_ts_consume_real route real fraction
+# TYPE ab_ts_consume_real gauge
+ab_ts_consume_real{arm="A"} NaN
+ab_ts_consume_real{arm="B"} NaN
+# HELP ab_ts_consume_delta abs diff between cfg and real
+# TYPE ab_ts_consume_delta gauge
+ab_ts_consume_delta{arm="A"} NaN
+ab_ts_consume_delta{arm="B"} NaN

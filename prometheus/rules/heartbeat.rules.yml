@@ -1,0 +1,55 @@
+groups:
+- name: heartbeat
+  interval: 30s
+  rules:
+  # Recording rule: Heartbeat age (seconds since last update)
+  # clamp_min to prevent negative age (e.g., from clock skew)
+  - record: duri_heartbeat_age_seconds
+    labels:
+      metric_realm: "prod"
+    expr: clamp_min(time() - duri_textfile_heartbeat_ts{metric_realm="prod"}, 0)
+  
+  # Recording rule: Label-preserving zero helper
+  # Creates a zero value with the same labels as duri_textfile_heartbeat_ts
+  # Used for OR fallback to maintain label consistency
+  - record: duri_heartbeat_zero_like
+    labels:
+      metric_realm: "prod"
+    expr: 0 * duri_textfile_heartbeat_ts{metric_realm="prod"}
+  
+  # Recording rule: Heartbeat freshness (1 = fresh within 120s, 0 = stale)
+  # Use clamp_max to force boolean 0/1: clamp_max((age < 120), 1) ensures 0 or 1
+  - record: duri_heartbeat_fresh_120s
+    labels:
+      metric_realm: "prod"
+    expr: clamp_max(clamp_min((duri_heartbeat_age_seconds{metric_realm="prod"} < 120) * 1, 0), 1)
+          OR on(metric_realm,job,instance) duri_heartbeat_zero_like{metric_realm="prod"}
+  
+  # Recording rule: Heartbeat changes (number of changes in 6m window)
+  # increase() works with gauge metrics
+  # Always returns scalar >= 0, uses label-preserving zero fallback
+  - record: duri_heartbeat_changes_6m
+    labels:
+      metric_realm: "prod"
+    expr: increase(duri_textfile_heartbeat_seq{metric_realm="prod"}[6m])
+          OR on(metric_realm,job,instance) duri_heartbeat_zero_like{metric_realm="prod"}
+  
+  # Recording rule: Heartbeat OK (1 = healthy, 0 = stalled)
+  # OK if: fresh == 1 AND changes > 0
+  # Use clamp_max to force boolean 0/1
+  - record: duri_heartbeat_ok
+    labels:
+      metric_realm: "prod"
+    expr: clamp_max(clamp_min(
+          ((duri_heartbeat_fresh_120s{metric_realm="prod"} == 1) * 1)
+          * ((duri_heartbeat_changes_6m{metric_realm="prod"} > 0) * 1),
+          0), 1)
+          OR on(metric_realm,job,instance) duri_heartbeat_zero_like{metric_realm="prod"}
+  
+  # Recording rule: Heartbeat stall detection (1 = stale >= 120s, 0 = fresh)
+  # Use clamp_max to force boolean 0/1
+  - record: duri_heartbeat_stall
+    labels:
+      metric_realm: "prod"
+    expr: clamp_max(clamp_min((duri_heartbeat_age_seconds{metric_realm="prod"} >= 120) * 1, 0), 1)
+          OR on(metric_realm,job,instance) duri_heartbeat_zero_like{metric_realm="prod"}

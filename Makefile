@@ -29,6 +29,11 @@ WEEK ?= 7
 export GA_ENFORCE ?= 1
 export CROSS_TYPE_ENFORCE ?= 1
 
+# Prometheus 도구 변수 (통합 정의)
+PROM_IMG ?= prom/prometheus:v2.54.1
+PROM_DIR ?= $(PWD)/prometheus
+PROM_LOG ?= .reports/obs/promtool_last.log
+
 # 의존성 정의
 SCRIPTS = scripts/rag_eval.sh scripts/rag_gate.sh
 TESTS = tests/eval_smoke.sh
@@ -311,5 +316,155 @@ alertmanager-reload:
 	@curl -s -X POST http://localhost:9093/-/reload && echo "Alertmanager reloaded"
 .PHONY: alertmanager-reload
 
+# 평가 윈도우에서만 n 하한 상향(게이트 n=1은 유지)
+.PHONY: eval-window-on eval-window-off
+eval-window-on:
+	@f=docker-compose.override.yml; \
+	sed -i 's/DURI_FORCE_MIN_SAMPLES=1/DURI_FORCE_MIN_SAMPLES=5/g' $$f; \
+	docker compose up -d --force-recreate duri-core duri-brain duri-evolution
+
+eval-window-off:
+	@f=docker-compose.override.yml; \
+	sed -i 's/DURI_FORCE_MIN_SAMPLES=5/DURI_FORCE_MIN_SAMPLES=1/g' $$f; \
+	docker compose up -d --force-recreate duri-core duri-brain duri-evolution
+
+# A. promtool 검증 명령 안정화 (단일 셸·단일 도커·명시적 종료 + 파일별 판정)
+.PHONY: promtool-check promtool-find-failing promtool-ensure-rules
+promtool-ensure-rules:
+	@[ -n "$$(ls -1 $(PROM_DIR)/rules/*.yml 2>/dev/null)" ] || { echo "[FAIL] no rules/*.yml files found"; exit 1; }
+	@echo "[OK] rules files present"
+
+promtool-check: promtool-ensure-rules
+	@mkdir -p $$(dirname "$(PROM_LOG)")
+	@echo "[promtool] full run -> $(PROM_LOG)"
+	@docker run --rm --entrypoint /bin/sh \
+	  -v "$(PROM_DIR):/etc/prometheus:ro" $(PROM_IMG) -lc '\
+	    set -eu; \
+	    promtool check config /etc/prometheus/prometheus.yml.minimal; ec1=$$?; \
+	    : > /tmp/prom_all.log; \
+	    fail=0; \
+	    for f in /etc/prometheus/rules/*.yml; do \
+	      echo "=== CHECK $$f ===" >>/tmp/prom_all.log; \
+	      promtool check rules "$$f" >>/tmp/prom_all.log 2>&1 || { echo "FAIL -> $$f"; fail=1; }; \
+	    done; \
+	    echo "EXIT-CFG=$$ec1 EXIT-RULES=$$fail"; \
+	    exit $$([ $$ec1 -eq 0 ] && echo $$fail || echo 1)' \
+	| tee "$(PROM_LOG)"; \
+	test $$? -eq 0 && echo "[OK] promtool-check passed" || { echo "[FAIL] promtool-check failed (see $(PROM_LOG))"; exit 1; }
+
+# L4 24-Hour Monitoring
+.PHONY: l4-monitor-24h l4-stats prometheus-snapshot
+l4-monitor-24h:
+	@echo "[INFO] Starting L4 24-hour stability monitor..."
+	@echo "[INFO] Run in background: nohup bash scripts/ops/l4_24h_monitor.sh > /dev/null 2>&1 &"
+	@bash scripts/ops/l4_24h_monitor.sh
+
+l4-stats:
+	@bash scripts/ops/l4_24h_stats.sh
+
+prometheus-snapshot:
+	@bash scripts/ops/prometheus_snapshot.sh
+
+# PromQL Unit Tests
+.PHONY: promql-unit promql-test-heartbeat
+promql-unit:
+	@REALM="${REALM:-prod}" bash scripts/ops/promql_unit.sh
+
+promql-test-heartbeat: promql-unit
+	@echo "[OK] Heartbeat rules test included in promql-unit"
+
+# Check for forbidden patterns in heartbeat rules
+.PHONY: heartbeat-rules-lint
+heartbeat-rules-lint:
+	@echo "[lint] Checking heartbeat rules for forbidden patterns..."
+	@FORBIDDEN="(sign|abs)\\(.*heartbeat|increase\\(.*duri_textfile_heartbeat"; \
+	HEARTBEAT_RULES="prometheus/rules/heartbeat*.yml"; \
+	if grep -rE "$$FORBIDDEN" $$HEARTBEAT_RULES 2>/dev/null; then \
+	  echo "[FAIL] Forbidden pattern detected in heartbeat rules: $$FORBIDDEN"; \
+	  exit 1; \
+	fi; \
+	echo "[OK] No forbidden patterns found in heartbeat rules"
+
+promtool-find-failing:
+	@docker run --rm --entrypoint /bin/sh -v "$(PROM_DIR):/etc/prometheus:ro" $(PROM_IMG) -lc '\
+	  set -eu; fail=0; for f in /etc/prometheus/rules/*.yml; do promtool check rules "$$f" >/dev/null 2>&1 || { echo "FAIL -> $$f"; fail=1; }; done; exit $$fail'
+
+.PHONY: promtool-check-full
+promtool-check-full:
+	@$(MAKE) --no-print-directory promtool-check
+	@docker run --rm --entrypoint /bin/sh \
+	  -v "$(PROM_DIR):/etc/prometheus:ro" $(PROM_IMG) -lc '\
+	    forbid="humanizePercentage|humanizeDuration|humanizeTimestamp"; \
+	    if grep -REn "$$forbid" /etc/prometheus/rules/*.yml >/dev/null 2>&1; then \
+	      echo "[FAIL] Forbidden template function detected"; exit 1; \
+	    fi; echo "[OK] No forbidden template functions found" \
+	  '
+	@docker run --rm --entrypoint /bin/sh \
+	  -v "$(PROM_DIR):/etc/prometheus:ro" $(PROM_IMG) -lc '\
+	    forbid="humanizePercentage|humanizeDuration|humanizeTimestamp"; \
+	    if grep -REn "$$forbid" /etc/prometheus/rules/*.yml >/dev/null 2>&1; then \
+	      echo "[FAIL] Forbidden template function detected"; exit 1; \
+	    fi; echo "[OK] No forbidden template functions found" \
+	  '
+
+# B. Safe reload (validation + reload)
+.PHONY: prometheus-reload-safe
+prometheus-reload-safe: promtool-check-full
+	@bash scripts/ops/reload_safe.sh
+
+# C. Deployment workflow (push → validate → reload)
+.PHONY: deploy-observation
+deploy-observation:
+	@echo "[DEPLOY] Observation stack deployment..."
+	@echo "[1/3] Validation..."
+	@make promtool-check-full || { echo "[FAIL] Validation failed, aborting"; exit 1; }
+	@echo "[2/3] Safe reload..."
+	@bash scripts/ops/reload_safe.sh || { echo "[FAIL] Reload failed"; exit 1; }
+	@echo "[3/3] Deployment complete"
+	@echo "[NOTE] To push changes: git push origin HEAD"
+
+# A. 환경변수 영구 반영 검증
+.PHONY: env-harden
+env-harden:
+	@echo "[INFO] 환경변수 영구 반영 확인..."
+	@docker compose up -d duri-core && sleep 3
+	@docker compose exec duri-core env 2>/dev/null | grep -E 'DURI_FORCE_MIN_SAMPLES|TEXTFILE_DIR' || echo "[WARN] 환경변수 확인 실패"
+
+# 크론 안정화 (중복 제거, flock 버전만 남김)
+.PHONY: cron-harden
+cron-harden:
+	@echo "[INFO] 크론 정리 (중복 제거: flock 버전만 남김)..."
+	@crontab -l 2>/dev/null | sed '/ts_router.py/d;/export_target_metrics.sh/d;/apply_routes.sh/d' | crontab - || true
+	@{ \
+		echo 'SHELL=/bin/bash'; \
+		echo 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'; \
+		echo '*/5 * * * *  cd /home/duri/DuRiWorkspace && flock -n var/locks/ts_router.lock -c "TEXTFILE_DIR=.reports/synth python3 scripts/ab/ts_router.py >> var/logs/ts_router.log 2>&1"'; \
+		echo '*/1 * * * *  cd /home/duri/DuRiWorkspace && flock -n var/locks/target_exporter.lock -c "TEXTFILE_DIR=.reports/synth bash scripts/export_target_metrics.sh >> var/logs/target_exporter.log 2>&1"'; \
+		echo '2-59/5 * * * * cd /home/duri/DuRiWorkspace && flock -n var/locks/route_apply.lock  -c "TEXTFILE_DIR=.reports/synth bash scripts/ab/apply_routes.sh >> var/logs/route_apply.log 2>&1"'; \
+	} | crontab -
+	@echo "[OK] 크론 안정화 완료"
+	@crontab -l
+
+# p-분산 메트릭 배선 (옵션1: 쉘 수집)
+.PHONY: p-sigma-wire
+p-sigma-wire:
+	@echo "[INFO] p-분산 메트릭 배선..."
+	@mkdir -p var/locks
+	@chmod +x scripts/ops/p_sigma_export.sh
+	@(crontab -l 2>/dev/null | grep -v "p_sigma_export.sh" || true; \
+		echo '*/1 * * * * cd /home/duri/DuRiWorkspace && flock -n var/locks/p_sigma.lock -c "TEXTFILE_DIR=.reports/synth bash scripts/ops/p_sigma_export.sh >> var/logs/p_sigma.log 2>&1"') | crontab -
+	@echo "[OK] p-sigma 크론 등록 완료"
+	@TEXTFILE_DIR=.reports/synth bash scripts/ops/p_sigma_export.sh || true
+	@echo "[OK] p-sigma 메트릭 배선 완료"
+
+# 프로듀서 스키마 계약 테스트 (P-FIX#2)
+.PHONY: producer-schema-check
+producer-schema-check:
+	bash tests/test_producer_schema.sh
 
 -include ops/observability/monitoring.mk
+test-p-sigma:
+	@bash tests/test_p_sigma_export.sh
+
+quality: test-p-sigma
+	@echo "[OK] quality gate: p-sigma"

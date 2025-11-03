@@ -1,0 +1,43 @@
+# Minimal Prometheus configuration for Observability Contract v1
+# Topology: single static target (node-exporter:9100)
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - /etc/prometheus/rules/*.yml
+
+scrape_configs:
+  # Prometheus self-scrape
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['prometheus:9090']
+        labels:
+          job: 'prometheus'
+  
+  # Pushgateway for textfile metrics (heartbeat, etc.)
+  # honor_labels: true to preserve job="duri_heartbeat", instance="local" from push
+  - job_name: 'pushgateway'
+    honor_labels: true
+    static_configs:
+      - targets: ['pushgateway:9091']
+        labels:
+          job: 'pushgateway'
+          metric_realm: 'prod'
+  
+  # Node Exporter with file_sd and static fallback
+  - job_name: 'node-exporter'
+    scrape_interval: 15s
+    scrape_timeout: 10s
+    honor_labels: true
+    file_sd_configs:
+      - files: ['/etc/prometheus/targets/node_exporter.yml']
+        refresh_interval: 30s
+    # Fallback to static config if file_sd fails
+    static_configs:
+      - targets: ['localhost:9100']
+        labels:
+          job: 'node-exporter'
+          metric_realm: 'prod'
+

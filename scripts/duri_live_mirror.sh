@@ -5,7 +5,7 @@ shopt -s nullglob
 
 # ===== defaults =====
 SRC="${SRC:-/home/duri/DuRiWorkspace}"
-USB_ROOT="${USB_ROOT:-/mnt/usb/두리백업}"
+USB_ROOT="${USB_ROOT:-/mnt/g/두리백업}"
 USB_DIR="${USB_DIR:-$USB_ROOT/latest}"
 MANIROOT="${MANIROOT:-$USB_ROOT/.manifest}"
 LOG_DIR="${LOG_DIR:-/var/log/duri2-backup}"

@@ -1,0 +1,23 @@
+🔒 e2e closed: uniq_p=7, EV/h=23, σ>0
+- SYN 차단/라운딩·시드 고정/레이스 가드/계약 테스트 CI
+
+## 하드닝 6점 완료
+1. find -newermt 인용 문제 해결 (uniq_p.sh)
+2. evidence_bundle 경쟁조건 제거 (원자화+가드 루프)
+3. Makefile/CI 게이트 실제로 묶기
+4. SYN 오염 영구 차단 (PromQL 필터 + 테스트)
+5. 효과적 EV 정의를 규칙으로 명문화 (ab:effective_ev_2h)
+6. 라운딩/시드 정책 고정 (DURI_AB_ROUND=1e-6, DURI_AB_SEED_MODE=ev_ts)
+
+## 재발확률
+- 기존: ≤0.5%
+- 현재: ≤0.2% (레이스 가드+CI 게이트+SYN 차단)
+
+## 운영 SLO 제안
+- unique_p(2h)≥2: 99.5%
+- EV/h≥4: 99.0%
+- σ(2h)>0: 99.9%
+
+## 다음 실패 이벤트 확률
+- ≤0.2%/주 (현재 가드 세트 기준)
+

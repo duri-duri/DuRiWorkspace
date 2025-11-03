@@ -6,8 +6,8 @@ set -Eeuo pipefail
 
 source .ops.env 2>/dev/null || true
 
-USB_ROOT="${USB_ROOT:-/mnt/usb/DuRiSync}"
-HANDOFF_ROOT="${HANDOFF_ROOT:-/mnt/usb/두리백업}"
+USB_ROOT="${USB_ROOT:-/mnt/g/DuRiSync}"
+HANDOFF_ROOT="${HANDOFF_ROOT:-/mnt/g/두리백업}"
 LOG_FILE="/var/log/duri2-backup/cascade_worker_$(date +%Y%m%d_%H%M%S).log"
 
 LOCK="/var/lock/cascade_worker.lock"
@@ -22,7 +22,7 @@ log "=== DuRi 캐스케이드 워커 시작 ===" | tee -a "$LOG_FILE"
 log "🔄 1단계: HDD → Desktop_Mirror" | tee -a "$LOG_FILE"
 DESKTOP_MIRROR="/mnt/hdd/ARCHIVE/Desktop_Mirror"
 if [[ -d "$DESKTOP_MIRROR" ]]; then
-    rsync -a --ignore-existing "$DESKTOP_MIRROR/" "/mnt/usb/두리백업/" | tee -a "$LOG_FILE" || true
+    rsync -a --ignore-existing "$DESKTOP_MIRROR/" "/mnt/g/두리백업/" | tee -a "$LOG_FILE" || true
     log "✅ Desktop_Mirror 동기화 완료" | tee -a "$LOG_FILE"
 else
     log "❌ Desktop_Mirror 디렉토리 없음" | tee -a "$LOG_FILE"

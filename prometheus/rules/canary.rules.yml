@@ -1,0 +1,39 @@
+# Canary Evaluation Rules
+# Purpose: Track canary samples, quorum pass, and health status
+
+groups:
+  - name: canary
+    interval: 30s
+    rules:
+      # Recording rule: Canary samples count (last 15 minutes)
+      - record: duri_canary_samples
+        expr: |
+          sum(increase(duri_canary_events_total[15m]))
+      
+      # Recording rule: Canary quorum pass (KS_p > 0.05 AND unique_ratio > 0.92)
+      - record: duri_canary_quorum_pass
+        expr: |
+          (duri_p_uniform_ks_p{window="2h"} > 0.05) * (duri_p_unique_ratio{window="2h"} > 0.92)
+      
+      # Recording rule: Canary health (samples > 300 AND quorum pass == 1)
+      - record: duri_canary_health
+        expr: |
+          (duri_canary_samples > 300) * (duri_canary_quorum_pass == 1)
+      
+      # Recording rule: Canary failure ratio (weekly)
+      - record: duri_canary_failure_ratio
+        expr: |
+          sum(increase(duri_canary_rollback_total[7d])) / 
+          (sum(increase(duri_canary_rollback_total[7d])) + sum(increase(duri_canary_promote_total[7d])) + 1)
+      
+      # Recording rule: Canary unique ratio (for decision)
+      - record: duri_canary_unique_ratio
+        expr: |
+          duri_p_unique_ratio{window="2h"}
+      
+      # Recording rule: Canary rollback rate (for alerts)
+      - record: duri_canary_rollback_rate
+        expr: |
+          sum(increase(duri_canary_rollback_total[7d])) / 
+          (sum(increase(duri_canary_rollback_total[7d])) + sum(increase(duri_canary_promote_total[7d])) + 1)
+

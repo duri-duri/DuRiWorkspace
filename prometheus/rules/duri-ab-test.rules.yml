@@ -1,0 +1,132 @@
+groups:
+- name: duri-ab-test.rules
+  rules:
+  - alert: ABTestPValueSignificant
+    expr: duri_ab_p_value < 0.05
+    for: 10m
+    labels: {severity: info}
+    annotations:
+      summary: "AB test indicates significance (p < 0.05)"
+      description: "p-value is {{ $value }} for at least 10m"
+  - alert: ABTestPValueEdgeCase
+    expr: duri_ab_p_value == 0 or duri_ab_p_value == 1
+    for: 5m
+    labels: {severity: warning}
+    annotations:
+      summary: "AB p-value at boundary (0 or 1)"
+      description: "Check pipeline (nan/overflow/underflow)."
+  - alert: ShadowSSHFailureSpike
+    expr: |
+      (
+        sum(rate(duri_shadow_transport_total{mode="ssh",status="failure"}[5m])) /
+        sum(rate(duri_shadow_transport_total{mode="ssh"}[5m]))
+      ) > 0.05
+    for: 10m
+    labels: {severity: warning}
+    annotations:
+      summary: "Shadow SSH failure rate > 5%"
+      description: "SSH failure rate is {{ $value }} for at least 10m. Auto-fallback to HTTP."
+  - alert: ShadowTransportDrift
+    expr: |
+      (
+        abs(
+          sum(rate(duri_shadow_transport_total{mode="ssh"}[10m])) /
+          sum(rate(duri_shadow_transport_total[10m])) -
+          sum(rate(duri_shadow_transport_total{mode="ssh"}[5m])) /
+          sum(rate(duri_shadow_transport_total[5m]))
+        )
+      ) > 0.20
+    for: 10m
+    labels: {severity: info}
+    annotations:
+      summary: "Shadow transport mode share changed > 20%"
+      description: "Transport mode share drift detected. Current SSH share: {{ $value }}"
+  - alert: NoNewEV
+    expr: time() - duri_last_ev_unixtime > 7200
+    for: 5m
+    labels: {severity: warning}
+    annotations:
+      summary: "No new EV bundle for > 2 hours"
+      description: "Last EV bundle created {{ $value }}s ago. Check Shadow→Evidence pipeline."
+  - alert: ABTestPValueNaN
+    expr: duri_ab_p_value != duri_ab_p_value
+    for: 1m
+    labels: {severity: warning}
+    annotations:
+      summary: "AB test p-value is NaN or invalid"
+      description: "p-value data corruption detected. Check ab_eval.prom pipeline."
+  # Δ10: EV 생성 속도 SLO 알림
+  - alert: EVVelocityLow
+    expr: duri_ev_velocity < 4.0
+    for: 30m
+    labels: {severity: warning}
+    annotations:
+      summary: "EV generation velocity < 4/h for > 30m"
+      description: "Current velocity: {{ $value | humanize }} EV/h (target: ≥4/h). Check pilot cycle, Shadow epoch, bundle latency."
+  # Δ10: AB p-value 상수화 탐지 (표준편차 0) - 24h 창
+  - alert: ABPValueConstant
+    expr: |
+      stddev_over_time(
+        (
+          count(duri_ab_p_value{ev!=""}) by (ev)
+        )[24h:]
+      ) == 0
+    for: 10m
+    labels: {severity: warning}
+    annotations:
+      summary: "AB p-value appears constant (stddev=0) for > 10m (24h window)"
+      description: "All p-values in last 24h are identical. Possible cache/recalculation bug. Check Γ2 (EV별 재계산)."
+  # A) p-value 분산 '진짜' 보장: 2h 창 동일 알람 추가 (조기 감지)
+  - alert: ABPValueConstant2H
+    expr: |
+      (
+        count(count(duri_ab_p_value{ev!=""}) by (ev)) < 2
+      ) or
+      (
+        stddev_over_time(
+          (
+            count(duri_ab_p_value{ev!=""}) by (ev)
+          )[2h:]
+        ) == 0
+      )
+    for: 5m
+    labels: {severity: warning}
+    annotations:
+      summary: "AB p-value appears constant (unique<2 or stddev=0) for > 5m (2h window)"
+      description: "Early detection: p-value variance issue in last 2h. Check Γ2 (EV별 입력/시드 분기)."
+  # Δ10: Shadow Epoch 지연 탐지
+  - alert: ShadowEpochDelay
+    expr: |
+      (
+        time() - max(duri_ab_build_unix{ev!=""})
+      ) > 900
+    for: 5m
+    labels: {severity: info}
+    annotations:
+      summary: "Shadow epoch duration > 15 minutes"
+      description: "Last epoch build timestamp {{ $value }}s ago. Target: 10-15min. Check SHADOW_EPOCH_DURATION log."
+  # (B) Prometheus 룰: 운영 레벨 알람 - 라벨 없는 p라인 탐지 (하드닝: 명확화)
+  - alert: ABUnlabeledPValueDetected
+    expr: scalar(count_over_time(ab_unlabeled_detected[2h])) > bool 0
+    for: 2m
+    labels: {severity: warning}
+    annotations:
+      summary: "Unlabeled p-value lines detected"
+      description: "Run scripts/fix_legacy_prom.sh and re-bundle."
+  # (4) 누락 탐지 감쇠 방지: count_over_time 창 2h 유지, for: 2m 유지
+  - alert: ABPValueNoVariance
+    expr: ab_eval_unique_p_2h < 2 or ab_eval_sigma_2h == 0
+    for: 2m
+    labels: {severity: warning}
+    annotations:
+      summary: "AB p-value variance collapsed"
+      description: "unique p < 2 or sigma == 0 (last 2h). Check Γ2 (EV별 입력/시드 분기)."
+  # (1) Clock skew 경고: Prom TS 비교
+  - alert: ClockSkewDetected
+    expr: |
+      abs(time() - duri_ab_build_unix{ev!=""}) > 300
+    for: 5m
+    labels: {severity: info}
+    annotations:
+      summary: "Clock skew detected (build_unixtime vs system time)"
+      description: "Check chrony/ntpd synchronization."

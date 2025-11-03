@@ -1,0 +1,55 @@
+# NOTE: 관찰 프로필은 minimal 설정만 사용한다.
+# 다른 compose 파일에서 /etc/prometheus/prometheus.yml를 다시 마운트하지 마라.
+
+services:
+  prometheus:
+    image: prom/prometheus:v2.54.1
+    container_name: prometheus
+    user: "65534:65534"
+    restart: unless-stopped
+    ports: ["9090:9090"]
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:9090/-/ready"]
+      interval: 10s
+      timeout: 3s
+      retries: 6
+      start_period: 20s
+    volumes:
+      # 핵심: 디렉터리 전체가 아니라 "단일 파일 바인드"로 강제
+      - ./prometheus/prometheus.yml.minimal:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus/rules:/etc/prometheus/rules:ro
+      - ./prometheus/targets:/etc/prometheus/targets:ro
+      # TSDB 데이터 볼륨 고정 (스냅샷 경로 일관성)
+      - ./prometheus-data:/prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --web.enable-lifecycle
+      - --web.enable-admin-api
+      - --storage.tsdb.retention.time=15d
+
+  node-exporter:
+    image: prom/node-exporter:v1.8.2
+    container_name: node-exporter
+    restart: unless-stopped
+    network_mode: host
+    pid: host
+    command:
+      - --path.rootfs=/host
+      - --path.procfs=/host/proc
+      - --path.sysfs=/host/sys
+      - --collector.systemd
+      - --collector.textfile
+      - --collector.textfile.directory=/textfile
+    volumes:
+      - /:/host:ro,rslave
+      - ./.reports/textfile:/textfile:ro   # Absolute path resolved at runtime
+
+  pushgateway:
+    image: prom/pushgateway:v1.7.0
+    container_name: pushgateway
+    restart: unless-stopped
+    ports: ["9091:9091"]
+    command:
+      - --web.listen-address=:9091
+      - --web.telemetry-path=/metrics

@@ -1,0 +1,38 @@
+# Lyapunov Control Function Rules
+# Purpose: Calculate control function V(t) and trigger corrective actions
+
+groups:
+  - name: lyapunov
+    interval: 1m
+    rules:
+      # Recording rule: Lyapunov control function V(t)
+      # Normalized: MTTR scaled by /300 (5 minutes = 1.0)
+      - record: duri_lyapunov_v
+        expr: |
+          alpha_const * (1 - duri_green_uptime_ratio) * (1 - duri_green_uptime_ratio)
+          + beta_const * duri_alert_rate_per_hour / 10
+          + gamma_const * (duri_mttr_seconds / 300)
+          + delta_const * (1 - duri_dr_success_ratio_7d)
+          + epsilon_const * clamp_min(ev_target - rate(duri_ev_created_total[1h]), 0)
+      
+      # Recording rule: Lyapunov delta (change rate over 10 minutes)
+      - record: duri_lyapunov_delta
+        expr: |
+          duri_lyapunov_v - (duri_lyapunov_v offset 10m)
+      
+      # Recording rule: V threshold check (for auto-correction)
+      - record: duri_lyapunov_below_threshold
+        expr: |
+          duri_lyapunov_v < v_threshold
+      
+      # Alert: Lyapunov V increasing (system instability)
+      - alert: LyapunovVIncreasing
+        expr: |
+          increase(duri_lyapunov_delta[10m]) > 0
+        for: 10m
+        labels: { severity: warning, team: "ops", component: "control" }
+        annotations:
+          summary: "System control function V(t) increasing"
+          description: "ΔV={{ $value }} > 0 for 10 minutes. Trigger corrective actions: throttle merges, increase retries, strengthen canary."
+
+
