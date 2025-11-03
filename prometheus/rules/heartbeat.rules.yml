@@ -4,32 +4,33 @@ groups:
   rules:
   # Recording rule: Heartbeat changes (number of changes in 6m window)
   # Window: 6m = HB(60s) + 2*SI(30s) + ε for safety margin
-  # changes() works with gauge metrics and counts value changes
+  # increase() works with gauge metrics and counts value changes
   # Filter by metric_realm="prod" to avoid legacy series
-  # This is the raw count of changes (for debugging/monitoring)
+  # Missing values coalesced to 0 (operational safety)
   - record: duri_heartbeat_changes_6m
     labels:
       metric_realm: "prod"
-    expr: clamp_max(changes(duri_textfile_heartbeat_seq{metric_realm="prod"}[6m]), 1e9) or on() vector(0)
+    expr: increase(duri_textfile_heartbeat_seq{metric_realm="prod"}[6m]) or on() vector(0)
   
   # Recording rule: Heartbeat freshness (recent sample within 120s)
-  # Direct timestamp check: time() - duri_textfile_heartbeat_ts <= 120
+  # Boolean 0/1: (time() - ts < 120) → 1, else 0
   # Missing values coalesced to 0 (operational safety)
   - record: duri_heartbeat_fresh_120s
     labels:
       metric_realm: "prod"
-    expr: ((time() - duri_textfile_heartbeat_ts{metric_realm="prod"}) <= 120) or on() vector(0)
+    expr: ((time() - duri_textfile_heartbeat_ts{metric_realm="prod"}) < 120) or on() vector(0)
   
   # Recording rule: Heartbeat OK (1 = healthy, 0 = stalled)
-  # OK if: changes > 0 AND fresh_120s == 1 (both conditions must be met)
+  # OK if: fresh_120s == 1 AND changes_6m > 0 (both conditions must be met)
+  # Boolean 0/1 conversion
   - record: duri_heartbeat_ok
     labels:
       metric_realm: "prod"
-    expr: ((duri_heartbeat_changes_6m > 0) and (duri_heartbeat_fresh_120s == 1)) or on() vector(0)
+    expr: ((duri_heartbeat_fresh_120s{metric_realm="prod"} == 1) and (duri_heartbeat_changes_6m{metric_realm="prod"} > 0)) or on() vector(0)
   
   # Recording rule: Heartbeat stall detection (for alerts)
-  # Stall if: ok == 0 (inverse of OK)
+  # Stall if: ts >= 120s old (inverse of fresh)
   - record: duri_heartbeat_stall
     labels:
       metric_realm: "prod"
-    expr: (1 - duri_heartbeat_ok) or on() vector(0)
+    expr: ((time() - duri_textfile_heartbeat_ts{metric_realm="prod"}) >= 120) or on() vector(0)

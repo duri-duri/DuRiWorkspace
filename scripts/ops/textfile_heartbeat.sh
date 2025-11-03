@@ -38,6 +38,7 @@ ts=$(date +%s)
 # Push to Pushgateway
 # Format: job=duri_heartbeat, instance=local
 # Metric labels: metric_realm="prod"
+# honor_labels: true ensures job="duri_heartbeat" is preserved
 cat <<EOF | curl -sf --data-binary @- "${PUSHGATEWAY_URL}/metrics/job/duri_heartbeat/instance/local" >/dev/null 2>&1 || true
 # TYPE duri_textfile_heartbeat_seq gauge
 duri_textfile_heartbeat_seq{metric_realm="prod"} ${SEQ}

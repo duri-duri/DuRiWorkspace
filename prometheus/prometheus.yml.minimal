@@ -17,6 +17,7 @@ scrape_configs:
           job: 'prometheus'
   
   # Pushgateway for textfile metrics (heartbeat, etc.)
+  # honor_labels: true to preserve job="duri_heartbeat", instance="local" from push
   - job_name: 'pushgateway'
     honor_labels: true
     static_configs:
