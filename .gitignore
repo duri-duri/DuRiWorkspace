@@ -181,3 +181,4 @@ scripts/._*
 
 # Allow ops documentation tracking
 !docs/ops/*.md
+prometheus-data/
