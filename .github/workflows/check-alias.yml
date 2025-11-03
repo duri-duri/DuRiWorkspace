@@ -34,3 +34,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo ok
+  
+  actionlint:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ok
