@@ -14,9 +14,6 @@ on:
       - 'docker-compose.monitoring.yml'
       - 'prometheus.yml'
       - 'Makefile'
-  schedule:
-    - cron: '0 * * * *'  # 매시간
-  workflow_dispatch: {}  # 수동 실행 허용
 
 jobs:
   smoke:
@@ -29,7 +26,7 @@ jobs:
           echo "[PR] smoke stub pass (required context satisfied)"
           exit 0
 
-      # 실제 스모크는 push/schedule/dispatch에서 실행
+      # 실제 스모크는 push에서만 실행
       - name: Checkout
         if: ${{ github.event_name != 'pull_request' }}
         uses: actions/checkout@v4
