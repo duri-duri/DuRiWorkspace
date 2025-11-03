@@ -90,24 +90,6 @@ jobs:
             echo "num=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
           fi
 
-      - name: Re-check labels live (avoid race condition)
-        id: labels
-        run: |
-          PR=${{ steps.pr.outputs.num }}
-          # Live re-check to avoid race condition when labels are added separately
-          names=$(gh api repos/${{ github.repository }}/issues/$PR/labels -q '.[].name' || echo "")
-          echo "Current labels: $names"
-          if ! echo "$names" | grep -qx "merge:temporal-relax"; then
-            echo "::notice::Label 'merge:temporal-relax' not found, exiting neutrally"
-            exit 78
-          fi
-          if ! echo "$names" | grep -qx "safe-change"; then
-            echo "::notice::Label 'safe-change' not found, exiting neutrally"
-            exit 78
-          fi
-          echo "Both labels found, proceeding"
-        env: { GH_TOKEN: ${{ env.ADMIN_TOKEN }} }
-
       # ---- 라이브 라벨 재확인 (race condition 방지, Safety gates 전에 실행) ----
       - name: Re-check labels live (avoid race condition)
         id: labels
