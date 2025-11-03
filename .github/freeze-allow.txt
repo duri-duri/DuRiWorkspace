@@ -117,3 +117,5 @@ docs/ops/**
 prometheus.yml
 .github/workflows/temporal-relax-merge-v2.yml
 .github/workflows/protection-guard.yml
+
+.wf_smoke
