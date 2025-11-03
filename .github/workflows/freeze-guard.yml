@@ -13,8 +13,8 @@ concurrency:
 
 jobs:
   enforce-freeze:
+    if: ${{ github.base_ref == 'main' && !contains(join(fromJson(toJson(github.event.pull_request.labels || fromJSON('[]'))).*.name, ','), 'freeze:override') && !contains(join(fromJson(toJson(github.event.pull_request.labels || fromJSON('[]'))).*.name, ','), 'override-freeze') }}
     runs-on: ubuntu-latest
-    if: ${{ github.base_ref == 'main' }} # main 병합 대상만 검사
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
@@ -27,7 +27,7 @@ jobs:
 
           # PR 라벨로 '긴급' 허용 토글 (원하면 제거 가능)
           if echo '${{ toJson(github.event.pull_request.labels) }}' \
-            | jq -e '.[]|select(.name=="override-freeze")' >/dev/null; then
+            | jq -e '.[]|select(.name=="override-freeze" or .name=="freeze:override")' >/dev/null; then
             FREEZE_ON=0
           fi
 
