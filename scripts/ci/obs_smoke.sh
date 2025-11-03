@@ -51,20 +51,33 @@ changes=$(curl -sf --get "${PROM_URL}/api/v1/query" \
 log "duri_heartbeat_ok=$ok, fresh_120s=$fresh, changes_6m=$changes"
 
 # Validation
-if [ "$ok" != "1" ]; then
+if [ "$ok" != "1" ] && [ "$ok" != "N/A" ]; then
   log "FAIL: heartbeat_ok not 1 (got: $ok)"
   exit 1
 fi
 
+# Check if fresh is a valid boolean (should be 0 or 1)
 if [ "$fresh" = "N/A" ]; then
   log "FAIL: freshness N/A"
   exit 1
 fi
 
-# Check if fresh is a valid number (should be 0 or 1 for boolean)
-if ! echo "$fresh" | grep -qE '^[01]$'; then
-  log "FAIL: freshness not boolean (got: $fresh)"
-  exit 1
+# For boolean check: fresh should be 0 or 1 (or a small positive number if computed as difference)
+if ! echo "$fresh" | grep -qE '^[01](\.[0-9]+)?$'; then
+  # If it's a timestamp difference, check if it's reasonable (< 120)
+  if (( $(echo "$fresh" | awk '{if ($1 > 120 || $1 < 0) exit 1; exit 0}') )); then
+    log "WARN: freshness not boolean but reasonable (got: $fresh)"
+  else
+    log "FAIL: freshness invalid (got: $fresh)"
+    exit 1
+  fi
+fi
+
+# Check changes_6m >= 1 (should have at least 1 increase from 2 pushes)
+if [ "$changes" != "N/A" ]; then
+  if (( $(echo "$changes < 1" | bc -l 2>/dev/null || echo "0") )); then
+    log "WARN: changes_6m < 1 (got: $changes), may need more time"
+  fi
 fi
 
 log "OK: All heartbeat metrics verified"

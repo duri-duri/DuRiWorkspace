@@ -4,7 +4,7 @@ services:
     container_name: prometheus-ci
     command:
       - --web.enable-admin-api
-      - --config.file=/etc/prometheus/prometheus.yml
+      - --config.file=/etc/prometheus/prometheus.yml.ci
       - --storage.tsdb.path=/prometheus
     ports: ["9090:9090"]
     healthcheck:

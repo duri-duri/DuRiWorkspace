@@ -13,43 +13,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: boot sandbox & smoke
-        run: |
-          set -eu
-          echo "[SANDBOX] Starting Prometheus sandbox..."
-          docker run -d --name prom-sandbox \
-            -v "$PWD/prometheus:/etc/prometheus:ro" \
-            -p 9091:9090 \
-            prom/prometheus:v2.54.1 \
-            --config.file=/etc/prometheus/prometheus.yml.minimal \
-            --storage.tsdb.path=/tmp/prometheus \
-            --web.listen-address=0.0.0.0:9090
-          
-          # Wait for readiness
-          for i in $(seq 1 30); do
-            if curl -sf http://localhost:9091/-/ready >/dev/null 2>&1; then
-              echo "[OK] Prometheus sandbox ready"
-              break
-            fi
-            sleep 2
-          done
-          
-          # Run heartbeat script
-          bash scripts/ops/textfile_heartbeat.sh || exit 1
-          
-          # Wait 60 seconds
-          echo "[WAIT] Waiting 60 seconds for metrics to stabilize..."
-          sleep 60
-          
-          # Final smoke check
-          query_result=$(curl -s --get 'http://localhost:9091/api/v1/query' \
-            --data-urlencode 'query=up' | jq -r '.status')
-          if [ "$query_result" != "success" ]; then
-            echo "[FAIL] Query failed: $query_result"
-            docker rm -f prom-sandbox
-            exit 1
-          fi
-          
-          echo "[OK] Sandbox smoke test passed"
-          docker rm -f prom-sandbox
-
+      - name: Bring up CI stack
+        run: docker compose -f compose.observation.ci.yml up -d --wait
+      
+      - name: Smoke heartbeat
+        run: bash scripts/ci/obs_smoke.sh
