@@ -87,3 +87,14 @@ compose.observation.ci.yml
 prometheus/prometheus.yml.ci
 docs/ops/**
 tests/promql/**
+
+# L4 Dry-Run Observability Stack - Additional patterns
+.cursorrules
+.github/CODEOWNERS
+.github/freeze-allow.txt
+.github/workflows/**
+.gitignore
+.obs/**
+.shadow/**
+compose.observation*.yml
+prometheus.yml
