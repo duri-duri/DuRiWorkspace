@@ -54,21 +54,21 @@ fi
 
 log "[OK] Snapshot ID: $SNAP_ID"
 
-# Step 5: Poll for snapshot directory creation (max 60s, async creation guard)
+# Step 5: Poll for snapshot directory creation (max 10s, async creation guard)
 log "Step 5: Waiting for snapshot directory creation (async guard)..."
 SNAP_DIR="${STORAGE_DIR}/snapshots/${SNAP_ID}"
 SNAP_READY=0
-for i in {1..60}; do
+for i in {1..20}; do
   if docker exec "$PROM_CONTAINER" test -d "$SNAP_DIR" 2>/dev/null; then
-    log "[OK] Snapshot directory ready after ${i}s"
+    log "[OK] Snapshot directory ready after $((i * 1))s"
     SNAP_READY=1
     break
   fi
-  sleep 1
+  sleep 0.5
 done
 
 if [ "$SNAP_READY" != "1" ]; then
-  log "[FAIL] Snapshot directory not found after 60s: $SNAP_DIR"
+  log "[FAIL] Snapshot directory not found after 10s: $SNAP_DIR"
   log "[INFO] Available snapshots:"
   docker exec "$PROM_CONTAINER" ls -la "${STORAGE_DIR}/snapshots/" 2>/dev/null || true
   exit 3

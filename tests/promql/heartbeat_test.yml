@@ -1,49 +1,49 @@
 rule_files:
   - /etc/prometheus/rules/heartbeat.rules.yml
 
-evaluation_interval: 60s
+evaluation_interval: 30s
 
 tests:
-- interval: 60s
+- interval: 1m
   input_series:
     # 원시 시계열: seq (분당 1씩 증가, 10분 동안)
     - series: 'duri_textfile_heartbeat_seq{metric_realm="prod"}'
-      values: '1+1x10'   # 10분 동안 1씩 증가 (changes()=9로 예측 가능)
+      values: '0+1x10'   # 0,1,2,...,9 (10분 동안 1씩 증가)
     # 원시 시계열: ts (초 단위 타임스탬프, 신선도 보장)
     - series: 'duri_textfile_heartbeat_ts{metric_realm="prod"}'
-      values: '0+60x10'  # 0, 60, 120, ..., 600 (10분 동안 신선함 유지)
+      values: '1700000000+60x10'  # 분당 60초 증가(결정론)
   
   promql_expr_test:
-    # 6m 시점: changes_6m = 6 (1→2→3→4→5→6→7)
+    # 6m 시점: changes_6m = 6 (0→1→2→3→4→5→6)
     - expr: duri_heartbeat_changes_6m
       eval_time: 6m
       exp_samples:
-        - labels: '{metric_realm="prod"}'
+        - labels: '{__name__="duri_heartbeat_changes_6m",metric_realm="prod"}'
           value: 6
     
     # 6m 시점: fresh_120s = 1 (타임스탬프가 신선함)
     - expr: duri_heartbeat_fresh_120s
       eval_time: 6m
       exp_samples:
-        - labels: '{metric_realm="prod"}'
+        - labels: '{__name__="duri_heartbeat_fresh_120s",metric_realm="prod"}'
           value: 1
     
-    # 6m 시점: ok = 1 (changes > 0 AND fresh > 0)
+    # 6m 시점: ok = 1 (changes > 0 AND fresh == 1)
     - expr: duri_heartbeat_ok
       eval_time: 6m
       exp_samples:
-        - labels: '{metric_realm="prod"}'
+        - labels: '{__name__="duri_heartbeat_ok",metric_realm="prod"}'
           value: 1
     
     # 6m 시점: stall = 0 (ok == 1이므로)
     - expr: duri_heartbeat_stall
       eval_time: 6m
       exp_samples:
-        - labels: '{metric_realm="prod"}'
+        - labels: '{__name__="duri_heartbeat_stall",metric_realm="prod"}'
           value: 0
 
 # Test case 2: 10분 시점 (정지 상태)
-- interval: 60s
+- interval: 1m
   input_series:
     # 최근 6분 내 변화 없음 (stuck at 10)
     - series: 'duri_textfile_heartbeat_seq{metric_realm="prod"}'
@@ -57,26 +57,26 @@ tests:
     - expr: duri_heartbeat_changes_6m
       eval_time: 10m
       exp_samples:
-        - labels: '{metric_realm="prod"}'
+        - labels: '{__name__="duri_heartbeat_changes_6m",metric_realm="prod"}'
           value: 0
     
     # 10분 시점: fresh_120s = 0 (타임스탬프가 stale)
     - expr: duri_heartbeat_fresh_120s
       eval_time: 10m
       exp_samples:
-        - labels: '{metric_realm="prod"}'
+        - labels: '{__name__="duri_heartbeat_fresh_120s",metric_realm="prod"}'
           value: 0
     
     # 10분 시점: ok = 0 (changes == 0 OR fresh == 0)
     - expr: duri_heartbeat_ok
       eval_time: 10m
       exp_samples:
-        - labels: '{metric_realm="prod"}'
+        - labels: '{__name__="duri_heartbeat_ok",metric_realm="prod"}'
           value: 0
     
     # 10분 시점: stall = 1 (ok == 0이므로)
     - expr: duri_heartbeat_stall
       eval_time: 10m
       exp_samples:
-        - labels: '{metric_realm="prod"}'
+        - labels: '{__name__="duri_heartbeat_stall",metric_realm="prod"}'
           value: 1

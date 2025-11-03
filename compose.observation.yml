@@ -5,6 +5,7 @@ services:
   prometheus:
     image: prom/prometheus:v2.54.1
     container_name: prometheus
+    user: "65534:65534"
     restart: unless-stopped
     ports: ["9090:9090"]
     healthcheck:
@@ -22,9 +23,9 @@ services:
       - ./prometheus-data:/prometheus
     command:
       - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
       - --web.enable-lifecycle
       - --web.enable-admin-api
-      - --storage.tsdb.path=/prometheus
       - --storage.tsdb.retention.time=15d
 
   node-exporter:
