@@ -76,3 +76,14 @@ compose.observation.ci.yml
 prometheus/prometheus.yml.ci
 docs/ops/**
 tests/promql/**
+
+# L4 Dry-Run Observability Stack
+prometheus/**
+prometheus/**/*
+prometheus/rules/**
+scripts/ops/**
+scripts/ci/**
+compose.observation.ci.yml
+prometheus/prometheus.yml.ci
+docs/ops/**
+tests/promql/**

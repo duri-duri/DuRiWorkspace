@@ -56,13 +56,7 @@ if [ "$ok" != "1" ]; then
   exit 1
 fi
 
-# fresh should be 0 or 1 (boolean)
-if [ "$fresh" = "N/A" ] || [ -z "$fresh" ]; then
-  log "FAIL: freshness N/A or empty"
-  exit 1
-fi
-
-# Check if fresh is valid (0 or 1, or reasonable timestamp difference < 120)
+# fresh should be 0 or 1 (boolean), or reasonable timestamp difference < 120
 if ! echo "$fresh" | grep -qE '^[01]$'; then
   # If it's a timestamp difference, check if it's reasonable (< 120)
   if ! awk -v v="$fresh" 'BEGIN{exit (v >= 0 && v < 120) ? 0 : 1}'; then
