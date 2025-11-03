@@ -10,8 +10,12 @@ tests:
     - series: 'duri_textfile_heartbeat_seq{metric_realm="prod"}'
       values: '0+1x10'   # 0,1,2,...,9 (10분 동안 1씩 증가)
     # 원시 시계열: ts (초 단위 타임스탬프, 신선도 보장)
+    # promtool test rules에서 time()은 테스트 시작 시간(0) 기준
+    # eval_time: 2m에서 time() = 120초
+    # fresh_120s = (time() - ts < 120) = (120 - ts < 120) = (ts > 0)
+    # 따라서 ts를 60으로 설정하면: 120 - 60 = 60 < 120 → fresh = 1
     - series: 'duri_textfile_heartbeat_ts{metric_realm="prod"}'
-      values: '1690000000+60x10'  # 분당 60초 증가(결정론)
+      values: '60+0x10'  # 60초로 고정 (2m 시점에서 120-60=60 < 120, fresh)
   
   promql_expr_test:
     # 2m 시점: changes_6m = 2 (0→1→2)
@@ -21,9 +25,23 @@ tests:
         - labels: '{__name__="duri_heartbeat_changes_6m",metric_realm="prod"}'
           value: 2
     
-    # 2m 시점: fresh_120s = 1 (타임스탬프가 신선함)
+    # 2m 시점: fresh_120s = 1 (타임스탬프가 신선함: 120 - 60 = 60 < 120)
     - expr: duri_heartbeat_fresh_120s
       eval_time: 2m
+      exp_samples:
+        - labels: '{__name__="duri_heartbeat_fresh_120s",metric_realm="prod"}'
+          value: 1
+    
+    # 경계 케이스: 119s 시점 (직전, fresh=1 유지: 119 - 60 = 59 < 120)
+    - expr: duri_heartbeat_fresh_120s
+      eval_time: 119s
+      exp_samples:
+        - labels: '{__name__="duri_heartbeat_fresh_120s",metric_realm="prod"}'
+          value: 1
+    
+    # 경계 케이스: 121s 시점 (직후, fresh=1 유지: 121 - 60 = 61 < 120)
+    - expr: duri_heartbeat_fresh_120s
+      eval_time: 121s
       exp_samples:
         - labels: '{__name__="duri_heartbeat_fresh_120s",metric_realm="prod"}'
           value: 1
@@ -49,8 +67,11 @@ tests:
     - series: 'duri_textfile_heartbeat_seq{metric_realm="prod"}'
       values: '10+0x10'  # 10분 동안 변화 없음
     # 타임스탬프는 stale (> 120s)
+    # eval_time: 10m에서 time() = 600초
+    # fresh_120s = (time() - ts < 120) = (600 - ts < 120) = (ts > 480)
+    # 따라서 ts를 0으로 설정하면: 600 - 0 = 600 > 120 → fresh = 0
     - series: 'duri_textfile_heartbeat_ts{metric_realm="prod"}'
-      values: '0x600'   # 10분 전 타임스탬프 (600s, stale)
+      values: '0+0x10'   # 0으로 고정 (10m 시점에서 600-0=600 > 120, stale)
   
   promql_expr_test:
     # 10분 시점: changes_6m = 0 (변화 없음)
@@ -60,7 +81,7 @@ tests:
         - labels: '{__name__="duri_heartbeat_changes_6m",metric_realm="prod"}'
           value: 0
     
-    # 10분 시점: fresh_120s = 0 (타임스탬프가 stale)
+    # 10분 시점: fresh_120s = 0 (타임스탬프가 stale: 600 - 0 = 600 > 120)
     - expr: duri_heartbeat_fresh_120s
       eval_time: 10m
       exp_samples:
@@ -80,3 +101,45 @@ tests:
       exp_samples:
         - labels: '{__name__="duri_heartbeat_stall",metric_realm="prod"}'
           value: 1
+
+# Test case 3: Fresh=0 만료 케이스 (5분 시점, 추가 보강)
+- interval: 1m
+  input_series:
+    # 시계열: 변화 있음
+    - series: 'duri_textfile_heartbeat_seq{metric_realm="prod"}'
+      values: '5+0x10'  # 5로 고정 (변화 있음)
+    # 타임스탬프는 stale (> 120s)
+    # eval_time: 5m에서 time() = 300초
+    # fresh_120s = (time() - ts < 120) = (300 - ts < 120) = (ts > 180)
+    # 따라서 ts를 0으로 설정하면: 300 - 0 = 300 > 120 → fresh = 0
+    - series: 'duri_textfile_heartbeat_ts{metric_realm="prod"}'
+      values: '0+0x10'   # 0으로 고정 (5m 시점에서 300-0=300 > 120, stale)
+  
+  promql_expr_test:
+    # 5분 시점: fresh_120s = 0 (타임스탬프가 stale: 300 - 0 = 300 > 120)
+    - expr: duri_heartbeat_fresh_120s
+      eval_time: 5m
+      exp_samples:
+        - labels: '{__name__="duri_heartbeat_fresh_120s",metric_realm="prod"}'
+          value: 0
+    
+    # 경계 케이스: 299s 시점 (직전, stale 유지: 299 - 0 = 299 > 120)
+    - expr: duri_heartbeat_fresh_120s
+      eval_time: 299s
+      exp_samples:
+        - labels: '{__name__="duri_heartbeat_fresh_120s",metric_realm="prod"}'
+          value: 0
+    
+    # 경계 케이스: 301s 시점 (직후, stale 유지: 301 - 0 = 301 > 120)
+    - expr: duri_heartbeat_fresh_120s
+      eval_time: 301s
+      exp_samples:
+        - labels: '{__name__="duri_heartbeat_fresh_120s",metric_realm="prod"}'
+          value: 0
+    
+    # 5분 시점: ok = 0 (fresh == 0이므로)
+    - expr: duri_heartbeat_ok
+      eval_time: 5m
+      exp_samples:
+        - labels: '{__name__="duri_heartbeat_ok",metric_realm="prod"}'
+          value: 0

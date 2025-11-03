@@ -8,7 +8,14 @@ ci-bootstrap-tools:
 	@command -v promtool   >/dev/null || echo "⚠️ promtool 없음 - 건너뜀" || true
 	@command -v black      >/dev/null || pip3 install --user black || true
 	@command -v pylint     >/dev/null || pip3 install --user pylint || true
-.PHONY: eval gate smoke clean k-sweep archive rollup smoke-preview help shellcheck metrics metrics-dashboard metrics-watch prom-rules-verify prom-rules-test prom-rules-ci validate-prom-all check-prom prom-rules-ci prom-dup-guard alert-labels-guard prom-rules-test ci-all runbook-url-guard runbook-url-guard-dummy
+# CI 일관성 타깃 (스텁)
+lint:
+	@echo "lint: no-op (define ruff/flake8 here if needed)"
+
+test:
+	@echo "test: no-op (wire pytest here if needed)"
+
+.PHONY: eval gate smoke clean k-sweep archive rollup smoke-preview help shellcheck metrics metrics-dashboard metrics-watch prom-rules-verify prom-rules-test prom-rules-ci validate-prom-all check-prom prom-rules-ci prom-dup-guard alert-labels-guard prom-rules-test ci-all runbook-url-guard runbook-url-guard-dummy lint test
 
 # 변수 정의 - 기본값 설정
 GT ?= .reports/day62/ground_truth_clean.tsv

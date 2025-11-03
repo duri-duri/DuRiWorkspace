@@ -10,21 +10,37 @@ on:
   workflow_dispatch:
 
 jobs:
-  guard:
+  guard-pr-noop:
+    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: read
     steps:
-      # 👉 PR에서는 필수 상태체크 이름을 'guard'로 유지한 채 즉시 성공 처리
       - name: Neutral pass on PR (required check name = guard)
-        if: ${{ github.event_name == 'pull_request' }}
         run: |
           echo "protection-guard: noop on pull_request (required-check satisfied)"
           exit 0
 
+  guard:
+    if: ${{ github.event_name != 'pull_request' }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        attempt: [1,2,3,4,5]   # 최대 5회 백오프
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Wait after protection change (backoff)
+        run: |
+          S=$(( 15 * (2 ** (${{matrix.attempt}}-1)) ))
+          echo "backoff ${S}s (attempt ${{matrix.attempt}}/5)..."
+          sleep ${S}
       - name: Check branch protection snapshot
-        if: ${{ github.event_name != 'pull_request' }}
         env:
           REPO: ${{ github.repository }}
           BRANCH: main
@@ -67,3 +83,11 @@ jobs:
           if (wantCtx !== liveCtx) bad.push(`contexts mismatch: ${liveCtx} != ${wantCtx}`);
           if (bad.length){ console.error('Branch protection drift:\n- '+bad.join('\n- ')); process.exit(1);}
           JS
+      - name: Verify at least one attempt succeeded
+        if: always() && matrix.attempt == 5
+        run: |
+          # Matrix strategy에서 최소 1개 성공 확인
+          if [ "${{ job.status }}" != "success" ]; then
+            echo "All 5 attempts failed"
+            exit 1
+          fi

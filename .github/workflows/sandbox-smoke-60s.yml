@@ -6,6 +6,20 @@ on:
     branches: [ "main", "release/*" ]
   push:
     branches: [ "main", "release/*" ]
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch: {}   # 수동 실행 허용
+  workflow_call: {}       # 재사용 가능(옵션)
+
+concurrency:
+  group: sandbox-smoke-60s-${{ github.ref }}
+  cancel-in-progress: true
+
+run-name: "sandbox-smoke-60s • ${{ github.event_name }} • ${{ github.ref_name }}"
+
+permissions:
+  contents: read
+  actions: read
 
 env:
   IS_DRY_RUN: ${{ contains(join(github.event.pull_request.labels.*.name, ','), 'dry-run') }}
