@@ -131,9 +131,26 @@ groups:
         expr: (duri_p_n{window="2h"} >= 200) OR (duri_p_n{window="24h"} >= 200)
       
       # Recording rule: GREEN uptime ratio (24h)
+      # Production metric: Average of heartbeat increases over 24h window
       - record: duri_green_uptime_ratio
         expr: |
-          sum_over_time((duri_pipeline_green == 1)[24h:30s]) / 86400
+          avg_over_time((increase(duri_textfile_heartbeat_seq[1m]) > 0)[24h:1m])
+      
+      # Recording rule: Heartbeat stall detection
+      # Alert if heartbeat does not increase in 5 minutes
+      - record: duri_heartbeat_stall
+        expr: |
+          (increase(duri_textfile_heartbeat_seq[5m]) == 0)
+      
+      # Recording rule: DR RTO p95 (7d) - converted to minutes
+      - record: duri_dr_rto_seconds_p95_7d
+        expr: |
+          histogram_quantile(0.95, sum by (le) (rate(duri_dr_restore_time_seconds_bucket[7d])))
+      
+      # Recording rule: DR RTO p95 in minutes (for convenience)
+      - record: duri_dr_rehearsal_p95_minutes
+        expr: |
+          histogram_quantile(0.95, sum by (le) (rate(duri_dr_restore_time_seconds_bucket[1h]))) / 60
       
       # Recording rule: DR success ratio (7d)
       - record: duri_dr_success_ratio_7d
