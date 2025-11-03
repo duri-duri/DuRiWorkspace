@@ -39,6 +39,7 @@ jobs:
         if: ${{ github.event_name != 'pull_request' && env.IS_DRY_RUN == 'true' }}
         run: echo "dry-run: fast-pass" && exit 0
       
+      # 실제 스모크는 push/schedule/dispatch에서 실행 (PR 제외)
       - name: Real run
         if: ${{ github.event_name != 'pull_request' && env.IS_DRY_RUN != 'true' }}
         uses: actions/checkout@v4
