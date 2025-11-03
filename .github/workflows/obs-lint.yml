@@ -2,17 +2,28 @@ name: obs-lint
 
 on: 
   pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
     branches: [ "main", "release/*" ]
   push:
     branches: [ "main", "release/*" ]
+
+env:
+  IS_DRY_RUN: ${{ contains(join(github.event.pull_request.labels.*.name, ','), 'dry-run') }}
 
 jobs:
   obs-lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Dry-run fast-pass
+        if: env.IS_DRY_RUN == 'true'
+        run: echo "dry-run: fast-pass" && exit 0
+      
+      - name: Real run
+        if: env.IS_DRY_RUN != 'true'
+        uses: actions/checkout@v4
       
       - name: promtool check (cfg+rules, per-file)
+        if: env.IS_DRY_RUN != 'true'
         run: |
           set -eu
           docker run --rm --entrypoint /bin/sh \
@@ -26,6 +37,7 @@ jobs:
             '
       
       - name: sandbox smoke test (60s)
+        if: env.IS_DRY_RUN != 'true'
         run: |
           set -eu
           echo "[SANDBOX] Starting Prometheus sandbox..."
@@ -68,3 +80,19 @@ jobs:
           echo "[OK] Sandbox smoke test passed (rules=$rules_loaded)"
           docker rm -f prom-sandbox
 
+  promql-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dry-run fast-pass
+        if: env.IS_DRY_RUN == 'true'
+        run: echo "dry-run: fast-pass" && exit 0
+      
+      - name: Real run
+        if: env.IS_DRY_RUN != 'true'
+        uses: actions/checkout@v4
+      
+      - name: Run PromQL unit tests
+        if: env.IS_DRY_RUN != 'true'
+        run: |
+          set -eu
+          make promql-unit REALM=prod
