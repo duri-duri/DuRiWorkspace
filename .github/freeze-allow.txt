@@ -115,3 +115,4 @@ docs/ops/**
 .github/freeze-allow.txt
 .gitignore
 prometheus.yml
+.wf_smoke
