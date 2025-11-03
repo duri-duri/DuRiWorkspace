@@ -135,10 +135,10 @@ if (( $(echo "$CANARY_UNIQUE < 0.92" | bc -l 2>/dev/null || echo "0") )); then
 fi
 
 # Heartbeat OK check (1 = healthy, 0 = stalled)
-# Use changes() based metric for reliable detection
+# Use changes() based metric with metric_realm="prod" filter
 if [ "$HEARTBEAT_OK" != "1" ]; then
   # Fallback: Check if heartbeat_seq changed in shorter window
-  HEARTBEAT_CHANGES=$(query_prom 'changes(duri_textfile_heartbeat_seq[5m])')
+  HEARTBEAT_CHANGES=$(query_prom 'changes(duri_textfile_heartbeat_seq{metric_realm="prod"}[5m])')
   if (( $(echo "$HEARTBEAT_CHANGES > 0" | bc -l 2>/dev/null || echo "0") )); then
     log "[OK] Heartbeat OK (fallback: seq changed in 5m window, heartbeat_ok=$HEARTBEAT_OK, changes=$HEARTBEAT_CHANGES)"
   else

@@ -132,10 +132,11 @@ groups:
       
       # Recording rule: GREEN uptime ratio (24h) - normalized to [0,1]
       # Production metric: Average of heartbeat increases over 24h window, normalized to ratio
+      # Use metric_realm="prod" filter for consistency
       - record: duri_green_uptime_ratio
         expr: |
           clamp_max(
-            avg_over_time((increase(duri_textfile_heartbeat_seq[1m]) > 0)[24h:1m]),
+            avg_over_time((increase(duri_textfile_heartbeat_seq{metric_realm="prod"}[1m]) > 0)[24h:1m]),
             1
           )
       
