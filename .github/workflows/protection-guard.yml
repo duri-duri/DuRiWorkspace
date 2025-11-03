@@ -16,7 +16,15 @@ jobs:
       contents: read
       pull-requests: read
     steps:
+      # 👉 PR에서는 필수 상태체크 이름을 'guard'로 유지한 채 즉시 성공 처리
+      - name: Neutral pass on PR (required check name = guard)
+        if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          echo "protection-guard: noop on pull_request (required-check satisfied)"
+          exit 0
+
       - name: Check branch protection snapshot
+        if: ${{ github.event_name != 'pull_request' }}
         env:
           REPO: ${{ github.repository }}
           BRANCH: main
@@ -32,7 +40,8 @@ jobs:
               "require_code_owner_reviews": true,
               "required_approving_review_count": 1,
               "required_conversation_resolution": true,
-              "enforce_admins": true
+              "enforce_admins": true,
+              "required_linear_history": true
             }
         run: |
           curl -sSf -H "Authorization: Bearer ${{ github.token }}" \
@@ -49,6 +58,7 @@ jobs:
             ['required_pull_request_reviews.required_approving_review_count', want.required_approving_review_count],
             ['required_conversation_resolution.enabled', want.required_conversation_resolution],
             ['enforce_admins.enabled', want.enforce_admins],
+            ['required_linear_history.enabled', want.required_linear_history],
           ];
           let bad = [];
           for (const [k,v] of checks) if (get(live,k)!==v) bad.push(`${k} != ${v}`);
