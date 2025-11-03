@@ -83,11 +83,11 @@ log ""
 log "=== 3) 핵심 시계열 검증 ==="
 
 GREEN_UPTIME=$(query_prom 'duri_green_uptime_ratio')
-ERROR_BUDGET_7D=$(query_prom 'duri_error_budget_burn_long * 7')
-ERROR_BUDGET_30D=$(query_prom 'duri_error_budget_burn_long * 30')
-DR_P95=$(query_prom 'duri_dr_rto_seconds_p95_7d / 60')  # Convert to minutes
-CANARY_FAILURE=$(query_prom 'duri_canary_rollback_rate')
-CANARY_UNIQUE=$(query_prom 'duri_p_unique_ratio{window="2h"}')
+ERROR_BUDGET_7D=$(query_prom 'duri_error_budget_burn_7d')
+ERROR_BUDGET_30D=$(query_prom 'duri_error_budget_burn_30d')
+DR_P95=$(query_prom 'duri_dr_rehearsal_p95_minutes')  # Use smoke rule
+CANARY_FAILURE=$(query_prom 'duri_canary_failure_ratio')
+CANARY_UNIQUE=$(query_prom 'duri_canary_unique_ratio')
 LYAPUNOV_V=$(query_prom 'duri_lyapunov_v')
 HEARTBEAT_STALL=$(query_prom 'increase(duri_textfile_heartbeat_seq[10m])')
 
