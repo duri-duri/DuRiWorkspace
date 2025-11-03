@@ -35,24 +35,25 @@ groups:
           )
       
       # 2) Heartbeat OK (1 = healthy, 0 = stalled)
+      # Use abs(sign(increase())) to reliably convert to 0/1 gauge
       - record: duri_heartbeat_ok
         expr: |
-          (increase(duri_textfile_heartbeat_seq[10m]) > 0) * 1
+          clamp_max(1, abs(sign(increase(duri_textfile_heartbeat_seq[5m]))))
       
       - record: duri_heartbeat_ok
         labels: { mode: "smoke" }
         expr: |
-          (increase(duri_textfile_heartbeat_seq[10m]) > 0) * 1
+          clamp_max(1, abs(sign(increase(duri_textfile_heartbeat_seq[5m]))))
       
       # 3) Heartbeat stall (for alerts only, 1 = stalled)
       - record: duri_heartbeat_stall
         expr: |
-          (increase(duri_textfile_heartbeat_seq[5m]) == 0) * 1
+          1 - duri_heartbeat_ok
       
       - record: duri_heartbeat_stall
         labels: { mode: "smoke" }
         expr: |
-          (increase(duri_textfile_heartbeat_seq[5m]) == 0) * 1
+          1 - duri_heartbeat_ok
       
       # 3) DR RTO p95 in minutes (production-ready with fallbacks)
       - record: duri_dr_rehearsal_p95_minutes
