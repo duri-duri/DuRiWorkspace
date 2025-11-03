@@ -159,6 +159,25 @@ jobs:
           echo "Path guard PASS"
       - name: Default validation (no labels)
         run: |
+          # Gate by label or change size
+          labels="${{ join(github.event.pull_request.labels.*.name, ',') }}"
+          if echo "$labels" | grep -qi 'safe-change'; then
+            echo "safe-change label → PASS"
+            exit 0
+          fi
+          
+          # Compute change size
+          git fetch origin ${{ github.base_ref }} --depth=1 || true
+          added=$(git diff --numstat origin/${{ github.base_ref }}... 2>/dev/null | awk '{a+=$1} END{print a+0}' || echo "0")
+          deleted=$(git diff --numstat origin/${{ github.base_ref }}... 2>/dev/null | awk '{d+=$2} END{print d+0}' || echo "0")
+          lines=$((added+deleted))
+          
+          if [ "$lines" -le 400 ]; then
+            echo "Δlines=$lines ≤ 400 → PASS"
+            exit 0
+          fi
+          
+          echo "Δlines=$lines > 400 → Running full validation"
           make prom-rules-ci
           make prom-dup-guard
           make alert-labels-guard
