@@ -17,25 +17,4 @@ jobs:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
 
-      - id: files
-        name: Collect changed workflow files
-        shell: bash
-        env:
-          BASE: ${{ github.event.pull_request.base.sha }}
-          HEAD: ${{ github.event.pull_request.head.sha }}
-        run: |
-          set -euo pipefail
-          CHANGED=$(git diff --name-only "$BASE" "$HEAD" -- \
-            '.github/workflows/**/*.yml' '.github/workflows/**/*.yaml' | tr '\n' ' ' | xargs -r)
-          echo "list=${CHANGED}" >> "$GITHUB_OUTPUT"
-
-      - name: Run actionlint on changed files
-        if: steps.files.outputs.list != ''
-        uses: rhysd/actionlint@v1.7.1
-        with:
-          # 공백 포함 대비해 전체를 하나의 문자열로 전달
-          args: "-color -shellcheck= ${{ steps.files.outputs.list }}"
-
-      - name: No workflow file changes
-        if: steps.files.outputs.list == ''
-        run: echo "No changed workflow files."
+      - uses: rhysd/actionlint@v1
