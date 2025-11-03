@@ -1,0 +1,71 @@
+rule_files:
+  - /etc/prometheus/rules/heartbeat.rules.yml
+
+evaluation_interval: 1m
+
+tests:
+- interval: 1m
+  input_series:
+  - series: 'duri_textfile_heartbeat_seq{metric_realm="prod"}'
+    values: '0 1 2 2 3 3'   # 6m 동안 3회 변화 (0→1, 1→2, 2→3)
+  - series: 'duri_textfile_heartbeat_ts{metric_realm="prod"}'
+    values: '0x60 0x120 0x180 0x240 0x300 0x360'  # 초 단위 (의미상 최근)
+  
+  promql_expr_test:
+  - expr: duri_heartbeat_changes_6m
+    eval_time: 6m
+    exp_samples:
+    - labels: '{ }'
+      value: 3
+  
+  - expr: duri_heartbeat_fresh_120s
+    eval_time: 6m
+    exp_samples:
+    - labels: '{ }'
+      value: 1
+  
+  - expr: duri_heartbeat_ok
+    eval_time: 6m
+    exp_samples:
+    - labels: '{ }'
+      value: 1
+  
+  - expr: duri_heartbeat_stall
+    eval_time: 6m
+    exp_samples:
+    - labels: '{ }'
+      value: 0
+
+# Test case 2: Stalled heartbeat (no changes, stale timestamp)
+- interval: 1m
+  input_series:
+  - series: 'duri_textfile_heartbeat_seq{metric_realm="prod"}'
+    values: '5+0x10'  # 10분 동안 변화 없음
+  - series: 'duri_textfile_heartbeat_ts{metric_realm="prod"}'
+    values: '0x600'   # 10분 전 타임스탬프 (stale)
+  
+  promql_expr_test:
+  - expr: duri_heartbeat_changes_6m
+    eval_time: 10m
+    exp_samples:
+    - labels: '{ }'
+      value: 0
+  
+  - expr: duri_heartbeat_fresh_120s
+    eval_time: 10m
+    exp_samples:
+    - labels: '{ }'
+      value: 0
+  
+  - expr: duri_heartbeat_ok
+    eval_time: 10m
+    exp_samples:
+    - labels: '{ }'
+      value: 0
+  
+  - expr: duri_heartbeat_stall
+    eval_time: 10m
+    exp_samples:
+    - labels: '{ }'
+      value: 1
+

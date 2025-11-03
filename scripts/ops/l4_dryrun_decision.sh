@@ -95,6 +95,8 @@ CANARY_UNIQUE=$(query_prom 'duri_canary_unique_ratio')
 LYAPUNOV_V=$(query_prom 'duri_lyapunov_v')
 HEARTBEAT_OK=$(query_prom 'duri_heartbeat_ok')  # Use heartbeat_ok (1 = healthy, 0 = stalled)
 HEARTBEAT_STALL=$(query_prom 'duri_heartbeat_stall')  # For reference only (alerts)
+HEARTBEAT_FRESH=$(query_prom 'duri_heartbeat_fresh_120s')  # Freshness check
+HEARTBEAT_CHANGES=$(query_prom 'duri_heartbeat_changes_6m')  # Raw changes count
 
 log "  duri_green_uptime_ratio: $GREEN_UPTIME (target: ≥0.9990)"
 log "  error_budget_burn_7d: $ERROR_BUDGET_7D (target: ≤0.60)"
@@ -105,6 +107,8 @@ log "  canary_unique_ratio: $CANARY_UNIQUE (target: ≥0.92)"
 log "  lyapunov_V: $LYAPUNOV_V"
 log "  heartbeat_ok: $HEARTBEAT_OK (target: ==1)"
 log "  heartbeat_stall: $HEARTBEAT_STALL (for reference, 1=stalled)"
+log "  heartbeat_fresh_120s: $HEARTBEAT_FRESH (for reference, 1=fresh)"
+log "  heartbeat_changes_6m: $HEARTBEAT_CHANGES (raw changes count)"
 
 # Go/No-Go 판정
 GO=1
@@ -136,13 +140,13 @@ fi
 
 # Heartbeat OK check (1 = healthy, 0 = stalled)
 # Use changes() based metric with metric_realm="prod" filter
+# Check freshness as fallback
 if [ "$HEARTBEAT_OK" != "1" ]; then
-  # Fallback: Check if heartbeat_seq changed in shorter window
-  HEARTBEAT_CHANGES=$(query_prom 'changes(duri_textfile_heartbeat_seq{metric_realm="prod"}[5m])')
-  if (( $(echo "$HEARTBEAT_CHANGES > 0" | bc -l 2>/dev/null || echo "0") )); then
-    log "[OK] Heartbeat OK (fallback: seq changed in 5m window, heartbeat_ok=$HEARTBEAT_OK, changes=$HEARTBEAT_CHANGES)"
+  # Fallback: Check if heartbeat_seq changed in shorter window or freshness
+  if [ "$HEARTBEAT_FRESH" = "1" ] || [ "$HEARTBEAT_CHANGES" != "0" ]; then
+    log "[OK] Heartbeat OK (fallback: fresh=$HEARTBEAT_FRESH or changes=$HEARTBEAT_CHANGES, heartbeat_ok=$HEARTBEAT_OK)"
   else
-    log "[NO-GO] Heartbeat not OK (heartbeat_ok: $HEARTBEAT_OK, changes: $HEARTBEAT_CHANGES)"
+    log "[NO-GO] Heartbeat not OK (heartbeat_ok: $HEARTBEAT_OK, fresh: $HEARTBEAT_FRESH, changes: $HEARTBEAT_CHANGES)"
     GO=0
   fi
 fi

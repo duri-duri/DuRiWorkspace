@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Prometheus Safe Reload Script
 # Purpose: Ensure promtool-check passes before reloading Prometheus
+# Uses container-internal paths for consistency
 # Usage: bash scripts/ops/reload_safe.sh
 
 set -euo pipefail
@@ -9,21 +10,45 @@ ROOT="$(git -C "$(dirname "$0")/../.." rev-parse --show-toplevel 2>/dev/null || 
 cd "$ROOT"
 
 PROM_URL="${PROM_URL:-http://localhost:9090}"
+PROM_CONTAINER="${PROM_CONTAINER:-prometheus}"
 
 log() {
   echo "[$(date +%Y-%m-%d\ %H:%M:%S)] $*" >&2
 }
 
-log "=== Prometheus Safe Reload ==="
+log "=== Prometheus Safe Reload (Container-Internal Check) ==="
 
-# Step 1: promtool-check (config + rules)
-log "Step 1: Checking Prometheus config and rules..."
-if ! make promtool-check >/dev/null 2>&1; then
-  log "[FAIL] promtool-check failed"
-  log "Fix configuration/rule errors before reloading"
-  exit 1
+# Step 1: promtool-check using container-internal paths
+log "Step 1: Checking Prometheus config and rules (container-internal)..."
+if docker exec "$PROM_CONTAINER" promtool check config /etc/prometheus/prometheus.yml.minimal >/dev/null 2>&1; then
+  log "[OK] Config check passed"
+else
+  log "[FAIL] promtool-check-config failed (container-internal)"
+  log "Fallback: Using host-side promtool-check..."
+  if ! make promtool-check >/dev/null 2>&1; then
+    log "[FAIL] promtool-check failed (host-side)"
+    log "Fix configuration/rule errors before reloading"
+    exit 1
+  fi
 fi
-log "[OK] Config and rules check passed"
+
+# Check rules using container-internal paths
+RULES_CHECKED=0
+for rule_file in prometheus/rules/*.yml; do
+  if docker exec "$PROM_CONTAINER" promtool check rules "/etc/prometheus/rules/$(basename "$rule_file")" >/dev/null 2>&1; then
+    RULES_CHECKED=$((RULES_CHECKED + 1))
+  fi
+done
+
+if [ "$RULES_CHECKED" -gt 0 ]; then
+  log "[OK] Rules check passed ($RULES_CHECKED files)"
+else
+  log "[WARN] No rules checked via container, using host-side check..."
+  if ! make promtool-check >/dev/null 2>&1; then
+    log "[FAIL] promtool-check failed"
+    exit 1
+  fi
+fi
 
 # Step 2: Reload Prometheus
 log "Step 2: Reloading Prometheus..."

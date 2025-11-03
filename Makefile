@@ -352,6 +352,26 @@ promtool-check: promtool-ensure-rules
 	| tee "$(PROM_LOG)"; \
 	test $$? -eq 0 && echo "[OK] promtool-check passed" || { echo "[FAIL] promtool-check failed (see $(PROM_LOG))"; exit 1; }
 
+# PromQL Unit Tests
+.PHONY: promql-unit promql-test-heartbeat
+promql-unit: promql-test-heartbeat
+	@echo "[OK] All PromQL unit tests passed"
+
+promql-test-heartbeat:
+	@echo "[promql] Testing heartbeat rules..."
+	@mkdir -p tests/promql
+	@docker run --rm --entrypoint /bin/sh \
+	  -v "$(PROM_DIR):/etc/prometheus:ro" \
+	  -v "$(ROOT)/tests/promql:/tests/promql:ro" \
+	  $(PROM_IMG) -lc '\
+	    if [ -f /tests/promql/heartbeat_test.yml ]; then \
+	      promtool test rules /tests/promql/heartbeat_test.yml || exit 1; \
+	    else \
+	      echo "[SKIP] heartbeat_test.yml not found"; \
+	    fi' \
+	|| { echo "[FAIL] heartbeat rules test failed"; exit 1; }
+	@echo "[OK] Heartbeat rules test passed"
+
 promtool-find-failing:
 	@docker run --rm --entrypoint /bin/sh -v "$(PROM_DIR):/etc/prometheus:ro" $(PROM_IMG) -lc '\
 	  set -eu; fail=0; for f in /etc/prometheus/rules/*.yml; do promtool check rules "$$f" >/dev/null 2>&1 || { echo "FAIL -> $$f"; fail=1; }; done; exit $$fail'
