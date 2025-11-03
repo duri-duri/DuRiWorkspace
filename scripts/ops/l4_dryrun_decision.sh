@@ -128,7 +128,7 @@ if (( $(echo "$CANARY_UNIQUE < 0.92" | bc -l 2>/dev/null || echo "0") )); then
   GO=0
 fi
 
-if [ "$HEARTBEAT_STALL" = "0" ] || [ -z "$HEARTBEAT_STALL" ]; then
+if [ "$HEARTBEAT_STALL" = "0" ] || [ -z "$HEARTBEAT_STALL" ] || (( $(echo "$HEARTBEAT_STALL < 0.1" | bc -l 2>/dev/null || echo "1") )); then
   log "[NO-GO] Heartbeat stalled"
   GO=0
 fi

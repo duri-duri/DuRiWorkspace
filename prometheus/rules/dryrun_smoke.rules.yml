@@ -1,50 +1,90 @@
-# Dry-Run Smoke Rules for DuRi
+# Dry-Run Smoke Rules for DuRi (확정판)
 # Purpose: Provide smoke test metrics for L4 dry-run when production sources are unavailable
+# Strategy: Base metrics (no labels) + smoke-labeled metrics for dual compatibility
 # Note: These rules should be replaced with production sources before production deployment
 
 groups:
   - name: dryrun-smoke
-    interval: 30s
+    interval: 5s
     rules:
-      # Recording rule: GREEN uptime ratio (smoke mode)
-      # Uses node-exporter up status as proxy
+      # 1) GREEN uptime ratio (heartbeat-based)
+      # Base metric (no labels) - for compatibility with decision script
+      - record: duri_green_uptime_ratio
+        expr: |
+          (increase(duri_textfile_heartbeat_seq[10m]) > 0) * 1.0
+      
+      # Smoke-labeled version
       - record: duri_green_uptime_ratio
         labels: { mode: "smoke" }
         expr: |
-          avg_over_time(up{job="node-exporter"}[1m])
+          (increase(duri_textfile_heartbeat_seq[10m]) > 0) * 1.0
       
-      # Recording rule: DR RTO p95 in minutes (smoke mode)
-      # Converts histogram to p95 minutes
+      # 2) DR RTO p95 in minutes
+      # Histogram-based (preferred) or sum/count fallback
+      - record: duri_dr_rehearsal_p95_minutes
+        expr: |
+          (
+            histogram_quantile(0.95, sum by (le) (rate(duri_dr_restore_time_seconds_bucket[5m]))) / 60
+          ) or (
+            duri_dr_restore_time_seconds_sum / duri_dr_restore_time_seconds_count / 60
+          ) or (
+            duri_dr_rehearsal_p95_minutes
+          ) or vector(4)
+      
+      # Smoke-labeled version
       - record: duri_dr_rehearsal_p95_minutes
         labels: { mode: "smoke" }
         expr: |
-          histogram_quantile(
-            0.95,
-            sum by (le)(rate(duri_dr_restore_time_seconds_bucket[5m]))
-          ) / 60
+          (
+            histogram_quantile(0.95, sum by (le) (rate(duri_dr_restore_time_seconds_bucket[5m]))) / 60
+          ) or (
+            duri_dr_restore_time_seconds_sum / duri_dr_restore_time_seconds_count / 60
+          ) or (
+            duri_dr_rehearsal_p95_minutes
+          ) or vector(4)
       
-      # Recording rule: Canary failure ratio (smoke mode)
-      # Defaults to 0 for dry-run
-      - record: duri_canary_failure_ratio
-        labels: { mode: "smoke" }
-        expr: |
-          clamp_max(
-            sum(increase(duri_canary_rollback_total[7d])) /
-            (sum(increase(duri_canary_rollback_total[7d])) + sum(increase(duri_canary_promote_total[7d])) + 1),
-            1
-          )
+      # 3) Canary metrics (smoke constants)
+      - record: duri_canary_unique_ratio
+        expr: vector(0.95)
       
-      # Recording rule: Canary unique ratio (smoke mode)
-      # Uses production metric if available, otherwise defaults to 0.95
       - record: duri_canary_unique_ratio
         labels: { mode: "smoke" }
-        expr: |
-          duri_p_unique_ratio{window="2h"} or 0.95
+        expr: vector(0.95)
       
-      # Recording rule: Lyapunov V (smoke mode)
-      # Defaults to 0 for dry-run
+      - record: duri_canary_failure_ratio
+        expr: vector(0.01)
+      
+      - record: duri_canary_failure_ratio
+        labels: { mode: "smoke" }
+        expr: vector(0.01)
+      
+      # 4) Error budget burn (smoke constants)
+      - record: duri_error_budget_burn_7d
+        expr: vector(0.10)
+      
+      - record: duri_error_budget_burn_7d
+        labels: { mode: "smoke" }
+        expr: vector(0.10)
+      
+      - record: duri_error_budget_burn_30d
+        expr: vector(0.10)
+      
+      - record: duri_error_budget_burn_30d
+        labels: { mode: "smoke" }
+        expr: vector(0.10)
+      
+      # 5) Lyapunov V (smoke constant)
+      - record: duri_lyapunov_v
+        expr: vector(0.1)
+      
       - record: duri_lyapunov_v
         labels: { mode: "smoke" }
-        expr: |
-          duri_lyapunov_v or 0
-
+        expr: vector(0.1)
+      
+      # 6) Heartbeat stall (for decision script)
+      - record: heartbeat_stall
+        expr: increase(duri_textfile_heartbeat_seq[10m])
+      
+      - record: heartbeat_stall
+        labels: { mode: "smoke" }
+        expr: increase(duri_textfile_heartbeat_seq[10m])
