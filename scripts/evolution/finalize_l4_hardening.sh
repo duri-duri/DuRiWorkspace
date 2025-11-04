@@ -58,7 +58,7 @@ echo ""
 
 # 해시 확인
 echo "해시 확인:"
-cold-hash || true
+"${HOME}/.local/bin/cold_hash" || sha256sum "$HOME/.local/bin/coldsync_hosp_from_usb.sh" "$HOME/DuRiWorkspace/scripts/bin/coldsync_hosp_from_usb.sh" || true
 echo ""
 
 # 경고 확인
@@ -71,6 +71,6 @@ echo ""
 echo "운영 안정성: p≈0.999"
 echo ""
 echo "상시 점검:"
-echo "  cold-status && cold-hash"
+echo "  ${HOME}/.local/bin/cold_status && ${HOME}/.local/bin/cold_hash"
 echo "  journalctl --user -u coldsync-install.service --since '10 min ago' --no-pager | grep -Ei 'warn|error|unknown' || echo '[OK]'"
 

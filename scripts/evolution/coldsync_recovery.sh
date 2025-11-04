@@ -29,7 +29,7 @@ Wants=coldsync-install.path
 
 [Service]
 Type=oneshot
-ExecStart=%h/.local/bin/coldsync_install_debounced.sh
+ExecStart=%h/.local/bin/coldsync_install_debounced.sh %h/DuRiWorkspace/scripts/bin/coldsync_hosp_from_usb.sh %h/.local/bin/coldsync_hosp_from_usb.sh
 
 [Install]
 WantedBy=default.target
@@ -64,6 +64,6 @@ echo ""
 echo "=== 복구 완료 ==="
 echo ""
 echo "다음 단계:"
-echo "  cold-status"
-echo "  cold-hash"
+echo "  ${HOME}/.local/bin/cold_status"
+echo "  ${HOME}/.local/bin/cold_hash"
 

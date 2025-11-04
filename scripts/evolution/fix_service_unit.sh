@@ -54,7 +54,7 @@ Environment=DST=%h/.local/bin/coldsync_hosp_from_usb.sh
 # 안전: 대상 디렉토리 없으면 생성
 ExecStartPre=/usr/bin/mkdir -p %h/.local/bin
 # 디바운스 래퍼로 실행 (인자 전달형)
-ExecStart=/bin/bash -lc '%h/.local/bin/coldsync_install_debounced.sh "$SRC" "$DST"'
+ExecStart=%h/.local/bin/coldsync_install_debounced.sh %h/DuRiWorkspace/scripts/bin/coldsync_hosp_from_usb.sh %h/.local/bin/coldsync_hosp_from_usb.sh
 # 로그가 길어져도 문제없음
 StandardOutput=journal
 StandardError=journal
@@ -109,9 +109,9 @@ echo "=== 서비스 유닛 정규화 완료 ==="
 echo ""
 echo "다음 단계:"
 echo "  # 해시 확인"
-echo "  cold-hash"
+echo "  ${HOME}/.local/bin/cold_hash"
 echo "  # 디바운스 테스트"
 echo "  printf '\n# test %s\n' \"\$(date)\" >> ~/DuRiWorkspace/scripts/bin/coldsync_hosp_from_usb.sh"
 echo "  sleep 3"
-echo "  cold-log | grep -E 'INSTALLED|up-to-date'"
+echo "  ${HOME}/.local/bin/cold_log | grep -E 'INSTALLED|up-to-date'"
 

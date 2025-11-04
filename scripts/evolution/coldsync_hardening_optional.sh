@@ -72,6 +72,6 @@ echo ""
 echo "=== 선택적 하드닝 완료 ==="
 echo ""
 echo "다음 단계:"
-echo "  cold-status"
-echo "  cold-hash"
+echo "  ${HOME}/.local/bin/cold_status"
+echo "  ${HOME}/.local/bin/cold_hash"
 

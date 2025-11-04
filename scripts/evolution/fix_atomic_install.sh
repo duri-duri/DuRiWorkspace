@@ -129,6 +129,6 @@ echo ""
 echo "=== 원자성 보강 완료 ==="
 echo ""
 echo "다음 단계:"
-echo "  cold-status"
-echo "  cold-hash"
+echo "  ${HOME}/.local/bin/cold_status"
+echo "  ${HOME}/.local/bin/cold_hash"
 

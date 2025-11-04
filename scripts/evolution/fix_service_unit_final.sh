@@ -45,7 +45,7 @@ Wants=coldsync-install.path
 
 [Service]
 Type=oneshot
-ExecStart=%h/.local/bin/coldsync_install_debounced.sh
+ExecStart=%h/.local/bin/coldsync_install_debounced.sh %h/DuRiWorkspace/scripts/bin/coldsync_hosp_from_usb.sh %h/.local/bin/coldsync_hosp_from_usb.sh
 
 [Install]
 WantedBy=default.target

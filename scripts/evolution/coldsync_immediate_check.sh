@@ -10,7 +10,9 @@ echo ""
 
 # Step 1: 강제 동기화 + 확인
 echo "=== Step 1: 강제 동기화 + 확인 ==="
-cold-run && sleep 1 && cold-hash
+"${HOME}/.local/bin/cold_run" || systemctl --user start coldsync-install.service || true
+sleep 2
+"${HOME}/.local/bin/cold_hash" || sha256sum "$HOME/.local/bin/coldsync_hosp_from_usb.sh" "$HOME/DuRiWorkspace/scripts/bin/coldsync_hosp_from_usb.sh" || true
 echo ""
 
 # Step 2: Path 유닛 확인

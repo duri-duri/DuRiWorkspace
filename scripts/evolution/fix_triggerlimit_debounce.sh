@@ -75,12 +75,12 @@ SERVICE="$HOME/.config/systemd/user/coldsync-install.service"
 if [ -f "$SERVICE" ]; then
     cp -a "$SERVICE" "$SERVICE.bak.$(date +%s)"
     
-    # ExecStart 라인을 래퍼로 교체
+    # ExecStart 라인을 래퍼로 교체 (인자 포함)
     if grep -q '^ExecStart=' "$SERVICE"; then
-        sed -i 's#^ExecStart=.*#ExecStart=%h/.local/bin/coldsync_install_debounced.sh#' "$SERVICE"
+        sed -i 's#^ExecStart=.*#ExecStart=%h/.local/bin/coldsync_install_debounced.sh %h/DuRiWorkspace/scripts/bin/coldsync_hosp_from_usb.sh %h/.local/bin/coldsync_hosp_from_usb.sh#' "$SERVICE"
     else
-        # ExecStart가 없을 경우 추가
-        sed -i '/^\[Service\]/a ExecStart=%h/.local/bin/coldsync_install_debounced.sh' "$SERVICE"
+        # ExecStart가 없을 경우 추가 (인자 포함)
+        sed -i '/^\[Service\]/a ExecStart=%h/.local/bin/coldsync_install_debounced.sh %h/DuRiWorkspace/scripts/bin/coldsync_hosp_from_usb.sh %h/.local/bin/coldsync_hosp_from_usb.sh' "$SERVICE"
     fi
     
     echo "✅ Service 유닛 수정 완료"
