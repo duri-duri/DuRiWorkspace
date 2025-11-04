@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+   code ~/DuRiWorkspace/scripts/bin/coldsync_hosp_from_usb.sh   code ~/DuRiWorkspace/scripts/bin/coldsync_hosp_from_usb.sh   code ~/DuRiWorkspace/scripts/bin/coldsync_hosp_from_usb.sh#!/usr/bin/env bash
 set -Eeuo pipefail
 USB=/mnt/usb/두리백업/latest
 DST=/mnt/e/DuRiSafe_HOSP/latest
@@ -12,6 +12,14 @@ rsync -aH -L --safe-links --copy-unsafe-links \
   --no-perms --no-owner --no-group \
   "$USB/" "$DST/"
 echo "[OK] HOSP cold synced $(date)"
-# Auto-install test Tue Nov  4 10:57:45 KST 2025
+# Auto-install test Tue Nov
 # Auto-deploy test 2025-11-04 11:21:42
 # Save trigger test 2025-11-04 11:24:57
+# touch Tue Nov  4 14:20:32 KST 2025
+# Smoke test 2025-11-04.14:20:34
+# Auto-deploy test $(date)
+# Test $(date)
+# Path trigger test $(date)
+# Path trigger test 2 $(date)
+# Path trigger test final $(date)
+#
