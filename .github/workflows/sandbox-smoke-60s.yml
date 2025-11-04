@@ -1,15 +1,30 @@
 name: sandbox-smoke-60s
 
 on:
+  # 수동 실행 허용 (맨 위로 이동 - GitHub 인덱싱 보장)
+  workflow_dispatch:
+    inputs:
+      is_dry_run:
+        description: 'Dry-run mode (skip actual smoke test)'
+        required: false
+        type: boolean
+        default: true
+  
+  # Pull request 이벤트 (PR stub pass)
   pull_request:
     types: [opened, synchronize, reopened, labeled, unlabeled]
     branches: [ "main", "release/*" ]
+  
+  # Push 이벤트 (실제 smoke 실행)
   push:
     branches: [ "main", "release/*" ]
+  
+  # 스케줄 실행 (실제 smoke 실행)
   schedule:
     - cron: "*/30 * * * *"
-  workflow_dispatch: {}   # 수동 실행 허용
-  workflow_call: {}       # 재사용 가능(옵션)
+  
+  # 재사용 가능 (옵션)
+  workflow_call: {}
 
 concurrency:
   group: sandbox-smoke-60s-${{ github.ref }}
@@ -22,25 +37,30 @@ permissions:
   actions: read
 
 env:
-  IS_DRY_RUN: ${{ contains(join(github.event.pull_request.labels.*.name, ','), 'dry-run') }}
+  # PR 라벨 또는 dispatch 입력으로 dry-run 결정
+  IS_DRY_RUN: ${{ github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && inputs.is_dry_run == true) || contains(join(github.event.pull_request.labels.*.name, ','), 'dry-run') }}
 
 jobs:
   sandbox-smoke-60s:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
+      # PR에서는 초경량 스텁만 실행 → 항상 성공 (필수 컨텍스트 이름 유지)
       - name: PR stub pass (keep required context name)
         if: ${{ github.event_name == 'pull_request' }}
         run: |
           echo "[PR] smoke stub pass (lightweight check for required context)"
           exit 0
       
+      # Dry-run fast-pass (dispatch 입력 또는 PR 라벨)
       - name: Dry-run fast-pass
         if: ${{ github.event_name != 'pull_request' && env.IS_DRY_RUN == 'true' }}
-        run: echo "dry-run: fast-pass" && exit 0
+        run: |
+          echo "dry-run: fast-pass (dispatch: ${{ inputs.is_dry_run }})"
+          exit 0
       
-      # 실제 스모크는 push/schedule/dispatch에서 실행 (PR 제외)
-      - name: Real run
+      # 실제 스모크는 push/schedule/dispatch(dry-run=false)에서 실행
+      - name: Checkout
         if: ${{ github.event_name != 'pull_request' && env.IS_DRY_RUN != 'true' }}
         uses: actions/checkout@v4
       
