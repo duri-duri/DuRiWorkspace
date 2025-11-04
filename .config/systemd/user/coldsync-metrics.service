@@ -1,0 +1,7 @@
+[Unit]
+Description=Emit coldsync metrics
+
+[Service]
+Type=oneshot
+ExecStart=%h/DuRiWorkspace/scripts/evolution/coldsync_emit_metrics.sh
+
