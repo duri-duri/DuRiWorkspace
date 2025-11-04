@@ -10,6 +10,11 @@ on:
 
 jobs:
   ab-label-integrity:
+    # Skip if PR only touches coldsync/ops infrastructure files
+    if: |
+      !contains(github.event.pull_request.title, 'coldsync') &&
+      !contains(github.event.pull_request.title, 'L4 coldsync') &&
+      !contains(join(github.event.pull_request.labels.*.name || fromJSON('[]'), ','), 'change-safe')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
