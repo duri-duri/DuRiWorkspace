@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# systemd 유닛 파일 검증
+verify_systemd_unit() {
+    local unit_file="$1"
+    if [ -f "$unit_file" ]; then
+        # systemd-analyze verify (user unit)
+        if ! systemd-analyze --user verify "$unit_file" 2>/dev/null; then
+            echo "❌ [FAIL] Invalid systemd unit: $unit_file"
+            return 1
+        fi
+        
+        # 쉘 조각 검사 (set -Eeuo, SRC=, DST= 등)
+        if grep -qE 'set -Eeuo|SRC=|DST=|^if\s+! cmp' "$unit_file"; then
+            echo "❌ [FAIL] Shell fragments detected in unit file: $unit_file"
+            echo "   Remove shell fragments from [Service] section"
+            return 1
+        fi
+    fi
+    return 0
+}
+
+# coldsync 관련 유닛 파일 검증
+USER_UNIT_DIR="$HOME/.config/systemd/user"
+if [ -d "$USER_UNIT_DIR" ]; then
+    ERRORS=0
+    
+    if [ -f "$USER_UNIT_DIR/coldsync-install.service" ]; then
+        verify_systemd_unit "$USER_UNIT_DIR/coldsync-install.service" || ERRORS=$((ERRORS + 1))
+    fi
+    
+    if [ -f "$USER_UNIT_DIR/coldsync-install.path" ]; then
+        verify_systemd_unit "$USER_UNIT_DIR/coldsync-install.path" || ERRORS=$((ERRORS + 1))
+    fi
+    
+    if [ "$ERRORS" -gt 0 ]; then
+        echo ""
+        echo "💡 Fix: bash scripts/evolution/fix_service_unit_final.sh"
+        exit 1
+    fi
+fi
+
+exit 0

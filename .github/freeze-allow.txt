@@ -1,4 +1,6 @@
 # === DuRi freeze-guard allowlist (minimal) ===
+scripts/bin/**
+scripts/bin/coldsync_hosp_from_usb.sh
 scripts/evolution/**
 scripts/catch_up_today.sh
 prometheus/rules/duri-ab-test.rules.yml
