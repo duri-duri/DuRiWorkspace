@@ -29,6 +29,17 @@ fi
 summary="${summary_log}" score="${score}" AUTO_SUSPEND_ON_REVIEW="${AUTO_SUSPEND_ON_REVIEW:-0}" \
 bash scripts/ops/inc/l4_post_decision.sh || true
 
+# 4) 로그 롤링 (decisions.ndjson이 50000줄 이상이면 아카이브)
+NDJSON="${ROOT}/var/audit/decisions.ndjson"
+MAX_LINES=50000
+if [[ -f "${NDJSON}" ]] && [[ $(wc -l < "${NDJSON}" 2>/dev/null || echo 0) -gt ${MAX_LINES} ]]; then
+  mkdir -p "${ROOT}/var/audit/archive"
+  ts=$(date +%Y%m%d-%H%M%S)
+  mv "${NDJSON}" "${ROOT}/var/audit/archive/decisions_${ts}.ndjson"
+  touch "${NDJSON}"
+  echo "[rollover] archived decisions.ndjson (${MAX_LINES}+ lines) to archive/decisions_${ts}.ndjson"
+fi
+
 # 산출 확인용(실패해도 runner 실패로 간주하지 않음)
 ls -1t var/audit/logs/weekly_*.log 2>/dev/null | head -1 || true
 tail -n +1 var/audit/recommendations.log 2>/dev/null | tail -5 || true

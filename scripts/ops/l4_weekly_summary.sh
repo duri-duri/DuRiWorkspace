@@ -145,13 +145,34 @@ log "  MTTR p95 (seconds): $MTTR_P95"
 log "  U_POLICY (Policy effectiveness): $U_POLICY"
 log ""
 
-# Normalize MTTD/MTTR (inverse, max 1.0)
-MTTD_NORM=$(echo "scale=4; if ($MTTD_P95 > 180) then 0 else (1 - $MTTD_P95 / 180) end" | bc)
-MTTR_NORM=$(echo "scale=4; if ($MTTR_P95 > 600) then 0 else (1 - $MTTR_P95 / 600) end" | bc)
+# normalize (lower is better for MTTD/MTTR)
+# 안전 정규화 함수: 빈 값/비수치 → cap 값 대입
+num_or_default() {
+  local v="$1" d="$2"
+  if printf '%s' "$v" | grep -Eq '^[0-9]+(\.[0-9]+)?$'; then
+    printf '%s' "$v"
+  else
+    printf '%s' "$d"
+  fi
+}
+
+MAX_MTTD="${MAX_MTTD:-999999}"
+MAX_MTTR="${MAX_MTTR:-999999}"
+MTTD_RAW=$(num_or_default "${MTTD_P95}" "$MAX_MTTD")
+MTTR_RAW=$(num_or_default "${MTTR_P95}" "$MAX_MTTR")
+
+MTTD_NORM=$(awk -v x="$MTTD_RAW" -v m="$MAX_MTTD" 'BEGIN{printf "%.6f", (m>0? 1-(x/m):0)}')
+MTTR_NORM=$(awk -v x="$MTTR_RAW" -v m="$MAX_MTTR" 'BEGIN{printf "%.6f", (m>0? 1-(x/m):0)}')
 
 # Calculate promotion score
 # PromotionScore = 0.35*R_SLO + 0.25*(1-FP_RB) + 0.20*MTTD^-1 + 0.15*MTTR^-1 + 0.05*U_POLICY
-SCORE=$(echo "scale=4; 0.35*$R_SLO + 0.25*(1-$FP_RB) + 0.20*$MTTD_NORM + 0.15*$MTTR_NORM + 0.05*$U_POLICY" | bc)
+R_SLO_SAFE=$(num_or_default "${R_SLO}" 0)
+FP_RB_SAFE=$(num_or_default "${FP_RB}" 0)
+U_POLICY_SAFE=$(num_or_default "${U_POLICY}" 0)
+W_R_SLO=${W_R_SLO:-0.35}; W_FP_RB=${W_FP_RB:-0.25}; W_MTTD=${W_MTTD:-0.20}; W_MTTR=${W_MTTR:-0.15}; W_U_POLICY=${W_U_POLICY:-0.05}
+SCORE=$(awk -v r="$R_SLO_SAFE" -v f="$FP_RB_SAFE" -v m1="$MTTD_NORM" -v m2="$MTTR_NORM" -v u="$U_POLICY_SAFE" \
+         -v wr="$W_R_SLO" -v wf="$W_FP_RB" -v wm1="$W_MTTD" -v wm2="$W_MTTR" -v wu="$W_U_POLICY" \
+         'BEGIN{printf "%.6f", (wr*r) + (wf*(1-f)) + (wm1*m1) + (wm2*m2) + (wu*u)}')
 
 log "Normalized metrics:"
 log "  MTTD norm: $MTTD_NORM"
@@ -162,20 +183,28 @@ log "=== Promotion Score ==="
 log "Score: $SCORE"
 log ""
 
-# Threshold check
-THRESHOLD=0.92
-if (( $(echo "$SCORE >= $THRESHOLD" | bc -l) )); then
-  log "✅ PROMOTION SCORE ≥ $THRESHOLD"
-  log "   Verdict: Global L4 operation approved"
-  VERDICT="APPROVED"
-elif (( $(echo "$SCORE >= 0.85" | bc -l) )); then
-  log "⚠️  PROMOTION SCORE: $SCORE (below $THRESHOLD but ≥ 0.85)"
-  log "   Verdict: Continue observation, gradual expansion"
-  VERDICT="CONTINUE"
+# 데이터 부재(HOLD) 분기: 관측 공백을 실패로 오판 금지
+if [[ "$R_SLO" == "0.0" && "$FP_RB" == "0.0" && "$MTTD_NORM" == "0.000000" && "$MTTR_NORM" == "0.000000" ]]; then
+  VERDICT="HOLD"
+  SCORE="0.00"
+  log "⏸️  PROMOTION SCORE: $SCORE (data gap detected)"
+  log "   Verdict: HOLD - wait for observation data"
 else
-  log "❌ PROMOTION SCORE: $SCORE (below 0.85)"
-  log "   Verdict: Review and adjust thresholds"
-  VERDICT="REVIEW"
+  # Threshold check
+  THRESHOLD=0.92
+  if (( $(echo "$SCORE >= $THRESHOLD" | bc -l) )); then
+    log "✅ PROMOTION SCORE ≥ $THRESHOLD"
+    log "   Verdict: Global L4 operation approved"
+    VERDICT="APPROVED"
+  elif (( $(echo "$SCORE >= 0.85" | bc -l) )); then
+    log "⚠️  PROMOTION SCORE: $SCORE (below $THRESHOLD but ≥ 0.85)"
+    log "   Verdict: Continue observation, gradual expansion"
+    VERDICT="CONTINUE"
+  else
+    log "❌ PROMOTION SCORE: $SCORE (below 0.85)"
+    log "   Verdict: Review and adjust thresholds"
+    VERDICT="REVIEW"
+  fi
 fi
 
 log ""

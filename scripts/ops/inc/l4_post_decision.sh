@@ -88,6 +88,10 @@ case "$decision" in
     recommendation="stop_and_review"
     note="관찰 중단 권고; 임계값/정책 재검토"
     ;;
+  "HOLD")
+    recommendation="wait_for_data"
+    note="데이터 공백 감지; 관찰 데이터 누적 대기"
+    ;;
 esac
 
 printf "=== %s KST L4 Weekly Decision ===\nsummary=%s\nscore=%s\ndecision=%s\nrecommendation=%s\nnote=%s\n\n" \
@@ -100,7 +104,12 @@ json_line=$(jq -n --arg ts "$ts" --arg summary "$repo_rel_summary" \
                  --arg score "${score_str}" --arg decision "${decision}" \
                  --arg rec "${recommendation}" --arg note "${note}" \
                  '{ts:$ts, summary:$summary, score:($score|tonumber), decision:$decision, recommendation:$rec, note:$note}')
-echo "${json_line}" >> "${DECISIONS_NDJSON}"
+
+# 원자 append (flock 사용)
+NDJSON_LOCK="${DECISIONS_NDJSON}.lock"
+mkdir -p "$(dirname "$DECISIONS_NDJSON")"
+{ flock 200; printf '%s\n' "${json_line}" >> "${DECISIONS_NDJSON}"; } 200>"${NDJSON_LOCK}"
+
 snap="${DECISIONS_DIR}/$(basename "${summary%.*}").json"
 echo "${json_line}" | jq '.' > "${snap}"
 
