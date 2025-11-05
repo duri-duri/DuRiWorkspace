@@ -85,70 +85,29 @@ if [[ -f "${WORK}/var/audit/decisions.ndjson" ]]; then
   fi
 fi
 
-# [G] Check promfile freshness (cadence-aware SLA)
-echo "[G] Check promfile freshness (cadence-aware)"
-prom_dir="$dir"
-now=$(date +%s)
-
-# 산출물별 신선도 기준 (초)
-SLA_WEEKLY=$((8*24*3600))      # 8일 (주간 산출물)
-SLA_DAILY=$((26*3600))          # 26시간 (일일 산출물)
-SLA_QUICK=$((3*3600))           # 3시간 (퀵 체크)
-SLA_CANON=$((2*3600))           # 2시간 (정규화)
-SLA_BOOT=$((26*3600))           # 26시간 (부팅 상태)
-SLA_FRESH=600                   # 10분 (일반 메트릭)
-
-check_age() {
-  local f="$1"
-  local max="$2"
-  local label="$3"
-  local warn_only="${4:-0}"
-  
-  if [[ ! -f "$f" ]]; then
-    if [[ $warn_only -eq 1 ]]; then
-      echo "⚠️  WARN: $label missing (tolerated)"
-      return 0
-    else
-      echo "❌ MISSING: $label ($f)"
-      return 1
+# [G] Check promfile freshness (cadence-aware)
+# [G] START GENERATED - DO NOT EDIT MANUALLY
+# Generated from config/l4_spec.yml using: python3 scripts/ops/gen_l4_from_spec.py
+if [[ -f "${WORK}/scripts/ops/inc/_gen_freshness_block.sh" ]]; then
+  prom_dir="$dir"
+  now=$(date +%s)
+  . "${WORK}/scripts/ops/inc/_gen_freshness_block.sh"
+else
+  echo "⚠️  WARN: Generated freshness block not found, using fallback"
+  # Fallback to basic check
+  if [[ -f "$dir/l4_weekly_decision.prom" ]]; then
+    age=$(($(date +%s) - $(stat -c %Y "$dir/l4_weekly_decision.prom" 2>/dev/null || echo 0)))
+    echo "  weekly_decision age: ${age}s (limit: 691200s)"
+    if [[ $age -gt 691200 ]]; then
+      echo "❌ FAIL: weekly_decision stale (>691200s)"
+      fail=1
     fi
+  else
+    echo "❌ MISSING: weekly_decision"
+    fail=1
   fi
-  
-  local mtime
-  mtime=$(stat -c %Y "$f" 2>/dev/null || stat -f %m "$f" 2>/dev/null || echo 0)
-  local age=$((now - mtime))
-  
-  echo "  $label age: ${age}s (limit: ${max}s)"
-  
-  if [[ $age -gt $max ]]; then
-    if [[ $warn_only -eq 1 ]]; then
-      echo "⚠️  WARN: $label older than limit (${max}s)"
-      return 0
-    else
-      echo "❌ FAIL: $label stale (>${max}s)"
-      return 1
-    fi
-  fi
-  
-  return 0
-}
-
-# 주간 산출물: 8일 허용
-if ! check_age "$prom_dir/l4_weekly_decision.prom" "$SLA_WEEKLY" "weekly_decision"; then
-  fail=1
 fi
-
-# 부팅 상태: 26시간 허용
-if ! check_age "$prom_dir/l4_boot_status.prom" "$SLA_BOOT" "boot_status" 1; then
-  # 경고만, 실패로 처리하지 않음 (부팅 후 26시간 내 업데이트되지 않아도 정상일 수 있음)
-  :
-fi
-
-# 자체검증 메트릭: 10분 허용 (자체검증 실행 후 즉시 생성되어야 함)
-if ! check_age "$prom_dir/l4_selftest.pass.prom" "$SLA_FRESH" "selftest_pass" 1; then
-  # 첫 실행이거나 아직 실행되지 않았을 수 있으므로 경고만
-  :
-fi
+# [G] END GENERATED
 
 # [H] Generate selftest metric
 echo "[H] Generate selftest metric"

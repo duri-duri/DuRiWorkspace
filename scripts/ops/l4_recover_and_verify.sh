@@ -47,7 +47,7 @@ if ! echo "$env_line" | grep -q "NODE_EXPORTER_TEXTFILE_DIR="; then
     mkdir -p ~/.config/systemd/user/${s}.service.d
     cat > ~/.config/systemd/user/${s}.service.d/env.conf <<EOF
 [Service]
-Environment="NODE_EXPORTER_TEXTFILE_DIR=/var/lib/node_exporter/textfile_collector"
+Environment="NODE_EXPORTER_TEXTFILE_DIR=${HOME}/.cache/node_exporter/textfile"
 Environment="TZ=UTC"
 EOF
   done
@@ -59,7 +59,7 @@ fi
 
 # 5. 텍스트파일 디렉터리 생성 및 권한 보장
 echo "[5] ensure textfile directory"
-TEXTFILE_DIR="${NODE_EXPORTER_TEXTFILE_DIR:-/var/lib/node_exporter/textfile_collector}"
+TEXTFILE_DIR="${NODE_EXPORTER_TEXTFILE_DIR:-${HOME}/.cache/node_exporter/textfile}"
 mkdir -p "${TEXTFILE_DIR}"
 chmod 0755 "${TEXTFILE_DIR}" 2>/dev/null || true
 # 소유자 변경 시도 (권한 있으면)
@@ -103,6 +103,8 @@ if [[ -d "${TEXTFILE_DIR}" ]]; then
     echo "l4_boot_status 0" > "${TEXTFILE_DIR}/l4_boot_status.prom"
   fi
   chmod 0644 "${TEXTFILE_DIR}/l4_boot_status.prom" 2>/dev/null || true
+  # Export timestamp
+  bash "${WORK}/scripts/ops/inc/_export_timestamp.sh" "boot_status" || true
 fi
 
 # 10. 헬스 체크
