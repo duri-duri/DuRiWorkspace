@@ -29,7 +29,22 @@ fi
 summary="${summary_log}" score="${score}" AUTO_SUSPEND_ON_REVIEW="${AUTO_SUSPEND_ON_REVIEW:-0}" \
 bash scripts/ops/inc/l4_post_decision.sh || true
 
-# 4) 로그 롤링 (decisions.ndjson이 50000줄 이상이면 아카이브)
+# 4) 48h 스톱룰 체크 (의미 있는 관찰 확보)
+if bash scripts/ops/l4_stop_rule.sh 2>&1 | tee -a "${summary_log}"; then
+  stop_result=$?
+  if [[ $stop_result -eq 1 ]]; then
+    echo "[STOP_RULE] ACT - Shadow replay triggered" >> "${summary_log}"
+    # Shadow replay 트리거 (graceful skip)
+    python3 scripts/evolution/shadow_runner.py 2>/dev/null || true
+  elif [[ $stop_result -eq 2 ]]; then
+    echo "[STOP_RULE] STOP - All recent decisions are HOLD (72h+)" >> "${summary_log}"
+    # 중단 신호 (로그만 기록, 실제 중단은 수동 확인)
+  else
+    echo "[STOP_RULE] KEEP - Continue observation" >> "${summary_log}"
+  fi
+fi
+
+# 5) 로그 롤링 (decisions.ndjson이 50000줄 이상이면 아카이브)
 NDJSON="${ROOT}/var/audit/decisions.ndjson"
 MAX_LINES=50000
 if [[ -f "${NDJSON}" ]] && [[ $(wc -l < "${NDJSON}" 2>/dev/null || echo 0) -gt ${MAX_LINES} ]]; then
