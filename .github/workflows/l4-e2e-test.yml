@@ -43,6 +43,14 @@ jobs:
         run: |
           bash scripts/ops/l4_prometheus_validation.sh || echo "Prometheus not available, skipping"
 
+      - name: promtool check rules (required)
+        run: |
+          if command -v promtool >/dev/null 2>&1; then
+            promtool check rules prometheus/rules/l4_alerts.yml
+          else
+            docker run --rm -v $PWD/prometheus/rules:/rules prom/prometheus:latest promtool check rules /rules/l4_alerts.yml
+          fi
+
       - name: Run stress test
         run: |
           bash scripts/ops/l4_stress_test.sh ${{ github.event.inputs.iterations || '1000' }} ${{ github.event.inputs.parallelism || '10' }}

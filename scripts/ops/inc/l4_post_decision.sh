@@ -121,13 +121,15 @@ printf "=== %s KST L4 Weekly Decision ===\nsummary=%s\nscore=%s\ndecision=%s\nre
   "$(date '+%Y-%m-%d %H:%M:%S')" "${summary}" "${score_str}" "${decision}" "${recommendation}" "${note}" >> "${RECO_FILE}"
 
 # ➊ NDJSON(append) + ➋ 주차별 JSON 스냅샷(덮어쓰기)
-# 타임스탬프 표준화 (ISO8601 초 단위 Z)
+# 타임스탬프 표준화 (ISO8601 초 단위 Z) + 모노토닉 시퀀스 ID
 ts="$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+seq=$(bash "${ROOT}/scripts/ops/inc/_next_seq.sh" 2>/dev/null || echo "0")
 repo_rel_summary="${summary#${ROOT}/}"
 json_line=$(jq -n --arg ts "$ts" --arg summary "$repo_rel_summary" \
                  --arg score "${score_str}" --arg decision "${decision}" \
                  --arg rec "${recommendation}" --arg note "${note}" \
-                 '{ts:$ts, summary:$summary, score:($score|tonumber), decision:$decision, recommendation:$rec, note:$note}')
+                 --argjson seq "$seq" \
+                 '{ts:$ts, summary:$summary, score:($score|tonumber), decision:$decision, recommendation:$rec, note:$note, seq:($seq|tonumber)}')
 
 # 원자 append (디렉터리 락 사용 - 회전과 append 동시성 제어)
 # fdatasync 보강: 실제 동기화 보장
@@ -159,7 +161,13 @@ try:
 except Exception:
     pass
 PYTHON
+  
+  # 디렉터리 fsync (rename 내구성 보장)
+  python3 "${ROOT}/scripts/ops/inc/_fsync_dir.py" "${AUDIT_DIR}" 2>/dev/null || true
 } 200>"${NDJSON_LOCK}"
+
+# 정규화 (쓰기 직후 한 번)
+bash "${ROOT}/scripts/ops/inc/l4_canonicalize_ndjson.sh" 2>/dev/null || echo "[WARN] canonicalize failed" >> "${RECO_FILE}"
 
 snap="${DECISIONS_DIR}/$(basename "${summary%.*}").json"
 echo "${json_line}" | jq '.' > "${snap}"

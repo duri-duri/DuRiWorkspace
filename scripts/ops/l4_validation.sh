@@ -57,23 +57,39 @@ else
   echo "  ⚠️  decisions.ndjson not found (initial state)"
 fi
 
-# 3. 타임스탬프 정렬 테스트
+# 3. 타임스탬프 정렬 테스트 (ts,seq) 2중 키 기준
 echo ""
-echo "3. Testing timestamp sorting..."
+echo "3. Testing timestamp sorting (ts,seq) dual-key..."
 if [[ -f "${DECISIONS}" ]]; then
-  sorted_count=$(jq -rs 'sort_by(.ts) | length' "${DECISIONS}" 2>/dev/null || echo 0)
+  sorted_count=$(jq -rs 'sort_by([.ts, (.seq // 0)]) | length' "${DECISIONS}" 2>/dev/null || echo 0)
   unsorted_count=$(wc -l < "${DECISIONS}" 2>/dev/null || echo 0)
   
   if [[ $sorted_count -eq $unsorted_count ]]; then
-    echo "  ✅ All ${sorted_count} entries sortable"
+    echo "  ✅ All ${sorted_count} entries sortable by (ts,seq)"
   else
     echo "  ⚠️  Sorting mismatch: sorted=${sorted_count}, total=${unsorted_count}"
   fi
   
-  # 최신 결정 추출 테스트
-  latest_decision=$(jq -rs 'sort_by(.ts) | reverse | .[0].decision // empty' "${DECISIONS}" 2>/dev/null || echo "")
-  if [[ -n "$latest_decision" ]]; then
-    echo "  ✅ Latest decision: ${latest_decision}"
+  # (ts,seq) 기준 정렬 위반 검사
+  violation_count=$(jq -cr 'select(type=="object" and .ts and .seq)|[.ts,.seq]|@tsv' "${DECISIONS}" 2>/dev/null | \
+    awk 'BEGIN{prev_ts=""; prev_seq=-1; violations=0}
+    {
+      ts=$1; seq=$2+0;
+      if (prev_ts!="" && (ts<prev_ts || (ts==prev_ts && seq<prev_seq))) { violations++ }
+      prev_ts=ts; prev_seq=seq
+    }
+    END{print violations}' || echo 0)
+  
+  if [[ $violation_count -eq 0 ]]; then
+    echo "  ✅ No sorting violations detected (ts,seq)"
+  else
+    echo "  ❌ Found ${violation_count} sorting violations"
+  fi
+  
+  # 최신 결정 확인
+  latest=$(jq -rs 'sort_by([.ts, (.seq // 0)]) | reverse | .[0].decision // empty' "${DECISIONS}" 2>/dev/null || echo "")
+  if [[ -n "$latest" ]]; then
+    echo "  ✅ Latest decision: ${latest}"
   else
     echo "  ⚠️  Could not extract latest decision"
   fi

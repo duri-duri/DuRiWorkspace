@@ -52,3 +52,59 @@ groups:
           summary: "L4 weekly score variance high (>0.12)"
           description: "L4 weekly score variance is high, indicating instability. Consider reviewing observation data quality."
 
+  - name: l4-deadman
+    interval: 1m
+    rules:
+      - alert: L4NoDecisionDeadman
+        expr: (time() - max_over_time(l4_weekly_decision[1h])) > 3600
+        for: 5m
+        labels:
+          severity: critical
+          component: l4_automation
+        annotations:
+          summary: "L4 decision pipeline stalled (>60m quiet)"
+          description: "L4 decision pipeline has been quiet for more than 60 minutes. Check if l4-weekly.service or l4-daily.service is running."
+
+      - alert: L4TextfileCollectorStalled
+        expr: (time() - max_over_time(l4_weekly_decision[30m])) > 1800
+        for: 3m
+        labels:
+          severity: warning
+          component: l4_automation
+        annotations:
+          summary: "L4 textfile collector stalled (>30m quiet)"
+          description: "L4 textfile collector has not been updated for more than 30 minutes. Check if post-decision script is running."
+
+  - name: l4-system-health
+    interval: 1m
+    rules:
+      - alert: L4ClockDriftHigh
+        expr: abs(node_ntp_offset_seconds) > 2
+        for: 5m
+        labels:
+          severity: warning
+          component: l4_automation
+        annotations:
+          summary: "L4 system clock drift high (>2s)"
+          description: "System clock drift exceeds 2 seconds. This may affect timestamp sorting and alerts."
+
+      - alert: L4FilesystemSpaceLow
+        expr: node_filesystem_avail_bytes{mountpoint="/home/duri/DuRiWorkspace/var/audit"} < 10737418240
+        for: 10m
+        labels:
+          severity: warning
+          component: l4_automation
+        annotations:
+          summary: "L4 audit filesystem space low (<10GiB)"
+          description: "Available space on audit filesystem is below 10GiB. Consider archiving old decisions."
+
+      - alert: L4TextfilePermissionDenied
+        expr: increase(l4_textfile_write_errors_total[5m]) > 0
+        for: 1m
+        labels:
+          severity: warning
+          component: l4_automation
+        annotations:
+          summary: "L4 textfile write permission denied"
+          description: "L4 textfile exporter encountered permission errors. Check NODE_EXPORTER_TEXTFILE_DIR permissions."
+
