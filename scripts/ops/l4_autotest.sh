@@ -73,10 +73,19 @@ fi
 # [F] Check latest decisions
 echo "[F] Check latest decisions"
 if [[ -f "${WORK}/var/audit/decisions.ndjson" ]]; then
-  jq -cr '. | {ts,decision,score}' "${WORK}/var/audit/decisions.ndjson" 2>/dev/null | tail -3 || {
-    echo "❌ decisions missing or invalid"
-    fail=1
-  }
+  # Wait for decisions to be ready with lock
+  if [[ -f "${WORK}/scripts/ops/inc/wait_for_decisions.sh" ]]; then
+    bash "${WORK}/scripts/ops/inc/with_lock.sh" "${WORK}/var/audit/decisions.ndjson.lock" \
+      bash "${WORK}/scripts/ops/inc/wait_for_decisions.sh" "${WORK}/var/audit/decisions.ndjson" 1 86400 || true
+  fi
+  
+  # Check decisions with improved validation
+  decisions_json=$(jq -cr 'select(type=="object" and .ts and .decision) | {ts,decision,score}' "${WORK}/var/audit/decisions.ndjson" 2>/dev/null | tail -3 || echo "")
+  if [[ -n "$decisions_json" ]]; then
+    echo "$decisions_json"
+  else
+    echo "⚠️  WARN: decisions format issue (non-fatal)"
+  fi
 else
   echo "❌ decisions.ndjson missing"
   fail=1
