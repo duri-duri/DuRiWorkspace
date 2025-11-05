@@ -208,6 +208,9 @@ fi
       echo '# HELP l4_weekly_score Promotion score (0..1)'
       echo '# TYPE l4_weekly_score gauge'
       printf 'l4_weekly_score %.2f\n' "$score_str"
+      echo '# HELP l4_weekly_decision_ts Timestamp of last L4 weekly decision (Unix epoch seconds)'
+      echo '# TYPE l4_weekly_decision_ts gauge'
+      echo "l4_weekly_decision_ts{decision=\"$decision\"} $(date +%s)"
       echo '# HELP l4_weekly_decision_info Current decision state (0/1)'
       echo '# TYPE l4_weekly_decision_info gauge'
       echo "l4_weekly_decision_info{decision=\"APPROVED\"} $([[ $dv -eq 2 ]] && echo 1 || echo 0)"

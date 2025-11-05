@@ -9,6 +9,9 @@ WORK="/home/duri/DuRiWorkspace"
 LOG="/tmp/l4_autotest.$(date +%Y%m%d-%H%M%S).log"
 exec > >(tee -a "$LOG") 2>&1
 
+# 로그 출력용 타임존 (계산은 epoch UTC 사용)
+export TZ=Asia/Seoul
+
 echo "=== L4 AUTOTEST START $(date) ==="
 
 fail=0
@@ -22,54 +25,6 @@ if systemctl --user is-enabled l4-weekly.timer >/dev/null 2>&1; then
 else
   echo "❌ l4-weekly.timer NOT enabled"
   fail=1
-fi
-
-for s in l4-weekly l4-daily l4-canonicalize l4-shadow-replay l4-daily-quick; do
-  env=$(systemctl --user show "${s}.service" | grep '^Environment=' | sed -n '1p' || echo "no env")
-  echo "  ${s}: ${env}"
-done
-
-# [B] Check NODE_EXPORTER_TEXTFILE_DIR
-echo "[B] Check NODE_EXPORTER_TEXTFILE_DIR"
-dir=$(systemctl --user show l4-weekly.service | sed -n 's/.*NODE_EXPORTER_TEXTFILE_DIR=\([^ ]*\).*/\1/p' | head -1 || true)
-[ -n "$dir" ] || dir="/tmp/test_textfile"
-echo "prom dir: $dir"
-
-if [[ ! -d "$dir" ]]; then
-  echo "❌ WARN: prom dir not present: $dir"
-  fail=1
-fi
-
-# [C] Run canonicalize (safe)
-echo "[C] Run canonicalize (safe)"
-bash "${WORK}/scripts/ops/inc/l4_canonicalize_ndjson.sh" || echo "⚠️  canonicalize non-fatal"
-
-# [D] Run one shadow replay
-echo "[D] Run one shadow replay"
-systemctl --user start l4-shadow-replay.service || echo "⚠️  shadow start non-fatal"
-sleep 3
-
-# [E] Run validation
-echo "[E] Run validation"
-if bash "${WORK}/scripts/ops/l4_validation.sh" >/tmp/l4_validation.autotest.log 2>&1; then
-  echo "✅ VALIDATION OK"
-else
-  echo "❌ VALIDATION FAIL"
-  fail=1
-fi
-
-# [F] Check latest decisions
-echo "[F] Check latest decisions"
-if [[ -f "${WORK}/var/audit/decisions.ndjson" ]]; then
-  jq -cr '. | {ts,decision,score}' "${WORK}/var/audit/decisions.ndjson" 2>/dev/null | tail -3 || {
-    echo "❌ decisions missing or invalid"
-    fail=1
-  }
-else
-  echo "❌ decisions.ndjson missing"
-  fail=1
-fi
-
 fi
 
 for s in l4-weekly l4-daily l4-canonicalize l4-shadow-replay l4-daily-quick; do
@@ -206,4 +161,3 @@ else
   echo "❌ L4 AUTOTEST FAIL $(date)"
   exit 2
 fi
-
