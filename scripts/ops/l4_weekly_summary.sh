@@ -187,6 +187,7 @@ log ""
 if [[ "$R_SLO" == "0.0" && "$FP_RB" == "0.0" && "$MTTD_NORM" == "0.000000" && "$MTTR_NORM" == "0.000000" ]]; then
   VERDICT="HOLD"
   SCORE="0.00"
+  THRESHOLD=0.92
   log "⏸️  PROMOTION SCORE: $SCORE (data gap detected)"
   log "   Verdict: HOLD - wait for observation data"
 else
