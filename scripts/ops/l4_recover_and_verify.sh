@@ -123,5 +123,15 @@ if [[ -d "${TEXTFILE_DIR}" ]]; then
 fi
 
 echo ">>> L4 복구 완료: $(date) (log: $LOG)"
+
+# 11. Generate selftest metric
+echo "[11] generate selftest metric"
+if [[ -f "${WORK}/scripts/ops/inc/l4_selftest_report.sh" ]]; then
+  bash "${WORK}/scripts/ops/inc/l4_selftest_report.sh" || true
+fi
+
+# Save log for selftest report
+cp "$LOG" /tmp/l4_recover.last.log 2>/dev/null || true
+
 exit 0
 
