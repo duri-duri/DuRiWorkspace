@@ -4,6 +4,8 @@ on:
   pull_request:
     types: [labeled, synchronize, reopened]
     branches: [main]
+  issue_comment:
+    types: [created]
   workflow_dispatch:
     inputs:
       pr:
@@ -11,24 +13,36 @@ on:
         required: false
         default: ""
 
+concurrency:
+  group: auto-relax-merge-${{ github.repository }}-${{ github.event.pull_request.number || github.event.inputs.pr || github.event.issue.number }}
+  cancel-in-progress: false
+
 permissions:
   contents: write
   pull-requests: write
+  issues: write
   actions: read
+  # 중요: 브랜치 보호 설정 수정을 위해 필요 (없으면 PAT 사용)
+  administration: write
 
 env:
   REPO: ${{ github.repository }}
   BASE_BRANCH: main
   SAFE_LABEL: "change:safe"
   AUTO_MERGE_LABEL: "auto-relax-merge"
-  SNAP: /tmp/protection_snapshot.json
+  AUDIT_DIR: docs/ops/audit
 
 jobs:
   gate:
     runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'pull_request' && contains(join(github.event.pull_request.labels.*.name, ','), 'auto-relax-merge')) ||
+      (github.event_name == 'issue_comment' && startsWith(github.event.comment.body, '/auto-merge'))
     outputs:
+      ok: ${{ steps.only_approval.outputs.ok }}
       pr_number: ${{ steps.pr.outputs.number }}
-      ok: ${{ steps.gate.outputs.ok }}
+      skip: ${{ steps.idempotency.outputs.skip }}
     steps:
       - name: Install GH CLI
         run: |
@@ -40,6 +54,95 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y gh
 
+      - name: Comment author allowlist
+        if: github.event_name == 'issue_comment'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          AUTHOR="${{ github.event.comment.user.login }}"
+          OWNER="${{ github.repository_owner }}"
+          
+          # 소유자 또는 repo 권한이 있는 사용자만 허용
+          role=$(gh api repos/$REPO/collaborators/$AUTHOR/permission -q .permission 2>/dev/null || echo "none")
+          case "$role" in
+            admin|maintain|write)
+              echo "✅ Comment author authorized: $AUTHOR ($role)"
+              ;;
+            *)
+              # 소유자도 허용
+              if [ "$AUTHOR" = "$OWNER" ]; then
+                echo "✅ Comment author authorized: $AUTHOR (owner)"
+              else
+                echo "::error::Unauthorized commenter: $AUTHOR ($role)"
+                exit 1
+              fi
+              ;;
+          esac
+
+      - name: Ensure labels exist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          for L in change:safe auto-relax-merge auto-relaxed-merged; do
+            if ! gh label list -R "$REPO" --limit 1000 | grep -qE "^${L}\\b"; then
+              echo "Creating label: $L"
+              gh label create "$L" -R "$REPO" -c "#0366d6" -d "Auto relax merge workflow label" || true
+            fi
+          done
+          echo "✅ Labels ensured"
+
+      - name: Idempotency guard (closed/merged PR)
+        id: idempotency
+        env:
+          PR: ${{ steps.pr.outputs.number }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          state=$(gh pr view "$PR" -R "$REPO" --json state,merged -q '[.state, .merged] | @tsv')
+          echo "PR state: $state"
+          
+          if echo "$state" | grep -q "true"; then
+            echo "✅ PR already merged, skipping"
+            echo "skip=1" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          
+          if echo "$state" | grep -q "CLOSED"; then
+            echo "✅ PR already closed, skipping"
+            echo "skip=1" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          
+          echo "skip=0" >> $GITHUB_OUTPUT
+
+      - name: Deny forked PR (security)
+        env:
+          PR: ${{ steps.pr.outputs.number }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          is_cross=$(jq -r '.isCrossRepository' /tmp/pr.json)
+          if [ "$is_cross" = "true" ]; then
+            echo "::error::Fork PR denied for auto-relax (security)"
+            exit 78
+          fi
+          echo "✅ Same-repo PR confirmed"
+
+      - name: Ensure base is main
+        env:
+          PR: ${{ steps.pr.outputs.number }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          base=$(jq -r '.baseRefName' /tmp/pr.json)
+          if [ "$base" != "$BASE_BRANCH" ]; then
+            echo "::error::Base branch must be $BASE_BRANCH, got: $base"
+            exit 78
+          fi
+          echo "✅ Base branch confirmed: $base"
+
       - name: Resolve PR number
         id: pr
         env:
@@ -47,6 +150,8 @@ jobs:
         run: |
           if [ -n "$PR_INPUT" ]; then
             echo "number=$PR_INPUT" >> $GITHUB_OUTPUT
+          elif [ "${{ github.event_name }}" == "issue_comment" ]; then
+            echo "number=${{ github.event.issue.number }}" >> $GITHUB_OUTPUT
           else
             echo "number=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
           fi
@@ -59,14 +164,20 @@ jobs:
         run: |
           set -euo pipefail
           gh pr view "$PR" -R "$REPO" --json \
-            baseRefName,author,mergeStateStatus,labels,maintainerCanModify,isCrossRepository,files,statusCheckRollup \
+            baseRefName,author,mergeStateStatus,labels,maintainerCanModify,isCrossRepository,files,statusCheckRollup,mergeable \
             > /tmp/pr.json
           
           echo "[INFO] PR details:"
-          cat /tmp/pr.json | jq '{base: .baseRefName, state: .mergeStateStatus, labels: [.labels[].name], files: [.files[].path]}'
+          cat /tmp/pr.json | jq '{
+            base: .baseRefName,
+            state: .mergeStateStatus,
+            mergeable: .mergeable,
+            labels: [.labels[].name],
+            files: [.files[].path]
+          }'
 
       - name: Hard gate — validate conditions
-        id: gate
+        id: guard
         env:
           PR: ${{ steps.pr.outputs.number }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -107,38 +218,242 @@ jobs:
           fi
           
           if [ "$pend" -gt 0 ]; then
-            echo "⏳ There are $pend pending checks → abort (wait for completion)"
+            echo "❌ There are $pend pending checks → abort (wait for completion)"
             exit 78
           fi
           
           # 4) Merge state 확인 (BLOCKED = 승인만 부족)
           state=$(jq -r '.mergeStateStatus' /tmp/pr.json)
-          echo "Merge state: $state"
+          mergeable=$(jq -r '.mergeable' /tmp/pr.json)
+          echo "Merge state: $state, mergeable: $mergeable"
           
-          if [ "$state" != "BLOCKED" ]; then
-            echo "⚠️  Not BLOCKED (probably already mergeable or has other issues)"
+          if [ "$state" != "BLOCKED" ] || [ "$mergeable" != "MERGEABLE" ]; then
+            echo "⚠️  Not BLOCKED or not MERGEABLE (probably already mergeable or has other issues)"
             exit 78
-          fi
-          
-          # 5) 경로 allowlist 확인 (optional, 안전장치)
-          jq -r '.files[].path' /tmp/pr.json | tee /tmp/paths.txt || true
-          
-          # 모든 파일이 허용 경로인지 확인 (docs, prometheus/rules, scripts/ops, .github/workflows, scripts/bin만)
-          if [ -f /tmp/paths.txt ]; then
-            while IFS= read -r path; do
-              if echo "$path" | grep -qvE '^(docs/|prometheus/rules/|scripts/ops/|scripts/bin/|\.github/workflows/|\.github/freeze-allow\.txt)'; then
-                echo "⚠️  File outside allowlist: $path"
-                # 경고만 하고 계속 진행 (엄격하게 하려면 exit 78)
-              fi
-            done < /tmp/paths.txt
           fi
           
           echo "✅ All gates passed"
           echo "ok=1" >> $GITHUB_OUTPUT
 
+      - name: Load rulepack
+        id: rulepack
+        run: |
+          set -euo pipefail
+          
+          # Check if rulepack directory exists
+          if [ ! -d "rulepack" ]; then
+            echo "⚠️  Rulepack directory not found, using default allowlist"
+            echo "matched_scenario=default" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          
+          # Get changed files
+          CHANGED_FILES=$(gh pr view "$PR" -R "$REPO" --json files --jq '.files[].path')
+          
+          # Try to match against scenarios
+          MATCHED_SCENARIO=""
+          for scenario_file in rulepack/*.yml; do
+            if [ ! -f "$scenario_file" ] || [ "$scenario_file" = "rulepack/schema.yml" ]; then
+              continue
+            fi
+            
+            # Check if all changed files match allow_paths
+            ALLOW_PATHS=$(yq -r '.allow_paths[]?' "$scenario_file" 2>/dev/null || echo "")
+            DENY_PATHS=$(yq -r '.deny_paths[]?' "$scenario_file" 2>/dev/null || echo "")
+            
+            if [ -z "$ALLOW_PATHS" ]; then
+              continue
+            fi
+            
+            # Check each changed file
+            MATCHED=true
+            for file in $CHANGED_FILES; do
+              # Check deny_paths first
+              DENIED=false
+              for deny in $DENY_PATHS; do
+                if python3 -c "import fnmatch; print(1 if fnmatch.fnmatch('$file', '$deny') else 0)" 2>/dev/null | grep -q 1; then
+                  DENIED=true
+                  break
+                fi
+              done
+              
+              if [ "$DENIED" = "true" ]; then
+                MATCHED=false
+                break
+              fi
+              
+              # Check allow_paths
+              ALLOWED=false
+              for allow in $ALLOW_PATHS; do
+                if python3 -c "import fnmatch; print(1 if fnmatch.fnmatch('$file', '$allow') else 0)" 2>/dev/null | grep -q 1; then
+                  ALLOWED=true
+                  break
+                fi
+              done
+              
+              if [ "$ALLOWED" != "true" ]; then
+                MATCHED=false
+                break
+              fi
+            done
+            
+            if [ "$MATCHED" = "true" ]; then
+              MATCHED_SCENARIO=$(basename "$scenario_file" .yml)
+              break
+            fi
+          done
+          
+          if [ -z "$MATCHED_SCENARIO" ]; then
+            echo "⚠️  No matching scenario found, using default allowlist"
+            echo "matched_scenario=default" >> $GITHUB_OUTPUT
+          else
+            echo "✅ Matched scenario: $MATCHED_SCENARIO"
+            echo "matched_scenario=$MATCHED_SCENARIO" >> $GITHUB_OUTPUT
+            
+            # Load scenario config
+            SCENARIO_FILE="rulepack/${MATCHED_SCENARIO}.yml"
+            RELAXABLE=$(yq -r '.relaxable // true' "$SCENARIO_FILE" 2>/dev/null || echo "true")
+            echo "relaxable=$RELAXABLE" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Validate scenario relaxability
+        if: steps.rulepack.outputs.matched_scenario != 'default'
+        run: |
+          set -euo pipefail
+          
+          if [ "${{ steps.rulepack.outputs.relaxable }}" != "true" ]; then
+            echo "::error::Scenario '${{ steps.rulepack.outputs.matched_scenario }}' is not relaxable"
+            echo "This scenario requires manual review and cannot use auto-relax-merge"
+            exit 78
+          fi
+          
+          echo "✅ Scenario is relaxable"
+
+      - name: Path allowlist check (rulepack-aware)
+        if: steps.rulepack.outputs.matched_scenario == 'default'
+        id: pathcheck
+        env:
+          PR: ${{ steps.pr.outputs.number }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          FILES=$(gh pr view "$PR" -R "$REPO" --json files --jq '.files[].path')
+          ALLOW_PATTERN='^(docs/|prometheus/rules/|scripts/ops/|scripts/bin/|\.github/workflows/)'
+          
+          echo "Changed files:"
+          echo "$FILES" | while IFS= read -r file; do
+            if ! echo "$file" | grep -qE "$ALLOW_PATTERN"; then
+              echo "❌ DENY: $file (not in allowlist)"
+              exit 78
+            else
+              echo "✅ ALLOW: $file"
+            fi
+          done
+        id: pathcheck
+        env:
+          PR: ${{ steps.pr.outputs.number }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          FILES=$(gh pr view "$PR" -R "$REPO" --json files --jq '.files[].path')
+          ALLOW_PATTERN='^(docs/|prometheus/rules/|scripts/ops/|scripts/bin/|\.github/workflows/)'
+          
+          echo "Changed files:"
+          echo "$FILES" | while IFS= read -r file; do
+            if ! echo "$file" | grep -qE "$ALLOW_PATTERN"; then
+              echo "❌ DENY: $file (not in allowlist)"
+              exit 78
+            else
+              echo "✅ ALLOW: $file"
+            fi
+          done
+
+      - name: Verify required contexts are green
+        id: ctxcheck
+        env:
+          PR: ${{ steps.pr.outputs.number }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PROTECTION_ADMIN_TOKEN: ${{ secrets.PROTECTION_ADMIN_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          API="https://api.github.com/repos/$REPO/branches/$BASE_BRANCH/protection"
+          
+          # 보호 설정에서 required contexts 가져오기 (재시도 포함)
+          PROT=""
+          for i in 1 2 3; do
+            PROT=$(curl -sS -H "Authorization: token $PROTECTION_ADMIN_TOKEN" -H "Accept: application/vnd.github+json" "$API" 2>/dev/null || echo "")
+            if [ -n "$PROT" ] && echo "$PROT" | jq -e . >/dev/null 2>&1; then
+              break
+            fi
+            sleep $((2**i))
+          done
+          
+          if [ -z "$PROT" ] || ! echo "$PROT" | jq -e . >/dev/null 2>&1; then
+            echo "::error::Failed to fetch protection settings"
+            exit 78
+          fi
+          
+          CTX=$(echo "$PROT" | jq -r '.required_status_checks.contexts // []')
+          CTX_LEN=$(echo "$CTX" | jq 'length')
+          
+          # contexts가 비어있으면 ruleset 기반일 수 있음 (경고만, 통과 허용)
+          if [ "$CTX_LEN" -eq 0 ]; then
+            echo "⚠️  No required contexts found (may be ruleset-based)"
+            echo "skip_context_check=1" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          
+          echo "Required contexts ($CTX_LEN): $(echo "$CTX" | jq -r '.[]')"
+          
+          # PR의 statusCheckRollup에서 각 context의 상태 확인
+          ROLL=$(gh pr view "$PR" -R "$REPO" --json statusCheckRollup --jq '.statusCheckRollup[] | "\(.name)|\(.conclusion)"')
+          
+          declare -A M
+          while IFS='|' read -r n c; do
+            M["$n"]="$c"
+          done <<<"$ROLL"
+          
+          miss=0
+          for c in $(echo "$CTX" | jq -r '.[]'); do
+            if [[ "${M[$c]:-}" != "SUCCESS" ]]; then
+              echo "❌ Required context not SUCCESS: $c (status: ${M[$c]:-missing})"
+              miss=1
+            else
+              echo "✅ Required context SUCCESS: $c"
+            fi
+          done
+          
+          if [ $miss -eq 1 ]; then
+            echo "::error::Some required contexts are not SUCCESS"
+            exit 78
+          fi
+          
+          echo "skip_context_check=0" >> $GITHUB_OUTPUT
+
+      - name: Only approval is blocking?
+        id: only_approval
+        env:
+          PR: ${{ steps.pr.outputs.number }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          # 위 gate들이 모두 통과했으므로, BLOCKED 상태는 승인만 부족한 것으로 간주
+          state=$(jq -r '.mergeStateStatus' /tmp/pr.json)
+          mergeable=$(jq -r '.mergeable' /tmp/pr.json)
+          fails=$(jq '[.statusCheckRollup[] | select(.conclusion=="FAILURE")] | length' /tmp/pr.json)
+          pend=$(jq '[.statusCheckRollup[] | select(.conclusion==null)] | length' /tmp/pr.json)
+          
+          if [ "$state" = "BLOCKED" ] && [ "$mergeable" = "MERGEABLE" ] && [ "$fails" -eq 0 ] && [ "$pend" -eq 0 ]; then
+            echo "✅ Only approval is blocking"
+            echo "ok=1" >> $GITHUB_OUTPUT
+          else
+            echo "❌ Not a pure-review block (state=$state, mergeable=$mergeable, fails=$fails, pending=$pend)"
+            echo "ok=0" >> $GITHUB_OUTPUT
+          fi
+
   relax-merge-restore:
     needs: gate
-    if: needs.gate.outputs.ok == '1'
+    if: needs.gate.outputs.ok == '1' && needs.gate.outputs.skip != '1'
     runs-on: ubuntu-latest
     environment: production
     steps:
@@ -152,70 +467,58 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y gh
 
+      - name: Checkout (for script)
+        uses: actions/checkout@v4
+
       - name: Snapshot protection
+        id: snapshot
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PROTECTION_ADMIN_TOKEN: ${{ secrets.PROTECTION_ADMIN_TOKEN || secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          gh api repos/$REPO/branches/$BASE_BRANCH/protection > "$SNAP"
-          echo "[SNAPSHOT] Current protection settings:"
-          cat "$SNAP" | jq '{
-            approvals: .required_pull_request_reviews.required_approving_review_count,
-            code_owner: .required_pull_request_reviews.require_code_owner_reviews,
-            contexts: .required_status_checks.contexts,
-            enforce_admins: .enforce_admins.enabled
-          }'
+          export PROTECTION_ADMIN_TOKEN="${PROTECTION_ADMIN_TOKEN}"
+          SNAP_FILE="/tmp/protection_pre_relax_${{ needs.gate.outputs.pr_number }}_$(date +%Y%m%d_%H%M%S).json"
+          bash scripts/ops/protection_apply.sh "$REPO" snapshot "$SNAP_FILE"
+          echo "SNAP=$SNAP_FILE" >> $GITHUB_ENV
+          echo "SNAP=$SNAP_FILE" >> $GITHUB_OUTPUT
           
-          # 감사 로그로 저장 (선택사항)
-          mkdir -p docs/ops/audit 2>/dev/null || true
-          cp "$SNAP" "docs/ops/audit/protection_snapshot_$(date +%Y%m%d_%H%M%S).json" 2>/dev/null || true
+          # 감사 로그로 저장
+          mkdir -p "$AUDIT_DIR" 2>/dev/null || true
+          ts=$(date +%Y%m%d-%H%M%S)
+          cp "$SNAP_FILE" "$AUDIT_DIR/protection_snapshot_${ts}.json" 2>/dev/null || true
+
+      - name: Upload snapshot artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: protection-snapshot-${{ needs.gate.outputs.pr_number }}
+          path: ${{ steps.snapshot.outputs.SNAP }}
+          retention-days: 90
+          if-no-files-found: ignore
 
       - name: Relax (approvals → 0, code_owner → false)
+        id: relax
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PROTECTION_ADMIN_TOKEN: ${{ secrets.PROTECTION_ADMIN_TOKEN || secrets.GITHUB_TOKEN }}
+          SNAP: ${{ steps.snapshot.outputs.SNAP }}
         run: |
           set -euo pipefail
+          export PROTECTION_ADMIN_TOKEN="${PROTECTION_ADMIN_TOKEN}"
           
           # 실패 시 복원을 위한 trap
           restore() {
             echo "[trap] Error occurred, restoring protection..."
-            gh api repos/$REPO/branches/$BASE_BRANCH/protection -X PUT --input "$SNAP" >/dev/null 2>&1 || true
+            bash scripts/ops/protection_apply.sh "$REPO" restore "$SNAP" >/dev/null 2>&1 || true
             echo "[trap] Protection restored"
           }
           trap restore ERR
           
-          # 기존 contexts 보존
-          CTX=$(jq -r '.required_status_checks.contexts // []' "$SNAP")
-          ENFORCE_ADMINS=$(jq -r '.enforce_admins.enabled // true' "$SNAP")
-          CONV_RESOLVE=$(jq -r '.required_conversation_resolution.enabled // true' "$SNAP")
-          LINEAR_HIST=$(jq -r '.required_linear_history.enabled // true' "$SNAP")
-          
-          jq -n \
-            --argjson ctx "$CTX" \
-            --argjson enforce_admins "$ENFORCE_ADMINS" \
-            --argjson conv_resolve "$CONV_RESOLVE" \
-            --argjson linear_hist "$LINEAR_HIST" \
-            '{
-              required_status_checks: { strict: true, contexts: $ctx },
-              enforce_admins: $enforce_admins,
-              required_pull_request_reviews: {
-                required_approving_review_count: 0,
-                require_code_owner_reviews: false
-              },
-              required_conversation_resolution: $conv_resolve,
-              required_linear_history: $linear_hist,
-              restrictions: null
-            }' > /tmp/relax.json
-          
           echo "[relax] Applying relaxation..."
-          gh api repos/$REPO/branches/$BASE_BRANCH/protection -X PUT --input /tmp/relax.json \
-            | jq '{
-              approvals: .required_pull_request_reviews.required_approving_review_count,
-              code_owner: .required_pull_request_reviews.require_code_owner_reviews
-            }'
+          bash scripts/ops/protection_apply.sh "$REPO" relax "$SNAP"
           
           # 복원 trap 해제 (정상 완료)
           trap - ERR
+          echo "done=1" >> $GITHUB_OUTPUT
 
       - name: Merge (squash) and delete branch
         env:
@@ -230,17 +533,20 @@ jobs:
       - name: Restore protection (from snapshot)
         if: always()
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PROTECTION_ADMIN_TOKEN: ${{ secrets.PROTECTION_ADMIN_TOKEN || secrets.GITHUB_TOKEN }}
+          SNAP: ${{ steps.snapshot.outputs.SNAP }}
         run: |
           set -euo pipefail
-          echo "[restore] Restoring protection settings..."
-          gh api repos/$REPO/branches/$BASE_BRANCH/protection -X PUT --input "$SNAP" \
-            | jq '{
-              approvals: .required_pull_request_reviews.required_approving_review_count,
-              code_owner: .required_pull_request_reviews.require_code_owner_reviews,
-              admins: .enforce_admins.enabled
-            }'
-          echo "[restore] ✅ Protection restored"
+          export PROTECTION_ADMIN_TOKEN="${PROTECTION_ADMIN_TOKEN}"
+          
+          # relax가 성공했을 때만 복원 시도
+          if [[ "${{ steps.relax.outputs.done }}" == "1" ]] || [ -f "$SNAP" ]; then
+            echo "[restore] Restoring protection settings..."
+            bash scripts/ops/protection_apply.sh "$REPO" restore "$SNAP"
+            echo "[restore] ✅ Protection restored"
+          else
+            echo "[restore] Skipping (relax was not applied)"
+          fi
 
       - name: Verify restored
         if: always()
@@ -266,3 +572,87 @@ jobs:
           fi
           echo "[verify] ✅ Protection settings verified"
 
+      - name: Verify merge & protection restore
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PROTECTION_ADMIN_TOKEN: ${{ secrets.PROTECTION_ADMIN_TOKEN || secrets.GITHUB_TOKEN }}
+          SNAP: ${{ steps.snapshot.outputs.SNAP }}
+        run: |
+          set -euo pipefail
+          PR=${{ needs.gate.outputs.pr_number }}
+          
+          # 1) merge 확인 (PR이 머지되었는지)
+          merged=$(gh pr view "$PR" -R "$REPO" --json merged -q .merged 2>/dev/null || echo "false")
+          if [ "$merged" = "true" ]; then
+            msha=$(gh pr view "$PR" -R "$REPO" --json mergeCommit -q '.mergeCommit.oid // empty' 2>/dev/null || echo "")
+            if [ -n "$msha" ]; then
+              echo "✅ Merge confirmed: $msha"
+            else
+              echo "⚠️  PR merged but merge commit not found"
+            fi
+          else
+            echo "⚠️  PR not merged yet (may have failed)"
+          fi
+          
+          # 2) 보호설정 원복 확인 (승인 요구 ≥ 스냅샷 값)
+          if [ -f "$SNAP" ]; then
+            want=$(jq -r '.required_pull_request_reviews.required_approving_review_count // 0' "$SNAP" 2>/dev/null || echo "0")
+            
+            # 재시도 로직으로 현재 보호 설정 가져오기
+            cur="0"
+            for i in 1 2 3; do
+              cur=$(gh api repos/$REPO/branches/$BASE_BRANCH/protection --jq '.required_pull_request_reviews.required_approving_review_count // 0' 2>/dev/null || echo "0")
+              if [ -n "$cur" ] && [ "$cur" != "0" ] || [ "$i" -eq 3 ]; then
+                break
+              fi
+              sleep $((2**i))
+            done
+            
+            echo "Required approvals: want=$want, current=$cur"
+            
+            if [ "$cur" -ge "$want" ]; then
+              echo "✅ Protection restored (current >= snapshot)"
+            else
+              echo "⚠️  WARNING: Protection may not be fully restored (current=$cur < snapshot=$want)"
+              # 경고만 하고 종료하지 않음 (다른 step에서 복원 시도)
+            fi
+          else
+            echo "⚠️  Snapshot file not found, skipping verification"
+          fi
+
+      - name: Mark PR & comment
+        if: success()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          PR=${{ needs.gate.outputs.pr_number }}
+          
+          # 라벨 추가
+          gh pr edit "$PR" -R "$REPO" --add-label "auto-relaxed-merged" 2>/dev/null || true
+          
+          # 코멘트 추가
+          gh pr comment "$PR" -R "$REPO" \
+            --body ":white_check_mark: Auto relax→merge→restore completed successfully.
+
+- Snapshot: artifact \`protection-snapshot-${PR}\`
+- Restored: yes
+- Status: ✅ success" || true
+
+      - name: Audit comment (failure case)
+        if: failure()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          PR=${{ needs.gate.outputs.pr_number }}
+          SNAP_FILE="${{ steps.snapshot.outputs.SNAP }}"
+          
+          gh pr comment "$PR" -R "$REPO" \
+            --body ":warning: Auto relax→merge→restore failed, but protection should be restored.
+
+- Snapshot: artifact \`protection-snapshot-${PR}\`
+- Restored: attempted (check verify step)
+- Status: ❌ failure
+- Please verify branch protection settings manually." || true

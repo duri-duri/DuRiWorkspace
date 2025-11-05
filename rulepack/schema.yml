@@ -1,0 +1,109 @@
+# Rulepack Schema
+# Purpose: Define schema for multi-scenario rulepacks
+# Usage: Define scenario-specific rules in rulepack/*.yml files
+
+version: 1
+
+scenarios:
+  safe-docs:
+    description: "Safe documentation and observability changes"
+    allow_paths:
+      - "docs/**"
+      - "prometheus/rules/**"
+      - "scripts/ops/**"
+      - "scripts/bin/**"
+      - ".github/workflows/**"
+    deny_paths: []
+    required_labels:
+      - "change:safe"
+      - "auto-relax-merge"
+    base_branch: "main"
+    required_contexts:
+      - "obs-lint"
+      - "sandbox-smoke-60s"
+      - "promql-unit"
+      - "dr-rehearsal-24h-pass"
+      - "canary-quorum-pass"
+      - "error-budget-burn-ok"
+    merge_state:
+      - "BLOCKED"
+      - "MERGEABLE"
+    trigger_comment: "/auto-merge"
+    actor_roles:
+      - "admin"
+      - "maintain"
+      - "write"
+    relaxable: true
+    require_reviews: 0
+
+  observability-only:
+    description: "Prometheus/Grafana rules only"
+    allow_paths:
+      - "prometheus/rules/**"
+      - "prometheus/dashboards/**"
+      - "grafana/**"
+    deny_paths: []
+    required_labels:
+      - "change:safe"
+      - "auto-relax-merge"
+    base_branch: "main"
+    required_contexts:
+      - "promql-unit"
+      - "obs-lint"
+    merge_state:
+      - "BLOCKED"
+      - "MERGEABLE"
+    trigger_comment: "/auto-merge"
+    actor_roles:
+      - "admin"
+      - "maintain"
+      - "write"
+    relaxable: true
+    require_reviews: 0
+
+  workflows-only:
+    description: "GitHub workflows only"
+    allow_paths:
+      - ".github/workflows/**"
+    deny_paths: []
+    required_labels:
+      - "change:safe"
+      - "auto-relax-merge"
+    base_branch: "main"
+    required_contexts:
+      - "obs-lint"
+    merge_state:
+      - "BLOCKED"
+      - "MERGEABLE"
+    trigger_comment: "/auto-merge"
+    actor_roles:
+      - "admin"
+      - "maintain"
+      - "write"
+    relaxable: true
+    require_reviews: 0
+
+  infra-critical:
+    description: "Infrastructure changes (helm, terraform, k8s)"
+    allow_paths:
+      - "helm/**"
+      - "terraform/**"
+      - "k8s/**"
+    deny_paths: []
+    required_labels:
+      - "change:safe"
+      - "auto-relax-merge"
+    base_branch: "main"
+    required_contexts:
+      - "obs-lint"
+      - "sandbox-smoke-60s"
+    merge_state:
+      - "BLOCKED"
+      - "MERGEABLE"
+    trigger_comment: "/auto-merge"
+    actor_roles:
+      - "admin"
+      - "maintain"
+    relaxable: false  # Manual review required
+    require_reviews: 2
+

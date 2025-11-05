@@ -1,0 +1,53 @@
+name: Policy Learning Loop
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"  # Every 6 hours
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: read
+
+jobs:
+  learn:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install --quiet --upgrade pip
+          pip install --quiet pyyaml
+
+      - name: Setup Git
+        run: |
+          git config user.name "duri-bot[bot]"
+          git config user.email "duri-bot[bot]@users.noreply.github.com"
+
+      - name: Run policy learning loop
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 scripts/evolution/policy_learning_loop.py
+
+      - name: Commit report if changed
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -n "$(git status --porcelain docs/ops/POLICY_LEARNING_REPORT.md)" ]; then
+            git add docs/ops/POLICY_LEARNING_REPORT.md
+            git commit -m "chore(policy): update learning report" || true
+            git push origin HEAD || true
+          fi
+

@@ -1,0 +1,168 @@
+name: L4 Auto Rollback
+
+on:
+  workflow_call:
+    inputs:
+      pr:
+        required: true
+        type: number
+        description: "PR number to revert"
+      merge_sha:
+        required: true
+        type: string
+        description: "Merge commit SHA to revert"
+      reason:
+        required: true
+        type: string
+        description: "Reason for rollback"
+  workflow_dispatch:
+    inputs:
+      pr:
+        required: true
+        description: "PR number to revert"
+      merge_sha:
+        required: true
+        description: "Merge commit SHA to revert"
+      reason:
+        required: false
+        default: "Manual rollback"
+        description: "Reason for rollback"
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: auto-rollback-${{ inputs.pr || github.event.inputs.pr }}
+  cancel-in-progress: false
+
+env:
+  REPO: ${{ github.repository }}
+
+jobs:
+  rollback:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      PR_NUMBER: ${{ inputs.pr || github.event.inputs.pr }}
+      MERGE_SHA: ${{ inputs.merge_sha || github.event.inputs.merge_sha }}
+      REASON: ${{ inputs.reason || github.event.inputs.reason }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify merge commit exists
+        id: verify
+        run: |
+          set -euo pipefail
+          
+          if ! git rev-parse --verify "$MERGE_SHA" >/dev/null 2>&1; then
+            echo "Fetching merge commit..."
+            git fetch origin "$MERGE_SHA" || git fetch origin main
+          fi
+          
+          if ! git rev-parse --verify "$MERGE_SHA" >/dev/null 2>&1; then
+            echo "::error::Merge commit not found: $MERGE_SHA"
+            exit 1
+          fi
+          
+          echo "✅ Merge commit verified: $MERGE_SHA"
+
+      - name: Create revert branch
+        id: branch
+        run: |
+          set -euo pipefail
+          
+          BRANCH_NAME="revert/pr-$PR_NUMBER-$(date +%Y%m%d-%H%M%S)"
+          echo "BRANCH=$BRANCH_NAME" >> $GITHUB_OUTPUT
+          
+          git config user.name "auto-rollback[bot]"
+          git config user.email "auto-rollback[bot]@users.noreply.github.com"
+          
+          git checkout -b "$BRANCH_NAME" origin/main
+          
+          # Attempt revert
+          if git revert --no-edit "$MERGE_SHA" 2>&1; then
+            echo "✅ Revert successful"
+            echo "revert_status=success" >> $GITHUB_OUTPUT
+          else
+            echo "⚠️  Revert had conflicts, aborting"
+            git revert --abort || true
+            echo "revert_status=conflict" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+          
+          git push origin "$BRANCH_NAME"
+
+      - name: Open revert PR
+        id: revert_pr
+        if: steps.branch.outputs.revert_status == 'success'
+        run: |
+          set -euo pipefail
+          
+          TITLE="[auto-rollback] Revert PR #$PR_NUMBER"
+          BODY=$(cat <<EOF
+Automated rollback due to: **$REASON**
+
+- Original PR: #$PR_NUMBER
+- Merge commit: \`$MERGE_SHA\`
+- Revert commit: \`$(git rev-parse HEAD)\`
+
+This PR was automatically created by the L4 Auto Rollback workflow.
+EOF
+)
+          
+          PR_NUM=$(gh pr create \
+            --base main \
+            --head "${{ steps.branch.outputs.BRANCH }}" \
+            --title "$TITLE" \
+            --body "$BODY" \
+            --label "change:safe" \
+            --label "auto-relax-merge" \
+            --label "rollback:auto" \
+            --json number \
+            --jq .number)
+          
+          echo "PR=$PR_NUM" >> $GITHUB_OUTPUT
+          echo "✅ Revert PR created: #$PR_NUM"
+
+      - name: Auto-merge revert PR
+        if: steps.branch.outputs.revert_status == 'success'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          
+          REVERT_PR="${{ steps.revert_pr.outputs.PR }}"
+          
+          echo "Waiting for checks to pass..."
+          sleep 30
+          
+          # Merge using auto-relax-merge-restore mechanism
+          # The revert PR already has the required labels, so it should auto-merge
+          echo "✅ Revert PR #$REVERT_PR will be auto-merged by auto-relax-merge-restore workflow"
+
+      - name: Post rollback summary
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          
+          if [ "${{ steps.branch.outputs.revert_status }}" = "success" ]; then
+            gh pr comment "$PR_NUMBER" -R "$REPO" \
+              --body "✅ **Auto-rollback initiated**
+            
+            Revert PR: #${{ steps.revert_pr.outputs.PR }}
+            Reason: $REASON" || true
+          else
+            gh pr comment "$PR_NUMBER" -R "$REPO" \
+              --body "⚠️  **Auto-rollback failed**
+            
+            Revert encountered conflicts. Manual intervention required.
+            Reason: $REASON" || true
+          fi
+

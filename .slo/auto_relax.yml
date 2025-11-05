@@ -1,0 +1,62 @@
+# SLO Configuration for Auto Relax Merge Restore
+# Purpose: Define SLO thresholds and monitoring parameters for post-merge quality watch
+
+window: "120m"           # Monitoring window after merge (ISO8601 duration)
+step: "30s"              # Prometheus query step interval
+
+prometheus:
+  base_url: "${{ secrets.PROMETHEUS_URL }}"   # e.g., https://prom.example.com/api/v1
+  auth_header: "${{ secrets.PROMETHEUS_AUTH }}" # Optional: Bearer token or basic auth
+
+slo:
+  availability:
+    # Availability = 1 - error_rate
+    # Threshold: minimum availability over the window
+    query: |
+      (1 - (
+        sum(rate(http_requests_total{job="prod",status=~"5.."}[5m]))
+        /
+        sum(rate(http_requests_total{job="prod"}[5m]))
+      ))
+    threshold: 0.995     # 99.5% availability minimum
+  
+  latency_p95:
+    # p95 latency (seconds) upper bound
+    query: |
+      histogram_quantile(
+        0.95,
+        sum(rate(http_request_duration_seconds_bucket{job="prod"}[5m])) by (le)
+      )
+    threshold: 0.450     # 450ms maximum
+  
+  error_rate:
+    # Error rate upper bound
+    query: |
+      sum(rate(http_requests_total{job="prod",status=~"5.."}[5m]))
+      /
+      sum(rate(http_requests_total{job="prod"}[5m]))
+    threshold: 0.003     # 0.3% maximum error rate
+  
+  error_budget_burn:
+    # Error budget burn rate (assuming 99.9% SLO target)
+    # burn_rate = error_ratio / (1 - SLO_target)
+    query: |
+      (
+        sum(rate(http_requests_total{job="prod",status=~"5.."}[1h]))
+        /
+        sum(rate(http_requests_total{job="prod"}[1h]))
+      )
+      /
+      0.001
+    threshold: 2.0       # 2x burn rate threshold
+
+rollback:
+  mode: "revert-merge-commit"   # Strategy: revert-merge-commit or revert-pr
+  auto_merge: true              # Auto-merge revert PR if checks pass
+  require_manual_confirm: false # Require manual confirmation before rollback
+
+notify:
+  comment_on_pr: true           # Post comment to PR
+  label_on_violation: "auto-rollback-triggered"  # Label to add on violation
+  create_issue: true            # Create issue for tracking
+
