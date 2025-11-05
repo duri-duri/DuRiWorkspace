@@ -64,8 +64,53 @@ S2=$(selftest_fresh)
 S3=$(weekly_fresh)
 S4=$(timers_ok)
 
+# Additional signals
+S5=1  # weekly_backfill_ok (check if weekly file exists and is fresh)
+if [[ -f "${OUT_DIR}/l4_weekly_decision.prom" ]]; then
+  age=$(( $(date +%s) - $(stat -c %Y "${OUT_DIR}/l4_weekly_decision.prom" 2>/dev/null || echo 0) ))
+  if [[ $age -le 604800 ]]; then
+    S5=1
+  else
+    S5=0
+  fi
+else
+  S5=0  # Missing weekly file
+fi
+
+S6=1  # decision_sla_ok (24h 내 결정 수 ≥ 120)
+decision_count=$(has_24h_decisions)
+if [[ "$decision_count" -ge 1 ]]; then
+  # Count actual decisions
+  decision_num=$(jq -r '
+    select(type=="object" and .ts and .decision) 
+    | select(.decision | IN("GO","NO-GO","REVIEW","HOLD","HEARTBEAT","APPROVED","CONTINUE"))
+    | ( .ts | fromdateiso8601 ) 
+    | select(. > (now - 86400))
+  ' "${WORK}/var/audit/decisions.ndjson" 2>/dev/null | wc -l | tr -d " ")
+  if [[ "${decision_num:-0}" -ge 120 ]]; then
+    S6=1
+  else
+    S6=0
+  fi
+else
+  S6=0
+fi
+
 # Truth: 모두 1이면 OK
-QUORUM=$(( S1 * S2 * S3 * S4 ))
+QUORUM=$(( S1 * S2 * S3 * S4 * S5 * S6 ))
+
+# Export additional metrics
+cat > "${OUT_DIR}/l4_weekly_backfill_ok.prom" <<EOF
+# HELP l4_weekly_backfill_ok Weekly decision backfill health (1=OK, 0=degraded)
+# TYPE l4_weekly_backfill_ok gauge
+l4_weekly_backfill_ok ${S5}
+EOF
+
+cat > "${OUT_DIR}/l4_decision_sla_ok.prom" <<EOF
+# HELP l4_decision_sla_ok Decision SLA compliance (1=OK, 0=degraded)
+# TYPE l4_decision_sla_ok gauge
+l4_decision_sla_ok ${S6}
+EOF
 
 # Atomic write: tmp -> fsync -> rename
 {
@@ -78,7 +123,7 @@ QUORUM=$(( S1 * S2 * S3 * S4 ))
 mv "${TMP_FILE}" "${OUT_FILE}"
 
 # Ensure permissions
-chmod 0644 "${OUT_FILE}" 2>/dev/null || true
+chmod 0644 "${OUT_FILE}" "${OUT_DIR}/l4_weekly_backfill_ok.prom" "${OUT_DIR}/l4_decision_sla_ok.prom" 2>/dev/null || true
 
 # Export timestamp
 if [[ -f "${WORK}/scripts/ops/inc/_export_timestamp.sh" ]]; then

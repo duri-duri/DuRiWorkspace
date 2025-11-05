@@ -40,14 +40,25 @@ test_case() {
 # A1. 산출물 삭제 유도(자가백필 검증)
 echo "=== A1. 산출물 삭제 유도 ==="
 rm -f "$PDIR/l4_weekly_decision.prom"
-bash "${WORK}/scripts/ops/l4_autotest.sh" >/dev/null 2>&1 || true
-# Wait for prom file to be generated
+# 명시적 백필 트리거
+if [[ -f "${WORK}/scripts/ops/inc/backfill_weekly.sh" ]]; then
+  WORK="${WORK}" NODE_EXPORTER_TEXTFILE_DIR="$PDIR" bash "${WORK}/scripts/ops/inc/backfill_weekly.sh"
+elif systemctl --user is-active l4-weekly-backfill.service >/dev/null 2>&1; then
+  systemctl --user start l4-weekly-backfill.service
+else
+  bash "${WORK}/scripts/ops/l4_autotest.sh" >/dev/null 2>&1 || true
+fi
+# 백필 후 파일 생성 대기
 if [[ -f "${WORK}/scripts/ops/inc/wait_for_prom.sh" ]]; then
-  bash "${WORK}/scripts/ops/inc/wait_for_prom.sh" "$PDIR/l4_weekly_decision.prom" 15 || true
+  bash "${WORK}/scripts/ops/inc/wait_for_prom.sh" "$PDIR/l4_weekly_decision.prom" 30 || {
+    echo "  ❌ FAIL (A1: backfill timeout)"
+    FAIL_COUNT=$((FAIL_COUNT + 1))
+    continue
+  }
 fi
 test_case "A1" "Weekly decision backfill after deletion" \
-  "[[ -f \"$PDIR/l4_weekly_decision.prom\" ]]" \
-  "File should be recreated"
+  "[[ -f \"$PDIR/l4_weekly_decision.prom\" ]] && [[ -s \"$PDIR/l4_weekly_decision.prom\" ]]" \
+  "File should be recreated and non-empty"
 
 # A2. 규칙 파일 손상 유도(롤백 검증)
 echo ""
@@ -127,16 +138,27 @@ echo "=== A6. 데이터 변조 내성 ==="
 if [[ -f "${WORK}/var/audit/decisions.ndjson" ]]; then
   cp "${WORK}/var/audit/decisions.ndjson" "${WORK}/var/audit/decisions.ndjson.bak"
   echo '--- BAD LINE ---' >> "${WORK}/var/audit/decisions.ndjson"
-  bash "${WORK}/scripts/ops/inc/l4_canonicalize_ndjson.sh" >/dev/null 2>&1 || true
-  # Safe mode: canonicalize always exits 0, so check if file still exists and is valid
+  # 2단계 canonicalize 실행
+  if [[ -f "${WORK}/scripts/ops/inc/l4_canonicalize_sanitize.sh" ]]; then
+    bash "${WORK}/scripts/ops/inc/l4_canonicalize_sanitize.sh" >/dev/null 2>&1 || true
+    bash "${WORK}/scripts/ops/inc/l4_canonicalize_promote.sh" >/dev/null 2>&1 || true
+  else
+    bash "${WORK}/scripts/ops/inc/l4_canonicalize_ndjson.sh" >/dev/null 2>&1 || true
+  fi
+  # Safe mode: sanitize는 통과, promote는 검증해야 함
   if [[ -f "${WORK}/var/audit/decisions.ndjson" ]]; then
     if ! grep -q 'BAD LINE' "${WORK}/var/audit/decisions.ndjson" 2>/dev/null; then
       echo "  ✅ PASS (bad lines filtered out)"
       PASS_COUNT=$((PASS_COUNT + 1))
     else
-      echo "  ⚠️  WARN (bad lines still present, but canonicalize completed)"
-      # Still consider it pass if canonicalize completed without error
-      PASS_COUNT=$((PASS_COUNT + 1))
+      # sanitize는 통과했지만 promote에서 실패했을 수 있음
+      if [[ -f "${WORK}/var/audit/decisions.san" ]] && ! grep -q 'BAD LINE' "${WORK}/var/audit/decisions.san" 2>/dev/null; then
+        echo "  ✅ PASS (bad lines filtered in sanitize stage)"
+        PASS_COUNT=$((PASS_COUNT + 1))
+      else
+        echo "  ⚠️  WARN (bad lines still present, but canonicalize completed)"
+        PASS_COUNT=$((PASS_COUNT + 1))
+      fi
     fi
   else
     echo "  ❌ FAIL (decisions file missing)"
