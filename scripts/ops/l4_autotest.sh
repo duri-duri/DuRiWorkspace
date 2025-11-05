@@ -70,33 +70,6 @@ else
   fail=1
 fi
 
-#!/usr/bin/env bash
-# L4 Autotest - 통합 자동화 검증 스크립트
-# Purpose: 자동화가 개입 없이 정상 동작하는지 검증
-# Usage: Called by systemd timer or manual execution
-
-set -euo pipefail
-
-WORK="/home/duri/DuRiWorkspace"
-LOG="/tmp/l4_autotest.$(date +%Y%m%d-%H%M%S).log"
-exec > >(tee -a "$LOG") 2>&1
-
-# 로그 출력용 타임존 (계산은 epoch UTC 사용)
-export TZ=Asia/Seoul
-
-echo "=== L4 AUTOTEST START $(date) ==="
-
-fail=0
-
-# [A] Timers & Services
-echo "[A] Timers & Services"
-systemctl --user list-timers --all | grep -E 'l4-(daily|weekly|canonicalize|shadow-replay|daily-quick)' || true
-
-if systemctl --user is-enabled l4-weekly.timer >/dev/null 2>&1; then
-  echo "✅ l4-weekly.timer enabled"
-else
-  echo "❌ l4-weekly.timer NOT enabled"
-  fail=1
 fi
 
 for s in l4-weekly l4-daily l4-canonicalize l4-shadow-replay l4-daily-quick; do
