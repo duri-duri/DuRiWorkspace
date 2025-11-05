@@ -1,0 +1,22 @@
+groups:
+  - name: coldsync.autofix
+    interval: 30s
+    rules:
+      # Recording rule: SHA 불일치 감지
+      # coldsync_sha_equal이 0이면 불일치 (1 - clamp_min(값, 0))
+      - record: coldsync:sha:mismatch
+        expr: 1 - clamp_min(coldsync_sha_equal{job="coldsync"}, 0)
+        labels:
+          metric_realm: "prod"
+      
+      # Alert: SHA 불일치 지속 (2분)
+      - alert: ColdSyncShaMismatchSustained
+        expr: coldsync:sha:mismatch{metric_realm="prod"} == 1
+        for: 2m
+        labels:
+          severity: critical
+          metric_realm: "prod"
+        annotations:
+          summary: "ColdSync drift sustained (sha256 mismatch)"
+          description: "ColdSync source and installed files have different SHA256 hashes for more than 2 minutes"
+          runbook: "systemd-run --unit=coldsync-autofix -- /usr/local/sbin/coldsync-install && logger -t coldsync 'autofix triggered'"
