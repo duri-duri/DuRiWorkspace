@@ -5,7 +5,7 @@
 
 set -euo pipefail
 
-NODE_EXPORTER_TEXTFILE_DIR="${NODE_EXPORTER_TEXTFILE_DIR:-/var/lib/node_exporter/textfile_collector}"
+NODE_EXPORTER_TEXTFILE_DIR="${NODE_EXPORTER_TEXTFILE_DIR:-${HOME}/.cache/node_exporter/textfile}"
 
 echo "=== L4 Final Environment Fix (One-time Setup) ==="
 echo ""
@@ -14,7 +14,7 @@ echo ""
 mkdir -p ~/.config/systemd/user.conf.d
 cat > ~/.config/systemd/user.conf.d/textfile-env.conf <<'CONF'
 [Manager]
-DefaultEnvironment="NODE_EXPORTER_TEXTFILE_DIR=/var/lib/node_exporter/textfile_collector"
+DefaultEnvironment="NODE_EXPORTER_TEXTFILE_DIR=${HOME}/.cache/node_exporter/textfile"
 DefaultEnvironment="TZ=UTC"
 CONF
 

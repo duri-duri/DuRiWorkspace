@@ -151,6 +151,9 @@ mkdir -p "$(dirname "$DECISIONS_NDJSON")"
   # append (원자적) + fdatasync
   printf '%s\n' "${json_line}" >> "${DECISIONS_NDJSON}"
   
+  # Export decision timestamp
+  bash "${ROOT}/scripts/ops/inc/_export_timestamp.sh" "decision" || true
+  
   # fdatasync로 커널 캐시 플러시 보장
   python3 << 'PYTHON' 2>/dev/null || true
 import os
@@ -218,6 +221,9 @@ fi
       echo "l4_weekly_decision_info{decision=\"REVIEW\"} $([[ $dv -eq 0 ]] && echo 1 || echo 0)"
       echo "l4_weekly_decision_info{decision=\"HOLD\"} $([[ $dv -eq -1 ]] && echo 1 || echo 0)"
     } > "${tmp_file}" && chmod 0644 "${tmp_file}"
+    
+    # Export timestamp metric for Prometheus alerting
+    bash "${ROOT}/scripts/ops/inc/_export_timestamp.sh" "weekly_decision" || true
     
     # fdatasync 후 원자적 mv
     python3 << 'PYTHON' 2>/dev/null || true

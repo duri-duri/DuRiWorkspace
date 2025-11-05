@@ -6,8 +6,8 @@
 set -euo pipefail
 
 WORK="/home/duri/DuRiWorkspace"
-# 사용자 권한으로 접근 가능한 디렉터리 사용
-TEXTFILE_DIR="${NODE_EXPORTER_TEXTFILE_DIR:-/tmp/textfile_collector}"
+# 사용자 권한으로 접근 가능한 영속 디렉터리 사용
+TEXTFILE_DIR="${NODE_EXPORTER_TEXTFILE_DIR:-${HOME}/.cache/node_exporter/textfile}"
 
 # 텍스트파일 디렉터리 생성 및 권한 보장 (사용자 권한으로만)
 mkdir -p "${TEXTFILE_DIR}" 2>/dev/null || true

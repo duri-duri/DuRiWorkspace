@@ -1,0 +1,37 @@
+global:
+  tz: "Asia/Seoul"
+  textfile_dir_env: "NODE_EXPORTER_TEXTFILE_DIR"
+
+artifacts:
+  - name: "weekly_decision"
+    file: "l4_weekly_decision.prom"
+    cadence: "7d"
+    grace: "2h"
+    alert:
+      rule: "L4WeeklyDecisionStale"
+      window: "8d"
+      severity: "warning"
+
+  - name: "boot_status"
+    file: "l4_boot_status.prom"
+    cadence: "1d"
+    grace: "2h"
+    alert:
+      rule: "L4BootstrapFail"
+      window: "10m"
+      severity: "warning"
+
+  - name: "selftest_pass"
+    file: "l4_selftest.pass.prom"
+    cadence: "10m"
+    grace: "0m"
+    alert:
+      rule: "L4SelftestRecentFailure"
+      window: "30m"
+      severity: "warning"
+
+decision_stream:
+  ndjson: "var/audit/decisions.ndjson"
+  recent_window: "24h"
+  heartbeat_interval: "23h"
+

@@ -63,4 +63,9 @@ log_file="${LOG_DIR}/quick_check_${ts}.log"
   echo "[$(date +'%Y-%m-%d %H:%M:%S')] === Quick Check Complete ==="
 } | tee "${log_file}"
 
+# 5. Generate heartbeat if needed (ensure 24h decision guarantee)
+if [[ -f "${ROOT}/scripts/ops/inc/l4_heartbeat.sh" ]]; then
+  bash "${ROOT}/scripts/ops/inc/l4_heartbeat.sh" || true
+fi
+
 exit 0
