@@ -34,12 +34,21 @@ done
 
 # [B] Check NODE_EXPORTER_TEXTFILE_DIR
 echo "[B] Check NODE_EXPORTER_TEXTFILE_DIR"
+# Use persistent path as default
+PERSISTENT_PATH="${HOME}/.cache/node_exporter/textfile"
 dir=$(systemctl --user show l4-weekly.service | sed -n 's/.*NODE_EXPORTER_TEXTFILE_DIR=\([^ ]*\).*/\1/p' | head -1 || true)
-[ -n "$dir" ] || dir="/tmp/test_textfile"
+[ -n "$dir" ] || dir="${NODE_EXPORTER_TEXTFILE_DIR:-${PERSISTENT_PATH}}"
 echo "prom dir: $dir"
 
+# Ensure directory exists and is writable
 if [[ ! -d "$dir" ]]; then
-  echo "❌ WARN: prom dir not present: $dir"
+  echo "⚠️  Creating persistent directory: $dir"
+  mkdir -p "$dir"
+  chmod 0755 "$dir" 2>/dev/null || true
+fi
+
+if [[ ! -w "$dir" ]]; then
+  echo "❌ WARN: prom dir not writable: $dir"
   fail=1
 fi
 
@@ -73,16 +82,27 @@ else
   fail=1
 fi
 
-# [F2] Check decisions in last 24h (activity check)
+# [F2] Check decisions in last 24h (activity check - HEARTBEAT included)
 echo "[F2] Decisions in last 24h"
 if [[ -f "${WORK}/var/audit/decisions.ndjson" ]]; then
-  cutoff_ts=$(date -u -d '24 hours ago' +%Y-%m-%dT%H:%M:%SZ)
-  if jq -e --arg ts "$cutoff_ts" 'select((.ts // "") >= $ts)' "${WORK}/var/audit/decisions.ndjson" 2>/dev/null | head -1 >/dev/null; then
-    echo "✅ Recent decisions found in last 24h"
+  # Use jq with fromdateiso8601 for UTC-consistent epoch comparison
+  # Include HEARTBEAT decisions as valid activity
+  decisions_24h=$(jq -r '
+    select(type=="object" and .ts and .decision) 
+    | select(.decision | IN("GO","NO-GO","REVIEW","HOLD","HEARTBEAT","APPROVED","CONTINUE"))
+    | ( .ts | fromdateiso8601 ) 
+    | select(. > (now - 86400))
+  ' "${WORK}/var/audit/decisions.ndjson" 2>/dev/null | wc -l | tr -d " ")
+  
+  if [[ "${decisions_24h:-0}" -gt 0 ]]; then
+    echo "✅ Recent decisions found in last 24h: ${decisions_24h}"
   else
-    echo "⚠️  WARN: no decisions in last 24h"
-    # 경고만, 실패로 처리하지 않음 (주간 실행일 수 있음)
+    echo "❌ FAIL: no decisions in last 24h"
+    fail=1
   fi
+else
+  echo "❌ FAIL: decisions.ndjson missing"
+  fail=1
 fi
 
 # [G] Check promfile freshness (cadence-aware)
