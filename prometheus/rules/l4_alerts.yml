@@ -154,12 +154,23 @@ groups:
 
       - alert: L4DecisionMissing
         expr: |
-          absent_over_time(file_mtime_seconds{file="l4_weekly_decision.prom"}[30m]) == 1
+          (time() - max_over_time(l4_weekly_decision_ts[24h])) > 86400
         for: 30m
         labels:
           severity: critical
           component: l4_automation
         annotations:
-          summary: "L4 decision metrics missing for >30m"
-          description: "Check ${NODE_EXPORTER_TEXTFILE_DIR}/l4_weekly_decision.prom"
+          summary: "L4 decision metrics missing for >24h"
+          description: "L4 decision metrics have not been updated for more than 24 hours. Check ${NODE_EXPORTER_TEXTFILE_DIR}/l4_weekly_decision.prom"
+
+      - alert: L4WeeklyDecisionStale
+        expr: |
+          (time() - max_over_time(l4_weekly_decision_ts[1h])) > 691200
+        for: 30m
+        labels:
+          severity: warning
+          component: l4_automation
+        annotations:
+          summary: "L4 weekly decision stale (>8d)"
+          description: "L4 weekly decision has not been updated for more than 8 days. Check if l4-weekly.service is running."
 
