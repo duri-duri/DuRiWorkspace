@@ -5,6 +5,9 @@
 
 set -euo pipefail
 
+# UTC 강제
+export TZ=UTC
+
 WORK="${WORK:-/home/duri/DuRiWorkspace}"
 PROM_DIR="${NODE_EXPORTER_TEXTFILE_DIR:-${HOME}/.cache/node_exporter/textfile}"
 SRC_NDJSON="${WORK}/var/audit/decisions.ndjson"
@@ -25,6 +28,7 @@ trap 'rm -f "$tmp"' EXIT
 if [[ -f "${WORK}/scripts/ops/inc/with_lock.sh" ]]; then
   bash "${WORK}/scripts/ops/inc/with_lock.sh" "$LOCK" bash -c "
     set -euo pipefail
+    export TZ=UTC
     
     # 1) 최근 7일 내 결정 스캔 → 가장 최신 결정 추출
     decision_val=\"HOLD\"

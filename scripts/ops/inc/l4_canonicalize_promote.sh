@@ -5,6 +5,9 @@
 
 set -euo pipefail
 
+# UTC 강제
+export TZ=UTC
+
 WORK="${WORK:-/home/duri/DuRiWorkspace}"
 SAN="${WORK}/var/audit/decisions.san"
 OUT="${WORK}/var/audit/decisions.ndjson"
@@ -19,6 +22,7 @@ umask 022
 if [[ -f "${WORK}/scripts/ops/inc/with_lock.sh" ]]; then
   bash "${WORK}/scripts/ops/inc/with_lock.sh" "$LOCK" bash -c "
     set -euo pipefail
+    export TZ=UTC
     
     if [[ ! -f \"${SAN}\" ]]; then
       echo '[WARN] decisions.san not found, skipping promote'
