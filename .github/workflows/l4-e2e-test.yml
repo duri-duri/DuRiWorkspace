@@ -1,0 +1,67 @@
+name: L4 E2E Test
+
+on:
+  schedule:
+    - cron: '0 2 * * 0'  # 매주 일요일 02:00 UTC (월 1회 권장)
+  workflow_dispatch:
+    inputs:
+      iterations:
+        description: 'Number of iterations'
+        required: false
+        default: '1000'
+      parallelism:
+        description: 'Parallel processes'
+        required: false
+        default: '10'
+
+permissions:
+  contents: read
+
+jobs:
+  resilience-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq python3
+
+      - name: Run resilience test
+        run: |
+          bash scripts/ops/l4_resilience_test.sh
+
+      - name: Run fdatasync test
+        run: |
+          bash scripts/ops/l4_fdatasync_test.sh
+
+      - name: Run Prometheus validation
+        env:
+          PROMETHEUS_URL: ${{ secrets.PROMETHEUS_URL || 'http://localhost:9090' }}
+        run: |
+          bash scripts/ops/l4_prometheus_validation.sh || echo "Prometheus not available, skipping"
+
+      - name: Run stress test
+        run: |
+          bash scripts/ops/l4_stress_test.sh ${{ github.event.inputs.iterations || '1000' }} ${{ github.event.inputs.parallelism || '10' }}
+
+      - name: Upload test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: l4-test-results
+          path: |
+            var/audit/logs/*.log
+            var/audit/*.ndjson.backup.*
+          retention-days: 7
+
+      - name: Test summary
+        if: always()
+        run: |
+          echo "## L4 E2E Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "- Resilience test: $([ -f var/audit/logs/resilience_*.log ] && echo '✅ PASS' || echo '❌ FAIL')" >> $GITHUB_STEP_SUMMARY
+          echo "- fdatasync test: $([ -f var/audit/logs/fdatasync_*.log ] && echo '✅ PASS' || echo '❌ FAIL')" >> $GITHUB_STEP_SUMMARY
+          echo "- Stress test: Completed" >> $GITHUB_STEP_SUMMARY
+

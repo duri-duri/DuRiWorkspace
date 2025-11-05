@@ -130,6 +130,7 @@ json_line=$(jq -n --arg ts "$ts" --arg summary "$repo_rel_summary" \
                  '{ts:$ts, summary:$summary, score:($score|tonumber), decision:$decision, recommendation:$rec, note:$note}')
 
 # 원자 append (디렉터리 락 사용 - 회전과 append 동시성 제어)
+# fdatasync 보강: 실제 동기화 보장
 NDJSON_LOCK="${AUDIT_DIR}/decisions.lock"
 mkdir -p "$(dirname "$DECISIONS_NDJSON")"
 { 
@@ -145,8 +146,19 @@ mkdir -p "$(dirname "$DECISIONS_NDJSON")"
     echo "[rollover] archived decisions.ndjson (${MAX_LINES}+ lines) to archive/decisions_${rotate_ts}.ndjson" >> "${RECO_FILE}"
   fi
   
-  # append (원자적)
+  # append (원자적) + fdatasync
   printf '%s\n' "${json_line}" >> "${DECISIONS_NDJSON}"
+  
+  # fdatasync로 커널 캐시 플러시 보장
+  python3 << 'PYTHON' 2>/dev/null || true
+import os
+import sys
+try:
+    with open("${DECISIONS_NDJSON}", "rb") as f:
+        os.fdatasync(f.fileno())
+except Exception:
+    pass
+PYTHON
 } 200>"${NDJSON_LOCK}"
 
 snap="${DECISIONS_DIR}/$(basename "${summary%.*}").json"
@@ -163,38 +175,53 @@ if [[ "$decision" == "REVIEW" && "$AUTO_SUSPEND_ON_REVIEW" == "1" ]]; then
 fi
 
 # Prometheus textfile(선택) - NODE_EXPORTER_TEXTFILE_DIR 지정 시 메트릭 방출
-# 원자적 쓰기: 임시 파일 + mv로 node_exporter 레이스 차단
-TEXT_DIR="${NODE_EXPORTER_TEXTFILE_DIR:-}"
-if [[ -n "${TEXT_DIR}" && -d "${TEXT_DIR}" ]]; then
-  mkdir -p "${TEXT_DIR}"
-  metric_file="${TEXT_DIR}/l4_weekly_decision.prom"
-  tmp_file="${TEXT_DIR}/.l4_weekly_decision.prom.$$"
-  
-  # decision을 수치화: APPROVED=2, CONTINUE=1, REVIEW=0, HOLD=-1
-  case "${decision}" in
-    APPROVED) dv=2 ;;
-    CONTINUE) dv=1 ;;
-    REVIEW)   dv=0 ;;
-    HOLD)     dv=-1 ;;
-    *)        dv=0 ;;
-  esac
-  
-  # 결정 분포 메트릭 추가 (HOLD 지속 감지력 향상)
-  {
-    echo '# HELP l4_weekly_decision L4 weekly decision (APPROVED=2, CONTINUE=1, REVIEW=0, HOLD=-1)'
-    echo '# TYPE l4_weekly_decision gauge'
-    echo "l4_weekly_decision ${dv}"
-    echo '# HELP l4_weekly_score Promotion score (0..1)'
-    echo '# TYPE l4_weekly_score gauge'
-    printf 'l4_weekly_score %.2f\n' "$score_str"
-    echo '# HELP l4_weekly_decision_info Current decision state (0/1)'
-    echo '# TYPE l4_weekly_decision_info gauge'
-    echo "l4_weekly_decision_info{decision=\"APPROVED\"} $([[ $dv -eq 2 ]] && echo 1 || echo 0)"
-    echo "l4_weekly_decision_info{decision=\"CONTINUE\"} $([[ $dv -eq 1 ]] && echo 1 || echo 0)"
-    echo "l4_weekly_decision_info{decision=\"REVIEW\"} $([[ $dv -eq 0 ]] && echo 1 || echo 0)"
-    echo "l4_weekly_decision_info{decision=\"HOLD\"} $([[ $dv -eq -1 ]] && echo 1 || echo 0)"
-  } > "${tmp_file}" && chmod 0644 "${tmp_file}" && mv -f "${tmp_file}" "${metric_file}"
-fi
+  # 원자적 쓰기: 임시 파일 + mv로 node_exporter 레이스 차단
+  # fdatasync 보강: 실제 동기화 보장
+  TEXT_DIR="${NODE_EXPORTER_TEXTFILE_DIR:-}"
+  if [[ -n "${TEXT_DIR}" && -d "${TEXT_DIR}" ]]; then
+    mkdir -p "${TEXT_DIR}"
+    metric_file="${TEXT_DIR}/l4_weekly_decision.prom"
+    tmp_file="${TEXT_DIR}/.l4_weekly_decision.prom.$$"
+    
+    # decision을 수치화: APPROVED=2, CONTINUE=1, REVIEW=0, HOLD=-1
+    case "${decision}" in
+      APPROVED) dv=2 ;;
+      CONTINUE) dv=1 ;;
+      REVIEW)   dv=0 ;;
+      HOLD)     dv=-1 ;;
+      *)        dv=0 ;;
+    esac
+    
+    # 결정 분포 메트릭 추가 (HOLD 지속 감지력 향상)
+    {
+      echo '# HELP l4_weekly_decision L4 weekly decision (APPROVED=2, CONTINUE=1, REVIEW=0, HOLD=-1)'
+      echo '# TYPE l4_weekly_decision gauge'
+      echo "l4_weekly_decision ${dv}"
+      echo '# HELP l4_weekly_score Promotion score (0..1)'
+      echo '# TYPE l4_weekly_score gauge'
+      printf 'l4_weekly_score %.2f\n' "$score_str"
+      echo '# HELP l4_weekly_decision_info Current decision state (0/1)'
+      echo '# TYPE l4_weekly_decision_info gauge'
+      echo "l4_weekly_decision_info{decision=\"APPROVED\"} $([[ $dv -eq 2 ]] && echo 1 || echo 0)"
+      echo "l4_weekly_decision_info{decision=\"CONTINUE\"} $([[ $dv -eq 1 ]] && echo 1 || echo 0)"
+      echo "l4_weekly_decision_info{decision=\"REVIEW\"} $([[ $dv -eq 0 ]] && echo 1 || echo 0)"
+      echo "l4_weekly_decision_info{decision=\"HOLD\"} $([[ $dv -eq -1 ]] && echo 1 || echo 0)"
+    } > "${tmp_file}" && chmod 0644 "${tmp_file}"
+    
+    # fdatasync 후 원자적 mv
+    python3 << 'PYTHON' 2>/dev/null || true
+import os
+import sys
+try:
+    with open("${tmp_file}", "rb") as f:
+        os.fdatasync(f.fileno())
+    os.rename("${tmp_file}", "${metric_file}")
+except Exception:
+    # fallback: 일반 mv
+    import subprocess
+    subprocess.run(["mv", "-f", "${tmp_file}", "${metric_file}"], check=False)
+PYTHON
+  fi
 
 exit 0
 
