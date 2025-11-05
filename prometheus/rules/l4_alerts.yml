@@ -108,3 +108,58 @@ groups:
           summary: "L4 textfile write permission denied"
           description: "L4 textfile exporter encountered permission errors. Check NODE_EXPORTER_TEXTFILE_DIR permissions."
 
+  - name: l4-selftest
+    interval: 1m
+    rules:
+      - alert: L4SelftestLowSuccessRate
+        expr: |
+          sum_over_time(l4_selftest_pass[7d]) / 7 < 0.95
+        for: 1h
+        labels:
+          severity: critical
+          component: l4_automation
+        annotations:
+          summary: "L4 selftest 7d success ratio below 95%"
+          description: "Check l4_selftest_pass metrics and /tmp/l4_recover.*.log"
+
+      - alert: L4SelftestRecentFailure
+        expr: |
+          l4_selftest_pass == 0
+        for: 30m
+        labels:
+          severity: warning
+          component: l4_automation
+        annotations:
+          summary: "L4 selftest failed in last 30m"
+          description: "Check /tmp/l4_autotest.*.log for details"
+
+      - record: l4_selftest_success_7d_ratio
+        expr: |
+          sum_over_time(l4_selftest_pass[7d]) / 7
+
+      - record: l4_selftest_success_30d_ratio
+        expr: |
+          sum_over_time(l4_selftest_pass[30d]) / 30
+
+      - alert: L4BootstrapFail
+        expr: |
+          increase(l4_boot_status[15m]) == 1
+        for: 0m
+        labels:
+          severity: warning
+          component: l4_automation
+        annotations:
+          summary: "L4 bootstrap failures detected"
+          description: "See journalctl --user -u l4-bootstrap.service"
+
+      - alert: L4DecisionMissing
+        expr: |
+          absent_over_time(file_mtime_seconds{file="l4_weekly_decision.prom"}[30m]) == 1
+        for: 30m
+        labels:
+          severity: critical
+          component: l4_automation
+        annotations:
+          summary: "L4 decision metrics missing for >30m"
+          description: "Check ${NODE_EXPORTER_TEXTFILE_DIR}/l4_weekly_decision.prom"
+
