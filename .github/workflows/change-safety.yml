@@ -24,7 +24,7 @@ env:
 
 jobs:
   _setup:
-    if: ${{ !contains(join(fromJson(toJson(github.event.pull_request.labels || fromJSON('[]'))).*.name, ','), 'safe-change') && !contains(join(fromJson(toJson(github.event.pull_request.labels || fromJSON('[]'))).*.name, ','), 'freeze:override') }}
+    if: ${{ !contains(join(fromJson(toJson(github.event.pull_request.labels || fromJSON('[]'))).*.name, ','), 'change:safe') && !contains(join(fromJson(toJson(github.event.pull_request.labels || fromJSON('[]'))).*.name, ','), 'safe-change') && !contains(join(fromJson(toJson(github.event.pull_request.labels || fromJSON('[]'))).*.name, ','), 'freeze:override') }}
     runs-on: ubuntu-latest
     outputs:
       risky: ${{ steps.eval.outputs.risky }}
@@ -161,8 +161,8 @@ jobs:
         run: |
           # Gate by label or change size
           labels="${{ join(github.event.pull_request.labels.*.name, ',') }}"
-          if echo "$labels" | grep -qi 'safe-change'; then
-            echo "safe-change label → PASS"
+          if echo "$labels" | grep -qiE 'change:safe|safe-change'; then
+            echo "change:safe or safe-change label → PASS"
             exit 0
           fi
           
