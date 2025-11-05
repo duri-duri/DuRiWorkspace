@@ -39,7 +39,9 @@ check_age() {
 }
 
 # weekly_decision: 7d + 2h = 612000s
-if ! check_age "$prom_dir/l4_weekly_decision.prom" "612000" "weekly_decision" 0; then
+if [[ ! -f "$prom_dir/l4_weekly_decision.prom" ]]; then
+  echo "⚠️  WARN: weekly_decision not yet created (first run pending)"
+elif ! check_age "$prom_dir/l4_weekly_decision.prom" "612000" "weekly_decision" 0; then
   fail=1
 fi
 

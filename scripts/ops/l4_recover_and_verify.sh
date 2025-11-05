@@ -107,8 +107,8 @@ if [[ -d "${TEXTFILE_DIR}" ]]; then
   bash "${WORK}/scripts/ops/inc/_export_timestamp.sh" "boot_status" || true
 fi
 
-# 10. 헬스 체크
-echo "[10] health checks"
+# 11. 헬스 체크
+echo "[11] health checks"
 echo "  Timers:"
 systemctl --user list-timers --all 2>/dev/null | grep -E 'l4-(daily|weekly|shadow|canonicalize)' || echo "    No timers found"
 
@@ -127,7 +127,7 @@ fi
 echo ">>> L4 복구 완료: $(date) (log: $LOG)"
 
 # 11. Generate selftest metric
-echo "[11] generate selftest metric"
+echo "[12] generate selftest metric"
 if [[ -f "${WORK}/scripts/ops/inc/l4_selftest_report.sh" ]]; then
   bash "${WORK}/scripts/ops/inc/l4_selftest_report.sh" || true
 fi

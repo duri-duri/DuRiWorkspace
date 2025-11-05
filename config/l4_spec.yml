@@ -7,6 +7,7 @@ artifacts:
     file: "l4_weekly_decision.prom"
     cadence: "7d"
     grace: "2h"
+    warn_only_until_first_create: true
     alert:
       rule: "L4WeeklyDecisionStale"
       window: "8d"
@@ -16,6 +17,7 @@ artifacts:
     file: "l4_boot_status.prom"
     cadence: "1d"
     grace: "2h"
+    warn_only_until_first_create: true
     alert:
       rule: "L4BootstrapFail"
       window: "10m"

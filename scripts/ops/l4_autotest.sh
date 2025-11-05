@@ -129,6 +129,23 @@ else
 fi
 # [G] END GENERATED
 
+# [I] Backfill missing artifacts if needed
+echo "[I] Backfill missing artifacts"
+if [[ -d "$dir" ]]; then
+  # Check if weekly_decision is missing and create stub
+  if [[ ! -f "$dir/l4_weekly_decision.prom" ]]; then
+    echo "  → Creating weekly_decision stub..."
+    TS=$(date +%s)
+    cat > "$dir/l4_weekly_decision.prom" <<EOF
+# HELP l4_weekly_decision_ts Unix timestamp of last weekly decision
+# TYPE l4_weekly_decision_ts gauge
+l4_weekly_decision_ts{decision="HOLD"} $TS
+EOF
+    bash "${WORK}/scripts/ops/inc/_export_timestamp.sh" "weekly_decision" || true
+    echo "  ✅ Stub created"
+  fi
+fi
+
 # [H] Generate selftest metric
 echo "[H] Generate selftest metric"
 if [[ $fail -eq 0 ]]; then

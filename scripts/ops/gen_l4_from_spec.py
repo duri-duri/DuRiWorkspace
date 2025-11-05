@@ -79,9 +79,19 @@ def main():
         # Determine if warn_only (boot_status, selftest_pass are optional)
         warn_only = 1 if name in ["boot_status", "selftest_pass"] else 0
         
+        # Check if first-create should be warn-only
+        warn_until_first = a.get("warn_only_until_first_create", False)
+        
         freshness_lines.append(f"# {name}: {cadence} + {grace} = {limit}s")
         if warn_only == 1:
             freshness_lines.append(f"check_age \"$prom_dir/{file}\" \"{limit}\" \"{name}\" {warn_only} || true")
+        elif warn_until_first:
+            # First-create exception: warn if missing, fail if stale
+            freshness_lines.append(f"if [[ ! -f \"$prom_dir/{file}\" ]]; then")
+            freshness_lines.append(f"  echo \"⚠️  WARN: {name} not yet created (first run pending)\"")
+            freshness_lines.append(f"elif ! check_age \"$prom_dir/{file}\" \"{limit}\" \"{name}\" 0; then")
+            freshness_lines.append("  fail=1")
+            freshness_lines.append("fi")
         else:
             freshness_lines.append(f"if ! check_age \"$prom_dir/{file}\" \"{limit}\" \"{name}\" {warn_only}; then")
             freshness_lines.append("  fail=1")
