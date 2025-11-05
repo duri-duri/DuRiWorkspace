@@ -195,7 +195,14 @@ groups:
           severity: warning
           component: l4_automation
         annotations:
+      - alert: L4WeeklyDecisionStale
+        expr: |
+          (time() - max_over_time(l4_weekly_decision_ts[8d])) > 612000
+        for: 5m
+        labels:
+          severity: warning
+          component: l4_automation
+        annotations:
           summary: "weekly_decision stale (>7d)"
           description: "weekly_decision has not been updated for more than 7d. Check if l4-weekly.service is running."
-
 garbage: : :

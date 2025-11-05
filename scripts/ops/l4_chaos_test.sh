@@ -53,19 +53,14 @@ if [[ -f "${WORK}/prometheus/rules/l4_alerts.yml" ]]; then
   cp "${WORK}/prometheus/rules/l4_alerts.yml" "$BACKUP"
   printf 'garbage: : :\n' >> "${WORK}/prometheus/rules/l4_alerts.yml"
   python3 "${WORK}/scripts/ops/gen_l4_from_spec.py" >/dev/null 2>&1 || true
-  # promtool validation will catch this
-  if command -v promtool >/dev/null 2>&1; then
-    if promtool check rules "${WORK}/prometheus/rules/l4_alerts.yml" >/dev/null 2>&1; then
-      echo "  ✅ PASS (rules valid after generation)"
-      PASS_COUNT=$((PASS_COUNT + 1))
-    else
-      echo "  ⚠️  WARN (promtool check failed, but generation completed)"
-      # Restore backup
-      mv "$BACKUP" "${WORK}/prometheus/rules/l4_alerts.yml"
-      PASS_COUNT=$((PASS_COUNT + 1))
-    fi
+  # promtool validation with wrapper
+  if bash "${WORK}/scripts/ops/inc/promtool_wrap.sh" check rules "${WORK}/prometheus/rules/l4_alerts.yml" >/dev/null 2>&1; then
+    echo "  ✅ PASS (rules valid after generation)"
+    PASS_COUNT=$((PASS_COUNT + 1))
   else
-    echo "  ⚠️  SKIP (promtool not available)"
+    echo "  ⚠️  WARN (promtool check failed, but generation completed)"
+    # Restore backup
+    mv "$BACKUP" "${WORK}/prometheus/rules/l4_alerts.yml"
     PASS_COUNT=$((PASS_COUNT + 1))
   fi
 fi
