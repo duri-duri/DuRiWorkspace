@@ -24,12 +24,12 @@ log_file="${LOG_DIR}/stop_rule_${ts}.log"
     exit 0
   fi
   
-  # 48h 전 시점 계산
+  # 48h 전 시점 계산 (ISO8601 초 단위 Z)
   cutoff_ts=$(date -u -d '48 hours ago' '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null || date -u -v-48H '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null || echo "")
   
-  # 48h 내 결정들 추출
-  recent_decisions=$(jq -r "select(.ts >= \"${cutoff_ts}\") | .decision" "${DECISIONS}" 2>/dev/null || echo "")
-  recent_scores=$(jq -r "select(.ts >= \"${cutoff_ts}\") | .score" "${DECISIONS}" 2>/dev/null || echo "")
+  # 48h 내 결정들 추출 (라인별 필터링, 타임스탬프 비교 표준화)
+  recent_decisions=$(jq -cr --arg ct "$cutoff_ts" 'select(type=="object" and .ts and .decision) | select(.ts >= $ct) | .decision' "${DECISIONS}" 2>/dev/null || echo "")
+  recent_scores=$(jq -cr --arg ct "$cutoff_ts" 'select(type=="object" and .ts and .score) | select(.ts >= $ct) | .score' "${DECISIONS}" 2>/dev/null || echo "")
   
   hold_count=$(echo "$recent_decisions" | grep -c "^HOLD$" || echo 0)
   total_count=$(echo "$recent_decisions" | grep -c "." || echo 0)

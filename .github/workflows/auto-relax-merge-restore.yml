@@ -349,24 +349,6 @@ jobs:
               echo "✅ ALLOW: $file"
             fi
           done
-        id: pathcheck
-        env:
-          PR: ${{ steps.pr.outputs.number }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -euo pipefail
-          FILES=$(gh pr view "$PR" -R "$REPO" --json files --jq '.files[].path')
-          ALLOW_PATTERN='^(docs/|prometheus/rules/|scripts/ops/|scripts/bin/|\.github/workflows/)'
-          
-          echo "Changed files:"
-          echo "$FILES" | while IFS= read -r file; do
-            if ! echo "$file" | grep -qE "$ALLOW_PATTERN"; then
-              echo "❌ DENY: $file (not in allowlist)"
-              exit 78
-            else
-              echo "✅ ALLOW: $file"
-            fi
-          done
 
       - name: Verify required contexts are green
         id: ctxcheck

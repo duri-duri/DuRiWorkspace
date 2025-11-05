@@ -132,24 +132,6 @@ log ""
 log "6. 사후 품질 감시 (Post-Merge Quality Watch):"
 TOTAL=$((TOTAL + 1))
 if check "SLO 감시" "머지 후 SLO 모니터링" \
-  "grep -q 'SLO\|error.*budget\|post.*merge.*quality' .github/workflows/auto-relax-merge-restore.yml"; then
-  PASS=$((PASS + 1))
-else
-  echo -e "  ${YELLOW}⚠${NC} 미구현: 머지 후 SLO 감시 필요"
-fi
-
-TOTAL=$((TOTAL + 1))
-if check "자동 롤백" "SLO 위반 시 자동 롤백" \
-  "grep -q 'auto.*rollback\|rollback.*workflow' .github/workflows/auto-relax-merge-restore.yml"; then
-  PASS=$((PASS + 1))
-else
-  echo -e "  ${YELLOW}⚠${NC} 미구현: 자동 롤백 메커니즘 필요"
-fi
-
-log ""
-log "6. 사후 품질 감시 (Post-Merge Quality Watch):"
-TOTAL=$((TOTAL + 1))
-if check "SLO 감시" "머지 후 SLO 모니터링" \
   "[ -f .github/workflows/l4-post-merge-quality-watch.yml ]"; then
   PASS=$((PASS + 1))
 else
@@ -190,16 +172,6 @@ if check "룰팩 통합" "게이트에서 rulepack 적용" \
   PASS=$((PASS + 1))
 else
   echo -e "  ${YELLOW}⚠${NC} 미구현: 게이트에서 rulepack 통합 필요"
-fi
-
-log ""
-log "7. 정책 러닝 루프 (Policy Learning Loop):"
-TOTAL=$((TOTAL + 1))
-if check "실패 분류" "실패 원인 자동 분류" \
-  "grep -q 'failure.*classification\|label.*failure' .github/workflows/auto-relax-merge-restore.yml"; then
-  PASS=$((PASS + 1))
-else
-  echo -e "  ${YELLOW}⚠${NC} 미구현: 실패 분류 및 정책 업데이트 필요"
 fi
 
 log ""

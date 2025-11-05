@@ -1,0 +1,54 @@
+groups:
+  - name: l4_weekly_decision
+    interval: 1m
+    rules:
+      - alert: L4WeeklyDecisionMissing
+        expr: absent_over_time(l4_weekly_decision[30m]) == 1
+        for: 30m
+        labels:
+          severity: warning
+          component: l4_automation
+        annotations:
+          summary: "L4 weekly decision metric missing for 30 minutes"
+          description: "L4 weekly decision metric has not been updated for 30 minutes. Check if l4-weekly.service is running."
+
+      - alert: L4WeeklyDecisionHoldPersistent
+        expr: min_over_time(l4_weekly_decision[72h]) == -1 and max_over_time(l4_weekly_decision[72h]) == -1
+        for: 1h
+        labels:
+          severity: critical
+          component: l4_automation
+        annotations:
+          summary: "L4 weekly decision HOLD persistent for 72h+"
+          description: "L4 weekly decision has been HOLD for 72 hours or more. Consider manual intervention or check data collection."
+
+      - alert: L4WeeklyScoreStagnant
+        expr: max_over_time(l4_weekly_score[24h]) == 0
+        for: 24h
+        labels:
+          severity: warning
+          component: l4_automation
+        annotations:
+          summary: "L4 weekly score stagnant (0) for 24h"
+          description: "L4 weekly score has been 0 for 24 hours. Check if score calculation is working correctly."
+
+      - alert: L4WeeklyDecisionTransition
+        expr: changes(l4_weekly_decision[48h]) > 0
+        for: 0m
+        labels:
+          severity: info
+          component: l4_automation
+        annotations:
+          summary: "L4 weekly decision transition detected"
+          description: "L4 weekly decision changed in the last 48 hours. Previous: {{ $labels.previous }}, Current: {{ $labels.current }}"
+
+      - alert: L4WeeklyScoreVarianceHigh
+        expr: stddev_over_time(l4_weekly_score[48h]) > 0.12
+        for: 1h
+        labels:
+          severity: warning
+          component: l4_automation
+        annotations:
+          summary: "L4 weekly score variance high (>0.12)"
+          description: "L4 weekly score variance is high, indicating instability. Consider reviewing observation data quality."
+

@@ -22,7 +22,12 @@ summary="${summary:-}"
 if [[ -z "${summary:-}" ]]; then
   summary="$(ls -1t "${LOG_DIR}"/weekly_*.log 2>/dev/null | head -1 || true)"
 fi
-[[ -z "${summary}" ]] && { echo "[skip] no weekly summary found" | tee -a "${RECO_FILE}"; exit 0; }
+# 입력 신뢰성: 존재/크기 체크 + 안전한 인자 처리
+if [[ -z "${summary}" ]] || [[ ! -s "${summary}" ]]; then
+  echo "[WARN] summary missing or empty: ${summary:-<unset>}" >&2 | tee -a "${RECO_FILE}"
+  echo "[skip] no weekly summary found" | tee -a "${RECO_FILE}"
+  exit 0
+fi
 
 # 머신리더블 NDJSON/JSON 산출 경로
 DECISIONS_NDJSON="${AUDIT_DIR}/decisions.ndjson"
@@ -116,6 +121,7 @@ printf "=== %s KST L4 Weekly Decision ===\nsummary=%s\nscore=%s\ndecision=%s\nre
   "$(date '+%Y-%m-%d %H:%M:%S')" "${summary}" "${score_str}" "${decision}" "${recommendation}" "${note}" >> "${RECO_FILE}"
 
 # ➊ NDJSON(append) + ➋ 주차별 JSON 스냅샷(덮어쓰기)
+# 타임스탬프 표준화 (ISO8601 초 단위 Z)
 ts="$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
 repo_rel_summary="${summary#${ROOT}/}"
 json_line=$(jq -n --arg ts "$ts" --arg summary "$repo_rel_summary" \
@@ -123,10 +129,25 @@ json_line=$(jq -n --arg ts "$ts" --arg summary "$repo_rel_summary" \
                  --arg rec "${recommendation}" --arg note "${note}" \
                  '{ts:$ts, summary:$summary, score:($score|tonumber), decision:$decision, recommendation:$rec, note:$note}')
 
-# 원자 append (flock 사용)
-NDJSON_LOCK="${DECISIONS_NDJSON}.lock"
+# 원자 append (디렉터리 락 사용 - 회전과 append 동시성 제어)
+NDJSON_LOCK="${AUDIT_DIR}/decisions.lock"
 mkdir -p "$(dirname "$DECISIONS_NDJSON")"
-{ flock 200; printf '%s\n' "${json_line}" >> "${DECISIONS_NDJSON}"; } 200>"${NDJSON_LOCK}"
+{ 
+  flock -w 5 200 || { echo "[ERROR] Failed to acquire lock for decisions.ndjson" >&2; exit 1; }
+  
+  # 회전 체크 (같은 크리티컬 섹션 안에서)
+  MAX_LINES=50000
+  if [[ -f "${DECISIONS_NDJSON}" ]] && [[ $(wc -l < "${DECISIONS_NDJSON}" 2>/dev/null || echo 0) -gt ${MAX_LINES} ]]; then
+    mkdir -p "${AUDIT_DIR}/archive"
+    rotate_ts=$(date +%Y%m%d-%H%M%S)
+    mv "${DECISIONS_NDJSON}" "${AUDIT_DIR}/archive/decisions_${rotate_ts}.ndjson"
+    touch "${DECISIONS_NDJSON}"
+    echo "[rollover] archived decisions.ndjson (${MAX_LINES}+ lines) to archive/decisions_${rotate_ts}.ndjson" >> "${RECO_FILE}"
+  fi
+  
+  # append (원자적)
+  printf '%s\n' "${json_line}" >> "${DECISIONS_NDJSON}"
+} 200>"${NDJSON_LOCK}"
 
 snap="${DECISIONS_DIR}/$(basename "${summary%.*}").json"
 echo "${json_line}" | jq '.' > "${snap}"
@@ -142,10 +163,13 @@ if [[ "$decision" == "REVIEW" && "$AUTO_SUSPEND_ON_REVIEW" == "1" ]]; then
 fi
 
 # Prometheus textfile(선택) - NODE_EXPORTER_TEXTFILE_DIR 지정 시 메트릭 방출
+# 원자적 쓰기: 임시 파일 + mv로 node_exporter 레이스 차단
 TEXT_DIR="${NODE_EXPORTER_TEXTFILE_DIR:-}"
 if [[ -n "${TEXT_DIR}" && -d "${TEXT_DIR}" ]]; then
   mkdir -p "${TEXT_DIR}"
   metric_file="${TEXT_DIR}/l4_weekly_decision.prom"
+  tmp_file="${TEXT_DIR}/.l4_weekly_decision.prom.$$"
+  
   # decision을 수치화: APPROVED=2, CONTINUE=1, REVIEW=0, HOLD=-1
   case "${decision}" in
     APPROVED) dv=2 ;;
@@ -154,15 +178,22 @@ if [[ -n "${TEXT_DIR}" && -d "${TEXT_DIR}" ]]; then
     HOLD)     dv=-1 ;;
     *)        dv=0 ;;
   esac
-  cat > "${metric_file}.tmp" <<EOF
-# HELP l4_weekly_decision L4 weekly decision (APPROVED=2, CONTINUE=1, REVIEW=0, HOLD=-1)
-# TYPE l4_weekly_decision gauge
-l4_weekly_decision ${dv}
-# HELP l4_weekly_score Promotion score (0..1)
-# TYPE l4_weekly_score gauge
-l4_weekly_score ${score_str}
-EOF
-  mv "${metric_file}.tmp" "${metric_file}"
+  
+  # 결정 분포 메트릭 추가 (HOLD 지속 감지력 향상)
+  {
+    echo '# HELP l4_weekly_decision L4 weekly decision (APPROVED=2, CONTINUE=1, REVIEW=0, HOLD=-1)'
+    echo '# TYPE l4_weekly_decision gauge'
+    echo "l4_weekly_decision ${dv}"
+    echo '# HELP l4_weekly_score Promotion score (0..1)'
+    echo '# TYPE l4_weekly_score gauge'
+    printf 'l4_weekly_score %.2f\n' "$score_str"
+    echo '# HELP l4_weekly_decision_info Current decision state (0/1)'
+    echo '# TYPE l4_weekly_decision_info gauge'
+    echo "l4_weekly_decision_info{decision=\"APPROVED\"} $([[ $dv -eq 2 ]] && echo 1 || echo 0)"
+    echo "l4_weekly_decision_info{decision=\"CONTINUE\"} $([[ $dv -eq 1 ]] && echo 1 || echo 0)"
+    echo "l4_weekly_decision_info{decision=\"REVIEW\"} $([[ $dv -eq 0 ]] && echo 1 || echo 0)"
+    echo "l4_weekly_decision_info{decision=\"HOLD\"} $([[ $dv -eq -1 ]] && echo 1 || echo 0)"
+  } > "${tmp_file}" && chmod 0644 "${tmp_file}" && mv -f "${tmp_file}" "${metric_file}"
 fi
 
 exit 0

@@ -19,13 +19,25 @@ log_file="${LOG_DIR}/quick_check_${ts}.log"
 {
   echo "[$(date +'%Y-%m-%d %H:%M:%S')] === L4 Daily Quick Check ==="
   
-  # 1. 최근 48h 내 결정 확인
+  # 1. 최근 48h 내 결정 확인 (NDJSON 파싱 안전화 및 정렬 보장)
   if [[ -f "${DECISIONS}" ]]; then
-    recent_count=$(jq -r 'select(.ts >= (now - 172800 | todateiso8601)) | .decision' "${DECISIONS}" 2>/dev/null | wc -l || echo 0)
-    recent_decision=$(jq -r 'select(.ts >= (now - 172800 | todateiso8601)) | .decision' "${DECISIONS}" 2>/dev/null | tail -1 || echo "")
+    # ISO8601 초 단위 Z로 48h 전 시점 계산
+    cutoff_ts=$(date -u -d '48 hours ago' '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null || date -u -v-48H '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null || echo "")
+    
+    # 라인별 필터링 (비JSON 라인/빈줄 무시) 후 정렬 → 최신 결정 추출
+    recent_decisions=$(tail -n 50 "${DECISIONS}" | jq -cr 'select(type=="object" and .ts and .decision) | select(.ts >= "'"${cutoff_ts}"'") | .decision' 2>/dev/null || echo "")
+    recent_count=$(echo "$recent_decisions" | grep -c "." || echo 0)
+    recent_decision=$(echo "$recent_decisions" | tail -n 1 || echo "")
+    
+    # 최근 3개 타임스탬프 확인 (파싱 오류 방지)
+    recent_ts=$(tail -n 50 "${DECISIONS}" | jq -cr 'select(type=="object" and .ts)|.ts' 2>/dev/null | tail -n 3 || echo "")
     
     echo "Recent decisions (48h): ${recent_count}"
     echo "Latest decision: ${recent_decision:-none}"
+    if [[ -n "$recent_ts" ]]; then
+      echo "Recent timestamps:"
+      echo "$recent_ts" | while read -r ts; do echo "  - $ts"; done
+    fi
     
     if [[ "$recent_decision" == "HOLD" ]]; then
       echo "[WARN] HOLD detected in last 48h - shadow replay may be needed"

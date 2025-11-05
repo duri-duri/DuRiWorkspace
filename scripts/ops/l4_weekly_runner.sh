@@ -44,16 +44,8 @@ if bash scripts/ops/l4_stop_rule.sh 2>&1 | tee -a "${summary_log}"; then
   fi
 fi
 
-# 5) 로그 롤링 (decisions.ndjson이 50000줄 이상이면 아카이브)
-NDJSON="${ROOT}/var/audit/decisions.ndjson"
-MAX_LINES=50000
-if [[ -f "${NDJSON}" ]] && [[ $(wc -l < "${NDJSON}" 2>/dev/null || echo 0) -gt ${MAX_LINES} ]]; then
-  mkdir -p "${ROOT}/var/audit/archive"
-  ts=$(date +%Y%m%d-%H%M%S)
-  mv "${NDJSON}" "${ROOT}/var/audit/archive/decisions_${ts}.ndjson"
-  touch "${NDJSON}"
-  echo "[rollover] archived decisions.ndjson (${MAX_LINES}+ lines) to archive/decisions_${ts}.ndjson"
-fi
+# 5) 로그 롤링은 이제 l4_post_decision.sh 내부에서 디렉터리 락으로 원자 처리됨
+# (별도 회전 로직 불필요 - append 시점에 자동 처리)
 
 # 산출 확인용(실패해도 runner 실패로 간주하지 않음)
 ls -1t var/audit/logs/weekly_*.log 2>/dev/null | head -1 || true
