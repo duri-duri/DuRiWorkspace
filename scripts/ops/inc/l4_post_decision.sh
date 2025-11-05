@@ -45,19 +45,37 @@ if [[ -z "$score_str" ]]; then
   score_str="0.00"
 fi
 
-# 실수 비교 유틸(awk 기반)
+# Decision 확보: (1) 환경변수 decision, (2) summary에서 파싱, (3) Score 기반 계산
+decision="${decision:-}"
+if [[ -z "$decision" ]]; then
+  decision="$(grep -E '^\[.*\] Decision:' "$summary" 2>/dev/null | tail -1 | awk '{print $NF}' || true)"
+fi
+if [[ -z "$decision" ]]; then
+  decision="$(grep -E '^Decision:' "$summary" 2>/dev/null | tail -1 | awk '{print $2}' || true)"
+fi
+if [[ -z "$decision" ]]; then
+  # Score 기반 자동 결정
+  ge() { awk -v a="$1" -v b="$2" 'BEGIN{exit !(a>=b)}'; }
+  if ge "$score_str" "0.92"; then
+    decision="APPROVED"
+  elif ge "$score_str" "0.85"; then
+    decision="CONTINUE"
+  else
+    decision="REVIEW"
+  fi
+fi
+
+# 실수 비교 유틸(awk 기반) - decision이 이미 결정된 경우 사용하지 않음
 ge() { awk -v a="$1" -v b="$2" 'BEGIN{exit !(a>=b)}'; }
 lt() { awk -v a="$1" -v b="$2" 'BEGIN{exit !(a<b)}'; }
 
-decision="CONTINUE"
 action_note=""
-
-if ge "$score_str" "0.92"; then
-  decision="APPROVED"
+if [[ "$decision" == "APPROVED" ]]; then
   action_note=$'# ✅ Score ≥ 0.92 → Global L4 운영 승인\n# 다음 단계:\n# 1) 정책 학습 PR 확인 (필요 시 다음 주기 merge 준비)\n# 2) rollback_label.tsv 최신화 여부 점검\n# 3) L5(상위 기준) 준비 항목 사전 점검'
-elif ge "$score_str" "0.85"; then
-  decision="CONTINUE"
+elif [[ "$decision" == "CONTINUE" ]]; then
   action_note=$'# ⚠️ Score 0.85~0.92 → 관찰 연장\n# 다음 단계:\n# 1) rollback_label.tsv TP/FP 누락 여부 확인\n# 2) policy:update-proposed PR 내용 검토(merge 금지)\n# 3) 다음 주 Score 변동 원인 기록(스파이크/데이터 공백 등)'
+elif [[ "$decision" == "HOLD" ]]; then
+  action_note=$'# ⏸️ 데이터 공백 감지 → 관찰 대기\n# 다음 단계:\n# 1) 일일 관찰 로그 확인 (데이터 누적 여부)\n# 2) 다음 주 자동 재평가 대기\n# 3) 수동 개입 없이 자동으로 재평가됨'
 else
   decision="REVIEW"
   action_note=$'# ❌ Score < 0.85 → 임계값/정책 재검토 권고\n# 다음 단계:\n# 1) var/audit/logs/* 주요 실패 구간 점검\n# 2) rollback_label.tsv 라벨 누락 확인\n# 3) 임계값·정책 후보 도출(제안 리포트 준비)'
@@ -128,10 +146,12 @@ TEXT_DIR="${NODE_EXPORTER_TEXTFILE_DIR:-}"
 if [[ -n "${TEXT_DIR}" && -d "${TEXT_DIR}" ]]; then
   mkdir -p "${TEXT_DIR}"
   metric_file="${TEXT_DIR}/l4_weekly_decision.prom"
-  # decision을 수치화: APPROVED=2, CONTINUE=1, REVIEW=0
+  # decision을 수치화: APPROVED=2, CONTINUE=1, REVIEW=0, HOLD=-1
   case "${decision}" in
     APPROVED) dv=2 ;;
     CONTINUE) dv=1 ;;
+    REVIEW)   dv=0 ;;
+    HOLD)     dv=-1 ;;
     *)        dv=0 ;;
   esac
   cat > "${metric_file}.tmp" <<EOF
