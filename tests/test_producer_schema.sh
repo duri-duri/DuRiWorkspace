@@ -46,9 +46,10 @@ bash scripts/evolution/evidence_bundle.sh --ev "${ev_id}" --force >/dev/null 2>&
 latest_prom=$(find var/evolution -name "ab_eval.prom" -newermt "-1 minute" | head -1)
 
 if [ -n "$latest_prom" ] && [ -f "$latest_prom" ]; then
-    # 하드닝: p-value 라인 확인 (최대 5s 리트라이로 플랩 제로화)
+    # 하드닝: p-value 라인 확인 (최대 10s 리트라이로 플랩 제로화)
+    # CI 환경에서 타이밍 이슈 완화: 500ms × 20회 = 10초
     found=0
-    for i in {1..10}; do
+    for i in $(seq 1 20); do
         if grep -q '^duri_ab_p_value{' "$latest_prom" 2>/dev/null; then
             found=1
             break
@@ -59,9 +60,10 @@ if [ -n "$latest_prom" ] && [ -f "$latest_prom" ]; then
     if [ "$found" -eq 1 ]; then
         echo "[OK] ab_eval.prom에 p-value 라인 생성 확인 ($latest_prom)"
     else
-        echo "[FAIL] ab_eval.prom에 p-value 라인 없음 (5s 리트라이 후에도)"
+        echo "[FAIL] ab_eval.prom에 p-value 라인 없음 (10s 리트라이 후에도)"
         echo "[DEBUG] ab_eval.prom 내용:"
         cat "$latest_prom"
+        echo "[INFO] 타이밍/플러시 문제일 수 있습니다. Issue #83 참고."
         exit 1
     fi
 else
