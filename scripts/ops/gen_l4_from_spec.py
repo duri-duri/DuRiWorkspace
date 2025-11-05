@@ -76,19 +76,19 @@ def main():
         grace = a.get("grace", "0m")
         limit = sec(cadence) + sec(grace)
         
-    # Determine if warn_only (boot_status, selftest_pass are optional)
-    warn_only = 1 if name in ["boot_status", "selftest_pass"] else 0
-    
-    freshness_lines.append(f"# {name}: {cadence} + {grace} = {limit}s")
-    if warn_only == 1:
-        freshness_lines.append(f"if ! check_age \"$prom_dir/{file}\" \"{limit}\" \"{name}\" {warn_only}; then")
-        freshness_lines.append("  # Warning only, not fatal")
-        freshness_lines.append("fi")
-    else:
-        freshness_lines.append(f"if ! check_age \"$prom_dir/{file}\" \"{limit}\" \"{name}\" {warn_only}; then")
-        freshness_lines.append("  fail=1")
-        freshness_lines.append("fi")
-    freshness_lines.append("")
+        # Determine if warn_only (boot_status, selftest_pass are optional)
+        warn_only = 1 if name in ["boot_status", "selftest_pass"] else 0
+        
+        freshness_lines.append(f"# {name}: {cadence} + {grace} = {limit}s")
+        if warn_only == 1:
+            freshness_lines.append(f"if ! check_age \"$prom_dir/{file}\" \"{limit}\" \"{name}\" {warn_only}; then")
+            freshness_lines.append("  # Warning only, not fatal")
+            freshness_lines.append("fi")
+        else:
+            freshness_lines.append(f"if ! check_age \"$prom_dir/{file}\" \"{limit}\" \"{name}\" {warn_only}; then")
+            freshness_lines.append("  fail=1")
+            freshness_lines.append("fi")
+        freshness_lines.append("")
     
     freshness_block = pathlib.Path("scripts/ops/inc/_gen_freshness_block.sh")
     freshness_block.write_text("\n".join(freshness_lines))
