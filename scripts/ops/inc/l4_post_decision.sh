@@ -6,29 +6,34 @@
 
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-AUDIT_DIR="$ROOT/var/audit"
-LOG_DIR="$AUDIT_DIR/logs"
-RECO_FILE="$AUDIT_DIR/recommendations.log"
-mkdir -p "$LOG_DIR"
-touch "$RECO_FILE"
+# 리포지토리 루트 결정: git 최상위 → 폴백(/home/duri/DuRiWorkspace)
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null || true)"
+if [[ -z "${ROOT}" || ! -d "${ROOT}/.git" ]]; then
+  ROOT="/home/duri/DuRiWorkspace"
+fi
+AUDIT_DIR="${ROOT}/var/audit"
+LOG_DIR="${AUDIT_DIR}/logs"
+RECO_FILE="${AUDIT_DIR}/recommendations.log"
+mkdir -p "${LOG_DIR}"
+touch "${RECO_FILE}"
 
-# 최신 weekly 요약 파일 탐색 (없으면 생성하여 안전하게 진행)
+# summary 자동 탐색(최신 weekly_*.log) – 없으면 no-op 종료
 summary="${summary:-}"
 if [[ -z "${summary:-}" ]]; then
-  summary="$(ls -1t "$LOG_DIR"/weekly_*.log 2>/dev/null | head -1 || true)"
+  summary="$(ls -1t "${LOG_DIR}"/weekly_*.log 2>/dev/null | head -1 || true)"
 fi
-if [[ -z "$summary" ]]; then
-  ts="$(date +%Y%m%d_%H%M%S)"
-  summary="$LOG_DIR/weekly_${ts}.log"
-  echo "[note] weekly summary not found; creating placeholder: $summary" | tee -a "$RECO_FILE" >/dev/null
-  touch "$summary"
-fi
+[[ -z "${summary}" ]] && { echo "[skip] no weekly summary found" | tee -a "${RECO_FILE}"; exit 0; }
+
+# 머신리더블 NDJSON/JSON 산출 경로
+DECISIONS_NDJSON="${AUDIT_DIR}/decisions.ndjson"
+DECISIONS_DIR="${AUDIT_DIR}/decisions"
+mkdir -p "${DECISIONS_DIR}"
 
 # 이미 가이드가 붙어 있으면 중복 방지
 if grep -q "^=== Human Action Guide ===" "$summary" 2>/dev/null; then
   echo "[skip] guide already present in: $summary" >> "$RECO_FILE"
-  exit 0
+  # 중복이어도 머신리더블 레코드는 남긴다(운영 대시보드 일관성)
+  :
 fi
 
 # Score 확보: (1) 환경변수 score, (2) summary에서 파싱, (3) 없으면 0.00
