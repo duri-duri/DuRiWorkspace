@@ -34,9 +34,9 @@ if [[ -f "${WORK}/scripts/ops/inc/with_lock.sh" ]]; then
         | select(.decision | IN(\"GO\",\"NO-GO\",\"REVIEW\",\"HOLD\",\"HEARTBEAT\",\"APPROVED\",\"CONTINUE\"))
         | select((.ts | fromdateiso8601) > (now - 604800))
         | .decision
-      ' \"${SRC_NDJSON}\" 2>/dev/null | tail -1 || echo \"HOLD\")
+      ' \"${SRC_NDJSON}\" 2>/dev/null | tail -n1 | head -n1 || echo \"HOLD\")
       
-      if [[ -z \"\$decision_val\" ]]; then
+      if [[ -z \"\$decision_val\" ]] || [[ \"\$decision_val\" == \"null\" ]]; then
         decision_val=\"HOLD\"
       fi
     fi
