@@ -155,7 +155,7 @@ if [[ -n "${TEXT_DIR}" && -d "${TEXT_DIR}" ]]; then
     *)        dv=0 ;;
   esac
   cat > "${metric_file}.tmp" <<EOF
-# HELP l4_weekly_decision L4 weekly decision (APPROVED=2, CONTINUE=1, REVIEW=0)
+# HELP l4_weekly_decision L4 weekly decision (APPROVED=2, CONTINUE=1, REVIEW=0, HOLD=-1)
 # TYPE l4_weekly_decision gauge
 l4_weekly_decision ${dv}
 # HELP l4_weekly_score Promotion score (0..1)
