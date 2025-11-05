@@ -6,22 +6,19 @@
 set -euo pipefail
 
 WORK="/home/duri/DuRiWorkspace"
-TEXTFILE_DIR="${NODE_EXPORTER_TEXTFILE_DIR:-/var/lib/node_exporter/textfile_collector}"
+# 사용자 권한으로 접근 가능한 디렉터리 사용
+TEXTFILE_DIR="${NODE_EXPORTER_TEXTFILE_DIR:-/tmp/textfile_collector}"
 
-# 텍스트파일 디렉터리 생성 및 권한 보장
-mkdir -p "${TEXTFILE_DIR}"
+# 텍스트파일 디렉터리 생성 및 권한 보장 (사용자 권한으로만)
+mkdir -p "${TEXTFILE_DIR}" 2>/dev/null || true
 chmod 0755 "${TEXTFILE_DIR}" 2>/dev/null || true
 chown "$(whoami):$(whoami)" "${TEXTFILE_DIR}" 2>/dev/null || true
 
-# 재부팅 생존성 체크 실행
+# 재부팅 생존성 체크 실행 (비동기)
 if [[ -f "${WORK}/scripts/ops/l4_reboot_survival_check.sh" ]]; then
   bash "${WORK}/scripts/ops/l4_reboot_survival_check.sh" || true
 fi
 
-# 복구 스크립트 실행 (비동기, 실패해도 계속)
-if [[ -f "${WORK}/scripts/ops/l4_recover_and_verify.sh" ]]; then
-  bash "${WORK}/scripts/ops/l4_recover_and_verify.sh" &
-fi
-
+# 복구 스크립트는 recovery.service에서 실행되므로 여기서는 실행하지 않음
 exit 0
 
