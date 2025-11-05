@@ -81,9 +81,7 @@ def main():
         
         freshness_lines.append(f"# {name}: {cadence} + {grace} = {limit}s")
         if warn_only == 1:
-            freshness_lines.append(f"if ! check_age \"$prom_dir/{file}\" \"{limit}\" \"{name}\" {warn_only}; then")
-            freshness_lines.append("  # Warning only, not fatal")
-            freshness_lines.append("fi")
+            freshness_lines.append(f"check_age \"$prom_dir/{file}\" \"{limit}\" \"{name}\" {warn_only} || true")
         else:
             freshness_lines.append(f"if ! check_age \"$prom_dir/{file}\" \"{limit}\" \"{name}\" {warn_only}; then")
             freshness_lines.append("  fail=1")

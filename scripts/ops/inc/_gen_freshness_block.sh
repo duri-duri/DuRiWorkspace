@@ -44,11 +44,7 @@ if ! check_age "$prom_dir/l4_weekly_decision.prom" "612000" "weekly_decision" 0;
 fi
 
 # boot_status: 1d + 2h = 93600s
-if ! check_age "$prom_dir/l4_boot_status.prom" "93600" "boot_status" 1; then
-  # Warning only, not fatal
-fi
+check_age "$prom_dir/l4_boot_status.prom" "93600" "boot_status" 1 || true
 
 # selftest_pass: 10m + 0m = 600s
-if ! check_age "$prom_dir/l4_selftest.pass.prom" "600" "selftest_pass" 1; then
-  # Warning only, not fatal
-fi
+check_age "$prom_dir/l4_selftest.pass.prom" "600" "selftest_pass" 1 || true
