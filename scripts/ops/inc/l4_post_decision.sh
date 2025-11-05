@@ -75,27 +75,34 @@ fi
 } >> "$summary"
 
 # 권고 로그 파일에 머신 판정 및 권고사항 기록
-{
-  echo "=== $(date +'%F %T %Z') L4 Weekly Decision ==="
-  echo "summary=$summary"
-  echo "score=$score_str"
-  echo "decision=$decision"
-  case "$decision" in
-    "APPROVED")
-      echo "recommendation=keep_cycle"
-      echo "note=다음 주기로 자동 유지; 정책 PR은 필요 시만 수동 merge"
-      ;;
-    "CONTINUE")
-      echo "recommendation=extend_observation"
-      echo "note=관찰 연장; rollback 라벨과 정책 PR 검토 강화"
-      ;;
-    "REVIEW")
-      echo "recommendation=stop_and_review"
-      echo "note=관찰 중단 권고; 임계값/정책 재검토"
-      ;;
-  esac
-  echo ""
-} >> "$RECO_FILE"
+case "$decision" in
+  "APPROVED")
+    recommendation="keep_cycle"
+    note="다음 주기로 자동 유지; 정책 PR은 필요 시만 수동 merge"
+    ;;
+  "CONTINUE")
+    recommendation="extend_observation"
+    note="관찰 연장; rollback 라벨과 정책 PR 검토 강화"
+    ;;
+  "REVIEW")
+    recommendation="stop_and_review"
+    note="관찰 중단 권고; 임계값/정책 재검토"
+    ;;
+esac
+
+printf "=== %s KST L4 Weekly Decision ===\nsummary=%s\nscore=%s\ndecision=%s\nrecommendation=%s\nnote=%s\n\n" \
+  "$(date '+%Y-%m-%d %H:%M:%S')" "${summary}" "${score_str}" "${decision}" "${recommendation}" "${note}" >> "${RECO_FILE}"
+
+# ➊ NDJSON(append) + ➋ 주차별 JSON 스냅샷(덮어쓰기)
+ts="$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+repo_rel_summary="${summary#${ROOT}/}"
+json_line=$(jq -n --arg ts "$ts" --arg summary "$repo_rel_summary" \
+                 --arg score "${score_str}" --arg decision "${decision}" \
+                 --arg rec "${recommendation}" --arg note "${note}" \
+                 '{ts:$ts, summary:$summary, score:($score|tonumber), decision:$decision, recommendation:$rec, note:$note}')
+echo "${json_line}" >> "${DECISIONS_NDJSON}"
+snap="${DECISIONS_DIR}/$(basename "${summary%.*}").json"
+echo "${json_line}" | jq '.' > "${snap}"
 
 # (옵션) REVIEW 시 관찰 루프 자동 중단 — 명시적 opt-in
 AUTO_SUSPEND_ON_REVIEW="${AUTO_SUSPEND_ON_REVIEW:-0}"
