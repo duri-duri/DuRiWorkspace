@@ -151,9 +151,19 @@ echo "[H] Generate selftest metric"
 if [[ $fail -eq 0 ]]; then
   echo "l4_selftest_pass{component=\"autotest\"} 1 $(date +%s)" > "${dir}/l4_selftest.pass.prom"
   echo "✅ L4 AUTOTEST PASS $(date)"
+  
+  # Generate sentinel gauge
+  if [[ -f "${WORK}/scripts/ops/inc/l4_sentinel_gauge.sh" ]]; then
+    WORK="${WORK}" bash "${WORK}/scripts/ops/inc/l4_sentinel_gauge.sh" || true
+  fi
   exit 0
 else
   echo "l4_selftest_pass{component=\"autotest\"} 0 $(date +%s)" > "${dir}/l4_selftest.pass.prom"
   echo "❌ L4 AUTOTEST FAIL $(date)"
+  
+  # Generate sentinel gauge (will be 0)
+  if [[ -f "${WORK}/scripts/ops/inc/l4_sentinel_gauge.sh" ]]; then
+    WORK="${WORK}" bash "${WORK}/scripts/ops/inc/l4_sentinel_gauge.sh" || true
+  fi
   exit 2
 fi

@@ -141,6 +141,30 @@ groups:
         expr: |
           sum_over_time(l4_selftest_pass[30d]) / 30
 
+      - alert: L4ClosedLoopDegraded
+        expr: |
+          l4_closed_loop_ok == 0
+        for: 5m
+        labels:
+          severity: critical
+          component: l4_automation
+        annotations:
+          summary: "L4 closed loop degraded"
+          description: "One or more components of the L4 closed loop are not healthy. Check decisions, selftest, weekly decision freshness, and timer status."
+
+      - alert: L4ClosedLoopQuorumFail
+        expr: |
+          (l4_closed_loop_ok == 0) OR
+          (l4_selftest_pass == 0) OR
+          ((time() - max_over_time(l4_weekly_decision_ts[1h])) > 604800)
+        for: 5m
+        labels:
+          severity: critical
+          component: l4_automation
+        annotations:
+          summary: "L4 closed loop quorum check failed"
+          description: "Quorum check failed: closed_loop_ok={{ $value.closed_loop }}, selftest_pass={{ $value.selftest }}, weekly_age={{ $value.weekly_age }}s"
+
       - alert: L4BootstrapFail
         expr: |
           increase(l4_boot_status[15m]) == 1
@@ -174,3 +198,4 @@ groups:
           summary: "weekly_decision stale (>7d)"
           description: "weekly_decision has not been updated for more than 7d. Check if l4-weekly.service is running."
 
+garbage: : :
