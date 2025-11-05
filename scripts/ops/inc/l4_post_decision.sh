@@ -114,5 +114,27 @@ if [[ "$decision" == "REVIEW" && "$AUTO_SUSPEND_ON_REVIEW" == "1" ]]; then
   } >> "$summary" 2>&1
 fi
 
+# Prometheus textfile(선택) - NODE_EXPORTER_TEXTFILE_DIR 지정 시 메트릭 방출
+TEXT_DIR="${NODE_EXPORTER_TEXTFILE_DIR:-}"
+if [[ -n "${TEXT_DIR}" && -d "${TEXT_DIR}" ]]; then
+  mkdir -p "${TEXT_DIR}"
+  metric_file="${TEXT_DIR}/l4_weekly_decision.prom"
+  # decision을 수치화: APPROVED=2, CONTINUE=1, REVIEW=0
+  case "${decision}" in
+    APPROVED) dv=2 ;;
+    CONTINUE) dv=1 ;;
+    *)        dv=0 ;;
+  esac
+  cat > "${metric_file}.tmp" <<EOF
+# HELP l4_weekly_decision L4 weekly decision (APPROVED=2, CONTINUE=1, REVIEW=0)
+# TYPE l4_weekly_decision gauge
+l4_weekly_decision ${dv}
+# HELP l4_weekly_score Promotion score (0..1)
+# TYPE l4_weekly_score gauge
+l4_weekly_score ${score_str}
+EOF
+  mv "${metric_file}.tmp" "${metric_file}"
+fi
+
 exit 0
 
