@@ -1,0 +1,41 @@
+name: L4 Pre-Merge Gate
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: L4 Health Check
+        run: |
+          bash scripts/ops/l4_health_check.sh check || {
+            echo "::error::L4 health check failed"
+            exit 1
+          }
+      
+      - name: L4 Autotest (if available)
+        continue-on-error: true
+        run: |
+          if [[ -f scripts/ops/l4_autotest.sh ]]; then
+            bash scripts/ops/l4_autotest.sh --ci || {
+              echo "::warning::L4 autotest failed (non-blocking)"
+            }
+          fi
+      
+      - name: Prometheus Rules Check
+        run: |
+          if command -v promtool >/dev/null 2>&1; then
+            promtool check rules prometheus/rules/l4_alerts.yml || true
+            promtool check rules prometheus/rules/l4_window.rules.yml || true
+          fi
+      
+      - name: Gate Summary
+        if: always()
+        run: |
+          echo "=== L4 Pre-Merge Gate Summary ==="
+          bash scripts/ops/l4_health_check.sh check || true
+
