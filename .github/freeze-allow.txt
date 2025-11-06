@@ -121,3 +121,5 @@ prometheus.yml
 .github/workflows/protection-guard.yml
 
 .wf_smoke
+.githooks/**
+prometheus/rules/l4_alerts.yml

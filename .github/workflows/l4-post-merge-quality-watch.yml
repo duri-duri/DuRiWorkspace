@@ -1,0 +1,361 @@
+name: L4 Post-Merge Quality Watch
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: "PR number (manual run)"
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: post-merge-watch-${{ github.repository }}-${{ github.event.pull_request.number || inputs.pr }}
+  cancel-in-progress: false
+
+env:
+  REPO: ${{ github.repository }}
+  SLO_CONFIG: .slo/auto_relax.yml
+
+jobs:
+  watch:
+    if: >
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main')
+      || (github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    timeout-minutes: 150  # 120min watch + buffer
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq curl bc
+
+      - name: Resolve PR info
+        id: pr_info
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number || inputs.pr }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          
+          if [ -z "$PR_NUMBER" ]; then
+            echo "PR number unknown"
+            exit 1
+          fi
+          
+          MERGE_SHA=$(gh pr view "$PR_NUMBER" -R "$REPO" --json mergeCommit -q '.mergeCommit.oid // empty' 2>/dev/null || echo "")
+          CLOSED_AT=$(gh pr view "$PR_NUMBER" -R "$REPO" --json closedAt -q '.closedAt // empty' 2>/dev/null || echo "")
+          
+          if [ -z "$MERGE_SHA" ] || [ "$MERGE_SHA" = "null" ]; then
+            echo "⚠️  PR not merged yet or merge commit not found"
+            exit 1
+          fi
+          
+          echo "pr=$PR_NUMBER" >> $GITHUB_OUTPUT
+          echo "merge_sha=$MERGE_SHA" >> $GITHUB_OUTPUT
+          echo "closed_at=$CLOSED_AT" >> $GITHUB_OUTPUT
+          
+          echo "[INFO] PR #$PR_NUMBER merged at $CLOSED_AT (SHA: $MERGE_SHA)"
+
+      - name: Load SLO config
+        id: slo_config
+        run: |
+          set -euo pipefail
+          
+          if [ ! -f "$SLO_CONFIG" ]; then
+            echo "⚠️  SLO config not found: $SLO_CONFIG"
+            echo "Using default values"
+            echo "window=120m" >> $GITHUB_OUTPUT
+            echo "step=30s" >> $GITHUB_OUTPUT
+          else
+            # Parse YAML using yq or python (fallback to python)
+            if command -v yq >/dev/null 2>&1; then
+              echo "window=$(yq -r '.window // "120m"' "$SLO_CONFIG")" >> $GITHUB_OUTPUT
+              echo "step=$(yq -r '.step // "30s"' "$SLO_CONFIG")" >> $GITHUB_OUTPUT
+            else
+              python3 <<PY
+import yaml, sys
+with open('$SLO_CONFIG', 'r') as f:
+    cfg = yaml.safe_load(f)
+    print(f"window={cfg.get('window', '120m')}")
+    print(f"step={cfg.get('step', '30s')}")
+PY
+            fi
+          fi
+
+      - name: Wait for stabilization
+        run: |
+          echo "Waiting 5 minutes for system stabilization..."
+          sleep 300
+
+      - name: Calculate monitoring window
+        id: window
+        run: |
+          set -euo pipefail
+          
+          # Parse ISO8601 duration (e.g., "120m" -> 120 minutes)
+          WINDOW_STR="${{ steps.slo_config.outputs.window }}"
+          MINUTES=$(echo "$WINDOW_STR" | sed -E 's/[^0-9]//g')
+          [ -z "$MINUTES" ] && MINUTES=120
+          
+          echo "window_minutes=$MINUTES" >> $GITHUB_OUTPUT
+          
+          # Calculate start time (closed_at) and end time
+          CLOSED_AT="${{ steps.pr_info.outputs.closed_at }}"
+          START_TS=$(date -u -d "$CLOSED_AT" +%s 2>/dev/null || echo "$(date +%s)")
+          END_TS=$((START_TS + MINUTES * 60))
+          
+          echo "start_ts=$START_TS" >> $GITHUB_OUTPUT
+          echo "end_ts=$END_TS" >> $GITHUB_OUTPUT
+          
+          echo "[INFO] Monitoring window: ${MINUTES} minutes"
+
+      - name: Query Prometheus SLO metrics
+        id: prom_query
+        env:
+          PROM_BASE_URL: ${{ secrets.PROMETHEUS_URL }}
+          PROM_AUTH_HEADER: ${{ secrets.PROMETHEUS_AUTH }}
+          START_TS: ${{ steps.window.outputs.start_ts }}
+          END_TS: ${{ steps.window.outputs.end_ts }}
+          STEP: ${{ steps.slo_config.outputs.step }}
+        run: |
+          set -euo pipefail
+          
+          if [ -z "$PROM_BASE_URL" ]; then
+            echo "⚠️  PROMETHEUS_URL not set, skipping SLO check"
+            echo "violated=0" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          
+          # Load queries from SLO config
+          if [ -f "$SLO_CONFIG" ]; then
+            python3 <<PY
+import yaml, json, os, subprocess, sys
+            
+cfg = yaml.safe_load(open('$SLO_CONFIG'))
+queries = {}
+thresholds = {}
+
+for metric in ['availability', 'latency_p95', 'error_rate', 'error_budget_burn']:
+    if metric in cfg.get('slo', {}):
+        queries[metric] = cfg['slo'][metric]['query']
+        thresholds[metric] = cfg['slo'][metric]['threshold']
+
+results = {}
+violated = 0
+
+for metric, query in queries.items():
+    try:
+        # Use prom_query.sh helper
+        cmd = [
+            'bash', 'scripts/ops/prom_query.sh',
+            query,
+            str(int(os.environ['END_TS'])),
+            'range',
+            os.environ['START_TS'],
+            os.environ['END_TS'],
+            os.environ.get('STEP', '30s')
+        ]
+        
+        resp = subprocess.check_output(cmd, text=True, stderr=subprocess.DEVNULL)
+        data = json.loads(resp)
+        
+        # Extract values and calculate avg/max
+        values = []
+        for result in data.get('data', {}).get('result', []):
+            for val in result.get('values', []):
+                try:
+                    values.append(float(val[1]))
+                except (ValueError, IndexError):
+                    pass
+        
+        if values:
+            avg_val = sum(values) / len(values)
+            max_val = max(values)
+            threshold = thresholds[metric]
+            
+            # Check violation based on metric type
+            if metric in ['availability']:
+                # Lower bound: value must be >= threshold
+                is_violated = avg_val < threshold
+            else:
+                # Upper bound: value must be <= threshold
+                is_violated = max_val > threshold
+            
+            results[metric] = {
+                'avg': avg_val,
+                'max': max_val,
+                'threshold': threshold,
+                'violated': is_violated
+            }
+            
+            if is_violated:
+                violated = 1
+                print(f"[VIOLATION] {metric}: {max_val if metric != 'availability' else avg_val} {'<' if metric == 'availability' else '>'} {threshold}", file=sys.stderr)
+        else:
+            results[metric] = {'error': 'no data'}
+    except Exception as e:
+        print(f"[ERROR] Failed to query {metric}: {e}", file=sys.stderr)
+        results[metric] = {'error': str(e)}
+
+# Output results
+print(f"violated={violated}")
+for metric, data in results.items():
+    if 'error' not in data:
+        print(f"{metric}_avg={data.get('avg', 0):.6f}")
+        print(f"{metric}_max={data.get('max', 0):.6f}")
+        print(f"{metric}_violated={int(data.get('violated', False))}")
+PY
+          else
+            echo "⚠️  SLO config not found, using defaults"
+            echo "violated=0" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Evaluate SLO (dual condition + inertia)
+        id: eval
+        env:
+          AVAIL_VIOLATED: ${{ steps.prom_query.outputs.availability_violated }}
+          LATENCY_VIOLATED: ${{ steps.prom_query.outputs.latency_p95_violated }}
+          ERROR_VIOLATED: ${{ steps.prom_query.outputs.error_rate_violated }}
+          BURN_VIOLATED: ${{ steps.prom_query.outputs.error_budget_burn_violated }}
+        run: |
+          set -euo pipefail
+          
+          # Dual condition: latency AND error_rate both violated
+          DUAL_CONDITION=0
+          if [ "${LATENCY_VIOLATED:-0}" = "1" ] && [ "${ERROR_VIOLATED:-0}" = "1" ]; then
+            DUAL_CONDITION=1
+            echo "✅ Dual condition met: latency + error_rate both violated"
+          fi
+          
+          # Check cooldown period (first 10 minutes excluded)
+          CLOSED_AT="${{ steps.pr_info.outputs.closed_at }}"
+          CLOSED_TS=$(date -u -d "$CLOSED_AT" +%s 2>/dev/null || echo "$(date +%s)")
+          NOW_TS=$(date +%s)
+          ELAPSED=$((NOW_TS - CLOSED_TS))
+          
+          COOLDOWN_PERIOD=600  # 10 minutes
+          IN_COOLDOWN=0
+          if [ "$ELAPSED" -lt "$COOLDOWN_PERIOD" ]; then
+            IN_COOLDOWN=1
+            echo "⚠️  Still in cooldown period (${ELAPSED}s < ${COOLDOWN_PERIOD}s)"
+          fi
+          
+          # Final violation decision
+          FINAL_VIOLATION=0
+          if [ "$DUAL_CONDITION" = "1" ] && [ "$IN_COOLDOWN" = "0" ]; then
+            FINAL_VIOLATION=1
+            echo "❌ SLO violation confirmed (dual condition + past cooldown)"
+          elif [ "${AVAIL_VIOLATED:-0}" = "1" ] && [ "$IN_COOLDOWN" = "0" ]; then
+            # Availability violation alone is also critical
+            FINAL_VIOLATION=1
+            echo "❌ SLO violation confirmed (availability < threshold)"
+          elif [ "${BURN_VIOLATED:-0}" = "1" ] && [ "$IN_COOLDOWN" = "0" ]; then
+            # Error budget burn is critical
+            FINAL_VIOLATION=1
+            echo "❌ SLO violation confirmed (error budget burn > threshold)"
+          else
+            echo "✅ No SLO violation (or in cooldown period)"
+          fi
+          
+          echo "final_violation=$FINAL_VIOLATION" >> $GITHUB_OUTPUT
+          echo "dual_condition=$DUAL_CONDITION" >> $GITHUB_OUTPUT
+          echo "in_cooldown=$IN_COOLDOWN" >> $GITHUB_OUTPUT
+
+      - name: Post quality report
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ steps.pr_info.outputs.pr }}
+        run: |
+          set -euo pipefail
+          
+          STATUS="✅ PASS"
+          if [ "${{ steps.prom_query.outputs.violated }}" = "1" ]; then
+            STATUS="❌ VIOLATION"
+          fi
+          
+          REPORT=$(cat <<EOF
+**Post-Merge SLO Watch (last ${{ steps.slo_config.outputs.window }})**
+
+Status: **${STATUS}**
+
+Metrics:
+- Availability avg: ${{ steps.prom_query.outputs.availability_avg || 'N/A' }} (threshold: ${{ steps.slo_config.outputs.availability_threshold || '0.995' }}) → ${{ steps.prom_query.outputs.availability_violated == '1' && '❌ FAIL' || '✅ OK' }}
+- Latency p95 max: ${{ steps.prom_query.outputs.latency_p95_max || 'N/A' }}s (threshold: ${{ steps.slo_config.outputs.latency_p95_threshold || '0.450' }}s) → ${{ steps.prom_query.outputs.latency_p95_violated == '1' && '❌ FAIL' || '✅ OK' }}
+- Error rate max: ${{ steps.prom_query.outputs.error_rate_max || 'N/A' }} (threshold: ${{ steps.slo_config.outputs.error_rate_threshold || '0.003' }}) → ${{ steps.prom_query.outputs.error_rate_violated == '1' && '❌ FAIL' || '✅ OK' }}
+- Error budget burn: ${{ steps.prom_query.outputs.error_budget_burn_max || 'N/A' }} (threshold: ${{ steps.slo_config.outputs.error_budget_burn_threshold || '2.0' }}) → ${{ steps.prom_query.outputs.error_budget_burn_violated == '1' && '❌ FAIL' || '✅ OK' }}
+
+Merge: ${{ steps.pr_info.outputs.merge_sha }}
+EOF
+)
+          
+          gh pr comment "$PR_NUMBER" -R "$REPO" --body "$REPORT" || true
+
+      - name: Label PR on violation
+        if: steps.prom_query.outputs.violated == '1'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ steps.pr_info.outputs.pr }}
+        run: |
+          set -euo pipefail
+          LABEL="${{ secrets.SLO_VIOLATION_LABEL || 'auto-rollback-triggered' }}"
+          gh pr edit "$PR_NUMBER" -R "$REPO" --add-label "$LABEL" 2>/dev/null || true
+
+      - name: Trigger rollback workflow
+        if: steps.eval.outputs.final_violation == '1'
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: l4-auto-rollback.yml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: main
+          inputs: |
+            pr=${{ steps.pr_info.outputs.pr }}
+            merge_sha=${{ steps.pr_info.outputs.merge_sha }}
+            reason=SLO violation detected (dual condition: latency+error_rate)
+            dry_run=false
+
+      - name: Create audit entry
+        if: always()
+        run: |
+          set -euo pipefail
+          
+          mkdir -p docs/ops/audit
+          
+          AUDIT_FILE="docs/ops/audit/watch_$(date +%Y%m%d-%H%M%S).json"
+          
+          cat > "$AUDIT_FILE" <<JSON
+{
+  "ts": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+  "stage": "post-merge-watch",
+  "result": "${{ steps.eval.outputs.final_violation == '1' && 'breach' || 'pass' }}",
+  "reason": "${{ steps.eval.outputs.final_violation == '1' && 'SLO violation (dual condition)' || 'SLO OK' }}",
+  "ctx": {
+    "pr": ${{ steps.pr_info.outputs.pr }},
+    "sha": "${{ steps.pr_info.outputs.merge_sha }}",
+    "availability_violated": ${{ steps.prom_query.outputs.availability_violated || 0 }},
+    "latency_violated": ${{ steps.prom_query.outputs.latency_p95_violated || 0 }},
+    "error_violated": ${{ steps.prom_query.outputs.error_rate_violated || 0 }},
+    "burn_violated": ${{ steps.prom_query.outputs.error_budget_burn_violated || 0 }},
+    "dual_condition": ${{ steps.eval.outputs.dual_condition || 0 }},
+    "in_cooldown": ${{ steps.eval.outputs.in_cooldown || 0 }},
+    "workflow": "l4-post-merge-quality-watch"
+  }
+}
+JSON
+          
+          echo "✅ Audit entry created: $AUDIT_FILE"
+          
+          # Update audit index
+          INDEX_FILE="docs/ops/audit/audit_index.jsonl"
+          echo "$(cat "$AUDIT_FILE")" >> "$INDEX_FILE"

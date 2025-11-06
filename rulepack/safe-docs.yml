@@ -1,0 +1,44 @@
+# Safe Documentation Scenario
+# Purpose: Rulepack for safe documentation and observability changes
+# Usage: Automatically matched when PR changes only docs/ and observability paths
+
+scenario: "safe-docs"
+description: "Safe documentation and observability changes"
+
+allow_paths:
+  - "docs/**"
+  - "prometheus/rules/**"
+  - "scripts/ops/**"
+  - "scripts/bin/**"
+  - ".github/workflows/**"
+
+deny_paths: []
+
+required_labels:
+  - "change:safe"
+  - "auto-relax-merge"
+
+base_branch: "main"
+
+required_contexts:
+  - "obs-lint"
+  - "sandbox-smoke-60s"
+  - "promql-unit"
+  - "dr-rehearsal-24h-pass"
+  - "canary-quorum-pass"
+  - "error-budget-burn-ok"
+
+merge_state:
+  - "BLOCKED"
+  - "MERGEABLE"
+
+trigger_comment: "/auto-merge"
+
+actor_roles:
+  - "admin"
+  - "maintain"
+  - "write"
+
+relaxable: true
+require_reviews: 0
+

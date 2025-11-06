@@ -1,0 +1,61 @@
+groups:
+- name: l4-alerts
+  rules:
+  # 1) Freshness (crit: >120s, warn: >90s)
+  - alert: L4FreshnessCritical
+    expr: (time() - l4_weekly_decision_ts) > 120
+    for: 2m
+    labels:
+      severity: critical
+      service: duri-l4
+    annotations:
+      summary: "L4 freshness >120s"
+      description: "time() - l4_weekly_decision_ts > 120s for 2m."
+  - alert: L4FreshnessWarn
+    expr: (time() - l4_weekly_decision_ts) > 90
+    for: 2m
+    labels:
+      severity: warning
+      service: duri-l4
+    annotations:
+      summary: "L4 freshness >90s"
+      description: "time() - l4_weekly_decision_ts > 90s for 2m."
+  # 2) Canonicalize bad ratio
+  - alert: L4CanonBadRatioCritical
+    expr: (l4_canon_bad / clamp_min(l4_canon_total, 1)) > 0.05
+    for: 5m
+    labels:
+      severity: critical
+      service: duri-l4
+    annotations:
+      summary: "L4 canon bad ratio >5%"
+      description: "Bad ratio > 5% for 5m."
+  - alert: L4CanonBadRatioWarn
+    expr: (l4_canon_bad / clamp_min(l4_canon_total, 1)) > 0.02
+    for: 5m
+    labels:
+      severity: warning
+      service: duri-l4
+    annotations:
+      summary: "L4 canon bad ratio >2%"
+      description: "Bad ratio > 2% for 5m."
+  # 3) Backfill return code
+  - alert: L4BackfillFailure
+    expr: l4_backfill_last_rc != 0
+    for: 1m
+    labels:
+      severity: critical
+      service: duri-l4
+    annotations:
+      summary: "L4 backfill rc != 0"
+      description: "Backfill last return code non-zero for 1m."
+  # 4) Boot recovery
+  - alert: L4BootNotRecovered
+    expr: l4_boot_status == 0
+    for: 5m
+    labels:
+      severity: warning
+      service: duri-l4
+    annotations:
+      summary: "L4 boot not recovered"
+      description: "l4_boot_status stayed 0 for 5m."

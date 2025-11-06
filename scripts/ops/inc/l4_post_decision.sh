@@ -1,0 +1,244 @@
+#!/usr/bin/env bash
+# L4 주간 요약 후처리: Score 기반 자동 판정 + 인간 행동 가이드 주석 + (옵션) 관찰 루프 자동 중단
+# - 원본 파이프라인/임계값/프로덕션 설정을 변경하지 않음 (기본 읽기 전용)
+# - decision 및 권고사항은 var/audit/recommendations.log 로 남김
+# - summary 파일을 직접 찾아 append (요약 스크립트 내부 구현에 의존하지 않음)
+
+set -euo pipefail
+
+# 리포지토리 루트 결정: git 최상위 → 폴백(/home/duri/DuRiWorkspace)
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null || true)"
+if [[ -z "${ROOT}" || ! -d "${ROOT}/.git" ]]; then
+  ROOT="/home/duri/DuRiWorkspace"
+fi
+AUDIT_DIR="${ROOT}/var/audit"
+LOG_DIR="${AUDIT_DIR}/logs"
+RECO_FILE="${AUDIT_DIR}/recommendations.log"
+mkdir -p "${LOG_DIR}"
+touch "${RECO_FILE}"
+
+# summary 자동 탐색(최신 weekly_*.log) – 없으면 no-op 종료
+summary="${summary:-}"
+if [[ -z "${summary:-}" ]]; then
+  summary="$(ls -1t "${LOG_DIR}"/weekly_*.log 2>/dev/null | head -1 || true)"
+fi
+# 입력 신뢰성: 존재/크기 체크 + 안전한 인자 처리
+if [[ -z "${summary}" ]] || [[ ! -s "${summary}" ]]; then
+  echo "[WARN] summary missing or empty: ${summary:-<unset>}" >&2 | tee -a "${RECO_FILE}"
+  echo "[skip] no weekly summary found" | tee -a "${RECO_FILE}"
+  exit 0
+fi
+
+# 머신리더블 NDJSON/JSON 산출 경로
+DECISIONS_NDJSON="${AUDIT_DIR}/decisions.ndjson"
+DECISIONS_DIR="${AUDIT_DIR}/decisions"
+mkdir -p "${DECISIONS_DIR}"
+
+# 이미 가이드가 붙어 있으면 중복 방지
+if grep -q "^=== Human Action Guide ===" "$summary" 2>/dev/null; then
+  echo "[skip] guide already present in: $summary" >> "$RECO_FILE"
+  # 중복이어도 머신리더블 레코드는 남긴다(운영 대시보드 일관성)
+  :
+fi
+
+# Score 확보: (1) 환경변수 score, (2) summary에서 파싱, (3) 없으면 0.00
+score_str="${score:-}"
+if [[ -z "$score_str" ]]; then
+  score_str="$(awk -F': *' '/^Score/ {print $2; exit}' "$summary" 2>/dev/null || true)"
+fi
+if [[ -z "$score_str" ]]; then
+  score_str="0.00"
+fi
+
+# Decision 확보: (1) 환경변수 decision, (2) summary에서 파싱, (3) Score 기반 계산
+decision="${decision:-}"
+if [[ -z "$decision" ]]; then
+  decision="$(grep -E '^\[.*\] Decision:' "$summary" 2>/dev/null | tail -1 | awk '{print $NF}' || true)"
+fi
+if [[ -z "$decision" ]]; then
+  decision="$(grep -E '^Decision:' "$summary" 2>/dev/null | tail -1 | awk '{print $2}' || true)"
+fi
+if [[ -z "$decision" ]]; then
+  # Score 기반 자동 결정
+  ge() { awk -v a="$1" -v b="$2" 'BEGIN{exit !(a>=b)}'; }
+  if ge "$score_str" "0.92"; then
+    decision="APPROVED"
+  elif ge "$score_str" "0.85"; then
+    decision="CONTINUE"
+  else
+    decision="REVIEW"
+  fi
+fi
+
+# 실수 비교 유틸(awk 기반) - decision이 이미 결정된 경우 사용하지 않음
+ge() { awk -v a="$1" -v b="$2" 'BEGIN{exit !(a>=b)}'; }
+lt() { awk -v a="$1" -v b="$2" 'BEGIN{exit !(a<b)}'; }
+
+action_note=""
+if [[ "$decision" == "APPROVED" ]]; then
+  action_note=$'# ✅ Score ≥ 0.92 → Global L4 운영 승인\n# 다음 단계:\n# 1) 정책 학습 PR 확인 (필요 시 다음 주기 merge 준비)\n# 2) rollback_label.tsv 최신화 여부 점검\n# 3) L5(상위 기준) 준비 항목 사전 점검'
+elif [[ "$decision" == "CONTINUE" ]]; then
+  action_note=$'# ⚠️ Score 0.85~0.92 → 관찰 연장\n# 다음 단계:\n# 1) rollback_label.tsv TP/FP 누락 여부 확인\n# 2) policy:update-proposed PR 내용 검토(merge 금지)\n# 3) 다음 주 Score 변동 원인 기록(스파이크/데이터 공백 등)'
+elif [[ "$decision" == "HOLD" ]]; then
+  action_note=$'# ⏸️ 데이터 공백 감지 → 관찰 대기\n# 다음 단계:\n# 1) 일일 관찰 로그 확인 (데이터 누적 여부)\n# 2) 다음 주 자동 재평가 대기\n# 3) 수동 개입 없이 자동으로 재평가됨'
+else
+  decision="REVIEW"
+  action_note=$'# ❌ Score < 0.85 → 임계값/정책 재검토 권고\n# 다음 단계:\n# 1) var/audit/logs/* 주요 실패 구간 점검\n# 2) rollback_label.tsv 라벨 누락 확인\n# 3) 임계값·정책 후보 도출(제안 리포트 준비)'
+fi
+
+# Summary에 주석(인간 행동 가이드)와 자동판정 기록 append
+{
+  echo ""
+  echo "=== Human Action Guide ==="
+  printf "%s\n" "$action_note"
+  echo "# --- 자동 생성: L4 weekly post-decision module"
+  echo ""
+  echo "[AUTO] Decision: $decision"
+  echo "[AUTO] Score   : $score_str"
+} >> "$summary"
+
+# 권고 로그 파일에 머신 판정 및 권고사항 기록
+case "$decision" in
+  "APPROVED")
+    recommendation="keep_cycle"
+    note="다음 주기로 자동 유지; 정책 PR은 필요 시만 수동 merge"
+    ;;
+  "CONTINUE")
+    recommendation="extend_observation"
+    note="관찰 연장; rollback 라벨과 정책 PR 검토 강화"
+    ;;
+  "REVIEW")
+    recommendation="stop_and_review"
+    note="관찰 중단 권고; 임계값/정책 재검토"
+    ;;
+  "HOLD")
+    recommendation="wait_for_data"
+    note="데이터 공백 감지; 관찰 데이터 누적 대기"
+    ;;
+esac
+
+printf "=== %s KST L4 Weekly Decision ===\nsummary=%s\nscore=%s\ndecision=%s\nrecommendation=%s\nnote=%s\n\n" \
+  "$(date '+%Y-%m-%d %H:%M:%S')" "${summary}" "${score_str}" "${decision}" "${recommendation}" "${note}" >> "${RECO_FILE}"
+
+# ➊ NDJSON(append) + ➋ 주차별 JSON 스냅샷(덮어쓰기)
+# 타임스탬프 표준화 (ISO8601 초 단위 Z) + 모노토닉 시퀀스 ID
+ts="$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+seq=$(bash "${ROOT}/scripts/ops/inc/_next_seq.sh" 2>/dev/null || echo "0")
+repo_rel_summary="${summary#${ROOT}/}"
+json_line=$(jq -n --arg ts "$ts" --arg summary "$repo_rel_summary" \
+                 --arg score "${score_str}" --arg decision "${decision}" \
+                 --arg rec "${recommendation}" --arg note "${note}" \
+                 --argjson seq "$seq" \
+                 '{ts:$ts, summary:$summary, score:($score|tonumber), decision:$decision, recommendation:$rec, note:$note, seq:($seq|tonumber)}')
+
+# 원자 append (디렉터리 락 사용 - 회전과 append 동시성 제어)
+# fdatasync 보강: 실제 동기화 보장
+NDJSON_LOCK="${AUDIT_DIR}/decisions.lock"
+mkdir -p "$(dirname "$DECISIONS_NDJSON")"
+{ 
+  flock -w 5 200 || { echo "[ERROR] Failed to acquire lock for decisions.ndjson" >&2; exit 1; }
+  
+  # 회전 체크 (같은 크리티컬 섹션 안에서)
+  MAX_LINES=50000
+  if [[ -f "${DECISIONS_NDJSON}" ]] && [[ $(wc -l < "${DECISIONS_NDJSON}" 2>/dev/null || echo 0) -gt ${MAX_LINES} ]]; then
+    mkdir -p "${AUDIT_DIR}/archive"
+    rotate_ts=$(date +%Y%m%d-%H%M%S)
+    mv "${DECISIONS_NDJSON}" "${AUDIT_DIR}/archive/decisions_${rotate_ts}.ndjson"
+    touch "${DECISIONS_NDJSON}"
+    echo "[rollover] archived decisions.ndjson (${MAX_LINES}+ lines) to archive/decisions_${rotate_ts}.ndjson" >> "${RECO_FILE}"
+  fi
+  
+  # append (원자적) + fdatasync
+  printf '%s\n' "${json_line}" >> "${DECISIONS_NDJSON}"
+  
+  # Export decision timestamp
+  bash "${ROOT}/scripts/ops/inc/_export_timestamp.sh" "decision" || true
+  
+  # fdatasync로 커널 캐시 플러시 보장
+  python3 << 'PYTHON' 2>/dev/null || true
+import os
+import sys
+try:
+    with open("${DECISIONS_NDJSON}", "rb") as f:
+        os.fdatasync(f.fileno())
+except Exception:
+    pass
+PYTHON
+  
+  # 디렉터리 fsync (rename 내구성 보장)
+  python3 "${ROOT}/scripts/ops/inc/_fsync_dir.py" "${AUDIT_DIR}" 2>/dev/null || true
+} 200>"${NDJSON_LOCK}"
+
+# 정규화 (쓰기 직후 한 번)
+bash "${ROOT}/scripts/ops/inc/l4_canonicalize_ndjson.sh" 2>/dev/null || echo "[WARN] canonicalize failed" >> "${RECO_FILE}"
+
+snap="${DECISIONS_DIR}/$(basename "${summary%.*}").json"
+echo "${json_line}" | jq '.' > "${snap}"
+
+# (옵션) REVIEW 시 관찰 루프 자동 중단 — 명시적 opt-in
+AUTO_SUSPEND_ON_REVIEW="${AUTO_SUSPEND_ON_REVIEW:-0}"
+if [[ "$decision" == "REVIEW" && "$AUTO_SUSPEND_ON_REVIEW" == "1" ]]; then
+  {
+    echo "[AUTO] REVIEW → l4-daily.timer 비활성화 시도 (user systemd)"
+    systemctl --user disable --now l4-daily.timer || true
+    echo "[AUTO] REVIEW → l4-weekly.timer 유지 (다음 실행에서 재평가 가능)"
+  } >> "$summary" 2>&1
+fi
+
+# Prometheus textfile(선택) - NODE_EXPORTER_TEXTFILE_DIR 지정 시 메트릭 방출
+  # 원자적 쓰기: 임시 파일 + mv로 node_exporter 레이스 차단
+  # fdatasync 보강: 실제 동기화 보장
+  TEXT_DIR="${NODE_EXPORTER_TEXTFILE_DIR:-}"
+  if [[ -n "${TEXT_DIR}" && -d "${TEXT_DIR}" ]]; then
+    mkdir -p "${TEXT_DIR}"
+    metric_file="${TEXT_DIR}/l4_weekly_decision.prom"
+    tmp_file="${TEXT_DIR}/.l4_weekly_decision.prom.$$"
+    
+    # decision을 수치화: APPROVED=2, CONTINUE=1, REVIEW=0, HOLD=-1
+    case "${decision}" in
+      APPROVED) dv=2 ;;
+      CONTINUE) dv=1 ;;
+      REVIEW)   dv=0 ;;
+      HOLD)     dv=-1 ;;
+      *)        dv=0 ;;
+    esac
+    
+    # 결정 분포 메트릭 추가 (HOLD 지속 감지력 향상)
+    {
+      echo '# HELP l4_weekly_decision L4 weekly decision (APPROVED=2, CONTINUE=1, REVIEW=0, HOLD=-1)'
+      echo '# TYPE l4_weekly_decision gauge'
+      echo "l4_weekly_decision ${dv}"
+      echo '# HELP l4_weekly_score Promotion score (0..1)'
+      echo '# TYPE l4_weekly_score gauge'
+      printf 'l4_weekly_score %.2f\n' "$score_str"
+      echo '# HELP l4_weekly_decision_ts Timestamp of last L4 weekly decision (Unix epoch seconds)'
+      echo '# TYPE l4_weekly_decision_ts gauge'
+      echo "l4_weekly_decision_ts{decision=\"$decision\"} $(date +%s)"
+      echo '# HELP l4_weekly_decision_info Current decision state (0/1)'
+      echo '# TYPE l4_weekly_decision_info gauge'
+      echo "l4_weekly_decision_info{decision=\"APPROVED\"} $([[ $dv -eq 2 ]] && echo 1 || echo 0)"
+      echo "l4_weekly_decision_info{decision=\"CONTINUE\"} $([[ $dv -eq 1 ]] && echo 1 || echo 0)"
+      echo "l4_weekly_decision_info{decision=\"REVIEW\"} $([[ $dv -eq 0 ]] && echo 1 || echo 0)"
+      echo "l4_weekly_decision_info{decision=\"HOLD\"} $([[ $dv -eq -1 ]] && echo 1 || echo 0)"
+    } > "${tmp_file}" && chmod 0644 "${tmp_file}"
+    
+    # Export timestamp metric for Prometheus alerting
+    bash "${ROOT}/scripts/ops/inc/_export_timestamp.sh" "weekly_decision" || true
+    
+    # fdatasync 후 원자적 mv
+    python3 << 'PYTHON' 2>/dev/null || true
+import os
+import sys
+try:
+    with open("${tmp_file}", "rb") as f:
+        os.fdatasync(f.fileno())
+    os.rename("${tmp_file}", "${metric_file}")
+except Exception:
+    # fallback: 일반 mv
+    import subprocess
+    subprocess.run(["mv", "-f", "${tmp_file}", "${metric_file}"], check=False)
+PYTHON
+  fi
+
+exit 0
+
