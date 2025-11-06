@@ -31,14 +31,17 @@ if [[ -f "${WORK}/scripts/ops/inc/with_lock.sh" ]]; then
     export TZ=UTC
     
     # 1) 최근 7일 내 결정 스캔 → 가장 최신 결정 추출
-    decision_val=\"HOLD\"
-    if [[ -f \"${SRC_NDJSON}\" ]]; then
-      decision_val=\$(jq -r '
+    decision_val="HOLD"
+    if [[ -f "${SRC_NDJSON}" ]]; then
+      decision_raw=\$(jq -r '
         select(type==\"object\" and .ts and .decision)
         | select(.decision | IN(\"GO\",\"NO-GO\",\"REVIEW\",\"HOLD\",\"HEARTBEAT\",\"APPROVED\",\"CONTINUE\"))
         | select((.ts | fromdateiso8601) > (now - 604800))
         | .decision
       ' \"${SRC_NDJSON}\" 2>/dev/null | tail -n1 | head -n1 || echo \"HOLD\")
+      
+      # 개행/CR 제거, 첫 단어만 추출, 이스케이프 처리
+      decision_val=\$(printf '%s' \"\$decision_raw\" | tr -d '\r\n' | awk '{gsub(/\\\"/,\"\\\\\\\"\"); print \$1}' || echo \"HOLD\")
       
       if [[ -z \"\$decision_val\" ]] || [[ \"\$decision_val\" == \"null\" ]]; then
         decision_val=\"HOLD\"
@@ -48,12 +51,12 @@ if [[ -f "${WORK}/scripts/ops/inc/with_lock.sh" ]]; then
     # 2) 타임스탬프 생성 (UTC 기준)
     ts_utc=\$(date -u +%s)
     
-    # 3) Prometheus 메트릭 생성
-    cat > \"${tmp}\" <<EOF
-# HELP l4_weekly_decision_ts Unix timestamp of last weekly decision (UTC)
-# TYPE l4_weekly_decision_ts gauge
-l4_weekly_decision_ts{decision=\"\$decision_val\"} \$ts_utc
-EOF
+    # 3) Prometheus 메트릭 생성 (개행 없는 단일 라인 보장)
+    {
+      echo '# HELP l4_weekly_decision_ts Unix timestamp of last weekly decision (UTC)'
+      echo '# TYPE l4_weekly_decision_ts gauge'
+      printf 'l4_weekly_decision_ts{decision=\"%s\"} %s\\n' \"\$decision_val\" \"\$ts_utc\"
+    } > \"${tmp}\"
     
     # 4) 원자적 쓰기
     if [[ -f \"${WORK}/scripts/ops/inc/atomic_write.sh\" ]]; then
