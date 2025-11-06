@@ -62,7 +62,7 @@ if echo "$FAILED_CHECKS" | grep -q "ab-label-integrity\|label-integrity"; then
   CURRENT_LABELS=$(gh pr view "$PR_NUMBER" --json labels -q '.labels[].name' 2>/dev/null || echo "")
   
   # 정책 1: safe-change일 때는 ab:none 필요
-  if echo "$CURRENT_LABELS" | grep -q "safe-change"; then
+  if echo "$CURRENT_LABELS" | grep -q "safe-change\|change:safe"; then
     echo "  Policy: safe-change requires ab:none"
     if echo "$CURRENT_LABELS" | grep -q "ab:A\|ab:B"; then
       echo "  Removing ab:A/ab:B (conflict with safe-change)"
@@ -81,7 +81,7 @@ if echo "$FAILED_CHECKS" | grep -q "ab-label-integrity\|label-integrity"; then
       fi
     fi
   # 정책 2: risky-change일 때는 ab:A 또는 ab:B 필요
-  elif echo "$CURRENT_LABELS" | grep -q "risky-change"; then
+  elif echo "$CURRENT_LABELS" | grep -q "risky-change\|change:risky"; then
     echo "  Policy: risky-change requires ab:A or ab:B"
     if ! echo "$CURRENT_LABELS" | grep -q "ab:A\|ab:B"; then
       echo "  Adding ab:A (default for risky-change)"
@@ -99,7 +99,7 @@ if echo "$FAILED_CHECKS" | grep -q "ab-label-integrity\|label-integrity"; then
       fi
     fi
   # 정책 3: change-safety 라벨 없으면 파일 패턴 기반 판단
-  elif ! echo "$CURRENT_LABELS" | grep -q "safe-change\|risky-change"; then
+  elif ! echo "$CURRENT_LABELS" | grep -q "safe-change\|risky-change\|change:safe\|change:risky"; then
     echo "  Policy: Auto-detect change-safety from file patterns"
     SAFE_PATTERNS="^(prometheus/rules/|scripts/ops/|docs/ops/|\.gitignore|\.githooks/)"
     RISKY_PATTERNS="^(config/|\.slo/|rulepack/)"
