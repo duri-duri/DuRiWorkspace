@@ -41,27 +41,31 @@ ALLOW='["GO","NO-GO","REVIEW","HOLD","HEARTBEAT","APPROVED","CONTINUE"]'
 TOTAL_LINES=$(wc -l < "$IN" 2>/dev/null || echo 0)
 
 # 핵심: 입력 파일($IN)만 읽고, 임시 파일에 쓰기
+# 작업 디렉토리를 임시 디렉토리로 변경하여 다른 파일 읽기 방지
 # cat으로 명시적으로 파일 읽기 후 jq에 파이프
 # jq -Rn: 입력을 라인별로 읽고 fromjson?로 파싱 실패 시 자동 드랍
 # 정렬: (ts, seq) 순으로 안정 정렬
 # 중복 제거: 같은 ts에서 마지막 1건만 유지 + idempotency (ts, seq) 조합으로 중복 제거
-cat "$IN" | jq -Rn '
-  def ok_decision: '"$ALLOW"' | index(.);
-  [ inputs
-    | fromjson? // empty
-    | select(. and type=="object" and .ts and .decision)
-    | select( (.decision|tostring) as $d | ('"$ALLOW"') | index($d) != null )
-    | { ts: ((.ts|fromdateiso8601) // 0), seq: ((.seq|tonumber) // 0), decision: .decision, orig: . }
-  ]
-  | sort_by(.ts, .seq)
-  | (group_by(.ts) | map(last))  # 같은 ts 그룹에서 마지막 1건만
-  | unique_by(.ts, .seq)          # idempotency: (ts, seq) 조합으로 중복 제거
-  | .[]
-  | .orig
-' > "$TMP" 2>/dev/null || {
-  echo "[WARN] Canonicalization failed, using empty" >&2
-  touch "$TMP"
-}
+# 중요: 서브셸에서 실행하여 작업 디렉토리 격리
+(
+  cd "$(mktemp -d)" || exit 1
+  cat "$IN" | jq -Rn --argjson allow "$ALLOW" '
+    [ inputs
+      | fromjson? // empty
+      | select(. and type=="object" and .ts and .decision)
+      | select( (.decision|tostring) as $d | $allow | index($d) != null )
+      | { ts: ((.ts|fromdateiso8601) // 0), seq: ((.seq|tonumber) // 0), decision: .decision, orig: . }
+    ]
+    | sort_by(.ts, .seq)
+    | (group_by(.ts) | map(last))  # 같은 ts 그룹에서 마지막 1건만
+    | unique_by(.ts, .seq)          # idempotency: (ts, seq) 조합으로 중복 제거
+    | .[]
+    | .orig
+  ' > "$TMP" 2>/dev/null || {
+    echo "[WARN] Canonicalization failed, using empty" >&2
+    touch "$TMP"
+  }
+)
 
 # 원자적 쓰기 (덮어쓰기, append 금지)
 mkdir -p "$(dirname "$OUT")"
