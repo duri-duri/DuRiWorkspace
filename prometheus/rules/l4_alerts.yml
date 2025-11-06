@@ -19,26 +19,36 @@ groups:
       service: duri-l4
     annotations:
       summary: "L4 freshness >90s"
-      description: "time() - l4_weekly_decision_ts > 90s for 2m."
-  # 2) Canonicalize bad ratio
+      description: "time() - l4_weekly_decision_ts >90s for 2m."
+  # 2) Canonicalize bad ratio (윈도우 기준)
   - alert: L4CanonBadRatioCritical
-    expr: (l4_canon_bad / clamp_min(l4_canon_total, 1)) > 0.05
-    for: 5m
+    expr: |
+      (l4_canon_bad / clamp_min(l4_canon_total, 1)) > 0.05
+      OR
+      (l4_bad_ratio_1h > 0.05)
+      OR
+      (l4_bad_ratio_6h > 0.05)
+    for: 15m
     labels:
       severity: critical
       service: duri-l4
     annotations:
       summary: "L4 canon bad ratio >5%"
-      description: "Bad ratio > 5% for 5m."
+      description: "Bad ratio > 5% for 15m (window or cumulative)."
   - alert: L4CanonBadRatioWarn
-    expr: (l4_canon_bad / clamp_min(l4_canon_total, 1)) > 0.02
-    for: 5m
+    expr: |
+      (l4_canon_bad / clamp_min(l4_canon_total, 1)) > 0.02
+      OR
+      (l4_bad_ratio_1h > 0.02)
+      OR
+      (l4_bad_ratio_6h > 0.02)
+    for: 30m
     labels:
       severity: warning
       service: duri-l4
     annotations:
       summary: "L4 canon bad ratio >2%"
-      description: "Bad ratio > 2% for 5m."
+      description: "Bad ratio > 2% for 30m (window or cumulative)."
   # 3) Backfill return code
   - alert: L4BackfillFailure
     expr: l4_backfill_last_rc != 0
@@ -59,3 +69,13 @@ groups:
     annotations:
       summary: "L4 boot not recovered"
       description: "l4_boot_status stayed 0 for 5m."
+  # 5) Heartbeat stale
+  - alert: L4HeartbeatStale
+    expr: (time() - l4_weekly_decision_ts) > 180
+    for: 2m
+    labels:
+      severity: critical
+      service: duri-l4
+    annotations:
+      summary: "L4 heartbeat stale >180s"
+      description: "Heartbeat not updated for >180s."
