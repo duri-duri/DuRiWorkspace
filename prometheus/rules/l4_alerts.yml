@@ -69,13 +69,23 @@ groups:
     annotations:
       summary: "L4 boot not recovered"
       description: "l4_boot_status stayed 0 for 5m."
-  # 5) Heartbeat stale
+  # 5) Heartbeat stale (레거시)
   - alert: L4HeartbeatStale
     expr: (time() - l4_weekly_decision_ts) > 180
     for: 2m
     labels:
+      severity: warning
+      service: duri-l4
+    annotations:
+      summary: "L4 heartbeat stale >180s (legacy)"
+      description: "Heartbeat not updated for >180s."
+  # 6) Backfill freshness (우선)
+  - alert: L4BackfillStale
+    expr: l4_backfill_last_ok_age_seconds > 1200
+    for: 5m
+    labels:
       severity: critical
       service: duri-l4
     annotations:
-      summary: "L4 heartbeat stale >180s"
-      description: "Heartbeat not updated for >180s."
+      summary: "L4 backfill stale >20m"
+      description: "Backfill has not succeeded within 20m (threshold: 1200s)."

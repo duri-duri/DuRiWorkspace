@@ -20,4 +20,9 @@ groups:
     expr: sum_over_time(l4_canon_bad[1h])
   - record: l4_bad_ratio_1h
     expr: l4_canon_bad_1h / clamp_min(l4_canon_total_1h, 1)
+- name: l4-freshness
+  interval: 30s
+  rules:
+  - record: l4_backfill_last_ok_age_seconds
+    expr: time() - max_over_time(l4_backfill_last_ok_ts_seconds[30m])
 

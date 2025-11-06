@@ -200,6 +200,86 @@ check_timers() {
   return $all_ok
 }
 
+# 5. 불변식 검증 (파이프라인 일관성)
+check_invariants() {
+  log_info "불변식 검증..."
+  
+  local src_file="var/audit/decisions.ndjson"
+  local pref_file="var/audit/decisions.pref.ndjson"
+  local fixd_file="var/audit/decisions.fixed.ndjson"
+  local cano_file="var/audit/decisions.canon.ndjson"
+  
+  local n_src=$(wc -l < "$src_file" 2>/dev/null || echo 0)
+  local n_pref=$(wc -l < "$pref_file" 2>/dev/null || echo 0)
+  local n_fixd=$(wc -l < "$fixd_file" 2>/dev/null || echo 0)
+  local n_cano=$(wc -l < "$cano_file" 2>/dev/null || echo 0)
+  
+  echo "  src=$n_src, pref=$n_pref, fix=$n_fixd, canon=$n_cano"
+  
+  # 불변식: src >= pref >= fix >= canon
+  if ! [[ $n_cano -le $n_fixd && $n_fixd -le $n_pref && $n_pref -le $n_src ]]; then
+    log_error "불변식 위반: src=$n_src >= pref=$n_pref >= fix=$n_fixd >= canon=$n_cano"
+    log_error "예상: src >= pref >= fix >= canon"
+    
+    if [[ "$MODE" == "repair" ]]; then
+      log_info "파이프라인 재실행으로 복구 시도..."
+      bash scripts/ops/l4_backfill.sh || {
+        log_error "파이프라인 재실행 실패"
+        return 1
+      }
+      log_info "파이프라인 재실행 완료"
+    fi
+    
+    return 1
+  else
+    log_info "불변식 OK: src=$n_src >= pref=$n_pref >= fix=$n_fixd >= canon=$n_cano ✓"
+    return 0
+  fi
+}
+
+# 6. Backfill 신선도 검증 (타이머 주기와 일치)
+check_backfill_freshness() {
+  log_info "Backfill 신선도 검증..."
+  
+  local backfill_file="${TEXTFILE_DIR}/l4_backfill_last_ok.prom"
+  
+  if [[ ! -f "$backfill_file" ]]; then
+    log_warn "backfill_last_ok.prom not found"
+    return 1
+  fi
+  
+  local ts=$(awk '/^l4_backfill_last_ok_ts_seconds/{print $NF}' "$backfill_file" | head -1)
+  
+  if [[ -z "$ts" ]] || ! [[ "$ts" =~ ^[0-9]+$ ]]; then
+    log_error "타임스탬프 없음"
+    return 1
+  fi
+  
+  local now=$(date -u +%s)
+  local age=$((now - ts))
+  local threshold=1200  # 20분 (15m 타이머 + 버퍼)
+  
+  echo "  Age: ${age}s, Threshold: ${threshold}s"
+  
+  if [[ "$age" -gt "$threshold" ]]; then
+    log_error "Backfill 신선도 초과: age=${age}s > ${threshold}s"
+    
+    if [[ "$MODE" == "repair" ]]; then
+      log_info "Backfill 파이프라인 강제 실행..."
+      bash scripts/ops/l4_backfill.sh || {
+        log_error "Backfill 실행 실패"
+        return 1
+      }
+      log_info "Backfill 실행 완료"
+    fi
+    
+    return 1
+  else
+    log_info "Backfill 신선도 OK: age=${age}s <= ${threshold}s ✓"
+    return 0
+  fi
+}
+
 # 메인 실행
 main() {
   echo "=== L4 Health Check Start $(date -u +%Y-%m-%dT%H:%M:%SZ) ==="
@@ -208,19 +288,30 @@ main() {
   
   local failures=0
   
-  echo "=== 1. Canonicalize 메트릭 ==="
+  echo "=== 1. 불변식 검증 ==="
+  check_invariants || failures=$((failures + 1))
+  echo ""
+  
+  echo "=== 2. Canonicalize 메트릭 ==="
   check_canonicalize || failures=$((failures + 1))
   echo ""
   
-  echo "=== 2. 부팅 상태 ==="
+  echo "=== 3. 부팅 상태 ==="
   check_boot_status || failures=$((failures + 1))
   echo ""
   
-  echo "=== 3. Weekly Decision 신선도 ==="
-  check_weekly_decision || failures=$((failures + 1))
+  echo "=== 4. Backfill 신선도 ==="
+  check_backfill_freshness || failures=$((failures + 1))
   echo ""
   
-  echo "=== 4. 타이머 상태 ==="
+  echo "=== 5. Weekly Decision 신선도 (레거시) ==="
+  check_weekly_decision || {
+    # 레거시 체크는 경고만 (backfill 신선도가 우선)
+    log_warn "Weekly decision 신선도 초과 (backfill 신선도 우선)"
+  }
+  echo ""
+  
+  echo "=== 6. 타이머 상태 ==="
   check_timers || failures=$((failures + 1))
   echo ""
   
