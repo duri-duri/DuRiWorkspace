@@ -1,0 +1,58 @@
+name: Auto-Ready PR
+on:
+  pull_request:
+    types: [labeled, synchronize, opened]
+  workflow_dispatch:
+
+jobs:
+  auto-ready:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Check PR conditions
+        id: check
+        run: |
+          set -euo pipefail
+          
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          IS_DRAFT="${{ github.event.pull_request.draft }}"
+          
+          # 라벨 확인
+          LABELS=$(echo '${{ join(github.event.pull_request.labels.*.name, ',') }}' || echo "")
+          
+          # 필수 라벨 확인
+          HAS_SAFE_CHANGE=$(echo "$LABELS" | grep -qE "(safe-change|change:safe)" && echo "true" || echo "false")
+          HAS_AB_NONE=$(echo "$LABELS" | grep -q "ab:none" && echo "true" || echo "false")
+          HAS_TYPE=$(echo "$LABELS" | grep -q "type:" && echo "true" || echo "false")
+          
+          # CI 상태 확인 (모두 통과)
+          CI_STATUS=$(gh pr checks "$PR_NUMBER" --json name,conclusion --jq '[.[] | select(.conclusion != "SUCCESS" and .conclusion != null)] | length' 2>/dev/null || echo "999")
+          
+          echo "is_draft=$IS_DRAFT" >> $GITHUB_OUTPUT
+          echo "has_safe_change=$HAS_SAFE_CHANGE" >> $GITHUB_OUTPUT
+          echo "has_ab_none=$HAS_AB_NONE" >> $GITHUB_OUTPUT
+          echo "has_type=$HAS_TYPE" >> $GITHUB_OUTPUT
+          echo "ci_failures=$CI_STATUS" >> $GITHUB_OUTPUT
+          
+          # 조건: Draft이고, 모든 필수 라벨이 있고, CI 실패가 0
+          if [[ "$IS_DRAFT" == "true" ]] && \
+             [[ "$HAS_SAFE_CHANGE" == "true" ]] && \
+             [[ "$HAS_AB_NONE" == "true" ]] && \
+             [[ "$HAS_TYPE" == "true" ]] && \
+             [[ "$CI_STATUS" == "0" ]]; then
+            echo "ready=true" >> $GITHUB_OUTPUT
+          else
+            echo "ready=false" >> $GITHUB_OUTPUT
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Auto-ready PR
+        if: steps.check.outputs.ready == 'true'
+        run: |
+          gh pr ready ${{ github.event.pull_request.number }}
+          echo "✅ PR automatically marked as ready for review"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
