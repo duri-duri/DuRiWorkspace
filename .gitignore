@@ -10,6 +10,17 @@ safe_workspace/
 safe_extract_and_verify*.sh
 verify_and_cleanup_first_stage*.sh
 
+# === L4 Automation Generated Files ===
+# Canonicalized NDJSON (normalized intermediate)
+var/audit/decisions.canon.ndjson
+# Generated Prometheus rules
+prometheus/rules/*_generated.yml
+# Prometheus textfile metrics (runtime generated)
+*.prom
+**/*.prom
+~/.cache/node_exporter/textfile/
+.cache/node_exporter/textfile/
+
 # === Logs & Artifacts ===
 logs/
 **/*.log
@@ -182,3 +193,13 @@ scripts/._*
 # Allow ops documentation tracking
 !docs/ops/*.md
 prometheus-data/
+
+# === L4 Automation Artifacts (Final) ===
+# Generated outputs
+out/
+var/**/logs/
+var/**/audit/
+var/audit/decisions.canon.ndjson
+prometheus/rules/*_generated.yml
+*.prom
+**/*.prom

@@ -98,6 +98,92 @@ groups:
           summary: "L4 audit filesystem space low (<10GiB)"
           description: "Available space on audit filesystem is below 10GiB. Consider archiving old decisions."
 
+  - name: l4-freshness-and-drift
+    interval: 1m
+    rules:
+      # 신선도(드리프트): ζ(scrape_interval) 보정 포함
+      - alert: L4DecisionFreshnessWarn
+        expr: (time() - l4_weekly_decision_ts) < -300
+        for: 5m
+        labels:
+          severity: warning
+          component: l4_automation
+        annotations:
+          summary: "L4 weekly decision staleness warning (>5m)"
+          description: "L4 weekly decision timestamp is more than 5 minutes old. Check if backfill is running."
+
+      - alert: L4DecisionFreshnessCrit
+        expr: (time() - l4_weekly_decision_ts) < -600
+        for: 10m
+        labels:
+          severity: critical
+          component: l4_automation
+        annotations:
+          summary: "L4 weekly decision staleness critical (>10m)"
+          description: "L4 weekly decision timestamp is more than 10 minutes old. Check if backfill service is stuck."
+
+      - alert: L4UtcDriftDetected
+        expr: abs(time() - l4_weekly_decision_ts) > 120
+        for: 5m
+        labels:
+          severity: warning
+          component: l4_automation
+        annotations:
+          summary: "UTC drift in weekly decision timestamp"
+          description: "UTC drift detected: |time() - ts| > 120s. Check TZ enforcement and generators."
+
+  - name: l4-canonicalization
+    interval: 1m
+    rules:
+      # 정규화 손상 라인 비율
+      - alert: L4CanonHasBadLines
+        expr: (l4_canon_bad / clamp_min(l4_canon_total, 1)) > 0
+        for: 5m
+        labels:
+          severity: warning
+          component: l4_automation
+        annotations:
+          summary: "L4 canonicalizer has bad lines (WARN)"
+          description: "L4 canonicalizer detected bad lines in input. Ratio: {{ $value | humanize }}"
+
+      - alert: L4CanonTooManyBadLines
+        expr: (l4_canon_bad / clamp_min(l4_canon_total, 1)) > 0.01
+        for: 5m
+        labels:
+          severity: critical
+          component: l4_automation
+        annotations:
+          summary: "L4 canonicalizer has too many bad lines (>1%)"
+          description: "L4 canonicalizer detected bad lines ratio > 1%. Ratio: {{ $value | humanize }}"
+
+  - name: l4-backfill-health
+    interval: 1m
+    rules:
+      # 백필 결과 코드
+      - alert: L4BackfillError
+        expr: max_over_time(l4_backfill_last_rc[10m]) != 0
+        for: 3m
+        labels:
+          severity: critical
+          component: l4_automation
+        annotations:
+          summary: "L4 backfill error detected"
+          description: "L4 backfill healer returned non-zero exit code. Check logs for details."
+
+  - name: l4-boot-status
+    interval: 1m
+    rules:
+      # 부팅 상태
+      - alert: L4BootNotReady
+        expr: l4_boot_status == 0
+        for: 5m
+        labels:
+          severity: warning
+          component: l4_automation
+        annotations:
+          summary: "L4 boot recovery not ready"
+          description: "L4 boot status indicates recovery is not complete. Check l4-bootstrap.service logs."
+
       - alert: L4TextfilePermissionDenied
         expr: increase(l4_textfile_write_errors_total[5m]) > 0
         for: 1m

@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# 생성물이 스테이징에 포함되면 차단
+bad=$(git diff --cached --name-only | grep -E '\.prom$|_generated\.yml$|^var/audit/decisions\.canon\.ndjson$|^out/' 2>/dev/null || true)
+
+if [ -n "$bad" ]; then
+  echo "[BLOCK] Artifacts cannot be committed:" >&2
+  echo "$bad" >&2
+  echo "" >&2
+  echo "These are generated files. Remove them from staging:" >&2
+  echo "  git reset HEAD <file>" >&2
+  exit 1
+fi
