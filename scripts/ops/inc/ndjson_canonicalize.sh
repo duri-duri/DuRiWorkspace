@@ -46,9 +46,11 @@ TOTAL_LINES=$(wc -l < "$IN" 2>/dev/null || echo 0)
 # jq -Rn: 입력을 라인별로 읽고 fromjson?로 파싱 실패 시 자동 드랍
 # 정렬: (ts, seq) 순으로 안정 정렬
 # 중복 제거: 같은 ts에서 마지막 1건만 유지 + idempotency (ts, seq) 조합으로 중복 제거
-# 중요: 서브셸에서 실행하여 작업 디렉토리 격리
+# 중요: 서브셸에서 실행하여 작업 디렉토리 격리, 서브셸 내부에서 TMP 파일 생성
 (
-  cd "$(mktemp -d)" || exit 1
+  ISOLATED_DIR="$(mktemp -d)"
+  cd "$ISOLATED_DIR" || exit 1
+  SUBSHELL_TMP="$(mktemp)"
   cat "$IN" | jq -Rn --argjson allow "$ALLOW" '
     [ inputs
       | fromjson? // empty
@@ -61,10 +63,13 @@ TOTAL_LINES=$(wc -l < "$IN" 2>/dev/null || echo 0)
     | unique_by(.ts, .seq)          # idempotency: (ts, seq) 조합으로 중복 제거
     | .[]
     | .orig
-  ' > "$TMP" 2>/dev/null || {
+  ' > "$SUBSHELL_TMP" 2>/dev/null || {
     echo "[WARN] Canonicalization failed, using empty" >&2
-    touch "$TMP"
+    touch "$SUBSHELL_TMP"
   }
+  # 서브셸 밖으로 결과 복사
+  cat "$SUBSHELL_TMP" > "$TMP"
+  rm -rf "$ISOLATED_DIR"
 )
 
 # 원자적 쓰기 (덮어쓰기, append 금지)
