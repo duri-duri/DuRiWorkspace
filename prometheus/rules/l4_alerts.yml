@@ -221,9 +221,5 @@ groups:
           description: "L4 decision stream has been quiet for more than 24h. Check if decision pipeline is running."
 
         annotations:
-        annotations:
-        annotations:
-        annotations:
           summary: "weekly_decision stale (>7d)"
           description: "weekly_decision has not been updated for more than 7d. Check if l4-weekly.service is running."
-garbage: : :

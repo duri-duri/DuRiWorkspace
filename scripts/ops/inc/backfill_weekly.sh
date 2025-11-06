@@ -41,7 +41,7 @@ if [[ -f "${WORK}/scripts/ops/inc/with_lock.sh" ]]; then
       ' \"${SRC_NDJSON}\" 2>/dev/null | tail -n1 | head -n1 || echo \"HOLD\")
       
       # 개행/CR 제거, 첫 단어만 추출, 이스케이프 처리
-      decision_val=\$(printf '%s' \"\$decision_raw\" | tr -d '\r\n' | awk '{gsub(/\\\"/,\"\\\\\\\"\"); print \$1}' || echo \"HOLD\")
+      decision_val=\$(printf '%s' \"\$decision_raw\" | tr -d '\r\n' | sed 's/[[:space:]].*//' | head -c 20 | awk '{gsub(/\\\"/,\"\\\\\\\"\"); print}' || echo \"HOLD\")
       
       if [[ -z \"\$decision_val\" ]] || [[ \"\$decision_val\" == \"null\" ]]; then
         decision_val=\"HOLD\"
