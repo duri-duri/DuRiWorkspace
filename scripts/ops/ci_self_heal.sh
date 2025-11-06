@@ -61,38 +61,126 @@ if echo "$FAILED_CHECKS" | grep -q "ab-label-integrity\|label-integrity"; then
   
   CURRENT_LABELS=$(gh pr view "$PR_NUMBER" --json labels -q '.labels[].name' 2>/dev/null || echo "")
   
-  # ab:A 또는 ab:B 확인
-  if ! echo "$CURRENT_LABELS" | grep -q "ab:A\|ab:B"; then
-    echo "  Adding ab:A label"
-    if [[ -z "$DRY_RUN" ]]; then
-      gh label create "ab:A" --color FFD700 --description "A-branch of AB gate" 2>/dev/null || true
-      gh pr edit "$PR_NUMBER" --add-label "ab:A" 2>/dev/null || true
-      FIXES_APPLIED=$((FIXES_APPLIED + 1))
+  # 정책 1: safe-change일 때는 ab:none 필요
+  if echo "$CURRENT_LABELS" | grep -q "safe-change"; then
+    echo "  Policy: safe-change requires ab:none"
+    if echo "$CURRENT_LABELS" | grep -q "ab:A\|ab:B"; then
+      echo "  Removing ab:A/ab:B (conflict with safe-change)"
+      if [[ -z "$DRY_RUN" ]]; then
+        gh pr edit "$PR_NUMBER" --remove-label "ab:A" 2>/dev/null || true
+        gh pr edit "$PR_NUMBER" --remove-label "ab:B" 2>/dev/null || true
+        FIXES_APPLIED=$((FIXES_APPLIED + 1))
+      fi
     fi
-  fi
-  
-  # safe-change 또는 risky-change 확인
-  if ! echo "$CURRENT_LABELS" | grep -q "safe-change\|risky-change"; then
-    # 변경 파일 기반으로 판단
+    if ! echo "$CURRENT_LABELS" | grep -q "ab:none"; then
+      echo "  Adding ab:none (required for safe-change)"
+      if [[ -z "$DRY_RUN" ]]; then
+        gh label create "ab:none" --color FFD700 --description "No AB variant" 2>/dev/null || true
+        gh pr edit "$PR_NUMBER" --add-label "ab:none" 2>/dev/null || true
+        FIXES_APPLIED=$((FIXES_APPLIED + 1))
+      fi
+    fi
+  # 정책 2: risky-change일 때는 ab:A 또는 ab:B 필요
+  elif echo "$CURRENT_LABELS" | grep -q "risky-change"; then
+    echo "  Policy: risky-change requires ab:A or ab:B"
+    if ! echo "$CURRENT_LABELS" | grep -q "ab:A\|ab:B"; then
+      echo "  Adding ab:A (default for risky-change)"
+      if [[ -z "$DRY_RUN" ]]; then
+        gh label create "ab:A" --color FFD700 --description "A-branch of AB gate" 2>/dev/null || true
+        gh pr edit "$PR_NUMBER" --add-label "ab:A" 2>/dev/null || true
+        FIXES_APPLIED=$((FIXES_APPLIED + 1))
+      fi
+    fi
+    if echo "$CURRENT_LABELS" | grep -q "ab:none"; then
+      echo "  Removing ab:none (conflict with risky-change)"
+      if [[ -z "$DRY_RUN" ]]; then
+        gh pr edit "$PR_NUMBER" --remove-label "ab:none" 2>/dev/null || true
+        FIXES_APPLIED=$((FIXES_APPLIED + 1))
+      fi
+    fi
+  # 정책 3: change-safety 라벨 없으면 파일 패턴 기반 판단
+  elif ! echo "$CURRENT_LABELS" | grep -q "safe-change\|risky-change"; then
+    echo "  Policy: Auto-detect change-safety from file patterns"
     SAFE_PATTERNS="^(prometheus/rules/|scripts/ops/|docs/ops/|\.gitignore|\.githooks/)"
     RISKY_PATTERNS="^(config/|\.slo/|rulepack/)"
     
     CHANGED_FILES=$(gh pr diff "$PR_NUMBER" --name-only 2>/dev/null || git diff --name-only origin/main...HEAD)
     
     if echo "$CHANGED_FILES" | grep -qE "$RISKY_PATTERNS"; then
-      echo "  Adding risky-change label (risky patterns detected)"
+      echo "  Adding risky-change + ab:A (risky patterns detected)"
       if [[ -z "$DRY_RUN" ]]; then
         gh label create "risky-change" --color DC143C --description "High-risk change" 2>/dev/null || true
-        gh pr edit "$PR_NUMBER" --add-label "risky-change" 2>/dev/null || true
+        gh label create "ab:A" --color FFD700 --description "A-branch of AB gate" 2>/dev/null || true
+        gh pr edit "$PR_NUMBER" --add-label "risky-change" --add-label "ab:A" 2>/dev/null || true
+        FIXES_APPLIED=$((FIXES_APPLIED + 1))
       fi
     else
-      echo "  Adding safe-change label (safe patterns only)"
+      echo "  Adding safe-change + ab:none (safe patterns only)"
       if [[ -z "$DRY_RUN" ]]; then
         gh label create "safe-change" --color FFD700 --description "Low-risk ops/rules change" 2>/dev/null || true
-        gh pr edit "$PR_NUMBER" --add-label "safe-change" 2>/dev/null || true
+        gh label create "ab:none" --color FFD700 --description "No AB variant" 2>/dev/null || true
+        gh pr edit "$PR_NUMBER" --add-label "safe-change" --add-label "ab:none" 2>/dev/null || true
+        FIXES_APPLIED=$((FIXES_APPLIED + 1))
       fi
     fi
-    FIXES_APPLIED=$((FIXES_APPLIED + 1))
+  # 정책 4: ab 그룹 중복 제거 (정확히 하나만)
+  else
+    AB_COUNT=$(echo "$CURRENT_LABELS" | grep -oE "ab:(A|B|none)" | wc -l)
+    if [[ "$AB_COUNT" -gt 1 ]]; then
+      echo "  Policy: Multiple ab: labels detected, keeping ab:none if safe-change present"
+      if echo "$CURRENT_LABELS" | grep -q "safe-change"; then
+        echo "  Removing ab:A/ab:B (keeping ab:none)"
+        if [[ -z "$DRY_RUN" ]]; then
+          gh pr edit "$PR_NUMBER" --remove-label "ab:A" --remove-label "ab:B" 2>/dev/null || true
+          gh pr edit "$PR_NUMBER" --add-label "ab:none" 2>/dev/null || true
+          FIXES_APPLIED=$((FIXES_APPLIED + 1))
+        fi
+      fi
+    elif [[ "$AB_COUNT" -eq 0 ]]; then
+      echo "  Policy: No ab: label found, adding ab:none (default)"
+      if [[ -z "$DRY_RUN" ]]; then
+        gh label create "ab:none" --color FFD700 --description "No AB variant" 2>/dev/null || true
+        gh pr edit "$PR_NUMBER" --add-label "ab:none" 2>/dev/null || true
+        FIXES_APPLIED=$((FIXES_APPLIED + 1))
+      fi
+    fi
+  fi
+  
+  # 추가 필수 라벨 확인 (type, area, size)
+  if ! echo "$CURRENT_LABELS" | grep -q "type:"; then
+    echo "  Adding type:ops (default)"
+    if [[ -z "$DRY_RUN" ]]; then
+      gh label create "type:ops" --color 0366d6 --description "Operations change" 2>/dev/null || true
+      gh pr edit "$PR_NUMBER" --add-label "type:ops" 2>/dev/null || true
+      FIXES_APPLIED=$((FIXES_APPLIED + 1))
+    fi
+  fi
+  
+  if ! echo "$CURRENT_LABELS" | grep -q "area:"; then
+    echo "  Adding area:observability (detected from changed files)"
+    if [[ -z "$DRY_RUN" ]]; then
+      gh label create "area:observability" --color 0e8a16 --description "Observability area" 2>/dev/null || true
+      gh pr edit "$PR_NUMBER" --add-label "area:observability" 2>/dev/null || true
+      FIXES_APPLIED=$((FIXES_APPLIED + 1))
+    fi
+  fi
+  
+  if ! echo "$CURRENT_LABELS" | grep -q "size:"; then
+    # 변경 파일 수 기반으로 size 판단
+    CHANGE_COUNT=$(gh pr diff "$PR_NUMBER" --name-only 2>/dev/null | wc -l || echo "10")
+    if [[ "$CHANGE_COUNT" -lt 5 ]]; then
+      SIZE="S"
+    elif [[ "$CHANGE_COUNT" -lt 20 ]]; then
+      SIZE="M"
+    else
+      SIZE="L"
+    fi
+    echo "  Adding size:$SIZE (change count: $CHANGE_COUNT)"
+    if [[ -z "$DRY_RUN" ]]; then
+      gh label create "size:$SIZE" --color fbca04 --description "Size: $SIZE" 2>/dev/null || true
+      gh pr edit "$PR_NUMBER" --add-label "size:$SIZE" 2>/dev/null || true
+      FIXES_APPLIED=$((FIXES_APPLIED + 1))
+    fi
   fi
 fi
 
