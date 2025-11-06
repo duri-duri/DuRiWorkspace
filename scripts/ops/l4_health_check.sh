@@ -33,8 +33,9 @@ check_canonicalize() {
     return 1
   fi
   
-  local total=$(awk '/^l4_canon_total[^{]*{/{getline; print $NF}' "$canon_file" 2>/dev/null | head -1 || echo "0")
-  local bad=$(awk '/^l4_canon_bad[^{]*{/{getline; print $NF}' "$canon_file" 2>/dev/null | head -1 || echo "0")
+  # Prometheus 메트릭 형식: l4_canon_total{} 1881
+  local total=$(awk '/^l4_canon_total/{print $NF}' "$canon_file" 2>/dev/null | head -1 || echo "0")
+  local bad=$(awk '/^l4_canon_bad/{print $NF}' "$canon_file" 2>/dev/null | head -1 || echo "0")
   
   # 숫자만 추출 (메트릭 값만)
   total=$(echo "$total" | grep -oE '^[0-9]+$' || echo "0")
