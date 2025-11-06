@@ -33,8 +33,12 @@ check_canonicalize() {
     return 1
   fi
   
-  local total=$(awk '/l4_canon_total/{print $NF}' "$canon_file" 2>/dev/null || echo "0")
-  local bad=$(awk '/l4_canon_bad/{print $NF}' "$canon_file" 2>/dev/null || echo "0")
+  local total=$(awk '/^l4_canon_total[^{]*{/{getline; print $NF}' "$canon_file" 2>/dev/null | head -1 || echo "0")
+  local bad=$(awk '/^l4_canon_bad[^{]*{/{getline; print $NF}' "$canon_file" 2>/dev/null | head -1 || echo "0")
+  
+  # 숫자만 추출 (메트릭 값만)
+  total=$(echo "$total" | grep -oE '^[0-9]+$' || echo "0")
+  bad=$(echo "$bad" | grep -oE '^[0-9]+$' || echo "0")
   
   if [[ "$total" == "0" ]]; then
     log_warn "canon_total is 0"
