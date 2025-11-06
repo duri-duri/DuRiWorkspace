@@ -1,311 +1,61 @@
 groups:
-  - name: l4_weekly_decision
-    interval: 1m
-    rules:
-      - alert: L4WeeklyDecisionMissing
-        expr: absent_over_time(l4_weekly_decision[30m]) == 1
-        for: 30m
-        labels:
-          severity: warning
-          component: l4_automation
-        annotations:
-          summary: "L4 weekly decision metric missing for 30 minutes"
-          description: "L4 weekly decision metric has not been updated for 30 minutes. Check if l4-weekly.service is running."
-
-      - alert: L4WeeklyDecisionHoldPersistent
-        expr: min_over_time(l4_weekly_decision[72h]) == -1 and max_over_time(l4_weekly_decision[72h]) == -1
-        for: 1h
-        labels:
-          severity: critical
-          component: l4_automation
-        annotations:
-          summary: "L4 weekly decision HOLD persistent for 72h+"
-          description: "L4 weekly decision has been HOLD for 72 hours or more. Consider manual intervention or check data collection."
-
-      - alert: L4WeeklyScoreStagnant
-        expr: max_over_time(l4_weekly_score[24h]) == 0
-        for: 24h
-        labels:
-          severity: warning
-          component: l4_automation
-        annotations:
-          summary: "L4 weekly score stagnant (0) for 24h"
-          description: "L4 weekly score has been 0 for 24 hours. Check if score calculation is working correctly."
-
-      - alert: L4WeeklyDecisionTransition
-        expr: changes(l4_weekly_decision[48h]) > 0
-        for: 0m
-        labels:
-          severity: info
-          component: l4_automation
-        annotations:
-          summary: "L4 weekly decision transition detected"
-          description: "L4 weekly decision changed in the last 48 hours. Previous: {{ $labels.previous }}, Current: {{ $labels.current }}"
-
-      - alert: L4WeeklyScoreVarianceHigh
-        expr: stddev_over_time(l4_weekly_score[48h]) > 0.12
-        for: 1h
-        labels:
-          severity: warning
-          component: l4_automation
-        annotations:
-          summary: "L4 weekly score variance high (>0.12)"
-          description: "L4 weekly score variance is high, indicating instability. Consider reviewing observation data quality."
-
-  - name: l4-deadman
-    interval: 1m
-    rules:
-      - alert: L4NoDecisionDeadman
-        expr: (time() - max_over_time(l4_weekly_decision[1h])) > 3600
-        for: 5m
-        labels:
-          severity: critical
-          component: l4_automation
-        annotations:
-          summary: "L4 decision pipeline stalled (>60m quiet)"
-          description: "L4 decision pipeline has been quiet for more than 60 minutes. Check if l4-weekly.service or l4-daily.service is running."
-
-      - alert: L4TextfileCollectorStalled
-        expr: (time() - max_over_time(l4_weekly_decision[30m])) > 1800
-        for: 3m
-        labels:
-          severity: warning
-          component: l4_automation
-        annotations:
-          summary: "L4 textfile collector stalled (>30m quiet)"
-          description: "L4 textfile collector has not been updated for more than 30 minutes. Check if post-decision script is running."
-
-  - name: l4-system-health
-    interval: 1m
-    rules:
-      - alert: L4ClockDriftHigh
-        expr: abs(node_ntp_offset_seconds) > 2
-        for: 5m
-        labels:
-          severity: warning
-          component: l4_automation
-        annotations:
-          summary: "L4 system clock drift high (>2s)"
-          description: "System clock drift exceeds 2 seconds. This may affect timestamp sorting and alerts."
-
-      - alert: L4FilesystemSpaceLow
-        expr: node_filesystem_avail_bytes{mountpoint="/home/duri/DuRiWorkspace/var/audit"} < 10737418240
-        for: 10m
-        labels:
-          severity: warning
-          component: l4_automation
-        annotations:
-          summary: "L4 audit filesystem space low (<10GiB)"
-          description: "Available space on audit filesystem is below 10GiB. Consider archiving old decisions."
-
-  - name: l4-freshness-and-drift
-    interval: 1m
-    rules:
-      # 신선도(드리프트): ζ(scrape_interval) 보정 포함
-      - alert: L4DecisionFreshnessWarn
-        expr: (time() - l4_weekly_decision_ts) < -300
-        for: 5m
-        labels:
-          severity: warning
-          component: l4_automation
-        annotations:
-          summary: "L4 weekly decision staleness warning (>5m)"
-          description: "L4 weekly decision timestamp is more than 5 minutes old. Check if backfill is running."
-
-      - alert: L4DecisionFreshnessCrit
-        expr: (time() - l4_weekly_decision_ts) < -600
-        for: 10m
-        labels:
-          severity: critical
-          component: l4_automation
-        annotations:
-          summary: "L4 weekly decision staleness critical (>10m)"
-          description: "L4 weekly decision timestamp is more than 10 minutes old. Check if backfill service is stuck."
-
-      - alert: L4UtcDriftDetected
-        expr: abs(time() - l4_weekly_decision_ts) > 120
-        for: 5m
-        labels:
-          severity: warning
-          component: l4_automation
-        annotations:
-          summary: "UTC drift in weekly decision timestamp"
-          description: "UTC drift detected: |time() - ts| > 120s. Check TZ enforcement and generators."
-
-  - name: l4-canonicalization
-    interval: 1m
-    rules:
-      # 정규화 손상 라인 비율
-      - alert: L4CanonHasBadLines
-        expr: (l4_canon_bad / clamp_min(l4_canon_total, 1)) > 0
-        for: 5m
-        labels:
-          severity: warning
-          component: l4_automation
-        annotations:
-          summary: "L4 canonicalizer has bad lines (WARN)"
-          description: "L4 canonicalizer detected bad lines in input. Ratio: {{ $value | humanize }}"
-
-      - alert: L4CanonTooManyBadLines
-        expr: (l4_canon_bad / clamp_min(l4_canon_total, 1)) > 0.01
-        for: 5m
-        labels:
-          severity: critical
-          component: l4_automation
-        annotations:
-          summary: "L4 canonicalizer has too many bad lines (>1%)"
-          description: "L4 canonicalizer detected bad lines ratio > 1%. Ratio: {{ $value | humanize }}"
-
-  - name: l4-backfill-health
-    interval: 1m
-    rules:
-      # 백필 결과 코드
-      - alert: L4BackfillError
-        expr: max_over_time(l4_backfill_last_rc[10m]) != 0
-        for: 3m
-        labels:
-          severity: critical
-          component: l4_automation
-        annotations:
-          summary: "L4 backfill error detected"
-          description: "L4 backfill healer returned non-zero exit code. Check logs for details."
-
-  - name: l4-boot-status
-    interval: 1m
-    rules:
-      # 부팅 상태
-      - alert: L4BootNotReady
-        expr: l4_boot_status == 0
-        for: 5m
-        labels:
-          severity: warning
-          component: l4_automation
-        annotations:
-          summary: "L4 boot recovery not ready"
-          description: "L4 boot status indicates recovery is not complete. Check l4-bootstrap.service logs."
-
-      - alert: L4TextfilePermissionDenied
-        expr: increase(l4_textfile_write_errors_total[5m]) > 0
-        for: 1m
-        labels:
-          severity: warning
-          component: l4_automation
-        annotations:
-          summary: "L4 textfile write permission denied"
-          description: "L4 textfile exporter encountered permission errors. Check NODE_EXPORTER_TEXTFILE_DIR permissions."
-
-  - name: l4-selftest
-    interval: 1m
-    rules:
-      - alert: L4SelftestLowSuccessRate
-        expr: |
-          sum_over_time(l4_selftest_pass[7d]) / 7 < 0.95
-        for: 1h
-        labels:
-          severity: critical
-          component: l4_automation
-        annotations:
-          summary: "L4 selftest 7d success ratio below 95%"
-          description: "Check l4_selftest_pass metrics and /tmp/l4_recover.*.log"
-
-      - alert: L4SelftestRecentFailure
-        expr: |
-          l4_selftest_pass == 0
-        for: 30m
-        labels:
-          severity: warning
-          component: l4_automation
-        annotations:
-          summary: "L4 selftest failed in last 30m"
-          description: "Check /tmp/l4_autotest.*.log for details"
-
-      - record: l4_selftest_success_7d_ratio
-        expr: |
-          sum_over_time(l4_selftest_pass[7d]) / 7
-
-      - record: l4_selftest_success_30d_ratio
-        expr: |
-          sum_over_time(l4_selftest_pass[30d]) / 30
-
-      - alert: L4ClosedLoopDegraded
-        expr: |
-          l4_closed_loop_ok == 0
-        for: 5m
-        labels:
-          severity: critical
-          component: l4_automation
-        annotations:
-          summary: "L4 closed loop degraded"
-          description: "One or more components of the L4 closed loop are not healthy. Check decisions, selftest, weekly decision freshness, and timer status."
-
-      - alert: L4ClosedLoopQuorumFail
-        expr: |
-          (l4_closed_loop_ok == 0) OR
-          (l4_selftest_pass == 0) OR
-          ((time() - max_over_time(l4_weekly_decision_ts[1h])) > 604800)
-        for: 5m
-        labels:
-          severity: critical
-          component: l4_automation
-        annotations:
-          summary: "L4 closed loop quorum check failed"
-          description: "Quorum check failed: closed_loop_ok={{ $value.closed_loop }}, selftest_pass={{ $value.selftest }}, weekly_age={{ $value.weekly_age }}s"
-
-      - alert: L4WeeklyBackfillFail
-        expr: |
-          l4_weekly_backfill_ok == 0
-        for: 10m
-        labels:
-          severity: warning
-          component: l4_automation
-        annotations:
-          summary: "Weekly decision backfill failed"
-          description: "Weekly decision file is missing or stale. Check l4-weekly-backfill.service."
-
-      - alert: L4DecisionSLAFail
-        expr: |
-          l4_decision_sla_ok == 0
-        for: 30m
-        labels:
-          severity: warning
-          component: l4_automation
-        annotations:
-          summary: "Decision SLA violation"
-          description: "Decision count in last 24h is below SLA threshold (<120). Check decision pipeline."
-
-      - alert: L4CanonicalizePromoteFail
-        expr: |
-          l4_canonicalize_promote_ok == 0
-        for: 5m
-        labels:
-          severity: warning
-          component: l4_automation
-        annotations:
-          summary: "Canonicalize promote failed"
-          description: "Canonicalize promotion stage failed. Check sanitize output and validation rules."
-
-      - alert: L4BootstrapFail
-        expr: |
-          increase(l4_boot_status[15m]) == 1
-        for: 0m
-        labels:
-          severity: warning
-          component: l4_automation
-        annotations:
-          summary: "L4 bootstrap failures detected"
-          description: "See journalctl --user -u l4-bootstrap.service"
-
-      - alert: L4DecisionMissing
-        expr: |
-          (time() - max_over_time(l4_decision_ts[24h])) > 86400
-        for: 10m
-        labels:
-          severity: warning
-          component: l4_automation
-        annotations:
-          summary: "No decisions in 24h"
-          description: "L4 decision stream has been quiet for more than 24h. Check if decision pipeline is running."
-
-        annotations:
-          summary: "weekly_decision stale (>7d)"
-          description: "weekly_decision has not been updated for more than 7d. Check if l4-weekly.service is running."
+- name: l4-alerts
+  rules:
+  # 1) Freshness (crit: >120s, warn: >90s)
+  - alert: L4FreshnessCritical
+    expr: (time() - l4_weekly_decision_ts) > 120
+    for: 2m
+    labels:
+      severity: critical
+      service: duri-l4
+    annotations:
+      summary: "L4 freshness >120s"
+      description: "time() - l4_weekly_decision_ts > 120s for 2m."
+  - alert: L4FreshnessWarn
+    expr: (time() - l4_weekly_decision_ts) > 90
+    for: 2m
+    labels:
+      severity: warning
+      service: duri-l4
+    annotations:
+      summary: "L4 freshness >90s"
+      description: "time() - l4_weekly_decision_ts > 90s for 2m."
+  # 2) Canonicalize bad ratio
+  - alert: L4CanonBadRatioCritical
+    expr: (l4_canon_bad / clamp_min(l4_canon_total, 1)) > 0.05
+    for: 5m
+    labels:
+      severity: critical
+      service: duri-l4
+    annotations:
+      summary: "L4 canon bad ratio >5%"
+      description: "Bad ratio > 5% for 5m."
+  - alert: L4CanonBadRatioWarn
+    expr: (l4_canon_bad / clamp_min(l4_canon_total, 1)) > 0.02
+    for: 5m
+    labels:
+      severity: warning
+      service: duri-l4
+    annotations:
+      summary: "L4 canon bad ratio >2%"
+      description: "Bad ratio > 2% for 5m."
+  # 3) Backfill return code
+  - alert: L4BackfillFailure
+    expr: l4_backfill_last_rc != 0
+    for: 1m
+    labels:
+      severity: critical
+      service: duri-l4
+    annotations:
+      summary: "L4 backfill rc != 0"
+      description: "Backfill last return code non-zero for 1m."
+  # 4) Boot recovery
+  - alert: L4BootNotRecovered
+    expr: l4_boot_status == 0
+    for: 5m
+    labels:
+      severity: warning
+      service: duri-l4
+    annotations:
+      summary: "L4 boot not recovered"
+      description: "l4_boot_status stayed 0 for 5m."
