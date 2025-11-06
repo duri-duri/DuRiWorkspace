@@ -25,6 +25,9 @@ if [[ ! -f "$IN" ]] || [[ ! -s "$IN" ]]; then
   exit 0
 fi
 
+# 기존 출력 파일 삭제 (덮어쓰기 보장)
+rm -f "$OUT"
+
 # 임시 파일 생성 (원자적 교체 보장)
 TMP="$(mktemp "${OUT}.XXXXXX")"
 trap 'rm -f "$TMP"' EXIT
@@ -38,10 +41,11 @@ ALLOW='["GO","NO-GO","REVIEW","HOLD","HEARTBEAT","APPROVED","CONTINUE"]'
 TOTAL_LINES=$(wc -l < "$IN" 2>/dev/null || echo 0)
 
 # 핵심: 입력 파일($IN)만 읽고, 임시 파일에 쓰기
+# cat으로 명시적으로 파일 읽기 후 jq에 파이프
 # jq -Rn: 입력을 라인별로 읽고 fromjson?로 파싱 실패 시 자동 드랍
 # 정렬: (ts, seq) 순으로 안정 정렬
 # 중복 제거: 같은 ts에서 마지막 1건만 유지 + idempotency (ts, seq) 조합으로 중복 제거
-jq -Rn '
+cat "$IN" | jq -Rn '
   def ok_decision: '"$ALLOW"' | index(.);
   [ inputs
     | fromjson? // empty
@@ -54,7 +58,7 @@ jq -Rn '
   | unique_by(.ts, .seq)          # idempotency: (ts, seq) 조합으로 중복 제거
   | .[]
   | .orig
-' < "$IN" > "$TMP" 2>/dev/null || {
+' > "$TMP" 2>/dev/null || {
   echo "[WARN] Canonicalization failed, using empty" >&2
   touch "$TMP"
 }
@@ -70,6 +74,8 @@ BAD_LINES=$(( TOTAL_LINES > VALID_LINES ? TOTAL_LINES - VALID_LINES : 0 ))
 # 불변식 검증: 출력 라인 수는 입력 이하여야 함
 if [[ $VALID_LINES -gt $TOTAL_LINES ]]; then
   echo "[ERROR] Invariant violation: output_lines($VALID_LINES) > input_lines($TOTAL_LINES)" >&2
+  echo "[ERROR] Input file: $IN" >&2
+  echo "[ERROR] Output file: $OUT" >&2
   echo "[ERROR] This indicates canonicalize read from wrong source or appended data" >&2
   exit 1
 fi
